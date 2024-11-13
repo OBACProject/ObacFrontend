@@ -19,7 +19,7 @@ export default function CardHorizontal({ cardData }: CardHorizontalProps) {
     <>
       {Array.isArray(cardData) &&
         cardData.map((data, index) => (
-          <div key={index} className="rounded-md border border-s bg-card text-card-foreground shadow-sm  lg:w-[600px] md:w-[500px] sm:w-[300px] my-3 bg-white sm:grid md:flex">
+          <div key={index} className="rounded-md border-[1px] border-[#CFD0D4] bg-card text-card-foreground shadow-sm  lg:w-[600px] md:w-[500px] sm:w-[300px] my-3 bg-white sm:grid md:flex">
             <div className="lg:flex md:flex sm:grid items-start px-5 py-4">
               <div className="relative lg:w-5/12 lg:h-36 md:w-7/12 md:h-36 mr-4 sm:w-full sm:h-36 ">
                 <Image
@@ -32,8 +32,8 @@ export default function CardHorizontal({ cardData }: CardHorizontalProps) {
               </div>
               <div className="grid w-full">
                 <div className="flex justify-between">
-                  <span className="font-semibold text-black">{data.topic}</span>
-                  <span className="text-gray-700 "><span className="text-black font-semibold">category: </span>{data.category}</span>
+                  <span className="font-semibold text-black text-lg">{data.topic}</span>
+                  <span className="text-gray-700 text-lg"><span className="text-black font-semibold">category: </span>{data.category}</span>
                 </div>
                 <div className="mt-3 text-gray-600">
                   {data.description.slice(0,120)}...

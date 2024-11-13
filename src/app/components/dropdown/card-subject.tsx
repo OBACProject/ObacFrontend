@@ -19,7 +19,7 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
       {Array.isArray(cardSubjectData) &&
         cardSubjectData.map((data, index) => (
           <div
-            className="shadow-sm shadow-gray-400 rounded-lg my-2 bg-card text-card-foreground w-[600px] bg-white grid grid-cols-[40%_25%_35%]"
+            className=" border-[1px] border-[#A4B7E0] rounded-lg my-2 bg-card text-card-foreground w-[620px] bg-white grid grid-cols-[40%_21%_3%_36%]"
             key={index}
           >
             <div className="ml-5 py-4 ">
@@ -32,10 +32,12 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
             </div>
 
             <div className="py-3 w-11/12">
-              <p className="text-center text-gray-600 font-semibold py-1 px-2 bg-gray-200 rounded-lg">ห้องสอน : {data.currentRoom}</p>
+              <p className="text-center text-gray-600 font-semibold py-1 px-2 bg-[#D6E9E9] rounded-lg">ห้องสอน : {data.currentRoom}</p>
             </div>
+            <div className={`${data.subjectStatus==2?'bg-[#D2F9E0]':'bg-[#DBEFFA] h-full w-full'}`}>
 
-            <div className={`${data.subjectStatus==2?'bg-green-300':'bg-blue-200 h-full w-full'} rounded-r-lg`}>
+            </div>
+            <div className={`${data.subjectStatus==2?'bg-[#9AFFBF]':'bg-[#A0DDFD] h-full w-full'} rounded-r-lg`}>
                 <div className="text-center pt-1 text-lg text-white font-semibold">
                     สถานะคะแนน
                 </div>
