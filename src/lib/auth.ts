@@ -23,7 +23,7 @@ export async function decrypt(input: string): Promise<any> {
 export async function login(formData: FormData) {
 
   const user = { username : formData.get("username")};
-  const expires = new Date(Date.now() + 10 * 1000);
+  const expires = new Date(Date.now() + 1800 * 1000); // อยู่ได้ครึ่งชั่วโมง
   const session = await encrypt({ user, expires });
   cookies().set("session", session, { expires, httpOnly: true });
   
