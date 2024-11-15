@@ -29,10 +29,10 @@ export default function DropMenu({
 }) {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="text-white p-4">
+      <NavigationMenuList className="text-white">
         {menuData.map((menu, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="text-xl flex ">
+            <NavigationMenuTrigger className="text-base flex ">
               {menu.menuTopic}
             </NavigationMenuTrigger>
             <NavigationMenuContent className="bg-[#FFFBF8]">
@@ -61,7 +61,7 @@ const ListItem = React.forwardRef<
     <li>
       <NavigationMenuLink
         asChild
-        className="flex gap-4 p-2 justify-center items-center"
+        className="flex gap-4 justify-center items-center"
       >
         <a
           ref={ref}

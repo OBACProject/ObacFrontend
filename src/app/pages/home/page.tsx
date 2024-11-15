@@ -9,6 +9,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div>
+      <CLShomepage />
       <div className="flex w-full bg-[#E0F6FF] ">
         {/* slide bar on homepage */}
         <div className="w-1/5 flex flex-col  mx-16 mt-10 gap-4">
