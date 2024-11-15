@@ -7,9 +7,9 @@ export function Navbar() {
   return (
     <header className="flex flex-col shadow-xl">
       {/* Logo and Name */}
-      <div className="flex flex-col sm:flex-row p-6 gap-6 sm:gap-10 sm:ml-12">
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 sm:ml-12">
         {/* Logo */}
-        <div className="relative w-32 h-32 sm:w-40 sm:h-40 p-6">
+        <div className="relative w-32 h-32 sm:w-40 sm:h-40 p-1">
           <Image
             src="/images/obac-logo.png"
             alt="obac-logo"
