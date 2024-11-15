@@ -23,7 +23,7 @@ export default function LoginForm({ session }: Session) {
   return (
     <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
       {session ? (
-        <div className="my-10 bg-white rounded-lg px-10 py-10">
+        <div className="my-10 bg-white rounded-lg px-10 py-12">
           <pre>{JSON.stringify(session, null, 2)}</pre>
           <div className="grid place-items-center mt-5">
             <button
