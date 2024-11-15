@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 
 export function Navbar() {
@@ -26,10 +27,8 @@ export function Navbar() {
         </div>
       </div>
       {/* menu bar */}
-      <div className="bg-[#2E58A2] flex flex-auto p-6 text-white text-3xl ">
-        <div className="mx-10">
-          {/* <DropMenu menuName="About OBAC" menuList={menuList} /> */}
-        </div>
+      <div className=" text-white text-3xl w-full flex justify-center bg-[#2E58A2]">
+        <DropMenu menuData={NavbarData} />
       </div>
     </header>
   );
