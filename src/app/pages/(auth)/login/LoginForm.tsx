@@ -22,7 +22,20 @@ export default function LoginForm({ session }:Session) {
 
   return (
     <div className="w-full grid place-items-center py-10">
-      <form
+     
+
+      {session ? (
+        <div className="my-10">
+          <pre>{JSON.stringify(session, null, 2)}</pre>
+          <button
+            onClick={handleLogout} // Bind the client-side logout handler
+            className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
+          >
+            Logout
+          </button>
+        </div>
+      ) : (<>
+        <form
         onSubmit={handleLogin} // Bind the client-side login handler
         className="pb-5 grid place-items-center border-[1px] w-1/3 rounded-lg shadow-sm"
       >
@@ -53,19 +66,7 @@ export default function LoginForm({ session }:Session) {
           Login
         </button>
       </form>
-
-      {session ? (
-        <div className="my-10">
-          <pre>{JSON.stringify(session, null, 2)}</pre>
-          <button
-            onClick={handleLogout} // Bind the client-side logout handler
-            className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <div className="my-10">You are not logged in.</div>
+        <div className="my-10">You are not logged in.</div></>
       )}
     </div>
   );

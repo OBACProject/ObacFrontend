@@ -1,6 +1,7 @@
 import "@app/styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Navbar } from "../../home/navbar";
 
 export const metadata = {
   title: "Next.js",
@@ -20,6 +21,7 @@ export default function RootLayout({
           hideProgressBar
           className="z-50"
         />
+        <Navbar />
         {children}
       </body>
     </html>

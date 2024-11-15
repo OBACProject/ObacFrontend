@@ -9,24 +9,26 @@ export async function encrypt(payload: any) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("10 sec from now")
+    .setExpirationTime("30m")
     .sign(key);
 }
 
 export async function decrypt(input: string): Promise<any> {
   const { payload } = await jwtVerify(input, key, {
     algorithms: ["HS256"],
+    clockTolerance: 5, 
   });
   return payload;
 }
 
 export async function login(formData: FormData) {
+  const user = { username: formData.get("username") };
 
-  const user = { username : formData.get("username")};
-  const expires = new Date(Date.now() + 1800 * 1000); // อยู่ได้ครึ่งชั่วโมง
-  const session = await encrypt({ user, expires });
-  cookies().set("session", session, { expires, httpOnly: true });
-  
+  const session = await encrypt({ user });
+  cookies().set("session", session, { 
+    expires: new Date(Date.now() + 1800 * 1000), 
+    httpOnly: true 
+  });
 }
 
 export async function logout() {
@@ -42,7 +44,6 @@ export async function getSession() {
 export async function updateSession(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) return;
-
   const parsed = await decrypt(session);
   parsed.expires = new Date(Date.now() + 10 * 1000);
   const res = NextResponse.next();
