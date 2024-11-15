@@ -8,7 +8,7 @@ import {
   faPeopleLine,
   faReceipt,
 } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 
 interface DropMenuList {
   menuName: string;
