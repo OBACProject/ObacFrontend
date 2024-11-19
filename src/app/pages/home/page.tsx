@@ -21,7 +21,7 @@ export default function Home() {
               >
                 <div className="w-8  h-10 text-slate-600">{item.menuIcon}</div>
                 <div>
-                  <div className="text-xl font-semibold leading-none">
+                  <div className="text-md font-semibold leading-none">
                     {item.menuName}
                   </div>
                 </div>
