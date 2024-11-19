@@ -10,18 +10,18 @@ export default function Home() {
   return (
     <div>
       <CLShomepage />
-      <div className="flex w-full bg-[#E0F6FF] ">
+      <div className="flex w-full bg-gradient-to-tr from-[#89bfe1] to-white ">
         {/* slide bar on homepage */}
-        <div className="w-1/5 flex flex-col  mx-16 mt-10 gap-4">
-          <div className=" bg-[#003571] sticky rounded-xl p-4 gap-4 flex flex-col">
+        <div className="w-3/12 flex flex-col  mx-10 mt-5 gap-4">
+          <div className=" bg-blue-800 sticky rounded-md p-4 gap-4 flex flex-col">
             {SidebarData.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center p-4 gap-5 bg-[#FFF9F4] rounded-xl"
+                className="flex items-center justify-center px-4 py-3 gap-5 hover:bg-blue-200 bg-white rounded-md hover:text-blue-900"
               >
-                <div className="w-10 h-10 text-slate-600">{item.menuIcon}</div>
+                <div className="w-8  h-10 text-slate-600">{item.menuIcon}</div>
                 <div>
-                  <div className="text-lg font-medium leading-none">
+                  <div className="text-xl font-semibold leading-none">
                     {item.menuName}
                   </div>
                 </div>
