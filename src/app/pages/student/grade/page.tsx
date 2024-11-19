@@ -1,5 +1,4 @@
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+
 import Image from "next/image";
 
 export default function Page() {
