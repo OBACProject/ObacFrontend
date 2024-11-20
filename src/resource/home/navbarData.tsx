@@ -8,7 +8,6 @@ import {
   faPeopleLine,
   faReceipt,
 } from "@fortawesome/free-solid-svg-icons";
-import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 
 interface DropMenuList {
   menuName: string;
@@ -16,7 +15,7 @@ interface DropMenuList {
   tab: string;
 }
 
-interface DropMenuProps {
+export interface DropMenuProps {
   menuTopic: string;
   href: string;
   menuList: DropMenuList[];

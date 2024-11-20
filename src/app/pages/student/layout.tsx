@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import "@app/styles/globals.css";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+
 import { StudentSidebar } from "@app/pages/student/sidebar/studentSidebar";
 import {
   ProfileData,
