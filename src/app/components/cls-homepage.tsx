@@ -18,7 +18,6 @@ export default function CLShomepage() {
         autoPlay={true}
         interval={2600}
         width="full"
-        
         autoFocus={false}
         infiniteLoop={true}
         showArrows={false}
