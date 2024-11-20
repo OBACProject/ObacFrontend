@@ -31,7 +31,7 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "ตารางเรียน",
       tooltip: "schedule",
-      href: "/schedule",
+      href: "/pages/student/schedule",
       icon: (
         <CalendarDays
           style={{ width: "2.5rem", height: "2.5rem" }}
@@ -42,7 +42,7 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "ตรวจสอบผลการเรียน",
       tooltip: "grade",
-      href: "/grade",
+      href: "/pages/student/grade",
       icon: (
         <GraduationCap
           style={{ width: "2.5rem", height: "2.5rem" }}
