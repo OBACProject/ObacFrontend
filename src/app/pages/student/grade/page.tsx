@@ -6,7 +6,10 @@ export default function Page() {
   return (
     <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">
       {/* card content all unit and all grade */}
-      <div className="flex w-full items-center justify-center shadow-md rounded-lg p-4 border-4 border-[#2E58A2]">
+      <Badge className="text-sm sm:text-base" variant="outline">
+        ตรวจสอบผลการเรียน
+      </Badge>
+      <div className="flex w-full items-center mt-10 justify-center shadow-md rounded-lg p-4 border-4 border-[#2E58A2]">
         <div className="flex flex-col w-full">
           {/* Header Table */}
           <div className="flex w-full items-center justify-center border-b-2 rounded-lg p-6">
@@ -23,8 +26,7 @@ export default function Page() {
               <span>{StudentGradeData.allCredit}</span>
             </div>
             <div className="flex text-center flex-col w-4/12">
-              {" "}
-              {StudentGradeData.allGrade}{" "}
+              {StudentGradeData.allGrade}
             </div>
           </div>
         </div>

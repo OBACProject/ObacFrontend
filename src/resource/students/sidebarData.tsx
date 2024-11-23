@@ -63,8 +63,8 @@ export const StudentSidebarData: StudentSidebarProps = {
     },
     {
       title: "ประวัตินิสิต",
-      tooltip: "history",
-      href: "/history",
+      tooltip: "profile",
+      href: "/pages/student/profile",
       icon: (
         <BookText
           style={{ width: "2.5rem", height: "2.5rem" }}
