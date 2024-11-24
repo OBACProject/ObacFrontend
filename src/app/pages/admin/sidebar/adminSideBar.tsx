@@ -1,24 +1,20 @@
-"use client";
-
 import {
-  StudentSidebarProps,
   ProfileData,
-} from "@/resource/students/studentSidebarData";
+  AdminSidebarProps,
+} from "@/resource/admin/adminSidebarData";
 import { CircleUserRound } from "lucide-react";
-import React from "react";
 
-export function StudentSidebar({
+export function AdminSideBar({
   menuItems,
   profileData,
   ...props
-}: StudentSidebarProps & { profileData: ProfileData }) {
+}: AdminSidebarProps & { profileData: ProfileData }) {
   return (
     <header className="flex w-screen top-0 bg-background shrink-0 items-center gap-2 border-b px-4 py-2">
       {/* sidebar with info and menu */}
       <SidebarMenu
         name={profileData.name}
         href={profileData.href}
-        id="6410450958"
         menuItems={menuItems}
       />
 
@@ -43,36 +39,29 @@ export function StudentSidebar({
 
 export function SidebarMenu({
   name,
-  id,
   href,
   menuItems,
 }: {
   name: string;
-  id: string;
   href: string;
-  menuItems: StudentSidebarProps["menuItems"];
+  menuItems: AdminSidebarProps["menuItems"];
 }) {
   const truncatedTitle = name.length > 25 ? `${name.slice(0, 22)}...` : name;
 
   return (
     <div className="border-r-2 bg-white fixed top-2 left-1 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 ">
       <div className="flex gap-2 mb-2">
-        <a href={href} className="flex items-center justify-start">
+        <a href={href} className="flex items-center justify-start gap-4">
           <button className="flex items-start gap-6 ">
             <CircleUserRound
               style={{ width: "3.5rem", height: "3rem" }}
               className="text-[#0C2943]"
             />
           </button>
-        </a>
-        <div className="flex flex-col gap-2 mr-4">
           <span className="text-[#0C2943] text-xs font-medium block opacity-0 group-hover:opacity-100 ">
             {truncatedTitle}
           </span>
-          <span className="text-[#0C2943] text-xs block opacity-0 group-hover:opacity-100 ">
-            {id}
-          </span>
-        </div>
+        </a>
       </div>
 
       {/* Menu Items */}

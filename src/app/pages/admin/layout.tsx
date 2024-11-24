@@ -7,6 +7,8 @@ import {
   ProfileData,
   StudentSidebarData,
 } from "@/resource/students/studentSidebarData";
+import { AdminSideBar } from "./sidebar/adminSideBar";
+import { AdminSidebarData } from "@/resource/admin/adminSidebarData";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,8 +25,8 @@ export default function RootLayout({
       <body>
         {/* <SidebarProvider> */}
         {/* Pass StudentSidebarData to StudentSidebar */}
-        <StudentSidebar
-          menuItems={StudentSidebarData.menuItems}
+        <AdminSideBar
+          menuItems={AdminSidebarData.menuItems}
           profileData={ProfileData}
         />
         {children}
