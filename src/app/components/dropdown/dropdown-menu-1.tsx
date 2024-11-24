@@ -10,17 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-interface DropMenuList {
-  menuName: string;
-  menuIcon: React.ReactNode;
-  tab: string;
-}
-
-interface DropMenuProps {
-  menuTopic: string;
-  href: string;
-  menuList: DropMenuList[];
-}
+import { DropMenuProps } from "@/resource/home/navbarData";
 
 export default function DropMenu({
   menuData = [],
