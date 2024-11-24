@@ -29,6 +29,18 @@ export default function page() {
   const toggleEducationInfo = () => {
     setIsEducationInfoVisible((prev) => !prev);
   };
+
+  const [isAddressInfoVisible, setIsAddressInfoVisible] = useState(true);
+  const toggleAddressInfo = () => {
+    setIsAddressInfoVisible((prev) => !prev);
+  };
+
+  const [isPresentAddressInfoVisible, setIsPresentAddressInfoVisible] =
+    useState(true);
+  const togglePresentAddressInfo = () => {
+    setIsPresentAddressInfoVisible((prev) => !prev);
+  };
+
   return (
     <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">
       <div className="p-4 text-lg sm:text-xl flex flex-col w-auto">
@@ -89,19 +101,19 @@ export default function page() {
                   ข้อมูลการศึกษา
                 </TabsTrigger>
                 <TabsTrigger value="address" className="p-4 w-full">
-                  ที่อยู่
+                  ข้อมูลที่อยู่
                 </TabsTrigger>
               </TabsList>
 
               {/* Tabs Content */}
-              <div className="w-9/12 flex bg-sky-50  border-l-4 border-slate-200">
+              <div className="w-9/12 flex bg-sky-50  border-l-4 border-slate-200 p-4">
                 <TabsContent
                   value="profile"
                   className="flex-grow ml-6 p-2 text-sm"
                 >
                   <div className="p-2">
                     <h1
-                      className="p-2 font-bold cursor-pointer flex justify-between"
+                      className="p-2 font-bold cursor-pointer text-base flex justify-between"
                       onClick={toggleGeneralInfo}
                     >
                       ข้อมูลการทั่วไป
@@ -154,7 +166,7 @@ export default function page() {
                   <hr />
                   <div className="p-2">
                     <h1
-                      className="p-2 font-bold cursor-pointer flex justify-between"
+                      className="p-2 font-bold cursor-pointer text-base flex justify-between"
                       onClick={toggleFatherInfo}
                     >
                       ข้อมูลบิดา
@@ -198,7 +210,7 @@ export default function page() {
                   <hr />
                   <div className="p-2">
                     <h1
-                      className="p-2 font-bold cursor-pointer flex justify-between"
+                      className="p-2 font-bold cursor-pointer flex justify-between text-base"
                       onClick={toggleMotherInfo}
                     >
                       ข้อมูลมารดา
@@ -246,7 +258,7 @@ export default function page() {
                 >
                   <div className="p-2">
                     <h1
-                      className="p-2 font-bold cursor-pointer flex justify-between"
+                      className="p-2 font-bold cursor-pointer flex justify-between text-base"
                       onClick={toggleEducationInfo}
                     >
                       ข้อมูลการศึกษา
@@ -289,6 +301,22 @@ export default function page() {
                           topic="ปวช. / ปวส."
                           data={exampleStudentData.educationalInfo.class}
                         />
+                        <LabelText
+                          topic="ที่อยู่สถาบัน"
+                          data={[
+                            exampleStudentData.educationalInfo.address.address,
+                            exampleStudentData.educationalInfo.address
+                              .subDistrict,
+                            exampleStudentData.educationalInfo.address.district,
+                            exampleStudentData.educationalInfo.address.province,
+                            exampleStudentData.educationalInfo.address
+                              .postalCode,
+                          ]}
+                        />
+                        <LabelText
+                          topic="เบอร์โทรสภาพสถาบัน"
+                          data={exampleStudentData.educationalInfo.tel}
+                        />
                       </div>
                     </div>
                   </div>
@@ -297,8 +325,97 @@ export default function page() {
                   value="address"
                   className="flex-grow ml-6 p-2 text-sm"
                 >
-                  <h1 className="p-2 font-bold">ที่อยู่</h1>
-                  <div className="relative gap-2 w-full  items-center flex flex-col"></div>
+                  <div className="p-2">
+                    <h1
+                      className="p-2 font-bold cursor-pointer flex justify-between text-base"
+                      onClick={toggleAddressInfo}
+                    >
+                      ที่อยู่ตามทะเบียนบ้าน
+                      <span className="text-lg">
+                        {isAddressInfoVisible ? <ChevronDown /> : <ChevronUp />}
+                      </span>
+                    </h1>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isAddressInfoVisible ? "max-h-[1000px]" : "max-h-0"
+                      }`}
+                    >
+                      <div className="relative gap-2 w-full items-center flex flex-col">
+                        <LabelText
+                          topic="ที่อยู่บ้าน"
+                          data={exampleStudentData.addressInfo.address}
+                        />
+                        <LabelText
+                          topic="ตำบล"
+                          data={exampleStudentData.addressInfo.subDistrict}
+                        />
+                        <LabelText
+                          topic="อำเภอ"
+                          data={exampleStudentData.addressInfo.district}
+                        />
+                        <LabelText
+                          topic="จังหวัด"
+                          data={exampleStudentData.addressInfo.province}
+                        />
+                        <LabelText
+                          topic="รหัสไปรษณีย์"
+                          data={exampleStudentData.addressInfo.postalCode}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2">
+                    <h1
+                      className="p-2 font-bold cursor-pointer flex justify-between text-base"
+                      onClick={togglePresentAddressInfo}
+                    >
+                      ที่อยู่ปัจจุบัน
+                      <span className="text-lg">
+                        {isPresentAddressInfoVisible ? (
+                          <ChevronDown />
+                        ) : (
+                          <ChevronUp />
+                        )}
+                      </span>
+                    </h1>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isPresentAddressInfoVisible
+                          ? "max-h-[1000px]"
+                          : "max-h-0"
+                      }`}
+                    >
+                      <div className="relative gap-2 w-full items-center flex flex-col">
+                        <LabelText
+                          topic="ที่อยู่บ้าน"
+                          data={exampleStudentData.presentAddressInfo.address}
+                        />
+                        <LabelText
+                          topic="ตำบล"
+                          data={
+                            exampleStudentData.presentAddressInfo.subDistrict
+                          }
+                        />
+                        <LabelText
+                          topic="อำเภอ"
+                          data={exampleStudentData.presentAddressInfo.district}
+                        />
+                        <LabelText
+                          topic="จังหวัด"
+                          data={exampleStudentData.presentAddressInfo.province}
+                        />
+                        <LabelText
+                          topic="รหัสไปรษณีย์"
+                          data={
+                            exampleStudentData.presentAddressInfo.postalCode
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
               </div>
             </Tabs>
