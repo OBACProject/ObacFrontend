@@ -60,9 +60,9 @@ export const AdminSidebarData: AdminSidebarProps = {
       ),
     },
     {
-      title: "จัดการวิชา",
+      title: "จัดการบุคลากรภายใน",
       tooltip: "subjectManagement",
-      href: "/pages/admin/subjectManagement",
+      href: "/pages/admin/academicManagement",
       icon: (
         <BookMarked
           style={{ width: "2.5rem", height: "2.5rem" }}
