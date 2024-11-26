@@ -1,6 +1,6 @@
 import {
     BookText,
-    CalendarDays,
+    FilePen,
     CreditCard,
     GraduationCap,
   } from "lucide-react";
@@ -33,8 +33,8 @@ import {
         tooltip: "schedule",
         href: "/pages/teacher/profile",
         icon: (
-          <CalendarDays
-            style={{ width: "2.5rem", height: "2.5rem" }}
+          <FilePen
+            style={{ width: "2.0rem", height: "2.5rem" }}
             className="text-[#0C2943]"
           />
         ),
@@ -45,7 +45,7 @@ import {
         href: "/pages/teacher/subject",
         icon: (
           <GraduationCap
-            style={{ width: "2.5rem", height: "2.5rem" }}
+            style={{ width: "2.3rem", height: "2.5rem" }}
             className="text-[#0C2943]"
           />
         ),
@@ -56,7 +56,7 @@ import {
         href: "/pages/teacher/schedule",
         icon: (
           <CreditCard
-            style={{ width: "2.5rem", height: "2.5rem" }}
+            style={{ width: "2.2rem", height: "2.5rem" }}
             className="text-[#0C2943]"
           />
         ),

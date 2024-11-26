@@ -56,7 +56,7 @@ export function SidebarMenu({
 
   return (
     <div className="border-r-2 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 z-40 ">
-      <div className="flex h-[51px] ">
+      <div className="flex h-[48px] ">
         <a href={href} className="flex   items-center justify-start">
           <button className="flex items-start  ">
             <CircleUserRound

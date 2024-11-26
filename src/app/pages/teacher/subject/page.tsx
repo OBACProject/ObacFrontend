@@ -1,13 +1,8 @@
 import React from 'react'
-import ProfileForm from './profileForm'
-
-
-
+import SubjectForm from './subjectForm'
 
 export default function page() {
   return (
-    <>
-    <ProfileForm/>
-    </>
+    <div><SubjectForm/></div>
   )
 }
