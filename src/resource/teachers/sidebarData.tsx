@@ -1,0 +1,66 @@
+import {
+    BookText,
+    CalendarDays,
+    CreditCard,
+    GraduationCap,
+  } from "lucide-react";
+
+
+  export interface TeacherSidebarProps {
+    menuItems: {
+      title: string;
+      tooltip: string;
+      href: string;
+      icon: React.ReactNode;
+    }[];
+  }
+
+  export interface ProfileData {
+    name: string;
+    href: string;
+  }
+
+  export const ProfileData: ProfileData = {
+    name: "Patarajarin Napakarn",
+    href: "/profile",
+  };
+  
+
+  export const TeacherSideBarData: TeacherSidebarProps = {
+    menuItems: [
+      {
+        title: "ข้อมูลอาจารย์",
+        tooltip: "schedule",
+        href: "/pages/teacher/profile",
+        icon: (
+          <CalendarDays
+            style={{ width: "2.5rem", height: "2.5rem" }}
+            className="text-[#0C2943]"
+          />
+        ),
+      },
+      {
+        title: "รายวิชา",
+        tooltip: "grade",
+        href: "/pages/teacher/subject",
+        icon: (
+          <GraduationCap
+            style={{ width: "2.5rem", height: "2.5rem" }}
+            className="text-[#0C2943]"
+          />
+        ),
+      },
+      {
+        title: "ตารางสอน",
+        tooltip: "schedule",
+        href: "/pages/teacher/schedule",
+        icon: (
+          <CreditCard
+            style={{ width: "2.5rem", height: "2.5rem" }}
+            className="text-[#0C2943]"
+          />
+        ),
+      }
+    ],
+  };
+  
