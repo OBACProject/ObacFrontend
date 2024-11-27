@@ -5,7 +5,7 @@ import DetailCard from './detailCard'
 export default function ProfileForm() {
   return (
     <div className='text-xl pl-20 '>
-      <div className='grid place-items-center  text-center py-6 bg-gray-100'>
+      <div className='grid place-items-center  text-center py-2 bg-gray-100'>
         ข้อมูลอาจารย์
           </div>
       <div className='text-xl border-2  border-gray-200 py-5 px-5'>
