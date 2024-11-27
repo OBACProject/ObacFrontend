@@ -62,7 +62,7 @@ export function SidebarMenu({
         </button>
       </a>
       <div className="flex flex-col gap-2 mr-4">
-        <span className="text-[#0C2943] text-xs font-medium block opacity-0 group-hover:opacity-100 ">
+        <span className="text-[#0C2943] text-sm font-medium block opacity-0 pt-4  group-hover:opacity-100 ">
           {truncatedTitle}
         </span>
       </div>

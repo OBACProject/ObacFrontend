@@ -65,17 +65,17 @@ export function SidebarMenu({
             />
           </button>
         </a>
-        <div className="flex flex-col gap-2 mr-4">
-          <span className="text-[#0C2943] text-xs font-medium block opacity-0 group-hover:opacity-100 ">
+        <div className="flex flex-col gap-2 pt-3 mr-4">
+          <span className="text-[#0C2943] text-sm font-semibold block opacity-0 group-hover:opacity-100 ">
             {truncatedTitle}
           </span>
-          <span className="text-[#0C2943] text-xs block opacity-0 group-hover:opacity-100 ">
+          <span className="text-blue-600 text-xs font-semibold block opacity-0 group-hover:opacity-100 ">
             {id}
           </span>
         </div>
       </div>
 
-      {/* Menu Items */}
+
       <div className="border-t-2 pt-2 mt-4">
         {menuItems.map((item, index) => (
           <a key={index} href={item.href}>

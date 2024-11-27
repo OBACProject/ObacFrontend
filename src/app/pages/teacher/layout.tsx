@@ -1,7 +1,7 @@
 import { TeacherSideBarData } from "@/resource/teachers/sidebarData"
 import { TeacherSidebar } from "./sidebar/teacherSidebar"
 import "@app/styles/globals.css";
-import { ProfileData } from "@/resource/students/sidebarData"
+import { ProfileData } from "@/resource/teachers/sidebarData";
 import type { Metadata } from "next";
 export const metadata = {
   title: 'Next.js',

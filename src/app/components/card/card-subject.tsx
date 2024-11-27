@@ -1,7 +1,9 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 
 interface CardSubjectProp {
+  subjectId : string;
   subjectName: string;
   subjectCode: string;
   currentRoom: string;
@@ -18,8 +20,8 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
     <>
       {Array.isArray(cardSubjectData) &&
         cardSubjectData.map((data, index) => (
-          <div
-            className=" border-[1px] hover:border-black border-[#A4B7E0] rounded-md my-2 bg-card text-card-foreground w-full hover:bg-[hsl(200,38%,92%)] bg-white grid grid-cols-[40%_21%_3%_36%]"
+          <Link href={data.subjectId}
+            className=" border-[1px] hover:border-black border-[#A4B7E0] rounded-md my-2 bg-card text-card-foreground w-full hover:bg-[#f5f5f5] bg-white grid grid-cols-[40%_21%_3%_36%]"
             key={index}
           >
             <div className="ml-5 py-4 ">
@@ -51,7 +53,7 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
                     ปีการศึกษา 1/2567
                 </div>
             </div>
-          </div>
+          </Link>
         ))}
     </>
   );

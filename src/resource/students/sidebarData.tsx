@@ -23,7 +23,7 @@ export interface ProfileData {
 export const ProfileData: ProfileData = {
   name: "ถิรวัฒน์ พงศ์ปฏิสนธิพงศ์ปฏิสนธิ",
   id: "6410450958",
-  href: "/profile",
+  href: "/pages/student/profile",
 };
 
 export const StudentSidebarData: StudentSidebarProps = {

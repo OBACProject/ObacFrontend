@@ -22,7 +22,7 @@ import {
 
   export const ProfileData: ProfileData = {
     name: "Patarajarin Napakarn",
-    href: "/profile",
+    href: "/pages/teacher/profile",
   };
   
 
