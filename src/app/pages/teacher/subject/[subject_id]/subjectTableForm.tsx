@@ -19,64 +19,64 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
     {
       studentId: "100001",
       studentName: "สมชาย ใจดี",
-      Score1: 10,
-      Score2: 20,
+      Score1: 33,
+      Score2: 12,
       Score3: 30,
     },
     {
       studentId: "100002",
       studentName: "สมศรี สวยงาม",
-      Score1: 15,
-      Score2: 25,
-      Score3: 35,
+      Score1: 35,
+      Score2: 15,
+      Score3: 20,
     },
     {
       studentId: "100003",
       studentName: "อาทิตย์ แสงจันทร์",
-      Score1: 20,
-      Score2: 15,
-      Score3: 40,
+      Score1: 27,
+      Score2: 8,
+      Score3: 22,
     },
     {
       studentId: "100004",
       studentName: "วันเพ็ญ นวลตา",
-      Score1: 30,
-      Score2: 10,
+      Score1: 41,
+      Score2: 5,
       Score3: 25,
     },
     {
       studentId: "100005",
       studentName: "นพดล เพชรนิล",
-      Score1: 25,
-      Score2: 30,
-      Score3: 20,
+      Score1: 45,
+      Score2: 13,
+      Score3: 11,
     },
     {
       studentId: "100006",
       studentName: "วิภาวดี ทองคำ",
-      Score1: 35,
-      Score2: 20,
+      Score1: 38,
+      Score2: 18,
       Score3: 15,
     },
     {
       studentId: "100007",
       studentName: "ประยุทธ์ ขยันยิ่ง",
       Score1: 40,
-      Score2: 10,
+      Score2: 11,
       Score3: 20,
     },
     {
       studentId: "100008",
       studentName: "พิมพ์ใจ จิตใจงาม",
-      Score1: 15,
-      Score2: 35,
+      Score1: 42,
+      Score2: 15,
       Score3: 25,
     },
     {
       studentId: "100009",
       studentName: "นฤมล ใจเย็น",
-      Score1: 20,
-      Score2: 30,
+      Score1: 34,
+      Score2: 17,
       Score3: 10,
     },
     {
@@ -84,7 +84,7 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
       studentName: "เจษฎา ศักดิ์ใหญ่",
       Score1: 25,
       Score2: 15,
-      Score3: 35,
+      Score3: 28,
     },
   ]);
 
@@ -123,19 +123,28 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
           <input
             type="number"
             value={item.Score1}
-            className="text-center  border-r-2 py-2 group-hover:bg-[#e8f3ff]"
+            min={0} max={50}
+            className={`text-center  py-2 group-hover:bg-[#e8f3ff] ${
+                item.Score1 > 50 || item.Score1 < 0?   "border-red-500 rounded-md border-[3px]" : "border-gray-300 border-r-2"
+              }`}
             onChange={(e) => handleInputChange(index, "Score1", e.target.value)}
           />
           <input
             type="number"
             value={item.Score2}
-            className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"
+            min={0} max={20}
+            className={`text-center  py-2 group-hover:bg-[#e8f3ff] ${
+                item.Score2 > 20 || item.Score2 < 0 ? "border-red-500 rounded-md border-[3px]" : "border-gray-300 border-r-2"
+              }`}
             onChange={(e) => handleInputChange(index, "Score2", e.target.value)}
           />
           <input
             type="number"
             value={item.Score3}
-            className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"
+            min={0} max={30}
+            className={`text-center  py-2 group-hover:bg-[#e8f3ff] ${
+                item.Score3 > 30|| item.Score3 < 0 ? "border-red-500 rounded-md border-[3px]" : "border-gray-300 border-r-2"
+              }`}
             onChange={(e) => handleInputChange(index, "Score3", e.target.value)}
           />
           <span className="text-center border-r-2 py-2">
