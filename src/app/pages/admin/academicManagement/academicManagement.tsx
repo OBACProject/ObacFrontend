@@ -5,9 +5,9 @@ import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { AcademicColumn, AcademicData } from "@/resource/admin/adminData";
 
 import { useState, useEffect } from "react";
+import { AcademicColumn, AcademicData } from "@/resource/admin/academicData";
 
 export function AcademicPage() {
   const [searchStaff, setSearchStaff] = useState<string>("");
@@ -42,7 +42,7 @@ export function AcademicPage() {
       name: "Name",
       surname: "Surname",
       email: "Email",
-    }, // Assuming no custom headers are needed
+    },
     [
       {
         label: "Edit",
