@@ -35,7 +35,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: 10 } }, // กำหนดค่าเริ่มต้นของ pageSize
+    initialState: { pagination: { pageSize: 6 } }, // กำหนดค่าเริ่มต้นของ pageSize
   });
 
   // pagination
