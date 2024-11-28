@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import MenuBar from "./menuBar"; // Adjust the import path as needed
+import { useRouter } from "next/navigation";
 
 type DropdownData = {
   id: string;
@@ -8,6 +9,7 @@ type DropdownData = {
 };
 
 export default function Form() {
+  const router = useRouter();
   const [faculty, setFaculty] = useState<string | null>();
   const [level, setLevel] = useState<string | null>();
   const [group, setGroup] = useState<string | null>();
@@ -234,6 +236,9 @@ export default function Form() {
       ? subjectJ_lv2
       : [];
 
+  const handleSearch = () => {
+    router.push(`/pages/academic/course-management/${group}`)
+  };
   return (
     <>
       <MenuBar />
@@ -329,8 +334,11 @@ export default function Form() {
           </div>
           <div className="w-full mt-5 pr-28 grid place-content-end">
             <button
-              className={`${group ? 'bg-blue-500' : 'bg-blue-200'} text-md mr-16 rounded-sm py-2 px-16 text-white `}
+              className={`${
+                group ? "bg-blue-500" : "bg-blue-200"
+              } text-md mr-16 rounded-sm py-2 px-16 text-white `}
               disabled={!group}
+              onClick={handleSearch}
             >
               Search
             </button>
