@@ -169,7 +169,7 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
   };
   return (
     <div className="w-full ">
-      <div className="  bg-[#cfe4ff] grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border-2 border-blue-700">
+      <div className="  bg-[#cfe4ff] grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border-2 border-gray-400">
         <span className="grid place-items-center text-xl py-2">No.</span>
         <span className="grid place-items-center text-xl  py-2">รหัสนักเรียน</span>
         <span className="grid place-items-center text-xl  py-2">ชื่อ - นามสกุล</span>
