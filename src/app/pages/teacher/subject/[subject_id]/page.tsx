@@ -17,7 +17,7 @@ export default async function Page({
 
   return (
     <div className="pl-20">
-        <MenuBar slug={slug} />
+        <MenuBar slug={slug} subjectName={"บริหารธุรกิจและการตลาด"} />
         <div className="px-5 py-5">
           <SubjectTableForm slug={slug} studentData={[]} />  
         </div>
