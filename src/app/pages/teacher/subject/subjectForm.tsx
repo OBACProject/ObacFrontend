@@ -53,9 +53,18 @@ export default function SubjectForm() {
 
   return (
     <>
-      <div className="text-xl border-2  border-gray-200 py-2 px-5">
-        <div className=" lg:w-3/5 sm:w-full md:w-full">
-          <CardSubject cardSubjectData={subjectCards} />
+      <div className="text-xl px-5 py-5">
+        <div className="border-2 py-2 px-5 border-gray-200 border-dashed">
+          {subjectCards.length > 0 ? (
+            <div className="ml-14 lg:w-3/5 sm:w-full md:w-full">
+            <CardSubject cardSubjectData={subjectCards} />
+          </div>
+          ):(
+            <div className="grid text-gray-500 text-3xl font-semibold place-items-center py-10">
+              ไม่มีวิชาที่สอน
+            </div>
+          )}
+          
         </div>
       </div>
     </>

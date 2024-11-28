@@ -12,9 +12,10 @@ type SubjectData = {
 interface Props {
   slug: string;
   studentData?: SubjectData[];
+  onEdit:boolean|null | undefined;
 }
 
-export default function SubjectTableForm({ slug, studentData = [] }: Props) {
+export default function SubjectTableForm({ slug, studentData = [],onEdit }: Props) {
   const [studentDatas, setStudentData] = useState<SubjectData[]>([
     {
       studentId: "100001",
@@ -202,6 +203,7 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
             {item.studentName}
           </span>
           <input
+          disabled={onEdit!=true}
             type="number"
             value={item.Score1}
             min={0}
@@ -213,7 +215,7 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
             }`}
             onChange={(e) => handleInputChange(index, "Score1", e.target.value)}
           />
-          <input
+          <input disabled={onEdit!=true}
             type="number"
             value={item.Score2}
             min={0}
@@ -226,6 +228,7 @@ export default function SubjectTableForm({ slug, studentData = [] }: Props) {
             onChange={(e) => handleInputChange(index, "Score2", e.target.value)}
           />
           <input
+          disabled={onEdit!=true}
             type="number"
             value={item.Score3}
             min={0}
