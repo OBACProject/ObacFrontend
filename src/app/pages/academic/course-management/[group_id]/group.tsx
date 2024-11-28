@@ -117,7 +117,7 @@ export default function Group({ id }: Props) {
           เพิ่มรายวิชา
         </button>
       </div>
-      <div className="grid place-items-center">
+      <div className="grid my-5 place-items-center">
         {schedules?.map((items, index) => (
           <div className="w-4/5 mt-2  border-[1px] border-gray-200 shadow-md shadow-gray-200  rounded-md grid grid-cols-[20%_30%_25%_25%]">
             <div
@@ -137,7 +137,7 @@ export default function Group({ id }: Props) {
                   : items.day == "saturday"
                   ? "bg-purple-300"
                   : ""
-              } py-5 px-5 rounded-l-md border-r-2 border-gray-500 place-items-center grid`}
+              } py-5 px-5 rounded-l-md border-r-2 border-gray-500 place-items-center grid text-lg font-semibold`}
             >
               {items.day}
             </div>
@@ -237,7 +237,7 @@ export default function Group({ id }: Props) {
                   />
                 </span>
               </div>
-              <div className="flex justify-between px-32">
+              <div className="flex justify-between gap-5 px-28 mb-5">
                 <button className="px-8 text-white py-2 bg-blue-500 rounded-sm hover:text-black hover:bg-blue-300"
                 onClick={handleAddSubject}>
                   ตกลง
