@@ -4,7 +4,7 @@ import { LabelInput } from "@/app/components/input/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 
-export default function CreatePage() {
+export default function CreateAcademicPage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

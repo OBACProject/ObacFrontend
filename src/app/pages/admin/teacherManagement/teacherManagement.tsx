@@ -13,13 +13,6 @@ export function TeacherPage() {
     TeacherColumn[]
   >([]);
 
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
-
-  const [rowCount] = useState(paginationModel.page);
-
   const router = useRouter();
   const handleEdit = (id: number) => {
     console.log("Edit", id);

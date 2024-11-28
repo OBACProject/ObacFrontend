@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import CreatePage from "./createAcademic";
+import CreateAcademicPage from "./createAcademic";
 
 export default function Page() {
   return (
     <div className="app">
-      <CreatePage />
+      <CreateAcademicPage />
     </div>
   );
 }
