@@ -16,7 +16,7 @@ export interface ProfileData {
 
 export const ProfileData: ProfileData = {
   name: "Patarajarin Napakarn",
-  href: "/pages/teacher/profile",
+  href: "/pages/academic",
 };
 
 export const AcademicSideBarData: AcademicSidebarProps = {
@@ -35,7 +35,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "จัดตารางสอน",
       tooltip: "grade",
-      href: "/pages/academic/subject",
+      href: "/pages/academic/schedule-management",
       icon: (
         <Grid2X2Plus
           style={{ width: "2.0rem", height: "2.2rem" }}
@@ -46,7 +46,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "รายชื่อนักเรียน",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/pages/academic/student-info-list",
       icon: (
         <BookUser
           style={{ width: "2.2rem", height: "2.5rem" }}
@@ -57,7 +57,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "รายชื่ออาจารย์",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/pages/academic/teacher-info-list",
       icon: (
         <ContactRound
           style={{ width: "2.1rem", height: "2.5rem" }}
@@ -68,7 +68,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "ออกเกรดรายวิชา",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/pages/academic/grad-excution",
       icon: (
         <FileSpreadsheet
           style={{ width: "2.2rem", height: "2.5rem" }}
@@ -79,7 +79,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "รายชื่อไม่ผ่านเกณฑ์วิชา",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/pages/academic/student-failed",
       icon: (
         <OctagonX
           style={{ width: "2.2rem", height: "2.5rem" }}
@@ -90,7 +90,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "รายชื่อผู้สมัครเข้าศึกษา",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/pages/academic/application",
       icon: (
         <UserRound
           style={{ width: "2.2rem", height: "2.5rem" }}

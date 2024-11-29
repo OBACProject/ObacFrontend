@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import MenuBar from "./menuBar"; // Adjust the import path as needed
+import MenuBar from "./menuBar";
 import { useRouter } from "next/navigation";
-
+import { Search } from "lucide-react";
 type DropdownData = {
   id: string;
   label: string;
@@ -243,12 +243,12 @@ export default function Form() {
     <>
       <MenuBar />
       <div>
-        <div className="shadow-md shadow-gray-200 border-b-[1px] border-gray-200 py-5 lg:px-32 sm:px-20 md:px-32 ">
+        <div className="shadow-md shadow-gray-200 border-b-[1px] border-gray-200 py-5 lg:px-48 sm:px-20 md:px-32 ">
           <div
             className="grid lg:grid-cols[25%_25%_25%_25%] md:grid-cols-4 
         "
           >
-            <div className="gridborder-2 lg:place-items-center sm:place-items-start">
+            <div className="gridborder-2 lg:place-items-start sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 ระดับการศึกษา
               </label>
@@ -267,13 +267,13 @@ export default function Form() {
                 ))}
               </select>
             </div>
-            <div className="grid lg:place-items-center sm:place-items-start ">
-              <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
+            <div className="grid lg:place-items-start sm:place-items-start ">
+              <label className="block pl-1  mb-2 text-md font-semibold text-gray-900">
                 หลักสูตรการศึกษา
               </label>
               <select
                 id="faculty"
-                className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block text-center py-2 px-4 cursor-pointer"
+                className="w-4/5 bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block text-center py-2 px-4 cursor-pointer"
                 onChange={handleFacultyChange}
                 disabled={!selectedEducation}
               >
@@ -288,7 +288,7 @@ export default function Form() {
               </select>
             </div>
 
-            <div className="grid lg:place-items-center sm:place-items-start">
+            <div className="grid lg:place-items-start sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 ชั้นปี
               </label>
@@ -314,7 +314,7 @@ export default function Form() {
               </label>
               <select
                 id="level"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block text-center py-2 px-4 cursor-pointer"
+                className="bg-gray-50  w-2/3 border border-gray-300 text-gray-900 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block text-center py-2 px-4 cursor-pointer"
                 disabled={!faculty || !level}
                 onChange={handleGroupChange}
               >
@@ -333,15 +333,35 @@ export default function Form() {
               </select>
             </div>
           </div>
-          <div className="w-full mt-5 pr-28 grid lg:place-content-end sm:place-items-center">
+          <div className="w-full mt-5 grid lg:grid-cols-4
+          md:grid-cols-4 sm:grid-cols-1">
+            <div></div>
+            <div></div>
+            <div></div>
             <button
               className={`${
-                group ? "bg-blue-500" : "bg-blue-200"
-              } text-md mr-16 rounded-sm py-2 px-16 text-white `}
+                group ? "bg-blue-500 hover:bg-blue-400" : "bg-blue-200"
+              } text-md mr-16 rounded-sm w-2/3 py-2  text-white `}
               disabled={!group}
               onClick={handleSearch}
             >
-              Search
+              ค้นหา
+            </button>
+          </div>
+          <hr className="my-5" />
+          <div className=" flex mt-10 mb-5  gap-0">
+            <input
+              type="text"
+              placeholder="รหัสนักเรียน"
+              className="text-md  border-gray-300 bg-gray-50 border-2 border-r-[0px] w-fit rounded-l-md px-5 py-2 focus:outline-blue-400"
+            />
+            <button
+              className={`text-md mr-16 rounded-r-md py-2 px-5 text-white bg-blue-500 hover:bg-blue-400`}
+            >
+              <Search
+                style={{ width: "1.0rem", height: "1.0rem" }}
+                className="text-[#ffff]"
+              />
             </button>
           </div>
         </div>
