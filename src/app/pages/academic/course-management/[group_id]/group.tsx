@@ -43,24 +43,6 @@ export default function Group({ id }: Props) {
       day: "friday",
       room: "102",
     },
-    {
-      id: "3",
-      subjectName: "วิชาศาสตร์มืดเพื่อแม่",
-      subjectId: "333012",
-      periode: "2",
-      teacherName: "ทีรวัตน์",
-      day: "tuesday",
-      room: "102",
-    },
-    {
-      id: "4",
-      subjectName: "วิชาปรุงยาขาย",
-      subjectId: "333012",
-      periode: "2",
-      teacherName: "ภัทรจาริน",
-      day: "thusday",
-      room: "102",
-    },
   ]);
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const days = [
@@ -159,7 +141,7 @@ export default function Group({ id }: Props) {
       </div>
       {popUpAddSubject == true && (
         <div
-          className="fixed inset-0 flex items-center duration-1000 animate-appearance-in justify-center bg-gray-200 bg-opacity-45"
+          className="fixed inset-0 flex items-center duration-1000 animate-appearance-in justify-center bg-gray-200 bg-opacity-60"
           onClick={onClosePopUp}
         >
           <div

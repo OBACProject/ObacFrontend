@@ -153,6 +153,9 @@ export default function Form() {
     { id: "1", label: "ปวส2.7" },
   ]);
 
+
+
+
   const [selectedEducation, setSelectedEducation] = useState<string>("");
 
   const handleEducationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -243,9 +246,10 @@ export default function Form() {
     <>
       <MenuBar />
       <div>
-        <div className="shadow-md shadow-gray-200 border-b-[1px] border-gray-200 py-5 px-32">
-          <div className="grid grid-cols-[25%_25%_25%_25%]  ">
-            <div className="grid place-items-center">
+        <div className="shadow-md shadow-gray-200 border-b-[1px] border-gray-200 py-5 lg:px-32 sm:px-20 md:px-32 xs:px-32">
+          <div className="grid lg:grid-cols-4 md:grid-cols-4 
+          sm:grid-rows-4 ">
+            <div className="grid lg:place-items-center sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 ระดับการศึกษา
               </label>
@@ -265,7 +269,7 @@ export default function Form() {
               </select>
             </div>
 
-            <div className="grid place-items-center ">
+            <div className="grid lg:place-items-center sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 หลักสูตรการศึกษา
               </label>
@@ -286,7 +290,7 @@ export default function Form() {
               </select>
             </div>
 
-            <div className="grid place-items-center">
+            <div className="grid lg:place-items-center sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 ชั้นปี
               </label>
@@ -307,7 +311,7 @@ export default function Form() {
               </select>
             </div>
 
-            <div className="grid place-items-start">
+            <div className="grid lg:place-items-start sm:place-items-start">
               <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
                 กลุ่มการเรียน
               </label>
@@ -332,7 +336,7 @@ export default function Form() {
               </select>
             </div>
           </div>
-          <div className="w-full mt-5 pr-28 grid place-content-end">
+          <div className="w-full mt-5 pr-28 grid lg:place-content-end sm:place-items-center">
             <button
               className={`${
                 group ? "bg-blue-500" : "bg-blue-200"
