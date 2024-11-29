@@ -90,7 +90,7 @@ export default function page() {
           <div className="w-full">
             <Tabs
               defaultValue="profile"
-              className="w-full flex min-h-dvh border-2 border-black rounded-md"
+              className="w-full z-10 flex min-h-dvh border-2 border-black rounded-md"
             >
               {/* Tabs List */}
               <TabsList className="rounded-sm  flex flex-col w-3/12 sticky h-40  ">
@@ -106,7 +106,7 @@ export default function page() {
               </TabsList>
 
               {/* Tabs Content */}
-              <div className="w-9/12 flex bg-sky-50  border-l-4 border-slate-200 p-4">
+              <div className="w-9/12 flex bg-sky-50 z-10 border-l-4 border-slate-200 p-4">
                 <TabsContent
                   value="profile"
                   className="flex-grow ml-6 p-2 text-sm"
