@@ -7,8 +7,8 @@ export async function login(formData: FormData) {
   await serverLogin(formData);
   redirect("/pages/login");
 }
-
 export async function logout() {
   await serverLogout();
   redirect("/pages/login");
 }
+

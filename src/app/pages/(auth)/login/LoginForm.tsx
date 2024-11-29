@@ -38,7 +38,7 @@ export default function LoginForm({ session }: Session) {
         <>
           <form
             onSubmit={handleLogin}
-            className="pb-5 grid place-items-center bg-white border-[1px] w-3/12 rounded-lg shadow-sm"
+            className="pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
           >
             <div className="mt-10 bg-blue-900 rounded-full w-28 h-28"></div>
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
