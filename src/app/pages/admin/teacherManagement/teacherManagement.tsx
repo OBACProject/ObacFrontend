@@ -3,7 +3,10 @@ import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { TeacherColumn, teacherData } from "@/resource/admin/teacherData";
+import {
+  TeacherColumn,
+  exampleTeacherColumns,
+} from "@/resource/admin/teacherData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -30,22 +33,22 @@ export function TeacherPage() {
   const columns = makeColumns<TeacherColumn>(
     {
       id: "",
-      name: "",
-      surname: "",
-      englishName: "",
-      englishSurname: "",
-      faculty: "",
-      email: "",
+      thaiName: "",
+      thaiLastName: "",
+      teacherFirstName: "",
+      teacherLastName: "",
+      teacherFaculty: "",
+      teacherEmail: "",
     },
     "id",
     {
       id: "ID",
-      name: "Name",
-      surname: "Surname",
-      englishName: "English Name",
-      englishSurname: "English Surname",
-      faculty: "Faculty",
-      email: "Email",
+      thaiName: "Thai Name",
+      thaiLastName: "Thai Surname",
+      teacherFirstName: "First Name (English)",
+      teacherLastName: "Last Name (English)",
+      teacherFaculty: "Faculty",
+      teacherEmail: "Email",
     },
     [
       {
@@ -62,19 +65,23 @@ export function TeacherPage() {
   );
 
   useEffect(() => {
-    const searchMatch = teacherData.filter(
+    const searchMatch = exampleTeacherColumns.filter(
       (teacher) =>
-        teacher.name.toLowerCase().includes(searchTeacher.toLowerCase()) ||
-        teacher.email.toLowerCase().includes(searchTeacher.toLowerCase()) ||
+        teacher.teacherFirstName
+          .toLowerCase()
+          .includes(searchTeacher.toLowerCase()) ||
+        teacher.teacherLastName
+          .toLowerCase()
+          .includes(searchTeacher.toLowerCase()) ||
         teacher.id.toLowerCase().includes(searchTeacher.toLowerCase()) ||
-        teacher.surname.toLowerCase().includes(searchTeacher.toLowerCase()) ||
-        teacher.englishName
+        teacher.thaiName.toLowerCase().includes(searchTeacher.toLowerCase()) ||
+        teacher.thaiLastName
           .toLowerCase()
           .includes(searchTeacher.toLowerCase()) ||
-        teacher.englishSurname
+        teacher.teacherFaculty
           .toLowerCase()
           .includes(searchTeacher.toLowerCase()) ||
-        teacher.faculty.toLowerCase().includes(searchTeacher.toLowerCase())
+        teacher.teacherEmail.toLowerCase().includes(searchTeacher.toLowerCase())
     );
     setSearchTeacherFilter(searchMatch);
   }, [searchTeacher]);

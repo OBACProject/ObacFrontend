@@ -4,7 +4,6 @@ export function LabelInput(props: {
   htmlFor: string;
   className?: string;
   editData?: string;
-  onEdit?: (edit: string) => void;
 }) {
   return (
     <div className="relative mt-6 w-full mx-4">
@@ -13,7 +12,6 @@ export function LabelInput(props: {
         id={props.htmlFor}
         placeholder=" "
         defaultValue={props.editData}
-        onChange={(e) => props.onEdit?.(e.target.value)}
         className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
       />
       <label
