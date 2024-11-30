@@ -71,7 +71,7 @@ export function Combobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={`w-full p-0`}>
-        <Command>
+        <Command className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 dark:border-gray-600 ">
           <CommandInput placeholder="Search..." className={`h-9`} />
           <CommandList>
             <CommandEmpty>No options found.</CommandEmpty>

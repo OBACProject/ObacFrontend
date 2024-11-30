@@ -35,7 +35,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: 10 } }, // กำหนดค่าเริ่มต้นของ pageSize
+    initialState: { pagination: { pageSize: 6 } }, // กำหนดค่าเริ่มต้นของ pageSize
   });
 
   // pagination
@@ -151,16 +151,16 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
         <div className="flex items-center justify-between py-4">
           {/* Left side: Showing total rows */}
           <div className="ml-4">
-            Showing{" "}
+            Showing
             {table.getState().pagination.pageIndex *
               table.getState().pagination.pageSize +
-              1}{" "}
-            to{" "}
+              1}
+            to
             {Math.min(
               (table.getState().pagination.pageIndex + 1) *
                 table.getState().pagination.pageSize,
               table.getFilteredRowModel().rows.length
-            )}{" "}
+            )}
             of {table.getFilteredRowModel().rows.length} results
           </div>
 
