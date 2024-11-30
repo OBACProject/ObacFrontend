@@ -3,7 +3,7 @@ import React from 'react'
 export default function page() {
   return (
     <div className='w-full'>
-        <div className='grid place-items-center  py-8 text-bole text-2xl px-20 bg-blue-900 text-white'>
+        <div className='grid place-items-center border-t-2 border-white  py-8 text-bole text-2xl px-20 bg-blue-900 text-white'>
             วิสัยทัศน์
         </div>
         <div className='grid place-items-center pb-20'>

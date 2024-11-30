@@ -6,6 +6,7 @@ interface DropMenuList {
   menuName: string;
   menuIcon: React.ReactNode;
   tab: string;
+  href:string;
 }
 
 export interface DropMenuProps {
@@ -26,6 +27,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "history",
+        href:"/pages/home/aboutObac/history"
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
@@ -34,6 +36,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "vision",
+        href:"/pages/home/aboutObac/symbol"
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
@@ -42,6 +45,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "symbol",
+        href:"/pages/home/aboutObac/vision"
       },
     ],
   },
@@ -56,6 +60,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "accounting",
+        href:"/pages/home"
       },
       {
         menuName: "การตลาด",
@@ -64,6 +69,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "marketing",
+        href:"/pages/home"
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
@@ -72,6 +78,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "digital",
+        href:"/pages/home"
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
@@ -80,6 +87,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "graphic",
+        href:"/pages/home"
       },
       {
         menuName: "การท่องเที่ยว",
@@ -88,6 +96,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "tourism",
+        href:"/pages/home"
       },
     ],
   },
@@ -102,6 +111,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "management",
+        href:"/pages/home/managementStructure/executive",
       },
       {
         menuName: "คณะผู้บริหารวิทยาลัย",
@@ -110,12 +120,13 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "executive",
+        href:"/pages/home/managementStructure/management"
       },
     ],
   },
   {
     menuTopic: "ข่าวสารและกิจกรรม",
-    href: "/news",
+    href: "/pages/home/news",
     menuList: [
       {
         menuName: "กิจกรรม",
@@ -124,6 +135,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "activity",
+        href:"/pages/home"
       },
       {
         menuName: "ข่าวสาร",
@@ -132,12 +144,13 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "news",
+        href:"/pages/home"
       },
     ],
   },
   {
     menuTopic: "ติดต่อ",
-    href: "/contact",
+    href: "/pages/home/contact",
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
@@ -146,6 +159,7 @@ export const NavbarData: DropMenuProps[] = [
         className="text-[#0C2943]"
       />,
         tab: "contact",
+        href:"/pages/home/contact"
       },
     ],
   },

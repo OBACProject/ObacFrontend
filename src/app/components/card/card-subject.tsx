@@ -21,7 +21,7 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
       {Array.isArray(cardSubjectData) &&
         cardSubjectData.map((data, index) => (
           <Link href={data.subjectId}
-            className=" border-[1px] hover:border-black border-[#A4B7E0] rounded-md my-2 bg-card text-card-foreground w-full hover:bg-[#f5f5f5] bg-white grid grid-cols-[40%_21%_3%_36%]"
+            className=" border-[1px] hover:border-black border-[#A4B7E0] rounded-md my-2 bg-card text-card-foreground w-full hover:bg-gray-50 bg-white grid grid-cols-[40%_21%_3%_36%]"
             key={index}
           >
             <div className="ml-5 py-4 ">
@@ -34,7 +34,7 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
             </div>
 
             <div className="py-3 w-11/12">
-              <p className="text-center text-gray-600 font-semibold py-1 px-2 bg-[#D6E9E9] rounded-md">ห้องสอน : {data.currentRoom}</p>
+              <p className="text-center text-gray-600 font-semibold py-1 px-2 bg-[#e4f1f8] rounded-md">ห้องสอน : {data.currentRoom}</p>
             </div>
             <div className={`${data.subjectStatus==2?'bg-[#D2F9E0]':'bg-[#DBEFFA] h-full w-full'}`}>
 
