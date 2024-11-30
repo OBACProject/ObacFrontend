@@ -36,7 +36,7 @@ export function Navbar() {
         </div>
       </div>
       {/* menu bar */}
-      <div className=" text-white w-full flex justify-center bg-[#2E58A2]">
+      <div className=" text-white w-full flex justify-center bg-blue-900">
         <DropMenu menuData={NavbarData} />
       </div>
     </header>
