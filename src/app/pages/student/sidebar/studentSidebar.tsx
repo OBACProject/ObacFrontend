@@ -75,11 +75,10 @@ export function SidebarMenu({
         </div>
       </div>
 
-
       <div className="border-t-2 pt-2 mt-4">
         {menuItems.map((item, index) => (
           <a key={index} href={item.href}>
-            <button className="h-12 flex items-center w-full px-2 group">
+            <button className="h-12 flex items-center w-full px-2 group hover:bg-blue-200 hover:rounded-lg">
               <div className="flex items-center gap-4 w-full">
                 <div className="w-10 h-10 flex items-center justify-center">
                   {item.icon}
