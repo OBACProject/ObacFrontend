@@ -1,14 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faLaptop,
-  faMagnifyingGlassDollar,
-  faPen,
-  faPenRuler,
-  faPeopleLine,
-  faReceipt,
-} from "@fortawesome/free-solid-svg-icons";
 
+
+import { Boxes, CalendarRange, Component, Cpu, HandCoins, HandIcon ,Landmark , Lightbulb, Newspaper, NotebookTabs, Phone, Plane, TvMinimalPlay, Users } from "lucide-react";
 interface DropMenuList {
   menuName: string;
   menuIcon: React.ReactNode;
@@ -28,17 +21,26 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "ประวัติมหาลัย",
-        menuIcon: <FontAwesomeIcon icon={faBook} />,
+        menuIcon: <NotebookTabs
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "history",
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
-        menuIcon: <FontAwesomeIcon icon={faPen} />,
+        menuIcon: <Lightbulb
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "vision",
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Component
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "symbol",
       },
     ],
@@ -49,27 +51,42 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "การบัญชี",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <HandCoins
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "accounting",
       },
       {
         menuName: "การตลาด",
-        menuIcon: <FontAwesomeIcon icon={faMagnifyingGlassDollar} />,
+        menuIcon: <Landmark
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "marketing",
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Cpu
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "digital",
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
-        menuIcon: <FontAwesomeIcon icon={faLaptop} />,
+        menuIcon: <TvMinimalPlay
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "graphic",
       },
       {
         menuName: "การท่องเที่ยว",
-        menuIcon: <FontAwesomeIcon icon={faPenRuler} />,
+        menuIcon: <Plane
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "tourism",
       },
     ],
@@ -80,12 +97,18 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "โครงสร้างการบริหาร",
-        menuIcon: <FontAwesomeIcon icon={faBook} />,
+        menuIcon: <Users
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "management",
       },
       {
         menuName: "คณะผู้บริหารวิทยาลัย",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Boxes
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "executive",
       },
     ],
@@ -96,12 +119,18 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "กิจกรรม",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <CalendarRange
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "activity",
       },
       {
         menuName: "ข่าวสาร",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <Newspaper
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "news",
       },
     ],
@@ -112,7 +141,10 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <Phone
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-[#0C2943]"
+      />,
         tab: "contact",
       },
     ],
