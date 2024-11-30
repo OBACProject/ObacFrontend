@@ -5,43 +5,66 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
+  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-interface DropMenuProps {
-  menuName: string;
-  menuIcon: React.ReactNode;
-  href: string;
-}
+import { DropMenuProps } from "@/resource/home/navbarData";
 
-export default function DropMenu(menuData: DropMenuProps[]) {
+export default function DropMenu({
+  menuData = [],
+}: {
+  menuData: DropMenuProps[];
+}) {
   return (
     <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>About OBAC</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            {menuData.map((menu) => (
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href={menu.href}
-                  >
-                    <div className="flex items-center justify-center w-12 h-12 bg-primary rounded-md">
-                      {menu.menuIcon}
-                    </div>
-                    <span className="mt-3 text-lg font-bold text-primary">
-                      {menu.menuName}
-                    </span>
-                  </a>
-                </li>
+      <NavigationMenuList className="text-white">
+        {menuData.map((menu, index) => (
+          <NavigationMenuItem key={index}>
+            <NavigationMenuTrigger className="text-base flex ">
+              {menu.menuTopic}
+            </NavigationMenuTrigger>
+            <NavigationMenuContent className="bg-[#FFFBF8]">
+              <ul className="w-[68rem] flex gap-10 p-12">
+                {menu.menuList.map((item, index) => (
+                  <ListItem
+                    key={index}
+                    title={item.menuName}
+                    children={item.menuIcon}
+                  ></ListItem>
+                ))}
               </ul>
-            ))}
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        ))}
       </NavigationMenuList>
     </NavigationMenu>
   );
 }
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink
+        asChild
+        className="flex gap-4 justify-center items-center"
+      >
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="w-10 h-10 text-slate-600">{children}</div>
+          <div className="text-lg font-medium leading-none">{title}</div>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
