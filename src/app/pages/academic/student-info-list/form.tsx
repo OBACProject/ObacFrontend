@@ -237,7 +237,7 @@ export default function Form() {
       : [];
 
   const handleSearch = () => {
-    router.push(`/pages/academic/course-management/${group}`);
+    router.push(`/pages/academic/student-info-list/${group}`);
   };
   return (
     <>
@@ -357,6 +357,7 @@ export default function Form() {
             />
             <button
               className={`text-md mr-16 rounded-r-md py-2 px-5 text-white bg-blue-500 hover:bg-blue-400`}
+              onClick={handleSearch}
             >
               <Search
                 style={{ width: "1.0rem", height: "1.0rem" }}

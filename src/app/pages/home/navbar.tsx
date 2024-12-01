@@ -15,7 +15,6 @@ export function Navbar() {
             <Image
             src="/images/obac-logo.png"
             alt="obac-logo"
-            style={{ objectFit: "contain" }}
             width={80}
             height={80}
             className="p-4"

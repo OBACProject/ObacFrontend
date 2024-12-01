@@ -28,8 +28,7 @@ export default function CardHorizontal({ cardData }: CardHorizontalProps) {
                 <Image
                   src={data.img}
                   alt={data.topic}
-                  layout="fill"
-                  objectFit="cover"
+                  fill
                   className="rounded-sm"
                 />
               </div>
