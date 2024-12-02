@@ -2,7 +2,6 @@ export interface EducationData {
   course: string;
   groupsCourse: FacultyInfo[];
 }
-
 export interface FacultyInfo {
   faculty: string;
   faculties: levelInfo[];
