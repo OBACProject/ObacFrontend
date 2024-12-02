@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import MenuBar from "./menuBar";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
-import { Container } from "postcss";
+
 import { Combobox } from "@/app/components/combobox/combobox";
 import {
   EducationData,
@@ -11,6 +9,14 @@ import {
   educationData,
 } from "@/resource/academics/studentInfoList/studentData";
 import { Badge } from "@/components/ui/badge";
+import {
+  StudentColumns,
+  studentColumnsData,
+} from "@/resource/academics/studentInfoList/studentDataTable";
+import { run } from "node:test";
+import { makeColumns } from "@/app/components/table/makeColumns";
+import { DataTable } from "@/app/components/table/tableComponent";
+import { Input } from "@/components/ui/input";
 type DropdownData = {
   id: string;
   label: string;
@@ -18,8 +24,6 @@ type DropdownData = {
 
 export default function Form() {
   const router = useRouter();
-  const [faculty, setFaculty] = useState<string | null>();
-  const [level, setLevel] = useState<string | null>();
   const [group, setGroup] = useState<string | null>();
   const [education, setEducation] = useState<DropdownData[]>([
     {
@@ -31,6 +35,11 @@ export default function Form() {
       label: "ปวส.",
     },
   ]);
+
+  const [searchStudent, setSearchStudent] = useState<string>("");
+  const [searchStudentFilter, setSearchStudentFilter] = useState<
+    StudentColumns[]
+  >([]);
 
   // use for selected filter
   const [selectedCourse, setSelectedCourse] = useState<string>("");
@@ -74,6 +83,7 @@ export default function Form() {
 
     return levelData?.sec || [];
   };
+  console.log(studentColumnsData);
   // Function to handle selection change
   const handleCourseChange = (selected: string) => {
     setSelectedCourse(selected);
@@ -102,26 +112,9 @@ export default function Form() {
     setSelectedSec(selected);
   };
 
-  // const [selectedEducation, setSelectedEducation] = useState<string>("");
-
-  // const handleEducationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setSelectedEducation(e.target.value);
-  // };
-
-  // // const handleFacultyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  // //   setFaculty(e.target.value);
-  // // };
-  // const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setLevel(e.target.value);
-  // };
-
-  // const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setGroup(e.target.value);
-  // };
   useEffect(() => {
     // edit Data from a educationData
     // course data : [ปวช,ปวส]
-    // console.log("educationData", educationData);
     const vocational = educationData.filter((item) => item.course === "ปวช.");
     const diploma = educationData.filter((item) => item.course === "ปวส.");
 
@@ -136,10 +129,47 @@ export default function Form() {
     // group data : [1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.1,3.2,3.3,3.4,3.5,3.6]
   }, []);
 
+  useEffect(() => {
+    const normalizedSearch = searchStudent.toLowerCase();
+    const filteredStudent = studentColumnsData.filter(
+      (student) =>
+        student.studentId.toLowerCase().includes(normalizedSearch) ||
+        student.studentName.toLowerCase().includes(normalizedSearch) ||
+        student.studentSurname.toLowerCase().includes(normalizedSearch) ||
+        student.more?.toLowerCase().includes(normalizedSearch)
+    );
+    setSearchStudentFilter(filteredStudent);
+  }, [searchStudent, studentColumnsData]);
+
   const handleSearch = () => {
     router.push(`/pages/academic/student-info-list/${group}`);
   };
   console.log(selectedCourse);
+
+  // ----------------- Table -----------------
+  // const [studentData, setStudentData] = useState<StudentColumns[]>([]);
+  const studentColumns: StudentColumns[] = [];
+
+  const columns = makeColumns<StudentColumns>(
+    {
+      runningNumber: 1,
+      studentId: "",
+      studentName: "",
+      studentSurname: "",
+      blank: "",
+      more: "",
+    },
+    "studentId",
+    {
+      runningNumber: "No.",
+      studentId: "รหัสนักเรียน",
+      studentName: "ชื่อ",
+      studentSurname: "นามสกุล",
+      blank: " ",
+      more: "หมายเหตุ",
+    }
+  );
+
   return (
     <>
       <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 flex-col">
@@ -191,7 +221,7 @@ export default function Form() {
                     ชั้นปี
                   </h1>
                   <Combobox
-                    buttonLabel="select level"
+                    buttonLabel="select Grade Level"
                     options={levels.map((item) => ({
                       value: item,
                       label: item,
@@ -207,7 +237,7 @@ export default function Form() {
                     ห้องเรียน
                   </h1>
                   <Combobox
-                    buttonLabel="select level"
+                    buttonLabel="select class"
                     options={sec.map((item) => ({
                       value: item,
                       label: item,
@@ -233,6 +263,31 @@ export default function Form() {
               </div>
             </div>
             {/* <div className="w-1/5"></div> */}
+          </div>
+          <hr className="bg-black mt-4 text-black" />
+          <div className="mt-4 flex flex-col gap-6">
+            <h1>
+              รายชื่อนักเรียน ห้องเรียน : {selectedSec}
+              <br />
+              <span className="text-sm text-gray-400">
+                พบข้อมูลทั้งหมด {studentColumnsData.length} รายการ
+              </span>
+            </h1>
+            <Input
+              type="text"
+              placeholder="Search..."
+              className="w-1/3"
+              onChange={(event) => setSearchStudent(event.target.value)}
+            />
+            <DataTable
+              columns={columns}
+              data={searchStudentFilter}
+              selectedValue="studentId"
+              columnWidths={{
+                blank: 200,
+                more: 100,
+              }}
+            />
           </div>
         </div>
       </header>
