@@ -6,21 +6,19 @@ import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
-  StudentRegisterColumn,
-  StudentRegisterDataColumn,
-} from "@/resource/academics/studentInfoList/studentRegisterData";
-import React, { useEffect, useState } from "react";
+  StudentFailColumnData,
+  StudentFailDataColumn,
+} from "@/resource/academics/studentInfoList/studentFailData";
+import { useEffect, useState } from "react";
 
-export function AcademicRegisterStudent() {
-  const [searchStudent, setSearchStudent] = useState<string>("");
+export function StudentFailed() {
+  const [searchFailStudent, setSearchFailStudent] = useState<string>("");
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
 
-  // console.log(selectedClass, selectedFaculty, selectedProgram);
-
-  const [searchStudentFilter, setSearchStudentFilter] = useState<
-    StudentRegisterDataColumn[]
+  const [searchFailStudentFilter, setSearchFailStudentFilter] = useState<
+    StudentFailDataColumn[]
   >([]);
 
   const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];
@@ -33,10 +31,7 @@ export function AcademicRegisterStudent() {
     "การท่องเที่ยว",
   ];
   const classes = ["ปวช.", "ปวส."];
-
-  // console.log(StudentRegisterColumn);
-
-  const columns = makeColumns<StudentRegisterDataColumn>(
+  const columns = makeColumns<StudentFailDataColumn>(
     {
       runningNumber: 0,
       thaiName: "",
@@ -58,29 +53,32 @@ export function AcademicRegisterStudent() {
     },
     [
       {
-        label: "ดูข้อมูล",
+        label: "ดูรายละเอียด",
         onClick: (id) => console.log("View", id),
         className: "hover:bg-blue-600 bg-blue-500",
       },
       {
-        label: "ปฏิเสธ",
+        label: "ไม่ผ่าน",
         onClick: (id) => console.log("Delete", id),
         className: "hover:bg-red-600 bg-red-500",
       },
     ]
   );
+
   useEffect(() => {
-    const searchMatch = StudentRegisterColumn.filter((student) => {
+    const searchMatch = StudentFailColumnData.filter((student) => {
       const matchesSearch =
-        searchStudent &&
-        (student.runningNumber.toString().includes(searchStudent) ||
+        searchFailStudent &&
+        (student.runningNumber.toString().includes(searchFailStudent) ||
           student.thaiName
             .toLowerCase()
-            .includes(searchStudent.toLowerCase()) ||
+            .includes(searchFailStudent.toLowerCase()) ||
           student.thaiLastName
             .toLowerCase()
-            .includes(searchStudent.toLowerCase()) ||
-          student.gender.toLowerCase().includes(searchStudent.toLowerCase()));
+            .includes(searchFailStudent.toLowerCase()) ||
+          student.gender
+            .toLowerCase()
+            .includes(searchFailStudent.toLowerCase()));
 
       const matchesClass = selectedClass
         ? student.class === selectedClass
@@ -95,26 +93,29 @@ export function AcademicRegisterStudent() {
         : true;
 
       return (
-        (matchesSearch || !searchStudent) &&
+        (matchesSearch || !searchFailStudent) &&
         matchesClass &&
         matchesFaculty &&
         matchesProgram
       );
     });
-    setSearchStudentFilter(searchMatch);
-  }, [searchStudent, selectedClass, selectedFaculty, selectedProgram]);
+    setSearchFailStudentFilter(searchMatch);
+  }, [searchFailStudent, selectedClass, selectedFaculty, selectedProgram]);
   return (
-    <div className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 flex-col">
-      <div className="w-1/6">
-        <Badge className="text-sm sm:text-lg" variant="outline">
-          รายชื่อผู้สมัครเข้าศึกษา
+    <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">
+      <div
+        className="flex justify-between p-4 h-20
+      "
+      >
+        <Badge className="text-sm sm:text-base" variant="outline">
+          รายชื่อนักเรียนสอบตก
         </Badge>
       </div>
       <div className="flex gap-12 mt-6">
         <Input
           type="text"
           placeholder="Search..."
-          onChange={(event) => setSearchStudent(event.target.value)}
+          onChange={(event) => setSearchFailStudent(event.target.value)}
         />
 
         <Combobox
@@ -147,10 +148,10 @@ export function AcademicRegisterStudent() {
       <div className="mt-6">
         <DataTable
           columns={columns}
-          data={searchStudentFilter}
+          data={searchFailStudentFilter}
           selectedValue="id"
         />
       </div>
-    </div>
+    </header>
   );
 }
