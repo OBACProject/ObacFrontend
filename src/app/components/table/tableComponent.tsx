@@ -163,18 +163,24 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
         </Table>
         <div className="flex items-center justify-between py-4">
           {/* Left side: Showing total rows */}
-          <div className="ml-4">
-            Showing
-            {table.getState().pagination.pageIndex *
-              table.getState().pagination.pageSize +
-              1}
-            to
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
-              table.getFilteredRowModel().rows.length
-            )}
-            of {table.getFilteredRowModel().rows.length} results
+          <div className="ml-4 flex gap-2">
+            <span>Showing</span>
+            <span>
+              {table.getState().pagination.pageIndex *
+                table.getState().pagination.pageSize +
+                1}
+            </span>
+            <span>to</span>
+            <span>
+              {Math.min(
+                (table.getState().pagination.pageIndex + 1) *
+                  table.getState().pagination.pageSize,
+                table.getFilteredRowModel().rows.length
+              )}
+            </span>
+            <span>of</span>
+            <span>{table.getFilteredRowModel().rows.length}</span>
+            <span>results</span>
           </div>
 
           {/* Right side: Pagination buttons */}
