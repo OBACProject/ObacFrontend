@@ -1,4 +1,12 @@
-import { BookUser,TableProperties, Grid2X2Plus,ContactRound,FileSpreadsheet,  OctagonX, UsersRound } from "lucide-react";
+import {
+  BookUser,
+  TableProperties,
+  Grid2X2Plus,
+  ContactRound,
+  FileSpreadsheet,
+  OctagonX,
+  UsersRound,
+} from "lucide-react";
 
 export interface AcademicSidebarProps {
   menuItems: {
@@ -90,7 +98,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "รายชื่อผู้สมัครเข้าศึกษา",
       tooltip: "schedule",
-      href: "/pages/academic/application",
+      href: "/pages/academic/register-student",
       icon: (
         <UsersRound
           style={{ width: "2.2rem", height: "2.5rem" }}
