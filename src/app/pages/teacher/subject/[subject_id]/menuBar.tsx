@@ -1,5 +1,6 @@
 
 "use client"
+import GenStudentNameList from "@/app/components/PDF/genStudentNameList";
 import { useState } from "react";
 interface Props {
   slug: string;
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export default function MenuBar({ slug, subjectName, onEditReturn }: Props) {
+  const [FirstName, setFName] = useState<string>("Patarajarin")
+  const [LastName , setLName] = useState<string>("Napakarn")
   const handleEditChange = ()=>{
     onEditReturn(true)
   }
@@ -29,7 +32,7 @@ export default function MenuBar({ slug, subjectName, onEditReturn }: Props) {
           </div>
         </div>
         <div className="grid row-2 gap-2">
-          <button className=" text-md text-gray-600 hover:bg-gray-200 bg-white rounded-md px-6 py-2">
+          <button className=" text-md text-gray-600 hover:bg-gray-200 bg-white rounded-md px-6 py-2" onClick={()=>{GenStudentNameList({FirstName:FirstName,LastName:LastName})}}>
             ดาวน์โหลดเอกสาร
           </button>
           <div className="grid grid-cols-2">
