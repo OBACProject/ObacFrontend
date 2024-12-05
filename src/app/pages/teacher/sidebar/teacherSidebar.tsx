@@ -27,7 +27,6 @@ export function TeacherSidebar({
           style={{
             width: "3.5rem",
             height: "3.5rem",
-            objectFit: "contain",
           }}
         />
         <span className="text-center text-lg py-2">

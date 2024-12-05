@@ -27,7 +27,7 @@ export function AcademicSidebar({
           style={{
             width: "3.5rem",
             height: "3.5rem",
-            objectFit: "contain",
+
           }}
         />
         <span className="text-center text-lg py-2">
@@ -49,7 +49,6 @@ export function SidebarMenu({
   menuItems: AcademicSidebarProps["menuItems"];
 }) {
   const truncatedTitle = name.length > 25 ? `${name.slice(0, 22)}...` : name;
-
   return (
     <div className="border-r-2 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 z-40 ">
     <div className="flex h-[48px] ">

@@ -22,7 +22,7 @@ export default function DropMenu({
       <NavigationMenuList className="text-white">
         {menuData.map((menu, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="text-base flex ">
+            <NavigationMenuTrigger className=" hover:bg-blue-800 rounded-none text-base flex ">
               {menu.menuTopic}
             </NavigationMenuTrigger>
             <NavigationMenuContent className="mt-0 bg-white">

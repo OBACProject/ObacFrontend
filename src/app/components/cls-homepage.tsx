@@ -30,7 +30,6 @@ export default function CLShomepage() {
           <img src="/cls/slide01.jpg" alt="slide1" style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
               }} />
           <p className="legend">Beyond to new technology</p>
         </div>
@@ -39,7 +38,6 @@ export default function CLShomepage() {
           <img src="/cls/slide02.jpg" alt="slide2" style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
               }} />
           <p className="legend">Our Service</p>
         </div>
@@ -47,7 +45,6 @@ export default function CLShomepage() {
           <img src="/cls/slide03.jpg" alt="slide3" style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
               }}/>
           <p className="legend">You never seen before</p>
         </div>
@@ -55,7 +52,6 @@ export default function CLShomepage() {
           <img src="/cls/slide04.jpg" alt="slide4" style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
               }} />
           <p className="legend">5G planning</p>
         </div>
@@ -63,7 +59,6 @@ export default function CLShomepage() {
           <img src="/cls/slide05.jpg" alt="slide5"  style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
               }}/>
           <p className="legend">IoT Everywhere</p>
         </div>

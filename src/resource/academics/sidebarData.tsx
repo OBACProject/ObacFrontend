@@ -1,4 +1,4 @@
-import { BookUser,TableProperties, Grid2X2Plus,ContactRound,FileSpreadsheet, CreditCard, OctagonX,UserRound } from "lucide-react";
+import { BookUser,TableProperties, Grid2X2Plus,ContactRound,FileSpreadsheet,  OctagonX, UsersRound } from "lucide-react";
 
 export interface AcademicSidebarProps {
   menuItems: {
@@ -92,7 +92,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       tooltip: "schedule",
       href: "/pages/academic/application",
       icon: (
-        <UserRound
+        <UsersRound
           style={{ width: "2.2rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
