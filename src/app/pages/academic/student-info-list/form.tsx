@@ -13,7 +13,7 @@ import {
   StudentColumns,
   studentColumnsData,
 } from "@/resource/academics/studentInfoList/studentDataTable";
-import { run } from "node:test";
+
 import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Input } from "@/components/ui/input";

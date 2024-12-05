@@ -1,6 +1,7 @@
 
 "use client"
 import GenStudentNameList from "@/app/components/PDF/genStudentNameList";
+import GenTranscript from "@/app/components/PDF/genTranscript";
 import { useState } from "react";
 interface Props {
   slug: string;
@@ -40,7 +41,9 @@ export default function MenuBar({ slug, subjectName, onEditReturn }: Props) {
             onClick={handleEditChange}>
               แก้ไข
             </button>
-            <button className="duration-300 text-white text-md  px-6 border-l-[1px] hover:text-gray-700 hover:rounded-sm hover:bg-blue-200">
+            <button className="duration-300 text-white text-md  px-6 border-l-[1px] hover:text-gray-700 hover:rounded-sm hover:bg-blue-200" onClick={()=>{
+              GenTranscript({score:50})
+            }}>
               บันทึก
             </button>
           </div>

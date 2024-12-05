@@ -6,7 +6,7 @@ import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 
 export function Navbar() {
   return (
-    <header className="flex flex-col shadow-xl">
+    <header className="flex flex-col w-full top-0 left-0 bg-white shadow-xl fixed z-50">
       {/* Logo and Name */}
       <div className="h-1/2">
         <div className="flex justify-between sm:flex-row gap-6 sm:gap-10 sm:ml-12">
