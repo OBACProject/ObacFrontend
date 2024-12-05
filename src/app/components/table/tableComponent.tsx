@@ -22,6 +22,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   onRowClick?: (id: number) => void;
   selectedValue?: string;
+  columnWidths?: Record<string, number>;
 }
 
 export function DataTable<TData extends { [key: string]: any }, TValue>({
@@ -29,7 +30,13 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
   data,
   onRowClick,
   selectedValue,
+  columnWidths = {},
 }: DataTableProps<TData, TValue>) {
+  const defaultColumnWidths = columns.map(() => 250); // Default to 250px for each column
+
+  // Use either provided columnWidths or defaultColumnWidths
+  const effectiveColumnWidths =
+    columnWidths.length > 0 ? columnWidths : defaultColumnWidths;
   const table = useReactTable({
     data,
     columns,
@@ -99,7 +106,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
-                  className={`text-center`}
+                  className={`text-center  h-10`}
                   key={row.id}
                   onClick={() => {
                     const value = selectedValue
@@ -114,26 +121,32 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
                   style={{ cursor: "pointer" }}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell, index) => (
-                    <TableCell
-                      key={cell.id}
-                      className={`${
-                        index === row.getVisibleCells().length - 1
-                          ? "sticky right-0 z-10"
-                          : ""
-                      }`}
-                      style={
-                        index === row.getVisibleCells().length - 1
-                          ? { zIndex: 10 }
-                          : {}
-                      }
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell, index) => {
+                    // Check if the column has a custom width set
+                    const columnWidth = columnWidths[cell.column.id] || 100;
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={`${
+                          index === row.getVisibleCells().length - 1
+                            ? "sticky right-0 z-10"
+                            : "border-r-2"
+                        }`}
+                        style={{
+                          width: columnWidth,
+                          zIndex:
+                            index === row.getVisibleCells().length - 1
+                              ? 10
+                              : undefined,
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
