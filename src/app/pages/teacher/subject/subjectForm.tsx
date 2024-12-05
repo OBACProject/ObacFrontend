@@ -1,7 +1,7 @@
 "use client";
 
 import CardSubject from "@/app/components/card/card-subject";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type SubjectCard = {
   subjectId: string;
@@ -14,8 +14,58 @@ type SubjectCard = {
 interface Props {
   subjectCard: SubjectCard[];
 }
+type CardData =  {
+  teacherId: 1,
+  firstName: string | null,
+  lastName:string | null,
+  thaiName: string,
+  thaiLastName: string,
+  gender: string,
+  rank: string,
+  qualification: string,
+  thaiId:string| null,
+  email:string,
+  phoneNumber: string,
+  address: string | null,
+  nationality:string,
+  religion: string,
+  userId: string,
+  isActive: boolean,
+  hiredDate: string,
+  programId: number,
+  programName: string,
+  facultyId: number,
+  facultyName:string,
+  birthDate: string | null
+}
+
+const getData = async (): Promise<CardData[]> => {
+  try {
+    const res = await fetch("http://139.59.253.55:5111/api/Teacher/GetAllTeacher/");
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+    const text = await res.text();
+
+    const json = JSON.parse(text);
+    const data = json.data;
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+    throw error;
+  }
+};
 
 export default function SubjectForm() {
+  const [datas ,  setData] = useState<CardData | null>(null)
+  useEffect(() => {
+   getData().then((d:any)=>{
+    setData(d)
+   })
+  }, []);
+
+  console.log("==============> :", datas);
+  
   const [subjectCards, setCard] = useState<SubjectCard[]>([
     {
       subjectId: "/pages/teacher/subject/" + "111111",
@@ -54,6 +104,20 @@ export default function SubjectForm() {
   return (
     <>
       <div className="text-xl px-10 py-5">
+        test
+      {
+          Array.isArray(datas) && datas.map((item) => (
+            <div key={item.teacherId} className="text-black my-10">
+              <p>Thai Name: {item.thaiName} {item.thaiLastName}</p>
+              <p>Email: {item.email}</p>
+              <p>Gender: {item.gender}</p>
+              <p>Faculty: {item.facultyName}</p>
+              <p>Program: {item.programName}</p>
+              <p>Rank: {item.rank}</p>
+              <p>Religion: {item.religion}</p>
+            </div>
+          ))
+        }
         <div className="border-2 py-2 px-5 grid place-items-center border-gray-200 border-dashed">
           {subjectCards.length > 0 ? (
             <div className=" lg:w-9/12 sm:w-full md:w-full">
