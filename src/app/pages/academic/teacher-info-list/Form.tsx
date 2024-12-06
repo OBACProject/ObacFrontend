@@ -118,6 +118,15 @@ export default function Form() {
           columns={columns}
           data={searchTeacherFilter}
           selectedValue=""
+          columnWidths={{
+            runningNumber: "w-1/12",
+            teacherId: "w-1/12",
+            teacherName: "w-1/6",
+            teacherSurname: "w-1/6",
+            programs: "w-1/6",
+            email: "w-1/6",
+            phoneNumber: "w-1/6",
+          }}
         />
       </header>
       {/* <div className="py-5 border-b-[1px] border-gray-100 shadow-md shadow-gray-100 ">
