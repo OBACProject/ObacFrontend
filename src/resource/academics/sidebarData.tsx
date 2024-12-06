@@ -76,7 +76,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     {
       title: "ออกเกรดรายวิชา",
       tooltip: "schedule",
-      href: "/pages/academic/grad-excution",
+      href: "/pages/academic/grading",
       icon: (
         <FileSpreadsheet
           style={{ width: "2.2rem", height: "2.5rem" }}
