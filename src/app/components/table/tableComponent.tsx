@@ -22,7 +22,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   onRowClick?: (id: number) => void;
   selectedValue?: string;
-  columnWidths?: Record<string, number>;
+  columnWidths?: Record<string, string>;
 }
 
 export function DataTable<TData extends { [key: string]: any }, TValue>({
@@ -32,11 +32,6 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
   selectedValue,
   columnWidths = {},
 }: DataTableProps<TData, TValue>) {
-  const defaultColumnWidths = columns.map(() => 250); // Default to 250px for each column
-
-  // Use either provided columnWidths or defaultColumnWidths
-  const effectiveColumnWidths =
-    columnWidths.length > 0 ? columnWidths : defaultColumnWidths;
   const table = useReactTable({
     data,
     columns,
@@ -123,17 +118,16 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
                 >
                   {row.getVisibleCells().map((cell, index) => {
                     // Check if the column has a custom width set
-                    const columnWidth = columnWidths[cell.column.id] || 100;
+                    const columnWidth = columnWidths[cell.column.id] || "w-1/6";
                     return (
                       <TableCell
                         key={cell.id}
                         className={`${
                           index === row.getVisibleCells().length - 1
                             ? "sticky right-0 z-10"
-                            : "border-r-2"
+                            : `border-r-2 ${columnWidth}`
                         }`}
                         style={{
-                          width: columnWidth,
                           zIndex:
                             index === row.getVisibleCells().length - 1
                               ? 10
@@ -163,18 +157,24 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
         </Table>
         <div className="flex items-center justify-between py-4">
           {/* Left side: Showing total rows */}
-          <div className="ml-4">
-            Showing
-            {table.getState().pagination.pageIndex *
-              table.getState().pagination.pageSize +
-              1}
-            to
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
-              table.getFilteredRowModel().rows.length
-            )}
-            of {table.getFilteredRowModel().rows.length} results
+          <div className="ml-4 flex gap-2">
+            <span>Showing</span>
+            <span>
+              {table.getState().pagination.pageIndex *
+                table.getState().pagination.pageSize +
+                1}
+            </span>
+            <span>to</span>
+            <span>
+              {Math.min(
+                (table.getState().pagination.pageIndex + 1) *
+                  table.getState().pagination.pageSize,
+                table.getFilteredRowModel().rows.length
+              )}
+            </span>
+            <span>of</span>
+            <span>{table.getFilteredRowModel().rows.length}</span>
+            <span>results</span>
           </div>
 
           {/* Right side: Pagination buttons */}

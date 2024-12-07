@@ -5,6 +5,9 @@ export function LabelInput(props: {
   className?: string;
   editData?: string;
   onEdit?: (edit: string) => void;
+  maxLength?: number;
+  isValid?: boolean;
+  errorMessage?: string;
 }) {
   return (
     <div className="relative mt-6 w-full mx-4">
@@ -14,6 +17,7 @@ export function LabelInput(props: {
         placeholder=" "
         defaultValue={props.editData}
         onChange={(e) => props.onEdit?.(e.target.value)}
+        maxLength={props.maxLength}
         className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
       />
       <label
@@ -22,6 +26,9 @@ export function LabelInput(props: {
       >
         {props.label}
       </label>
+      {!props.isValid && (
+        <span className="text-red-500 text-xs mt-1">{props.errorMessage}</span>
+      )}
     </div>
   );
 }
