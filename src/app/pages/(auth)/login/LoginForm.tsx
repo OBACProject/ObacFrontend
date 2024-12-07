@@ -72,12 +72,32 @@ export default function LoginForm({ session }: Session) {
         </>
       )}
 
-    <div className="flex gap-4 mt-10">
-      <a className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70" href="/pages/student/profile">Student</a>
-      <a className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70" href="/pages/teacher/profile">Teacher</a>
-      <a className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70" href="/pages/academic">Academic</a>
-      <a className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70" href="/pages/admin/">Admin</a>
-    </div>
+      <div className="flex gap-4 mt-10">
+        <a
+          className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
+          href="/pages/student/schedule"
+        >
+          Student
+        </a>
+        <a
+          className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
+          href="/pages/teacher/profile"
+        >
+          Teacher
+        </a>
+        <a
+          className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
+          href="/pages/academic"
+        >
+          Academic
+        </a>
+        <a
+          className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
+          href="/pages/admin/academicManagement"
+        >
+          Admin
+        </a>
+      </div>
     </div>
   );
 }
