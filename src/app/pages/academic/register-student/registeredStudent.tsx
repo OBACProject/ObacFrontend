@@ -17,11 +17,24 @@ export function AcademicRegisterStudent() {
   const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
 
+  // open popup
+  const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
   // console.log(selectedClass, selectedFaculty, selectedProgram);
 
   const [searchStudentFilter, setSearchStudentFilter] = useState<
     StudentRegisterDataColumn[]
   >([]);
+
+  const closePopup = () => {
+    setIsOpenPopUp(false);
+  };
+
+  const openPopup = (registerStudentId: number) => {
+    if (registerStudentId == 0) {
+      alert("ข้อมูลนักเรียกไม่ถูกต้อง");
+    }
+    setIsOpenPopUp(true);
+  };
 
   const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];
   const programNames = [
@@ -53,7 +66,7 @@ export function AcademicRegisterStudent() {
       thaiLastName: "นามสกุล",
       gender: "เพศ",
       class: "ระดับการศึกษา",
-      facultyName: "คณะ",
+      facultyName: "หลักสูตรการศึกษา",
       programName: "สาขา",
     },
     [
@@ -80,7 +93,14 @@ export function AcademicRegisterStudent() {
           student.thaiLastName
             .toLowerCase()
             .includes(searchStudent.toLowerCase()) ||
-          student.gender.toLowerCase().includes(searchStudent.toLowerCase()));
+          student.gender.toLowerCase().includes(searchStudent.toLowerCase()) ||
+          student.class.toLowerCase().includes(searchStudent.toLowerCase()) ||
+          student.facultyName
+            .toLowerCase()
+            .includes(searchStudent.toLowerCase()) ||
+          student.programName
+            .toLowerCase()
+            .includes(searchStudent.toLowerCase()));
 
       const matchesClass = selectedClass
         ? student.class === selectedClass
@@ -105,18 +125,12 @@ export function AcademicRegisterStudent() {
   }, [searchStudent, selectedClass, selectedFaculty, selectedProgram]);
   return (
     <div className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 flex-col">
-      <div className="w-1/6">
+      <div className="w-2/6">
         <Badge className="text-sm sm:text-lg" variant="outline">
           รายชื่อผู้สมัครเข้าศึกษา
         </Badge>
       </div>
       <div className="flex gap-12 mt-6">
-        <Input
-          type="text"
-          placeholder="Search..."
-          onChange={(event) => setSearchStudent(event.target.value)}
-        />
-
         <Combobox
           options={classes.map((classData) => ({
             value: classData,
@@ -142,6 +156,12 @@ export function AcademicRegisterStudent() {
           }))}
           buttonLabel="สาขา"
           onSelect={(selectedProgram) => setSelectedProgram(selectedProgram)}
+        />
+
+        <Input
+          type="text"
+          placeholder="Search..."
+          onChange={(event) => setSearchStudent(event.target.value)}
         />
       </div>
       <div className="mt-6">

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import React from "react";
-import { Grading } from "./grading";
+import { Main } from "./main";
 
 export default function page() {
   return (
@@ -10,7 +10,7 @@ export default function page() {
           ออกเกรดรายวิชา
         </Badge>
 
-        <Grading />
+        <Main />
       </div>
     </header>
   );

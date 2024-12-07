@@ -15,3 +15,12 @@ export interface GradingDataColumn {
   subjectName: string;
   description: string;
 }
+
+export interface ClassSubjectColumn {
+  id: number;
+  day: string;
+  period: string;
+  room: string;
+  teacherName: string;
+  isPublish: boolean;
+}

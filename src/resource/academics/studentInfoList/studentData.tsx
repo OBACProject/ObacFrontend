@@ -8,7 +8,7 @@ export interface FacultyInfo {
 }
 export interface levelInfo {
   level: string;
-  sec: string[];
+  class: string[];
 }
 
 export const educationData: EducationData[] = [
@@ -20,7 +20,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวช.1",
-            sec: [
+            class: [
               "ปวช1.1",
               "ปวช1.2",
               "ปวช1.3",
@@ -33,7 +33,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวช.2",
-            sec: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
+            class: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
           },
         ],
       },
@@ -42,7 +42,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวช.1",
-            sec: [
+            class: [
               "ปวช1.1",
               "ปวช1.2",
               "ปวช1.3",
@@ -55,7 +55,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวช.2",
-            sec: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
+            class: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
           },
         ],
       },
@@ -64,7 +64,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวช.1",
-            sec: [
+            class: [
               "ปวช1.1",
               "ปวช1.2",
               "ปวช1.3",
@@ -77,7 +77,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวช.2",
-            sec: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
+            class: ["ปวช.2.1", "ปวช.2.2", "ปวช.2.3", "ปวช.2.4"],
           },
         ],
       },
@@ -91,7 +91,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวส.1",
-            sec: [
+            class: [
               "ปวส.1.1",
               "ปวส.1.2",
               "ปวส.1.3",
@@ -104,7 +104,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวส.2",
-            sec: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
+            class: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
           },
         ],
       },
@@ -113,7 +113,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวส.1",
-            sec: [
+            class: [
               "ปวส.1.1",
               "ปวส.1.2",
               "ปวส.1.3",
@@ -126,7 +126,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวส.2",
-            sec: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
+            class: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
           },
         ],
       },
@@ -135,7 +135,7 @@ export const educationData: EducationData[] = [
         faculties: [
           {
             level: "ปวส.1",
-            sec: [
+            class: [
               "ปวส.1.1",
               "ปวส.1.2",
               "ปวส.1.3",
@@ -148,7 +148,7 @@ export const educationData: EducationData[] = [
           },
           {
             level: "ปวส.2",
-            sec: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
+            class: ["ปวส.2.1", "ปวส.2.2", "ปวส.2.3", "ปวส.2.4"],
           },
         ],
       },

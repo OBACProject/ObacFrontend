@@ -48,7 +48,7 @@ export function StudentFailed() {
       thaiLastName: "นามสกุล",
       gender: "เพศ",
       class: "ระดับการศึกษา",
-      facultyName: "คณะ",
+      facultyName: "หลักสูตรการศึกษา",
       programName: "สาขา",
     },
     [
@@ -77,6 +77,15 @@ export function StudentFailed() {
             .toLowerCase()
             .includes(searchFailStudent.toLowerCase()) ||
           student.gender
+            .toLowerCase()
+            .includes(searchFailStudent.toLowerCase()) ||
+          student.class
+            .toLowerCase()
+            .includes(searchFailStudent.toLowerCase()) ||
+          student.facultyName
+            .toLowerCase()
+            .includes(searchFailStudent.toLowerCase()) ||
+          student.programName
             .toLowerCase()
             .includes(searchFailStudent.toLowerCase()));
 
@@ -112,12 +121,6 @@ export function StudentFailed() {
         </Badge>
       </div>
       <div className="flex gap-12 mt-6">
-        <Input
-          type="text"
-          placeholder="Search..."
-          onChange={(event) => setSearchFailStudent(event.target.value)}
-        />
-
         <Combobox
           options={classes.map((classData) => ({
             value: classData,
@@ -143,6 +146,12 @@ export function StudentFailed() {
           }))}
           buttonLabel="สาขา"
           onSelect={(selectedProgram) => setSelectedProgram(selectedProgram)}
+        />
+
+        <Input
+          type="text"
+          placeholder="Search..."
+          onChange={(event) => setSearchFailStudent(event.target.value)}
         />
       </div>
       <div className="mt-6">

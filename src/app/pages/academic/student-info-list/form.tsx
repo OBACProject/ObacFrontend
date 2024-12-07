@@ -13,7 +13,7 @@ import {
   StudentColumns,
   studentColumnsData,
 } from "@/resource/academics/studentInfoList/studentDataTable";
-import { run } from "node:test";
+
 import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Input } from "@/components/ui/input";
@@ -45,6 +45,7 @@ export default function Form() {
   const [selectedCourse, setSelectedCourse] = useState<string>("");
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedLevel, setSelectedLevel] = useState<string>("");
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [selectedSec, setSelectedSec] = useState<string>("");
 
   const [vocationalData, setVocationalData] = useState<EducationData[]>([]);
@@ -52,14 +53,27 @@ export default function Form() {
   const [vocationalFaculties, setVocationalFaculties] = useState<FacultyInfo[]>(
     []
   );
+
   const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
+  // const [program, setProgram] = useState<string[]>([]);
   const [sec, setSec] = useState<string[]>([]);
 
   // get faculties from selected course
   const getFaculties = (courseData: EducationData[]): FacultyInfo[] => {
     return courseData.flatMap((item) => item.groupsCourse);
   };
+
+  const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];
+  const programNames = [
+    "การบัญชี",
+    "การตลาด",
+    "คอมพิวเตอร์ธุรกิจ",
+    "คอมพิวกราฟฟิค",
+    "การจัดการสำนักงาน",
+    "การท่องเที่ยว",
+  ];
+  const classes = ["ปวช.", "ปวส."];
 
   // get level from selected faculty
   const getLevels = (selectedFaculty: string) => {
@@ -81,13 +95,14 @@ export default function Form() {
       (faculty) => faculty.level === selectedLevel
     );
 
-    return levelData?.sec || [];
+    return levelData?.class || [];
   };
   console.log(studentColumnsData);
   // Function to handle selection change
   const handleCourseChange = (selected: string) => {
     setSelectedCourse(selected);
     setSelectedFaculty("");
+    setSelectedProgram("");
     setSelectedLevel("");
     setSelectedSec("");
     handleFacultyChange("");
@@ -95,10 +110,16 @@ export default function Form() {
 
   const handleFacultyChange = (selected: string) => {
     setSelectedFaculty(selected);
+    setSelectedProgram("");
     setSelectedLevel("");
     setSelectedSec("");
     const fetchedLevels = getLevels(selected);
     setLevels(fetchedLevels);
+  };
+  const handleProgramChange = (selected: string) => {
+    setSelectedProgram(selected);
+    setSelectedLevel("");
+    setSelectedSec("");
   };
 
   const handleLevelChange = (selected: string) => {
@@ -204,6 +225,15 @@ export default function Form() {
                   </h1>
                   <Combobox
                     buttonLabel="select faculty"
+                    options={facultyNames.map((faculty) => ({
+                      value: faculty,
+                      label: faculty,
+                    }))}
+                    onSelect={(selected) => handleFacultyChange(selected)}
+                    disabled={!selectedCourse}
+                  />
+                  {/* <Combobox
+                    buttonLabel="select faculty"
                     options={(selectedCourse === "ปวช."
                       ? vocationalFaculties
                       : diplomaFaculties
@@ -213,8 +243,23 @@ export default function Form() {
                     }))}
                     onSelect={(selected) => handleFacultyChange(selected)}
                     disabled={!selectedCourse}
+                  /> */}
+                </div>
+
+                {/* faculty select */}
+                <div className="w-1/6 flex flex-col gap-4">
+                  <h1 className="text-md font-semibold text-gray-900">สาขา</h1>
+                  <Combobox
+                    buttonLabel="select program"
+                    options={programNames.map((program) => ({
+                      value: program,
+                      label: program,
+                    }))}
+                    onSelect={(selected) => handleProgramChange(selected)}
+                    disabled={!selectedFaculty}
                   />
                 </div>
+
                 {/* level select */}
                 <div className="w-1/6 flex flex-col gap-4">
                   <h1 className="text-md font-semibold text-gray-900">
@@ -227,7 +272,7 @@ export default function Form() {
                       label: item,
                     }))}
                     onSelect={(selected) => handleLevelChange(selected)}
-                    disabled={!selectedFaculty}
+                    disabled={!selectedProgram}
                   />
                 </div>
 
@@ -273,6 +318,7 @@ export default function Form() {
                 พบข้อมูลทั้งหมด {studentColumnsData.length} รายการ
               </span>
             </h1>
+
             <Input
               type="text"
               placeholder="Search..."
@@ -284,8 +330,12 @@ export default function Form() {
               data={searchStudentFilter}
               selectedValue="studentId"
               columnWidths={{
-                blank: 200,
-                more: 100,
+                runningNumber: "w-1/12",
+                studentId: "w-1/12",
+                studentName: "w-1/6",
+                studentSurname: "w-1/6",
+                blank: "w-1/4",
+                more: "w-1/2",
               }}
             />
           </div>

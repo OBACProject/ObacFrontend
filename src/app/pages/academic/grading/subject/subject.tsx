@@ -8,7 +8,7 @@ import { GradingDataColumn } from "@/dto/gradingDto";
 import { getGradingViewData } from "@/resource/academics/grading/viewData/gradingViewData";
 import { useEffect, useState } from "react";
 
-export function Grading() {
+export function Subject(props: { handleTab: (tab: string) => void }) {
   const [searchSubject, setSearchSubject] = useState<string>("");
 
   const [gradingData, setGradingData] = useState<GradingDataColumn[]>([]);
@@ -22,6 +22,11 @@ export function Grading() {
   const yearsList = Array.from({ length: 5 }, (_, i) =>
     (currentYear - i).toString()
   );
+
+  const handleSelectedData = (id: number) => {
+    props.handleTab("class");
+    console.log("Selected data", id);
+  };
 
   const columns = makeColumns<GradingDataColumn>(
     {
@@ -40,7 +45,7 @@ export function Grading() {
     [
       {
         label: "ตรวจสอบรายละเอียด",
-        onClick: (id) => console.log("View", id),
+        onClick: (id: string | number) => handleSelectedData(Number(id)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
     ]
@@ -65,7 +70,6 @@ export function Grading() {
         item.subjectCode.toLowerCase().includes(normalizedSearch) ||
         item.subjectName.toLowerCase().includes(normalizedSearch) ||
         item.description.toLowerCase().includes(normalizedSearch);
-
       return matchSearch;
     });
 
