@@ -1,6 +1,6 @@
 import React from 'react'
-import SubjectForm from './subjectForm'
-import FilterBar from './filterBar'
+import SubjectForm from './Form'
+import FilterBar from './menuBar'
 
 export default function page() {
   return (

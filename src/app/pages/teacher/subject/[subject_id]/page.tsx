@@ -1,4 +1,4 @@
-import SubjectMainForm from "./subjectMain"
+import SubjectMainForm from "./Main"
 
 
 

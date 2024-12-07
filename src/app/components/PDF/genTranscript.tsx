@@ -1,7 +1,7 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "@/app/pages/pdf/THSarabunFont";
+import THSarabunFont from "@/app/components/PDF/THSarabunFont";
 
 type Data = {
   score: number;
