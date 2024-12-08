@@ -3,15 +3,14 @@ import React, { useEffect, useState } from "react";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 
 interface Props {
-
   grads?: GetGradBySubjectId[];
-  onEdit:boolean|null | undefined;
+  onEdit: boolean | null | undefined;
 }
 
-export default function SubjectTableForm({ grads,onEdit }: Props) {
+export default function SubjectTableForm({ grads, onEdit }: Props) {
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
-    setGradData(grads ?? []); // Use an empty array if grads is undefined
+    setGradData(grads ?? []); 
   }, [grads]);
   const handleInputChange = (
     index: number,
@@ -22,12 +21,53 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
     updatedStudents[index][field] = (parseFloat(value) as number) || 0;
     setGradData(updatedStudents);
   };
+
+  const saveChanges = async () => {
+    try {
+      const payload = gradDatas.map((item) => ({
+        gradeId: item.gradeId ?? 0,
+        collectScore: item.collectScore,
+        testScore: item.testScore,
+        affectiveScore: item.affectiveScore,
+      }));
+      for (let i = 0; i < payload.length; i++) {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload[i]),
+          }
+        );
+        const responseBody = await response.json();
+        console.log("Response from server:", responseBody);
+
+        if (!response.ok) {
+          throw new Error(
+            responseBody.message || "Failed to update student grades"
+          );
+        }
+      }
+      console.log("Payload sent to the server:", payload);
+      alert("Grades updated successfully!");
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      alert("Failed to save grades. Please try again.");
+    }
+  };
+
   return (
     <div className="w-full ">
       <div className="  bg-[#cfe4ff] grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border-2 border-gray-400">
         <span className="grid place-items-center text-xl py-2">No.</span>
-        <span className="grid place-items-center text-xl  py-2">รหัสนักเรียน</span>
-        <span className="grid place-items-center text-xl  py-2">ชื่อ - นามสกุล</span>
+        <span className="grid place-items-center text-xl  py-2">
+          รหัสนักเรียน
+        </span>
+        <span className="grid place-items-center text-xl  py-2">
+          ชื่อ - นามสกุล
+        </span>
         <span className="text-center   pt-2 pb-1">
           <div className="text-xl">คะแนนเก็บ</div>
           <div className="text-md text-gray-600">50 คะแนน</div>
@@ -52,12 +92,12 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
           <span className="text-center font-semibold border-l-2 border-r-2 py-2">
             {index + 1}.
           </span>
-          <span className="text-center border-r-2 py-2">{item.studentId}</span>
+          <span className="text-center border-r-2 py-2">{item.studentCode}</span>
           <span className="text-start pl-5 border-r-2 py-2">
             {item.firstName} {item.lastName}
           </span>
           <input
-          disabled={onEdit!=true}
+            disabled={onEdit != true}
             type="number"
             value={item.collectScore}
             min={0}
@@ -67,9 +107,12 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
                 ? "outline-red-500 border-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
-            onChange={(e) => handleInputChange(index, "collectScore", e.target.value)}
+            onChange={(e) =>
+              handleInputChange(index, "collectScore", e.target.value)
+            }
           />
-          <input disabled={onEdit!=true}
+          <input
+            disabled={onEdit != true}
             type="number"
             value={item.testScore}
             min={0}
@@ -79,10 +122,12 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
                 ? "border-red-500 outline-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
-            onChange={(e) => handleInputChange(index, "testScore", e.target.value)}
+            onChange={(e) =>
+              handleInputChange(index, "testScore", e.target.value)
+            }
           />
           <input
-          disabled={onEdit!=true}
+            disabled={onEdit != true}
             type="number"
             value={item.affectiveScore}
             min={0}
@@ -92,7 +137,9 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
-            onChange={(e) => handleInputChange(index, "affectiveScore", e.target.value)}
+            onChange={(e) =>
+              handleInputChange(index, "affectiveScore", e.target.value)
+            }
           />
           <span className="text-center border-r-2 py-2">
             {item.collectScore + item.testScore + item.affectiveScore}
@@ -101,30 +148,50 @@ export default function SubjectTableForm({ grads,onEdit }: Props) {
             {50 <= item.collectScore + item.testScore + item.affectiveScore &&
             item.collectScore + item.testScore + item.affectiveScore < 55 ? (
               <div>1</div>
-            ) : 55 <= item.collectScore + item.testScore + item.affectiveScore &&
+            ) : 55 <=
+                item.collectScore + item.testScore + item.affectiveScore &&
               item.collectScore + item.testScore + item.affectiveScore < 60 ? (
               <div>1.5</div>
-            ) : 60 <= item.collectScore + item.testScore + item.affectiveScore &&
+            ) : 60 <=
+                item.collectScore + item.testScore + item.affectiveScore &&
               item.collectScore + item.testScore + item.affectiveScore < 65 ? (
               <div>2</div>
-            ) : 65 <= item.collectScore + item.testScore + item.affectiveScore &&
+            ) : 65 <=
+                item.collectScore + item.testScore + item.affectiveScore &&
               item.collectScore + item.testScore + item.affectiveScore < 70 ? (
               <div>2.5</div>
-            ) : 70 <= item.collectScore + item.testScore + item.affectiveScore &&
+            ) : 70 <=
+                item.collectScore + item.testScore + item.affectiveScore &&
               item.collectScore + item.testScore + item.affectiveScore < 75 ? (
               <div>3</div>
-            ) : 75 <= item.collectScore + item.testScore + item.affectiveScore &&
+            ) : 75 <=
+                item.collectScore + item.testScore + item.affectiveScore &&
               item.collectScore + item.testScore + item.affectiveScore < 80 ? (
               <div>3.5</div>
-            ) : item.collectScore + item.testScore + item.affectiveScore >= 80 ? (
+            ) : item.collectScore + item.testScore + item.affectiveScore >=
+              80 ? (
               <div>4</div>
             ) : (
               <div>0</div>
             )}
           </span>
-          <input type="text" placeholder={'-'} className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"/>
+          <input
+            type="text"
+            placeholder={"-"}
+            className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"
+          />
         </div>
       ))}
+      <div className="my-5 w-full grid place-items-end  ">
+         <button
+        onClick={saveChanges}
+        className="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        บันทึกคะแนนดิไอเวร
+      </button>
+      </div>
+      <hr/>
+     
     </div>
   );
 }

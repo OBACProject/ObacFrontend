@@ -1,7 +1,7 @@
 export interface GetAllTeacher{
-    teacherId: number,
-      firstName: null,
-      lastName: null,
+      teacherId: number,
+      firstName: string,
+      lastName: string,
       thaiName: string,
       thaiLastName: string,
       gender: string,
@@ -25,8 +25,9 @@ export interface GetAllTeacher{
 
 export interface GetTeacherByTeacherId {
     teacherId: number,
-    teacherFirstName: string,
-    teacherLastName: string,
+    teacherCode:string,
+    teacherEngFirstName: string,
+    teacherEngLastName: string,
     teacherRank: string 
     thaiName: string,
     thaiLastName: string,
@@ -49,6 +50,7 @@ export interface TeacherEnrollment {
     teacherThaiName:string ,
     teacherThaiLastName:string ,
     scheduleSubjectId: number,
+    subjectId: number,
     subjectCode: string,
     subjectName:string ,
     totalStudent: number,

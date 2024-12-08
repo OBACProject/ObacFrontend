@@ -31,7 +31,6 @@ const GenStudentNameList = ({grads}:DataList) => {
   doc.line(4,4,205,4);
   doc.line(205,291,4,291);
 
-
   doc.line(4,12,205,12);
 
 
@@ -69,7 +68,7 @@ const GenStudentNameList = ({grads}:DataList) => {
         autoTable(doc, {
           startY: 19 + n,
           body: [
-            [i + 1, grads[i].studentId, `${grads[i].firstName}`, `${grads[i].lastName}`, "", ""],
+            [i + 1, grads[i].studentCode, `${grads[i].firstName}`, `${grads[i].lastName}`, "", ""],
           ],
           alternateRowStyles: { fillColor: [255, 255, 255] },
           styles: {
@@ -104,13 +103,10 @@ const GenStudentNameList = ({grads}:DataList) => {
           },
           margin: { left: 4, right: 0 },
         });
-      
         n += 7;
       }
     }
- 
-  
 
-  doc.save("tester.pdf");
+  doc.save("ใบรายชื่อวิชา__.pdf");
 };
 export default GenStudentNameList;

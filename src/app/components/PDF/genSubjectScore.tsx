@@ -79,7 +79,7 @@ const GenSubjectScore = ({ grads }: DataList) => {
         body: [
           [
             i + 1,
-            grads[i].studentId,
+            grads[i].studentCode,
             `${grads[i].firstName}`,
             `${grads[i].lastName}`,
             `${grads[i].collectScore}`,
@@ -129,6 +129,6 @@ const GenSubjectScore = ({ grads }: DataList) => {
     }
   }
 
-  doc.save("tester.pdf");
+  doc.save("ใบคะแนนวิชา__.pdf");
 };
 export default GenSubjectScore;

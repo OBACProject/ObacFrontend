@@ -5,68 +5,92 @@ import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-
 import { useState, useEffect } from "react";
-import { AcademicColumn, AcademicData } from "@/resource/admin/academicData";
+import { AcademicColumn } from "@/resource/admin/academicData";
+import { fetchGetAllAcademicUser } from "@/api/user/userAPI";
+import { GetAllAcademicUser } from "@/dto/userDto";
+
+const getAcademicData = async () => {
+  try {
+    return await fetchGetAllAcademicUser();
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
 
 export function AcademicPage() {
+  const [academicDatas, setAcademicData] = useState<GetAllAcademicUser[]>([]);
   const [searchStaff, setSearchStaff] = useState<string>("");
-  const [searchStaffFilter, setSearchStaffFilter] = useState<AcademicColumn[]>(
-    []
-  );
+  const [searchStaffFilter, setSearchStaffFilter] = useState<
+    GetAllAcademicUser[]
+  >([]);
   const router = useRouter();
 
-  const handleEdit = (id: number) => {
-    console.log("Edit", id);
+  useEffect(() => {
+    const fetchData = async () => {
+      const items = await getAcademicData();
+      setAcademicData(items);
+    };
+    fetchData().catch((error) => {
+      console.error("Error in useEffect:", error);
+    });
+  }, []);
+
+
+  const handleEdit = (id: any) => {
     router.push(`/pages/admin/academicManagement/edit/${id}`);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: any) => {
     console.log("Delete", id);
   };
 
-  const handleRowClick = (id: number) => {
-    console.log("Row clicked. ID:", id);
+  const handleRowClick = (id: any) => {
+    router.push(`/pages/admin/academicManagement/edit/${id}`);
   };
 
   const columns = makeColumns<AcademicColumn>(
     {
-      id: "",
-      name: "",
-      surname: "",
+      userId: "",
+      firstName: "",
+      lastName: "",
       email: "",
     },
     "id",
     {
-      id: "ID",
-      name: "Name",
-      surname: "Surname",
+      userId: "ID",
+      firstName: "Name",
+      lastName: "Surname",
       email: "Email",
     },
     [
       {
         label: "Edit",
-        onClick: (id) => handleEdit(Number(id)),
+        onClick: (userId) => handleEdit(Number(userId)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
       {
         label: "Delete",
-        onClick: (id) => handleDelete(Number(id)),
+        onClick: (userId) => handleDelete(Number(userId)),
         className: "hover:bg-red-600 bg-red-500",
       },
     ]
   );
 
   useEffect(() => {
-    const searchMatch = AcademicData.filter(
-      (staff) =>
-        staff.name.toLowerCase().includes(searchStaff.toLowerCase()) ||
-        staff.email.toLowerCase().includes(searchStaff.toLowerCase()) ||
-        staff.id.toLowerCase().includes(searchStaff.toLowerCase()) ||
-        staff.surname.toLowerCase().includes(searchStaff.toLowerCase())
-    );
-    setSearchStaffFilter(searchMatch);
-  }, [searchStaff]);
+    if (Array.isArray(academicDatas)) {
+      const searchMatch = academicDatas.filter(
+        (staff) =>
+          staff.firstName.toLowerCase().includes(searchStaff.toLowerCase()) ||
+          staff.email.toLowerCase().includes(searchStaff.toLowerCase()) ||
+          staff.userId.toLowerCase().includes(searchStaff.toLowerCase())
+      );
+      setSearchStaffFilter(searchMatch);
+    } else {
+      console.error("academicDatas is not an array:", academicDatas);
+    }
+  }, [searchStaff, academicDatas]);
 
   return (
     <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">
@@ -93,7 +117,7 @@ export function AcademicPage() {
         columns={columns}
         data={searchStaffFilter}
         onRowClick={handleRowClick}
-        selectedValue="id"
+        selectedValue="userId"
       />
     </header>
   );

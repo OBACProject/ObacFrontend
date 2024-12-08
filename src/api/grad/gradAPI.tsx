@@ -1,11 +1,11 @@
 import { GetGradBySubjectId } from "@/dto/gradDto";
 
 export const fetchGetGradBySubjectId = async (
-  subjectId: number
+  subjectId: number , scheduleId : number
 ): Promise<GetGradBySubjectId[]> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGradeBySubjectId?subjectId=${subjectId}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`
     );
     if (!response.ok) {
       throw new Error("Failed to get teacher enrollment data");
