@@ -14,9 +14,14 @@ export function Main() {
 
   return (
     <>
-      <ClassSubject id={2} year={2024} term={1} />
+      {/* <ClassSubject
+        id={2}
+        year={2024}
+        term={1}
+        subjectName="วิชาอะไรไม่รู้ละ"
+      /> */}
       {/* Use the Subject component */}
-      {/* <Subject handleTab={handleTab} /> */}
+      <Subject handleTab={handleTab} />
 
       {/* {activeTab === "subject" && (
         <div>

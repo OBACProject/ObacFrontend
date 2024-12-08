@@ -6,11 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/app/components/table/tableComponent";
-import {
-  TeacherColumns,
-  TeacherColumnsData,
-} from "@/resource/academics/teacherInfoList/teacherDataTable";
+import { TeacherColumns } from "@/resource/academics/teacherInfoList/teacherDataTable";
 import { makeColumns } from "@/app/components/table/makeColumns";
+import { getTeacherInfoViewData } from "@/resource/academics/teacherInfoList/viewData/teacherInfoViewData";
 
 export default function Form() {
   const router = useRouter();
@@ -19,27 +17,32 @@ export default function Form() {
     router.push(`/pages/academic/schedule-management/${id}`);
   };
 
-  const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [searchTeacher, setSearchTeacher] = useState<string>("");
+  // data from api
+  const [teacherInfoData, setTeacherInfoData] = useState<TeacherColumns[]>([]);
   const [searchTeacherFilter, setSearchTeacherFilter] = useState<
     TeacherColumns[]
   >([]);
 
-  const programNames = [
-    "การบัญชี",
-    "การตลาด",
-    "คอมพิวเตอร์ธุรกิจ",
-    "คอมพิวกราฟฟิค",
-    "การจัดการสำนักงาน",
-    "การท่องเที่ยว",
-  ];
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
+  const [searchTeacher, setSearchTeacher] = useState<string>("");
+
+  // const programNames = [
+  //   "การบัญชี",
+  //   "การตลาด",
+  //   "คอมพิวเตอร์ธุรกิจ",
+  //   "คอมพิวกราฟฟิค",
+  //   "การจัดการสำนักงาน",
+  //   "การท่องเที่ยว",
+  // ];
+  const [programNames, setProgramNames] = useState<string[]>([]);
+  console.log("programNames", programNames);
   const handleCourseChange = (selected: string) => {
     setSelectedProgram(selected);
   };
 
   useEffect(() => {
     const normalizedSearch = searchTeacher.toLowerCase();
-    const filtered = TeacherColumnsData.filter((item) => {
+    const filtered = teacherInfoData?.filter((item) => {
       const matchSearch =
         item.teacherName.toLowerCase().includes(normalizedSearch) ||
         item.teacherSurname.toLowerCase().includes(normalizedSearch) ||
@@ -54,7 +57,23 @@ export default function Form() {
       return matchSearch && matchProgram;
     });
     setSearchTeacherFilter(filtered);
-  }, [searchTeacher, selectedProgram]);
+  }, [searchTeacher, selectedProgram, teacherInfoData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getTeacherInfoViewData();
+      setTeacherInfoData(data);
+
+      const programNames = Array.from(
+        new Set(data.map((item) => item.programs).filter((program) => program))
+      );
+
+      setProgramNames(programNames);
+    };
+
+    fetchData();
+  }, []);
+  console.log("teacherInfoData", teacherInfoData);
 
   const columns = makeColumns<TeacherColumns>(
     {
