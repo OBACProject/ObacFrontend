@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Subject } from "./subject/subject";
 import { ClassSubject } from "./classSubject/classSubject";
 
 export function Main() {

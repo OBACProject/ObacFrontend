@@ -4,7 +4,6 @@ import { SidebarData } from "@/resource/home/sidebarData";
 import CardHorizontal from "@/app/components/card/card-horizontal";
 import { cardData } from "@/resource/fetchData/cardContent";
 import CLShomepage from "@/app/components/cls-homepage";
-import Image from "next/image";
 
 export default function Home() {
   return (
