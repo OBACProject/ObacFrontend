@@ -40,15 +40,15 @@ export default function MenuBar({
   return (
     <div className="bg-white border-[1px] border-gray-200 px-5 py-2">
       <div className="grid grid-cols-[70%_30%]">
-        <div className="grid grid-cols-[40%_60%]">
-          <div className="">
-            <div className=" text-xl px-5 py-1 ">รหัสวิชา : {subjectData?.subjectCode}<span className="text-gray-800 font-semibold">&nbsp;&nbsp;&nbsp;กลุ่มนักเรียน : {student_group_list[0]} </span></div>
-            <div className="px-5   font-semibold text-2xl rounded-md py-2">
+        <div className="grid grid-cols-[40%_60%] ">
+          <div className="rounded-md bg-blue-400 text-white py-3 mr-4">
+            <span className=" text-xl px-5 py-1 mt-2 ">รหัสวิชา : {subjectData?.subjectCode}</span><span className="text-md text-gray-500 font-semibold bg-white rounded-sm ml-2 text-center py-1 w-fit px-2">กลุ่มเรียน : {student_group_list[0]} </span>
+            <div className="px-5   text-2xl rounded-md py-2">
               วิชา : {subjectData?.subjectName}
             </div>
           </div>
-          <div className="text-2xl  font-semibold text-center">
-            *** ประกาศ ***
+          <div className="text-2xl border-2 grid place-items-center border-gray-400 border-dashed rounded-md  font-semibold text-center">
+            พื้นที่ประกาศ
           </div>
         </div>
         <div className="grid row-2 gap-2">
@@ -73,19 +73,19 @@ export default function MenuBar({
 
           <div className="flex justify-end gap-3">
             <button
-              className="duration-300  text-md px-10 border-gray-200 border-[1px] hover:text-gray-700 rounded-md hover:bg-blue-200 py-2 hover:rounded-sm"
+              className="duration-300 text-white  text-lg px-10 border-blue-400     rounded-md hover:opacity-75 py-1 hover:rounded-sm bg-blue-400"
               onClick={handleEditChange}
             >
               แก้ไข
             </button>
-            <button
+            {/* <button
               className="duration-300  text-md rounded-md  px-10 border-gray-200 border-[1px] hover:text-gray-700 hover:rounded-sm hover:bg-blue-200"
               onClick={() => {
                 GenTranscript({ score: 50 });
               }}
             >
               บันทึก
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

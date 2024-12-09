@@ -39,7 +39,7 @@ export interface GetTeacherByTeacherId {
     teacherQualification: string,
     teacherFaculty: string,
     teacherProgram:string,
-    teacherDateOfJoining: Date,
+    teacherDateOfJoining: string,
     teacherProfilePicture: string
 }
 export interface TeacherEnrollment {

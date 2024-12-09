@@ -24,7 +24,7 @@ export default function SubjectForm() {
 
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   useEffect(() => {
-    getSubjectData(3, 1, 2024).then((item) => {
+    getSubjectData(2, 1, 2024).then((item) => {
       setCard(item);
     });
   }, []);
