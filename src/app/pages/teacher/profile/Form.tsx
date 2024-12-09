@@ -109,7 +109,7 @@ export default function ProfileForm() {
         </div>
 
         <div className="flex">
-          <div className="border-[1px]   duration-1000 hover:bg-[#e4f1f8] shadow-md w-fit shadow-gray-200 border-gray-200 px-5 my-4 py-5 rounded-sm">
+          <div className="border-[1px]  duration-1000 hover:bg-[#e4f1f8] shadow-md w-fit shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm">
             <div className="flex">
               <div className="text-xl font-semibold">เข้าร่วมเมื่อ </div>
               <div className="mx-4 font-bole text-blue-700">
@@ -117,7 +117,7 @@ export default function ProfileForm() {
               </div>
             </div>
           </div>
-          <div className="border-[1px] mx-5 duration-1000 hover:bg-[#e4f1f8] shadow-md w-fit shadow-gray-200 border-gray-200 px-5 my-4 py-5 rounded-sm">
+          <div className="border-[1px] mx-5 duration-1000 hover:bg-[#e4f1f8] shadow-md w-fit shadow-gray-200 border-gray-200 px-5  py-5 rounded-sm">
             <div className="flex">
               <div className="text-xl font-semibold">คุณสมบัติ : </div>
               <div className="mx-4 font-semibold text-purple-700">
