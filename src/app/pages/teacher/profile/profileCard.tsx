@@ -1,15 +1,14 @@
 import React from "react";
+import { GetTeacherByTeacherId } from "@/dto/teacherDto";
+
 
 interface Props {
   isLoading: boolean;
   imgPath: string | null;
-  // FnameTH :string
-  // LNameTH :string
-  // FNameEN :string
-  // LNameEN :string
+  teachers : GetTeacherByTeacherId | undefined;
 }
 
-export default function ProfileCard({ isLoading, imgPath }: Props) {
+export default function ProfileCard({ isLoading, imgPath,teachers }: Props) {
   return (
     <div className="w-full sm:place-items-center lg:place-items-end ">
       <div className="w-4/5 bg-blue-800 px-2 py-10 rounded-md my-0">

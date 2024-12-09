@@ -1,4 +1,4 @@
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { BookText } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface DropMenuList {
@@ -9,18 +9,30 @@ interface DropMenuList {
 export const SidebarData: DropMenuList[] = [
   {
     menuName: "กระทรวงศึกษาธิการ",
-    menuIcon: <FontAwesomeIcon icon={faBook} />,
+    menuIcon: <BookText
+    style={{ width: "2.2rem", height: "2.5rem" }}
+    className="text-[#0C2943]"
+  />,
   },
   {
     menuName: "กระทรวงศึกษาธิการ 1",
-    menuIcon: <FontAwesomeIcon icon={faBook} />,
+    menuIcon:<BookText
+    style={{ width: "2.2rem", height: "2.5rem" }}
+    className="text-[#0C2943]"
+  />,
   },
   {
     menuName: "กระทรวงศึกษาธิการ 2",
-    menuIcon: <FontAwesomeIcon icon={faBook} />,
+    menuIcon: <BookText
+    style={{ width: "2.2rem", height: "2.5rem" }}
+    className="text-[#0C2943]"
+  />,
   },
   {
     menuName: "กระทรวงศึกษาธิการ 3",
-    menuIcon: <FontAwesomeIcon icon={faBook} />,
+    menuIcon: <BookText
+    style={{ width: "2.2rem", height: "2.5rem" }}
+    className="text-[#0C2943]"
+  />,
   },
 ];

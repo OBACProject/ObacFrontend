@@ -3,6 +3,6 @@ import Form from './form'
 
 export default function page() {
   return (
-    <div><Form/></div>
+    <div className='pl-20'><Form/></div>
   )
 }

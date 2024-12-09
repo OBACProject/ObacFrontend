@@ -1,18 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faLaptop,
-  faMagnifyingGlassDollar,
-  faPen,
-  faPenRuler,
-  faPeopleLine,
-  faReceipt,
-} from "@fortawesome/free-solid-svg-icons";
 
+
+import { Boxes, CalendarRange, Component, Cpu, HandCoins, HandIcon ,Landmark , Lightbulb, Newspaper, NotebookTabs, Phone, Plane, TvMinimalPlay, Users } from "lucide-react";
 interface DropMenuList {
   menuName: string;
   menuIcon: React.ReactNode;
   tab: string;
+  href:string;
 }
 
 export interface DropMenuProps {
@@ -28,18 +22,30 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "ประวัติมหาลัย",
-        menuIcon: <FontAwesomeIcon icon={faBook} />,
+        menuIcon: <NotebookTabs
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "history",
+        href:"/pages/home/aboutObac/history"
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
-        menuIcon: <FontAwesomeIcon icon={faPen} />,
+        menuIcon: <Lightbulb
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "vision",
+        href:"/pages/home/aboutObac/symbol"
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Component
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "symbol",
+        href:"/pages/home/aboutObac/vision"
       },
     ],
   },
@@ -49,28 +55,48 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "การบัญชี",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <HandCoins
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "accounting",
+        href:"/pages/home"
       },
       {
         menuName: "การตลาด",
-        menuIcon: <FontAwesomeIcon icon={faMagnifyingGlassDollar} />,
+        menuIcon: <Landmark
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "marketing",
+        href:"/pages/home"
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Cpu
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+        />,
         tab: "digital",
+        href:"/pages/home"
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
-        menuIcon: <FontAwesomeIcon icon={faLaptop} />,
+        menuIcon: <TvMinimalPlay
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "graphic",
+        href:"/pages/home"
       },
       {
         menuName: "การท่องเที่ยว",
-        menuIcon: <FontAwesomeIcon icon={faPenRuler} />,
+        menuIcon: <Plane
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "tourism",
+        href:"/pages/home"
       },
     ],
   },
@@ -80,40 +106,60 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "โครงสร้างการบริหาร",
-        menuIcon: <FontAwesomeIcon icon={faBook} />,
+        menuIcon: <Users
+        style={{ width: "2.0rem", height: "2.5rem" }}
+       className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "management",
+        href:"/pages/home/managementStructure/executive",
       },
       {
         menuName: "คณะผู้บริหารวิทยาลัย",
-        menuIcon: <FontAwesomeIcon icon={faPeopleLine} />,
+        menuIcon: <Boxes
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "executive",
+        href:"/pages/home/managementStructure/management"
       },
     ],
   },
   {
     menuTopic: "ข่าวสารและกิจกรรม",
-    href: "/news",
+    href: "/pages/home/news",
     menuList: [
       {
         menuName: "กิจกรรม",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <CalendarRange
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "activity",
+        href:"/pages/home"
       },
       {
         menuName: "ข่าวสาร",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <Newspaper
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "news",
+        href:"/pages/home"
       },
     ],
   },
   {
     menuTopic: "ติดต่อ",
-    href: "/contact",
+    href: "/pages/home/contact",
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
-        menuIcon: <FontAwesomeIcon icon={faReceipt} />,
+        menuIcon: <Phone
+        style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-white group-hover:text-black transition-colors"
+      />,
         tab: "contact",
+        href:"/pages/home/contact"
       },
     ],
   },

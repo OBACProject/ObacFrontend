@@ -27,7 +27,6 @@ export function TeacherSidebar({
           style={{
             width: "3.5rem",
             height: "3.5rem",
-            objectFit: "contain",
           }}
         />
         <span className="text-center text-lg py-2">
@@ -72,7 +71,7 @@ export function SidebarMenu({
     <div className="border-t-2 pt-2 mt-4">
       {menuItems.map((item, index) => (
         <a key={index} href={item.href}>
-          <button className="h-12  flex items-center w-full px-3 group hover:bg-gray-200 rounded-md  duration-300">
+          <button className="h-12  flex items-center w-full px-3 group focus:bg-gray-200 hover:bg-gray-200 rounded-md  duration-300">
             <div className="flex items-center gap-4 w-full">
               <div className=" h-10 flex items-center justify-center">
                 {item.icon}
