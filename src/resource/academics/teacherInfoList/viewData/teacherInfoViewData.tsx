@@ -7,15 +7,17 @@ export const getTeacherInfoViewData = async (): Promise<TeacherColumns[]> => {
     const data = await getTeacherInfoData();
     console.log("Fetched Data:", data);
 
-    const gradingDataColumn = data.map((item: TeacherInfoData) => ({
-      runningNumber: item.teacherId,
-      teacherId: item.teacherId.toString(),
-      teacherName: item.firstName,
-      teacherSurname: item.lastName,
-      programs: item.facultyName,
-      email: item.email,
-      phoneNumber: faker.phone.number(),
-    }));
+    const gradingDataColumn = data.map(
+      (item: TeacherInfoData, index: number) => ({
+        runningNumber: index + 1,
+        teacherId: item.teacherId.toString(),
+        teacherName: item.firstName,
+        teacherSurname: item.lastName,
+        programs: item.facultyName,
+        email: item.email,
+        phoneNumber: faker.phone.number(),
+      })
+    );
 
     return gradingDataColumn;
   } catch (error) {
