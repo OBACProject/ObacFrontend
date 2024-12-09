@@ -41,7 +41,7 @@ export default function MenuBar({
     <div className="bg-white border-[1px] border-gray-200 px-5 py-2">
       <div className="grid grid-cols-[70%_30%]">
         <div className="grid grid-cols-[40%_60%] ">
-          <div className="rounded-md bg-blue-400 text-white py-3 mr-4">
+          <div className="rounded-md bg-blue-900 text-white py-3 mr-4">
             <span className=" text-xl px-5 py-1 mt-2 ">รหัสวิชา : {subjectData?.subjectCode}</span><span className="text-md text-gray-500 font-semibold bg-white rounded-sm ml-2 text-center py-1 w-fit px-2">กลุ่มเรียน : {student_group_list[0]} </span>
             <div className="px-5   text-2xl rounded-md py-2">
               วิชา : {subjectData?.subjectName}

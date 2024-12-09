@@ -35,8 +35,9 @@ export function Navbar() {
         </div>
       </div>
       {/* menu bar */}
-      <div className=" text-white w-full flex justify-center bg-blue-900">
+      <div className=" text-white w-full flex py-1 px-10 justify-between bg-blue-950">
         <DropMenu menuData={NavbarData} />
+        <button className="text-lg bg-blue-800 rounded-full border-2 border-white hover:bg-white hover:text-black hover:border-2 hover:border-black px-10 py-2  duration-500 justify-end">สมัครออนไลน์</button>
       </div>
     </header>
   );
