@@ -18,53 +18,53 @@ export interface TeacherData {
 }
 
 export interface TeacherColumn {
-  id: string;
+  teacherId: number;
   thaiName: string;
   thaiLastName: string;
-  teacherFirstName: string;
-  teacherLastName: string;
-  teacherFaculty: string;
-  teacherEmail: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  email: string;
 }
 
-export const exampleTeacherColumns: TeacherColumn[] = [
-  {
-    id: "1",
-    thaiName: "สมชาย",
-    thaiLastName: "ใจดี",
-    teacherFirstName: "Somchai",
-    teacherLastName: "Jaidee",
-    teacherFaculty: "Computer Science",
-    teacherEmail: "",
-  },
-  {
-    id: "2",
-    thaiName: "สายสมร",
-    thaiLastName: "สุขสันต์",
-    teacherFirstName: "Saisamorn",
-    teacherLastName: "Suksan",
-    teacherFaculty: "Education",
-    teacherEmail: "",
-  },
-  {
-    id: "3",
-    thaiName: "อาทิตย์",
-    thaiLastName: "รุ่งเรือง",
-    teacherFirstName: "Arthit",
-    teacherLastName: "Rungreung",
-    teacherFaculty: "Mathematics",
-    teacherEmail: "",
-  },
-  {
-    id: "4",
-    thaiName: "สมหมาย",
-    thaiLastName: "สุขสันต์",
-    teacherFirstName: "Sommai",
-    teacherLastName: "Suksan",
-    teacherFaculty: "Education",
-    teacherEmail: "",
-  },
-];
+// export const exampleTeacherColumns: TeacherColumn[] = [
+//   {
+//     id: "1",
+//     thaiName: "สมชาย",
+//     thaiLastName: "ใจดี",
+//     teacherFirstName: "Somchai",
+//     teacherLastName: "Jaidee",
+//     teacherFaculty: "Computer Science",
+//     teacherEmail: "",
+//   },
+//   {
+//     id: "2",
+//     thaiName: "สายสมร",
+//     thaiLastName: "สุขสันต์",
+//     teacherFirstName: "Saisamorn",
+//     teacherLastName: "Suksan",
+//     teacherFaculty: "Education",
+//     teacherEmail: "",
+//   },
+//   {
+//     id: "3",
+//     thaiName: "อาทิตย์",
+//     thaiLastName: "รุ่งเรือง",
+//     teacherFirstName: "Arthit",
+//     teacherLastName: "Rungreung",
+//     teacherFaculty: "Mathematics",
+//     teacherEmail: "",
+//   },
+//   {
+//     id: "4",
+//     thaiName: "สมหมาย",
+//     thaiLastName: "สุขสันต์",
+//     teacherFirstName: "Sommai",
+//     teacherLastName: "Suksan",
+//     teacherFaculty: "Education",
+//     teacherEmail: "",
+//   },
+// ];
 
 export const exampleTeacherData: TeacherData[] = [
   {

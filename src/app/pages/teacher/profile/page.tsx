@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileForm from './profileForm'
+import ProfileForm from './Form'
 
 
 

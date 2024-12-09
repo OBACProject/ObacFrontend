@@ -2,10 +2,6 @@
 
 import { LabelInput } from "@/app/components/input/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  AcademicColumn,
-  getAcademicDataById,
-} from "@/resource/admin/academicData";
 import { useState } from "react";
 
 export default function Page({ params }: { params: { id: string } }) {

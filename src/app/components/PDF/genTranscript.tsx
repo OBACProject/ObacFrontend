@@ -1,24 +1,28 @@
 "use client";
-
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "./THSarabunFont";
-import THSarabunBold from "./THSarabunBold"
-import { useState } from "react";
-const generatePDF = (score:string) => {
+import THSarabunFont from "@/app/components/PDF/THSarabunFont";
+
+type Data = {
+  score: number;
+//   FirstName: string;
+//   LastName: string;
+}
+
+const GenTranscript = ({score}:Data) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
     format: "a4",
   });
-  // Add TH Sarabun Font
+  
   doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
   
   doc.addFont("THSarabun.ttf", "THSarabun", "normal");
   doc.addFont("THSarabun.ttf", "THSarabunB", "bold");
   doc.setFont("THSarabun");
 
-  // Header Section (aligned to your image)
+ 
   doc.setFontSize(16);
   doc.text("สำเนา รบ 2567 ปวส. การจัดการสำนักงานดิจิทัล", 105, 10, { align: "center" });
   doc.setFontSize(12);
@@ -90,7 +94,7 @@ const generatePDF = (score:string) => {
   })
   doc.line(104,62 , 104,290)
 
-  doc.text("รหัส", 111, 70);doc.text("รายวิชา", 146, 70); doc.line(127,62 , 127,75)
+  doc.text("รหัส", 113, 70);doc.text("รายวิชา", 146, 70); doc.line(127,62 , 127,75)
   doc.line(175,62,175,75)
   doc.text("หน่วยกิต",179, 74,{
     angle: 90, 
@@ -339,10 +343,4 @@ const generatePDF = (score:string) => {
 
   doc.save("tester.pdf");
 };
-
-
-
-export default function PDFGenerator() {
-    const [score ,  seScore] = useState<string>("144")
-  return <button onClick={()=>{generatePDF(score)}}>Generate PDF</button>;
-}
+export default GenTranscript;
