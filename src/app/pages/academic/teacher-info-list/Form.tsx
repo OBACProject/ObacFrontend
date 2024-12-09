@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import MenuBar from "./MenuBar";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Combobox } from "@/app/components/combobox/combobox";

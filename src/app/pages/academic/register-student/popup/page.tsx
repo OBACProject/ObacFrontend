@@ -1,10 +1,10 @@
-interface AddItemPopupProps {
-  onClose: () => void;
-  isOpen: boolean;
-  customerId: number;
-  warehouseId: number;
-  //   onSubmit: (newItem: ) => void;
-}
+// interface AddItemPopupProps {
+//   onClose: () => void;
+//   isOpen: boolean;
+//   customerId: number;
+//   warehouseId: number;
+//   //   onSubmit: (newItem: ) => void;
+// }
 
 export function RegisterPopUp() {
   return (

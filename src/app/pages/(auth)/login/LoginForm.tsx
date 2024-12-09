@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import { login, logout } from "@/app/action/authAction";
 import { toast } from "react-toastify";
 interface Session {

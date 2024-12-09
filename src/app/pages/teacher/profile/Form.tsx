@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import ProfileCard from "./profileCard";
-import DetailCard from "./Notice";
 import { useState, useEffect } from "react";
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
