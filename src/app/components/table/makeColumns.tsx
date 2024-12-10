@@ -35,7 +35,7 @@ export function makeColumns<T extends { [key: string]: any }>(
       cell: ({ row }) => {
         const id = row.original[idColumn];
         return (
-          <td className="flex justify-center gap-2 whitespace-nowrap px-6 py-4 text-center">
+          <div className="flex justify-center gap-2 whitespace-nowrap px-6 py-4 text-center">
             {CustomAction?.map((action, index) => (
               <Button
                 onClick={(e) => {
@@ -50,7 +50,7 @@ export function makeColumns<T extends { [key: string]: any }>(
                 {action.label}
               </Button>
             ))}
-          </td>
+          </div>
         );
       },
     });
