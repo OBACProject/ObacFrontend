@@ -29,9 +29,9 @@ export function Navbar() {
           </a>
 
           <div className="justify-end grid place-items-center px-10 mr-6 sm:px-2 sm:py-1">
-            <a href="/pages/login" className="px-4 py-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 ">Sign In
+            <a href="/pages/login" className="px-4 py-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 ">ระบบผู้ใช้
               <div className="mt-0.5 ml-2 text-xl">
-                <LogIn />
+                {/* <LogIn /> */}
               </div>
 
             </a>

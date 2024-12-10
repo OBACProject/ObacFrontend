@@ -22,9 +22,9 @@ export default function DropMenu({
       <NavigationMenuList className="text-white flex ">
         {menuData.map((menu, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="hover:bg-blue-900 py-2 px-4 h-full rounded-xl duration-300 text-md">
+            <NavigationMenuTrigger className="hover:bg-blue-900 w-full py-2 px-4 h-full rounded-none duration-300 text-md">
               {menu.menuTopic}
-              <NavigationMenuContent className="top-full  bg-zinc-700 rounded-xl">
+              <NavigationMenuContent className="top-full  bg-zinc-700 rounded-sm">
                 <ul className="gap-2 py-1 px-2 text-white  ">
                   {menu.menuList.map((item, index) => (
                     <ListItem
@@ -53,7 +53,7 @@ const ListItem = React.forwardRef<
     <li>
       <NavigationMenuLink
         asChild
-        className="flex gap-0 my-1 justify-between items-center"
+        className="flex gap-0 my-1  text-start items-center"
       >
         <a
           ref={ref}
