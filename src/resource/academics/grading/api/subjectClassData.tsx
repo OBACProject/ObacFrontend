@@ -16,3 +16,16 @@ export const getClassSubjectData = async (
     throw new Error("Failed to fetch class subject data.");
   }
 };
+
+export const putPublishGrade = async (
+  schudule_subject_id: number
+): Promise<void> => {
+  try {
+    await api.put(
+      `Grade/PublishGrade?schedule_subject_id=${schudule_subject_id}&isPublished=true`
+    );
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to publish grade.");
+  }
+};

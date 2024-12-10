@@ -7,7 +7,10 @@ import { ClassSubjectColumn, ClassSubjectData } from "@/dto/gradingDto";
 import { getSubjectClassViewData } from "@/resource/academics/grading/viewData/subjectClassViewData";
 import { useEffect, useState } from "react";
 import { ClassSubject } from "../main";
-import { getClassSubjectData } from "@/resource/academics/grading/api/subjectClassData";
+import {
+  getClassSubjectData,
+  putPublishGrade,
+} from "@/resource/academics/grading/api/subjectClassData";
 
 export function ClassSubjectPage(props: {
   handleTab: (tab: string) => void;
@@ -57,6 +60,63 @@ export function ClassSubjectPage(props: {
       console.log("Selected data infoClass", id);
     } else {
       alert("ไม่พบข้อมูล");
+    }
+  };
+
+  const handlePusblishGrade = async () => {
+    console.log("publish Grade");
+    const list_of_schudule_subject_id = classSubjectDataFiltered.map(
+      (item) => item.id
+    );
+
+    try {
+      for (const item of list_of_schudule_subject_id) {
+        await putPublishGrade(item);
+      }
+      console.log("Grades published successfully!");
+
+      // Reload data after publishing grades
+      const rawData = await getClassSubjectData(
+        classSubjecPassingData.id,
+        classSubjecPassingData.term,
+        classSubjecPassingData.year
+      );
+      setRawClassSubjectData(rawData);
+
+      const data = await getSubjectClassViewData(
+        classSubjecPassingData.id,
+        classSubjecPassingData.term,
+        classSubjecPassingData.year
+      );
+      setClassSubjectData(data);
+
+      // Reinitialize filters
+      const roomNumbers = Array.from(
+        new Set(data.map((item) => item.room).filter((room) => room))
+      );
+      const periodNumbers = Array.from(
+        new Set(data.map((item) => item.period).filter((period) => period))
+      );
+      const teacherNames = Array.from(
+        new Set(
+          data
+            .map((item) => item.teacherName)
+            .filter((teacherName) => teacherName)
+        )
+      );
+
+      setRoomNumbers(roomNumbers);
+      setPeriodNumbers(periodNumbers);
+      setTeacherNames(teacherNames);
+
+      // Optionally clear selected filters
+      setSelectedRoom(null);
+      setSelectedPeriod(null);
+      setSelectedTeacher(null);
+
+      console.log("Data reloaded successfully!");
+    } catch (error) {
+      console.error("Error publishing grade or reloading data:", error);
     }
   };
 
@@ -271,7 +331,7 @@ export function ClassSubjectPage(props: {
               }}
             />
             <div className="flex justify-end mt-4">
-              <button>
+              <button onClick={handlePusblishGrade}>
                 <Badge
                   variant={"outline"}
                   className="h-10 text-lg hover:bg-slate-200 transition:duration-500 rounded-md"
@@ -281,7 +341,6 @@ export function ClassSubjectPage(props: {
               </button>
             </div>
           </div>
-          {/* breadcrumb zone */}
         </header>
       </div>
     </>
