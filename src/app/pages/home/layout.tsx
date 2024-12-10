@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import React from "react";
 import "@app/styles/globals.css";
 import { Navbar } from "@/app/pages/home/navbar";
+import Credit from "../../components/credit";
 
 export const metadata: Metadata = {
   title: "OBAC.ac.th",
@@ -17,10 +18,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Navbar />
-        <div className="mt-32">
+        <div className="mt-28 mb-20">
          {children} 
         </div>
-        
+        <Credit />
       </body>
     </html>
   );

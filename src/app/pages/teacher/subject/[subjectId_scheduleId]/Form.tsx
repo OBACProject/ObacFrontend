@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { GetGradBySubjectId } from "@/dto/gradDto";
+import { useRouter } from "next/navigation";
 
 interface Props {
   grads?: GetGradBySubjectId[];
@@ -8,9 +9,10 @@ interface Props {
 }
 
 export default function SubjectTableForm({ grads, onEdit }: Props) {
+  const router = useRouter();
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
-    setGradData(grads ?? []); 
+    setGradData(grads ?? []);
   }, [grads]);
   const handleInputChange = (
     index: number,
@@ -25,10 +27,11 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   const saveChanges = async () => {
     try {
       const payload = gradDatas.map((item) => ({
-        gradeId: item.gradeId ?? 0,
+        gradeId: item.gradeId,
         collectScore: item.collectScore,
-        testScore: item.testScore,
         affectiveScore: item.affectiveScore,
+        testScore: item.testScore,
+        totalScore:  (item.affectiveScore + item.collectScore + item.testScore)
       }));
       for (let i = 0; i < payload.length; i++) {
         const response = await fetch(
@@ -39,6 +42,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(payload[i]),
+            
           }
         );
         const responseBody = await response.json();
@@ -50,8 +54,8 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           );
         }
       }
-      console.log("Payload sent to the server:", payload);
-      alert("Grades updated successfully!");
+      alert("บันทึกคะแนนสำเร็จ")
+      router.push("/pages/teacher/subject")
     } catch (error) {
       console.error("Error saving changes:", error);
       alert("Failed to save grades. Please try again.");
@@ -92,7 +96,9 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <span className="text-center font-semibold border-l-2 border-r-2 py-2">
             {index + 1}.
           </span>
-          <span className="text-center border-r-2 py-2">{item.studentCode}</span>
+          <span className="text-center border-r-2 py-2">
+            {item.studentCode}
+          </span>
           <span className="text-start pl-5 border-r-2 py-2">
             {item.firstName} {item.lastName}
           </span>
@@ -102,7 +108,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.collectScore}
             min={0}
             max={50}
-            className={` text-center focus:outline-blue-300 py-2 group-hover:bg-[#e8f3ff] ${
+            className={` text-center focus:outline-blue-500 py-2 group-hover:bg-[#e8f3ff] ${
               item.collectScore > 50 || item.collectScore < 0
                 ? "outline-red-500 border-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -114,31 +120,31 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <input
             disabled={onEdit != true}
             type="number"
-            value={item.testScore}
+            value={item.affectiveScore}
             min={0}
             max={20}
-            className={`text-center focus:outline-blue-300  py-2 group-hover:bg-[#e8f3ff] ${
-              item.testScore > 20 || item.testScore < 0
+            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+              item.affectiveScore > 20 || item.affectiveScore < 0
                 ? "border-red-500 outline-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
             onChange={(e) =>
-              handleInputChange(index, "testScore", e.target.value)
+              handleInputChange(index, "affectiveScore", e.target.value)
             }
           />
           <input
             disabled={onEdit != true}
             type="number"
-            value={item.affectiveScore}
+            value={item.testScore}
             min={0}
             max={30}
-            className={`text-center focus:outline-blue-300  py-2 group-hover:bg-[#e8f3ff] ${
-              item.affectiveScore > 30 || item.affectiveScore < 0
+            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+              item.testScore > 30 || item.testScore < 0
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
             onChange={(e) =>
-              handleInputChange(index, "affectiveScore", e.target.value)
+              handleInputChange(index, "testScore", e.target.value)
             }
           />
           <span className="text-center border-r-2 py-2">
@@ -183,15 +189,14 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
         </div>
       ))}
       <div className="my-5 w-full grid place-items-end  ">
-         <button
-        onClick={saveChanges}
-        className="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        บันทึกคะแนนดิไอเวร
-      </button>
+        <button
+          onClick={saveChanges}
+          className="px-4 py-2  bg-green-500 text-white rounded hover:opacity-75"
+        >
+          บันทึกคะแนนดิไอเวร
+        </button>
       </div>
-      <hr/>
-     
+      <hr />
     </div>
   );
 }

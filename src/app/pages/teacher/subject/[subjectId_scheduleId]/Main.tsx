@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import MenuBar from "./menuBar";
+import MenuBar from "./Menu";
 import SubjectTableForm from "./Form";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { fetchGetGradBySubjectId } from "@/api/grad/gradAPI";

@@ -16,7 +16,7 @@ export default function CLShomepage() {
     <div className={`transition-opacity duration-1000${isLoaded ? 'animate-fadeIn' : 'opacity-0'}`}>
       <Carousel 
         autoPlay={true}
-        interval={2600}
+        interval={5000}
         width="full"
         autoFocus={false}
         infiniteLoop={true}
@@ -26,13 +26,13 @@ export default function CLShomepage() {
         swipeable={true}
         stopOnHover={false}
       >
-        <div>
+        {/* <div>
           <img src="/cls/slide01.jpg" alt="slide1" style={{
                 width: '100%',
                 height: '100%',
               }} />
           <p className="legend">Beyond to new technology</p>
-        </div>
+        </div> */}
         <div>
         
           <img src="/cls/slide02.jpg" alt="slide2" style={{
