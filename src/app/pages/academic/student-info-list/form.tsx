@@ -119,8 +119,8 @@ export default function Form() {
     setSelectedProgram("");
     setSelectedGradeLevel("");
     setSelectedRoom("");
-    const fetchedLevels = getLevels(selected);
-    setLevels(fetchedLevels);
+    // const fetchedLevels = getLevels(selected);
+    // setLevels(fetchedLevels);
   };
   const handleProgramChange = (selected: string) => {
     setSelectedProgram(selected);
@@ -131,8 +131,8 @@ export default function Form() {
   const handleLevelChange = (selected: string) => {
     setSelectedGradeLevel(selected);
     setSelectedRoom("");
-    const fetchedSec = getSec(selected);
-    setSec(fetchedSec);
+    // const fetchedSec = getSec(selected);
+    // setSec(fetchedSec);
   };
 
   const handleSecChange = (selected: string) => {
@@ -273,7 +273,7 @@ export default function Form() {
                       label: faculty,
                     }))}
                     onSelect={(selected) => handleFacultyChange(selected)}
-                    disabled={!selectedCourse}
+                    // disabled={!selectedCourse}
                   />
                   {/* <Combobox
                     buttonLabel="select faculty"
@@ -304,7 +304,7 @@ export default function Form() {
                 </div>
 
                 {/* level select */}
-                <div className="w-1/6 flex flex-col gap-4">
+                {/* <div className="w-1/6 flex flex-col gap-4">
                   <h1 className="text-md font-semibold text-gray-900">
                     ชั้นปี
                   </h1>
@@ -317,10 +317,10 @@ export default function Form() {
                     onSelect={(selected) => handleLevelChange(selected)}
                     disabled={!selectedProgram}
                   />
-                </div>
+                </div> */}
 
                 {/* room select */}
-                <div className="w-1/6 flex flex-col gap-4">
+                {/* <div className="w-1/6 flex flex-col gap-4">
                   <h1 className="text-md font-semibold text-gray-900">
                     ห้องเรียน
                   </h1>
@@ -333,9 +333,9 @@ export default function Form() {
                     onSelect={(selected) => handleSecChange(selected)}
                     disabled={!selectedLevel}
                   />
-                </div>
+                </div> */}
 
-                <div className="flex  items-end justify-center ml-10 w-1/6">
+                {/* <div className="flex  items-end justify-center ml-10 w-1/6">
                   <button
                     className={`${
                       selectedSec
@@ -347,20 +347,20 @@ export default function Form() {
                   >
                     ค้นหา
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* <div className="w-1/5"></div> */}
           </div>
           <hr className="bg-black mt-4 text-black" />
           <div className="mt-4 flex flex-col gap-6">
-            <h1>
+            {/* <h1>
               รายชื่อนักเรียน ห้องเรียน : {selectedSec}
               <br />
               <span className="text-sm text-gray-400">
                 พบข้อมูลทั้งหมด {studentColumnsData.length} รายการ
               </span>
-            </h1>
+            </h1> */}
 
             <Input
               type="text"
