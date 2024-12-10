@@ -101,7 +101,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
-                  className={`text-center  h-10`}
+                  className={`text-center h-10`}
                   key={row.id}
                   onClick={() => {
                     const value = selectedValue

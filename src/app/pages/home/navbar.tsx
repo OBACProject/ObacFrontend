@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import { CircleCheck, LogIn } from "lucide-react";
+import {  CircleCheck, LogIn } from "lucide-react";
 
 export function Navbar() {
   return (
@@ -38,7 +38,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-      {/* menu bar */}
       <div className=" text-white w-full flex py-1 px-6 justify-between bg-blue-950">
         <div className="flex ">
           <DropMenu menuData={NavbarData} />
@@ -50,8 +49,6 @@ export function Navbar() {
           <div className="pt-0.5">
             <CircleCheck className="" /> 
           </div>
-           
-            
           </a>
         </div>
       </div>
