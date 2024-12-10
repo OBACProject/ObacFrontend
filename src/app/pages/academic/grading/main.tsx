@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Subject } from "./subject/subject";
-import { ClassSubject } from "./classSubject/classSubject";
+import { ClassSubjectPage } from "./classSubject/classSubject";
 import { ChevronRight } from "lucide-react";
+import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 
 export interface ClassSubject {
   id: number;
@@ -12,86 +13,129 @@ export interface ClassSubject {
 }
 
 export function Main() {
-  // use for calling a classSubjectPage
-  const [classSubjectPage, setClassSubjectPage] = useState<ClassSubject>();
+  // State for classSubjectPage, subject tabs, and other selections
+  const [classSubjectData, setClassSubjectData] = useState<{
+    id: number;
+    year: number;
+    term: number;
+    subjectName: string;
+  } | null>(null);
 
-  // Use state to manage the selected tab
+  const [classInfoData, setClassInfoData] = useState<{
+    subjectId: number;
+    scheduleSubjectId: number;
+    room: string;
+  } | null>(null);
+
   const [activeTab, setActiveTab] = useState<string>("subject");
-  const [subject, setSubject] = useState<string>("");
-  const [classSubject, setClassSubject] = useState<string>("");
-  const [studentClass, setStudentClass] = useState<string>("");
-  // useEffect(() => {
-
-  // }, [subject, classSubject, studentClass]);
 
   const handleTab = (tab: string) => {
-    console.log("tab", tab);
-    setActiveTab(tab); // Update active tab
+    if (activeTab === tab) {
+      return; // Exit early if the tab is already set
+    }
+    setActiveTab(tab);
+
+    // case select subject tab
+    if (classSubjectData && tab === "subject") {
+      setClassSubjectData(null); // Reset classSubjectPage when switching to subject
+    }
+    // case select class tab
+    if (classSubjectData && classInfoData && tab === "class") {
+      setClassInfoData(null); // Reset infoClass when switching to class
+    }
   };
 
-  // process is when select a subject it will show a subject name and
+  const handleSelectedSubjectData = (data: {
+    id: number;
+    year: number;
+    term: number;
+    subjectName: string;
+  }) => {
+    setClassSubjectData(data);
+  };
+
+  const handleSelectedClassInfo = (data: {
+    subjectId: number;
+    scheduleSubjectId: number;
+    room: string;
+  }) => {
+    setClassInfoData(data);
+  };
 
   return (
     <>
-      {/* breadcrumb by a polygon arrow */}
-      {/* group of arrow button */}
-      <div className="w-full flex gap-2 ">
-        <div className="mt-4  w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
-          {/* subject tab */}
-          <div className="w-full flex items-center justify-center ">
+      {/* Breadcrumb and navigation */}
+      <div className="w-full flex gap-2 transition-all duration-500 ease-in-out">
+        <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
+          {/* Subject Tab */}
+          <div className="flex items-center">
             <button
-              className="w-32  hover:bg-slate-50 rounded-md"
-              // style={{
-              //   clipPath: "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
-              // }}
+              className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md whitespace-nowrap"
+              onClick={() => handleTab("subject")}
             >
-              <span className="text-black text-sm font-bold">Subject</span>
+              <span className="text-black text-sm font-bold">
+                {classSubjectData?.subjectName ?? "Subject"}
+              </span>
             </button>
-            {/* icon  */}
-            <div className="">
-              <ChevronRight></ChevronRight>
-            </div>
+            <ChevronRight />
           </div>
-          {/* class tab */}
-          <div className="w-full flex items-center justify-center ">
-            <div></div>
-            <button className="w-32 hover:bg-slate-50 rounded-md">
-              <span className="text-black text-sm font-bold">Class</span>
-            </button>
-            <div className="">
-              <ChevronRight></ChevronRight>
+
+          {/* Class Tab */}
+          {classSubjectData && (
+            <div className="w-full flex items-center justify-center">
+              <button
+                className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md whitespace-nowrap"
+                onClick={() => handleTab("class")}
+              >
+                <span className="text-black text-sm font-bold">
+                  {classInfoData?.room ?? "Class"}
+                </span>
+              </button>
+              <ChevronRight />
             </div>
-          </div>
+          )}
+          {classSubjectData && classInfoData && (
+            <div className="w-full flex items-center justify-center">
+              <button
+                className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md whitespace-nowrap"
+                onClick={() => handleTab("infoClass")}
+              >
+                <span className="text-black text-sm font-bold">Info Class</span>
+              </button>
+              <ChevronRight />
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Conditional Rendering for Active Tab */}
       {activeTab === "subject" && (
-        <div>
+        <div className="opacity-100 transition-opacity duration-500 ease-in-out">
           <Subject
             handleTab={handleTab}
-            handleSelectedData={(data) => setClassSubjectPage(data)}
+            handleSelectedData={handleSelectedSubjectData}
           />
         </div>
       )}
-      {activeTab === "class" && (
-        <div>
-          <ClassSubject
-            id={classSubjectPage.id}
-            year={classSubjectPage.year}
-            term={classSubjectPage.term}
-            subjectName={classSubjectPage.subjectName}
+
+      {activeTab === "class" && classSubjectData && (
+        <div className="opacity-100 transition-opacity duration-500 ease-in-out">
+          <ClassSubjectPage
+            classSubjecPassingData={classSubjectData}
+            handleTab={handleTab}
+            handleSelectedData={handleSelectedClassInfo}
           />
         </div>
       )}
-      {/* <ClassSubject
-        id={2}
-        year={2024}
-        term={1}
-        subjectName="วิชาอะไรไม่รู้ละ"
-      /> */}
-      {/* Use the Subject component */}
-      {/* {activeTab === "class" && <div>Class</div>}
-      {activeTab === "student" && <div>Student</div>}  */}
+
+      {activeTab === "infoClass" && classSubjectData && classInfoData && (
+        <>
+          <AcademicStudentInfo
+            subjectId={classInfoData.subjectId}
+            scheduleSubjectId={classInfoData.scheduleSubjectId}
+          />
+        </>
+      )}
     </>
   );
 }
