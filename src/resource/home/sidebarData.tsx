@@ -1,5 +1,4 @@
 import { BookText } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface DropMenuList {
   menuName: string;
