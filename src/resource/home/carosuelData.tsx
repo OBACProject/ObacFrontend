@@ -1,4 +1,4 @@
-import Carousel1 from "@/app/components/carousel/carousel-1";
+
 
 interface ImageData {
   src: string;

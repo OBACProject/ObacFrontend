@@ -2,9 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import { FaSignInAlt } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
-import { Bookmark, CircleCheck, LogIn } from "lucide-react";
+import { CircleCheck, LogIn } from "lucide-react";
 
 export function Navbar() {
   return (
