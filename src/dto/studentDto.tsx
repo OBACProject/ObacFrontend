@@ -23,3 +23,28 @@ export interface StudentCreateData {
   facultyId: number;
   birthDate: Date; // /
 }
+
+export interface filterProgramsParamsData {
+  facultyName: string;
+  programName: string;
+  classLevel: string;
+  groupName: string;
+}
+
+export interface StudentColumns {
+  runningNumber: number;
+  studentId: string;
+  studentName: string;
+  studentSurname: string;
+  blank: string;
+  more: string | null;
+}
+
+export interface StudentColumns {
+  runningNumber: number;
+  studentId: string;
+  studentName: string;
+  studentSurname: string;
+  blank: string;
+  more: string | null;
+}

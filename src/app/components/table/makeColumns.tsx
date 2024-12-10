@@ -11,12 +11,20 @@ export function makeColumns<T extends { [key: string]: any }>(
   classType: T,
   idColumn: string,
   customHeaders?: { [K in keyof T]?: string },
-  CustomAction?: CustomAction<T>[]
+  CustomAction?: CustomAction<T>[],
+  customRenderers?: { [K in keyof T]?: (row: T) => JSX.Element }
 ): ColumnDef<T>[] {
   const keys = Object.keys(classType) as (keyof T)[];
   const columns: ColumnDef<T>[] = keys.map((key) => ({
     accessorKey: key as string,
     header: customHeaders?.[key] || (key as string), // make a custom header
+    cell: customRenderers?.[key] // make a custom renderer
+      ? ({ row }) => customRenderers[key]!(row.original)
+      : ({ row }) => (
+          <div className="px-6 py-4 flex justify-center text-center">
+            {row.original[key]}
+          </div>
+        ),
   }));
   // const { isDarkMode } = useTheme();
 
@@ -27,7 +35,7 @@ export function makeColumns<T extends { [key: string]: any }>(
       cell: ({ row }) => {
         const id = row.original[idColumn];
         return (
-          <td className="flex justify-center gap-2 whitespace-nowrap px-6 py-4 text-center">
+          <div className="flex justify-center gap-2 whitespace-nowrap px-6 py-4 text-center">
             {CustomAction?.map((action, index) => (
               <Button
                 onClick={(e) => {
@@ -42,7 +50,7 @@ export function makeColumns<T extends { [key: string]: any }>(
                 {action.label}
               </Button>
             ))}
-          </td>
+          </div>
         );
       },
     });

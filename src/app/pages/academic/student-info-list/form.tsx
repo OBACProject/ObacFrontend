@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Combobox } from "@/app/components/combobox/combobox";
@@ -17,24 +17,27 @@ import {
 import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Input } from "@/components/ui/input";
-type DropdownData = {
-  id: string;
-  label: string;
-};
+import { filterProgramsData } from "@/resource/academics/studentInfoList/api/filterProgramsApiParams";
+import { filterProgramsParamsData } from "@/dto/studentDto";
 
 export default function Form() {
   const router = useRouter();
   const [group, setGroup] = useState<string | null>();
-  const [education, setEducation] = useState<DropdownData[]>([
-    {
-      id: "1",
-      label: "ปวช.",
-    },
-    {
-      id: "2",
-      label: "ปวส.",
-    },
-  ]);
+
+  const [filterProgramsDataFromApi, setFilterProgramsDataFromApi] = useState<
+    filterProgramsParamsData[]
+  >([]);
+  // filter data from api
+  const [classLevelsFilter, setClassLevelsFilter] = useState<string[]>([]);
+  const [facultiesFilter, setFacultiesFilter] = useState<string[]>([]);
+  const [programsFilter, setProgramsFilter] = useState<string[]>([]);
+  const [levelGradeFilter, setLevelGradeFilter] = useState<
+    Record<string, string[]>
+  >({
+    "ปวช.": ["1", "2", "3"],
+    "ปวส.": ["1", "2"],
+  });
+  const [roomFilter, setRoomFilter] = useState<string[]>([]);
 
   const [searchStudent, setSearchStudent] = useState<string>("");
   const [searchStudentFilter, setSearchStudentFilter] = useState<
@@ -42,20 +45,17 @@ export default function Form() {
   >([]);
 
   // use for selected filter
-  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
-  const [selectedLevel, setSelectedLevel] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [selectedSec, setSelectedSec] = useState<string>("");
+  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>("");
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
 
-  const [vocationalData, setVocationalData] = useState<EducationData[]>([]);
-  const [diplomaData, setDiplomaData] = useState<EducationData[]>([]);
   const [vocationalFaculties, setVocationalFaculties] = useState<FacultyInfo[]>(
     []
   );
 
   const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
-  const [levels, setLevels] = useState<string[]>([]);
   // const [program, setProgram] = useState<string[]>([]);
   const [sec, setSec] = useState<string[]>([]);
 
@@ -73,75 +73,97 @@ export default function Form() {
     "การจัดการสำนักงาน",
     "การท่องเที่ยว",
   ];
-  const classes = ["ปวช.", "ปวส."];
 
-  // get level from selected faculty
-  const getLevels = (selectedFaculty: string) => {
-    const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
-      (item) => item.faculty === selectedFaculty
-    );
-    return faculties[0]?.faculties.map((faculty) => faculty.level) || [];
-  };
+  // // get level from selected faculty
+  // const getLevels = (selectedFaculty: string) => {
+  //   const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
+  //     (item) => item.faculty === selectedFaculty
+  //   );
+  //   return faculties[0]?.faculties.map((faculty) => faculty.level) || [];
+  // };
 
-  // get level from selected level
-  const getSec = (selectedLevel: string) => {
-    const faculties = [...vocationalFaculties, ...diplomaFaculties].find(
-      (item) => item.faculty === selectedFaculty
-    );
+  // // get level from selected level
+  // const getSec = (selectedLevel: string) => {
+  //   const faculties = [...vocationalFaculties, ...diplomaFaculties].find(
+  //     (item) => item.faculty === selectedFaculty
+  //   );
 
-    if (!faculties) return [];
+  //   if (!faculties) return [];
 
-    const levelData = faculties.faculties.find(
-      (faculty) => faculty.level === selectedLevel
-    );
+  //   const levelData = faculties.faculties.find(
+  //     (faculty) => faculty.level === selectedLevel
+  //   );
 
-    return levelData?.class || [];
-  };
+  //   return levelData?.class || [];
+  // };
   console.log(studentColumnsData);
   // Function to handle selection change
-  const handleCourseChange = (selected: string) => {
-    setSelectedCourse(selected);
+  const getFacultiesFromLevels = (classLevel: string) => {
+    const faculties = filterProgramsDataFromApi.filter(
+      (item) => item.classLevel === classLevel
+    );
+    return faculties.map((item) => item.facultyName);
+  };
+
+  const handleClassLevelChange = (selected: string) => {
+    setSelectedClassLevel(selected);
     setSelectedFaculty("");
     setSelectedProgram("");
-    setSelectedLevel("");
-    setSelectedSec("");
+    setSelectedGradeLevel("");
+    setSelectedRoom("");
     handleFacultyChange("");
   };
 
   const handleFacultyChange = (selected: string) => {
     setSelectedFaculty(selected);
     setSelectedProgram("");
-    setSelectedLevel("");
-    setSelectedSec("");
-    const fetchedLevels = getLevels(selected);
-    setLevels(fetchedLevels);
+    setSelectedGradeLevel("");
+    setSelectedRoom("");
+    // const fetchedLevels = getLevels(selected);
+    // setLevels(fetchedLevels);
   };
   const handleProgramChange = (selected: string) => {
     setSelectedProgram(selected);
-    setSelectedLevel("");
-    setSelectedSec("");
+    setSelectedGradeLevel("");
+    setSelectedRoom("");
   };
 
   const handleLevelChange = (selected: string) => {
-    setSelectedLevel(selected);
-    setSelectedSec("");
-    const fetchedSec = getSec(selected);
-    setSec(fetchedSec);
+    setSelectedGradeLevel(selected);
+    setSelectedRoom("");
+    // const fetchedSec = getSec(selected);
+    // setSec(fetchedSec);
   };
 
   const handleSecChange = (selected: string) => {
-    setSelectedSec(selected);
+    setSelectedRoom(selected);
   };
 
   useEffect(() => {
+    const fetchFilterData = async () => {
+      const data = await filterProgramsData();
+      console.log("Fetched Data:", data);
+      setFilterProgramsDataFromApi(data);
+      const levels = Array.from(new Set(data.map((item) => item.classLevel)));
+      setClassLevelsFilter(levels);
+      // call function to get faculties from levels
+      // const faculties = getFacultiesFromLevels();
+      // const faculties = Array.from(
+      //   new Set(data.map((item) => item.facultyName))
+      // );
+      // call function to get programName from Faculty
+      const programNames = Array.from(
+        new Set(data.map((item) => item.programName))
+      );
+      // call function to get room from programName
+      const room = Array.from(new Set(data.map((item) => item.groupName)));
+    };
     // edit Data from a educationData
     // course data : [ปวช,ปวส]
     const vocational = educationData.filter((item) => item.course === "ปวช.");
     const diploma = educationData.filter((item) => item.course === "ปวส.");
 
     // faculty data : [การบัญชี,การตลาด,เทคโนโลยีธุรกิจดิจิทัล]
-    setVocationalData(vocational);
-    setDiplomaData(diploma);
 
     setVocationalFaculties(getFaculties(vocational));
     setDiplomaFaculties(getFaculties(diploma));
@@ -149,7 +171,29 @@ export default function Form() {
     // level data : [1,2,3]
     // group data : [1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.1,3.2,3.3,3.4,3.5,3.6]
   }, []);
-
+  // useEffect for geting Data from filter
+  useEffect(() => {
+    // call function to get faculties from levels
+    if (selectedClassLevel != null) {
+      const faculties = getFacultiesFromLevels(selectedClassLevel);
+      if (selectedFaculty != null) {
+        if (selectedProgram != null) {
+          if (selectedGradeLevel != null) {
+            if (selectedRoom != null) {
+              // call api to get a student data from a groupId
+            }
+          }
+        }
+      }
+    }
+  }, [
+    selectedClassLevel,
+    selectedFaculty,
+    selectedProgram,
+    selectedGradeLevel,
+    selectedRoom,
+  ]);
+  // useEffect for searching
   useEffect(() => {
     const normalizedSearch = searchStudent.toLowerCase();
     const filteredStudent = studentColumnsData.filter(
@@ -165,7 +209,6 @@ export default function Form() {
   const handleSearch = () => {
     router.push(`/pages/academic/student-info-list/${group}`);
   };
-  console.log(selectedCourse);
 
   // ----------------- Table -----------------
   // const [studentData, setStudentData] = useState<StudentColumns[]>([]);
@@ -211,11 +254,11 @@ export default function Form() {
                   </h1>
                   <Combobox
                     buttonLabel="select education"
-                    options={education.map((item) => ({
-                      value: item.label,
-                      label: item.label,
+                    options={classLevelsFilter.map((classLevel) => ({
+                      value: classLevel,
+                      label: classLevel,
                     }))}
-                    onSelect={(selected) => handleCourseChange(selected)}
+                    onSelect={(selected) => setSelectedClassLevel(selected)}
                   />
                 </div>
                 {/* faculty select */}
@@ -230,7 +273,7 @@ export default function Form() {
                       label: faculty,
                     }))}
                     onSelect={(selected) => handleFacultyChange(selected)}
-                    disabled={!selectedCourse}
+                    // disabled={!selectedCourse}
                   />
                   {/* <Combobox
                     buttonLabel="select faculty"
@@ -261,7 +304,7 @@ export default function Form() {
                 </div>
 
                 {/* level select */}
-                <div className="w-1/6 flex flex-col gap-4">
+                {/* <div className="w-1/6 flex flex-col gap-4">
                   <h1 className="text-md font-semibold text-gray-900">
                     ชั้นปี
                   </h1>
@@ -274,10 +317,10 @@ export default function Form() {
                     onSelect={(selected) => handleLevelChange(selected)}
                     disabled={!selectedProgram}
                   />
-                </div>
+                </div> */}
 
                 {/* room select */}
-                <div className="w-1/6 flex flex-col gap-4">
+                {/* <div className="w-1/6 flex flex-col gap-4">
                   <h1 className="text-md font-semibold text-gray-900">
                     ห้องเรียน
                   </h1>
@@ -290,9 +333,9 @@ export default function Form() {
                     onSelect={(selected) => handleSecChange(selected)}
                     disabled={!selectedLevel}
                   />
-                </div>
+                </div> */}
 
-                <div className="flex  items-end justify-center ml-10 w-1/6">
+                {/* <div className="flex  items-end justify-center ml-10 w-1/6">
                   <button
                     className={`${
                       selectedSec
@@ -304,20 +347,20 @@ export default function Form() {
                   >
                     ค้นหา
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* <div className="w-1/5"></div> */}
           </div>
           <hr className="bg-black mt-4 text-black" />
           <div className="mt-4 flex flex-col gap-6">
-            <h1>
+            {/* <h1>
               รายชื่อนักเรียน ห้องเรียน : {selectedSec}
               <br />
               <span className="text-sm text-gray-400">
                 พบข้อมูลทั้งหมด {studentColumnsData.length} รายการ
               </span>
-            </h1>
+            </h1> */}
 
             <Input
               type="text"

@@ -8,6 +8,23 @@ export interface GradingData {
   isActive: boolean;
 }
 
+export interface ClassSubjectData {
+  scheduleSubjectId: number;
+  scheduleId: number; // ไม่เอา
+  subjectId: number;
+  studentGroupId: number;
+  studentGroupName: string;
+  room: string;
+  isPublish: boolean;
+  subjectCode: string; // ไม่เอาคับ
+  subjectName: string; // ไม่เอาคับ
+  day: string;
+  period: string;
+  teacherName: string;
+  year: number; // ไม่เอา
+  term: number; // ไม่เอา
+}
+
 // data to show in columns
 export interface GradingDataColumn {
   id: number;
@@ -24,3 +41,5 @@ export interface ClassSubjectColumn {
   teacherName: string;
   isPublish: boolean;
 }
+
+export interface GradingInfo {}
