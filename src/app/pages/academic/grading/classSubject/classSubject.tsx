@@ -3,16 +3,28 @@ import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ClassSubjectColumn } from "@/dto/gradingDto";
+import { ClassSubjectColumn, ClassSubjectData } from "@/dto/gradingDto";
 import { getSubjectClassViewData } from "@/resource/academics/grading/viewData/subjectClassViewData";
 import { useEffect, useState } from "react";
+import { ClassSubject } from "../main";
+import { getClassSubjectData } from "@/resource/academics/grading/api/subjectClassData";
 
-export function ClassSubject(props: {
-  id: number;
-  subjectName: string;
-  year: number;
-  term: number;
+export function ClassSubjectPage(props: {
+  handleTab: (tab: string) => void;
+  classSubjecPassingData: ClassSubject;
+  handleSelectedData: (data: {
+    subjectId: number;
+    scheduleSubjectId: number;
+    room: string;
+  }) => void;
 }) {
+  const { classSubjecPassingData } = props;
+  // raw data
+  const [rawClassSubjectData, setRawClassSubjectData] = useState<
+    ClassSubjectData[]
+  >([]);
+
+  // search
   const [searchClassSubject, setSearchClassSubject] = useState<string>("");
   const [classSubjectData, setClassSubjectData] = useState<
     ClassSubjectColumn[]
@@ -30,8 +42,23 @@ export function ClassSubject(props: {
   const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
 
-  // console.log(selectedPeriod, selectedRoom, selectedTeacher);
-  // const roomNumbers = ["A101", "A102", "A103"];
+  const handleSelectedInfoClassData = (id: number) => {
+    props.handleTab("infoClass");
+    const item = rawClassSubjectData.find(
+      (item) => item.scheduleSubjectId === id
+    );
+    console.log("item", item);
+    if (item) {
+      props.handleSelectedData({
+        subjectId: item.subjectId,
+        scheduleSubjectId: item.scheduleSubjectId,
+        room: item.room,
+      });
+      console.log("Selected data infoClass", id);
+    } else {
+      alert("ไม่พบข้อมูล");
+    }
+  };
 
   const columns = makeColumns<ClassSubjectColumn>(
     {
@@ -54,7 +81,8 @@ export function ClassSubject(props: {
     [
       {
         label: "ตรวจสอบรายละเอียด",
-        onClick: (id: any) => console.log("Selected data", id),
+        onClick: (id: string | number | boolean) =>
+          handleSelectedInfoClassData(Number(id)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
     ],
@@ -76,10 +104,16 @@ export function ClassSubject(props: {
     // setClassSubjectData(SubjectClassMockData);
     const fetchData = async () => {
       try {
+        const rawData = await getClassSubjectData(
+          classSubjecPassingData.id,
+          classSubjecPassingData.term,
+          classSubjecPassingData.year
+        );
+        setRawClassSubjectData(rawData);
         const data = await getSubjectClassViewData(
-          props.id,
-          props.term,
-          props.year
+          classSubjecPassingData.id,
+          classSubjecPassingData.term,
+          classSubjecPassingData.year
         );
         setClassSubjectData(data);
 
@@ -131,14 +165,46 @@ export function ClassSubject(props: {
       return matchSearch && matchesRoom && matchesPeriod && matchesTeacher;
     });
     setClassSubjectDataFiltered(filterData);
-  }, [searchClassSubject, classSubjectData]);
+  }, [
+    searchClassSubject,
+    classSubjectData,
+    selectedRoom,
+    selectedPeriod,
+    selectedTeacher,
+  ]);
 
   return (
     <>
       <div>
         <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
+          {/* detail table */}
+          <div className=" flex mb-4 justify-between">
+            <div className="flex w-1/5">
+              <Badge variant={"outline"}>
+                <h1 className="text-base">
+                  รายวิชา : {classSubjecPassingData.subjectName}
+                </h1>
+              </Badge>
+            </div>
+            <div className="flex w-1/6 gap-6 text-base">
+              <div>
+                <Badge variant={"outline"}>
+                  <h1 className="text-base">
+                    year : {classSubjecPassingData.year}
+                  </h1>
+                </Badge>
+              </div>
+              <div>
+                <Badge variant={"outline"}>
+                  <h1 className="text-base">
+                    term : {classSubjecPassingData.term}
+                  </h1>
+                </Badge>
+              </div>
+            </div>
+          </div>
           {/* filter Data */}
-          <div className="flex gap-12 mt-6 p-4 bg-slate-50 rounded-lg">
+          <div className="flex gap-12 p-4 bg-slate-50 rounded-lg">
             {/* filter */}
             <div className="w-1/4 flex flex-col gap-4">
               <h1>รายชื่ออาจารย์</h1>
@@ -176,7 +242,7 @@ export function ClassSubject(props: {
               />
             </div>
 
-            <div className="relative w-1/4 flex items-end">
+            <div className="relative w-1/3 flex items-end">
               <div className="bg-white w-full">
                 <Input
                   type="text"
@@ -191,26 +257,6 @@ export function ClassSubject(props: {
           </div>
           {/* data zone */}
           <div className="mt-4 w-full p-4">
-            {/* detail table */}
-            <div className=" flex mb-4 justify-between">
-              <div className="flex w-1/5">
-                <Badge variant={"outline"}>
-                  <h1 className="text-base">รายวิชา : {props.subjectName}</h1>
-                </Badge>
-              </div>
-              <div className="flex w-1/6 gap-6 text-base">
-                <div>
-                  <Badge variant={"outline"}>
-                    <h1 className="text-base">year : {props.year}</h1>
-                  </Badge>
-                </div>
-                <div>
-                  <Badge variant={"outline"}>
-                    <h1 className="text-base">term : {props.term}</h1>
-                  </Badge>
-                </div>
-              </div>
-            </div>
             <DataTable
               columns={columns}
               data={classSubjectDataFiltered}
@@ -224,6 +270,16 @@ export function ClassSubject(props: {
                 isPublish: "w-1/12",
               }}
             />
+            <div className="flex justify-end mt-4">
+              <button>
+                <Badge
+                  variant={"outline"}
+                  className="h-10 text-lg hover:bg-slate-200 transition:duration-500 rounded-md"
+                >
+                  publish Grade
+                </Badge>
+              </button>
+            </div>
           </div>
           {/* breadcrumb zone */}
         </header>

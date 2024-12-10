@@ -7,11 +7,15 @@ import { Input } from "@/components/ui/input";
 import { GradingDataColumn } from "@/dto/gradingDto";
 import { getGradingViewData } from "@/resource/academics/grading/viewData/gradingViewData";
 import { useEffect, useState } from "react";
-import { ClassSubject } from "../main";
 
 export function Subject(props: {
   handleTab: (tab: string) => void;
-  handleSelectedData: (data: ClassSubject) => void;
+  handleSelectedData: (data: {
+    id: number;
+    year: number;
+    term: number;
+    subjectName: string;
+  }) => void;
 }) {
   const [searchSubject, setSearchSubject] = useState<string>("");
 
@@ -29,16 +33,24 @@ export function Subject(props: {
   const [selectedTerm, setSelectedTerm] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
 
-  const handleSelectedData = (id: number) => {
-    props.handleTab("class");
-    props.handleSelectedData({
-      id: id,
-      year: Number(selectedYear),
-      term: Number(selectedTerm),
-      subjectName: gradingDataFiltered.find((item) => item.id === id)
-        ?.subjectName,
-    });
-    console.log("Selected data", id);
+  const handleSelectedSubjectData = (id: number) => {
+    if (!selectedTerm || !selectedYear) {
+      alert("กรุณาเลือกภาคเรียนและปีการศึกษาก่อน");
+    } else {
+      props.handleTab("class");
+      const item = gradingDataFiltered.find((item) => item.id === id);
+      if (item) {
+        props.handleSelectedData({
+          id: id,
+          year: Number(selectedYear),
+          term: Number(selectedTerm),
+          subjectName: item.subjectName,
+        });
+      } else {
+        alert("ไม่พบข้อมูล");
+      }
+      console.log("Selected data", id);
+    }
   };
 
   const columns = makeColumns<GradingDataColumn>(
@@ -58,7 +70,7 @@ export function Subject(props: {
     [
       {
         label: "ตรวจสอบรายละเอียด",
-        onClick: (id: string | number) => handleSelectedData(Number(id)),
+        onClick: (id: string | number) => handleSelectedSubjectData(Number(id)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
     ]
@@ -88,7 +100,7 @@ export function Subject(props: {
 
     setGradingDataFiltered(filteredData);
   }, [searchSubject, gradingData]);
-  console.log(gradingDataFiltered);
+  // console.log(gradingDataFiltered);
   return (
     <>
       <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">

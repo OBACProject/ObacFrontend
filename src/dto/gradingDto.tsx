@@ -20,6 +20,7 @@ export interface ClassSubjectData {
   subjectName: string; // ไม่เอาคับ
   day: string;
   period: string;
+  teacherName: string;
   year: number; // ไม่เอา
   term: number; // ไม่เอา
 }
@@ -40,3 +41,5 @@ export interface ClassSubjectColumn {
   teacherName: string;
   isPublish: boolean;
 }
+
+export interface GradingInfo {}
