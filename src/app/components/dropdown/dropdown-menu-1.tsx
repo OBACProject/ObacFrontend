@@ -19,24 +19,25 @@ export default function DropMenu({
 }) {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="text-white">
+      <NavigationMenuList className="text-white flex ">
         {menuData.map((menu, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className=" hover:bg-blue-800 h-full rounded-none text-base flex ">
+            <NavigationMenuTrigger className="hover:bg-blue-900 py-2 px-4 h-full rounded-xl duration-300 text-md">
               {menu.menuTopic}
+              <NavigationMenuContent className="top-full  bg-zinc-700 rounded-xl">
+                <ul className="gap-2 py-1 px-2 text-white  ">
+                  {menu.menuList.map((item, index) => (
+                    <ListItem
+                      href={item.href}
+                      key={index}
+                      title={item.menuName}
+                      children={item.menuIcon}
+                    />
+                  ))}
+                </ul>
+              </NavigationMenuContent>
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="mt-0 bg-gray-500">
-              <ul className="w-[68rem] flex gap-5 py-1 px-2 text-white">
-                {menu.menuList.map((item, index) => (
-                  <ListItem
-                  href={item.href}
-                    key={index}
-                    title={item.menuName}
-                    children={item.menuIcon}
-                  ></ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
+
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>
@@ -52,18 +53,18 @@ const ListItem = React.forwardRef<
     <li>
       <NavigationMenuLink
         asChild
-        className="flex gap-0 justify-center items-center"
+        className="flex gap-0 my-1 justify-between items-center"
       >
         <a
           ref={ref}
           className={cn(
-            "block select-none  rounded-md px-5 py-3 leading-none no-underline outline-none transition-colors group hover:bg-gray-300 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none  rounded-md px-5 py-2 leading-none no-underline outline-none transition-colors group hover:bg-zinc-500 duration-300  focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
         >
-          <div className="w-10 h-10 text-white">{children}</div>
-          <div className="text-md font-medium leading-none">{title}</div>
+          <div className="w-8 h-8 text-white mr-4">{children}</div>
+          <div className="text-sm font-medium mt-0.5 leading-none">{title}</div>
         </a>
       </NavigationMenuLink>
     </li>
