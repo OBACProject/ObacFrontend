@@ -93,25 +93,31 @@ export function StudentFailPopUp(props: {
             <div className="w-full flex gap-4">
               <div className="w-1/2">
                 <div className="bg-white">
-                  <LabelText topic="ชื่อ-นามสกุล" data={nameData} />
+                  <LabelText
+                    topic="ชื่อ-นามสกุล"
+                    data={nameData || "ข้อมูลไม่ครบ"}
+                  />
                 </div>
-                {/* <LabelInput
-                  label="ชื่อ-นามสกุล"
-                  type="text"
-                  htmlFor="name"
-                  editabled={false}
-                /> */}
               </div>
               <div className="w-1/2 bg-white">
-                <LabelText topic="ระดับการศึกษา" data={data.class} />
+                <LabelText
+                  topic="ระดับการศึกษา"
+                  data={data?.class || "ข้อมูลไม่ครบ"}
+                />
               </div>
             </div>
             <div className="w-full flex gap-4">
               <div className="w-1/3 bg-white">
-                <LabelText topic="หลักสูตร" data={data.facultyName} />
+                <LabelText
+                  topic="หลักสูตร"
+                  data={data?.facultyName || "ข้อมูลไม่ครบ"}
+                />
               </div>
               <div className="w-1/3 bg-white">
-                <LabelText topic="สาขา" data={data.programName} />
+                <LabelText
+                  topic="สาขา"
+                  data={data?.programName || "ข้อมูลไม่ครบ"}
+                />
               </div>
             </div>
           </div>
