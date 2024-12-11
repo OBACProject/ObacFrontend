@@ -57,6 +57,13 @@ export default function Form({ id }: Props) {
 
   const handleClickPopUp = () => {
     setpopUpAddSubject((popUpAddSubject) => !popUpAddSubject);
+    setSubjectId('')
+    setSubjectName('')
+    setSubject_Id('')
+    setPeriode('')
+    setTeacherName('')
+    setDay('')
+    setRoom('')
   };
   const onClosePopUp = () => {
     setpopUpAddSubject(false);
@@ -101,7 +108,7 @@ export default function Form({ id }: Props) {
       </div>
       <div className="grid my-5 place-items-center">
         {schedules?.map((items, index) => (
-          <div className="w-4/5 mt-2  border-[1px] border-gray-200 shadow-md shadow-gray-200  rounded-md grid grid-cols-[20%_30%_25%_25%]">
+          <div className="w-4/5 mt-2  border-[1px] hover:border-slate-400 border-gray-200 shadow-md shadow-gray-200  rounded-md grid grid-cols-[20%_30%_25%_25%]">
             <div
               className={`${
                 items.day == "monday"
@@ -119,12 +126,12 @@ export default function Form({ id }: Props) {
                   : items.day == "saturday"
                   ? "bg-purple-300"
                   : ""
-              } py-5 px-5 rounded-l-md border-r-2 border-gray-500 place-items-center grid text-lg font-semibold`}
+              } py-5 px-5 rounded-l-md border-r-2 border-slate-200 place-items-center grid text-lg font-semibold`}
             >
               {items.day}
             </div>
-            <div className="px-5 py-2 border-r-2 border-gray-500 ">
-              <div className="text-lg font-semibold">
+            <div className="px-5 py-2 border-r-2 border-slate-200 ">
+              <div className="text-lg text-blue-500 font-semibold">
                 วิชา : {items.subjectName}
               </div>
               <div>รหัส : {items?.subjectId || "000"}</div>
@@ -170,6 +177,8 @@ export default function Form({ id }: Props) {
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </span>
               </div>

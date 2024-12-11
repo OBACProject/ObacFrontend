@@ -7,6 +7,6 @@ interface Props{
 
 export default function MenuBar({id}:Props) {
   return (
-    <div className='px-10 py-10 bg-blue-500 text-white'>MenuBar</div>
+    <div className='px-10 grid text-2xl place-items-center py-10 bg-blue-800 text-white'>ตารางเรียนของกลุ่มเรียน ปวส 2.1</div>
   )
 }

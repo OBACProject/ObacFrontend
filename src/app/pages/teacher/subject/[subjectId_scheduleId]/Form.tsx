@@ -108,7 +108,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.collectScore}
             min={0}
             max={50}
-            className={` text-center focus:outline-blue-500 py-2 group-hover:bg-[#e8f3ff] ${
+            className={` text-center enabled:bg-blue-50   bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
               item.collectScore > 50 || item.collectScore < 0
                 ? "outline-red-500 border-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -123,7 +123,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.affectiveScore}
             min={0}
             max={20}
-            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+            className={`text-center enabled:bg-blue-50   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
               item.affectiveScore > 20 || item.affectiveScore < 0
                 ? "border-red-500 outline-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -138,7 +138,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.testScore}
             min={0}
             max={30}
-            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+            className={`text-center enabled:bg-blue-50   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
               item.testScore > 30 || item.testScore < 0
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                 : "border-gray-300 border-r-2"
