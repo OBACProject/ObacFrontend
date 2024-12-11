@@ -21,16 +21,16 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
         cardData.map((data, index) => (
           <div
             key={index}
-            className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group hover:bg-gray-100 my-3 bg-white"
+            className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group hover:bg-gray-100  my-3 bg-white"
           >
             <div className="grid items-start ">
               <div className="relative items-center justify-center flex w-full h-60 overflow-hidden">
                 <Image
                   src={data.img}
                   alt={data.topic}
-                  layout="fill" 
+                  fill
                   objectFit="cover" 
-                  className="transition-transform rounded-t-md duration-300 group-hover:rounded-t-md group-hover:scale-110"
+                  className="transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
                 />
               </div>
               <div className="grid w-full px-10">
