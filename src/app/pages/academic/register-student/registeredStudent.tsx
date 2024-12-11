@@ -10,6 +10,7 @@ import {
   StudentRegisterDataColumn,
 } from "@/resource/academics/studentInfoList/studentRegisterData";
 import React, { useEffect, useState } from "react";
+import { RegisterPopUp } from "./popup/registerPopUp";
 
 export function AcademicRegisterStudent() {
   const [searchStudent, setSearchStudent] = useState<string>("");
@@ -26,14 +27,19 @@ export function AcademicRegisterStudent() {
   >([]);
 
   const closePopup = () => {
-    setIsOpenPopUp(false);
+    setIsOpenPopUp(!isOpenPopUp);
+  };
+
+  const handleClickPopUp = (registerStudentId: number) => {
+    setIsOpenPopUp(!isOpenPopUp);
+    setStudentRegisterId(registerStudentId);
   };
 
   const openPopup = (registerStudentId: number) => {
     if (registerStudentId == 0) {
       alert("ข้อมูลนักเรียกไม่ถูกต้อง");
     }
-    setIsOpenPopUp(true);
+    setIsOpenPopUp(!isOpenPopUp);
   };
 
   const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];
@@ -46,7 +52,7 @@ export function AcademicRegisterStudent() {
     "การท่องเที่ยว",
   ];
   const classes = ["ปวช.", "ปวส."];
-
+  const [studentRegisterId, setStudentRegisterId] = useState<number>(0);
   // console.log(StudentRegisterColumn);
 
   const columns = makeColumns<StudentRegisterDataColumn>(
@@ -72,7 +78,7 @@ export function AcademicRegisterStudent() {
     [
       {
         label: "ดูข้อมูล",
-        onClick: (id) => console.log("View", id),
+        onClick: (id) => handleClickPopUp(Number(id)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
       {
@@ -169,8 +175,20 @@ export function AcademicRegisterStudent() {
           columns={columns}
           data={searchStudentFilter}
           selectedValue="id"
+          columnWidths={{
+            runningNumber: "w-1/12",
+            thaiName: "w-1/4",
+            thaiLastName: "w-1/4",
+            gender: "w-1/12",
+            class: "w-1/12",
+            facultyName: "w-1/2",
+            programName: "w-1/2",
+          }}
         />
       </div>
+      {isOpenPopUp && (
+        <RegisterPopUp registerId={studentRegisterId} onClose={closePopup} />
+      )}
     </div>
   );
 }
