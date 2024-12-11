@@ -10,6 +10,7 @@ import {
   StudentFailDataColumn,
 } from "@/resource/academics/studentInfoList/studentFailData";
 import { useEffect, useState } from "react";
+import { StudentFailPopUp } from "./popup/studentFailPopUp";
 
 export function StudentFailed() {
   const [searchFailStudent, setSearchFailStudent] = useState<string>("");
@@ -20,6 +21,17 @@ export function StudentFailed() {
   const [searchFailStudentFilter, setSearchFailStudentFilter] = useState<
     StudentFailDataColumn[]
   >([]);
+
+  const [popUpStudentFail, setPopUpStudentFail] = useState<boolean>(false);
+  const [selectedStudentFailId, setSelectedStudentFailId] = useState<number>(0);
+  const handleClickPopUp = (studentId: number) => {
+    setPopUpStudentFail(!popUpStudentFail);
+    setSelectedStudentFailId(studentId);
+  };
+
+  const onClose = () => {
+    setPopUpStudentFail(false);
+  };
 
   const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];
   const programNames = [
@@ -54,7 +66,7 @@ export function StudentFailed() {
     [
       {
         label: "ดูรายละเอียด",
-        onClick: (id) => console.log("View", id),
+        onClick: (id) => handleClickPopUp(Number(id)),
         className: "hover:bg-blue-600 bg-blue-500",
       },
       {
@@ -64,6 +76,17 @@ export function StudentFailed() {
       },
     ]
   );
+
+  useEffect(() => {
+    if (popUpStudentFail) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = ""; // Clean up on component unmount
+    };
+  }, [popUpStudentFail]);
 
   useEffect(() => {
     const searchMatch = StudentFailColumnData.filter((student) => {
@@ -158,9 +181,21 @@ export function StudentFailed() {
         <DataTable
           columns={columns}
           data={searchFailStudentFilter}
-          selectedValue="id"
+          selectedValue="runningNumber"
+          columnWidths={{
+            runningNumber: "w-1/12",
+            thaiName: "w-1/4",
+            thaiLastName: "w-1/4",
+            gender: "w-1/6",
+            class: "w-1/6",
+            facultyName: "w-1/2",
+            programName: "w-1/2",
+          }}
         />
       </div>
+      {popUpStudentFail && (
+        <StudentFailPopUp studentId={selectedStudentFailId} onClose={onClose} />
+      )}
     </header>
   );
 }
