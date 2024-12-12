@@ -22,7 +22,7 @@ export default function RootLayout({
           className="z-50"
         />
         <Navbar />
-        <div className="mt-32">
+        <div className="mt-28">
         {children}
         </div>
       </body>

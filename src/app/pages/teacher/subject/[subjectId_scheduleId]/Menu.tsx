@@ -1,5 +1,5 @@
 "use client";
-import GenStudentNameList from "@/app/components/PDF/genStudentNameList";
+import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
@@ -34,6 +34,7 @@ export default function MenuBar({
   for (let i = 1 ; i<gradData.length;i++){
     student_group_list.push(gradData[i].studentGroup)
   }
+  const student_group = student_group_list[0]
 
   const handleEditChange = () => {
     onEditReturn(true);
@@ -49,7 +50,7 @@ export default function MenuBar({
       <div className="grid grid-cols-[70%_30%]">
         <div className="grid grid-cols-[40%_60%] ">
           <div className="rounded-md bg-blue-900 text-white py-3 mr-4">
-            <span className=" text-xl px-5 py-1 mt-2 ">รหัสวิชา : {subjectData?.subjectCode}</span><span className="text-md text-gray-500 font-semibold bg-white rounded-sm ml-2 text-center py-1 w-fit px-2">กลุ่มเรียน : {student_group_list[0]} </span>
+            <span className=" text-xl px-5 py-1 mt-2 ">รหัสวิชา : {subjectData?.subjectCode}</span><span className="text-md text-gray-500 font-semibold bg-white rounded-sm ml-2 text-center py-1 w-fit px-2">กลุ่มเรียน : {student_group} </span>
             <div className="px-5   text-2xl rounded-md py-2">
               วิชา : {subjectData?.subjectName}
             </div>
@@ -61,9 +62,10 @@ export default function MenuBar({
         <div className="grid row-2 gap-2">
           <div className="flex justify-end gap-3">
             <button
+            disabled={!student_group}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GenSubjectScore({grads:grads});
+                GenSubjectScore({grads:grads , studentGroup:student_group ,subjectId:subjectData?.subjectCode , subjectName:subjectData?.subjectName});
               }}
             >
               ดาวน์โหลดใบคะแนน
@@ -71,7 +73,7 @@ export default function MenuBar({
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={() => {
-                GenStudentNameList({ grads: grads });
+                GenStudentNameInSubject({grads:grads , studentGroup:student_group ,subjectId:subjectData?.subjectCode , subjectName:subjectData?.subjectName});
               }}
             >
               ดาวน์โหลดรายชื่อนักเรียน
@@ -101,14 +103,6 @@ export default function MenuBar({
             </button>
             )}
            
-            {/* <button
-              className="duration-300  text-md rounded-md  px-10 border-gray-200 border-[1px] hover:text-gray-700 hover:rounded-sm hover:bg-blue-200"
-              onClick={() => {
-                GenTranscript({ score: 50 });
-              }}
-            >
-              บันทึก
-            </button> */}
           </div>
         </div>
       </div>
