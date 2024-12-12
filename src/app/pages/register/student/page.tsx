@@ -1,7 +1,18 @@
-import { CircleDot, MapPinHouse, Phone, UserRound, UsersRound } from "lucide-react";
-import { NavbarRegisterStudent } from "./navbar";
+'use client'
+import {
+  MapPinHouse,
+  Phone,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const handleSubmit = ()=>{
+    alert("ส่งใบสมัครสำเร็จ รอตรวจสอบอีเมล")
+    router.push("/pages/home")
+  }
   return (
     <div className="py-5 px-5">
       <div className="grid place-items-center w-full ">
@@ -86,12 +97,14 @@ export default function Home() {
             placeholder="ปี"
           />
 
-<div className="rounded-l-md  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
+          <div className="rounded-l-md  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
             วันเกิด :{" "}
           </div>
 
-          <input type="date" className=" text-md border-2  border-gray-300 text-gray-600 border-l-0 w-[170px] mr-5 px-4 py-1 bg-white focus:outline-blue-300  rounded-r-md"/>
-         
+          <input
+            type="date"
+            className=" text-md border-2  border-gray-300 text-gray-600 border-l-0 w-[170px] mr-5 px-4 py-1 bg-white focus:outline-blue-300  rounded-r-md"
+          />
         </div>
 
         <div className="flex my-5">
@@ -109,7 +122,7 @@ export default function Home() {
             className=" text-md border-2  border-gray-300 text-gray-700 border-l-0 w-[80px] mr-5 px-4 py-1 bg-white focus:outline-blue-300  rounded-r-md"
             placeholder="-"
           />
-           <div className="rounded-l-md  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
+          <div className="rounded-l-md  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
             ศาสนา :
           </div>
           <input
@@ -137,7 +150,11 @@ export default function Home() {
         </div>
         <div className="my-5 flex">
           <div>ที่อยู่ :</div>
-          <textarea className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md" rows={2} placeholder="บ้านเลขที่..."/>
+          <textarea
+            className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md"
+            rows={2}
+            placeholder="บ้านเลขที่..."
+          />
         </div>
 
         <hr className="my-4 border-slate-200" />
@@ -222,7 +239,7 @@ export default function Home() {
           </select>
         </div>
         <div className="my-5 flex">
-        <div className="rounded-l-md h-fit  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
+          <div className="rounded-l-md h-fit  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
             อาชีพ :{" "}
           </div>
           <input
@@ -231,7 +248,11 @@ export default function Home() {
             placeholder="-"
           />
           <div>ที่อยู่ :</div>
-          <textarea className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md" rows={2} placeholder="บ้านเลขที่..."/>
+          <textarea
+            className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md"
+            rows={2}
+            placeholder="บ้านเลขที่..."
+          />
         </div>
         <div className="text-xl mt-5">ข้อมูลมารดา</div>
         <div className="flex mt-1 mb-5">
@@ -261,7 +282,7 @@ export default function Home() {
           </select>
         </div>
         <div className="my-5 flex">
-        <div className="rounded-l-md h-fit  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
+          <div className="rounded-l-md h-fit  text-gray-700 border-2 border-gray-300 border-r-0 w-fit bg-white py-1 pl-4 pr-1">
             อาชีพ :{" "}
           </div>
           <input
@@ -270,9 +291,15 @@ export default function Home() {
             placeholder="-"
           />
           <div>ที่อยู่ :</div>
-          <textarea className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md" rows={2} placeholder="บ้านเลขที่..."/>
+          <textarea
+            className="border-2 ml-2 w-[350px] focus:outline-blue-400 py-1 border-slate-200 px-3 rounded-md"
+            rows={2}
+            placeholder="บ้านเลขที่..."
+          />
         </div>
       </div>
+      <div className="w-full grid place-items-center  my-5"><button onClick={handleSubmit} className="rounded-md px-10 py-2 bg-green-500 text-white hover:opacity-75">
+        ส่งใบสมัคร</button></div>
     </div>
   );
 }

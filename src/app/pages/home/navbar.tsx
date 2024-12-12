@@ -44,7 +44,7 @@ export function Navbar() {
         </div>
 
         <div className="justify-end flex place-items-center px-10 sm:px-2 sm:py-1">
-          <a href="/pages/register/student" className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-blue-700 ">
+          <a href="/pages/register/student" className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-white hover:text-blue-950 ">
           สมัครออนไลน์
           <div className="pt-0.5">
             <CircleCheck className="" /> 
