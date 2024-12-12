@@ -1,81 +1,73 @@
-import React from "react";
+'use client';
+import { Facebook, Instagram } from "lucide-react";
 
-export default function page() {
+
+export default function Page() {
   return (
-    <div className="w-full">
-      <div className="grid place-items-center border-t-2 border-white  py-8 text-bole text-2xl px-20 bg-blue-900 text-white">
-        ข้อมูลการติดต่อ
+    <div className="w-full bg-white">
+      {/* Header Section */}
+      <div className=" pt-16 pb-4 text-6xl font-bold px-20 text-blue-900">
+        Contact Us
       </div>
-      <div className="grid place-items-center">
-        <div className="mt-5 border-[1px] border-gray-300 w-11/12 py-5 px-10 bg-white shadow-md rounded-md grid grid-cols-2 ">
-          <div>
-            <div className="text-2xl py-2 underline font-semibold text-gray-700">
-              ฝ่ายวิชาการ
+
+      {/* Contact Information Section */}
+      <div className="grid grid-cols-2  mt-8">
+        <div className="w-full py-5 px-10 bg-white gap-8">
+          {/* Academic Department */}
+          <div className="mb-2 mx-10">
+            <div className="text-xl py-2  font-semibold text-blue-800 underline">ฝ่ายวิชาการ</div>
+            <div className="text-md">
+              <span className="text-black text-md">Tel.&nbsp;&nbsp;</span>091-864-9154
             </div>
-            <div className="text-xl text-gray-600">
-              <span className="text-black font-semibold">Tel.&nbsp;&nbsp;</span>
-              091-864-9154
-            </div>
-            <hr className="my-5 w-4/5" />
           </div>
 
-          <div>
-            <div className="text-2xl py-2 text-gray-700 underline font-semibold">
-              ฝ่ายปกครอง
+          {/* Administrative Department */}
+          <div className="mb-2 mx-10">
+            <div className="text-xl py-2 font-semibold text-blue-800 underline">ฝ่ายปกครอง</div>
+            <div className="text-md">
+              <span className="text-black text-md">Tel.&nbsp;&nbsp;</span>091-864-9154
             </div>
-            <div className="text-xl text-gray-600">
-              <span className="font-semibold text-black ">
-                Tel.&nbsp;&nbsp;
-              </span>
-              091-864-9154
-            </div>
-            <hr className="my-5 w-4/5" />
-          </div>
-          <div>
-            <div className="text-2xl py-2 underline font-semibold text-gray-700">
-              ฝ่ายบริหาร
-            </div>
-            <div className="text-xl text-gray-600">
-              <span className="font-semibold text-black ">
-                Tel.&nbsp;&nbsp;
-              </span>
-              091-864-9154
-            </div>
-            <hr className="my-5 w-4/5" />
           </div>
 
-          <div>
-            <div className="text-2xl py-2 underline font-semibold text-gray-700">
-              ฝ่ายแนะแนว
+          {/* Management Department */}
+          <div className="mb-2 mx-10">
+            <div className="text-xl py-2 font-semibold text-blue-800 underline">ฝ่ายบริหาร</div>
+            <div className="text-md">
+              <span className="text-black text-md">Tel.&nbsp;&nbsp;</span>091-864-9154
             </div>
-            <div className="text-xl text-gray-600">
-              <span className="font-semibold text-black ">
-                Tel.&nbsp;&nbsp;
-              </span>
-              091-864-9154
+          </div>
+
+          {/* Counseling Department */}
+          <div className="mb-2 mx-10">
+            <div className="text-xl py-2 font-semibold text-blue-800 underline">ฝ่ายแนะแนว</div>
+            <div className="text-md">
+              <span className="text-black text-md">Tel.&nbsp;&nbsp;</span>091-864-9154
             </div>
-            <hr className="my-5 w-4/5" />
+          </div>
+
+          {/* Social Media Links Section */}
+          <div className=" place-items-center mt-16">
+            <div className="py-5 px-10 gap-8 flex">
+              {/* Facebook */}
+              <div className="flex gap-2">
+                <Facebook style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-blue-600 "/>
+                <div className="text-xl pt-2 text-gray-600">เอกวิทย์ยชาการวิทยาลัย</div>
+              </div>
+
+              {/* Instagram */}
+              <div className="flex gap-2">
+                <Instagram style={{ width: "2.0rem", height: "2.5rem" }}
+        className="text-pink-500" />
+                <div className="text-xl pt-2 text-gray-600">akkawitwittayalai.og</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="grid place-items-center">
-        <div className="mt-5 border-[1px] border-gray-300 w-11/12 py-5 px-10 bg-white shadow-md rounded-md grid grid-cols-2 ">
-          <div>
-            <div className="text-2xl py-2 underline font-semibold text-gray-700">
-              Facebook
-            </div>
-            <div className="text-xl text-gray-600">เอกวิทย์ยชาการวิทยาลัย</div>
-            <hr className="my-5 w-4/5" />
-          </div>
-
-          <div>
-            <div className="text-2xl py-2 text-gray-700 underline font-semibold">
-              Instagram
-            </div>
-            <div className="text-xl text-gray-600">akkawitwittayalai.og</div>
-            <hr className="my-5 w-4/5" />
-          </div>
+        <div className="mapswrapper">
+          <iframe width="600" height="450" loading="lazy" allowFullScreen src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B8%AD%E0%B8%B2%E0%B8%8A%E0%B8%B5%E0%B8%A7%E0%B8%A8%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B9%8C%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%AB%E0%B8%B2%E0%B8%A3%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(%E0%B9%82%E0%B8%AD%E0%B9%81%E0%B8%9A%E0%B8%84)&zoom=10&maptype=roadmap">
+          </iframe>
         </div>
       </div>
     </div>

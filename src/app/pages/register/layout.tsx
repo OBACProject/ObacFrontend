@@ -1,5 +1,6 @@
 import "@app/styles/globals.css";
 import { NavbarRegisterStudent } from "./student/navbar";
+import Credit from "@/app/components/credit";
 
 export const metadata = {
   title: "Next.js",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <NavbarRegisterStudent />{children}</body>
+      <NavbarRegisterStudent />{children}<Credit/></body>
     </html>
   );
 }

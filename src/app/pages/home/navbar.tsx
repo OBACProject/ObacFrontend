@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import {  CircleCheck, LogIn } from "lucide-react";
+import {  CircleCheck, LogIn, Shield } from "lucide-react";
 
 export function Navbar() {
   return (
@@ -29,9 +29,10 @@ export function Navbar() {
           </a>
 
           <div className="justify-end grid place-items-center px-10 mr-6 sm:px-2 sm:py-1">
-            <a href="/pages/login" className="px-4 py-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 ">ระบบผู้ใช้
-              <div className="mt-0.5 ml-2 text-xl">
-                {/* <LogIn /> */}
+            <a href="/pages/login" className="px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 ">ระบบผู้ใช้
+              <div className="">
+                <Shield style={{ width: "1.6rem", height: "1.5rem" }}
+        className="text-white transition-colors"/>
               </div>
 
             </a>

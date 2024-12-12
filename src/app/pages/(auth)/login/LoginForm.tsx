@@ -41,7 +41,7 @@ export default function LoginForm({ session }: Session) {
           >
             <div className="mt-10 bg-blue-900 rounded-full w-28 h-28"></div>
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
-              <div className=" text-black text-2xl ">ลงทะเบียนเข้าสู่ระบบ</div>
+              <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
             </div>
 
             <input
@@ -70,8 +70,8 @@ export default function LoginForm({ session }: Session) {
           {/* <div className="my-10">You are not logged in.</div> */}
         </>
       )}
-
-      <div className="flex gap-4 mt-10">
+      {session && (
+        <div className="flex gap-4 mt-5">
         <a
           className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
           href="/pages/student/schedule"
@@ -97,6 +97,8 @@ export default function LoginForm({ session }: Session) {
           Admin
         </a>
       </div>
+      )}
+      
     </div>
   );
 }

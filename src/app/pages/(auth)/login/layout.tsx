@@ -2,6 +2,7 @@ import "@app/styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navbar } from "../../home/navbar";
+import Credit from "@/app/components/credit";
 
 export const metadata = {
   title: "OBAC Authentication",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <div className="mt-28">
         {children}
         </div>
+        <Credit/>
       </body>
     </html>
   );

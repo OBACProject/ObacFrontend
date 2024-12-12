@@ -298,7 +298,7 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="w-full grid place-items-center  my-5"><button onClick={handleSubmit} className="rounded-md px-10 py-2 bg-green-500 text-white hover:opacity-75">
+      <div className="w-full  grid place-items-center  my-5"><button onClick={handleSubmit} className="rounded-md px-10 py-2 shadow-md shadow-gray-200 bg-green-500 text-white hover:opacity-75">
         ส่งใบสมัคร</button></div>
     </div>
   );
