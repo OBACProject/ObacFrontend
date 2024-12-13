@@ -13,7 +13,7 @@ export function TeacherSidebar({
   ...props
 }: TeacherSidebarProps & { profileData: ProfileData }) {
   return (
-    <header className="flex w-screen top-0 bg-background shrink-0 items-center gap-2 border-b px-4 py-2">
+    <header className="flex w-screen top-0 bg-background shrink-0 items-center gap-2 shadow-md shadow-gray-200 px-4 py-2">
       <SidebarMenu
         name={profileData.name}
         href={profileData.href}
@@ -50,7 +50,7 @@ export function SidebarMenu({
   const truncatedTitle = name.length > 25 ? `${name.slice(0, 22)}...` : name;
 
   return (
-    <div className=" shadow-lg border-r-[1px] border-gray-100 shadow-gray-400 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 z-40 ">
+    <div className=" shadow-lg border-r-[1px] border-gray-100 shadow-gray-400 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64  w-20  z-40 ">
     <div className="flex h-[48px] ">
       <a href={href} className="flex   items-center justify-start">
         <button className="flex items-start  ">

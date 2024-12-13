@@ -33,13 +33,13 @@ export default function Home() {
             News And Events
           </h1>
           {/* <hr className="my-5 border-[1px] "/> */}
-          <div className="grid grid-cols-3 gap-x-20 mx-40 ">
+          <div className="grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
             <CardVertical cardData={cardData} />
           </div>
-          <div className="my-5 py-32 border-2 border-dashed border-gray-700 w-4/5 rounded-lg grid place-items-center text-2xl bg-gray-100">
+          <div className="my-5 py-32 border-2 border-dashed border-gray-700 w-full rounded-lg grid place-items-center text-2xl bg-gray-100">
             พื้นที่แปะภาพ
           </div>
-          <div className="grid place-items-start pl-36 w-full">
+          <div className="grid place-items-start mx-10 lg:px-20 md:px-10 sm:px-10 overflow-hidden lg:w-[95%]">
             <CardHorizontal cardData={cardData} />
             <CardHorizontal cardData={cardData} />
           </div>

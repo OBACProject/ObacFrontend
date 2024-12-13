@@ -49,11 +49,11 @@ export default function Page() {
           <div className=" place-items-center mt-16">
             <div className="py-5 px-10 gap-8 flex">
               {/* Facebook */}
-              <div className="flex gap-2">
+              <a href="https://web.facebook.com/groups/thaidev" className="flex gap-2">
                 <Facebook style={{ width: "2.0rem", height: "2.5rem" }}
         className="text-blue-600 "/>
                 <div className="text-xl pt-2 text-gray-600">เอกวิทย์ยชาการวิทยาลัย</div>
-              </div>
+              </a>
 
               {/* Instagram */}
               <div className="flex gap-2">

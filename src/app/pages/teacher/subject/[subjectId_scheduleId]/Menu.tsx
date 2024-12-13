@@ -98,7 +98,7 @@ export default function MenuBar({
             >
               แก้ไข  <Pencil
               style={{ width: "1.0rem", height: "1.5rem" }}
-              className="text-white pt-0.5"
+              className="text-white pt-1"
             />
             </button>
             )}

@@ -118,7 +118,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             }
           />
           <input
-            disabled={onEdit != true}
+            disabled={!onEdit}
             type="number"
             value={item.affectiveScore}
             min={0}
@@ -190,10 +190,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       ))}
       <div className="my-5 w-full grid place-items-end  ">
         <button
-          onClick={saveChanges}
-          className="px-4 py-2  bg-green-500 text-white rounded hover:opacity-75"
+          onClick={saveChanges} disabled={!onEdit}
+          className="px-4 py-2  enabled:bg-green-500 enabled:hover:bg-green-300 duration-300   bg-green-300 text-white rounded hover:bg-green-300"
         >
-          บันทึกคะแนนดิไอเวร
+          บันทึกคะแนน
         </button>
       </div>
       <hr />

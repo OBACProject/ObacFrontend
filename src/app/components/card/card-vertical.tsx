@@ -21,17 +21,18 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
         cardData.map((data, index) => (
           <div
             key={index}
-            className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group hover:bg-gray-100  my-3 bg-white"
+            className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group overflow-hidden hover:bg-gray-100  my-3 bg-white"
           >
             <div className="grid items-start ">
-              <div className="relative items-center justify-center flex w-full h-60 overflow-hidden">
+              <div className="relative  items-center justify-center flex w-full h-60 overflow-hidden">
                 <Image
                   src={data.img}
                   alt={data.topic}
                   fill
                   objectFit="cover" 
-                  className="transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
+                  className="absolute h-36 lg:h44 object-cover transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
                 />
+                <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
               </div>
               <div className="grid w-full px-10">
                 <span className="text-blue-800 text-sm mt-4">
@@ -45,8 +46,8 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
                 <div className="mt-3 font-semibold text-black">
                   {data.date}
                 </div>
-                <div className="mt-1 mb-4 text-gray-600">
-                  {data.description.slice(0, 200)}...
+                <div className="mt-1 mb-4 line-clamp-3 text-gray-600">
+                  {data.description}
                 </div>
               </div>
             </div>

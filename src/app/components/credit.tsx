@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export default function Credit() {
     return (
-        <div>
-            <div className="bg-blue-900 mt-0 w-full justify-center flex">
+        <div className="w-full">
+            <div className="bg-blue-900 mt-0 h-auto lg:h-auto md:h-50 sm:h-48 w-full justify-center flex">
                 <div className="mt-10 mb-10 w-2/3 flex justify-between text-white">
                     <div className="flex">
                         <div className="pt-0">
@@ -15,7 +15,7 @@ export default function Credit() {
                         
                         {/* Name university */}
                         <div className="flex flex-col justify-start font-inter font-bold p-2 pl-6 ">
-                            <span className="sm:text-lg ">
+                            <span className="sm:text-lg line-clamp-1">
                                 Ekawit Business Administration Vocational College
                             </span>
                             <span className="sm:text-sm ">วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ</span>

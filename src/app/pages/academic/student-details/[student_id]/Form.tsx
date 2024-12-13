@@ -125,17 +125,42 @@ export default function Form() {
           ข้อมูลส่วนอื่นๆ
         </div>
       </div>
-      <div className="my-5">
+      <div className="my-3">
         <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
           ข้อมูลส่วนอื่นๆ
         </div>
       </div>
-      <div className="my-5">
+      <div className="my-3">
         <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
           ข้อมูลส่วนอื่นๆ
         </div>
       </div>
-      <div className="my-5">
+      <div className="my-3">
+        <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
+          ข้อมูลส่วนอื่นๆ
+        </div>
+      </div>
+      <div className="my-3">
+        <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
+          ข้อมูลส่วนอื่นๆ
+        </div>
+      </div>
+      <div className="my-3">
+        <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
+          ข้อมูลส่วนอื่นๆ
+        </div>
+      </div>
+      <div className="my-3">
+        <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
+          ข้อมูลส่วนอื่นๆ
+        </div>
+      </div>
+      <div className="my-3">
+        <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
+          ข้อมูลส่วนอื่นๆ
+        </div>
+      </div>
+      <div className="my-3">
         <div className="border-2 rounded-lg border-dashed grid place-items-center border-gray-500 py-10 ">
           ข้อมูลส่วนอื่นๆ
         </div>
