@@ -23,11 +23,29 @@ export interface StudentCreateData {
   facultyId: number;
   birthDate: Date; // /
 }
+export interface EducationData {
+  classLevel: string;
+  groupsCourse: FacultyInfo[];
+}
+export interface FacultyInfo {
+  facultyName: string;
+  groupProgram: ProgramInfo[];
+}
+export interface ProgramInfo {
+  programName: string;
+  group: GroupInfo[];
+}
+
+export interface GroupInfo {
+  groupId: number;
+  groupName: string;
+}
 
 export interface filterProgramsParamsData {
   facultyName: string;
   programName: string;
   classLevel: string;
+  groupId: string;
   groupName: string;
 }
 
