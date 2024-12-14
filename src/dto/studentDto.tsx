@@ -58,11 +58,8 @@ export interface StudentColumns {
   more: string | null;
 }
 
-export interface StudentColumns {
-  runningNumber: number;
-  studentId: string;
+export interface StudentInfoByGroupId {
+  studentId: number;
   studentName: string;
   studentSurname: string;
-  blank: string;
-  more: string | null;
 }

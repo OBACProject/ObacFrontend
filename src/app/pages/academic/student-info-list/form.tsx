@@ -12,9 +12,9 @@ import {
 import { makeColumns } from "@/app/components/table/makeColumns";
 import { DataTable } from "@/app/components/table/tableComponent";
 import { Input } from "@/components/ui/input";
-import { filterProgramsData } from "@/resource/academics/studentInfoList/api/filterProgramsApiParams";
 import { EducationData, FacultyInfo } from "@/dto/studentDto";
 import { filterProgramsViewData } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
+import { getStudentByGroupIdDataView } from "@/resource/academics/studentInfoList/viewData/getStudentByGroupIdDataView";
 
 export default function Form() {
   const router = useRouter();
@@ -27,9 +27,10 @@ export default function Form() {
     "ปวส.": ["1", "2"],
   };
 
-  const [roomFilter, setRoomFilter] = useState<string[]>([]);
-
   const [searchStudent, setSearchStudent] = useState<string>("");
+  const [searchStudentData, setSearchStudentData] = useState<StudentColumns[]>(
+    []
+  );
   const [searchStudentFilter, setSearchStudentFilter] = useState<
     StudentColumns[]
   >([]);
@@ -46,8 +47,7 @@ export default function Form() {
   );
 
   const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
-  // console.log(vocationalFaculties);
-  // console.log(diplomaFaculties);
+
   const [program, setProgram] = useState<string[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
   const [room, setRoom] = useState<string[]>([]);
@@ -120,12 +120,14 @@ export default function Form() {
     setRoom(fetchRooms);
   };
 
-  const handleSecChange = (selected: string) => {
+  const handleRoom = (selected: string) => {
     setSelectedRoom(selected);
   };
+  console.log("selectedRoom", selectedRoom);
 
   useEffect(() => {
     const fetchFilterData = async () => {
+      // const data = await getStudentByGroupIdDataView(groupId);
       const data = await filterProgramsViewData();
       console.log("Fetched Data:", data);
       const vocational = data.filter(
@@ -141,10 +143,12 @@ export default function Form() {
 
     fetchFilterData();
   }, []);
+
+  // useEffect for searching a room by selected grade level
   // useEffect for searching
   useEffect(() => {
     const normalizedSearch = searchStudent.toLowerCase();
-    const filteredStudent = studentColumnsData.filter(
+    const filteredStudent = searchStudentData.filter(
       (student) =>
         student.studentId.toLowerCase().includes(normalizedSearch) ||
         student.studentName.toLowerCase().includes(normalizedSearch) ||
@@ -152,15 +156,32 @@ export default function Form() {
         student.more?.toLowerCase().includes(normalizedSearch)
     );
     setSearchStudentFilter(filteredStudent);
-  }, [searchStudent, studentColumnsData]);
+  }, [searchStudent, studentColumnsData, searchStudentData]);
 
-  const handleSearch = () => {
-    router.push(`/pages/academic/student-info-list/${group}`);
+  const handleSearch = async () => {
+    const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
+      (item) => item.facultyName === selectedFaculty
+    );
+    const program = faculties[0]?.groupProgram.filter(
+      (item) => item.programName === selectedProgram
+    );
+    const group = program[0]?.group.filter((item) => {
+      return item.groupName[0] === selectedGradeLevel;
+    });
+
+    const selectGroup = group?.filter(
+      (item) => item.groupName === selectedRoom
+    );
+    const groupId = selectGroup[0]?.groupId;
+    // console.log("groupId", groupId);
+    const data = await getStudentByGroupIdDataView(groupId);
+    setSearchStudentData(data);
+    // const data = await getStudentByGroupIdDataView();
+    // router.push(`/pages/academic/student-info-list/${group}`);
   };
 
   // ----------------- Table -----------------
   // const [studentData, setStudentData] = useState<StudentColumns[]>([]);
-  const studentColumns: StudentColumns[] = [];
 
   const columns = makeColumns<StudentColumns>(
     {
@@ -268,24 +289,24 @@ export default function Form() {
                       value: item,
                       label: item,
                     }))}
-                    onSelect={(selected) => handleSecChange(selected)}
+                    onSelect={(selected) => handleRoom(selected)}
                     disabled={!selectedGradeLevel}
                   />
                 </div>
 
-                {/* <div className="flex  items-end justify-center ml-10 w-1/6">
+                <div className="flex  items-end justify-center ml-10 w-1/6">
                   <button
                     className={`${
-                      selectedSec
+                      selectedRoom
                         ? "bg-blue-500 hover:bg-blue-400"
                         : "bg-blue-200"
                     } text-md mr-16 rounded-sm w-full py-2  text-white `}
-                    disabled={!selectedSec}
+                    disabled={!selectedRoom}
                     onClick={handleSearch}
                   >
                     ค้นหา
                   </button>
-                </div> */}
+                </div>
               </div>
             </div>
             {/* <div className="w-1/5"></div> */}
