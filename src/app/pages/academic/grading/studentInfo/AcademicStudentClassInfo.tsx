@@ -1,3 +1,4 @@
+import { Combobox } from "@/app/components/combobox/combobox";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GetGradBySubjectId } from "@/dto/gradDto";
@@ -92,6 +93,47 @@ export function AcademicStudentInfo(props: {
       alert("Failed to save grades. Please try again.");
     }
   };
+
+  function calculateGrade(totalScore: number) {
+    // Update the item to hold the totalScore
+
+    if (totalScore >= 80) {
+      return 4;
+    } else if (totalScore >= 75) {
+      return 3.5;
+    } else if (totalScore >= 70) {
+      return 3;
+    } else if (totalScore >= 65) {
+      return 2.5;
+    } else if (totalScore >= 60) {
+      return 2;
+    } else if (totalScore >= 55) {
+      return 1.5;
+    } else if (totalScore >= 50) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+  const onChangeGrade = (value: string) => {
+    console.log(value);
+  };
+
+  const gradeValue = [
+    "0",
+    "1",
+    "1.5",
+    "2",
+    "2.5",
+    "3",
+    "3.5",
+    "4",
+    "ผ.",
+    "มผ.",
+    "ขส.",
+    "ขร.",
+    "มส.",
+  ];
 
   console.log("gradDatas", gradDatas);
   return (
@@ -228,37 +270,30 @@ export function AcademicStudentInfo(props: {
               handleInputChange(index, "affectiveScore", e.target.value)
             }
           />
-
+          <span className="text-center flex justify-center items-center border-r-2 py-2">
+            {item.collectScore + item.testScore + item.affectiveScore}
+          </span>
           <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 py-2">
-            {50 <= item.collectScore + item.testScore + item.affectiveScore &&
-            item.collectScore + item.testScore + item.affectiveScore < 55 ? (
-              <div>1</div>
-            ) : 55 <=
-                item.collectScore + item.testScore + item.affectiveScore &&
-              item.collectScore + item.testScore + item.affectiveScore < 60 ? (
-              <div>1.5</div>
-            ) : 60 <=
-                item.collectScore + item.testScore + item.affectiveScore &&
-              item.collectScore + item.testScore + item.affectiveScore < 65 ? (
-              <div>2</div>
-            ) : 65 <=
-                item.collectScore + item.testScore + item.affectiveScore &&
-              item.collectScore + item.testScore + item.affectiveScore < 70 ? (
-              <div>2.5</div>
-            ) : 70 <=
-                item.collectScore + item.testScore + item.affectiveScore &&
-              item.collectScore + item.testScore + item.affectiveScore < 75 ? (
-              <div>3</div>
-            ) : 75 <=
-                item.collectScore + item.testScore + item.affectiveScore &&
-              item.collectScore + item.testScore + item.affectiveScore < 80 ? (
-              <div>3.5</div>
-            ) : item.collectScore + item.testScore + item.affectiveScore >=
-              80 ? (
-              <div>4</div>
-            ) : (
-              <div>0</div>
-            )}
+            {(() => {
+              const totalSum =
+                item.collectScore + item.testScore + item.affectiveScore;
+              const grade = calculateGrade(totalSum);
+              return (
+                <>
+                  <div className="flex justify-center p-4">
+                    <Combobox
+                      buttonLabel="เกรด"
+                      options={gradeValue.map((item) => ({
+                        label: item,
+                        value: item,
+                      }))}
+                      onSelect={(seletedGrade) => onChangeGrade(seletedGrade)}
+                      defaultValue={String(grade)}
+                    />
+                  </div>
+                </>
+              );
+            })()}
           </span>
 
           {/* Replace input with a span */}
