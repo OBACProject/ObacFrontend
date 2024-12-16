@@ -7,7 +7,7 @@ type Data = {
   score: number;
 };
 
-const HC1_Transcript = ({ score }: Data) => {
+const HC2_Transcript = ({ score }: Data) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -21,7 +21,7 @@ const HC1_Transcript = ({ score }: Data) => {
   doc.setFont("THSarabun");
 
   doc.setFontSize(16);
-  doc.text("สำเนา รบ 2567 ปวส. การจัดการสำนักงานดิจิทัล", 105, 10, {
+  doc.text("สำเนา รบ 2567 ปวส. การตลาด", 105, 10, { // <<<<<<<<<<<<<<<<<<<<<<<  แก้ชื่อให้ถูกด้วย
     align: "center",
   });
   doc.setFontSize(12);
@@ -39,8 +39,8 @@ const HC1_Transcript = ({ score }: Data) => {
   doc.text("ชื่อมารดา", 10, 47);
 
   doc.text("ประเภทวิชา บริหารธุรกิจ", 10, 51);
-  doc.text("กลุ่มอาชีพ  การจัดการ", 10, 55);
-  doc.text("สาขาวิชา  การจัดการสำนักงานดิจิทัล", 10, 59);
+  doc.text("กลุ่มอาชีพ  การตลาด", 10, 55);        // <<<<<<<<<<<<<<<<<<<<<<<  แก้ชื่อให้ถูกด้วย
+  doc.text("สาขาวิชา  การตลาด", 10, 59);         // <<<<<<<<<<<<<<<<<<<<<<<  แก้ชื่อให้ถูกด้วย
 
   doc.line(170, 10, 170, 47);
   doc.line(200, 10, 200, 47);
@@ -65,11 +65,13 @@ const HC1_Transcript = ({ score }: Data) => {
   doc.text("ระดับคะแนนเฉลี่ยสะสม  การจัดการ", 105, 55);
   doc.text("มาตรฐานวิชาชีพ ( ) ผ่าน ( ) ไม่ผ่าน", 105, 59);
 
+
+  doc.setLineWidth(0.3)
   doc.line(4, 4, 4, 291);
   doc.line(205, 4, 205, 291);
   doc.line(4, 4, 205, 4);
   doc.line(205, 291, 4, 291);
-
+  doc.setLineWidth(0.2)
   doc.line(4, 62, 205, 62);
   doc.line(4, 75, 205, 75);
   doc.text("รหัส", 13, 70);
@@ -156,12 +158,13 @@ const HC1_Transcript = ({ score }: Data) => {
         11,
       ],
       ["30000-1001", "การเป็นผู้ประกอบการ", "3", score, 7, 8, 9, 11],
-      ["30000-1002", "หลักการตลาด", "3", score, 7, 8, 9, 11],
-      ["300216-2001", "การจัดสำนักงานสมัยใหม่", "3", score, 7, 8, 9, 11],
-      ["300216-2002", "ธุรการสำนักงาน", "3", score, 7, 8, 9, 11],
+      ["31910-1002", "ธุรกิจดิจิทัล", "3", score, 7, 8, 9, 11],
+      ["31910-2001", "การบริหารจัดการความต้องการธุรกิจ", "3", score, 7, 8, 9, 11],
+      ["31910-2002", "ระบบการจัดการฐานข้อมูล", "3", score, 7, 8, 9, 11],
+
       [
-        "300216-2003",
-        "การใช้โปรแกรมสำเร็จรูปในงานสำนักงานดิจิทัล",
+        "31910-2003",
+        "วิเคราะห์และออกแบบระบบเชิงวัตถุ",
         "3",
         score,
         7,
@@ -214,10 +217,8 @@ const HC1_Transcript = ({ score }: Data) => {
       if (
         data.row.index === 9 ||
         data.row.index === 1 ||
-        data.row.index === 2 ||
         data.row.index === 3 ||
         data.row.index === 4 ||
-        data.row.index === 5 ||
         data.row.index === 6 ||
         data.row.index === 8
       ) {
@@ -552,6 +553,15 @@ const HC1_Transcript = ({ score }: Data) => {
   });
   doc.line(104, 62, 104, doc.lastAutoTable.finalY);
 
+//===================================================================================================
+
+
+
+
+
+
+
+
   doc.line(4, 246, 205, 246);
   doc.text("สรุปผลการเรียน", 23, 252.5);
   doc.line(62, 246, 62, 291);
@@ -632,6 +642,6 @@ const HC1_Transcript = ({ score }: Data) => {
   doc.text("0-49", 175, 289.5);
   doc.text("ตก", 194, 289.5);
 
-  doc.save("Transcript_การจัดการสำนักงานดิจิทัล.pdf")
+  doc.save("Transcript_การตลาด.pdf")
 };
-export default HC1_Transcript;
+export default HC2_Transcript;
