@@ -15,14 +15,14 @@ interface Props {
   id: string;
 }
 
-export default function Form({ id }: Props) {
-  const [subject_id, setSubject_Id] = useState<string>("");
-  const [subjectId, setSubjectId] = useState<string>("");
-  const [subjectName, setSubjectName] = useState<string>("");
-  const [day, setDay] = useState<string>("");
-  const [periode, setPeriode] = useState<string>("");
-  const [teacherName, setTeacherName] = useState<string>("");
-  const [room, setRoom] = useState<string>("");
+export default function Group({ id }: Props) {
+  const [subject_id , setSubject_Id ] = useState<string>('');
+  const [subjectId , setSubjectId ] = useState<string>('');
+  const [subjectName , setSubjectName ] = useState<string>('');
+  const [day , setDay ] = useState<string>('');
+  const [periode , setPeriode ] = useState<string>('');
+  const [teacherName , setTeacherName ] = useState<string>('');
+  const [room , setRoom ] = useState<string>('');
 
   const [schedules, setSchedule] = useState<ScheduleData[]>([
     {
@@ -155,10 +155,7 @@ export default function Form({ id }: Props) {
               <div className="grid my-3 grid-cols-2">
                 <span className="flex gap-2 justify-center">
                   <label className="py-1 px-2 ">วัน</label>
-                  <select
-                    className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                    onChange={handleChangeDay}
-                  >
+                  <select className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 " onChange={handleChangeDay}>
                     <option selected>- เลือก -</option>
                     {days.map((items) => (
                       <option value={items}>{items}</option>
@@ -167,10 +164,8 @@ export default function Form({ id }: Props) {
                 </span>
                 <span className="flex gap-2 justify-center">
                   <label className="py-1 px-2">คาบเรียน</label>
-                  <select
-                    className="rounded-md px-5 py-1 bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                    onChange={handleChangePeriod}
-                  >
+                  <select className="rounded-md px-5 py-1 bg-gray-50 border border-gray-300 focus:outline-blue-500 " 
+                  onChange={handleChangePeriod}> 
                     <option selected>- เลือก -</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -183,8 +178,7 @@ export default function Form({ id }: Props) {
                   <label className="py-1 pl-10 ">รหัสวิชา </label>
                   <input
                     type="text"
-                    onChange={(e) => setSubjectId(e.target.value)}
-                    value={subjectId}
+                    onChange={(e)=>setSubjectId(e.target.value)} value={subjectId}
                     className="px-4 w-2/3 focus:outline-blue-400 border-[1px] rounded-md border-gray-300 py-1"
                     placeholder="code"
                   />
@@ -194,8 +188,7 @@ export default function Form({ id }: Props) {
                 <span className="grid grid-cols-[30%_70%] gap-0 ">
                   <label className="py-1 pl-10  ">ชื่อวิชา</label>
                   <input
-                    onChange={(e) => setSubjectName(e.target.value)}
-                    value={subjectName}
+                  onChange={(e)=>setSubjectName(e.target.value)} value={subjectName}
                     type="text"
                     className="w-2/3 border-[1px] focus:outline-blue-400 rounded-md border-gray-300 px-4 py-1"
                     placeholder="subject"
@@ -206,8 +199,8 @@ export default function Form({ id }: Props) {
                 <span className="grid grid-cols-[30%_70%] gap-0 ">
                   <label className="py-1 pl-10  ">ชื่ออาจารย์</label>
                   <input
-                    onChange={(e) => setTeacherName(e.target.value)}
-                    value={teacherName}
+                  onChange={(e)=>setTeacherName(e.target.value)}
+                  value={teacherName}
                     type="text"
                     className="w-2/3 border-[1px] focus:outline-blue-400 rounded-md border-gray-300 px-4 py-1"
                     placeholder="name"
@@ -218,8 +211,8 @@ export default function Form({ id }: Props) {
                 <span className="grid grid-cols-[30%_30%] gap-0 ">
                   <label className="py-1 pl-10  ">ห้องเรียน</label>
                   <input
-                    onChange={(e) => setRoom(e.target.value)}
-                    value={room}
+                  onChange={(e)=>setRoom(e.target.value)}
+                  value={room}
                     type="text"
                     className="w-2/3 focus:outline-blue-400 border-[1px] rounded-md border-gray-300 px-4 py-1"
                     placeholder="room"
@@ -227,10 +220,8 @@ export default function Form({ id }: Props) {
                 </span>
               </div>
               <div className="flex justify-between gap-5 px-28 mb-5">
-                <button
-                  className="px-8 text-white py-2 bg-blue-500 rounded-sm hover:text-black hover:bg-blue-300"
-                  onClick={handleAddSubject}
-                >
+                <button className="px-8 text-white py-2 bg-blue-500 rounded-sm hover:text-black hover:bg-blue-300"
+                onClick={handleAddSubject}>
                   ตกลง
                 </button>
                 <button

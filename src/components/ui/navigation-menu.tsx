@@ -50,6 +50,7 @@ const NavigationMenuTrigger = React.forwardRef<
     {children}
     <ChevronDown
       className="relative top-[1px] ml-1 h-8 w-8 transition duration-300 group-data-[state=open]:rotate-180"
+      className="relative top-[1px] ml-1 h-8 w-8 transition duration-300 group-data-[state=open]:rotate-180"
       aria-hidden="true"
     />
   </NavigationMenuPrimitive.Trigger>
@@ -70,7 +71,10 @@ const NavigationMenuContent = React.forwardRef<
   />
 ));
 NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
+));
+NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
+const NavigationMenuLink = NavigationMenuPrimitive.Link;
 const NavigationMenuLink = NavigationMenuPrimitive.Link;
 
 const NavigationMenuViewport = React.forwardRef<

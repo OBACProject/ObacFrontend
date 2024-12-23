@@ -14,7 +14,7 @@ const getTeacherData = async () => {
     return await fetchGetAllTeacherAsync();
   } catch (err) {
     console.error("Error in getTeacherData:", err);
-    return []; 
+    return [];
   }
 };
 
@@ -23,7 +23,7 @@ export function TeacherPage() {
   const [searchTeacher, setSearchTeacher] = useState<string>("");
   const [teacherDatas, setTeacherDatas] = useState<GetAllTeacher[]>([]);
   const [searchTeacherFilter, setSearchTeacherFilter] = useState<
-  GetAllTeacher[]
+    GetAllTeacher[]
   >([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function TeacherPage() {
       const items = await getTeacherData();
       setTeacherDatas(items);
     };
-  
+
     fetchData().catch((error) => {
       console.error("Error in useEffect:", error);
     });
@@ -41,8 +41,7 @@ export function TeacherPage() {
     router.push(`/pages/admin/teacherManagement/edit/${id}`);
   };
 
-  const handleDelete = (id: number) => {
-  };
+  const handleDelete = (id: number) => {};
 
   const handleRowClick = (id: number) => {
     router.push(`/pages/admin/teacherManagement/edit/${id}`);
@@ -102,13 +101,11 @@ export function TeacherPage() {
           teacher.facultyName
             .toLowerCase()
             .includes(searchTeacher.toLowerCase()) ||
-          teacher.email
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase())
-      );setSearchTeacherFilter(searchMatch);
+          teacher.email.toLowerCase().includes(searchTeacher.toLowerCase())
+      );
+      setSearchTeacherFilter(searchMatch);
     }
-    
-  }, [searchTeacher,teacherDatas]);
+  }, [searchTeacher, teacherDatas]);
 
   return (
     <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">

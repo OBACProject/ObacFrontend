@@ -39,17 +39,17 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
           {cardData.subject_room}
         </div>
         {/* Subject Name and Teacher */}
-        <div className="flex flex-col w-full md:w-6/12 items-start justify-center">
-          <p className="font-bold text-start text-sm md:text-xl md:text-left items-center">
+        <div className="flex flex-col w-full md:w-4/12 items-start justify-center">
+          <p className="font-bold text-start md:text-left items-center">
             {cardData.subject_name}
           </p>
-          <div className="flex flex-col md:flex md:flex-row gap-1 md:gap-2">
+          <div className="flex flex-col md:flex md:flex-row gap-1 md:gap-2 text-end">
             <p className="font-semibold text-start">อาจารย์ผู้สอน:</p>
             <span>{cardData.teacher_name}</span>
           </div>
         </div>
         {/* Credit */}
-        <div className="flex items-center justify-end w-full md:w-2/12 font-semibold">
+        <div className="flex items-center justify-end w-full p-4 font-semibold">
           {cardData.subject_credit} หน่วยกิต
         </div>
       </div>
