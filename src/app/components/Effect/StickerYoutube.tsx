@@ -7,7 +7,7 @@ export default function StickerYoutube() {
   return (
     <Link
       href={"https://www.youtube.com/obectvonline"}
-      className="fixed group  shadow-md shadow-gray-700 rounded-full z-40 bottom-20 my-2 left-3 "
+      className="fixed group   rounded-full z-40 bottom-20 my-2 left-3 "
     >
       <div className="overflow-hidden flex items-center justify-center relative w-16 h-16 rounded-full bg-red-600 group-hover:opacity-70">
         <Youtube
