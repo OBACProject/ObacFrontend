@@ -29,8 +29,8 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
                   src={data.img}
                   alt={data.topic}
                   fill
-                  objectFit="cover" 
-                  className="absolute h-36 lg:h44 object-cover transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
+                   
+                  className="absolute h-36 lg:h-44 object-cover transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
                 />
                 <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
               </div>
