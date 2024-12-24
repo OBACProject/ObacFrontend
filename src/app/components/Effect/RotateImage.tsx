@@ -1,13 +1,13 @@
-"use client";
 
-import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+
 import React from "react";
-import HC2_Transcript from "@/app/components/PDF/HC2_Transcript";
 
 import "./styles.css";
 
-export default function page() {
+export default function RotateImage() {
   return (
+    <div className="">
+
     <div className="banner">
       <div
         className="slider"
@@ -84,11 +84,7 @@ export default function page() {
       <div className="content">
         
       </div>
-      <div className="">
-      <button  onClick={()=>{
-          HC2_Transcript({score:10})
-        }} className="px-10 my-2 z-10 hover:bg-blue-300 bg-blue-600 text-white rounded-md py-2">test</button>
-      </div>
+    </div>
     </div>
   );
 }

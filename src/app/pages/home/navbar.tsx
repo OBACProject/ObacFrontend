@@ -29,7 +29,7 @@ export function Navbar() {
           </a>
 
           <div className="justify-end grid place-items-center px-10 lg:mr-6 md:mr-6 sm:px-2 sm:py-1">
-            <a href="/pages/login" className="px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block md:block sm:block">ระบบผู้ใช้</div><div className="lg:hidden md:hidden sm:hidden">Login</div>
+            <a href="/pages/login" className="px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block md:block line-clamp-1 sm:block">ระบบผู้ใช้</div><div className="lg:hidden md:hidden sm:hidden">Login</div>
               <div className="">
                 <Shield style={{ width: "1.6rem", height: "1.5rem" }}
         className="text-white "/>
