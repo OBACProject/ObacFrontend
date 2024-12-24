@@ -13,7 +13,7 @@ export default function CLShomepage() {
 
   return (
     <div
-      className={`transition-opacity w-full duration-1000${
+      className={`animate-fastFade transition-opacity  w-full duration-1000${
         isLoaded ? "animate-fadeIn" : "opacity-0"
       }`}
     >
