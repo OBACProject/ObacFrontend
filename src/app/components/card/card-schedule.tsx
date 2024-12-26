@@ -15,42 +15,34 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
   const dayColorClass = dayColorMap[cardData.day] || "bg-slate-400";
 
   return (
-    <div className="flex flex-col md:flex-row shadow-md rounded-lg overflow-hidden">
+    <div className="lg:flex shadow-md rounded-lg overflow-hidden lg:h-[90px]">
       {/* Time Block */}
       <div
-        className={`flex flex-col items-center justify-center ${dayColorClass} text-white w-full md:w-2/12 h-20 md:h-auto`}
+        className={`grid place-items-center ${dayColorClass} bg-opacity-80 text-white   lg:h-auto lg:w-[250px] h-fit `}
       >
-        <div className="flex flex-col text-center text-sm sm:text-base p-2">
-          <span>
-            {cardData.start_time} - {cardData.end_time}
-          </span>
-          <span>{cardData.day}</span>
+        <div className="flex items-center justify-between w-full px-5 lg:px-0  md:text-center lg:grid lg:justify-center    sm:text-center  text-sm sm:text-base py-1">
+          <div className="text-xl w-full  text-center font-semibold">{cardData.day}</div>
+          <div className="w-full text-center">{cardData.subject_room}</div>
         </div>
       </div>
 
-      {/* Subject Details */}
-      <div className="flex flex-col md:flex-row w-full md:w-10/12 text-sm gap-4 p-4 md:p-0">
-        {/* Subject ID */}
-        <div className="flex items-center justify-center w-full md:w-2/12 font-bold">
-          {cardData.subject_code}
-        </div>
-        {/* Room */}
-        <div className="flex items-center justify-center w-full md:w-2/12 font-bold">
-          {cardData.subject_room}
-        </div>
-        {/* Subject Name and Teacher */}
-        <div className="flex flex-col w-full md:w-6/12 items-start justify-center">
-          <p className="font-bold text-start text-sm md:text-xl md:text-left items-center">
+      <div className="grid grid-rows-2 lg:grid-rows-1 lg:items-center lg:grid-cols-[45%_55%]  w-full text-sm gap-2 px-4 py-4 lg:py-10 ">
+        <div className="flex gap-2 lg:pl-10  lg:h-full line-clamp-1 h-fit lg:p-4">
+          <div className="flex items-center  justify-start lg:justify-center  font-bold">
+            {cardData.subject_code}
+          </div>
+          <p className="flex text-gray-700 font-bold text-start text-sm md:text-xl md:text-left items-center">
             {cardData.subject_name}
           </p>
-          <div className="flex flex-col md:flex md:flex-row gap-1 md:gap-2">
-            <p className="font-semibold text-start">อาจารย์ผู้สอน:</p>
+        </div>
+        <div className="flex justify-between line-clamp-1 h-fit">
+          <div className="flex gap-1 lg:text-lg lg:gap-3 md:gap-2">
+            <p className="font-semibold ">อาจารย์ผู้สอน:</p>
             <span>{cardData.teacher_name}</span>
           </div>
-        </div>
-        {/* Credit */}
-        <div className="flex items-center justify-end w-full md:w-2/12 font-semibold">
-          {cardData.subject_credit} หน่วยกิต
+          <div className="flex px-2  items-center  font-semibold">
+            {cardData.subject_credit} หน่วยกิต
+          </div>
         </div>
       </div>
     </div>

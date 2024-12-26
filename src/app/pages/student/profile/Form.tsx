@@ -41,7 +41,7 @@ export default function Form() {
     setIsPresentAddressInfoVisible((prev) => !prev);
   };
   return (
-    <header className="mx-4 sm:mx-10 lg:mx-44 p-4  ">
+    <header className="mx-4 sm:mx-10 md:mx-20 lg:mx-44 px-16 lg:px-4 py-8">
       <div className="px-5 py-4 text-lg sm:text-xl ">
         <div className="px-5 flex gap-2 items-center">
           <div className="text-xl  border-[1px] border-gray-300  text-center w-fit px-10 py-1 rounded-md text-white bg-blue-950">
@@ -60,7 +60,7 @@ export default function Form() {
                 px-5 py-4 text-sm"
           >
             {/* icon */}
-            <div className="flex justify-start items-center  w-full border-[1px] border-gray-200  px-10 gap-10 py-4 shadow-md shadow-gray-200 rounded-md">
+            <div className="flex justify-start items-center  w-full border-[1px] border-gray-200  px-10 gap-10 py-4 shadow-md shadow-gray-200 bg-gradient-to-r from-sky-100 via-gray-100 to-sky-100 rounded-md">
               <div className="flex justify-start items-center w-fit">
                 <button className="flex items-start gap-6 ">
                   <CircleUserRound
@@ -94,9 +94,9 @@ export default function Form() {
           <div className="w-full">
             <Tabs
               defaultValue="profile"
-              className="w-full z-10 flex  transition shadow-lg shadow-gray-200 border-[1px] border-gray-200 rounded-md  overflow-hidden"
+              className="w-full z-10 flex  transition shadow-lg shadow-gray-200 border-[1px] border-gray-200 rounded-md bg-white overflow-hidden"
             >
-              <TabsList className="rounded-sm pb-20  flex flex-col gap-2 w-3/12 sticky h-full  ">
+              <TabsList className="rounded-sm pb-20 bg-blue-50 flex flex-col gap-2 w-3/12 pt-4 sticky h-auto items-start justify-start bg-gradient-to-b from-sky-100 via-gray-100 to-sky-100 ">
                 <TabsTrigger value="profile" className="px-4 py-2  w-full">
                   ข้อมูลทั่วไป
                 </TabsTrigger>
