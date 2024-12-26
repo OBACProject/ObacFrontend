@@ -44,7 +44,7 @@ export default function Form() {
     <header className="mx-4 sm:mx-10 lg:mx-44 p-4  ">
       <div className="px-5 py-4 text-lg sm:text-xl ">
         <div className="px-5 flex gap-2 items-center">
-          <div className="text-xl  border-[1px] border-gray-300 shadow-sm shadow-gray-200 text-center w-fit px-10 py-1 rounded-md">
+          <div className="text-xl  border-[1px] border-gray-300  text-center w-fit px-10 py-1 rounded-md text-white bg-blue-950">
             ประวัตินิสิต
           </div>
           <div className="ml-4 text-lg">
@@ -60,12 +60,12 @@ export default function Form() {
                 px-5 py-4 text-sm"
           >
             {/* icon */}
-            <div className="flex justify-start items-center  w-full border-[1px] border-gray-300  px-10 gap-10 py-4 shadow-sm shadow-gray-200 rounded-md">
+            <div className="flex justify-start items-center  w-full border-[1px] border-gray-200  px-10 gap-10 py-4 shadow-md shadow-gray-200 rounded-md">
               <div className="flex justify-start items-center w-fit">
                 <button className="flex items-start gap-6 ">
                   <CircleUserRound
                     style={{ width: "5rem", height: "5rem" }}
-                    className="text-gray-700"
+                    className="text-blue-950 "
                   />
                 </button>
               </div>
@@ -78,10 +78,10 @@ export default function Form() {
                   {exampleStudentData.generalInfo.surname}
                 </div>
                 <div className="flex gap-10">
-                  <Badge className="py-1 px-4">
+                  <Badge className="py-1 px-4 shadow-none bg-blue-950">
                     <div>{exampleStudentData.educationalInfo.faculty}</div>
                   </Badge>
-                  <Badge className="py-1 px-4">
+                  <Badge className="py-1 px-4 shadow-none bg-blue-950">
                     <div>{exampleStudentData.educationalInfo.program}</div>
                   </Badge>
                 </div>
@@ -94,7 +94,7 @@ export default function Form() {
           <div className="w-full">
             <Tabs
               defaultValue="profile"
-              className="w-full z-10 flex  transition shadow-lg shadow-gray-200 border-[1px] border-gray-200 rounded-md overflow-hidden"
+              className="w-full z-10 flex  transition shadow-lg shadow-gray-200 border-[1px] border-gray-200 rounded-md  overflow-hidden"
             >
               <TabsList className="rounded-sm pb-20  flex flex-col gap-2 w-3/12 sticky h-full  ">
                 <TabsTrigger value="profile" className="px-4 py-2  w-full">
@@ -108,14 +108,14 @@ export default function Form() {
                 </TabsTrigger>
               </TabsList>
 
-              <div className="w-9/12 flex bg-white z-10 border-l-2 border-slate-200 px-5 ">
+              <div className="w-full flex  items-start z-10 border-l-2 border-slate-200 ">
                 <TabsContent
                   value="profile"
-                  className="flex-grow ml-6 p-2 text-sm"
+                  className="flex-grow   text-sm"
                 >
-                  <div className="px-2">
+                  <div className="">
                     <h1
-                      className="px-2 py-2 font-bold cursor-pointer text-base flex justify-between "
+                      className="py-3  px-5 font-bold  cursor-pointer text-base flex justify-between "
                       onClick={toggleGeneralInfo}
                     >
                       ข้อมูลการทั่วไป
@@ -166,9 +166,9 @@ export default function Form() {
                     </div>
                   </div>
                   <hr />
-                  <div className="p-2">
+                  <div className="">
                     <h1
-                      className="p-2 font-bold cursor-pointer text-base flex justify-between"
+                      className="py-3 px-5 font-bold cursor-pointer text-base flex justify-between"
                       onClick={toggleFatherInfo}
                     >
                       ข้อมูลบิดา
@@ -210,9 +210,9 @@ export default function Form() {
                     </div>
                   </div>
                   <hr />
-                  <div className="p-2">
+                  <div className="">
                     <h1
-                      className="p-2 font-bold cursor-pointer flex justify-between text-base"
+                      className="py-3 px-5 font-bold cursor-pointer flex justify-between text-base"
                       onClick={toggleMotherInfo}
                     >
                       ข้อมูลมารดา
