@@ -82,6 +82,8 @@ const config: Config = {
       animation: {
         fadeIn: 'fadeIn 2s ease-in-out',
         fastFade : 'fadeIn 1s ease-in-out',
+        fadeStep1: 'fadeIn 3s ease-in-out',
+        fadeStep2: 'fadeIn 4s ease-in-out',
       },
     },
   },

@@ -53,20 +53,9 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "สถานะการชำระเงิน",
       tooltip: "payment",
-      href: "/payment",
+      href: "/pages/student/payment",
       icon: (
         <CreditCard
-          style={{ width: "2.5rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "ประวัตินิสิต",
-      tooltip: "profile",
-      href: "/pages/student/profile",
-      icon: (
-        <BookText
           style={{ width: "2.5rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />

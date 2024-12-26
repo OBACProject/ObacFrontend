@@ -7,7 +7,7 @@ export function LabelText({
 }) {
   return (
     <div className="w-full my-2">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 border border-gray-300 rounded-lg p-4 shadow-sm bg-white">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2  sm:gap-4  bg-slate-50 px-4 py-2 shadow-sm ">
         {/* Topic Section */}
         <h1 className="text-sm font-semibold text-gray-600 w-full sm:w-4/12 flex-shrink-0">
           {topic}
@@ -18,7 +18,7 @@ export function LabelText({
             {data.map((item, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-gray-100 rounded-md text-sm text-gray-800 shadow-sm"
+                className="px-3 py-1 bg-white shadow-gray-300 rounded-md text-sm text-gray-800 shadow-sm"
               >
                 {item}
               </span>
