@@ -13,7 +13,7 @@ export default function Form() {
         </h1>
         <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-600 w-full"></div>
       </div>
-      <div className="my-5 lg:flex gap-2  grid place-items-start lg:mx-5">
+      <div className="my-5 animate-fastFade lg:flex gap-2  grid place-items-start lg:mx-5">
         <div className=" lg:w-[600px] lg:h-[450px]  ">
           <iframe
             className="lg:w-[600px] lg:h-[450px] w-[300px] h-[200px]"
@@ -22,7 +22,7 @@ export default function Form() {
             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B8%AD%E0%B8%B2%E0%B8%8A%E0%B8%B5%E0%B8%A7%E0%B8%A8%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B9%8C%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%AB%E0%B8%B2%E0%B8%A3%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(%E0%B9%82%E0%B8%AD%E0%B9%81%E0%B8%9A%E0%B8%84)&zoom=16&maptype=roadmap"
           ></iframe>
         </div>
-        <div className="lg:px-10">
+        <div className="lg:px-10 animate-fadeIn">
           <div className="text-xl w-fit line-clamp-2 text-blue-800 font-bold">
             OBAC (Ekkawit Business Administration)
           </div>
@@ -39,9 +39,12 @@ export default function Form() {
             2. รถสายพระโขนง-ซีคอน-หัวตะเข้ ธรรมดาและปรับอากาศสาย
             1013และรถตู้สุวรรณภูมิ
           </div>
+          <div className="mt-5 ">
+            <b>ติดต่อ :</b> 091-864-9154
+          </div>
         </div>
 
-        <div className="lg:translate-x-16 grid h-fit gap-4">
+        <div className="lg:translate-x-16 grid h-fit gap-4 animate-fadeStep1">
           <a href="https://web.facebook.com/OBAC41/?locale=th_TH&_rdc=1&_rdr#" className="px-10 w-[250px] text-center bg-[#0066ff] h-fit py-3 text-white font-semibold rounded-sm hover:opacity-80 hover:scale-[103%] duration-300">
             Facebook
           </a>

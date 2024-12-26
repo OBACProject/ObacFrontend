@@ -41,41 +41,47 @@ export default function Form() {
     setIsPresentAddressInfoVisible((prev) => !prev);
   };
   return (
-    <header className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 ">
-      <div className="p-4 text-lg sm:text-xl flex flex-col w-auto">
-        <div>
-          <Badge className="text-sm sm:text-base" variant="outline">
+    <header className="mx-4 sm:mx-10 lg:mx-44 p-4  ">
+      <div className="px-5 py-4 text-lg sm:text-xl ">
+        <div className="px-5 flex gap-2 items-center">
+          <div className="text-xl  border-[1px] border-gray-300 shadow-sm shadow-gray-200 text-center w-fit px-10 py-1 rounded-md">
             ประวัตินิสิต
-          </Badge>
+          </div>
+          <div className="ml-4 text-lg">
+            สถานะ : 
+          </div>
+          <div className="px-6 py-1 text-sm bg-sky-100 text-blue-600 rounded-md">
+            กำลังศึกษา
+          </div>
         </div>
-        <div className="mt-4 flex flex-col">
+        <div className=" flex flex-col">
           <div
-            className="w-full flex justify-center mt-2 gap-10
-                p-4 text-sm"
+            className="w-full flex justify-start  gap-4
+                px-5 py-4 text-sm"
           >
             {/* icon */}
-            <div className="flex justify-center items-center w-10/12 border-2 border-blue-800 p-4 shadow-sm rounded-md">
-              <div className="flex justify-center items-center w-4/12">
+            <div className="flex justify-start items-center  w-full border-[1px] border-gray-300  px-10 gap-10 py-4 shadow-sm shadow-gray-200 rounded-md">
+              <div className="flex justify-start items-center w-fit">
                 <button className="flex items-start gap-6 ">
                   <CircleUserRound
                     style={{ width: "5rem", height: "5rem" }}
-                    className="text-[#0C2943]"
+                    className="text-gray-700"
                   />
                 </button>
               </div>
               {/* Info Student */}
-              <div className="flex flex-col gap-4 p-2 w-8/12 font-semibold">
-                <div>{exampleStudentData.generalInfo.studentID}</div>
+              <div className="flex flex-col gap-2 p-2 w-8/12 font-semibold">
+                <div className="text-xl text-gray-700">{exampleStudentData.generalInfo.studentID}</div>
                 <div>
                   {exampleStudentData.generalInfo.titleName}{" "}
                   {exampleStudentData.generalInfo.name}
                   {exampleStudentData.generalInfo.surname}
                 </div>
                 <div className="flex gap-10">
-                  <Badge>
+                  <Badge className="py-1 px-4">
                     <div>{exampleStudentData.educationalInfo.faculty}</div>
                   </Badge>
-                  <Badge>
+                  <Badge className="py-1 px-4">
                     <div>{exampleStudentData.educationalInfo.program}</div>
                   </Badge>
                 </div>
@@ -84,37 +90,36 @@ export default function Form() {
           </div>
         </div>
 
-        <div className="mt-4 flex w-full">
+        <div className="px-5 flex w-full">
           <div className="w-full">
             <Tabs
               defaultValue="profile"
-              className="w-full z-10 flex min-h-dvh border-2 border-black rounded-md"
+              className="w-full z-10 flex  transition shadow-lg shadow-gray-200 border-[1px] border-gray-200 rounded-md overflow-hidden"
             >
-
-              <TabsList className="rounded-sm  flex flex-col w-3/12 sticky h-40  ">
-                <TabsTrigger value="profile" className="p-4 w-full">
+              <TabsList className="rounded-sm pb-20  flex flex-col gap-2 w-3/12 sticky h-full  ">
+                <TabsTrigger value="profile" className="px-4 py-2  w-full">
                   ข้อมูลทั่วไป
                 </TabsTrigger>
-                <TabsTrigger value="education" className="p-4 w-full">
+                <TabsTrigger value="education" className="px-4 py-2  w-full">
                   ข้อมูลการศึกษา
                 </TabsTrigger>
-                <TabsTrigger value="address" className="p-4 w-full">
+                <TabsTrigger value="address" className="px-4 py-2  w-full">
                   ข้อมูลที่อยู่
                 </TabsTrigger>
               </TabsList>
 
-              <div className="w-9/12 flex bg-sky-50 z-10 border-l-4 border-slate-200 p-4">
+              <div className="w-9/12 flex bg-white z-10 border-l-2 border-slate-200 px-5 ">
                 <TabsContent
                   value="profile"
                   className="flex-grow ml-6 p-2 text-sm"
                 >
-                  <div className="p-2">
+                  <div className="px-2">
                     <h1
-                      className="p-2 font-bold cursor-pointer text-base flex justify-between"
+                      className="px-2 py-2 font-bold cursor-pointer text-base flex justify-between "
                       onClick={toggleGeneralInfo}
                     >
                       ข้อมูลการทั่วไป
-                      <span className="text-lg">
+                      <span className="text-lg ">
                         {isGeneralInfoVisible ? <ChevronDown /> : <ChevronUp />}
                       </span>
                     </h1>
