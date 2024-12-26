@@ -15,7 +15,7 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
   const dayColorClass = dayColorMap[cardData.day] || "bg-slate-400";
 
   return (
-    <div className="lg:flex shadow-md rounded-lg overflow-hidden lg:h-[90px]">
+    <div className="lg:flex shadow-md shadow-gray-200 border border-gray-200 rounded-lg overflow-hidden lg:h-[90px]">
       {/* Time Block */}
       <div
         className={`grid place-items-center ${dayColorClass} bg-opacity-80 text-white   lg:h-auto lg:w-[250px] h-fit `}
@@ -26,12 +26,12 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
         </div>
       </div>
 
-      <div className="grid grid-rows-2 lg:grid-rows-1 lg:items-center lg:grid-cols-[45%_55%]  w-full text-sm gap-2 px-4 py-4 lg:py-10 ">
-        <div className="flex gap-2 lg:pl-10  lg:h-full line-clamp-1 h-fit lg:p-4">
-          <div className="flex items-center  justify-start lg:justify-center  font-bold">
+      <div className="grid grid-rows-2 lg:grid-rows-1 lg:items-center lg:grid-cols-[50%_50%]  w-full text-sm gap-2 px-4 py-4 lg:py-10 ">
+        <div className="flex gap-2 lg:gap-4 lg:pl-10  lg:h-full line-clamp-1 h-fit lg:p-4">
+          <div className="flex items-center  justify-start lg:justify-center font-semibold">
             {cardData.subject_code}
           </div>
-          <p className="flex text-gray-700 font-bold text-start text-sm md:text-xl md:text-left items-center">
+          <p className="flex text-gray-700 font-semibold text-start text-sm md:text-xl md:text-left items-center">
             {cardData.subject_name}
           </p>
         </div>

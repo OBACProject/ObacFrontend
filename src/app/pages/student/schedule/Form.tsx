@@ -19,7 +19,7 @@ export default function Form() {
         </Badge>
       </div>
 
-      <div className="mx-10 grid gap-2 mt-5 w-full">
+      <div className="mx-10 grid gap-3 mt-5 w-full">
         {StudentCardSubjectData.map((cardData, index) => (
           <CardSchedule key={index} {...cardData} />
         ))}
