@@ -20,14 +20,15 @@ export default function LoginForm({ session }: Session) {
   };
 
   return (
-    <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
+    <div className="relative bg-authBg bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
+      <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
       {session ? (
-        <div className="my-10 bg-white rounded-lg px-10 py-12">
+        <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">
           <pre>{JSON.stringify(session, null, 2)}</pre>
           <div className="grid place-items-center mt-5">
             <button
               onClick={handleLogout}
-              className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
+              className="bg-red-600 z-10 px-10 text-white my-3 rounded-md py-2"
             >
               Logout
             </button>
@@ -37,7 +38,7 @@ export default function LoginForm({ session }: Session) {
         <>
           <form
             onSubmit={handleLogin}
-            className="pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+            className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
           >
             <div className="mt-10 bg-blue-900 rounded-full w-28 h-28"></div>
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">

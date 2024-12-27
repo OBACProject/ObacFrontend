@@ -85,6 +85,9 @@ const config: Config = {
         fadeStep1: 'fadeIn 3s ease-in-out',
         fadeStep2: 'fadeIn 4s ease-in-out',
       },
+      backgroundImage:{
+        authBg:"url(https://lh3.googleusercontent.com/p/AF1QipOm1uKGkk3eh_TFYYireSIS-i5fZzfPfnAfQKNz=s1360-w1360-h1020)"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
