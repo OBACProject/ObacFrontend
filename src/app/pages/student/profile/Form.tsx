@@ -50,7 +50,7 @@ export default function Form() {
           <div className="ml-4 text-lg">
             สถานะ : 
           </div>
-          <div className="px-6 py-1 text-sm bg-sky-100 text-blue-600 rounded-md">
+          <div className="px-6 py-1 text-sm bg-green-100  bg-opacity-50 text-green-500 rounded-md">
             กำลังศึกษา
           </div>
         </div>
