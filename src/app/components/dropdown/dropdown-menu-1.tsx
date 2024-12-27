@@ -6,19 +6,12 @@ import {
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
 import { DropMenuProps } from "@/resource/home/navbarData";
-import { DropMenuProps } from "@/resource/home/navbarData";
 
-export default function DropMenu({
-  menuData = [],
-}: {
-  menuData: DropMenuProps[];
-}) {
 export default function DropMenu({
   menuData = [],
 }: {
@@ -44,7 +37,6 @@ export default function DropMenu({
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuTrigger>
-
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>

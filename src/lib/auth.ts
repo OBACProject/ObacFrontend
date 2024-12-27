@@ -2,7 +2,8 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const secretKey = "secret";
+const secretKey =
+  "0812113f5392b4d13d98837152805f7b232f60cacefa0a45081ff9f1ac97d5b6";
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {
@@ -16,7 +17,7 @@ export async function encrypt(payload: any) {
 export async function decrypt(input: string): Promise<any> {
   const { payload } = await jwtVerify(input, key, {
     algorithms: ["HS256"],
-    clockTolerance: 5, 
+    clockTolerance: 5,
   });
   return payload;
 }
@@ -25,9 +26,9 @@ export async function login(formData: FormData) {
   const user = { username: formData.get("username") };
 
   const session = await encrypt({ user });
-  cookies().set("session", session, { 
-    expires: new Date(Date.now() + 1800 * 1000), 
-    httpOnly: true 
+  cookies().set("session", session, {
+    expires: new Date(Date.now() + 1800 * 1000),
+    httpOnly: true,
   });
 }
 

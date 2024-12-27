@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
-import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 import { CircleCheck, LogIn, Menu, X } from "lucide-react";
 import DropDownMobile from "@/app/components/dropdown/dropdown-mobile";

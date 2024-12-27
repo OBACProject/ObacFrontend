@@ -1,36 +1,78 @@
 "use client";
 
-import { login, logout } from "@/app/action/authAction";
+import { login, logout } from "@/lib/authentication";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+// import { logout } from "@/app/action/authAction";
 import { toast } from "react-toastify";
 interface Session {
   session: string;
 }
 
 export default function LoginForm({ session }: Session) {
+  // from a local storage
+  const router = useRouter();
+
+  const [token, setToken] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     await login(formData);
+
+    const storedToken = localStorage.getItem("token");
+    const storedRole = localStorage.getItem("role");
+    const storedName = localStorage.getItem("name");
+
+    setToken(storedToken);
+    setRole(storedRole);
+    setName(storedName);
+
     toast.success("login success");
+
+    if (storedRole === "Student") {
+      router.push("/pages/student/schedule");
+    } else if (storedRole === "Teacher") {
+      router.push("/pages/teacher/profile");
+    } else if (storedRole === "Academic") {
+      router.push("/pages/academic");
+    } else if (storedRole === "Admin") {
+      router.push("/pages/admin/academicManagement");
+    }
   };
 
   const handleLogout = async () => {
     await logout();
+
+    setToken(null);
+    setRole(null);
+    setName(null);
     toast.info("logout success");
   };
 
   return (
     <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
-      {session ? (
-        <div className="my-10 bg-white rounded-lg px-10 py-12">
-          <pre>{JSON.stringify(session, null, 2)}</pre>
-          <div className="grid place-items-center mt-5">
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
-            >
-              Logout
-            </button>
+      {token && role && name ? (
+        <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
+          <div className="space-y-4">
+            {" "}
+            {/* Add space between elements */}
+            <div className="text-2xl">Welcome {name}</div>
+            <div className="text-lg">Role: {role}</div>
+            {/* <div className="text-sm break-words whitespace-normal">
+              Token: {token}
+            </div> */}
+            <div className="grid place-items-center mt-5">
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       ) : (
@@ -47,7 +89,7 @@ export default function LoginForm({ session }: Session) {
             <input
               className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
               type="text"
-              name="username"
+              name="userName"
               placeholder="Username / ชื่อผู้ใช้"
               required
             />
