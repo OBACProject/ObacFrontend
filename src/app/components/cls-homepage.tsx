@@ -31,7 +31,7 @@ export default function CLShomepage() {
       >
         <div className="overflow-hidden relative ">
           <img
-            src="/cls/slide03.jpg"
+            src="/cls/slide01.jpg"
             alt="slide2"
             className=" w-full h-40 md:h-72 sm:h-56 lg:h-80 object-cover transition duration-700"
           />
@@ -43,9 +43,26 @@ export default function CLShomepage() {
             alt="slide2"
             className=" w-full lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
           />
-          
           <p className="legend">Our Service</p>
         </div>
+        <div className="overflow-hidden relative ">
+          <img
+            src="/cls/slide03.jpg"
+            alt="slide2"
+            className=" w-full lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
+          />
+          <p className="legend">Our Service</p>
+        </div>
+        <div className="overflow-hidden relative ">
+          <img
+            src="/cls/slide04.jpg"
+            alt="slide2"
+            className=" w-full lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
+          />
+          <p className="legend">Our Service</p>
+        </div>
+
+
       </Carousel>
     </div>
   );
