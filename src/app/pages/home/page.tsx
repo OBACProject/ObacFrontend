@@ -12,11 +12,14 @@ export default function Home() {
       <div className="flex w-full bg-white ">
         <div className="w-full items-center  flex flex-col  px-4 py-4">
           <StickerFacebook /><StickerYoutube/>
-          <h1 className="text-5xl animate-fadeIn text-blue-950 my-5 font-bold px-5 py-1">
+          <div className=" flex justify-center items-center w-full border-blue-300  max-w-lg">
+             <h1 className="text-5xl animate-fadeIn text-blue-950 my-5 font-bold px-10 py-1 bg-white   rounded-lg">
             News And Events
           </h1>
+          </div>
+         
           {/* <hr className="my-5 border-[1px] "/> */}
-          <div className="animate-fadeIn grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
+          <div className="animate-fadeIn  grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
             <CardVertical cardData={cardData} />
           </div>
           <div className="animate-fadeIn my-5 py-32 border-2 border-dashed border-gray-700 w-full rounded-lg grid place-items-center text-2xl bg-gray-100">

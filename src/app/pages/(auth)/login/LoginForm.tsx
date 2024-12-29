@@ -20,7 +20,7 @@ export default function LoginForm({ session }: Session) {
   };
 
   return (
-    <div className="relative bg-authBg bg-repeat bg-cover w-full h-screen bg-bottom grid place-items-center pb-40 ">
+    <div className="relative bg-authBg bg-repeat  bg-cover w-full h-screen bg-bottom grid place-items-center pb-40 ">
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
       {session ? (
         <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">

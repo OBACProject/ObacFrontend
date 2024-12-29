@@ -1,4 +1,8 @@
-import { TeacherInfoData } from "@/dto/teacherDto";
+
+type TeacherInfoData = {
+  
+}
+
 import api from "@/lib/apiCentralized";
 
 export const getTeacherInfoData = async (): Promise<TeacherInfoData[]> => {
