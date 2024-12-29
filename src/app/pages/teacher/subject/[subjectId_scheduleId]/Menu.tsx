@@ -1,7 +1,6 @@
 "use client";
 import GenStudentNameList from "@/app/components/PDF/genStudentNameList";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
-import GenTranscript from "@/app/components/PDF/genTranscript";
 import { GetGradBySubjectId, convertGradBySubjectId } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";

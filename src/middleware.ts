@@ -17,15 +17,32 @@ export function middleware(req: NextRequest) {
 
   // Type the allowedRoles object
   const allowedRoles: Record<string, string[]> = {
-    "/student/*": ["student"],
-    "/teacher/*": ["teacher"],
-    "/academic/*": ["academic"],
-    "/admin/*": ["admin"],
+    "/pages/student": ["student"],
+    "/pages/teacher": ["teacher"],
+    "/pages/academic": ["academic"],
+    "/pages/admin": ["admin"],
   };
 
   for (const path in allowedRoles) {
     if (url.includes(path) && !allowedRoles[path].includes(role)) {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
+      if (role === "student") {
+        return NextResponse.redirect(
+          new URL("/pages/student/schedule", req.url)
+        );
+      }
+      if (role === "teacher") {
+        return NextResponse.redirect(
+          new URL("/pages/teacher/profile", req.url)
+        );
+      }
+      if (role === "academic") {
+        return NextResponse.redirect(new URL("/pages/academic", req.url));
+      }
+      if (role === "admin") {
+        return NextResponse.redirect(
+          new URL("/pages/admin/academicManagement", req.url)
+        );
+      }
     }
   }
 
