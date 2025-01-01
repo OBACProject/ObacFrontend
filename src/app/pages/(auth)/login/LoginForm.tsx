@@ -40,7 +40,7 @@ export default function LoginForm({ session }: Session) {
             onSubmit={handleLogin}
             className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
           >
-            <div className="mt-10 bg-blue-900 rounded-full w-28 h-28"></div>
+              <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
               <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
             </div>

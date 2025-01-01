@@ -25,7 +25,7 @@ export default function DropMenu({
             <NavigationMenuTrigger className="hover:bg-blue-900  w-full py-0 lg:py-2 md:py-2 sm:py-2 px-4 h-10 md:h-full lg:h-full rounded-none duration-300 text-sm lg:text-md md:text-md">
               {menu.menuTopic}
               <NavigationMenuContent className="top-full  bg-zinc-700 rounded-sm">
-                <ul className="gap-2 lg:py-2 lg:text-md  md:py-1 py-0 px-0  lg:px-2 md:px-2 text-white  ">
+                <ul className="gap-2 lg:py-0 lg:text-md  md:py-1 py-0 px-0  lg:px-1 md:px-2 text-white  ">
                   {menu.menuList.map((item, index) => (
                     <ListItem
                       href={item.href}
