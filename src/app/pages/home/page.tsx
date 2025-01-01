@@ -19,9 +19,9 @@ export default function Home() {
           <div className="animate-fadeIn grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
             <CardVertical cardData={cardData} />
           </div>
-          <div className="w-full lg:h-72 relative flex justify-center ">
+          <div className="w-full my-5 flex justify-center ">
             <img
-              className="h-40 lg:h-72 object-cover absolute"
+              className="h-40 w-full lg:w-[90%] lg:h-auto"
               src="https://www.obac.ac.th/mainsite/images/header/harder2018.jpg"
             />
           </div>
