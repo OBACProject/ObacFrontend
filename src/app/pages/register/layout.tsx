@@ -1,5 +1,5 @@
 import "@app/styles/globals.css";
-import { NavbarRegisterStudent } from "./student/navbar";
+import { NavbarRegisterStudent } from "./navbar";
 import Credit from "@/app/components/credit";
 
 export const metadata = {
