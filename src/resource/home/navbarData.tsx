@@ -1,12 +1,23 @@
-
-
-
-import { Boxes, CalendarRange, Component, Cpu, HandCoins ,Landmark , Lightbulb, Newspaper, NotebookTabs, Phone, Plane, TvMinimalPlay, Users } from "lucide-react";
+import {
+  Boxes,
+  CalendarRange,
+  Component,
+  Cpu,
+  HandCoins,
+  Landmark,
+  Lightbulb,
+  Newspaper,
+  NotebookTabs,
+  Phone,
+  Plane,
+  TvMinimalPlay,
+  Users,
+} from "lucide-react";
 interface DropMenuList {
   menuName: string;
   menuIcon: React.ReactNode;
   tab: string;
-  href:string;
+  href: string;
 }
 
 export interface DropMenuProps {
@@ -22,30 +33,36 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "ประวัติมหาลัย",
-        menuIcon: <NotebookTabs
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white transition-colors"
-      />,
+        menuIcon: (
+          <NotebookTabs
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white transition-colors"
+          />
+        ),
         tab: "history",
-        href:"/pages/home/aboutObac/history"
+        href: "/pages/home/aboutObac/history",
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
-        menuIcon: <Lightbulb
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Lightbulb
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "vision",
-        href:"/pages/home/aboutObac/symbol"
+        href: "/pages/home/aboutObac/symbol",
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
-        menuIcon: <Component
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Component
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "symbol",
-        href:"/pages/home/aboutObac/vision"
+        href: "/pages/home/aboutObac/vision",
       },
     ],
   },
@@ -55,48 +72,58 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "การบัญชี",
-        menuIcon: <HandCoins
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <HandCoins
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "accounting",
-        href:"/pages/home"
+        href: "/pages/home",
       },
       {
         menuName: "การตลาด",
-        menuIcon: <Landmark
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Landmark
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "marketing",
-        href:"/pages/home"
+        href: "/pages/home",
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
-        menuIcon: <Cpu
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-        />,
+        menuIcon: (
+          <Cpu
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "digital",
-        href:"/pages/home"
+        href: "/pages/home",
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
-        menuIcon: <TvMinimalPlay
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <TvMinimalPlay
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "graphic",
-        href:"/pages/home"
+        href: "/pages/home",
       },
       {
         menuName: "การท่องเที่ยว",
-        menuIcon: <Plane
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors "
-      />,
+        menuIcon: (
+          <Plane
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors "
+          />
+        ),
         tab: "tourism",
-        href:"/pages/home"
+        href: "/pages/home",
       },
     ],
   },
@@ -106,21 +133,25 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "โครงสร้างการบริหาร",
-        menuIcon: <Users
-        style={{ width: "2.0rem", height: "2.5rem" }}
-       className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Users
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "management",
-        href:"/pages/home/managementStructure/executive",
+        href: "/pages/home/managementStructure/executive",
       },
       {
         menuName: "คณะผู้บริหารวิทยาลัย",
-        menuIcon: <Boxes
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Boxes
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "executive",
-        href:"/pages/home/managementStructure/management"
+        href: "/pages/home/managementStructure/management",
       },
     ],
   },
@@ -130,21 +161,25 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "กิจกรรม",
-        menuIcon: <CalendarRange
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <CalendarRange
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "activity",
         href:"/pages/home/events"
       },
       {
         menuName: "ข่าวสาร",
-        menuIcon: <Newspaper
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Newspaper
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "news",
-        href:"/pages/home/news"
+        href: "/pages/home/news",
       },
     ],
   },
@@ -154,12 +189,14 @@ export const NavbarData: DropMenuProps[] = [
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
-        menuIcon: <Phone
-        style={{ width: "2.0rem", height: "2.5rem" }}
-        className="text-white  transition-colors"
-      />,
+        menuIcon: (
+          <Phone
+            style={{ width: "2.0rem", height: "2.5rem" }}
+            className="text-white  transition-colors"
+          />
+        ),
         tab: "contact",
-        href:"/pages/home/contact"
+        href: "/pages/home/contact",
       },
     ],
   },

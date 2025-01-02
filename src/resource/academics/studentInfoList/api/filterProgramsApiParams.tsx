@@ -5,7 +5,7 @@ export const filterProgramsData = async (): Promise<
   filterProgramsParamsData[]
 > => {
   try {
-    const response = await api.get("Program/GetAllActivePrograms");
+    const response = await api.get("Program/GetAllProgramAsync");
     return response.data.data;
   } catch (error) {
     console.error(error);

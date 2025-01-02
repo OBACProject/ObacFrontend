@@ -65,25 +65,24 @@ export function SidebarMenu({
           {truncatedTitle}
         </span>
       </div>
-    </div>
 
-    {/* Menu Items */}
-    <div className="border-t-2 pt-2 mt-4">
-      {menuItems.map((item, index) => (
-        <a key={index} href={item.href}>
-          <button className="h-12  flex items-center w-full px-3 group focus:bg-gray-200 hover:bg-gray-200 rounded-md  duration-300">
-            <div className="flex items-center gap-4 w-full">
-              <div className=" h-10 flex items-center justify-center">
-                {item.icon}
+      {/* Menu Items */}
+      <div className="border-t-2 pt-2 mt-4">
+        {menuItems.map((item, index) => (
+          <a key={index} href={item.href}>
+            <button className="h-12  flex items-center w-full px-3 group focus:bg-gray-200 hover:bg-gray-200 rounded-md  duration-300">
+              <div className="flex items-center gap-4 w-full">
+                <div className=" h-10 flex items-center justify-center">
+                  {item.icon}
+                </div>
+                <span className="ml-2 text-[#0C2943] text-sm opacity-0 group-hover:opacity-100 ">
+                  {item.title}
+                </span>
               </div>
-              <span className="ml-2 text-[#0C2943] text-sm opacity-0 group-hover:opacity-100 ">
-                {item.title}
-              </span>
-            </div>
-          </button>
-        </a>
-      ))}
+            </button>
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
   );
 }

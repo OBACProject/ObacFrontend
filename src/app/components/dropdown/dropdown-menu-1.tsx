@@ -37,7 +37,6 @@ export default function DropMenu({
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuTrigger>
-
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>

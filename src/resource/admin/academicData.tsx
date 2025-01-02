@@ -4,4 +4,3 @@ export interface AcademicColumn {
   lastName: string;
   email: string;
 }
-

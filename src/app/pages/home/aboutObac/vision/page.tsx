@@ -1,7 +1,8 @@
-import React from 'react'
+import React from "react";
 
 export default function page() {
   return (
+
     <div className='w-full py-5'>
          <div className="grid place-items-center py-10  text-2xl  bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500  text-white ">
         <p className="text-5xl ">วิสัยทัศน์</p>
@@ -10,7 +11,9 @@ export default function page() {
             <div>
                 <img src='/static/vision-01.jpg' width={800} height='full' />
             </div>
+
         </div>
+      </div>
     </div>
-  )
+  );
 }

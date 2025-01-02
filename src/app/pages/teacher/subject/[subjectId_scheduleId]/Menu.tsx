@@ -8,8 +8,8 @@ import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 interface Props {
   grads?: GetGradBySubjectId[];
-  schedules?:GetScheduleBysubjectId;
-  subjects:GetSubjectBySubjectId ;
+  schedules?: GetScheduleBysubjectId;
+  subjects: GetSubjectBySubjectId;
   onEditReturn: (data: boolean) => void;
 }
 
@@ -23,16 +23,17 @@ export default function MenuBar({
   const [scheduleData ,setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjectData  , setSubject] = useState<GetSubjectBySubjectId>();
   const [onEdit , setOnEdit]= useState<boolean>(false);
+
   useEffect(() => {
     setGradData(grads ?? []);
   }, grads);
-  useEffect(()=>{
-    setSchedules(schedules)
-    setSubject(subjects)
-  },[])
-  let student_group_list = []
-  for (let i = 1 ; i<gradData.length;i++){
-    student_group_list.push(gradData[i].studentGroup)
+  useEffect(() => {
+    setSchedules(schedules);
+    setSubject(subjects);
+  }, []);
+  let student_group_list = [];
+  for (let i = 1; i < gradData.length; i++) {
+    student_group_list.push(gradData[i].studentGroup);
   }
   const student_group = student_group_list[0]
 
@@ -59,7 +60,7 @@ export default function MenuBar({
             พื้นที่ประกาศ
           </div>
         </div>
-        <div className="grid row-2 gap-2">
+        <div className="grid row-2 gap-2 p-2">
           <div className="flex justify-end gap-3">
             <button
             disabled={!student_group}
@@ -77,6 +78,21 @@ export default function MenuBar({
               }}
             >
               ดาวน์โหลดรายชื่อนักเรียน
+            </button>
+            <button
+              className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+              onClick={async () => {
+                ConvertToExcel(
+                  convertGrad,
+                  String(scheduleData?.term ?? ""),
+                  String(scheduleData?.year ?? ""),
+                  subjectData?.subjectCode || "",
+                  subjectData?.subjectName || "",
+                  student_group_list[0] || ""
+                );
+              }}
+            >
+              ดาวน์โหลดใบคะแนนนักเรียน excel
             </button>
           </div>
 

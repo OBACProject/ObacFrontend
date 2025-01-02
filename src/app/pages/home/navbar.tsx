@@ -1,17 +1,20 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
 import {  CircleCheck, Shield } from "lucide-react";
 
 export function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <header className="flex flex-col w-full top-0 left-0 bg-white shadow-xl fixed z-50">
       {/* Logo and Name */}
       <div className="h-1/2">
-        <div className="flex justify-between sm:flex-row gap-6 sm:gap-10 sm:ml-12">
+        <div className="flex justify-between items-center px-6 sm:px-12 py-4">
           {/* Logo */}
-          <a href="/pages/home" className="flex">
+          <a href="/pages/home" className="flex items-center">
             <Image
               src="/images/obac-logo.png"
               alt="obac-logo"
@@ -34,9 +37,16 @@ export function Navbar() {
                 <Shield style={{ width: "1.6rem", height: "1.5rem" }}
         className="text-white hidden lg:block md:block"/>
               </div>
-
             </a>
           </div>
+
+          {/* Hamburger Menu Icon */}
+          <button
+            className="sm:hidden text-blue-900 focus:outline-none"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={30} /> : <Menu size={30} />}
+          </button>
         </div>
       </div>
       <div className=" text-white  h-12 lg:h-auto md:h-auto sm:h-auto w-full flex py-1 px-0 lg:px-6 md:px-6 sm:px-2 justify-between bg-blue-950">
@@ -50,6 +60,7 @@ export function Navbar() {
           <div className="pt-0.5">
             <CircleCheck className="" /> 
           </div>
+
           </a>
         </div>
       </div>

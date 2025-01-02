@@ -2,8 +2,10 @@ import { cardData } from "@/resource/fetchData/cardContent";
 import CLShomepage from "@/app/components/cls-homepage";
 import CardVertical from "@/app/components/card/card-vertical";
 import CardHorizontal from "@/app/components/card/card-horizontal";
+
 import StickerFacebook from "@/app/components/Effect/StickerFacebook";
 import StickerYoutube from "@/app/components/Effect/StickerYoutube";
+
 
 export default function Home() {
   return (

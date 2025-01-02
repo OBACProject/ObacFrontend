@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function page() {
   return (
@@ -10,7 +10,9 @@ export default function page() {
             <div>
                 <img src='/static/history-01.jpg' width={800} height={1000} />
             </div>
+
         </div>
+      </div>
     </div>
-  )
+  );
 }

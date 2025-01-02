@@ -27,7 +27,6 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
           <div className="w-full text-center">{cardData.subject_room}</div>
         </div>
       </div>
-
       <div className="grid grid-rows-2 lg:grid-rows-1 lg:items-center lg:grid-cols-[50%_50%]  w-full text-sm gap-2 px-4 py-4 lg:py-10 ">
         <div className="flex gap-2 lg:gap-4 lg:pl-10  lg:h-full line-clamp-1 h-fit lg:p-4">
           <div className="flex items-center text-gray-600 justify-start lg:justify-center font-semibold">
@@ -45,6 +44,7 @@ export function CardSchedule(cardData: studentCardSubjectProps) {
           <div className="flex px-2 text-gray-600   items-center  font-semibold">
             {cardData.subject_credit} หน่วยกิต
           </div>
+
         </div>
       </div>
     </div>

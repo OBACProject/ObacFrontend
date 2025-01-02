@@ -37,7 +37,6 @@ export function AcademicPage() {
     });
   }, []);
 
-
   const handleEdit = (id: any) => {
     router.push(`/pages/admin/academicManagement/edit/${id}`);
   };
