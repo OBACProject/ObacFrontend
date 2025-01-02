@@ -1,39 +1,33 @@
 import { School } from "lucide-react";
-import Image from "next/image";
 
 export default function Credit() {
-    return (
-        <div className="w-full">
-            <div className="bg-blue-900 mt-0 h-auto lg:h-auto md:h-50 sm:h-48 w-full justify-center flex">
-                <div className="mt-10 mb-10 w-2/3 flex justify-between text-white">
-                    <div className="flex">
-                        <div className="pt-0">
-                           <School
-                           style={{ width: "2.8rem", height: "4.0rem" }}
-                           /> 
-                        </div>
-                        
-                        {/* Name university */}
-                        <div className="flex flex-col justify-start font-inter font-bold p-2 pl-6 ">
-                            <span className="sm:text-lg line-clamp-1">
-                                Ekawit Business Administration Vocational College
-                            </span>
-                            <span className="sm:text-sm ">วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ</span>
-                        </div>
-                    </div>
-                    <div className="w-60">
-                        <div>
-                            5 ซอย ลาดกระบัง 34/1 ถนน ลาดกระบัง แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพมหานคร 10520
-                        </div>
-                        <div className="mt-2">
-                            02 327 2992
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="text-center py-8 bg-blue-900 text-white">
-                <p>© 2024 เอกวิทย์ชาการวิทยาลัย | All rights reserved</p>
-            </div>
+  return (
+    <div className="w-full bg-[#010b76] px-5 py-10 lg:px-10">
+      <div className="grid place-items-center  gap-5 lg:gap-10 lg:justify-center md:justify-center lg:flex md:flex ">
+        <div className="flex text-white">
+          <div className="rounded-full w-fit h-fit bg-white px-0 py-1">
+            <img src="/images/obac_navbar_logo.png" className="h-24" />
+          </div>
+          <div className="flex flex-col justify-start font-inter font-bold p-2 pl-6 ">
+            <span className="sm:text-lg line-clamp-1">
+              Ekawit Business Administration Vocational College
+            </span>
+            <span className="sm:text-sm ">
+              วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+            </span>
+          </div>
         </div>
-    );
+        <div className="text-white lg:text-start md:text-start text-center lg:w-[350px] md:w-[200px] sm:text-center sm:w-[350px]">
+          <div>
+            5 ซอย ลาดกระบัง 34/1 ถนน ลาดกระบัง แขวงลาดกระบัง เขตลาดกระบัง
+            กรุงเทพมหานคร 10520
+          </div>
+          <div className="mt-2">ติดต่อ : 02 327 2992</div>
+        </div>
+      </div>
+      <div className="text-center  py-4  text-white">
+        <p>© 2024 เอกวิทย์ชาการวิทยาลัย | All rights reserved</p>
+      </div>
+    </div>
+  );
 }
