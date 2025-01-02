@@ -149,7 +149,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.collectScore}
             min={0}
             max={50}
-            className={` text-center focus:outline-blue-500 py-2 group-hover:bg-[#e8f3ff] ${
+            className={` text-center enabled:bg-blue-50   bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
               item.collectScore > 50 || item.collectScore < 0
                 ? "outline-red-500 border-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -159,12 +159,12 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             }
           />
           <input
-            disabled={onEdit != true}
+            disabled={!onEdit}
             type="number"
             value={item.affectiveScore}
             min={0}
             max={20}
-            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+            className={`text-center enabled:bg-blue-50   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
               item.affectiveScore > 20 || item.affectiveScore < 0
                 ? "border-red-500 outline-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -179,7 +179,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.testScore}
             min={0}
             max={30}
-            className={`text-center focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+            className={`text-center enabled:bg-blue-50   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
               item.testScore > 30 || item.testScore < 0
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                 : "border-gray-300 border-r-2"
@@ -222,10 +222,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       ))}
       <div className="my-5 w-full grid place-items-end  ">
         <button
-          onClick={saveChanges}
-          className="px-4 py-2  bg-green-500 text-white rounded hover:opacity-75"
+          onClick={saveChanges} disabled={!onEdit}
+          className="px-4 py-2  enabled:bg-green-500 enabled:hover:bg-green-300 duration-300   bg-green-300 text-white rounded hover:bg-green-300"
         >
-          บันทึกคะแนนดิไอเวร
+          บันทึกคะแนน
         </button>
       </div>
       <hr />

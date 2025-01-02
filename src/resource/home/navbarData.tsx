@@ -157,7 +157,7 @@ export const NavbarData: DropMenuProps[] = [
   },
   {
     menuTopic: "ข่าวสารและกิจกรรม",
-    href: "/pages/home/news",
+    href: "/pages/home",
     menuList: [
       {
         menuName: "กิจกรรม",
@@ -168,7 +168,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "activity",
-        href: "/pages/home/",
+        href:"/pages/home/events"
       },
       {
         menuName: "ข่าวสาร",

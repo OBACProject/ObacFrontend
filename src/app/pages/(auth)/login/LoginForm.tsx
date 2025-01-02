@@ -54,6 +54,7 @@ export default function LoginForm({ session }: Session) {
   };
 
   return (
+
     <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
       {token && role && name ? (
         <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
@@ -73,17 +74,18 @@ export default function LoginForm({ session }: Session) {
                 Logout
               </button>
             </div>
+
           </div>
         </div>
       ) : (
         <>
           <form
             onSubmit={handleLogin}
-            className="pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+            className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
           >
-            <div className="mt-10 bg-blue-900 rounded-full w-28 h-28"></div>
+              <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
-              <div className=" text-black text-2xl ">ลงทะเบียนเข้าสู่ระบบ</div>
+              <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
             </div>
 
             <input
@@ -112,8 +114,8 @@ export default function LoginForm({ session }: Session) {
           {/* <div className="my-10">You are not logged in.</div> */}
         </>
       )}
-
-      <div className="flex gap-4 mt-10">
+      {session && (
+        <div className="flex gap-4 mt-5">
         <a
           className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
           href="/pages/student/schedule"
@@ -139,6 +141,8 @@ export default function LoginForm({ session }: Session) {
           Admin
         </a>
       </div>
+      )}
+      
     </div>
   );
 }

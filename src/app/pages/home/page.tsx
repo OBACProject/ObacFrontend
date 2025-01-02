@@ -3,42 +3,32 @@ import CLShomepage from "@/app/components/cls-homepage";
 import CardVertical from "@/app/components/card/card-vertical";
 import CardHorizontal from "@/app/components/card/card-horizontal";
 
+import StickerFacebook from "@/app/components/Effect/StickerFacebook";
+import StickerYoutube from "@/app/components/Effect/StickerYoutube";
+
+
 export default function Home() {
   return (
     <div>
       <CLShomepage />
       <div className="flex w-full bg-white ">
-        {/* slide bar on homepage */}
-        {/* <div className="w-3/12 flex flex-col  ml-5 mt-2 gap-4">
-          <div className=" bg-white w-full border-[1px] border-gray-200 sticky rounded-md py-3 px-2 gap-4 flex flex-col shadow-md shadow-gray-200">
-            {SidebarData.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-start px-2 py-3 gap-5 group hover:bg-[#e4f1f8] bg-white rounded-md "
-              >
-                <div className="w-8  h-10 text-slate-600">{item.menuIcon}</div>
-                <div>
-                  <div className="text-md  group-hover:text-black  text-gray-600 font-semibold leading-none">
-                    {item.menuName}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-        {/* news and activity */}
         <div className="w-full items-center  flex flex-col  px-4 py-4">
-          <h1 className="text-5xl text-blue-950 my-5 font-bold px-5 py-1">
+          <StickerFacebook />
+          <StickerYoutube />
+          <h1 className="text-5xl animate-fadeIn text-blue-950 my-5  font-bold px-5 py-1">
             News And Events
           </h1>
-          {/* <hr className="my-5 border-[1px] "/> */}
-          <div className="grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
+          <div className="animate-fadeIn grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
+
             <CardVertical cardData={cardData} />
           </div>
-          <div className="my-5 py-32 border-2 border-dashed border-gray-700 w-full rounded-lg grid place-items-center text-2xl bg-gray-100">
-            พื้นที่แปะภาพ
+          <div className="w-full my-5 flex justify-center ">
+            <img
+              className="h-40 w-full lg:w-[90%] lg:h-auto"
+              src="https://www.obac.ac.th/mainsite/images/header/harder2018.jpg"
+            />
           </div>
-          <div className="grid place-items-start mx-10 lg:px-20 md:px-10 sm:px-10 overflow-hidden lg:w-[95%]">
+          <div className="animate-fadeIn grid place-items-start mx-10 lg:px-20 md:px-10 sm:px-10 overflow-hidden lg:w-[95%]">
             <CardHorizontal cardData={cardData} />
             <CardHorizontal cardData={cardData} />
           </div>

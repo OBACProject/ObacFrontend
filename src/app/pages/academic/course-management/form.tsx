@@ -249,7 +249,7 @@ export default function Form() {
         "
           >
             <div className="gridborder-2 lg:place-items-center sm:place-items-start">
-              <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
+              <label className="block pl-1 mb-2 text-md font-semibold line-clamp-1 text-gray-900">
                 ระดับการศึกษา
               </label>
               <select
@@ -268,7 +268,7 @@ export default function Form() {
               </select>
             </div>
             <div className="grid lg:place-items-center sm:place-items-start ">
-              <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
+              <label className="pl-1 mb-2 text-md font-semibold line-clamp-1 text-gray-900">
                 หลักสูตรการศึกษา
               </label>
               <select
@@ -309,7 +309,7 @@ export default function Form() {
               </select>
             </div>
             <div className="grid lg:place-items-start sm:place-items-start">
-              <label className="block pl-1 mb-2 text-md font-semibold text-gray-900">
+              <label className="line-clamp-1 pl-1 mb-2 text-md font-semibold text-gray-900">
                 กลุ่มการเรียน
               </label>
               <select
