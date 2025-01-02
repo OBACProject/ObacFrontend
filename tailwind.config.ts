@@ -1,3 +1,5 @@
+import { transform } from "next/dist/build/swc";
+import { blob } from "stream/consumers";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -78,16 +80,31 @@ const config: Config = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        blob:{
+          '0%':{
+            transform : "translate(0px,0px) scale(1)"
+          },
+          "33%": {
+            transform:"translate(30px,-50px) scale(1.2)"
+          },
+          "66%" :{
+            transform :"translate(-20px,20px) scale(0.8)",
+          },
+          "100%":{
+            transform : "translate(0px,0px) scale(1)",
+          }
+        },
       },
       animation: {
         fadeIn: 'fadeIn 2s ease-in-out',
         fastFade : 'fadeIn 1s ease-in-out',
         fadeStep1: 'fadeIn 3s ease-in-out',
         fadeStep2: 'fadeIn 4s ease-in-out',
+        blob:"blob 7s infinite",
       },
       backgroundImage:{
         authBg:"url(https://lh3.googleusercontent.com/p/AF1QipOm1uKGkk3eh_TFYYireSIS-i5fZzfPfnAfQKNz=s1360-w1360-h1020)"
-      }
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

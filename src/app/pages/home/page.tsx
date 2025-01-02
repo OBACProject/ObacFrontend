@@ -17,6 +17,7 @@ export default function Home() {
             News And Events
           </h1>
           <div className="animate-fadeIn grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
+
             <CardVertical cardData={cardData} />
           </div>
           <div className="w-full my-5 flex justify-center ">

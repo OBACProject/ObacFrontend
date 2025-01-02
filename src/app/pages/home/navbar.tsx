@@ -32,7 +32,7 @@ export function Navbar() {
             <a href="/pages/login" className="overflow-hidden h-fit px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block md:block line-clamp-1  h-fit ">ระบบผู้ใช้</div><div className="lg:hidden md:hidden ">Login</div>
               <div className="">
                 <Shield style={{ width: "1.6rem", height: "1.5rem" }}
-        className="text-white "/>
+        className="text-white hidden lg:block md:block"/>
               </div>
 
             </a>
