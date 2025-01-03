@@ -3,6 +3,8 @@
 import { login, logout } from "@/lib/authentication";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { NextRequest } from "next/server";
+import Cookies from "js-cookie";
 
 // import { logout } from "@/app/action/authAction";
 import { toast } from "react-toastify";
@@ -10,11 +12,10 @@ interface Session {
   session: string;
 }
 
-export default function LoginForm({ session }: Session) {
+export default function LoginForm(req: NextRequest) {
   // from a local storage
   const router = useRouter();
 
-  const [token, setToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
 
@@ -23,23 +24,21 @@ export default function LoginForm({ session }: Session) {
     const formData = new FormData(event.currentTarget);
     await login(formData);
 
-    const storedToken = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    const storedName = localStorage.getItem("name");
+    const role = req.cookies.get("role")?.value || "";
+    const name = req.cookies.get("name")?.value || "";
 
-    setToken(storedToken);
-    setRole(storedRole);
-    setName(storedName);
+    setRole(role);
+    setName(name);
 
     toast.success("login success");
 
-    if (storedRole === "Student") {
+    if (role === "Student") {
       router.push("/pages/student/schedule");
-    } else if (storedRole === "Teacher") {
+    } else if (role === "Teacher") {
       router.push("/pages/teacher/profile");
-    } else if (storedRole === "Academic") {
+    } else if (role === "Academic") {
       router.push("/pages/academic");
-    } else if (storedRole === "Admin") {
+    } else if (role === "Admin") {
       router.push("/pages/admin/academicManagement");
     }
   };
@@ -47,7 +46,8 @@ export default function LoginForm({ session }: Session) {
   const handleLogout = async () => {
     await logout();
 
-    setToken(null);
+    Cookies.remove("role");
+    Cookies.remove("name");
     setRole(null);
     setName(null);
     toast.info("logout success");
@@ -55,7 +55,7 @@ export default function LoginForm({ session }: Session) {
 
   return (
     <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
-      {token && role && name ? (
+      {role && name ? (
         <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
           <div className="space-y-4">
             {" "}
