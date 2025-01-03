@@ -54,7 +54,6 @@ export default function LoginForm(req: NextRequest) {
   };
 
   return (
-
     <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
       {role && name ? (
         <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
@@ -74,7 +73,6 @@ export default function LoginForm(req: NextRequest) {
                 Logout
               </button>
             </div>
-
           </div>
         </div>
       ) : (
@@ -83,7 +81,7 @@ export default function LoginForm(req: NextRequest) {
             onSubmit={handleLogin}
             className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
           >
-              <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
+            <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
               <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
             </div>
@@ -114,35 +112,34 @@ export default function LoginForm(req: NextRequest) {
           {/* <div className="my-10">You are not logged in.</div> */}
         </>
       )}
-      {session && (
+      {req && (
         <div className="flex gap-4 mt-5">
-        <a
-          className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
-          href="/pages/student/schedule"
-        >
-          Student
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
-          href="/pages/teacher/profile"
-        >
-          Teacher
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
-          href="/pages/academic"
-        >
-          Academic
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
-          href="/pages/admin/academicManagement"
-        >
-          Admin
-        </a>
-      </div>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
+            href="/pages/student/schedule"
+          >
+            Student
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
+            href="/pages/teacher/profile"
+          >
+            Teacher
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
+            href="/pages/academic"
+          >
+            Academic
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
+            href="/pages/admin/academicManagement"
+          >
+            Admin
+          </a>
+        </div>
       )}
-      
     </div>
   );
 }
