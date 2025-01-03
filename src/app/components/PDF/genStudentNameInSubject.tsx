@@ -6,9 +6,12 @@ import { GetGradBySubjectId } from "@/dto/gradDto";
 
 interface DataList  {
   grads?:GetGradBySubjectId[];
+  studentGroup: string;
+  subjectName:string | undefined;
+  subjectId:string | undefined;
 }
 
-const GenStudentNameList = ({grads}:DataList) => {
+const GenStudentNameInSubject = ({grads,studentGroup,subjectId,subjectName}:DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -23,7 +26,8 @@ const GenStudentNameList = ({grads}:DataList) => {
 
  
   doc.setFontSize(16);
-  doc.text("รายชื่อนักเรียน กลุ่มเรียน", 105, 10, { align: "center" });
+  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, { align: "center" });
+  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 100, 10, { align: "center" });
   doc.setFontSize(12);
 
   doc.line(4,4,4,291);
@@ -106,7 +110,6 @@ const GenStudentNameList = ({grads}:DataList) => {
         n += 7;
       }
     }
-
-  doc.save("ใบรายชื่อวิชา__.pdf");
+  doc.save(`ใบรายชื่อวิชา${subjectName} กลุ่มเรียน ${studentGroup}.pdf`);
 };
-export default GenStudentNameList;
+export default GenStudentNameInSubject;

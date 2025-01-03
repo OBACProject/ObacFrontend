@@ -2,55 +2,49 @@ import { studentCardSubjectProps } from "@/resource/students/studentCardSubjectD
 
 export function CardSchedule(cardData: studentCardSubjectProps) {
   const dayColorMap: { [key: string]: string } = {
-    Monday: "bg-yellow-300",
-    Tuesday: "bg-pink-300",
-    Wednesday: "bg-green-300",
-    Thursday: "bg-blue-300",
-    Friday: "bg-purple-300",
-    Saturday: "bg-red-300",
-    Sunday: "bg-orange-300",
+    Monday: "bg-gradient-to-r from-yellow-200 via-orange-200 to-orange-100 ",
+    Tuesday: "bg-gradient-to-r from-pink-200 via-pink-300 to-red-100 ",
+    Wednesday: "bg-gradient-to-r from-green-200 via-emerald-300 to-yellow-100",
+    Thursday: "bg-gradient-to-r from-orange-200 via-orange-300 to-yellow-100",
+    Friday: "bg-gradient-to-r from-sky-200 via-blue-300 to-purple-200",
+    Saturday: "bg-purple-200",
+    Sunday: "bg-red-200",
   };
 
   // Get the color class based on the day
   const dayColorClass = dayColorMap[cardData.day] || "bg-slate-400";
 
   return (
-    <div className="flex flex-col md:flex-row shadow-md rounded-lg overflow-hidden">
+    <div className="lg:flex shadow-md shadow-gray-200 border border-gray-200 rounded-lg overflow-hidden lg:h-[90px]">
       {/* Time Block */}
       <div
-        className={`flex flex-col items-center justify-center ${dayColorClass} text-white w-full md:w-2/12 h-20 md:h-auto`}
+        className={`grid place-items-center ${dayColorClass} bg-opacity-80 text-gray-500  lg:h-auto lg:w-[250px] h-fit `}
       >
-        <div className="flex flex-col text-center text-sm sm:text-base p-2">
-          <span>
-            {cardData.start_time} - {cardData.end_time}
-          </span>
-          <span>{cardData.day}</span>
+        <div className="flex items-center justify-between w-full px-5 lg:px-0  md:text-center lg:grid lg:justify-center    sm:text-center  text-sm sm:text-base py-1 text-gray-500">
+          <div className="text-xl w-full  text-center font-semibold">
+            {cardData.day}
+          </div>
+          <div className="w-full text-center">{cardData.subject_room}</div>
         </div>
       </div>
-
-      {/* Subject Details */}
-      <div className="flex flex-col md:flex-row w-full md:w-10/12 text-sm gap-4 p-4 md:p-0">
-        {/* Subject ID */}
-        <div className="flex items-center justify-center w-full md:w-2/12 font-bold">
-          {cardData.subject_code}
-        </div>
-        {/* Room */}
-        <div className="flex items-center justify-center w-full md:w-2/12 font-bold">
-          {cardData.subject_room}
-        </div>
-        {/* Subject Name and Teacher */}
-        <div className="flex flex-col w-full md:w-4/12 items-start justify-center">
-          <p className="font-bold text-start md:text-left items-center">
+      <div className="grid grid-rows-2 lg:grid-rows-1 lg:items-center lg:grid-cols-[50%_50%]  w-full text-sm gap-2 px-4 py-4 lg:py-10 ">
+        <div className="flex gap-2 lg:gap-4 lg:pl-10  lg:h-full line-clamp-1 h-fit lg:p-4">
+          <div className="flex items-center text-gray-600 justify-start lg:justify-center font-semibold">
+            {cardData.subject_code}
+          </div>
+          <p className="flex text-gray-600  font-semibold text-start text-sm md:text-xl md:text-left items-center">
             {cardData.subject_name}
           </p>
-          <div className="flex flex-col md:flex md:flex-row gap-1 md:gap-2 text-end">
-            <p className="font-semibold text-start">อาจารย์ผู้สอน:</p>
+        </div>
+        <div className="flex justify-between line-clamp-1 h-fit">
+          <div className="flex gap-1 lg:text-lg text-gray-600  lg:gap-3 md:gap-2">
+            <p className="font-semibold ">อาจารย์ผู้สอน:</p>
             <span>{cardData.teacher_name}</span>
           </div>
-        </div>
-        {/* Credit */}
-        <div className="flex items-center justify-end w-full p-4 font-semibold">
-          {cardData.subject_credit} หน่วยกิต
+          <div className="flex px-2 text-gray-600   items-center  font-semibold">
+            {cardData.subject_credit} หน่วยกิต
+          </div>
+
         </div>
       </div>
     </div>

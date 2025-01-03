@@ -9,22 +9,18 @@ interface CardSubjectProps {
 
 export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
   return (
-    <div className=" border-[1px] hover:border-black border-gray-200 rounded-md my-3 bg-card text-card-foreground w-full hover:bg-gray-50 shadow-md shadow-gray-200 bg-white grid grid-cols-[40%_21%_3%_36%]">
-      <div className="ml-5 py-4 ">
-        <div className="flex ">
-          <div className="text-gray-600">
-            วิชา: &nbsp;
-            <span className="font-semibold text-blue-600">
-              {cardSubjectData.subjectName}
-            </span>{" "}
-          </div>
-        </div>
-        <div className="text-gray-600">
-          รหัสวิชา :&nbsp;
-          <span className="font-semibold text-gray-800">
-            {cardSubjectData.subjectCode}
-          </span>
-        </div>
+          <div
+            className=" border-[1px] hover:border-black border-gray-200 rounded-md my-3 bg-card text-card-foreground hover:scale-[0.99] duration-500 w-full hover:bg-gray-50 shadow-md shadow-gray-200 bg-white grid grid-cols-[40%_21%_3%_36%]"
+          >
+            <div className="ml-5 py-4 ">
+              <div className="flex ">
+                <div className="text-gray-600">วิชา: &nbsp;<span className="font-semibold text-blue-600">{cardSubjectData.subjectName}</span> </div>
+              </div>
+              <div className="text-gray-600">รหัสวิชา :&nbsp;<span className="font-semibold text-gray-800">{cardSubjectData.subjectCode}</span></div>
+
+              <div className="text-gray-600">จำนวนนักเรียน :&nbsp;<span className="font-semibold text-gray-800">{cardSubjectData.totalStudent}</span>&nbsp; คน</div>
+            </div>
+
 
         <div className="text-gray-600">
           จำนวนนักเรียน :&nbsp;

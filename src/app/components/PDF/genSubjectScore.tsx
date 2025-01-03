@@ -6,9 +6,12 @@ import { GetGradBySubjectId } from "@/dto/gradDto";
 
 interface DataList {
   grads?: GetGradBySubjectId[];
+  studentGroup: string;
+  subjectName:string | undefined;
+  subjectId:string | undefined;
 }
 
-const GenSubjectScore = ({ grads }: DataList) => {
+const GenSubjectScore = ({ grads ,studentGroup,subjectId,subjectName}: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -22,7 +25,9 @@ const GenSubjectScore = ({ grads }: DataList) => {
   doc.setFont("THSarabun");
 
   doc.setFontSize(16);
-  doc.text("รายชื่อนักเรียน กลุ่มเรียน", 105, 10, { align: "center" });
+  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, { align: "center" });
+  doc.setFontSize(16);
+  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 100, 10, { align: "center" });
   doc.setFontSize(12);
 
   doc.line(4, 4, 4, 291);
@@ -83,8 +88,8 @@ const GenSubjectScore = ({ grads }: DataList) => {
             `${grads[i].firstName}`,
             `${grads[i].lastName}`,
             `${grads[i].collectScore}`,
-            `${grads[i].testScore}`,
             `${grads[i].affectiveScore}`,
+            `${grads[i].testScore}`,
             `${grads[i].totalScore}`,
             "",
           ],
@@ -129,6 +134,6 @@ const GenSubjectScore = ({ grads }: DataList) => {
     }
   }
 
-  doc.save("ใบคะแนนวิชา__.pdf");
+  doc.save(`ใบคะแนนวิชา${subjectName} กลุ่มเรียน ${studentGroup}.pdf`);
 };
 export default GenSubjectScore;

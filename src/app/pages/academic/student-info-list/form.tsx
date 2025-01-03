@@ -183,6 +183,9 @@ export default function Form() {
   // ----------------- Table -----------------
   // const [studentData, setStudentData] = useState<StudentColumns[]>([]);
 
+  const handleRowClick = (id: number) => {
+    router.push(`/pages/academic/student-details/${id}`);
+  };
   const columns = makeColumns<StudentColumns>(
     {
       runningNumber: 1,
@@ -339,6 +342,7 @@ export default function Form() {
                 blank: "w-1/4",
                 more: "w-1/2",
               }}
+              onRowClick={handleRowClick}
             />
           </div>
         </div>
