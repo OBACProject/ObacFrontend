@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import {  CircleCheck, Shield } from "lucide-react";
+import { CircleCheck, Menu, Shield, X } from "lucide-react";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,15 +27,26 @@ export function Navbar() {
               <span className="text-sm lg:text-lg sm:text-lg line-clamp-3 ">
                 Ekawit Business Administration Vocational College
               </span>
-              <span className="sm:text-sm hidden lg:block md:block sm:block ">วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ</span>
+              <span className="sm:text-sm hidden lg:block md:block sm:block ">
+                วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+              </span>
             </div>
           </a>
 
           <div className="justify-end grid place-items-center px-10 lg:mr-6 md:mr-6 overflow-hidden h-fi sm:px-2 sm:py-1">
-            <a href="/pages/login" className="overflow-hidden h-fit px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block md:block line-clamp-1  h-fit ">ระบบผู้ใช้</div><div className="lg:hidden md:hidden ">Login</div>
+            <a
+              href="/pages/login"
+              className="overflow-hidden h-fit px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "
+            >
+              <div className="hidden lg:block md:block line-clamp-1  h-fit ">
+                ระบบผู้ใช้
+              </div>
+              <div className="lg:hidden md:hidden ">Login</div>
               <div className="">
-                <Shield style={{ width: "1.6rem", height: "1.5rem" }}
-        className="text-white hidden lg:block md:block"/>
+                <Shield
+                  style={{ width: "1.6rem", height: "1.5rem" }}
+                  className="text-white hidden lg:block md:block"
+                />
               </div>
             </a>
           </div>
@@ -55,12 +66,14 @@ export function Navbar() {
         </div>
 
         <div className="justify-end flex place-items-center lg:px-10 md:px-10 px-1 sm:px-2 sm:py-1">
-          <a href="/pages/register" className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-white hover:text-blue-950 ">
-          สมัครออนไลน์
-          <div className="pt-0.5">
-            <CircleCheck className="" /> 
-          </div>
-
+          <a
+            href="/pages/register"
+            className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-white hover:text-blue-950 "
+          >
+            สมัครออนไลน์
+            <div className="pt-0.5">
+              <CircleCheck className="" />
+            </div>
           </a>
         </div>
       </div>
