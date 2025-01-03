@@ -23,7 +23,7 @@ export default function RootLayout({
           className="z-50"
         />
         <Navbar />
-        <div className="mt-28">
+        <div className="mt-24">
         {children}
         </div>
         <Credit/>

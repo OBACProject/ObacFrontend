@@ -20,33 +20,36 @@ export default function LoginForm({ session }: Session) {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    await login(formData);
+    try {
+      const formData = new FormData(event.currentTarget);
+      await login(formData);
 
-    const storedToken = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    const storedName = localStorage.getItem("name");
+      const storedToken = localStorage.getItem("token");
+      const storedRole = localStorage.getItem("role");
+      const storedName = localStorage.getItem("name");
 
-    setToken(storedToken);
-    setRole(storedRole);
-    setName(storedName);
+      setToken(storedToken);
+      setRole(storedRole);
+      setName(storedName);
 
-    toast.success("login success");
+      toast.success("login success");
 
-    if (storedRole === "Student") {
-      router.push("/pages/student/schedule");
-    } else if (storedRole === "Teacher") {
-      router.push("/pages/teacher/profile");
-    } else if (storedRole === "Academic") {
-      router.push("/pages/academic");
-    } else if (storedRole === "Admin") {
-      router.push("/pages/admin/academicManagement");
+      if (storedRole === "Student") {
+        router.push("/pages/student/schedule");
+      } else if (storedRole === "Teacher") {
+        router.push("/pages/teacher/profile");
+      } else if (storedRole === "Academic") {
+        router.push("/pages/academic");
+      } else if (storedRole === "Admin") {
+        router.push("/pages/admin/academicManagement");
+      }
+    } catch (e) {
+      toast.error("Login failed.");
     }
   };
 
   const handleLogout = async () => {
     await logout();
-
     setToken(null);
     setRole(null);
     setName(null);
@@ -54,8 +57,8 @@ export default function LoginForm({ session }: Session) {
   };
 
   return (
-
-    <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
+    <div className="relative bg-authBg bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
+      <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
       {token && role && name ? (
         <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
           <div className="space-y-4">
@@ -69,21 +72,20 @@ export default function LoginForm({ session }: Session) {
             <div className="grid place-items-center mt-5">
               <button
                 onClick={handleLogout}
-                className="bg-red-600 px-10 text-white my-3 rounded-md py-2"
+                className="bg-red-600 z-10 px-10 text-white my-3 rounded-md py-2"
               >
                 Logout
               </button>
             </div>
-
           </div>
         </div>
       ) : (
         <>
           <form
             onSubmit={handleLogin}
-            className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+            className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 w-4/5 rounded-lg shadow-sm"
           >
-              <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
+            <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
             <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
               <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
             </div>
@@ -116,33 +118,32 @@ export default function LoginForm({ session }: Session) {
       )}
       {session && (
         <div className="flex gap-4 mt-5">
-        <a
-          className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
-          href="/pages/student/schedule"
-        >
-          Student
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
-          href="/pages/teacher/profile"
-        >
-          Teacher
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
-          href="/pages/academic"
-        >
-          Academic
-        </a>
-        <a
-          className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
-          href="/pages/admin/academicManagement"
-        >
-          Admin
-        </a>
-      </div>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
+            href="/pages/student/schedule"
+          >
+            Student
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
+            href="/pages/teacher/profile"
+          >
+            Teacher
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
+            href="/pages/academic"
+          >
+            Academic
+          </a>
+          <a
+            className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
+            href="/pages/admin/academicManagement"
+          >
+            Admin
+          </a>
+        </div>
       )}
-      
     </div>
   );
 }

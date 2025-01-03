@@ -5,7 +5,7 @@ export default function Credit() {
     <div className="w-full bg-[#010b76] px-5 py-10 lg:px-10">
       <div className="grid place-items-center  gap-5 lg:gap-10 lg:justify-center md:justify-center lg:flex md:flex ">
         <div className="flex text-white">
-          <div className="rounded-full w-fit h-fit bg-white px-0 py-1">
+          <div className="rounded-full hidden lg:block md:block sm:block w-fit h-fit bg-white px-0 py-1">
             <img src="/images/obac_navbar_logo.png" className="h-24" />
           </div>
           <div className="flex flex-col justify-start font-inter font-bold p-2 pl-6 ">

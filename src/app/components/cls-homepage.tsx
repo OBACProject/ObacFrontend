@@ -64,6 +64,6 @@ export default function CLShomepage() {
 
 
       </Carousel>
-  4</div>
+  </div>
   );
 }

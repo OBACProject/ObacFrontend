@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import {  CircleCheck, Shield } from "lucide-react";
+import {  CircleCheck, Menu, Shield, X } from "lucide-react";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,8 +11,8 @@ export function Navbar() {
   return (
     <header className="flex flex-col w-full top-0 left-0 bg-white shadow-xl fixed z-50">
       {/* Logo and Name */}
-      <div className="h-1/2">
-        <div className="flex justify-between items-center px-6 sm:px-12 py-4">
+      <div className="h-fit">
+        <div className="flex justify-between items-center lg:pl-10 lg:pr-2 sm:px-2 py-1">
           {/* Logo */}
           <a href="/pages/home" className="flex items-center">
             <Image
@@ -32,10 +32,10 @@ export function Navbar() {
           </a>
 
           <div className="justify-end grid place-items-center px-10 lg:mr-6 md:mr-6 overflow-hidden h-fi sm:px-2 sm:py-1">
-            <a href="/pages/login" className="overflow-hidden h-fit px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block md:block line-clamp-1  h-fit ">ระบบผู้ใช้</div><div className="lg:hidden md:hidden ">Login</div>
+            <a href="/pages/login" className="overflow-hidden h-fit px-4 py-2 gap-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700 "><div className="hidden lg:block line-clamp-1  h-fit ">ระบบผู้ใช้</div><div className="lg:hidden  ">Login</div>
               <div className="">
                 <Shield style={{ width: "1.6rem", height: "1.5rem" }}
-        className="text-white hidden lg:block md:block"/>
+        className="text-white hidden sm:block lg:block md:block"/>
               </div>
             </a>
           </div>
@@ -49,14 +49,17 @@ export function Navbar() {
           </button>
         </div>
       </div>
-      <div className=" text-white  h-12 lg:h-auto md:h-auto sm:h-auto w-full flex py-1 px-0 lg:px-6 md:px-6 sm:px-2 justify-between bg-blue-950">
+      <div className=" text-white  h-12 lg:h-auto md:h-auto  sm:h-auto w-full flex py-1 px-0 lg:pl-2 lg:pr-0 md:px-2 sm:px-2 justify-between bg-blue-950">
         <div className="flex ">
           <DropMenu menuData={NavbarData} />
         </div>
 
-        <div className="justify-end flex place-items-center lg:px-10 md:px-10 px-1 sm:px-2 sm:py-1">
-          <a href="/pages/register" className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-white hover:text-blue-950 ">
-          สมัครออนไลน์
+        <div className="justify-end flex h-fit place-items-center lg:px-10 md:px-10 px-1 sm:px-2 sm:py-1">
+          <a href="/pages/register" className="flex gap-2 justify-center  py-1  bg-blue-950 px-10 border-white border-2 rounded-full text-white text-xl hover:bg-white overflow-hidden hover:text-blue-950 line-clamp-1 h-fit">
+          <div className="line-clamp-1">
+            สมัครออนไลน์
+          </div>
+          
           <div className="pt-0.5">
             <CircleCheck className="" /> 
           </div>

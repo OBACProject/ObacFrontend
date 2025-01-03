@@ -1,3 +1,4 @@
+'use client'
 import { cardData } from "@/resource/fetchData/cardContent";
 import CLShomepage from "@/app/components/cls-homepage";
 import CardVertical from "@/app/components/card/card-vertical";
