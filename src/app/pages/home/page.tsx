@@ -39,7 +39,7 @@ export default function Home() {
             พื้นที่แปะภาพ
           </div>
           <div className="grid place-items-start mx-10 lg:px-20 md:px-10 sm:px-10 overflow-hidden lg:w-[95%]">
-            <CardHorizontal cardData={cardData} />
+            {/* <CardHorizontal cardData={cardData} /> */}
             <CardHorizontal cardData={cardData} />
           </div>
         </div>
