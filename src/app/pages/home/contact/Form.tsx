@@ -8,11 +8,11 @@ export default function Form() {
       <div className="relative ">
       
         <h1 className="mb-4 animate-fadeIn text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-500 to-blue-800 z-10">
+          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-blue-500 z-10">
             Contact Us
           </span>
         </h1>
-        <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-600 w-full"></div>
+        <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-300 w-full"></div>
       </div>
       <div className="my-5 animate-fastFade lg:flex gap-2  grid place-items-center lg:*:place-items-start lg:mx-5">
         <div className=" lg:w-[600px] lg:h-[450px]  ">

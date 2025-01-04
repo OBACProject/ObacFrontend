@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "./styles.css";
+import ".././styles.css";
 
 export default function CLShomepage() {
   const [isLoaded, setIsLoaded] = useState(false);

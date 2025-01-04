@@ -191,14 +191,14 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <span className="text-center flex justify-center items-center border-r-2 py-2">
             {item.collectScore + item.testScore + item.affectiveScore}
           </span>
-          <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 py-2">
+          <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 ">
             {(() => {
               const totalSum =
                 item.collectScore + item.testScore + item.affectiveScore;
               const grade = calculateGrade(totalSum);
               return (
                 <>
-                  <div className="flex justify-center p-4">
+                  <div className="flex justify-center px-2 py-1">
                     <Combobox
                       buttonLabel="เกรด"
                       options={gradeValue.map((item) => ({

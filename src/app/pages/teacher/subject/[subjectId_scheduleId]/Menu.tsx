@@ -79,7 +79,11 @@ export default function MenuBar({
             >
               ดาวน์โหลดรายชื่อนักเรียน
             </button>
-            <button
+           
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4">
+          <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={async () => {
                 ConvertToExcel(
@@ -94,9 +98,6 @@ export default function MenuBar({
             >
               ดาวน์โหลดใบคะแนนนักเรียน excel
             </button>
-          </div>
-
-          <div className="flex justify-end gap-3 pt-4">
             {onEdit? (
                <button
                className={`bg-red-500 duration-300 text-white tex-center text-lg    rounded-md hover:opacity-75 flex justify-center gap-2 w-[120px] py-1 hover:rounded-sm pl-2  `}

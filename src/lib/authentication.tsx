@@ -37,9 +37,9 @@ export async function login(formData: FormData) {
       throw new Error("Invalid token: Missing role or name.");
     }
 
-    // localStorage.setItem("token", token);
-    // localStorage.setItem("role", role);
-    // localStorage.setItem("name", name);
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    localStorage.setItem("name", name);
 
     Cookies.set("role", role, { expires: 7 });
     Cookies.set("name", name, { expires: 7 });
