@@ -1,22 +1,33 @@
 "use client";
 
 import { login, logout } from "@/lib/authentication";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-// import { logout } from "@/app/action/authAction";
+import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-interface Session {
-  session: string;
+
+interface LoginFormProps {
+  session?: { role?: string; name?: string };
 }
 
-export default function LoginForm({ session }: Session) {
-  // from a local storage
+export default function LoginForm({ session }: LoginFormProps) {
   const router = useRouter();
 
-  const [token, setToken] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
-  const [name, setName] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(session?.role || null);
+  const [name, setName] = useState<string | null>(session?.name || null);
+
+  useEffect(() => {
+    if (!role || !name) {
+      // Fetch cookies only if session is not passed
+      const storedRole = Cookies.get("role");
+      const storedName = Cookies.get("name");
+
+      if (storedRole && storedName) {
+        setRole(storedRole);
+        setName(storedName);
+      }
+    }
+  }, [role, name]);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,51 +35,50 @@ export default function LoginForm({ session }: Session) {
       const formData = new FormData(event.currentTarget);
       await login(formData);
 
-      const storedToken = localStorage.getItem("token");
-      const storedRole = localStorage.getItem("role");
-      const storedName = localStorage.getItem("name");
+    const newRole = Cookies.get("role");
+    const newName = Cookies.get("name");
 
-      setToken(storedToken);
-      setRole(storedRole);
-      setName(storedName);
+    setRole(newRole || null);
+    setName(newName || null);
 
-      toast.success("login success");
+    toast.success("Login successful");
 
-      if (storedRole === "Student") {
+    switch (newRole) {
+      case "Student":
         router.push("/pages/student/schedule");
-      } else if (storedRole === "Teacher") {
+        break;
+      case "Teacher":
         router.push("/pages/teacher/profile");
-      } else if (storedRole === "Academic") {
+        break;
+      case "Academic":
         router.push("/pages/academic");
-      } else if (storedRole === "Admin") {
+        break;
+      case "Admin":
         router.push("/pages/admin/academicManagement");
-      }
-    } catch (e) {
-      toast.error("Login failed.");
+        break;
+      default:
+        toast.error("Unknown role");
     }
   };
 
   const handleLogout = async () => {
     await logout();
-    setToken(null);
+
+    Cookies.remove("role");
+    Cookies.remove("name");
     setRole(null);
     setName(null);
-    toast.info("logout success");
+
+    toast.info("Logout successful");
   };
 
   return (
-    <div className="relative bg-authBg bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
-      <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
-      {token && role && name ? (
+    <div className="w-full bg-gray-400 grid place-items-center pb-40 pt-10">
+      {role && name ? (
         <div className="my-10 bg-white rounded-lg px-10 py-12 grid place-items-center mx-auto">
           <div className="space-y-4">
-            {" "}
-            {/* Add space between elements */}
             <div className="text-2xl">Welcome {name}</div>
             <div className="text-lg">Role: {role}</div>
-            {/* <div className="text-sm break-words whitespace-normal">
-              Token: {token}
-            </div> */}
             <div className="grid place-items-center mt-5">
               <button
                 onClick={handleLogout}
@@ -80,69 +90,38 @@ export default function LoginForm({ session }: Session) {
           </div>
         </div>
       ) : (
-        <>
-          <form
-            onSubmit={handleLogin}
-            className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 w-4/5 rounded-lg shadow-sm"
-          >
-            <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
-            <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
-              <div className=" text-black text-2xl ">เข้าสู่ระบบ</div>
-            </div>
+        <form
+          onSubmit={handleLogin}
+          className="z-10 relative mt-10 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+        >
+          <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
+          <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
+            <div className="text-black text-2xl">เข้าสู่ระบบ</div>
+          </div>
 
-            <input
-              className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
-              type="text"
-              name="userName"
-              placeholder="Username / ชื่อผู้ใช้"
-              required
-            />
+          <input
+            className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
+            type="text"
+            name="userName"
+            placeholder="Username / ชื่อผู้ใช้"
+            required
+          />
 
-            <input
-              className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
-              type="password"
-              name="password"
-              placeholder="Password / รหัสผ่าน"
-              required
-            />
+          <input
+            className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
+            type="password"
+            name="password"
+            placeholder="Password / รหัสผ่าน"
+            required
+          />
 
-            <button
-              type="submit"
-              className="bg-blue-900 px-20 text-white my-3 rounded-md py-2"
-            >
-              Login
-            </button>
-          </form>
-          {/* <div className="my-10">You are not logged in.</div> */}
-        </>
-      )}
-      {session && (
-        <div className="flex gap-4 mt-5">
-          <a
-            className="px-5 py-2 shadow-md text-white bg-blue-500 rounded-md hover:opacity-70"
-            href="/pages/student/schedule"
+          <button
+            type="submit"
+            className="bg-blue-900 px-20 text-white my-3 rounded-md py-2"
           >
-            Student
-          </a>
-          <a
-            className="px-5 py-2 shadow-md text-white bg-green-400 rounded-md hover:opacity-70"
-            href="/pages/teacher/profile"
-          >
-            Teacher
-          </a>
-          <a
-            className="px-5 py-2 shadow-md text-white bg-yellow-500 rounded-md hover:opacity-70"
-            href="/pages/academic"
-          >
-            Academic
-          </a>
-          <a
-            className="px-5 py-2 shadow-md text-white bg-purple-500 rounded-md hover:opacity-70"
-            href="/pages/admin/academicManagement"
-          >
-            Admin
-          </a>
-        </div>
+            Login
+          </button>
+        </form>
       )}
     </div>
   );

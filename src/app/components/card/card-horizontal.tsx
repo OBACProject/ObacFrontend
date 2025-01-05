@@ -22,7 +22,7 @@ export default function CardHorizontal({ cardData }: CardHorizontalProps) {
         cardData.map((data, index) => (
           <div
             key={index}
-            className="rounded-md border-[1px] border-[#CFD0D4] bg-card text-card-foreground overflow-hidden shadow-lg  hover:bg-slate-50 group lg:w-[1000px] md:w-[900px] w-full sm:w-[400px] my-3 hover:scale-[1.01] duration-500 bg-white sm:grid grid md:flex"
+            className="rounded-md border-[1px] border-[#CFD0D4] bg-card text-card-foreground overflow-hidden shadow-lg  hover:bg-slate-50 group lg:w-[1000px] md:w-[900px] w-[300px] sm:w-[300px] my-3 hover:scale-[1.01] duration-500 bg-white sm:grid grid md:flex"
           >
             <div className="lg:flex md:flex grid sm:grid items-start ">
               <div className="relative  overflow-hidden lg:w-5/12 lg:h-44 md:w-7/12 md:h-44 mr-4 w-full sm:w-full h-36 sm:h-44 ">
@@ -46,6 +46,25 @@ export default function CardHorizontal({ cardData }: CardHorizontalProps) {
                 </div>
                 <div className="mt-3 text-gray-600 line-clamp-4">
                   {data.description}
+                </div>
+                <div className="grid w-full">
+                  <div className="flex justify-between">
+                    <span className="font-semibold text-black text-lg">
+                      {data.topic}
+                    </span>
+                    <span className="text-gray-700 text-lg">
+                      <span className="text-black font-semibold">
+                        category:{" "}
+                      </span>
+                      {data.category}
+                    </span>
+                  </div>
+                  <div className="mt-3 text-gray-600">
+                    {data.description.slice(0, 200)}...
+                  </div>
+                  <div className="text-end mt-2 font-semibold text-gray-700">
+                    {data.date}
+                  </div>
                 </div>
               </div>
             </div>
