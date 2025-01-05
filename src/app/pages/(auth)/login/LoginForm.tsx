@@ -35,29 +35,32 @@ export default function LoginForm({ session }: LoginFormProps) {
       const formData = new FormData(event.currentTarget);
       await login(formData);
 
-    const newRole = Cookies.get("role");
-    const newName = Cookies.get("name");
+      const newRole = Cookies.get("role");
+      const newName = Cookies.get("name");
 
-    setRole(newRole || null);
-    setName(newName || null);
+      setRole(newRole || null);
+      setName(newName || null);
 
-    toast.success("Login successful");
+      toast.success("Login successful");
 
-    switch (newRole) {
-      case "Student":
-        router.push("/pages/student/schedule");
-        break;
-      case "Teacher":
-        router.push("/pages/teacher/profile");
-        break;
-      case "Academic":
-        router.push("/pages/academic");
-        break;
-      case "Admin":
-        router.push("/pages/admin/academicManagement");
-        break;
-      default:
-        toast.error("Unknown role");
+      switch (newRole) {
+        case "Student":
+          router.push("/pages/student/schedule");
+          break;
+        case "Teacher":
+          router.push("/pages/teacher/profile");
+          break;
+        case "Academic":
+          router.push("/pages/academic");
+          break;
+        case "Admin":
+          router.push("/pages/admin/academicManagement");
+          break;
+        default:
+          toast.error("Unknown role");
+      }
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
     }
   };
 

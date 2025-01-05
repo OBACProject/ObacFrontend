@@ -4,6 +4,7 @@ import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
+import { ConvertToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 interface Props {
