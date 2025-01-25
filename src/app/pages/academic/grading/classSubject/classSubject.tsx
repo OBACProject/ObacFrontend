@@ -32,10 +32,11 @@ export function ClassSubjectPage(props: {
   const [classSubjectData, setClassSubjectData] = useState<
     ClassSubjectColumn[]
   >([]);
+  console.log("classSubjectData", classSubjectData);
   const [classSubjectDataFiltered, setClassSubjectDataFiltered] = useState<
     ClassSubjectColumn[]
   >([]);
-
+  console.log("classSubjectDataFiltered", classSubjectDataFiltered);
   //filter data
   const [roomNumbers, setRoomNumbers] = useState<string[]>([]);
   const [periodNumbers, setPeriodNumbers] = useState<string[]>([]);

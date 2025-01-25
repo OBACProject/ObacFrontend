@@ -4,87 +4,108 @@ import {
   TeacherSidebarProps,
   ProfileData,
 } from "@/resource/teachers/sidebarData";
-import { CircleUserRound } from "lucide-react";
-import React from "react";
+import { CircleUserRound, Menu } from "lucide-react";
+import React, { useState } from "react";
 
 export function TeacherSidebar({
   menuItems,
   profileData,
   ...props
 }: TeacherSidebarProps & { profileData: ProfileData }) {
+  const [isPinned, setIsPinned] = useState(false);
+
   return (
-    <header className="flex w-screen top-0 bg-background shrink-0 items-center gap-2 border-b px-4 py-2">
-      <SidebarMenu
-        name={profileData.name}
-        href={profileData.href}
-        id="6410450958"
-        menuItems={menuItems}
-      />
-      <div className="flex justify-center items-center w-full gap-6 h-full">
-        <img
-          src="/images/obac_navbar_logo.png"
-          alt="obac-logo"
-          style={{
-            width: "3.5rem",
-            height: "3.5rem",
-            objectFit: "contain",
-          }}
-        />
-        <span className="text-center text-lg py-2">
-          วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
-        </span>
-      </div>
-    </header>
+    <div className="flex flex-col absolute w-full ">
+      {/* Header */}
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 z-10">
+        <div className="flex h-[64px] items-center">
+          <button
+            onClick={() => setIsPinned(!isPinned)}
+            className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
+          >
+            <Menu className="w-6 h-6" />{" "}
+            {/* Toggles between pinned and collapsed */}
+          </button>
+        </div>
+        {/* Logo */}
+        <div className="flex justify-start ml-8 items-center w-full gap-6 h-full">
+          <img
+            src="/images/obac_navbar_logo.png"
+            alt="obac-logo"
+            style={{
+              width: "3.5rem",
+              height: "3.5rem",
+              objectFit: "contain",
+            }}
+          />
+          <span className="text-center text-lg py-2">
+            วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+          </span>
+        </div>
+        {/* Profile Section in Header */}
+        <div className="flex items-center gap-4 ml-12">
+          <a href={profileData.href} className="flex items-center">
+            <CircleUserRound
+              style={{ width: "2.5rem", height: "2.5rem" }}
+              className="text-[#0C2943]"
+            />
+          </a>
+          <div className="ml-4">
+            <span className="text-[#0C2943] text-sm font-medium block">
+              {profileData.name.length > 25
+                ? `${profileData.name.slice(0, 22)}...`
+                : profileData.name}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Sidebar under the Header */}
+      <SidebarMenu menuItems={menuItems} isPinned={isPinned} />
+    </div>
   );
 }
 
 export function SidebarMenu({
-  name,
-  href,
   menuItems,
+  isPinned,
 }: {
-  name: string;
-  id: string;
-  href: string;
   menuItems: TeacherSidebarProps["menuItems"];
+  isPinned: boolean;
 }) {
-  const truncatedTitle = name.length > 25 ? `${name.slice(0, 22)}...` : name;
-
   return (
-    <div className="border-r-2 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 z-40 ">
-    <div className="flex h-[48px] ">
-      <a href={href} className="flex   items-center justify-start">
-        <button className="flex items-start  ">
-          <CircleUserRound
-            style={{ width: "3.5rem", height: "3rem" }}
-            className="text-[#0C2943]"
-          />
-        </button>
-      </a>
-      <div className="flex flex-col gap-2 mr-4">
-        <span className="text-[#0C2943] text-sm font-medium block opacity-0 pt-4  group-hover:opacity-100 ">
-          {truncatedTitle}
-        </span>
+    <div
+      className={`border-r-2 bg-white flex flex-col z-0 transition-all duration-300 min-h-screen z-50 ${
+        isPinned ? "w-64" : "w-20 group hover:w-64"
+      }`}
+    >
+      {/* Menu Items */}
+      <div className="mt-4">
+        {menuItems.map((item, index) => (
+          <a key={index} href={item.href}>
+            <button className="h-12 flex items-center w-full px-4 group hover:bg-gray-200 rounded-md duration-300">
+              <div className="flex items-center gap-4 w-full">
+                {/* Icon */}
+                <div className="w-10 h-10 flex items-center justify-center">
+                  {item.icon}
+                </div>
+                {/* Title */}
+                {isPinned ? (
+                  // When sidebar is pinned
+                  <span className="ml-2 text-[#0C2943] text-sm opacity-100 transition-opacity duration-300">
+                    {item.title}
+                  </span>
+                ) : (
+                  // When sidebar is collapsed
+                  <span className="ml-2 text-[#0C2943] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {item.title}
+                  </span>
+                )}
+              </div>
+            </button>
+          </a>
+        ))}
       </div>
     </div>
-
-    {/* Menu Items */}
-    <div className="border-t-2 pt-2 mt-4">
-      {menuItems.map((item, index) => (
-        <a key={index} href={item.href}>
-          <button className="h-12  flex items-center w-full px-2 group hover:bg-gray-200 rounded-md  duration-500">
-            <div className="flex items-center gap-4 w-full">
-              <div className="w-10 h-10 flex items-center justify-center">
-                {item.icon}
-              </div>
-              <span className="ml-2 text-[#0C2943] text-sm opacity-0 group-hover:opacity-100 ">
-                {item.title}
-              </span>
-            </div>
-          </button>
-        </a>
-      ))}
-    </div>
-  </div>
   );
 }
