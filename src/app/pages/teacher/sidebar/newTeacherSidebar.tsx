@@ -74,22 +74,26 @@ export function SidebarMenu({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  console.log(isVisible);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Track which index is hovered
+
   return (
     <div className="absolute left-0 top-20">
       <div
-        className={` ${
-          !isVisible ? "shadow-md shadow-gray-300  border-r border-r-gray-200" : ""
-        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200    text-white px-2 py-4`}
+        className={`${
+          !isVisible ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1" : "pr-0"
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
             <a key={index} href={item.href}>
               <button
-                className="h-12 flex items-center w-full px-1 group enabled:hover:bg-gray-200 rounded-md duration-300"
-                disabled={isVisible}
+                className={`${isVisible ? 'rounded-r-none rounded-l-md':'rounded-md'}  h-12 flex items-center w-full px-1 group  duration-300 ${
+                  hoveredIndex === index ? "bg-gray-200 " : ""
+                }`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                <div className="flex items-centergap-4 w-full">
+                <div className="flex items-center gap-4 w-full">
                   <div className="w-10 h-10 flex items-center justify-center">
                     {item.icon}
                   </div>
@@ -99,41 +103,45 @@ export function SidebarMenu({
           ))}
         </div>
       </div>
+
       <motion.div
         animate={isVisible ? { x: 242 } : { x: 60 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className=" w-fit  text-white "
+        className="w-fit text-white"
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className={`absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md`}
+          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}
-            className={` ${
-              isVisible ? "rotate-180 " : ""
+            className={`${
+              isVisible ? "rotate-180" : ""
             } text-white duration-700`}
           />
         </button>
       </motion.div>
+
       <motion.div
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -130 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200  border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
+        className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
             <button
               key={index}
-              onClick={() => {
-                router.push(item.href);
-              }}
-              className="h-12 flex items-center w-full px-4 group hover:bg-gray-200 rounded-md duration-300"
+              onClick={() => router.push(item.href)}
+              className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
+                hoveredIndex === index ? "bg-gray-200" : ""
+              }`}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
             >
               <div className="flex items-center gap-4 w-full">
-                <span className="ml-2 text-[#0C2943] text-sm  overflow-hidden h-fit  duration-300">
-                  <p className="line-clamp-1 h-fit ">{item.title}</p>
+                <span className=" text-[#0C2943] text-[16px] overflow-hidden h-fit duration-300">
+                  <p className="line-clamp-1 h-fit">{item.title}</p>
                 </span>
               </div>
             </button>
