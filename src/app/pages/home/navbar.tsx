@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import { CircleCheck, LogIn, Menu, X } from "lucide-react";
+import { CircleCheck, LogIn, Menu, Shield, X } from "lucide-react";
 import DropDownMobile from "@/app/components/dropdown/dropdown-mobile";
 
 export function Navbar() {
@@ -39,12 +39,10 @@ export function Navbar() {
           <div className="hidden sm:flex justify-end items-center">
             <a
               href="/pages/login"
-              className="px-4 py-2 flex rounded-md bg-blue-900 text-white hover:bg-blue-700"
+              className="px-4 py-2 flex gap-2 rounded-md bg-blue-900 text-white hover:bg-blue-700"
             >
-              Sign In
-              <div className="mt-0.5 ml-2 text-xl">
-                <LogIn />
-              </div>
+              ลงชื่อเข้าใช้
+                <Shield style={{width:"1.5rem" , height:"1.5rem"}} className="text-white"/>
             </a>
           </div>
 
@@ -60,7 +58,7 @@ export function Navbar() {
       <div
         className={`${
           isMenuOpen ? "block" : "hidden"
-        } sm:flex flex-col sm:flex-row bg-blue-950 text-white sm:py-1 px-6 w-full justify-between`}
+        } sm:flex flex-col sm:flex-row bg-blue-950 items-center h-fit text-white sm:py-1 px-6 w-full justify-between`}
       >
         <div className="flex flex-col sm:flex-row w-full items-center ">
           {isMenuOpen ? (
@@ -71,15 +69,13 @@ export function Navbar() {
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-end items-start sm:px-2 sm:py-1 m-2 w-1/6">
+        <div className="flex flex-col sm:flex-row justify-end items-start sm:px-2 sm:py-1 gap-2 lg:w-1/6 w-fit">
           <a
-            href="/pages/login"
-            className="flex gap-2 items-center justify-center sm:py-2 px-6 bg-blue-950 border-white border-2 rounded-full text-white text-base hover:bg-blue-700"
+            href="/pages/register"
+            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-blue-950 border-white border-2 rounded-full text-white text-base hover:bg-blue-700"
           >
-            สมัครออนไลน์
-            <div>
-              <CircleCheck />
-            </div>
+            <p className="line-clamp-1">สมัครออนไลน์</p>
+              <CircleCheck style={{width:"1.5rem",height:"1.5rem"}} />
           </a>
         </div>
       </div>
