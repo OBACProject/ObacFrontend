@@ -20,7 +20,7 @@ export default function RootLayout({
           menuItems={TeacherSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20 lg:pl-16">{children}</div>
+        <div className="pt-20 lg:pl-10">{children}</div>
       </body>
     </html>
   );

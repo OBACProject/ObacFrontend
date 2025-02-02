@@ -1,6 +1,10 @@
-import SubjectMainForm from "./Main";
+import Main from "./Main";
 
-export default function Page({ params }: { params: { subjectId_scheduleId?: string } }) {
+export default function Page({
+  params,
+}: {
+  params: { subjectId_scheduleId?: string };
+}) {
   console.log("Params received:", params);
 
   if (!params?.subjectId_scheduleId) {
@@ -13,7 +17,7 @@ export default function Page({ params }: { params: { subjectId_scheduleId?: stri
   const subjectIdInt = parseInt(subjectId, 10);
   return (
     <div>
-      <SubjectMainForm subjectId={subjectIdInt} scheduleId={scheduleIdInt} />
+      <Main subjectId={subjectIdInt} scheduleId={scheduleIdInt} />
     </div>
   );
 }

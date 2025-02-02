@@ -41,7 +41,7 @@ const getSubjectBySubjectId = async (subjectId: number) => {
   }
 };
 
-export default function SubjectMainForm({ subjectId, scheduleId }: Props) {
+export default function Main({ subjectId, scheduleId }: Props) {
   const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
