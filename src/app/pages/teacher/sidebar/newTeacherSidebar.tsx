@@ -1,0 +1,148 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronRight, CircleUserRound, Menu } from "lucide-react";
+import {
+  ProfileData,
+  TeacherSidebarProps,
+} from "@/resource/teachers/sidebarData";
+import { useRouter } from "next/navigation";
+
+export default function NewTeacherSidebar({
+  menuItems,
+  profileData,
+  ...props
+}: TeacherSidebarProps & { profileData: ProfileData }) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <div className="fixed flex flex-col  w-full">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 z-20">
+        <div className="flex h-[64px] items-center">
+          <button
+            onClick={() => setIsVisible(!isVisible)}
+            className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+        <div className="flex justify-start ml-8 items-center w-full gap-6 h-full">
+          <img
+            src="/images/obac_navbar_logo.png"
+            alt="obac-logo"
+            style={{
+              width: "3.5rem",
+              height: "3.5rem",
+              objectFit: "contain",
+            }}
+          />
+          <span className="text-center text-lg py-2">
+            วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+          </span>
+        </div>
+        <div className="flex items-center gap-4 ml-12">
+          <a href={profileData.href} className="flex items-center">
+            <CircleUserRound
+              style={{ width: "2.5rem", height: "2.5rem" }}
+              className="text-[#0C2943]"
+            />
+          </a>
+          <div className="ml-4">
+            <span className="text-[#0C2943] text-sm font-medium block">
+              {profileData.name.length > 25
+                ? `${profileData.name.slice(0, 22)}...`
+                : profileData.name}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <SidebarMenu
+        menuItems={menuItems}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+      />
+    </div>
+  );
+}
+
+export function SidebarMenu({
+  menuItems,
+  isVisible,
+  setIsVisible,
+}: {
+  menuItems: TeacherSidebarProps["menuItems"];
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const router = useRouter();
+  console.log(isVisible);
+  return (
+    <div className="relative z-20">
+      <div
+        className={` ${
+          !isVisible ? "shadow-md shadow-gray-300 border-r border-gray-200" : ""
+        } fixed left-0 h-full w-16 z-40 min-h-screen bg-white   text-white px-2 py-4`}
+      >
+        <div className="grid gap-2">
+          {menuItems.map((item, index) => (
+            <a key={index} href={item.href}>
+              <button
+                className="h-12 flex items-center w-full px-1 group enabled:hover:bg-gray-200 rounded-md duration-300"
+                disabled={isVisible}
+              >
+                <div className="flex items-centergap-4 w-full">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                </div>
+              </button>
+            </a>
+          ))}
+        </div>
+      </div>
+      <motion.div
+        animate={isVisible ? { x: 242 } : { x: 60 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className=" w-fit  text-white "
+      >
+        <button
+          onClick={() => setIsVisible(!isVisible)}
+          className={`absolute py-5 px-0 translate-y-1  bg-sky-600/30 backdrop-blur-md text-white rounded-r-md`}
+        >
+          <ChevronRight
+            style={{ width: "2.0rem", height: "2.0rem" }}
+            className={` ${
+              isVisible ? "rotate-180 " : ""
+            } text-white duration-700`}
+          />
+        </button>
+      </motion.div>
+      <motion.div
+        initial={{ x: -232, opacity: 1 }}
+        animate={isVisible ? { x: 50 } : { x: -130 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="h-full w-48 z-40 min-h-screen bg-white border-r border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
+      >
+        <div className="grid gap-2">
+          {menuItems.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                router.push(item.href);
+              }}
+              className="h-12 flex items-center w-full px-4 group hover:bg-gray-200 rounded-md duration-300"
+            >
+              <div className="flex items-center gap-4 w-full">
+                <span className="ml-2 text-[#0C2943] text-sm  overflow-hidden h-fit  duration-300">
+                  <p className="line-clamp-1 h-fit ">{item.title}</p>
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}

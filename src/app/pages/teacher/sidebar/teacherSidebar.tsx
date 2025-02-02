@@ -75,7 +75,7 @@ export function SidebarMenu({
 }) {
   return (
     <div
-      className={`border-r-2 bg-white flex flex-col z-0 transition-all duration-300 min-h-screen z-50 ${
+      className={`border-r-2 bg-white flex flex-col  transition-all duration-300 min-h-screen z-50 ${
         isPinned ? "w-64" : "w-20 group hover:w-64"
       }`}
     >
@@ -92,8 +92,8 @@ export function SidebarMenu({
                 {/* Title */}
                 {isPinned ? (
                   // When sidebar is pinned
-                  <span className="ml-2 text-[#0C2943] text-sm opacity-100 transition-opacity duration-300">
-                    {item.title}
+                  <span className="ml-2 text-[#0C2943] text-sm opacity-100 overflow-hidden h-fit transition-opacity duration-300">
+                    <p className="line-clamp-1 h-fit ">{item.title}</p>
                   </span>
                 ) : (
                   // When sidebar is collapsed

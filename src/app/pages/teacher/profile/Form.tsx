@@ -32,9 +32,9 @@ export default function ProfileForm() {
         </div>
         <div className="border-[1px] bg-white duration-1000 shadow-md w-fit shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm hover:bg-[#e4f1f8]">
           <div className="flex ">
-            <div className="relative overflow-hidden">
+            <div className=" overflow-hidden">
                 <img
-              className="hover:scale-125 duration-700 justify-start border-[1px] border-gray-400 rounded-md"
+              className="hover:scale-125  duration-700 justify-start border-[1px] border-gray-400 rounded-md"
               src={teachers?.teacherProfilePicture || "/asset/user.jpg"}
               width="150"
             />
@@ -128,6 +128,7 @@ export default function ProfileForm() {
           </div>
         </div>
       </div>
+      <div className="py-40"></div>
     </div>
   );
 }
