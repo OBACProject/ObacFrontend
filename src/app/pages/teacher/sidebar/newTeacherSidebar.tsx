@@ -8,8 +8,9 @@ import {
   TeacherSidebarProps,
 } from "@/resource/teachers/sidebarData";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function NewTeacherSidebar({
+export default function TeacherSidebar({
   menuItems,
   profileData,
   ...props
@@ -17,8 +18,8 @@ export default function NewTeacherSidebar({
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div className="fixed flex flex-col  w-full">
-      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 z-20">
+    <div className="fixed flex flex-col z-20  w-full">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 ">
         <div className="flex h-[64px] items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
@@ -41,20 +42,16 @@ export default function NewTeacherSidebar({
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
           </span>
         </div>
-        <div className="flex items-center gap-4 ml-12">
-          <a href={profileData.href} className="flex items-center">
+        <div className="flex items-center gap-8">
+          <Link href={profileData.href} className="flex items-center">
             <CircleUserRound
               style={{ width: "2.5rem", height: "2.5rem" }}
               className="text-[#0C2943]"
             />
-          </a>
-          <div className="ml-4">
-            <span className="text-[#0C2943] text-sm font-medium block">
-              {profileData.name.length > 25
-                ? `${profileData.name.slice(0, 22)}...`
-                : profileData.name}
-            </span>
-          </div>
+          </Link>
+          <p className="text-[#0C2943] line-clamp-2 h-fit text-sm font-medium block">
+            {profileData.name}
+          </p>
         </div>
       </header>
 
@@ -79,11 +76,11 @@ export function SidebarMenu({
   const router = useRouter();
   console.log(isVisible);
   return (
-    <div className="relative z-20">
+    <div className="absolute left-0 top-20">
       <div
         className={` ${
-          !isVisible ? "shadow-md shadow-gray-300 border-r border-gray-200" : ""
-        } fixed left-0 h-full w-16 z-40 min-h-screen bg-white   text-white px-2 py-4`}
+          !isVisible ? "shadow-md shadow-gray-300  border-r border-r-gray-200" : ""
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200    text-white px-2 py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
@@ -109,7 +106,7 @@ export function SidebarMenu({
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className={`absolute py-5 px-0 translate-y-1  bg-sky-600/30 backdrop-blur-md text-white rounded-r-md`}
+          className={`absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md`}
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}
@@ -123,7 +120,7 @@ export function SidebarMenu({
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -130 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-48 z-40 min-h-screen bg-white border-r border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
+        className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200  border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (

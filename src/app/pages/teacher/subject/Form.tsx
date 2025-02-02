@@ -6,7 +6,6 @@ import { TeacherEnrollment } from "@/dto/teacherDto";
 import { fetchGetTeacherEnrollmentsByTeacherId } from "@/api/teacher/teacherAPI";
 import Link from "next/link";
 
-
 const getSubjectData = async (
   teacherId: number,
   term: number,
@@ -20,8 +19,7 @@ const getSubjectData = async (
   }
 };
 
-export default function SubjectForm() {
-
+export default function Form() {
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   useEffect(() => {
     getSubjectData(2, 1, 2024).then((item) => {
@@ -31,12 +29,14 @@ export default function SubjectForm() {
 
   return (
     <>
-      <div className="text-xl px-10 py-5">
+      <div className="text-xl px-10 py-4">
         <div className="border-2 py-2 px-5 grid place-items-center border-gray-200 border-dashed">
           {subjectCards && subjectCards.length > 0 ? (
             <div className="lg:w-9/12 sm:w-full md:w-full">
               {subjectCards.map((items) => (
-                <Link href={`/pages/teacher/subject/${items.subjectId}_${items.scheduleSubjectId}`} >
+                <Link
+                  href={`/pages/teacher/subject/${items.subjectId}_${items.scheduleSubjectId}`}
+                >
                   <CardSubject cardSubjectData={items} />
                 </Link>
               ))}
