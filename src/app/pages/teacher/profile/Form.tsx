@@ -30,7 +30,7 @@ export default function ProfileForm() {
         <div className=" lg:text-2xl text-xl px-10 w-fit bg-gray-700 shadow-sm text-white py-2 rounded-3xl  font-semibold ">
           ข้อมูลอาจารย์
         </div>
-        <div className="border-[1px] bg-white duration-1000 shadow-md w-fit shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm hover:bg-[#e4f1f8]">
+        <div className="border-[1px] bg-white duration-1000 shadow-md w-fit shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm  hover:bg-[#e4f1f8]">
           <div className="flex ">
             <div className=" overflow-hidden">
               <img
@@ -40,12 +40,12 @@ export default function ProfileForm() {
               />
             </div>
 
-            <div className="px-5">
+            <div className="px-5 grid lg:gap-3 md:gap-2 gap-4">
               <div className="flex px-4 rounded-md py-1 w-fit bg-[#e4f1f8]">
                 <div className="text-xl font-semibold">เลขประจำตัว</div>
                 <div className="ml-2">{teachers?.teacherCode}</div>
               </div>
-              <div className=" flex my-2">
+              <div className=" flex">
                 <div className="text-xl pl-4 font-semibold ">
                   {/* {teachers?.teacherGender || "คุณ"} */}
                   นาย

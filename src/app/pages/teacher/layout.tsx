@@ -1,4 +1,5 @@
 import { TeacherSideBarData } from "@/resource/teachers/sidebarData";
+
 import "@app/styles/globals.css";
 import { ProfileData } from "@/resource/teachers/sidebarData";
 import NewTeacherSidebar from "./sidebar/newTeacherSidebar";

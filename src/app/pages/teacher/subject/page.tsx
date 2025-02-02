@@ -1,12 +1,15 @@
 import React from "react";
-import SubjectForm from "./Form";
-import FilterBar from "./menuBar";
+import Form from "./Form";
 
 export default function page() {
   return (
-    <div className="text-xl pl-20">
-      <FilterBar />
-      <SubjectForm />
+    <div className="py-4">
+      <div className="flex justify-center">
+        <p className="py-2 bg-gray-700 rounded-3xl w-fit px-10 text-xl text-white ">
+          รายวิชาที่สอน
+        </p>
+      </div>
+      <Form />
     </div>
   );
 }

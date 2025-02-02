@@ -18,8 +18,8 @@ export default function TeacherSidebar({
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div className="fixed flex flex-col  w-full">
-      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 z-20">
+    <div className="fixed flex flex-col z-20  w-full">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 ">
         <div className="flex h-[64px] items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
@@ -76,11 +76,11 @@ export function SidebarMenu({
   const router = useRouter();
   console.log(isVisible);
   return (
-    <div className="relative z-20">
+    <div className="absolute left-0 top-20">
       <div
         className={` ${
-          !isVisible ? "shadow-md shadow-gray-300 border-r border-gray-200" : ""
-        } fixed left-0 h-full w-16 z-40 min-h-screen bg-white   text-white px-2 py-4`}
+          !isVisible ? "shadow-md shadow-gray-300  border-r border-r-gray-200" : ""
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200    text-white px-2 py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
@@ -120,7 +120,7 @@ export function SidebarMenu({
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -130 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-48 z-40 min-h-screen bg-white border-r border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
+        className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200  border-gray-200 shadow-md shadow-gray-200  text-white px-2 py-4"
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
