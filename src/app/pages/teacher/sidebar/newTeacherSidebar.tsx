@@ -8,8 +8,9 @@ import {
   TeacherSidebarProps,
 } from "@/resource/teachers/sidebarData";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function NewTeacherSidebar({
+export default function TeacherSidebar({
   menuItems,
   profileData,
   ...props
@@ -41,20 +42,16 @@ export default function NewTeacherSidebar({
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
           </span>
         </div>
-        <div className="flex items-center gap-4 ml-12">
-          <a href={profileData.href} className="flex items-center">
+        <div className="flex items-center gap-8">
+          <Link href={profileData.href} className="flex items-center">
             <CircleUserRound
               style={{ width: "2.5rem", height: "2.5rem" }}
               className="text-[#0C2943]"
             />
-          </a>
-          <div className="ml-4">
-            <span className="text-[#0C2943] text-sm font-medium block">
-              {profileData.name.length > 25
-                ? `${profileData.name.slice(0, 22)}...`
-                : profileData.name}
-            </span>
-          </div>
+          </Link>
+          <p className="text-[#0C2943] line-clamp-2 h-fit text-sm font-medium block">
+            {profileData.name}
+          </p>
         </div>
       </header>
 
@@ -109,7 +106,7 @@ export function SidebarMenu({
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className={`absolute py-5 px-0 translate-y-1  bg-sky-600/30 backdrop-blur-md text-white rounded-r-md`}
+          className={`absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md`}
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}

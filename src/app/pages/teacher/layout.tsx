@@ -1,5 +1,4 @@
 import { TeacherSideBarData } from "@/resource/teachers/sidebarData";
-import { TeacherSidebar } from "./sidebar/teacherSidebar";
 import "@app/styles/globals.css";
 import { ProfileData } from "@/resource/teachers/sidebarData";
 import NewTeacherSidebar from "./sidebar/newTeacherSidebar";
@@ -16,15 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <TeacherSidebar
-          menuItems={TeacherSideBarData.menuItems}
-          profileData={ProfileData}
-        /> */}
         <NewTeacherSidebar
           menuItems={TeacherSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20">{children}</div>
+        <div className="pt-20 lg:pl-16">{children}</div>
       </body>
     </html>
   );
