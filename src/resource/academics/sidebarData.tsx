@@ -90,7 +90,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       href: "/pages/academic/student-failed",
       icon: (
         <OctagonX
-          style={{ width: "2.2rem", height: "2.5rem" }}
+          style={{ width: "2.0rem", height: "2.0rem" }}
           className="text-[#0C2943]"
         />
       ),
@@ -101,7 +101,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       href: "/pages/academic/register-student",
       icon: (
         <UsersRound
-          style={{ width: "2.2rem", height: "2.5rem" }}
+          style={{ width: "2.0rem", height: "2.0rem" }}
           className="text-[#0C2943]"
         />
       ),

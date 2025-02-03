@@ -41,15 +41,13 @@ export default function Form() {
     setIsPresentAddressInfoVisible((prev) => !prev);
   };
   return (
-    <header className="mx-4 sm:mx-10 md:mx-20 lg:mx-44 px-16 lg:px-4 py-8">
-      <div className="px-5 py-4 text-lg sm:text-xl ">
+    <header className="w-full lg:px-40 px-5  py-4">
+      <div className="px-5 text-lg sm:text-xl ">
         <div className="px-5 flex gap-2 items-center">
           <div className="text-xl  border-[1px] border-gray-300  text-center w-fit px-10 py-1 rounded-md text-white bg-blue-950">
             ประวัตินิสิต
           </div>
-          <div className="ml-4 text-lg">
-            สถานะ : 
-          </div>
+          <div className="ml-4 text-lg">สถานะ :</div>
           <div className="px-6 py-1 text-sm bg-green-100  bg-opacity-50 text-green-500 rounded-md">
             กำลังศึกษา
           </div>
@@ -62,16 +60,18 @@ export default function Form() {
             {/* icon */}
             <div className="flex justify-start items-center  w-full border-[1px] border-gray-200  px-10 gap-10 py-4 shadow-md shadow-gray-200 bg-gradient-to-r from-sky-100 via-gray-100 to-sky-100 rounded-md">
               <div className="flex justify-start items-center w-fit">
-                <button className="flex items-start gap-6 ">
-                  <CircleUserRound
-                    style={{ width: "5rem", height: "5rem" }}
-                    className="text-blue-950 "
+                <div className=" overflow-hidden ">
+                  <img
+                    className="hover:scale-125 w-20 h-20 rounded-full  duration-700 justify-start object-cover"
+                    src={"/asset/user.jpg"}
                   />
-                </button>
+                </div>
               </div>
               {/* Info Student */}
               <div className="flex flex-col gap-2 p-2 w-8/12 font-semibold">
-                <div className="text-xl text-gray-700">{exampleStudentData.generalInfo.studentID}</div>
+                <div className="text-xl text-gray-700">
+                  {exampleStudentData.generalInfo.studentID}
+                </div>
                 <div>
                   {exampleStudentData.generalInfo.titleName}{" "}
                   {exampleStudentData.generalInfo.name}
@@ -109,10 +109,7 @@ export default function Form() {
               </TabsList>
 
               <div className="w-full flex  items-start z-10 border-l-2 border-slate-200 ">
-                <TabsContent
-                  value="profile"
-                  className="flex-grow   text-sm"
-                >
+                <TabsContent value="profile" className="flex-grow   text-sm">
                   <div className="">
                     <h1
                       className="py-3  px-5 font-bold  cursor-pointer text-base flex justify-between "

@@ -2,8 +2,8 @@ import Form from "./Form";
 
 export default function page() {
   return (
-    <div>
-      <Form />
+    <div className="lg:flex lg:justify-center w-full"> 
+        <Form />
     </div>
   );
 }

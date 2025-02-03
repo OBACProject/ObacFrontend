@@ -21,14 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <SidebarProvider> */}
-        {/* Pass StudentSidebarData to StudentSidebar */}
         <StudentSidebar
           menuItems={StudentSidebarData.menuItems}
           profileData={ProfileData}
         />
-        {children}
-        {/* </SidebarProvider> */}
+        <div className="pt-20 lg:pl-10">{children}</div>
       </body>
     </html>
   );

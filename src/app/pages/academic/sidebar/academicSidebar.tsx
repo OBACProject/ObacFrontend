@@ -4,85 +4,149 @@ import {
   AcademicSidebarProps,
   ProfileData,
 } from "@/resource/academics/sidebarData";
-import { CircleUserRound } from "lucide-react";
-import React from "react";
+import { motion } from "framer-motion";
+import { ChevronRight, CircleUserRound, Menu } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 export function AcademicSidebar({
   menuItems,
   profileData,
   ...props
 }: AcademicSidebarProps & { profileData: ProfileData }) {
+  const [isVisible, setIsVisible] = useState(false);
   return (
-    <header className="flex w-screen top-0 bg-background shrink-0 items-center gap-2 border-b px-4 py-2">
+    <div className="fixed flex flex-col z-20  w-full">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 ">
+        <div className="flex h-[64px] items-center">
+          <button
+            onClick={() => setIsVisible(!isVisible)}
+            className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+        <div className=" flex justify-start ml-8 items-center w-full gap-6 h-full">
+          <img
+            src="/images/obac_navbar_logo.png"
+            alt="obac-logo"
+            style={{
+              width: "3.5rem",
+              height: "3.5rem",
+              objectFit: "contain",
+            }}
+          />
+          <span className="text-center text-lg py-2">
+            วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+          </span>
+        </div>
+        <div className="flex items-center gap-4">
+          <Link href={profileData.href} className="flex items-center">
+            <CircleUserRound
+              style={{ width: "2.5rem", height: "2.5rem" }}
+              className="text-[#0C2943]"
+            />
+          </Link>
+          <p className="text-[#0C2943] line-clamp-1 h-fit text-sm font-medium block">
+            {profileData.name}
+          </p>
+        </div>
+      </header>
+
       <SidebarMenu
-        name={profileData.name}
-        href={profileData.href}
-        id="6410450958"
         menuItems={menuItems}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
       />
-      <div className="flex justify-center items-center w-full gap-6 h-full">
-        <img
-          src="/images/obac_navbar_logo.png"
-          alt="obac-logo"
-          style={{
-            width: "3.5rem",
-            height: "3.5rem",
-          }}
-        />
-        <span className="text-center text-lg py-2">
-          วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
-        </span>
-      </div>
-    </header>
+    </div>
   );
 }
 
 export function SidebarMenu({
-  name,
-  href,
   menuItems,
+  isVisible,
+  setIsVisible,
 }: {
-  name: string;
-  id: string;
-  href: string;
   menuItems: AcademicSidebarProps["menuItems"];
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const truncatedTitle = name.length > 25 ? `${name.slice(0, 22)}...` : name;
+  const router = useRouter();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Track which index is hovered
+
   return (
-    <div className="border-r-2 pt-2 bg-white fixed top-0 left-0 flex flex-col h-screen p-1 transition-transform group hover:w-64 w-20 z-40 ">
-      <div className="flex h-[48px] ">
-        <a href={href} className="flex   items-center justify-start">
-          <button className="flex items-start  ">
-            <CircleUserRound
-              style={{ width: "3.5rem", height: "3rem" }}
-              className="text-[#0C2943]"
-            />
-          </button>
-        </a>
-        <div className="flex flex-col gap-2 mr-4">
-          <span className="text-[#0C2943] text-sm font-medium block opacity-0 pt-4  group-hover:opacity-100 ">
-            {truncatedTitle}
-          </span>
+    <div className="absolute left-0 top-20">
+      <div
+        className={`${
+          !isVisible ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1" : "pr-0"
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
+      >
+        <div className="grid gap-2">
+          {menuItems.map((item, index) => (
+            <a key={index} href={item.href}>
+              <button
+                className={`${isVisible ? 'rounded-r-none rounded-l-md':'rounded-md'}  h-12 flex items-center w-full px-1 group  duration-300 ${
+                  hoveredIndex === index ? "bg-gray-200 " : ""
+                }`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <div className="flex items-center gap-4 w-full">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    {item.icon}
+                  </div>
+                </div>
+              </button>
+            </a>
+          ))}
         </div>
       </div>
 
-      {/* Menu Items */}
-      <div className="border-t-2 items-center pt-2 mt-4">
-        {menuItems.map((item, index) => (
-          <a key={index} href={item.href}>
-            <button className="h-12  flex items-center  w-full px-3 group hover:bg-gray-200 rounded-md  duration-500">
-              <div className="flex items-center gap-4 w-full">
-                <div className=" h-10 flex items-center justify-center">
-                  {item.icon}
-                </div>
-                <span className="text-[#0C2943] text-sm opacity-0 group-hover:opacity-100 ">
-                  {item.title}
-                </span>
+      <motion.div
+        animate={isVisible ? { x: 270 } : { x: 60 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-fit text-white"
+      >
+        <button
+          onClick={() => setIsVisible(!isVisible)}
+          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
+        >
+          <ChevronRight
+            style={{ width: "2.0rem", height: "2.0rem" }}
+            className={`${
+              isVisible ? "rotate-180" : ""
+            } text-white duration-700`}
+          />
+        </button>
+      </motion.div>
+
+      <motion.div
+        initial={{ x: -232, opacity: 1 }}
+        animate={isVisible ? { x: 50 } : { x: -160 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="h-full w-56 z-40 min-h-screen border  bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
+      >
+        <div className="grid gap-2">
+          {menuItems.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => router.push(item.href)}
+              className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
+                hoveredIndex === index ? "bg-gray-200" : ""
+              }`}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <div className="flex   items-center gap-4 w-full">
+                  <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden  duration-300">{item.title}</p>
               </div>
             </button>
-          </a>
-        ))}
-      </div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 }
+
+
