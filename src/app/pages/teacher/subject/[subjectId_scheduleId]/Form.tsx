@@ -201,6 +201,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                   <div className="flex justify-center px-2 py-1">
                     <Combobox
                       buttonLabel="เกรด"
+                      disabled={!onEdit}
                       options={gradeValue.map((item) => ({
                         label: item,
                         value: item,

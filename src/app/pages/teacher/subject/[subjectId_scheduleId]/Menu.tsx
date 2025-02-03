@@ -7,6 +7,7 @@ import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { ConvertToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import GenerateMockData from "@/resource/teachers/exceldata";
 interface Props {
   grads?: GetGradBySubjectId[];
   schedules?: GetScheduleBysubjectId;
@@ -24,7 +25,7 @@ export default function MenuBar({
   const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjectData, setSubject] = useState<GetSubjectBySubjectId>();
   const [onEdit, setOnEdit] = useState<boolean>(false);
-
+  const convertGrad = GenerateMockData()
   useEffect(() => {
     setGradData(grads ?? []);
   }, grads);
@@ -98,14 +99,14 @@ export default function MenuBar({
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={async () => {
-                // ConvertToExcel(
-                //   // convertGrad,
-                //   String(scheduleData?.term ?? ""),
-                //   String(scheduleData?.year ?? ""),
-                //   subjectData?.subjectCode || "",
-                //   subjectData?.subjectName || "",
-                //   student_group_list[0] || ""
-                // );
+                ConvertToExcel(
+                  convertGrad,
+                  String(scheduleData?.term ?? ""),
+                  String(scheduleData?.year ?? ""),
+                  subjectData?.subjectCode || "",
+                  subjectData?.subjectName || "",
+                  student_group_list[0] || ""
+                );
               }}
             >
               <p className="line-clamp-1">ดาวน์โหลดใบคะแนนนักเรียน excel</p>
