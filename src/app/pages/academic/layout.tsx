@@ -22,7 +22,7 @@ export default function RootLayout({
           menuItems={AcademicSideBarData.menuItems}
           profileData={ProfileData}
         />
-        {children}
+        <div className="pt-20 lg:pl-10">{children}</div>
       </body>
     </html>
   );

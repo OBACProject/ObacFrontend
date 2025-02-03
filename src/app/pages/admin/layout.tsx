@@ -29,8 +29,7 @@ export default function RootLayout({
           menuItems={AdminSidebarData.menuItems}
           profileData={ProfileData}
         />
-        {children}
-        {/* </SidebarProvider> */}
+        <div className="pt-20 lg:pl-10">{children}</div>
       </body>
     </html>
   );
