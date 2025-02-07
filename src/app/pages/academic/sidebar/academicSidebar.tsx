@@ -5,17 +5,38 @@ import {
   ProfileData,
 } from "@/resource/academics/sidebarData";
 import { motion } from "framer-motion";
-import { ChevronRight, CircleUserRound, Menu } from "lucide-react";
+import { ChevronRight, CircleUserRound, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { logout } from "@/lib/authentication";
 
 export function AcademicSidebar({
   menuItems,
   profileData,
   ...props
 }: AcademicSidebarProps & { profileData: ProfileData }) {
+  const router = useRouter();
+
   const [isVisible, setIsVisible] = useState(false);
+  const [userName, setUserName] = useState(profileData.name);
+  useEffect(() => {
+    const cookieName = Cookies.get("name");
+    if (cookieName) {
+      setUserName(cookieName);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUserName("");
+      router.push("/pages/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <div className="fixed flex flex-col z-20  w-full">
       <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 ">
@@ -43,14 +64,17 @@ export function AcademicSidebar({
         </div>
         <div className="flex items-center gap-4">
           <Link href={profileData.href} className="flex items-center">
-            <CircleUserRound
-              style={{ width: "2.5rem", height: "2.5rem" }}
-              className="text-[#0C2943]"
-            />
+            <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
           </Link>
-          <p className="text-[#0C2943] line-clamp-1 h-fit text-sm font-medium block">
-            {profileData.name}
+          <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
+            {userName}
           </p>
+          <button
+            onClick={handleLogout}
+            className="text-red-500 hover:text-red-700"
+          >
+            <LogOut className="w-6 h-6" />
+          </button>
         </div>
       </header>
 
@@ -79,14 +103,18 @@ export function SidebarMenu({
     <div className="absolute left-0 top-20">
       <div
         className={`${
-          !isVisible ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1" : "pr-0"
+          !isVisible
+            ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1"
+            : "pr-0"
         } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
             <a key={index} href={item.href}>
               <button
-                className={`${isVisible ? 'rounded-r-none rounded-l-md':'rounded-md'}  h-12 flex items-center w-full px-1 group  duration-300 ${
+                className={`${
+                  isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
+                }  h-12 flex items-center w-full px-1 group  duration-300 ${
                   hoveredIndex === index ? "bg-gray-200 " : ""
                 }`}
                 onMouseEnter={() => setHoveredIndex(index)}
@@ -139,7 +167,9 @@ export function SidebarMenu({
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <div className="flex   items-center gap-4 w-full">
-                  <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden  duration-300">{item.title}</p>
+                <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden  duration-300">
+                  {item.title}
+                </p>
               </div>
             </button>
           ))}
@@ -148,5 +178,3 @@ export function SidebarMenu({
     </div>
   );
 }
-
-
