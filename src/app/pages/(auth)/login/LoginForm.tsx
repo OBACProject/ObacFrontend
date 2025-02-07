@@ -38,6 +38,11 @@ export default function LoginForm({ session }: LoginFormProps) {
       const newRole = Cookies.get("role");
       const newName = Cookies.get("name");
 
+      if (newRole && newName) {
+        Cookies.set("role", newRole, { expires: 1 });
+        Cookies.set("name", newName, { expires: 1 });
+      }
+
       setRole(newRole || null);
       setName(newName || null);
 
