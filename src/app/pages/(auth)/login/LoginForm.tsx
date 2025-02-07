@@ -38,9 +38,8 @@ export default function LoginForm({ session }: LoginFormProps) {
       const newRole = Cookies.get("role");
       const newName = Cookies.get("name");
 
-      if (newRole && newName) {
-        Cookies.set("role", newRole, { expires: 1 });
-        Cookies.set("name", newName, { expires: 1 });
+      if (!newRole || !newName) {
+        throw new Error("Invalid token: Missing role or name.");
       }
 
       setRole(newRole || null);
@@ -74,8 +73,6 @@ export default function LoginForm({ session }: LoginFormProps) {
 
     Cookies.remove("role");
     Cookies.remove("name");
-    setRole(null);
-    setName(null);
 
     toast.info("Logout successful");
   };
