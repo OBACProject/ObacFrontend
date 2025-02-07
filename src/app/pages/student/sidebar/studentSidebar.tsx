@@ -67,7 +67,7 @@ export function StudentSidebar({
           <Link href={profileData.href} className="flex items-center">
             <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
           </Link>
-          <p className="text-[#0C2943] text-sm font-medium truncate w-24">
+          <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
             {userName}
           </p>
           <button
