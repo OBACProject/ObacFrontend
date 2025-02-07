@@ -6,6 +6,8 @@ import {
   FileSpreadsheet,
   OctagonX,
   UsersRound,
+
+  UserRound,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -29,6 +31,17 @@ export const ProfileData: ProfileData = {
 
 export const AcademicSideBarData: AcademicSidebarProps = {
   menuItems: [
+    {
+      title: "ข้อมูลผู้ใช้",
+      tooltip: "schedule",
+      href: "/pages/academic",
+      icon: (
+        <UserRound
+          style={{ width: "2.0rem", height: "2.5rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
     {
       title: "จัดตารางเรียน",
       tooltip: "schedule",

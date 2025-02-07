@@ -8,6 +8,7 @@ import { ConvertToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import GenerateMockData from "@/resource/teachers/exceldata";
+import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 interface Props {
   grads?: GetGradBySubjectId[];
   schedules?: GetScheduleBysubjectId;
@@ -71,11 +72,11 @@ export default function MenuBar({
               disabled={!student_group}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GenSubjectScore({
-                  grads: grads,
-                  studentGroup: student_group,
-                  subjectId: subjectData?.subjectCode,
-                  subjectName: subjectData?.subjectName,
+                GradPerTerms({
+                  grads: 10,
+                  // studentGroup: student_group,
+                  // subjectId: subjectData?.subjectCode,
+                  // subjectName: subjectData?.subjectName,
                 });
               }}
             >

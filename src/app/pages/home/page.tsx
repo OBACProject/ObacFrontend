@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { cardData } from "@/resource/fetchData/cardContent";
 import CLShomepage from "@/app/components/cls/cls-homepage";
 import CardVertical from "@/app/components/card/card-vertical";
@@ -6,30 +6,89 @@ import CardHorizontal from "@/app/components/card/card-horizontal";
 
 import StickerFacebook from "@/app/components/Effect/StickerFacebook";
 import StickerYoutube from "@/app/components/Effect/StickerYoutube";
+import FadeInOnScroll from "@/app/components/Effect/FadInScroll";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-white">
+      <StickerFacebook />
+      <StickerYoutube />
       <CLShomepage />
-      <div className="flex w-full bg-white ">
-        <div className="w-full items-center  flex flex-col  px-4 py-4">
-          <StickerFacebook />
-          <StickerYoutube />
-          <h1 className="text-5xl animate-fadeIn text-blue-950 my-5  font-bold px-5 py-1">
-            News And Events
+      <div className="w-full items-center text-center px-4 py-4">
+        <FadeInOnScroll>
+          <h1 className="lg:text-5xl text-3xl text-blue-950 my-5  font-extrabold px-5 py-1">
+            Ekkawit Business Administration Vocational College (OBAC)
           </h1>
-          <div className="animate-fadeIn grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
-            <CardVertical cardData={cardData} />
-          </div>
-          <div className="w-full my-5 flex justify-center ">
+        </FadeInOnScroll>
+      </div>
+      <div className="w-full">
+        <FadeInOnScroll>
+          <div className="relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[400px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
             <img
-              className="h-40 w-full lg:w-[90%] lg:h-auto"
-              src="https://www.obac.ac.th/mainsite/images/header/harder2018.jpg"
+              className="absolute lg:w-[100%] lg:h-[400px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
+              src="/images/poster.jpg"
             />
+            <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
           </div>
-          <div className="grid place-items-start mx-10 lg:px-20 md:px-10 sm:px-10 overflow-hidden lg:w-[95%]">
-            {/* <CardHorizontal cardData={cardData} /> */}
-            <CardHorizontal cardData={cardData} />
+        </FadeInOnScroll>
+      </div>
+
+      <div className="flex w-full bg-white ">
+        <div className="w-full items-center text-center px-4 py-4">
+          <FadeInOnScroll>
+            <h1 className="text-5xl text-blue-950 my-5  font-extrabold px-5 py-1">
+              News And Events
+            </h1>
+          </FadeInOnScroll>
+        </div>
+      </div>
+      <FadeInOnScroll>
+        <div className="grid lg:grid-cols-3 gap-x-20 lg:mx-10  mx-5 ">
+          <CardVertical cardData={cardData} />
+        </div>
+      </FadeInOnScroll>
+      <FadeInOnScroll>
+          <div className="relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[400px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
+            <img
+              className="absolute lg:w-[100%] lg:h-[400px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
+              src="/images/poster.jpg"
+            />
+            <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
+          </div>
+        </FadeInOnScroll>
+      <div className="lg:flex grid w-full gap-5 lg:px-10 px-5">
+        <div className=" h-fit  w-fit">
+          <CardHorizontal cardData={cardData} />
+        </div>
+        <div className="h-fit grid grid-cols-2 gap-3 overflow-hidden py-5 px-10 ">
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+              <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
+          </div>
+
+          <div className="px-20 py-10 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
+            Image1
           </div>
         </div>
       </div>
