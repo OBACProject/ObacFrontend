@@ -1,4 +1,4 @@
-import { FilePen, CreditCard, GraduationCap } from "lucide-react";
+import {  CreditCard, GraduationCap, UserRound } from "lucide-react";
 
 export interface TeacherSidebarProps {
   menuItems: {
@@ -26,7 +26,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
       tooltip: "schedule",
       href: "/pages/teacher/profile",
       icon: (
-        <FilePen
+        <UserRound
           style={{ width: "2.0rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
