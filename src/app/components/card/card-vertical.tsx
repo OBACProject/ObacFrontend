@@ -18,7 +18,7 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
   return (
     <>
       {Array.isArray(cardData) &&
-        cardData.map((data, index) => (
+        cardData.slice(0,3).map((data:any, index:any) => (
           <div
             key={index}
             className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group overflow-hidden hover:bg-gray-100  my-3 bg-white"
