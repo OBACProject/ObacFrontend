@@ -155,7 +155,7 @@ export default function Form() {
         </div>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-gray-800 border border-gray-200 py-2 rounded-t-md">
+        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-gray-800 border border-gray-400 py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
@@ -165,31 +165,31 @@ export default function Form() {
         {subjects?.map((item: Subject, index) => (
           <div
             key={item.ID}
-            className="grid grid-cols-[5%_30%_35%_15%_15%] bg-white hover:bg-gray-50 border border-gray-200  border-t-0"
+            className="grid grid-cols-[5%_30%_35%_15%_15%] bg-white hover:bg-gray-50 border border-gray-400  border-t-0"
           >
-            <div className="text-center flex items-center w-full justify-center text-gray-600 border-r py-1  border-gray-200">
+            <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
               {index + 1}
             </div>
-            <div className="text-start flex items-center text-gray-600 py-1 px-4 border-r ">
+            <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
               <p className="line-clamp-1">{item.SubjectID}</p>
             </div>
-            <div className="text-start flex items-center text-gray-600 py-1 px-4 border-r ">
+            <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
               <p className="line-clamp-1">{item.SubjectName}</p>
             </div>
             <div className="text-center flex items-center w-full justify-center py-1 border-r ">
               {item.Status ? (
-                <p className="text-green-400 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
+                <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                   Enable
                 </p>
               ) : (
-                <p className="text-red-400 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
+                <p className="text-red-500 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
                   Disable
                 </p>
               )}
             </div>
             <div className=" flex items-center justify-center gap-2 py-1">
               <button
-                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-300 hover:text-white hover:border-gray-500 bg-white-400 border-2 border-gray-200  "
+                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-500 bg-white-400 border-2 border-gray-400  "
                 onClick={() => {
                   setEditSubjectPopUp(true);
                   setGetEditIdSubject(item.ID);
@@ -249,7 +249,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
       >
         <div className="w-full flex justify-between rounded-t-md text-center text-xl  bg-[#cfe4ff]">
           <div></div>
-          <p className="py-2 translate-x-6 text-gray-700">เพิ่มวิชาเรียน</p>
+          <p className="py-2 translate-x-10 text-gray-600">เพิ่มวิชาเรียน</p>
           <button
             className="px-5  rounded-sm   hover:bg-red-300"
             onClick={() => onClosePopUp(false)}
@@ -261,6 +261,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           <div className="flex items-center gap-2">
             <label>รหัสวิชา : </label>
             <input
+            placeholder="กรอกรหัสวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
               onChange={(e) => setSubjectCode(e.target.value)}
               value={subjectCode}
@@ -269,6 +270,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           <div className="flex items-center gap-2">
             <label>ชื่อวิชา : </label>
             <input
+            placeholder="กรอกชื่อวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
               onChange={(e) => setSubjectName(e.target.value)}
               value={subjectName}
@@ -335,7 +337,7 @@ const EditSubjectPopUp = ({
       >
         <div className="w-full flex justify-between rounded-t-md text-center text-xl  bg-[#cfe4ff]">
           <div></div>
-          <p className="py-2 translate-x-6 text-gray-700">แก้ไขวิชาเรียน</p>
+          <p className="py-2 translate-x-10 text-gray-600">แก้ไขวิชาเรียน</p>
           <button
             className="px-5  rounded-sm   hover:bg-red-300"
             onClick={() => onClosePopUp(false)}
