@@ -1,7 +1,6 @@
 import api from "./apiCentralized";
 import { compactVerify } from "jose";
 import Cookies from "js-cookie";
-
 const secretKey =
   "0812113f5392b4d13d98837152805f7b232f60cacefa0a45081ff9f1ac97d5b6";
 
@@ -31,18 +30,23 @@ export async function login(formData: FormData) {
     console.log(decodedPayload);
     const role = decodedPayload.Role;
     const name = decodedPayload.Name;
-    console.log(role);
-    console.log(name);
+    const userId = decodedPayload.UserID;
+
+    // console.log(role);
+    // console.log(name);
+    // console.log(UserId);
     if (!role || !name) {
       throw new Error("Invalid token: Missing role or name.");
     }
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
-    localStorage.setItem("name", name);
+    // localStorage.setItem("token", token);
+    // localStorage.setItem("role", role);
+    // localStorage.setItem("name", name);
 
-    Cookies.set("role", role, { expires: 7 });
-    Cookies.set("name", name, { expires: 7 });
+    Cookies.set("role", role, { expires: 1 });
+    Cookies.set("name", name, { expires: 1 });
+    Cookies.set("userId", userId, { expires: 1 });
+    Cookies.set("token", token, { expires: 1 });
 
     return { token, role };
   } catch (err) {
@@ -53,10 +57,11 @@ export async function login(formData: FormData) {
 
 export async function logout() {
   try {
-    // Clear token and role from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("name");
+    console.log("logout");
+    // Clear token and role from cookies
+    Cookies.remove("role");
+    Cookies.remove("name");
+    Cookies.remove("userId");
   } catch (err) {
     console.log(err);
     throw new Error("Failed to logout");

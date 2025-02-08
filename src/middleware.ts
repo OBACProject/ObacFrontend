@@ -13,40 +13,40 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/pages/login", req.url));
   }
 
-  // const allowedRoles: Record<string, string[]> = {
-  //   "/pages/student": ["student"],
-  //   "/pages/teacher": ["teacher"],
-  //   "/pages/academic": ["academic"],
-  //   "/pages/admin": ["admin"],
-  // };
+  const allowedRoles: Record<string, string[]> = {
+    "/pages/student": ["Student"],
+    "/pages/teacher": ["Teacher"],
+    "/pages/academic": ["Academic"],
+    "/pages/admin": ["admin"],
+  };
 
-  // // Check if the requested path matches any restricted paths
-  // for (const path in allowedRoles) {
-  //   if (urlPath.startsWith(path)) {
-  //     if (!allowedRoles[path].includes(role)) {
-  //       console.log(`Access denied for role: ${role} on path: ${urlPath}`);
+  // Check if the requested path matches any restricted paths
+  for (const path in allowedRoles) {
+    if (urlPath.startsWith(path)) {
+      if (!allowedRoles[path].includes(role)) {
+        console.log(`Access denied for role: ${role} on path: ${urlPath}`);
 
-  //       switch (role) {
-  //         case "student":
-  //           return NextResponse.redirect(
-  //             new URL("/pages/student/schedule", req.url)
-  //           );
-  //         case "teacher":
-  //           return NextResponse.redirect(
-  //             new URL("/pages/teacher/profile", req.url)
-  //           );
-  //         case "academic":
-  //           return NextResponse.redirect(new URL("/pages/academic", req.url));
-  //         case "admin":
-  //           return NextResponse.redirect(
-  //             new URL("/pages/admin/academicManagement", req.url)
-  //           );
-  //         default:
-  //           return NextResponse.redirect(new URL("/pages/login", req.url));
-  //       }
-  //     }
-  //   }
-  // }
+        switch (role) {
+          case "Student":
+            return NextResponse.redirect(
+              new URL("/pages/student/schedule", req.url)
+            );
+          case "Teacher":
+            return NextResponse.redirect(
+              new URL("/pages/teacher/profile", req.url)
+            );
+          case "Academic":
+            return NextResponse.redirect(new URL("/pages/academic", req.url));
+          case "admin":
+            return NextResponse.redirect(
+              new URL("/pages/admin/academicManagement", req.url)
+            );
+          default:
+            return NextResponse.redirect(new URL("/pages/login", req.url));
+        }
+      }
+    }
+  }
 
   return NextResponse.next();
 }
