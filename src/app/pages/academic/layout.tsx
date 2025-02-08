@@ -4,6 +4,8 @@ import {
   AcademicSideBarData,
   ProfileData,
 } from "@/resource/academics/sidebarData";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "OBAC-วิชาการ.ac.th",
@@ -18,6 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ToastContainer
+          position="bottom-right"
+          hideProgressBar
+          className="z-50"
+        />
         <AcademicSidebar
           menuItems={AcademicSideBarData.menuItems}
           profileData={ProfileData}
