@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import React from "react";
 import "@app/styles/globals.css";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { StudentSidebar } from "@app/pages/student/sidebar/studentSidebar";
 import {
   ProfileData,
@@ -25,6 +26,11 @@ export default function RootLayout({
       <body>
         {/* <SidebarProvider> */}
         {/* Pass StudentSidebarData to StudentSidebar */}
+        <ToastContainer
+          position="bottom-right"
+          hideProgressBar
+          className="z-50"
+        />
         <AdminSideBar
           menuItems={AdminSidebarData.menuItems}
           profileData={ProfileData}
