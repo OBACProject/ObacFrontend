@@ -8,7 +8,8 @@ export const getClassSubjectData = async (
 ): Promise<ClassSubjectData[]> => {
   try {
     const response = await api.get(
-      `Schedule/GetListOfClassBySubjectId?subjectId=${subjectId}&term=${term}&year=${year}`
+      `Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`
+      // `Schedule/GetListOfClassBySubjectId?subjectId=${subjectId}&term=${term}&year=${year}`
     );
     return response.data.data;
   } catch (error) {

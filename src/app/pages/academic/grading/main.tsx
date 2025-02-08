@@ -133,6 +133,7 @@ export function Main() {
           <AcademicStudentInfo
             subjectId={classInfoData.subjectId}
             scheduleSubjectId={classInfoData.scheduleSubjectId}
+            room={classInfoData.room}
           />
         </>
       )}
