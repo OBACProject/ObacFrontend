@@ -1,4 +1,4 @@
-import { PlusCircle, X } from "lucide-react";
+import { Pencil, PlusCircle, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -133,8 +133,8 @@ export default function Form() {
   }, [triggerEditSubject]);
 
   const getAndDelete = (id: string) => {
-    console.log("test")
-    console.log(id)
+    console.log("test");
+    console.log(id);
   };
 
   return (
@@ -146,7 +146,7 @@ export default function Form() {
         </h1>
         <div className="px-5 flex gap-2">
           <button
-            className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+            className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
             onClick={() => setAddSubjectPopUp(true)}
           >
             <PlusCircle className="w-5 h-5 text-white  " />
@@ -174,7 +174,7 @@ export default function Form() {
               <p className="line-clamp-1">{item.SubjectID}</p>
             </div>
             <div className="text-start flex items-center text-gray-600 py-1 px-4 border-r ">
-            <p className="line-clamp-1">{item.SubjectName}</p>
+              <p className="line-clamp-1">{item.SubjectName}</p>
             </div>
             <div className="text-center flex items-center w-full justify-center py-1 border-r ">
               {item.Status ? (
@@ -189,7 +189,7 @@ export default function Form() {
             </div>
             <div className=" flex items-center justify-center gap-2 py-1">
               <button
-                className="w-[80px] py-1 text-sm rounded-sm hover:bg-blue-500 bg-blue-400 text-white"
+                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-300 hover:text-white hover:border-gray-500 bg-white-400 border-2 border-gray-200  "
                 onClick={() => {
                   setEditSubjectPopUp(true);
                   setGetEditIdSubject(item.ID);
@@ -197,7 +197,7 @@ export default function Form() {
                   setGetEditSubjectName(item.SubjectName);
                 }}
               >
-                แก้ไข
+                <Pencil className="w-5 h-5 "/>
               </button>
             </div>
           </div>
