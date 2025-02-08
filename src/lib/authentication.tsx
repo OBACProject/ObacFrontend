@@ -46,6 +46,7 @@ export async function login(formData: FormData) {
     Cookies.set("role", role, { expires: 1 });
     Cookies.set("name", name, { expires: 1 });
     Cookies.set("userId", userId, { expires: 1 });
+    Cookies.set("token", token, { expires: 1 });
 
     return { token, role };
   } catch (err) {
