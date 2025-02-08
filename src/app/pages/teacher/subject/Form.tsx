@@ -29,7 +29,7 @@ export default function Form() {
 
   return (
     <>
-      <div className="text-xl px-10 py-4">
+      <div className="text-xl px-10 ">
         <div className="border-2 py-2 px-5 grid place-items-center border-gray-200 border-dashed">
           {subjectCards && subjectCards.length > 0 ? (
             <div className="lg:w-9/12 sm:w-full md:w-full">

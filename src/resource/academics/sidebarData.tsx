@@ -42,21 +42,32 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
+    // {
+    //   title: "จัดตารางเรียน",
+    //   tooltip: "schedule",
+    //   href: "/pages/academic/course-management",
+    //   icon: (
+    //     <TableProperties
+    //       style={{ width: "2.0rem", height: "2.5rem" }}
+    //       className="text-[#0C2943]"
+    //     />
+    //   ),
+    // },
     {
-      title: "จัดตารางเรียน",
-      tooltip: "schedule",
-      href: "/pages/academic/course-management",
+      title: "จัดตารางเรียนตารางสอน",
+      tooltip: "grade",
+      href: "/pages/academic/schedule-management",
       icon: (
         <TableProperties
-          style={{ width: "2.0rem", height: "2.5rem" }}
+          style={{ width: "2.0rem", height: "2.2rem" }}
           className="text-[#0C2943]"
         />
       ),
     },
     {
-      title: "จัดตารางสอน",
+      title: "จัดการรายวิชา",
       tooltip: "grade",
-      href: "/pages/academic/schedule-management",
+      href: "/pages/academic/subject-management",
       icon: (
         <Grid2X2Plus
           style={{ width: "2.0rem", height: "2.2rem" }}

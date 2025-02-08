@@ -27,7 +27,7 @@ export default function ProfileForm() {
   return (
     <div className="text-xl font-sans">
       <div className="grid gap-4 px-5">
-        <div className=" lg:text-2xl text-xl px-10 w-fit bg-gray-700 shadow-sm text-white py-2 rounded-3xl  font-semibold ">
+        <div className=" lg:text-xl text-xl px-10 w-fit bg-gray-700 shadow-sm text-white py-1 rounded-3xl   ">
           ข้อมูลฝ่ายทะเบียน
         </div>
         <div className="border-[1px] bg-white duration-1000 shadow-md w-fit shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm  ">

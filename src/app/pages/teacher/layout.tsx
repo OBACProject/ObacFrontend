@@ -3,6 +3,8 @@ import { TeacherSideBarData } from "@/resource/teachers/sidebarData";
 import "@app/styles/globals.css";
 import { ProfileData } from "@/resource/teachers/sidebarData";
 import NewTeacherSidebar from "./sidebar/TeacherSidebar";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "OBAC-teacher.ac.th",
@@ -17,6 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ToastContainer
+          position="bottom-right"
+          hideProgressBar
+          className="z-50"
+        />
         <NewTeacherSidebar
           menuItems={TeacherSideBarData.menuItems}
           profileData={ProfileData}
