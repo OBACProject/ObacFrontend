@@ -37,6 +37,7 @@ export function ClassSubjectPage(props: {
     ClassSubjectColumn[]
   >([]);
   console.log("classSubjectDataFiltered", classSubjectDataFiltered);
+
   //filter data
   const [roomNumbers, setRoomNumbers] = useState<string[]>([]);
   const [periodNumbers, setPeriodNumbers] = useState<string[]>([]);
@@ -208,10 +209,10 @@ export function ClassSubjectPage(props: {
     const normalizedSearch = searchClassSubject.toLowerCase();
     const filterData = classSubjectData.filter((item) => {
       const matchSearch =
-        item.day.toLowerCase().includes(normalizedSearch) ||
-        item.period.toLowerCase().includes(normalizedSearch) ||
-        item.room.toLowerCase().includes(normalizedSearch) ||
-        item.teacherName.toLowerCase().includes(normalizedSearch);
+        item.day?.toLowerCase().includes(normalizedSearch) ||
+        item.period?.toLowerCase().includes(normalizedSearch) ||
+        item.room?.toLowerCase().includes(normalizedSearch) ||
+        item.teacherName?.toLowerCase().includes(normalizedSearch);
 
       const matchesRoom = selectedRoom ? item.room === selectedRoom : true;
 
