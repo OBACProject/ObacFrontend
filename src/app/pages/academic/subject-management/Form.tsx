@@ -10,8 +10,10 @@ type Subject = {
 };
 
 export default function Form() {
-  const [addSubjectName, setAddSubjectName] = useState<string | null>(null);
   const [addSubjectCode, setAddSubjectCode] = useState<string | null>(null);
+  const [addSubjectName, setAddSubjectName] = useState<string | null>(null);
+  const [editSubjectCode, setEditSubjectCode] = useState<string | null>(null);
+  const [editSubjectName, setEditSubjectName] = useState<string | null>(null);
   const [subjects, setSubject] = useState<Subject[] | null>([
     {
       ID: "bas3fleanf12ha",
@@ -69,8 +71,15 @@ export default function Form() {
     },
   ]);
 
+  const [getEditSubjectId, setGetEditIdSubject] = useState<string>("");
+  const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
+  const [getEditSubjectName, setGetEditSubjectName] = useState<string>("");
+
   const [addSubject_popup, setAddSubjectPopUp] = useState<boolean>(false);
+  const [editSubject_popup, setEditSubjectPopUp] = useState<boolean>(false);
   const [triggerAddSubject, setTriggerAddSubject] = useState<boolean>(false);
+
+  const [triggerEditSubject, setTriggerEditSubject] = useState<boolean>(false);
 
   const getAddSubjectProps = (subjectName: string, subjectCode: string) => {
     setAddSubjectName(subjectName);
@@ -88,7 +97,7 @@ export default function Form() {
     //     body: JSON.stringify({ addSubjectCode, addSubjectName }),
     //   }
     // );
-    toast.success("เพิ่มวิชาสำเร็จ")
+    toast.success("เพิ่มวิชาสำเร็จ");
   };
   useEffect(() => {
     if (triggerAddSubject) {
@@ -96,6 +105,37 @@ export default function Form() {
     }
     setTriggerAddSubject(false);
   }, [triggerAddSubject]);
+
+  const getEditSubjectProps = (subjectName: string, subjectCode: string) => {
+    setEditSubjectName(subjectName);
+    setEditSubjectCode(subjectCode);
+    setTriggerEditSubject(true);
+  };
+  const EditSubject = async () => {
+    // const response = await fetch(
+    //   `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ addSubjectCode, addSubjectName }),
+    //   }
+    // );
+    toast.success("แก้ไขวิชาสำเร็จ");
+  };
+
+  useEffect(() => {
+    if (triggerEditSubject) {
+      EditSubject();
+    }
+    setTriggerEditSubject(false);
+  }, [triggerEditSubject]);
+
+  const getAndDelete = (id: string) => {
+    console.log("test")
+    console.log(id)
+  };
 
   return (
     <div className="w-full">
@@ -115,7 +155,7 @@ export default function Form() {
         </div>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-gray-800 border border-gray-200 py-2 rounded-t-md">
+        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-gray-800 border border-gray-200 py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
@@ -131,24 +171,32 @@ export default function Form() {
               {index + 1}
             </div>
             <div className="text-start flex items-center text-gray-600 py-1 px-4 border-r ">
-              {item.SubjectID}
+              <p className="line-clamp-1">{item.SubjectID}</p>
             </div>
             <div className="text-start flex items-center text-gray-600 py-1 px-4 border-r ">
-              {item.SubjectName}
+            <p className="line-clamp-1">{item.SubjectName}</p>
             </div>
             <div className="text-center flex items-center w-full justify-center py-1 border-r ">
               {item.Status ? (
-                <p className="text-green-400 font-thin lg:text-[16px] text-[14px]">
+                <p className="text-green-400 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                   Enable
                 </p>
               ) : (
-                <p className="text-red-400 font-thin lg:text-[16px] text-[14px]]">
+                <p className="text-red-400 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
                   Disable
                 </p>
               )}
             </div>
             <div className=" flex items-center justify-center gap-2 py-1">
-              <button className="w-[80px] py-1 text-sm rounded-sm hover:bg-blue-500 bg-blue-400 text-white">
+              <button
+                className="w-[80px] py-1 text-sm rounded-sm hover:bg-blue-500 bg-blue-400 text-white"
+                onClick={() => {
+                  setEditSubjectPopUp(true);
+                  setGetEditIdSubject(item.ID);
+                  setGetEditSubjectCode(item.SubjectID);
+                  setGetEditSubjectName(item.SubjectName);
+                }}
+              >
                 แก้ไข
               </button>
             </div>
@@ -161,23 +209,33 @@ export default function Form() {
           onSave={getAddSubjectProps}
         />
       )}
+      {editSubject_popup && (
+        <EditSubjectPopUp
+          onClosePopUp={setEditSubjectPopUp}
+          onSave={getEditSubjectProps}
+          onDelete={getAndDelete}
+          ID={getEditSubjectId}
+          SubjectCode={getEditSubjectCode}
+          SubjectName={getEditSubjectName}
+        />
+      )}
     </div>
   );
 }
 
-type AddDevicePopUpProps = {
+type AddPopUpProps = {
   onClosePopUp: (value: boolean) => void;
   onSave: (name: string, id: string) => void;
 };
 
-const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddDevicePopUpProps) => {
-  const [subjectName, setSubjectName] = useState<string>('');
-  const [subjectCode, setSubjectCode] = useState<string>('');
+const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
+  const [subjectName, setSubjectName] = useState<string>("");
+  const [subjectCode, setSubjectCode] = useState<string>("");
 
   const Save = () => {
     if (subjectName && subjectCode) {
       onSave(subjectName, subjectCode);
-      onClosePopUp(false)
+      onClosePopUp(false);
     }
   };
   return (
@@ -193,7 +251,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddDevicePopUpProps) => {
           <div></div>
           <p className="py-2 translate-x-6 text-gray-700">เพิ่มวิชาเรียน</p>
           <button
-            className="px-5  rounded-sm   hover:bg-gray-300"
+            className="px-5  rounded-sm   hover:bg-red-300"
             onClick={() => onClosePopUp(false)}
           >
             <X className="text-white w-5 h-5" />
@@ -202,12 +260,19 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddDevicePopUpProps) => {
         <div className="w-full px-10 py-5 grid place-items-center gap-4">
           <div className="flex items-center gap-2">
             <label>รหัสวิชา : </label>
-            <input className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm" 
-            onChange={(e)=>setSubjectCode(e.target.value)} value={subjectCode}/>
+            <input
+              className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
+              onChange={(e) => setSubjectCode(e.target.value)}
+              value={subjectCode}
+            />
           </div>
           <div className="flex items-center gap-2">
             <label>ชื่อวิชา : </label>
-            <input className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm" onChange={(e)=>setSubjectName(e.target.value)} value={subjectName}/>
+            <input
+              className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
+              onChange={(e) => setSubjectName(e.target.value)}
+              value={subjectName}
+            />
           </div>
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
@@ -216,6 +281,98 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddDevicePopUpProps) => {
             onClick={() => Save()}
           >
             เพิ่ม
+          </button>
+          <button
+            className="px-5 w-[80px] bg-gray-500 text-white py-1 rounded-sm  hover:bg-gray-700"
+            onClick={() => onClosePopUp(false)}
+          >
+            ยกเลิก
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type EditPopUpProps = {
+  onClosePopUp: (value: boolean) => void;
+  onSave: (name: string, id: string) => void;
+  onDelete: (Id: string) => void;
+  ID: string;
+  SubjectName: string;
+  SubjectCode: string;
+};
+
+const EditSubjectPopUp = ({
+  onClosePopUp,
+  onSave,
+  onDelete,
+  ID,
+  SubjectName,
+  SubjectCode,
+}: EditPopUpProps) => {
+  const [subjectName, setSubjectName] = useState<string>(SubjectName);
+  const [subjectCode, setSubjectCode] = useState<string>(SubjectCode);
+
+  const Save = () => {
+    if (subjectName && subjectCode) {
+      onSave(subjectName, subjectCode);
+      onClosePopUp(false);
+    }
+  };
+  const Delete = () => {
+    onDelete(ID);
+    onClosePopUp(false);
+  };
+  return (
+    <div
+      className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+      onClick={() => onClosePopUp(false)}
+    >
+      <div
+        className="bg-white rounded-md   lg:w-[500px]  z-100 shadow-lg shadow-gray-500 "
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="w-full flex justify-between rounded-t-md text-center text-xl  bg-[#cfe4ff]">
+          <div></div>
+          <p className="py-2 translate-x-6 text-gray-700">แก้ไขวิชาเรียน</p>
+          <button
+            className="px-5  rounded-sm   hover:bg-red-300"
+            onClick={() => onClosePopUp(false)}
+          >
+            <X className="text-white w-5 h-5" />
+          </button>
+        </div>
+        <div className="w-full px-10 py-5 grid place-items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label>รหัสวิชา : </label>
+            <input
+              className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
+              onChange={(e) => setSubjectCode(e.target.value)}
+              value={subjectCode}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <label>ชื่อวิชา : </label>
+            <input
+              className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
+              onChange={(e) => setSubjectName(e.target.value)}
+              value={subjectName}
+            />
+          </div>
+        </div>
+        <div className="py-5 w-full flex gap-5 justify-center">
+          <button
+            className="px-5 w-[80px] bg-blue-400 text-white py-1 rounded-sm  hover:bg-blue-600"
+            onClick={() => Save()}
+          >
+            บันทึก
+          </button>
+          <button
+            className="px-5 w-[80px] bg-red-400 text-white py-1 rounded-sm  hover:bg-red-600"
+            onClick={() => Delete()}
+          >
+            ลบ
           </button>
           <button
             className="px-5 w-[80px] bg-gray-500 text-white py-1 rounded-sm  hover:bg-gray-700"
