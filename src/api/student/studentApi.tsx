@@ -5,7 +5,7 @@ export const fetchCreateStudentAsync = async (
 ) => {
   try {
     const response = await fetch(
-      "http://139.59.253.55:5111/api/Student/CreateStudent",
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/CreateStudent`,
       {
         method: "POST",
         headers: {

@@ -24,3 +24,28 @@ export interface convertGradBySubjectId {
   affectiveScore: number;
   totalScore: number;
 }
+
+export interface Subject {
+  subjectName: string;
+  subjectCode: string;
+  grade: string;
+  credit: number;
+}
+
+export interface GetGradPerTermByStudentIdDto {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  programName: string;
+  class: string;
+  groupName: string;
+  isActive: boolean;
+  term: number;
+  year: number;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  subject: Subject[];
+}
