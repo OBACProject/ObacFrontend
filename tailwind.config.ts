@@ -104,7 +104,7 @@ const config: Config = {
         blob:"blob 7s infinite",
       },
       backgroundImage:{
-        authBg:"url(https://lh3.googleusercontent.com/p/AF1QipOm1uKGkk3eh_TFYYireSIS-i5fZzfPfnAfQKNz=s1360-w1360-h1020)"
+        authBg:"/images/obac_view.jpg"
       },
     },
   },
