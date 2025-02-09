@@ -1,12 +1,16 @@
+import { fetchGetAllSubject } from "@/api/subject/subjectAPI";
 import { Pencil, PlusCircle, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { GetAllSubject } from "@/dto/subjectDto";
 
-type Subject = {
-  ID: string;
-  SubjectID: string;
-  SubjectName: string;
-  Status: boolean;
+const getAllSubject = async () => {
+  try {
+    const data = await fetchGetAllSubject();
+    return data;
+  } catch (err) {
+    return [];
+  }
 };
 
 export default function Form() {
@@ -14,62 +18,13 @@ export default function Form() {
   const [addSubjectName, setAddSubjectName] = useState<string | null>(null);
   const [editSubjectCode, setEditSubjectCode] = useState<string | null>(null);
   const [editSubjectName, setEditSubjectName] = useState<string | null>(null);
-  const [subjects, setSubject] = useState<Subject[] | null>([
-    {
-      ID: "bas3fleanf12ha",
-      SubjectID: "303101",
-      SubjectName: "English For Life Long",
-      Status: false,
-    },
-    {
-      ID: "xjs83jds92kda",
-      SubjectID: "303102",
-      SubjectName: "Mathematics Basics",
-      Status: true,
-    },
-    {
-      ID: "pqw74mdns92ka",
-      SubjectID: "303103",
-      SubjectName: "Introduction to Physics",
-      Status: false,
-    },
-    {
-      ID: "dks83hdd92lal",
-      SubjectID: "303104",
-      SubjectName: "Chemistry in Everyday Life",
-      Status: true,
-    },
-    {
-      ID: "smd93mdla02ma",
-      SubjectID: "303105",
-      SubjectName: "World History Overview",
-      Status: false,
-    },
-    {
-      ID: "as93jdkl28sma",
-      SubjectID: "303106",
-      SubjectName: "Computer Science Fundamentals",
-      Status: true,
-    },
-    {
-      ID: "wkd83nd92dkan",
-      SubjectID: "303107",
-      SubjectName: "Art and Creativity",
-      Status: false,
-    },
-    {
-      ID: "zms93hdla82ka",
-      SubjectID: "303108",
-      SubjectName: "Environmental Science",
-      Status: true,
-    },
-    {
-      ID: "xks92jdla74mao",
-      SubjectID: "303109",
-      SubjectName: "Business and Economics",
-      Status: false,
-    },
-  ]);
+  const [subjects, setSubject] = useState<GetAllSubject[]>([]);
+  useEffect(() => {
+    getAllSubject().then((d) => {
+      setSubject(d);
+    });
+  }, []);
+  console.log(subjects)
 
   const [getEditSubjectId, setGetEditIdSubject] = useState<string>("");
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
@@ -162,22 +117,24 @@ export default function Form() {
           <div className="text-center">สถานะ</div>
           <div className="text-center">Action</div>
         </div>
-        {subjects?.map((item: Subject, index) => (
+        {subjects?.map((item: GetAllSubject, index) => (
           <div
             key={item.ID}
-            className="grid grid-cols-[5%_30%_35%_15%_15%] bg-white hover:bg-gray-50 border border-gray-400  border-t-0"
+            className={` ${
+              index % 2 == 0 ? "bg-white" : "bg-blue-50"
+            } grid grid-cols-[5%_30%_35%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
           >
             <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
               {index + 1}
             </div>
             <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
-              <p className="line-clamp-1">{item.SubjectID}</p>
+              <p className="line-clamp-1">{item.subjectCode}</p>
             </div>
             <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
-              <p className="line-clamp-1">{item.SubjectName}</p>
+              <p className="line-clamp-1">{item.subjectName}</p>
             </div>
             <div className="text-center flex items-center w-full justify-center py-1 border-r ">
-              {item.Status ? (
+              {item.isActive ? (
                 <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                   Enable
                 </p>
@@ -189,15 +146,15 @@ export default function Form() {
             </div>
             <div className=" flex items-center justify-center gap-2 py-1">
               <button
-                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-500 bg-white-400 border-2 border-gray-400  "
+                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-200 bg-white-400 border border-gray-400 shadow-md  bg-white"
                 onClick={() => {
                   setEditSubjectPopUp(true);
                   setGetEditIdSubject(item.ID);
-                  setGetEditSubjectCode(item.SubjectID);
-                  setGetEditSubjectName(item.SubjectName);
+                  setGetEditSubjectCode(item.subjectCode);
+                  setGetEditSubjectName(item.subjectName);
                 }}
               >
-                <Pencil className="w-5 h-5 "/>
+                <Pencil className="w-5 h-5 " />
               </button>
             </div>
           </div>
@@ -261,7 +218,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           <div className="flex items-center gap-2">
             <label>รหัสวิชา : </label>
             <input
-            placeholder="กรอกรหัสวิชา"
+              placeholder="กรอกรหัสวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
               onChange={(e) => setSubjectCode(e.target.value)}
               value={subjectCode}
@@ -270,7 +227,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           <div className="flex items-center gap-2">
             <label>ชื่อวิชา : </label>
             <input
-            placeholder="กรอกชื่อวิชา"
+              placeholder="กรอกชื่อวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
               onChange={(e) => setSubjectName(e.target.value)}
               value={subjectName}

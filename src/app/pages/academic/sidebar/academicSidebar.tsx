@@ -63,19 +63,21 @@ export function AcademicSidebar({
           </span>
         </div>
         <div className="flex items-center px-5 gap-6">
-          <div className="flex gap-2 items-center"> <Link href={profileData.href} className="flex items-center">
-            <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
-          </Link>
-          <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
-            {userName}
-          </p></div>
-          
+          <div className="flex gap-2 items-center">
+            {" "}
+            <Link href={profileData.href} className="flex items-center">
+              <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
+            </Link>
+            <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
+              {userName}
+            </p>
+          </div>
+
           <button
             onClick={handleLogout}
             className="px-5 items-center rounded-md py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
           >
             Logout
-            <LogOut className="w-5 h-5" />
           </button>
         </div>
       </header>

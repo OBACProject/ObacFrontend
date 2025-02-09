@@ -1,10 +1,36 @@
 "use client";
+import { fetchGetGradPerTermByStudentId } from "@/api/grad/gradAPI";
 import GenTranscript from "@/app/components/PDF/genTranscript";
+import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 import { CircleX, Pencil } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+const fetchStudentGrad = async (
+  studentId: number,
+  term: number,
+  year: number
+) => {
+  try {
+    const data = await fetchGetGradPerTermByStudentId(studentId, term, year);
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch data.");
+    return [];
+  }
+};
 
 export default function Form() {
   const [onEdit, setOnEdit] = useState<boolean>(false);
+  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto[]>([]);
+  useEffect(() => {
+    fetchStudentGrad(1, 1, 2024).then((d) => {
+      if (d) {
+        setGrad(d);
+      }
+    });
+  }, []);
+  console.log("Grads:", grads.length);
 
   const handleEditChange = () => {
     setOnEdit((onEdit) => !onEdit);
@@ -12,18 +38,26 @@ export default function Form() {
   return (
     <div className="px-40">
       <div className="flex justify-between my-5">
-        <div className="border-[1px] rounded-md text-gray-700 border-slate-300 text-lg w-fit px-5 py-2 ">
+        <div className="border-[1px] rounded-md text-white bg-gray-700  border-slate-300 text-lg w-fit px-5 py-2 ">
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-4">
-          <button className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit">
-            ดาวโหลดน์ผลการเรียนล่าสุด
-          </button>
+          {grads && (
+            <button
+              className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit"
+              onClick={() => {
+                GradPerTerms(grads[0]);
+              }}
+            >
+              ดาวโหลดน์ผลการเรียนล่าสุด
+            </button>
+          )}
+
           <button
             className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 shadow-sm shadow-slate-300 h-fit"
             onClick={() => GenTranscript({ score: 10 })}
           >
-            ดาวโหลดน์ทรานสคริป
+            ดาวน์โหลดทรานสคริป
           </button>
         </div>
       </div>
