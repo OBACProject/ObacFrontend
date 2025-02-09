@@ -63,3 +63,12 @@ export interface StudentInfoByGroupId {
   studentName: string;
   studentSurname: string;
 }
+
+
+export interface StudentGroup  {
+  studentGroupId: number;
+  studentGroupName: string;
+  class: string;
+  program: string;
+  studentCount: number;
+};

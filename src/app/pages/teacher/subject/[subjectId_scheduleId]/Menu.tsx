@@ -72,12 +72,10 @@ export default function MenuBar({
               disabled={!student_group}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GradPerTerms({
-                  grads: 10,
-                  // studentGroup: student_group,
-                  // subjectId: subjectData?.subjectCode,
-                  // subjectName: subjectData?.subjectName,
-                });
+                GenSubjectScore({ grads: grads,
+                  studentGroup: student_group,
+                  subjectId: subjectData?.subjectCode,
+                  subjectName: subjectData?.subjectName,})
               }}
             >
               <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
