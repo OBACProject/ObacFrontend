@@ -11,7 +11,7 @@ export default function OtherPage() {
     <div className="px-10  ">
       <div className="lg:flex justify-center  pb-20">
         {param1 && param2 && param3 ? (
-          <Form term={param1} year={param2} userId={param3} />
+          <Form term={param1} year={param2} groupId={Number(param3)} />
         ) : (
           <div></div>
         )}

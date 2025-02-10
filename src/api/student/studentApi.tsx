@@ -1,4 +1,6 @@
+"use server"
 import { StudentCreateData, StudentGroup } from "@/dto/studentDto";
+import {cookies} from "next/headers"
 
 export const fetchCreateStudentAsync = async (
   studentData: StudentCreateData
@@ -26,7 +28,7 @@ export const fetchCreateStudentAsync = async (
 };
 
 export const fetchGetAllStudentGroup = async (): Promise<StudentGroup[]> => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoic3RyaW5nIHN0cmluZyIsIlJvbGUiOiJBY2FkZW1pYyIsIlVzZXJJRCI6IjJmMTI0NGU2LWMxYTUtNGI1NC05N2Q1LTA5NjEzZmVkMWY4YSIsImp0aSI6ImQ2NzYzMWY5LTVhNjEtNDYwOC05ZTE1LTQ5MzI4MDZkYThlOSIsIm5iZiI6MTczOTAzOTA3NywiZXhwIjoxNzM5MDQ2Mjc2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.N3rob4WTfilVaAr1pIcurXMswDi29XwYKBUVLpwCHMM"
+  const token = cookies().get("token")?.value
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudentGroup`,{

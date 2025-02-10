@@ -1,6 +1,9 @@
 "use client";
 import { fetchGetScheduleOfTeacherByUserID } from "@/api/schedule/scheduleAPI";
+import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
+import { GetTeacherByTeacherId } from "@/dto/teacherDto";
+import { PlusCircle } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
 type Props = {
@@ -9,9 +12,23 @@ type Props = {
   userId: string;
 };
 
-const getData = async (userId: string, term: number, year: number) => {
+const getTeacherData = async (teacherId: string) => {
   try {
-    const data = await fetchGetScheduleOfTeacherByUserID(userId, term, year);
+    const response = await fetchGetTeacherByTeacherIdAsync(Number(teacherId));
+    return response;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+const getSchedule = async (userId: string, term: string, year: string) => {
+  try {
+    const data = await fetchGetScheduleOfTeacherByUserID(
+      userId,
+      Number(term),
+      Number(year)
+    );
     return data;
   } catch (err) {
     console.log(err);
@@ -20,29 +37,125 @@ const getData = async (userId: string, term: number, year: number) => {
 };
 
 export default function Form({ term, year, userId }: Props) {
-    const [schedules ,setSchedules ] = useState<TeacherScheduleSubject[]>([])
+  const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
+  const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
   useEffect(() => {
-    getData(userId, Number(term) ,Number(year)).then((d) => {
+    getSchedule(userId, term, year).then((d: any) => {
+      setSchedules(d);
+    });
+    getTeacherData("1").then((data: any) => {
+      setTeacherData(data);
     });
   }, []);
+
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
-        <h1 className="px-10 text-lg py-1 bg-gray-700 text-white rounded-3xl">
+        <h1 className="px-10 text-xl py-1 bg-gray-700 text-white rounded-3xl">
           ตารางสอนอาจารย์
         </h1>
       </div>
-      <div className="flex justify-start gap-5">
-        <div className="flex gap-2">
-          <div>อาจารย์ : </div>
+      <div className="w-full py-5 flex justify-between items-start ">
+        <div className=" rounded-md flex border group shadow-md shadow-gray-200 border-gray-200 w-fit px-5">
+          <div className="overflow-hidden w-[100px] h-auto">
+            <img
+              src={teacherData?.teacherProfilePicture || "/asset/user.jpg"}
+              className="w-[100px] h-auto group-hover:scale-[110%] duration-500  object-cover"
+            />
+          </div>
+          <div className="grid h-fit px-4  py-2 gap-1 ">
+            <div className="flex gap-2 text-[18px]">
+              <p>{teacherData?.nameTitle}</p>
+              <p>{teacherData?.thaiName}</p>
+              <p>{teacherData?.thaiLastName}</p>
+            </div>
+            <div className="flex text-gray-700 gap-2 text-[16px]">
+              เบอร์ติดต่อ :<p>{teacherData?.teacherPhone}</p>
+            </div>
+            <div className="flex text-gray-700 gap-2 text-[16px]">
+              Email :<p>{teacherData?.teacherEmail}</p>
+            </div>
+          </div>
+        </div>
+        <div className="">
+          {" "}
+          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl">
+            <PlusCircle className="w-5 h-5 text-white  " />
+            เพิ่มตารางเรียน
+          </button>
         </div>
       </div>
 
-      {schedules.map((item ,index)=>(
-            <div className="px-10 text-black" key={index}>
-                    {item.scheduleSubjects[index].room}
+      <div className="w-full ">
+        <div className="w-full grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
+          <div className="text-center">ลำดับ</div>
+          <div className="text-center">รหัสวิชา</div>
+          <div className="text-center">ชื่อวิชา</div>
+          <div className="text-center">สายชั้น</div>
+          <div className="text-center">กลุ่มนักเรียน</div>
+          <div className="text-center">ห้องเรียน</div>
+          <div className="text-center">หน่วยกิต</div>
+          <div className="text-center">คาบเรียน</div>
+          <div className="text-center">วันสอน</div>
+        </div>
+      </div>
+      {schedules?.map((item: TeacherScheduleSubject, index) => (
+        <div key={index}>
+          {item.scheduleSubjects.map((subject, subIndex) => (
+            <div
+              key={index}
+              className={` ${
+                index % 2 == 0 ? "bg-white" : "bg-gray-100"
+              } grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%]  hover:bg-blue-50 border text-[16px] border-gray-400 text-gray-700  border-t-0`}
+            >
+              <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-2  border-gray-400">
+                {index + 1}
+              </div>
+              <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
+                {subject.subjectCode}
+              </p>
+              <p className="text-start flex items-center  px-4 border-r border-gray-400  py-1 line-clamp-1">
+                {subject.subjectName}
+              </p>
+              <p className="text-center flex items-center justify-center border-r border-gray-400">
+                {subject.class}
+              </p>
+              <p className="text-center flex items-center justify-center border-r border-gray-400">
+                {subject.groupName}
+              </p>
+              <p className="text-center flex items-center justify-center border-r border-gray-400">
+                {subject.room}
+              </p>
+              <p className="text-center flex items-center justify-center border-r border-gray-400">
+                {subject.credit}
+              </p>
+              <p className="text-center flex items-center justify-center border-r border-gray-400">
+                {subject.period}
+              </p>
+              <p className="text-center py-2 flex items-center justify-center  ">
+                {subject.day}
+              </p>
             </div>
+          ))}
+        </div>
       ))}
+
+      {/* {schedules.map((item, index) => (
+        <div className="px-10 text-xl text-black" key={index}>
+          <h2>{item.day}</h2>
+          {item.scheduleSubjects.map((subject, subIndex) => (
+            <div key={subIndex}>
+              <p>Group: {subject.groupName}</p>
+              <p>
+                Subject: {subject.subjectName} ({subject.subjectCode})
+              </p>
+              <p>
+                Room: {subject.room}, Period: {subject.period}
+              </p>
+            </div>
+          ))}
+        </div>
+      ))} */}
     </div>
   );
 }
