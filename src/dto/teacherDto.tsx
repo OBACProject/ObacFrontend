@@ -1,29 +1,41 @@
+// export interface GetAllTeacher {
+//   teacherId: number;
+//   firstName: string;
+//   lastName: string;
+//   thaiName: string;
+//   thaiLastName: string;
+//   gender: string;
+//   rank: string;
+//   qualification: string;
+//   thaiId: string;
+//   email: string;
+//   phoneNumber: string;
+//   address: string;
+//   nationality: string;
+//   religion: string;
+//   userId: string;
+//   isActive: boolean;
+//   hiredDate: Date;
+//   programId: number;
+//   programName: string;
+//   facultyId: number;
+//   facultyName: string;
+//   birthDate: Date;
+// }
+
 export interface GetAllTeacher {
   teacherId: number;
   firstName: string;
   lastName: string;
   thaiName: string;
   thaiLastName: string;
-  gender: string;
-  rank: string;
-  qualification: string;
-  thaiId: string;
   email: string;
-  phoneNumber: string;
-  address: string;
-  nationality: string;
-  religion: string;
-  userId: string;
-  isActive: boolean;
-  hiredDate: Date;
-  programId: number;
-  programName: string;
+  teacherCode: string;
   facultyId: number;
   facultyName: string;
-  birthDate: Date;
 }
 
-export interface GetTeacherByTeacherId {
+export type GetTeacherByTeacherId = {
   teacherId: number;
   teacherCode: string;
   teacherEngFirstName: string;
@@ -39,9 +51,10 @@ export interface GetTeacherByTeacherId {
   teacherQualification: string;
   teacherFaculty: string;
   teacherProgram: string;
-  teacherDateOfJoining: Date;
-  teacherProfilePicture: string;
-}
+  teacherDateOfJoining: string; 
+  teacherProfilePicture: string | null;
+  nameTitle: string;
+};
 export interface TeacherEnrollment {
   id: number;
   teacherId: number;

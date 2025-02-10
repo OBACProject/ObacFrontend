@@ -1,4 +1,6 @@
+"use server"
 import { GetAllTeacher ,GetTeacherByTeacherId, TeacherEnrollment} from "@/dto/teacherDto";
+import { cookies } from "next/headers";
 
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
@@ -21,8 +23,16 @@ export const fetchGetTeacherByTeacherIdAsync = async (
   id : number
 ): Promise<GetTeacherByTeacherId> => {
   try {
+    const token = cookies().get("token")?.value
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherByTeacherId?teacherId=${id}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to get teacher data");

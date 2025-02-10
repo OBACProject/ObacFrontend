@@ -7,8 +7,9 @@ export interface GetSubjectBySubjectId  {
     isActive: boolean,
 }
 export interface GetAllSubject {
-    ID: string;
+    id: number;
     subjectCode: string;
     subjectName: string;
+    credits:number;
     isActive: boolean;
 }

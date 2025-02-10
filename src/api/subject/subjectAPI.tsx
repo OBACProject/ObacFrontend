@@ -1,4 +1,6 @@
+"use server";
 import { GetAllSubject, GetSubjectBySubjectId } from "@/dto/subjectDto";
+import { cookies } from "next/headers";
 
 export const fetchGetSubjectBySubjectId = async (
   id: number
@@ -21,15 +23,16 @@ export const fetchGetSubjectBySubjectId = async (
 };
 
 export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoic3RyaW5nIHN0cmluZyIsIlJvbGUiOiJBY2FkZW1pYyIsIlVzZXJJRCI6IjJmMTI0NGU2LWMxYTUtNGI1NC05N2Q1LTA5NjEzZmVkMWY4YSIsImp0aSI6IjYyZDlmNjhhLWIxYTctNGNiNS04ZDM1LTIyZmIxMzJiMzQyYyIsIm5iZiI6MTczOTA4MTczMCwiZXhwIjoxNzM5MDg4OTI5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.Ocn290vHfYK_Q5s7UDR2tcublXALYygKaLnaodQMmzw"
+  const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetAllSubjectAsync`,{
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetAllSubjectAsync`,
+      {
         method: "GET",
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
     );
     if (!response.ok) {
@@ -49,4 +52,3 @@ export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
     return [];
   }
 };
-

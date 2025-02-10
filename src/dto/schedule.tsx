@@ -17,7 +17,6 @@ export interface GetScheduleBysubjectId {
   term: number;
 }
 
-
 export interface ScheduleSubject {
   groupName: string;
   subjectName: string;
@@ -29,6 +28,11 @@ export interface ScheduleSubject {
   credit: number;
 }
 export type TeacherScheduleSubject = {
+  day: string;
+  scheduleSubjects: ScheduleSubject[];
+};
+
+export type StudentGroupScheduleSubject = {
   day: string;
   scheduleSubjects: ScheduleSubject[];
 };

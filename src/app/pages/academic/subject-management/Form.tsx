@@ -26,7 +26,7 @@ export default function Form() {
   }, []);
   console.log(subjects)
 
-  const [getEditSubjectId, setGetEditIdSubject] = useState<string>("");
+  const [getEditSubjectId, setGetEditIdSubject] = useState<number>(0);
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
   const [getEditSubjectName, setGetEditSubjectName] = useState<string>("");
 
@@ -87,7 +87,7 @@ export default function Form() {
     setTriggerEditSubject(false);
   }, [triggerEditSubject]);
 
-  const getAndDelete = (id: string) => {
+  const getAndDelete = (id: number) => {
     console.log("test");
     console.log(id);
   };
@@ -110,7 +110,7 @@ export default function Form() {
         </div>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-gray-800 border border-gray-400 py-2 rounded-t-md">
+        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
@@ -119,9 +119,9 @@ export default function Form() {
         </div>
         {subjects?.map((item: GetAllSubject, index) => (
           <div
-            key={item.ID}
+            key={item.id}
             className={` ${
-              index % 2 == 0 ? "bg-white" : "bg-blue-50"
+              index % 2 == 0 ? "bg-white" : "bg-gray-100"
             } grid grid-cols-[5%_30%_35%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
           >
             <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
@@ -149,7 +149,7 @@ export default function Form() {
                 className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-200 bg-white-400 border border-gray-400 shadow-md  bg-white"
                 onClick={() => {
                   setEditSubjectPopUp(true);
-                  setGetEditIdSubject(item.ID);
+                  setGetEditIdSubject(item.id);
                   setGetEditSubjectCode(item.subjectCode);
                   setGetEditSubjectName(item.subjectName);
                 }}
@@ -256,8 +256,8 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
 type EditPopUpProps = {
   onClosePopUp: (value: boolean) => void;
   onSave: (name: string, id: string) => void;
-  onDelete: (Id: string) => void;
-  ID: string;
+  onDelete: (Id: number) => void;
+  ID: number;
   SubjectName: string;
   SubjectCode: string;
 };
