@@ -110,7 +110,7 @@ export function SidebarMenu({
           !isVisible
             ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1"
             : "pr-0"
-        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1 py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
@@ -118,7 +118,7 @@ export function SidebarMenu({
               <button
                 className={`${
                   isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
-                }  h-12 flex items-center w-full px-1 group  duration-300 ${
+                } h-12 flex items-center w-full px-1 group duration-300 ${
                   hoveredIndex === index ? "bg-gray-200 " : ""
                 }`}
                 onMouseEnter={() => setHoveredIndex(index)}
@@ -157,24 +157,41 @@ export function SidebarMenu({
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -160 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-56 z-40 min-h-screen border  bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
+        className="h-full w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
       >
-        <div className="grid gap-2">
+        <div className="grid gap-2 relative">
           {menuItems.map((item, index) => (
             <button
               key={index}
               onClick={() => router.push(item.href)}
               className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
                 hoveredIndex === index ? "bg-gray-200" : ""
-              }`}
+              } relative`}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <div className="flex   items-center gap-4 w-full">
-                <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden  duration-300">
+              <div className="flex items-center gap-4 w-full">
+                <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden duration-300">
                   {item.title}
                 </p>
               </div>
+
+              {/* Tooltip showing when hovered */}
+              {hoveredIndex === index && (
+                <div
+                  className="absolute bg-slate-900 text-white p-2 rounded-md w-28"
+                  style={{
+                    left: "100%",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    marginLeft: "10px",
+                    padding: "4px 8px",
+                    zIndex: 100,
+                  }}
+                >
+                  {item.title}
+                </div>
+              )}
             </button>
           ))}
         </div>
