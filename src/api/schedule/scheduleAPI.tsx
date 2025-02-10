@@ -1,6 +1,6 @@
-import { GetScheduleBysubjectId } from "@/dto/schedule";
+import { GetScheduleBysubjectId, TeacherScheduleSubject } from "@/dto/schedule";
 
-export const fetchGetScheduleBysubjectId= async (
+export const fetchGetScheduleBysubjectId = async (
   subjectId: number
 ): Promise<GetScheduleBysubjectId> => {
   try {
@@ -12,8 +12,30 @@ export const fetchGetScheduleBysubjectId= async (
     }
     const text = await response.text();
     const json = JSON.parse(text);
-    const data : GetScheduleBysubjectId =  json.data;
-    return data
+    const data: GetScheduleBysubjectId = json.data;
+    return data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const fetchGetScheduleOfTeacherByUserID = async (
+  userId: string,
+  term: number,
+  year: number
+): Promise<TeacherScheduleSubject> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByUserID?userId=${userId}?term=${term}?year=${year}`
+    );
+    if (!response.ok){
+      throw new Error("Failed to fetch Schedule")
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: TeacherScheduleSubject = json.data;
+    return data;
   } catch (err) {
     console.log(err);
     throw err;

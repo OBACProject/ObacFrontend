@@ -16,3 +16,19 @@ export interface GetScheduleBysubjectId {
   year: number;
   term: number;
 }
+
+
+export interface ScheduleSubject {
+  groupName: string;
+  subjectName: string;
+  subjectCode: string;
+  day: string;
+  period: string;
+  room: string;
+  class: string;
+  credit: number;
+}
+export type TeacherScheduleSubject = {
+  day: string;
+  scheduleSubjects: ScheduleSubject[];
+};

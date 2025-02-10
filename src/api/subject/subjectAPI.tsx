@@ -21,7 +21,7 @@ export const fetchGetSubjectBySubjectId = async (
 };
 
 export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoic3RyaW5nIHN0cmluZyIsIlJvbGUiOiJBY2FkZW1pYyIsIlVzZXJJRCI6IjJmMTI0NGU2LWMxYTUtNGI1NC05N2Q1LTA5NjEzZmVkMWY4YSIsImp0aSI6ImQ2NzYzMWY5LTVhNjEtNDYwOC05ZTE1LTQ5MzI4MDZkYThlOSIsIm5iZiI6MTczOTAzOTA3NywiZXhwIjoxNzM5MDQ2Mjc2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.N3rob4WTfilVaAr1pIcurXMswDi29XwYKBUVLpwCHMM"
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoic3RyaW5nIHN0cmluZyIsIlJvbGUiOiJBY2FkZW1pYyIsIlVzZXJJRCI6IjJmMTI0NGU2LWMxYTUtNGI1NC05N2Q1LTA5NjEzZmVkMWY4YSIsImp0aSI6IjYyZDlmNjhhLWIxYTctNGNiNS04ZDM1LTIyZmIxMzJiMzQyYyIsIm5iZiI6MTczOTA4MTczMCwiZXhwIjoxNzM5MDg4OTI5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUxMTEiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.Ocn290vHfYK_Q5s7UDR2tcublXALYygKaLnaodQMmzw"
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetAllSubjectAsync`,{
@@ -49,3 +49,4 @@ export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
     return [];
   }
 };
+
