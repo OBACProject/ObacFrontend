@@ -52,25 +52,17 @@ export function Main() {
 
   const handleConfirm = async () => {
     if (gradingMode === "period" && (!startTime || !endTime)) {
-      alert("Please select both start and end times.");
+      alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนน");
       return;
     }
     if (gradingMode === "period" && startTime >= endTime) {
-      alert("Start Time must be earlier than End Time.");
+      alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนนให้ถูกต้อง");
       return;
     }
     let isAuto = true;
     if (gradingMode === "period") {
       isAuto = false;
     }
-    //     {
-    //   "id": 0,
-    //   "methodName": "string",
-    //   "isAuto": true,
-    //   "startDate": "string",
-    //   "endDate": "string",
-    //   "isActive": true
-    // }
 
     const methodData = {
       id: 1,
@@ -133,7 +125,7 @@ export function Main() {
             className="px-6 py-2 bg-blue-500 text-white rounded"
             onClick={() => setIsPopupOpen(true)}
           >
-            Set Grading Mode
+            ระบบเปิด/ปิดช่วงการลงคะแนน
           </button>
         </div>
       </div>
@@ -172,7 +164,9 @@ export function Main() {
       {isPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">Select Grading Mode</h2>
+            <h2 className="text-lg font-semibold mb-4">
+              ระบบเปิด/ปิดช่วงการลงคะแนน
+            </h2>
 
             {/* Manual Option */}
             <label className="flex items-center space-x-2 cursor-pointer">
@@ -183,7 +177,7 @@ export function Main() {
                 checked={gradingMode === "manual"}
                 onChange={() => setGradingMode("manual")}
               />
-              <span>Manual (Can only open/close manually)</span>
+              <span>เปิดระบบการกรอกคะแนน (On / Off)</span>
             </label>
 
             {/* Period Time Option */}
@@ -195,14 +189,14 @@ export function Main() {
                 checked={gradingMode === "period"}
                 onChange={() => setGradingMode("period")}
               />
-              <span>Period Time (Set Start & End Time)</span>
+              <span>ช่วงเวลาในการกรอกคะแนน</span>
             </label>
 
-            {/* Time Pickers (Only Show If Period Mode is Selected) */}
+            {/* Time Pickers */}
             {gradingMode === "period" && (
               <div className="mt-4 space-y-2">
                 <label className="block">
-                  Start Time:
+                  วันที่เริ่มต้นการกรอกคะแนน:
                   <input
                     type="datetime-local"
                     value={startTime}
@@ -211,7 +205,7 @@ export function Main() {
                   />
                 </label>
                 <label className="block">
-                  End Time:
+                  วันที่สิ้นสุดการกรอกคะแนน:
                   <input
                     type="datetime-local"
                     value={endTime}
