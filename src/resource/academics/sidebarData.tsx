@@ -6,14 +6,12 @@ import {
   FileSpreadsheet,
   OctagonX,
   UsersRound,
-
   UserRound,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
   menuItems: {
     title: string;
-    tooltip: string;
     href: string;
     icon: React.ReactNode;
   }[];
@@ -33,7 +31,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
   menuItems: [
     {
       title: "ข้อมูลผู้ใช้",
-      tooltip: "schedule",
       href: "/pages/academic",
       icon: (
         <UserRound
@@ -55,7 +52,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     // },
     {
       title: "จัดตารางเรียนตารางสอน",
-      tooltip: "grade",
       href: "/pages/academic/schedule-management",
       icon: (
         <TableProperties
@@ -66,7 +62,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "จัดการรายวิชา",
-      tooltip: "grade",
       href: "/pages/academic/subject-management",
       icon: (
         <Grid2X2Plus
@@ -77,7 +72,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "รายชื่อนักเรียน",
-      tooltip: "schedule",
       href: "/pages/academic/student-info-list",
       icon: (
         <BookUser
@@ -88,7 +82,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "รายชื่ออาจารย์",
-      tooltip: "schedule",
       href: "/pages/academic/teacher-info-list",
       icon: (
         <ContactRound
@@ -99,7 +92,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "ออกเกรดรายวิชา",
-      tooltip: "schedule",
       href: "/pages/academic/grading",
       icon: (
         <FileSpreadsheet
@@ -109,8 +101,17 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       ),
     },
     {
+      title: "ออกเกรดรายวิชา",
+      href: "/pages/academic/grading/management",
+      icon: (
+        <FileSpreadsheet
+          style={{ width: "2.2rem", height: "2.5rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
+    {
       title: "รายชื่อไม่ผ่านเกณฑ์วิชา",
-      tooltip: "schedule",
       href: "/pages/academic/student-failed",
       icon: (
         <OctagonX
@@ -121,7 +122,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "รายชื่อผู้สมัครเข้าศึกษา",
-      tooltip: "schedule",
       href: "/pages/academic/register-student",
       icon: (
         <UsersRound
