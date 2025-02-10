@@ -1,7 +1,10 @@
-import { convertGradBySubjectId } from "@/dto/gradDto";
+import {
+  convertGradBySubjectId,
+  ConvertClassroomToExcelDto,
+} from "@/dto/gradDto";
 import ExcelJS from "exceljs";
 
-export async function ConvertToExcel(
+export async function ConvertScoreToExcel(
   data: convertGradBySubjectId[],
   term: string,
   year: string,
@@ -89,6 +92,84 @@ export async function ConvertToExcel(
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
   const filename = `ห้องเรียน ${classroom} Grade.xlsx`;
+
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
+
+export async function ConvertClassroomToExcel(
+  data: ConvertClassroomToExcelDto[],
+  subjectCode: string,
+  subjectName: string,
+  classroom: string
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Student List");
+
+  worksheet.mergeCells("A1:E1");
+  const header1 = worksheet.getCell("A1");
+  header1.value = `รายชื่อนักเรียน กลุ่มเรียน ${classroom} รหัสวิชา ${subjectCode} วิชา ${subjectName}`;
+  header1.alignment = { horizontal: "center", vertical: "middle" };
+  header1.font = { size: 14, bold: true };
+  worksheet.getRow(1).height = 20;
+
+  const headerRow = worksheet.addRow([
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    "ชื่อ - นามสกุล",
+    "",
+    "หมายเหตุ",
+  ]);
+
+  headerRow.eachCell((cell) => {
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.font = { bold: true, size: 12 };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+  worksheet.getRow(headerRow.number).height = 18;
+
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentId", width: 15 },
+    { key: "name", width: 25 },
+    { key: "space", width: 60 },
+    { key: "note", width: 20 },
+  ];
+
+  // Populate data
+  data.forEach((student, index) => {
+    const row = worksheet.addRow([
+      index + 1,
+      student.studentCode,
+      student.name,
+      "", // Empty column for spacing
+      "", // หมายเหตุ
+    ]);
+
+    row.eachCell((cell) => {
+      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.font = { size: 10 };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+    row.height = 15;
+  });
+
+  // Save the Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom}.xlsx`;
 
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
