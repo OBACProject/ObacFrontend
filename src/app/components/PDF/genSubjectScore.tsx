@@ -1,17 +1,23 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "@/app/components/PDF/THSarabunFont";
 import { GetGradBySubjectId } from "@/dto/gradDto";
+import THSarabunFont from "../font/THSarabunFont";
+import THSarabunFontBold from "../font/THSarabunBold";
 
 interface DataList {
   grads?: GetGradBySubjectId[];
   studentGroup: string;
-  subjectName:string | undefined;
-  subjectId:string | undefined;
+  subjectName: string | undefined;
+  subjectId: string | undefined;
 }
 
-const GenSubjectScore = ({ grads ,studentGroup,subjectId,subjectName}: DataList) => {
+const GenSubjectScore = ({
+  grads,
+  studentGroup,
+  subjectId,
+  subjectName,
+}: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -19,15 +25,21 @@ const GenSubjectScore = ({ grads ,studentGroup,subjectId,subjectName}: DataList)
   });
 
   doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
-
   doc.addFont("THSarabun.ttf", "THSarabun", "normal");
-  doc.addFont("THSarabun.ttf", "THSarabunB", "bold");
-  doc.setFont("THSarabun");
 
+  doc.addFileToVFS("THSarabunBold.ttf", THSarabunFontBold);
+  doc.addFont("THSarabunBold.ttf", "THSarabunBold", "normal");
+
+  doc.setFont("THSarabunBold");
+  doc.setFontSize(14);
+  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, {
+    align: "center",
+  });
   doc.setFontSize(16);
-  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, { align: "center" });
-  doc.setFontSize(16);
-  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 100, 10, { align: "center" });
+  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 100, 10, {
+    align: "center",
+  });
+
   doc.setFontSize(12);
 
   doc.line(4, 4, 4, 291);
@@ -53,7 +65,7 @@ const GenSubjectScore = ({ grads ,studentGroup,subjectId,subjectName}: DataList)
     ],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
-      font: "THSarabun",
+      font: "THSarabunBold",
       fontSize: 14,
       cellPadding: 1,
       halign: "center",
@@ -76,6 +88,8 @@ const GenSubjectScore = ({ grads ,studentGroup,subjectId,subjectName}: DataList)
     },
     margin: { left: 4, right: 0 },
   });
+
+  doc.setFont("THSarabun");
   let n = 0;
   if (grads) {
     for (let i = 0; i < grads.length; i++) {
