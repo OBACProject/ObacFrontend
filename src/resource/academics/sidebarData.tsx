@@ -7,6 +7,8 @@ import {
   OctagonX,
   UsersRound,
   UserRound,
+  BookMarked,
+  School,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -14,6 +16,11 @@ export interface AcademicSidebarProps {
     title: string;
     href: string;
     icon: React.ReactNode;
+    subMenu?: {
+      title: string;
+      href: string;
+      icon: React.ReactNode;
+    }[];
   }[];
 }
 
@@ -39,17 +46,16 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
-    // {
-    //   title: "จัดตารางเรียน",
-    //   tooltip: "schedule",
-    //   href: "/pages/academic/course-management",
-    //   icon: (
-    //     <TableProperties
-    //       style={{ width: "2.0rem", height: "2.5rem" }}
-    //       className="text-[#0C2943]"
-    //     />
-    //   ),
-    // },
+    {
+      title: "จัดตารางเรียน",
+      href: "/pages/academic/course-management",
+      icon: (
+        <TableProperties
+          style={{ width: "2.0rem", height: "2.5rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
     {
       title: "จัดตารางเรียนตารางสอน",
       href: "/pages/academic/schedule-management",
@@ -101,14 +107,36 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       ),
     },
     {
-      title: "ออกเกรดรายวิชา",
-      href: "/pages/academic/grading/management",
+      title: "ระบบจัดการเกรดและคะแนน",
+      href: "/pages/academic/grading/management/classroom",
       icon: (
-        <FileSpreadsheet
+        <BookMarked
           style={{ width: "2.2rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
       ),
+      subMenu: [
+        {
+          title: "จัดการเกรดรายห้องเรียน",
+          href: "/pages/academic/grading/management/classroom",
+          icon: (
+            <School
+              style={{ width: "2.2rem", height: "2.5rem" }}
+              className="text-[#0C2943]"
+            />
+          ),
+        },
+        {
+          title: "จัดการเกรดรายบุคคล",
+          href: "/pages/academic/grading/management/individual",
+          icon: (
+            <UsersRound
+              style={{ width: "2.2rem", height: "2.5rem" }}
+              className="text-[#0C2943]"
+            />
+          ),
+        },
+      ],
     },
     {
       title: "รายชื่อไม่ผ่านเกณฑ์วิชา",
