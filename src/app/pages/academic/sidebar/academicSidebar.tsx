@@ -90,7 +90,6 @@ export function AcademicSidebar({
     </div>
   );
 }
-
 export function SidebarMenu({
   menuItems,
   isVisible,
@@ -101,7 +100,27 @@ export function SidebarMenu({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Track which index is hovered
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
+  const [delayedSubMenu, setDelayedSubMenu] = useState<number | null>(null);
+
+  const handleMouseEnter = (index: number, subMenu: any) => {
+    setHoveredIndex(index);
+    if (subMenu) {
+      setTimeout(() => {
+        setDelayedSubMenu(index);
+      }, 200); // Delay of 200ms before showing the submenu
+    }
+  };
+
+  const handleMouseLeave = (index: number, subMenu: any) => {
+    setHoveredIndex(null);
+    if (subMenu) {
+      setTimeout(() => {
+        setDelayedSubMenu(null);
+      }, 200); // Delay of 200ms before showing the submenu
+    }
+  };
 
   return (
     <div className="absolute left-0 top-20">
@@ -110,31 +129,53 @@ export function SidebarMenu({
           !isVisible
             ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1"
             : "pr-0"
-        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
+        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 pl-1 py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
-            <a key={index} href={item.href}>
-              <button
-                className={`${
-                  isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
-                }  h-12 flex items-center w-full px-1 group  duration-300 ${
-                  hoveredIndex === index ? "bg-gray-200 " : ""
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div className="flex items-center gap-4 w-full">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    {item.icon}
+            <div
+              key={index}
+              onMouseEnter={() => handleMouseEnter(index, item.subMenu)}
+              onMouseLeave={() => handleMouseLeave(index, item.subMenu)}
+              className="relative"
+            >
+              <a href={item.href}>
+                <button
+                  className={`${
+                    isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
+                  } h-12 flex items-center w-full px-1 group duration-300 ${
+                    hoveredIndex === index ? "bg-gray-200" : ""
+                  }`}
+                >
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      {item.icon}
+                    </div>
                   </div>
-                </div>
-              </button>
-            </a>
+                </button>
+              </a>
+              {item.subMenu && delayedSubMenu === index && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute left-full top-0 ml-2 bg-white shadow-lg border border-gray-200 rounded-md w-60 z-50"
+                >
+                  {item.subMenu.map((subItem, subIndex) => (
+                    <a key={subIndex} href={subItem.href}>
+                      <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
+                        {subItem.title}
+                      </button>
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </div>
           ))}
         </div>
       </div>
 
+      {/* Sidebar Toggle Button */}
       <motion.div
         animate={isVisible ? { x: 270 } : { x: 60 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -153,29 +194,72 @@ export function SidebarMenu({
         </button>
       </motion.div>
 
+      {/* Expanded Sidebar */}
       <motion.div
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -160 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-56 z-40 min-h-screen border  bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
+        className="h-full w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md px-2 py-4"
       >
-        <div className="grid gap-2">
+        <div className="grid gap-2 relative">
           {menuItems.map((item, index) => (
-            <button
+            <div
               key={index}
-              onClick={() => router.push(item.href)}
-              className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
-                hoveredIndex === index ? "bg-gray-200" : ""
-              }`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+              onMouseEnter={() => {
+                setHoveredIndex(index);
+                if (item.subMenu) setOpenSubMenu(index);
+              }}
+              onMouseLeave={() => {
+                setHoveredIndex(null);
+                setOpenSubMenu(null);
+              }}
+              className="relative"
             >
-              <div className="flex   items-center gap-4 w-full">
-                <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden  duration-300">
-                  {item.title}
-                </p>
-              </div>
-            </button>
+              <button
+                onClick={() => {
+                  if (!item.subMenu) router.push(item.href);
+                }}
+                className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
+                  hoveredIndex === index ? "bg-gray-200" : ""
+                } relative`}
+              >
+                <div className="flex items-center gap-4 w-full">
+                  <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden duration-300">
+                    {item.title}
+                  </p>
+                </div>
+
+                {/* Tooltip */}
+                {hoveredIndex === index && !item.subMenu && (
+                  <div
+                    className="absolute bg-slate-900 text-white p-2 rounded-md w-28"
+                    style={{
+                      left: "100%",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      marginLeft: "10px",
+                      padding: "4px 8px",
+                      zIndex: 100,
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                )}
+              </button>
+
+              {/* Display submenu if it exists */}
+              {item.subMenu && isVisible && (
+                <div className="absolute left-full top-0 ml-2 bg-white shadow-lg border border-gray-200 rounded-md w-60 z-50">
+                  {item.subMenu.map((subItem, subIndex) => (
+                    <a key={subIndex} href={subItem.href}>
+                      <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
+                        {subItem.title}
+                      </button>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </motion.div>

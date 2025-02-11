@@ -25,6 +25,11 @@ export interface convertGradBySubjectId {
   totalScore: number;
 }
 
+export interface ConvertClassroomToExcelDto {
+  studentCode: string;
+  name: string; // firstName + lastName
+}
+
 export interface Subject {
   subjectName: string;
   subjectCode: string;

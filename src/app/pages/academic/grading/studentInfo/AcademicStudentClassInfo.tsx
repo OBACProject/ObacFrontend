@@ -6,7 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
-import { ConvertToExcel } from "@/lib/convertToExcel";
+import {
+  ConvertClassroomToExcel,
+  ConvertScoreToExcel,
+} from "@/lib/convertToExcel";
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -37,7 +40,7 @@ export function AcademicStudentInfo(props: {
           props.subjectId,
           props.scheduleSubjectId
         );
-        setGradData(grads ?? []); // Set the fetched data
+        setGradData(grads ?? []);
         setGradDataFilter(grads ?? []);
 
         const schedule: GetScheduleBysubjectId =
@@ -80,6 +83,11 @@ export function AcademicStudentInfo(props: {
     testScore: item.testScore,
     affectiveScore: item.affectiveScore,
     totalScore: item.collectScore + item.testScore + item.affectiveScore,
+  }));
+
+  const covertStudentExcel = gradDatas.map((item) => ({
+    studentCode: item.studentCode,
+    name: `${item.firstName} ${item.lastName}`,
   }));
 
   // const convertGrad: {
@@ -192,12 +200,12 @@ export function AcademicStudentInfo(props: {
             disabled={!room}
             className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
             onClick={() => {
-              GradPerTerms({
-                grads: 10,
-                // studentGroup: props.room,
-                // subjectId: scheduleData?.subjectCode,
-                // subjectName: scheduleData?.subjectName,
-              });
+              // GradPerTerms({
+              //   grads: 10,
+              //   // studentGroup: props.room,
+              //   // subjectId: scheduleData?.subjectCode,
+              //   // subjectName: scheduleData?.subjectName,
+              // });
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
@@ -208,7 +216,7 @@ export function AcademicStudentInfo(props: {
               GenStudentNameInSubject({
                 grads: gradDatas,
                 studentGroup: room,
-                subjectId: gradDatas[0]?.studentCode,
+                subjectId: scheduleData?.subjectCode,
                 subjectName: gradDatas[0]?.subjectName,
               });
             }}
@@ -218,7 +226,7 @@ export function AcademicStudentInfo(props: {
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             onClick={async () => {
-              ConvertToExcel(
+              ConvertScoreToExcel(
                 convertGrad,
                 String(scheduleData?.term ?? ""),
                 String(scheduleData?.year ?? ""),
@@ -229,6 +237,27 @@ export function AcademicStudentInfo(props: {
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดใบคะแนนนักเรียน excel</p>
+          </button>
+          <button
+            className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+            onClick={async () => {
+              ConvertClassroomToExcel(
+                covertStudentExcel,
+                scheduleData?.subjectCode || "",
+                gradDatas[0]?.subjectName || "",
+                room || ""
+              );
+              // ConvertScoreToExcel(
+              //   convertGrad,
+              //   String(scheduleData?.term ?? ""),
+              //   String(scheduleData?.year ?? ""),
+              //   scheduleData?.subjectCode || "",
+              //   gradDatas[0]?.subjectName || "",
+              //   room || ""
+              // );
+            }}
+          >
+            <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อนักเรียน excel</p>
           </button>
         </div>
       </div>
