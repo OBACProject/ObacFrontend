@@ -1,7 +1,7 @@
 import { filterProgramsParamsData, EducationData } from "@/dto/studentDto";
 import { filterProgramsData } from "../api/filterProgramsApiParams";
 
-export const filterProgramsViewData = async (): Promise<EducationData[]> => {
+export async function filterProgramsViewData(): Promise<EducationData[]> {
   try {
     const data = await filterProgramsData();
 
@@ -64,4 +64,11 @@ export const filterProgramsViewData = async (): Promise<EducationData[]> => {
     console.error("Error fetching or transforming data:", error);
     throw error;
   }
-};
+}
+
+export async function getRawProgramViewData(): Promise<
+  filterProgramsParamsData[]
+> {
+  const data = await filterProgramsData();
+  return data as filterProgramsParamsData[];
+}
