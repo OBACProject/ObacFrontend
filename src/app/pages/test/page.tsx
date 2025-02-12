@@ -5,89 +5,29 @@ import React from "react";
 import HC2_Transcript from "@/app/components/PDF/HC2_Transcript";
 
 import "./styles.css";
+import TotalScoreInGroup from "@/app/components/PDF/TotalScoreInGroup";
 
 export default function page() {
   return (
-    <div className="banner">
-      <div
-        className="slider"
-        style={{ "--quatity": 10 } as React.CSSProperties}
-      >
-        <div className="item" style={{ "--position": 1 } as React.CSSProperties}>
-          <img
-            src="/images/obac_info_1.jpg"
-
-            alt="test"
-          />
-        </div>
-
-        <div className="item" style={{ "--position": 2 } as React.CSSProperties}>
-          <img
-            src="/images/obac_info_2.jpg"
-
-            alt="test"
-          />
-        </div>
-
-        <div className="item" style={{ "--position": 3 } as React.CSSProperties}>
-          <img
-            src="/images/obac_info_3.jpg"
-
-            alt="test"
-          />
-        </div>
-
-        <div className="item" style={{ "--position": 4 } as React.CSSProperties}>
-          <img
-            src="/images/obac_poster_1.jpg"
-            alt="test"
-          />
-        </div>
-        <div className="item" style={{ "--position": 5 } as React.CSSProperties}>
-          <img
-            src="/images/obac_poster_2.jpg"
-            alt="test"
-          />
-        </div>
-        <div className="item" style={{ "--position": 6 } as React.CSSProperties}>
-          <img
-            src="/images/obac_poster_3.jpg"
-            alt="test"
-          />
-        </div>
-        <div className="item" style={{ "--position": 7 } as React.CSSProperties}>
-          <img
-            src="/images/event.jpg"
-            alt="test"
-          />
-        </div>
-        <div className="item" style={{ "--position": 8 } as React.CSSProperties}>
-          <img
-            src="/images/event.jpg"
-            alt="test"
-          />
-        </div>
-
-        <div className="item" style={{ "--position": 9 } as React.CSSProperties}>
-          <img
-            src="/images/event.jpg"
-            alt="test"
-          />
-        </div>
-        <div className="item" style={{ "--position": 10 } as React.CSSProperties}>
-          <img
-            src="/images/event.jpg"
-            alt="test"
-          />
-        </div>
-      </div>
-      <div className="content">
-        
-      </div>
-      <div className="">
-      <button  onClick={()=>{
-          HC2_Transcript({score:10})
-        }} className="px-10 my-2 z-10 hover:bg-blue-300 bg-blue-600 text-white rounded-md py-2">test</button>
+    <div className="w-full grid px-10 py-10">
+      <div className="w-full py-10 grid place-items-center gap-5">
+        <button className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]" onClick={()=>{
+          TotalScoreInGroup()
+        }}>
+          ดาวโหลดใบรวมเกรดของห้อง
+        </button>
+        <button className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]">
+          ดาวโหลดใบคะแนน
+        </button>
+        <button className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]">
+          ดาวโหลดTranscript
+        </button>
+        <button className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]">
+          ดาวโหลดใบเกรดต่อเทอม
+        </button>
+        <button className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]" >
+          ดาวโหลดใบรายชื่อ
+        </button>
       </div>
     </div>
   );
