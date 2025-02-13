@@ -4,11 +4,10 @@ import {
   Grid2X2Plus,
   ContactRound,
   FileSpreadsheet,
-  OctagonX,
   UsersRound,
   UserRound,
-  BookMarked,
   School,
+  FileSliders,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -45,73 +44,24 @@ export const AcademicSideBarData: AcademicSidebarProps = {
           className="text-[#0C2943]"
         />
       ),
-    },
-    {
-      title: "จัดตารางเรียน",
-      href: "/pages/academic/course-management",
-      icon: (
-        <TableProperties
-          style={{ width: "2.0rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "จัดตารางเรียนตารางสอน",
-      href: "/pages/academic/schedule-management",
-      icon: (
-        <TableProperties
-          style={{ width: "2.0rem", height: "2.2rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "จัดการรายวิชา",
-      href: "/pages/academic/subject-management",
-      icon: (
-        <Grid2X2Plus
-          style={{ width: "2.0rem", height: "2.2rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "รายชื่อนักเรียน",
-      href: "/pages/academic/student-info-list",
-      icon: (
-        <BookUser
-          style={{ width: "2.2rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "รายชื่ออาจารย์",
-      href: "/pages/academic/teacher-info-list",
-      icon: (
-        <ContactRound
-          style={{ width: "2.1rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
+    }
+    ,
     {
       title: "ออกเกรดรายวิชา",
       href: "/pages/academic/grading",
       icon: (
-        <FileSpreadsheet
+        <FileSliders
           style={{ width: "2.2rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
       ),
     },
     {
-      title: "ระบบจัดการเกรดและคะแนน",
+      title: "ระบบจัดการคะแนน",
       href: "/pages/academic/grading/management/classroom",
       icon: (
-        <BookMarked
-          style={{ width: "2.2rem", height: "2.5rem" }}
+        <FileSpreadsheet
+          style={{ width: "2.1rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
       ),
@@ -139,11 +89,42 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       ],
     },
     {
-      title: "รายชื่อไม่ผ่านเกณฑ์วิชา",
-      href: "/pages/academic/student-failed",
+      title: "ข้อมูลนักเรียน",
+      href: "/pages/academic/student-info-list",
       icon: (
-        <OctagonX
-          style={{ width: "2.0rem", height: "2.0rem" }}
+        <BookUser
+          style={{ width: "2.2rem", height: "2.5rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
+    {
+      title: "ข้อมูลอาจารย์",
+      href: "/pages/academic/teacher-info-list",
+      icon: (
+        <ContactRound
+          style={{ width: "2.1rem", height: "2.5rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
+    
+    {
+      title: "จัดตารางเรียนตารางสอน",
+      href: "/pages/academic/schedule-management",
+      icon: (
+        <TableProperties
+          style={{ width: "2.0rem", height: "2.2rem" }}
+          className="text-[#0C2943]"
+        />
+      ),
+    },
+    {
+      title: "จัดการรายวิชา",
+      href: "/pages/academic/subject-management",
+      icon: (
+        <Grid2X2Plus
+          style={{ width: "2.0rem", height: "2.2rem" }}
           className="text-[#0C2943]"
         />
       ),
