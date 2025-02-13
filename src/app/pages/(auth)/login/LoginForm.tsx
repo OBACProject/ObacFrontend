@@ -73,8 +73,8 @@ export default function LoginForm({ session }: LoginFormProps) {
 
     Cookies.remove("role");
     Cookies.remove("name");
-
     toast.info("Logout successful");
+    window.location.reload()
   };
 
   return (

@@ -31,7 +31,7 @@ export default function TeacherSidebar({
     try {
       await logout();
       setUserName("");
-      router.push("/pages/login");
+      window.location.reload()
     } catch (error) {
       console.error("Logout failed:", error);
     }
