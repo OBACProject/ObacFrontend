@@ -31,11 +31,11 @@ const GenStudentNameInSubject = ({
   doc.addFont("THSarabunBold.ttf", "THSarabunBold", "normal");
 
   doc.setFont("THSarabunBold")
-  doc.setFontSize(16);
+  doc.setFontSize(14);
   doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, {
     align: "center",
   });
-  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 100, 10, {
+  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 120, 10, {
     align: "center",
   });
   doc.setFontSize(12);

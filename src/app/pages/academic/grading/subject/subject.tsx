@@ -103,7 +103,7 @@ export function Subject(props: {
   // console.log(gradingDataFiltered);
   return (
     <>
-      <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
+      <header className="flex flex-col p-4 w-full border-2 mt-4 rounded-lg">
         {/* filter Data */}
         <div className="flex gap-6 mt-6 p-4 bg-slate-50 rounded-lg">
           {/* filter */}

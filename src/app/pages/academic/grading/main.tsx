@@ -79,7 +79,7 @@ export function Main() {
   };
 
   return (
-    <>
+    <div className="w-full">
       {/* Breadcrumb and navigation */}
       <div className="w-full flex gap-2 transition-all duration-500 ease-in-out justify-between">
         <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
@@ -97,7 +97,7 @@ export function Main() {
           {classSubjectData && (
             <div className="w-full flex items-center justify-center">
               <button
-                className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 w-full hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("class")}
               >
                 <span className="text-black text-sm font-bold">
@@ -110,7 +110,7 @@ export function Main() {
           {classSubjectData && classInfoData && (
             <div className="w-full flex items-center justify-center">
               <button
-                className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 w-auto  hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("infoClass")}
               >
                 <span className="text-black text-sm font-bold">Info Class</span>
@@ -132,7 +132,7 @@ export function Main() {
 
       {/* Conditional Rendering for Active Tab */}
       {activeTab === "subject" && (
-        <div className="opacity-100 transition-opacity duration-500 ease-in-out">
+        <div className="opacity-100 w-full  transition-opacity duration-500 ease-in-out">
           <Subject
             handleTab={handleTab}
             handleSelectedData={handleSelectedSubjectData}
@@ -152,6 +152,7 @@ export function Main() {
 
       {activeTab === "infoClass" && classSubjectData && classInfoData && (
         <>
+        <h1 className="text-5xl font-extrabold text-black"></h1>
           <AcademicStudentInfo
             subjectId={classInfoData.subjectId}
             scheduleSubjectId={classInfoData.scheduleSubjectId}
@@ -234,6 +235,6 @@ export function Main() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

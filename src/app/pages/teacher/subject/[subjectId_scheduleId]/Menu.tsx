@@ -4,7 +4,7 @@ import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
-import { ConvertToExcel } from "@/lib/convertToExcel";
+import { ConvertScoreToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import GenerateMockData from "@/resource/teachers/exceldata";
@@ -98,7 +98,7 @@ export default function MenuBar({
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={async () => {
-                ConvertToExcel(
+                ConvertScoreToExcel(
                   convertGrad,
                   String(scheduleData?.term ?? ""),
                   String(scheduleData?.year ?? ""),

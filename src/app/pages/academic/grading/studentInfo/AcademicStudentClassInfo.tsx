@@ -1,6 +1,6 @@
 import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
-import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
+import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -21,14 +21,23 @@ export function AcademicStudentInfo(props: {
 }) {
   const room = props.room;
 
-  const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId>();
+  const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId[]>([]);
   const [searchStudent, setSearchStudent] = useState<string>("");
+  
+  
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   const [gradDataFilter, setGradDataFilter] = useState<GetGradBySubjectId[]>(
     []
   );
   const [onEdit, setOnEdit] = useState<boolean>(false);
 
+  let subject_group_list =[];
+  for (let i = 0 ; i< scheduleData.length ; i++){
+
+  }
+
+  console.log("data :",scheduleData)
+  console.log("code :",0)
   const handleEdit = () => {
     setOnEdit(!onEdit);
   };
@@ -45,7 +54,7 @@ export function AcademicStudentInfo(props: {
 
         const schedule: GetScheduleBysubjectId =
           await fetchGetScheduleBysubjectId(props.subjectId);
-        setSchedules(schedule);
+        setSchedules([schedule]);
       } catch (error) {
         console.error("Error fetching grad data:", error);
         setGradData([]);
@@ -119,7 +128,6 @@ export function AcademicStudentInfo(props: {
           }
         );
         const responseBody = await response.json();
-        console.log("Response from server:", responseBody);
 
         if (!response.ok) {
           throw new Error(
@@ -127,7 +135,6 @@ export function AcademicStudentInfo(props: {
           );
         }
       }
-      console.log("Payload sent to the server:", payload);
       setOnEdit(!onEdit);
       alert("Grades updated successfully!");
     } catch (error) {
@@ -158,7 +165,7 @@ export function AcademicStudentInfo(props: {
     }
   }
   const onChangeGrade = (value: string) => {
-    console.log(value);
+
   };
 
   const gradeValue = [
@@ -177,7 +184,6 @@ export function AcademicStudentInfo(props: {
     "มส.",
   ];
 
-  console.log("gradDatas", gradDatas);
   return (
     <div className="w-full mt-4">
       <div className="flex justify-between mb-4">
@@ -195,17 +201,15 @@ export function AcademicStudentInfo(props: {
             </span>
           </Badge>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="grid grid-cols-2 gap-2">
           <button
             disabled={!room}
             className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
             onClick={() => {
-              // GradPerTerms({
-              //   grads: 10,
-              //   // studentGroup: props.room,
-              //   // subjectId: scheduleData?.subjectCode,
-              //   // subjectName: scheduleData?.subjectName,
-              // });
+              GenSubjectScore({ grads: gradDatas,
+                studentGroup: room,
+                subjectId: scheduleData[0]?.subjectCode,
+                subjectName:  gradDatas[0]?.subjectName,})
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
@@ -213,12 +217,13 @@ export function AcademicStudentInfo(props: {
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             onClick={() => {
-              GenStudentNameInSubject({
-                grads: gradDatas,
-                studentGroup: room,
-                subjectId: scheduleData?.subjectCode,
-                subjectName: gradDatas[0]?.subjectName,
-              });
+                GenStudentNameInSubject({
+                  grads: gradDatas,
+                  studentGroup: room,
+                  subjectId: scheduleData[0]?.subjectCode,
+                  subjectName: gradDatas[0]?.subjectName,
+              }
+            )
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดรายชื่อนักเรียน</p>
@@ -228,9 +233,9 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertScoreToExcel(
                 convertGrad,
-                String(scheduleData?.term ?? ""),
-                String(scheduleData?.year ?? ""),
-                scheduleData?.subjectCode || "",
+                String(scheduleData[0]?.term ?? ""),
+                String(scheduleData[0]?.year ?? ""),
+                scheduleData[0]?.subjectCode || "",
                 gradDatas[0]?.subjectName || "",
                 room || ""
               );
@@ -243,7 +248,7 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertClassroomToExcel(
                 covertStudentExcel,
-                scheduleData?.subjectCode || "",
+                scheduleData[0]?.subjectCode || "",
                 gradDatas[0]?.subjectName || "",
                 room || ""
               );
