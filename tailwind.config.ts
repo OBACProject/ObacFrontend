@@ -11,6 +11,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      width: () => {
+        const widths: Record<string, string> = {};
+        for (let i = 1; i <= 16; i++) {
+          widths[`${i}/16`] = `${(i / 16) * 100}%`;
+        }
+        return widths;
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -77,34 +84,33 @@ const config: Config = {
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
-        blob:{
-          '0%':{
-            transform : "translate(0px,0px) scale(1)"
+        blob: {
+          "0%": {
+            transform: "translate(0px,0px) scale(1)",
           },
           "33%": {
-            transform:"translate(40px,-60px) scale(1.2)"
+            transform: "translate(40px,-60px) scale(1.2)",
           },
-          "66%" :{
-            transform :"translate(-40px,60px) scale(0.8)",
+          "66%": {
+            transform: "translate(-40px,60px) scale(0.8)",
           },
-          "100%":{
-            transform : "translate(0px,0px) scale(1)",
-          }
+          "100%": {
+            transform: "translate(0px,0px) scale(1)",
+          },
         },
-        
       },
       animation: {
-        fadeIn: 'fadeIn 2s ease-in-out',
-        fastFade : 'fadeIn 1s ease-in-out',
-        fadeStep1: 'fadeIn 3s ease-in-out',
-        fadeStep2: 'fadeIn 4s ease-in-out',
-        blob:"blob 7s infinite",
+        fadeIn: "fadeIn 2s ease-in-out",
+        fastFade: "fadeIn 1s ease-in-out",
+        fadeStep1: "fadeIn 3s ease-in-out",
+        fadeStep2: "fadeIn 4s ease-in-out",
+        blob: "blob 7s infinite",
       },
-      backgroundImage:{
-        authBg:"/images/obac_view.jpg"
+      backgroundImage: {
+        authBg: "/images/obac_view.jpg",
       },
     },
   },
