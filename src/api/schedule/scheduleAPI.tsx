@@ -1,4 +1,4 @@
-import { GetScheduleBysubjectId, StudentGroupScheduleSubject, TeacherScheduleSubject } from "@/dto/schedule";
+import { GetScheduleBysubjectId, StudentGroupScheduleSubject, TeacherScheduleSubject,CreateScheduleSubjectRequest } from "@/dto/schedule";
 
 export const fetchGetScheduleBysubjectId = async (
   subjectId: number
@@ -59,6 +59,31 @@ export const fetchGetScheduleOfStudentGroupByGroupID = async (
     const json = JSON.parse(text);
     const data: StudentGroupScheduleSubject = json.data;
     return data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+export const fetchCreateScheduleSubject = async (
+  requestBody: CreateScheduleSubjectRequest
+): Promise<void> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/CreateScheduleSubjectAsync`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to create Schedule Subject");
+    }
+
+    console.log("Schedule Subject created successfully");
   } catch (err) {
     console.log(err);
     throw err;

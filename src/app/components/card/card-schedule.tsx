@@ -2,13 +2,13 @@ import { studentCardSubjectProps } from "@/resource/students/studentCardSubjectD
 
 export function CardSchedule(cardData: studentCardSubjectProps) {
   const dayColorMap: { [key: string]: string } = {
-    Monday: "bg-gradient-to-r from-yellow-200 via-orange-200 to-orange-100 ",
-    Tuesday: "bg-gradient-to-r from-pink-200 via-pink-300 to-red-100 ",
-    Wednesday: "bg-gradient-to-r from-green-200 via-emerald-300 to-yellow-100",
-    Thursday: "bg-gradient-to-r from-orange-200 via-orange-300 to-yellow-100",
-    Friday: "bg-gradient-to-r from-sky-200 via-blue-300 to-purple-200",
-    Saturday: "bg-purple-200",
-    Sunday: "bg-red-200",
+    วันจันทร์: "bg-gradient-to-r from-yellow-200 via-orange-200 to-orange-100 ",
+    วันอังคาร: "bg-gradient-to-r from-pink-200 via-pink-300 to-red-100 ",
+    วันพุธ: "bg-gradient-to-r from-green-200 via-emerald-300 to-yellow-100",
+    วันพฤหัสบดี: "bg-gradient-to-r from-orange-200 via-orange-300 to-yellow-100",
+    วันศุกร์: "bg-gradient-to-r from-sky-200 via-blue-300 to-purple-200",
+    วันเสาร์: "bg-purple-200",
+    วันอาทิตย์: "bg-red-200",
   };
 
   // Get the color class based on the day

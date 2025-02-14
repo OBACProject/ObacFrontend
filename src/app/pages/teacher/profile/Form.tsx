@@ -2,12 +2,12 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
+import { fetchGetTeacherByTeacherIdAsync, fetchTeacherUser } from "@/api/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
 
-const getTeachData = async (id: number) => {
+const getTeachData = async () => {
   try {
-    const teacher = await fetchGetTeacherByTeacherIdAsync(id);
+    const teacher = await fetchTeacherUser();
     console.log(teacher);
     return teacher;
   } catch (err) {
@@ -18,7 +18,7 @@ const getTeachData = async (id: number) => {
 export default function ProfileForm() {
   const [teachers, setTeacher] = useState<GetTeacherByTeacherId>();
   useEffect(() => {
-    getTeachData(2).then((items) => {
+    getTeachData().then((items) => {
       setTeacher(items);
     });
   }, []);

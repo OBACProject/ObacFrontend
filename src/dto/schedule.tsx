@@ -38,3 +38,13 @@ export type StudentGroupScheduleSubject = {
   day: string;
   scheduleSubjects: ScheduleSubject[];
 };
+export type CreateScheduleSubjectRequest = {
+  day:string;
+  period:string;
+  subject_id: number;
+  year: number;
+  term: string;
+  student_group_id: number;
+  teacher_id: number;
+  room: string;
+}

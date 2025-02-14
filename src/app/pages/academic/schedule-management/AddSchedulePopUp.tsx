@@ -1,24 +1,20 @@
+import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
-import { fetchGetAllSubject } from "@/api/subject/subjectAPI";
+import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { GetAllTeacher } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
+import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {
   onClosePopUp: (value: boolean) => void;
   term: string;
   year: string;
-  onSave: (
-    subjectID:number,
-    teacherID: number,
-    studentGroupID: number,
-    room: string,
-    period: string,
-    day: string
-  ) => void;
+  
 };
 
 interface TeacherOption {
@@ -27,7 +23,7 @@ interface TeacherOption {
 }
 const getAllSubject = async () => {
   try {
-    const response = await fetchGetAllSubject();
+    const response = await fetchGetAllActiveSubject();
     return response;
   } catch (err) {
     console.log(err);
@@ -57,7 +53,6 @@ export default function AddSchedulePopUp({
   onClosePopUp,
   term,
   year,
-  onSave,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
@@ -76,13 +71,13 @@ export default function AddSchedulePopUp({
   }, []);
 
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thusday",
-    "Friday",
-    "Saturday",
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์",
   ];
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
@@ -128,7 +123,7 @@ export default function AddSchedulePopUp({
 
   const teacherOptions = teachers.map((teacher) => ({
     value: teacher.teacherId,
-    label: `${teacher.teacherCode} : ${teacher.firstName} ${teacher.lastName}`,
+    label: `${teacher.teacherCode} : ${teacher.thaiName} ${teacher.thaiLastName}`,
   }));
 
   const handleGroupChange = (
@@ -150,21 +145,26 @@ export default function AddSchedulePopUp({
     label: `${item.class}.${item.studentGroupName}`,
   }));
 
-  const onSubmit = () => {
-    console.log(subjectID)
-    console.log(teacherID)
-    console.log(studentGroupId)
-    console.log(room)
-    console.log(period)
-    console.log(day)
-    onSave(
-      subjectID,
-      teacherID,
-      studentGroupId,
-      room,
-      period,
-      day
-    );
+  const onSubmit = async () => {
+      const requestBody: CreateScheduleSubjectRequest = {
+        day:day,
+        period:period,
+        subject_id: subjectID,
+        year: Number(year),
+        term: term,
+        student_group_id: studentGroupId,
+        teacher_id: teacherID,
+        room: room,
+      };
+    
+      try {
+        await fetchCreateScheduleSubject(requestBody);
+        toast.success("สร้างสำเร็จ")
+        onClosePopUp(false)
+      } catch (err) {
+        console.error("Error creating schedule:", err);
+      }
+
   };
 
   return (
