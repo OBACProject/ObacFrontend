@@ -136,8 +136,8 @@ export default function Form() {
           </div>
           {teachers?.map((item: GetAllTeacher, index) => (
             <Link
-              href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=c11ef10d-4616-4a49-8c2f-b362898594f9`}
-              key={index}
+              href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
+              key={item.teacherId}
               className={` ${
                 index % 2 == 0 ? "bg-white" : "bg-gray-100"
               } grid grid-cols-[5%_20%_20%_20%_20%_15%]  hover:bg-blue-50 border border-gray-400  border-t-0`}
@@ -149,13 +149,13 @@ export default function Form() {
                 <p className="line-clamp-1">T10221501</p>
               </div>
               <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
-                <p className="line-clamp-1">{item.firstName}</p>
+                <p className="line-clamp-1">{item.thaiName}</p>
               </div>
               <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r ">
-                <p className="line-clamp-1">{item.lastName}</p>
+                <p className="line-clamp-1">{item.thaiLastName}</p>
               </div>
               <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
-                {item.facultyName}
+                <p className="line-clamp-1">{item.facultyName}</p>
               </div>
               <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
                 091-874-1224
@@ -165,25 +165,29 @@ export default function Form() {
         </div>
       ) : (
         <div className="w-full rounded-sm py-5 px-10">
-          <div className="w-full grid grid-cols-[5%_20%_30%_20%_25%] bg-[#cfe4ff] text-gray-800 border text-lg border-gray-400 py-2 rounded-t-md">
+          <div className="w-full grid grid-cols-[5%_10%_25%_25%_25%_10%] bg-[#cfe4ff] text-gray-800 border text-lg border-gray-400 py-2 rounded-t-md">
             <div className="text-center">ลำดับ</div>
             <div className="text-center">ระดับชั้น</div>
+            <div className="text-center">ประเภทวิชา/สายอาชีพ</div>
+            <div className="text-center">กลุ่มอาชีพ</div>
             <div className="text-center">สาขาวิชา</div>
-            <div className="text-center">สาขางาน</div>
             <div className="text-center">จำนวนนักเรียน</div>
           </div>
           {studentGroup?.map((item: StudentGroup, index) => (
-            <Link href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=1`}
-              key={index}
+            <Link href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.studentGroupId}`}
+              key={item.studentGroupId}
               className={` ${
                 index % 2 == 0 ? "bg-white" : "bg-gray-100"
-              } grid grid-cols-[5%_20%_30%_20%_25%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
+              } grid grid-cols-[5%_10%_25%_25%_25%_10%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
             >
               <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
                 {index + 1}
               </div>
               <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
-                <p className="line-clamp-1">{item.class}</p>
+                <p className="line-clamp-1">{item.class}.{item.studentGroupName}</p>
+              </div>
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+                <p className="line-clamp-1">{item.program}</p>
               </div>
               <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
                 <p className="line-clamp-1">{item.program}</p>
