@@ -62,6 +62,7 @@ export async function logout() {
     Cookies.remove("role");
     Cookies.remove("name");
     Cookies.remove("userId");
+    Cookies.remove("token");
   } catch (err) {
     console.log(err);
     throw new Error("Failed to logout");
