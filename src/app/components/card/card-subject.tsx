@@ -26,19 +26,19 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
 
             <div className="py-3 w-11/12">
               <p className="text-center text-gray-600 font-semibold shadow-sm shadow-gray-400 py-1 px-2 bg-[#e4f1f8] rounded-md">ห้องสอน : {cardSubjectData.room}</p>
-              <div className={`${ cardSubjectData.day  == "Monday"
+              <div className={`${ cardSubjectData.day  == "วันจันทร์"
                   ? "bg-yellow-200"
-                  : cardSubjectData.day == "Tuesday"
+                  : cardSubjectData.day == "วันอังคาร"
                   ? "bg-pink-200"
-                  : cardSubjectData.day == "Wednesday"
+                  : cardSubjectData.day == "วันพุธ"
                   ? "bg-green-300"
-                  : cardSubjectData.day == "Thursday"
+                  : cardSubjectData.day == "วันพฤหัสบดี"
                   ? "bg-orange-200"
-                  : cardSubjectData.day == "Friday"
+                  : cardSubjectData.day == "วันศุกร์"
                   ? "bg-blue-200"
-                  : cardSubjectData.day == "Sunday"
+                  : cardSubjectData.day == "วันเสาร์"
                   ? "bg-red-200"
-                  : cardSubjectData.day == "Saturday"
+                  : cardSubjectData.day == "วันอาทิตย์"
                   ? "bg-purple-300"
                   : ""} text-center font-semibold mt-4 shadow-sm shadow-gray-400  py-1 rounded-sm `}>{cardSubjectData.day}</div>
             </div>

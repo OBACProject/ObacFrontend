@@ -3,8 +3,12 @@
 import CardSubject from "@/app/components/card/card-subject";
 import React, { useEffect, useState } from "react";
 import { TeacherEnrollment } from "@/dto/teacherDto";
-import { fetchGetTeacherEnrollmentsByTeacherId } from "@/api/teacher/teacherAPI";
+import { fetchGetTeacherEnrollmentsByTeacherId, fetchTeacherUser } from "@/api/teacher/teacherAPI";
 import Link from "next/link";
+
+type Props  = {
+  teacherId:number;
+}
 
 const getSubjectData = async (
   teacherId: number,
@@ -19,10 +23,11 @@ const getSubjectData = async (
   }
 };
 
-export default function Form() {
+
+export default function Form({teacherId}:Props) {
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   useEffect(() => {
-    getSubjectData(2, 1, 2024).then((item) => {
+    getSubjectData(teacherId, 1, 2024).then((item) => {
       setCard(item);
     });
   }, []);
