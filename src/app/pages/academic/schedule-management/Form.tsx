@@ -207,7 +207,6 @@ export default function Form() {
           onClosePopUp={setpopUpAddSubject}
           term={term}
           year={year}
-          onSave={getDataAddSchedulePopUp}
         />
       )}
     </div>
