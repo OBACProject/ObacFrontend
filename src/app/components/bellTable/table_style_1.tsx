@@ -11,14 +11,14 @@ type TableProps<T> = {
   columns: Column[];
   data: T[];
   pagination: number;
-  rowLink?: (item: T) => string;
+  onRowClick?: (item: T) => void;
 };
 
 export function DataTable<T>({
   columns,
   data,
   pagination,
-  rowLink,
+  onRowClick,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -55,31 +55,20 @@ export function DataTable<T>({
         paginatedData.map((item, index) => (
           <div
             key={index}
-            className={`w-full flex border border-gray-400 border-t-0 hover:bg-blue-100 text-gray-700 ${
+            className={`w-full flex border border-gray-400 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
               index % 2 === 0 ? "bg-white" : "bg-gray-100"
             }`}
+            onClick={() => onRowClick && onRowClick(item)}
           >
             {columns.map((col, colIndex) => {
-              const cellValue = (item as any)[col.key] ?? "-"; // Ensure non-null values
-              const cellContent = (
+              const cellValue = (item as any)[col.key] ?? "-";
+              return (
                 <div
                   key={`${index}-${colIndex}`}
                   className={`text-center flex items-center px-4 py-2 border-r border-gray-400 ${col.className}`}
                 >
                   <p className="whitespace-normal break-words">{cellValue}</p>
                 </div>
-              );
-
-              return rowLink ? (
-                <Link
-                  href={rowLink(item)}
-                  key={`link-${index}-${colIndex}`}
-                  className="contents"
-                >
-                  {cellContent}
-                </Link>
-              ) : (
-                cellContent
               );
             })}
           </div>
