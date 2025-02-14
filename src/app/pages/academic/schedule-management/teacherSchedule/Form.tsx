@@ -1,5 +1,5 @@
 "use client";
-import { fetchGetScheduleOfTeacherByUserID } from "@/api/schedule/scheduleAPI";
+import { fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI";
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 type Props = {
   term: string;
   year: string;
-  userId: string;
+  teacherID: string;
 };
 
 const getTeacherData = async (teacherId: string) => {
@@ -22,10 +22,10 @@ const getTeacherData = async (teacherId: string) => {
   }
 };
 
-const getSchedule = async (userId: string, term: string, year: string) => {
+const getSchedule = async (teacherID: string, term: string, year: string) => {
   try {
-    const data = await fetchGetScheduleOfTeacherByUserID(
-      userId,
+    const data = await fetchGetScheduleOfTeacherByTeacherID(
+      teacherID,
       Number(term),
       Number(year)
     );
@@ -36,14 +36,14 @@ const getSchedule = async (userId: string, term: string, year: string) => {
   }
 };
 
-export default function Form({ term, year, userId }: Props) {
+export default function Form({ term, year, teacherID }: Props) {
   const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
   const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
   useEffect(() => {
-    getSchedule(userId, term, year).then((d: any) => {
+    getSchedule(teacherID, term, year).then((d: any) => {
       setSchedules(d);
     });
-    getTeacherData("1").then((data: any) => {
+    getTeacherData(teacherID).then((data: any) => {
       setTeacherData(data);
     });
   }, []);

@@ -20,14 +20,14 @@ export const fetchGetScheduleBysubjectId = async (
   }
 };
 
-export const fetchGetScheduleOfTeacherByUserID = async (
-  userId: string,
+export const fetchGetScheduleOfTeacherByTeacherID = async (
+  teacherID: string,
   term: number,
   year: number
 ): Promise<TeacherScheduleSubject> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByUserID?userId=${userId}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Schedule");
@@ -45,12 +45,12 @@ export const fetchGetScheduleOfTeacherByUserID = async (
 
 export const fetchGetScheduleOfStudentGroupByGroupID = async (
   groupId: number,
-  term: number,
+  term: string,
   year: number
 ): Promise<StudentGroupScheduleSubject> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleByStudnetGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Schedule");

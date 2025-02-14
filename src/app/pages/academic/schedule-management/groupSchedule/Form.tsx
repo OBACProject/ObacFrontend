@@ -12,7 +12,7 @@ const getSchedule = async (term: string, year: string, groupId: number) => {
   try {
     const response = await fetchGetScheduleOfStudentGroupByGroupID(
       groupId,
-      Number(term),
+     term,
       Number(year)
     );
     return response;
@@ -38,12 +38,11 @@ export default function Form({ term, year, groupId }: Props) {
         </h1>
       </div>
       <div className="w-full ">
-        <div className="w-full grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
+        <div className="w-full grid grid-cols-[5%_10%_20%_20%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
-          <div className="text-center">สายชั้น</div>
-          <div className="text-center">กลุ่มนักเรียน</div>
+          <div className="text-center">อาจารย์ผู้สอน</div>
           <div className="text-center">ห้องเรียน</div>
           <div className="text-center">หน่วยกิต</div>
           <div className="text-center">คาบเรียน</div>
@@ -58,7 +57,7 @@ export default function Form({ term, year, groupId }: Props) {
                     key={index}
                     className={` ${
                       index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                    } grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%]   border text-[16px] border-gray-400 text-gray-700  border-t-0`}
+                    } grid grid-cols-[5%_10%_20%_20%_10%_10%_10%_15%]   border text-[16px] border-gray-400 text-gray-700  border-t-0`}
                   >
                     <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-2  border-gray-400">
                       {index + 1}
@@ -70,11 +69,9 @@ export default function Form({ term, year, groupId }: Props) {
                       {subject.subjectName}
                     </p>
                     <p className="text-center flex items-center justify-center border-r border-gray-400">
-                      {subject.class}
+                      {subject.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;{subject.teacherLastName}
                     </p>
-                    <p className="text-center flex items-center justify-center border-r border-gray-400">
-                      {subject.groupName}
-                    </p>
+
                     <p className="text-center flex items-center justify-center border-r border-gray-400">
                       {subject.room}
                     </p>

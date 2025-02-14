@@ -21,6 +21,8 @@ export interface ScheduleSubject {
   groupName: string;
   subjectName: string;
   subjectCode: string;
+  teacherName:string;
+  teacherLastName:string;
   day: string;
   period: string;
   room: string;
