@@ -71,15 +71,19 @@ export default function LoginForm({ session }: LoginFormProps) {
   const handleLogout = async () => {
     await logout();
 
+    Cookies.remove("token");
     Cookies.remove("role");
     Cookies.remove("name");
     toast.info("Logout successful");
-    window.location.reload()
+    window.location.reload();
   };
 
   return (
     <div className="relative  bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
-      <img src="/images/obac_view.jpg"  className="absolute object-cover h-screen w-full"/>
+      <img
+        src="/images/obac_view.jpg"
+        className="absolute object-cover h-screen w-full"
+      />
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
       {role && name ? (
         <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">
@@ -99,7 +103,7 @@ export default function LoginForm({ session }: LoginFormProps) {
       ) : (
         <form
           onSubmit={handleLogin}
-        className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+          className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
         >
           <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
           <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
