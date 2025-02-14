@@ -1,3 +1,5 @@
+import { GetSubjectByGroupId } from "./subjectDto";
+
 export interface StudentCreateData {
   userName: string;
   password: string;
@@ -44,7 +46,7 @@ export interface GroupInfo {
 export interface filterProgramsParamsData {
   facultyName: string;
   programName: string;
-  classLevel: string;
+  class: string;
   groupId: string;
   groupName: string;
 }
@@ -64,11 +66,22 @@ export interface StudentInfoByGroupId {
   studentSurname: string;
 }
 
-
-export interface StudentGroup  {
+export interface StudentGroup {
   studentGroupId: number;
   studentGroupName: string;
   class: string;
   program: string;
   studentCount: number;
-};
+}
+
+export interface GetStudentByGroupId {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  subject: GetSubjectByGroupId[];
+}

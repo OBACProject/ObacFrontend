@@ -7,10 +7,14 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
 
     const groupedData = data.reduce(
       (acc: Record<string, EducationData>, item: filterProgramsParamsData) => {
-        const { classLevel, facultyName, programName, groupId, groupName } =
-          item;
+        const {
+          class: classLevel,
+          facultyName,
+          programName,
+          groupId,
+          groupName,
+        } = item;
 
-        // Initialize classLevel if not exists
         if (!acc[classLevel]) {
           acc[classLevel] = {
             classLevel,
@@ -18,12 +22,10 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
           };
         }
 
-        // Find the faculty within the classLevel
         let faculty = acc[classLevel].groupsCourse.find(
           (f) => f.facultyName === facultyName
         );
 
-        // If the faculty doesn't exist, add it
         if (!faculty) {
           faculty = {
             facultyName,
@@ -32,7 +34,6 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
           acc[classLevel].groupsCourse.push(faculty);
         }
 
-        // Find the program within the faculty
         let program = faculty.groupProgram.find(
           (p) => p.programName === programName
         );
@@ -45,7 +46,6 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
           faculty.groupProgram.push(program);
         }
 
-        // Add the group to the program
         program.group.push({
           groupId: parseInt(groupId, 10),
           groupName,
@@ -56,7 +56,6 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
       {}
     );
 
-    // Convert the grouped data back into an array
     const editData: EducationData[] = Object.values(groupedData);
     console.log("editData", editData);
     return editData;

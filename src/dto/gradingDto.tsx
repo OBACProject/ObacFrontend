@@ -1,3 +1,5 @@
+import { GetStudentByGroupId } from "./studentDto";
+
 // data from api
 export interface GradingData {
   id: number;
@@ -43,3 +45,15 @@ export interface ClassSubjectColumn {
 }
 
 export interface GradingInfo {}
+
+export interface ClassroomByGroupIdData {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  facultyName: string;
+  programName: string;
+  term: string;
+  year: number;
+  student: GetStudentByGroupId[];
+}
