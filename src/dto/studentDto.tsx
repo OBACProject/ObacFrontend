@@ -85,3 +85,59 @@ export interface GetStudentByGroupId {
   totalCredit: number;
   subject: GetSubjectByGroupId[];
 }
+
+export interface GetAllStudent {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  thaiName: string;
+  thaiLastName: string;
+  class: string;
+  currentYear: number;
+  studentCode: string;
+  groupName: string;
+  programName: string;
+  facultyName: string;
+  subProgramName: string;
+}
+
+export interface GetAllStudentTableDto {
+  studentId: number;
+  studentCode: string;
+  thaiName: string;
+  class: string;
+  currentYear: number;
+  facultyName: string;
+  subProgramName: string;
+  programName: string;
+}
+
+export interface TermQuery {
+  subject_name: string;
+  subject_code: string;
+  credit: string;
+  finalGrade: string;
+}
+
+export interface YearData {
+  term: string;
+  year: number;
+  totalCredit: number;
+  termQuery: TermQuery[];
+}
+
+export interface StudentTranscriptData {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  thaiName: string;
+  thaiLastName: string;
+  class: string;
+  currentYear: number;
+  studentCode: string;
+  groupName: string;
+  programName: string;
+  facultyName: string;
+  subProgramName: string;
+  year: YearData[];
+}
