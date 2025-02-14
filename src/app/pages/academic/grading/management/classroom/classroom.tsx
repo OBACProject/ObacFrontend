@@ -1,8 +1,13 @@
 "use client";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { Combobox } from "@/app/components/combobox/combobox";
-import { Input } from "@/components/ui/input";
-import { FacultyInfo, EducationData } from "@/dto/studentDto";
+// import { Input } from "@/components/ui/input";
+// import { }
+import {
+  FacultyInfo,
+  EducationData,
+  filterProgramsParamsData,
+} from "@/dto/studentDto";
 import {
   filterProgramsViewData,
   getRawProgramViewData,
@@ -10,21 +15,36 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 interface ClassroomTable {
-  class: string;
+  classLevel: string;
   faculty: string;
   program: string;
+  groupId: string;
   room: string;
 }
 
 export function ClassroomGrading(props: {
   handleTab: (tab: string) => void;
-  handleSelectedData: (data: { groupId: number; room: string }) => void;
+  handleSelectedData: (data: {
+    groupId: number;
+    term: string;
+    year: string;
+    classroom: string;
+  }) => void;
 }) {
   const classLevels = ["ปวช", "ปวส"];
   const levelGrade: Record<string, string[]> = {
     ปวช: ["1", "2", "3"],
     ปวส: ["1", "2"],
   };
+  const term = ["1", "2"];
+  const currentYear = new Date().getFullYear() - 1;
+  const yearsList = Array.from({ length: 5 }, (_, i) =>
+    (currentYear - i).toString()
+  );
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString()
+  );
   // data in table
   const [dataTable, setDataTable] = useState<ClassroomTable[]>([]);
   console.log("dataTable", dataTable);
@@ -43,8 +63,6 @@ export function ClassroomGrading(props: {
   const [program, setProgram] = useState<string[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
   const [room, setRoom] = useState<string[]>([]);
-
-  const [searchClassroom, setSearchClassroom] = useState<string>("");
 
   // get faculties from selected course
   const getFaculties = (courseData: EducationData[]): FacultyInfo[] => {
@@ -117,7 +135,27 @@ export function ClassroomGrading(props: {
   const handleRoom = (selected: string) => {
     setSelectedRoom(selected);
   };
-  console.log("selectedRoom", selectedRoom);
+  // console.log("selectedRoom", selectedRoom);
+
+  const handleRowClick = (item: ClassroomTable) => {
+    if (!selectedTerm || !selectedYear) {
+      alert("กรุณาเลือกภาคเรียนและปีการศึกษา");
+      return;
+    } else {
+      if (item) {
+        // props.handleTab("classroomByGroupId");
+        props.handleSelectedData({
+          groupId: parseInt(item.groupId),
+          term: selectedTerm || "",
+          year: selectedYear || "",
+          classroom: item.room,
+        });
+      } else {
+        alert("ไม่พบข้อมูล");
+      }
+    }
+    console.log("Clicked Group ID:", item.groupId);
+  };
 
   useEffect(() => {
     const fetchFilterData = async () => {
@@ -125,12 +163,19 @@ export function ClassroomGrading(props: {
 
       // set for table data
       const rawData = await getRawProgramViewData();
-      const formattedData: ClassroomTable[] = rawData.map((item) => ({
-        class: item.classLevel,
-        faculty: item.facultyName,
-        program: item.programName,
-        room: item.groupName, // Adjust if this doesn't match the expected "room"
-      }));
+      console.log("rawData", rawData);
+
+      const formattedData: ClassroomTable[] = rawData.map(
+        (item: filterProgramsParamsData) => ({
+          classLevel: item.class,
+          faculty: item.facultyName,
+          groupId: item.groupId,
+          program: item.programName,
+          room: item.groupName,
+        })
+      );
+
+      // console.log("formattedData", formattedData);
       setDataTable(formattedData);
 
       // set for filter data
@@ -150,15 +195,10 @@ export function ClassroomGrading(props: {
   }, []);
 
   const filteredData = useMemo(() => {
-    const normalizedSearch = searchClassroom.toLowerCase();
+    // const normalizedSearch = searchClassroom.toLowerCase();
     const filtered = dataTable.filter((item) => {
-      const matchSearch =
-        item.class.toLowerCase().includes(normalizedSearch) ||
-        item.faculty.toLowerCase().includes(normalizedSearch) ||
-        item.program.toLowerCase().includes(normalizedSearch) ||
-        item.room.toLowerCase().includes(normalizedSearch);
       const matchClassLevel = selectedClassLevel
-        ? item.class === selectedClassLevel
+        ? item.classLevel === selectedClassLevel
         : true;
       const matchFaculty = selectedFaculty
         ? item.faculty === selectedFaculty
@@ -172,7 +212,7 @@ export function ClassroomGrading(props: {
       const matchRoom = selectedRoom ? item.room === selectedRoom : true;
 
       return (
-        matchSearch &&
+        // matchSearch &&
         matchClassLevel &&
         matchFaculty &&
         matchProgram &&
@@ -180,7 +220,9 @@ export function ClassroomGrading(props: {
         matchRoom
       );
     });
-    return filtered;
+    const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
+
+    return sortedData;
   }, [
     dataTable,
     selectedClassLevel,
@@ -188,13 +230,13 @@ export function ClassroomGrading(props: {
     selectedProgram,
     selectedGradeLevel,
     selectedRoom,
-    searchClassroom,
+    // searchClassroom,
   ]);
-  console.log("filteredData", filteredData);
+  // console.log("filteredData", filteredData);
 
   const columns = [
-    { label: "ลำดับ", key: "index", className: "w-1/12" },
-    { label: "ระดับชั้น", key: "class", className: "w-1/12" },
+    { label: "ลำดับ", key: "groupId", className: "w-1/12" },
+    { label: "ระดับชั้น", key: "classLevel", className: "w-1/12" },
     { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-4/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
     { label: "ห้องเรียน", key: "room", className: "w-3/12" },
@@ -203,11 +245,10 @@ export function ClassroomGrading(props: {
   return (
     <>
       <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
-        <div className="flex gap-12 mt-6">
+        <div className="flex gap-12 mt-4">
           <div className="flex justify-center w-full">
-            <div className="flex gap-6 mt-6 w-full p-4 rounded-lg">
+            <div className="flex mx-auto justify-center gap-6 w-full p-2 rounded-lg">
               <div className="w-1/6 flex flex-col gap-4">
-                <h1>ระดับการศึกษา</h1>
                 <Combobox
                   options={classLevels.map((classData) => ({
                     value: classData,
@@ -220,9 +261,6 @@ export function ClassroomGrading(props: {
                 />
               </div>
               <div className="w-1/6 flex flex-col gap-4">
-                <h1 className="text-md font-semibold text-gray-900">
-                  หลักสูตรการศึกษา
-                </h1>
                 <Combobox
                   buttonLabel="กรุณาเลือกหลักสูตร"
                   options={(selectedClassLevel === "ปวช."
@@ -236,8 +274,7 @@ export function ClassroomGrading(props: {
                   disabled={!selectedClassLevel}
                 />
               </div>
-              <div className="w-1/6 flex flex-col gap-4">
-                <h1 className="text-md font-semibold text-gray-900">สาขา</h1>
+              <div className="w-1/6 flex flex-col gap-">
                 <Combobox
                   buttonLabel="กรุณาเลือกสาขา"
                   options={program.map((program) => {
@@ -247,8 +284,7 @@ export function ClassroomGrading(props: {
                   disabled={!selectedFaculty}
                 />
               </div>
-              <div className="w-1/6 flex flex-col gap-4">
-                <h1 className="text-md font-semibold text-gray-900">ชั้นปี</h1>
+              <div className="w-1/6 flex flex-col gap-2">
                 <Combobox
                   buttonLabel="กรุณาเลือกชั้นปี"
                   options={levels.map((item) => ({
@@ -260,9 +296,6 @@ export function ClassroomGrading(props: {
                 />
               </div>
               <div className="w-1/6 flex flex-col gap-4">
-                <h1 className="text-md font-semibold text-gray-900">
-                  ห้องเรียน
-                </h1>
                 <Combobox
                   buttonLabel="กรุณาเลือกห้องเรียน"
                   options={room.map((item) => ({
@@ -277,13 +310,37 @@ export function ClassroomGrading(props: {
           </div>
           <hr className="bg-black mt-4 text-black" />
         </div>
-        <div className="mt-4 flex flex-col gap-6">
-          <Input
+        <div className="flex gap-12 justify-start p-2 ml-20 w-full">
+          <div className="w-1/6 flex flex-col p-2 relative">
+            <h1>เทอม</h1>
+            <Combobox
+              options={term.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+              defaultValue="1"
+              buttonLabel="เลือกภาคเรียน"
+              onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+            />
+          </div>
+          <div className="w-1/6 flex flex-col p-2 relative">
+            <h1>ปีการศึกษา</h1>
+            <Combobox
+              options={yearsList.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+              defaultValue={currentYear.toString()}
+              buttonLabel="เลือกปีการศึกษา"
+              onSelect={(selectedYear) => setSelectedYear(selectedYear)}
+            />
+          </div>
+          {/* <Input
             type="text"
             placeholder="Search..."
             className="w-1/3"
             onChange={(event) => setSearchClassroom(event.target.value)}
-          />
+          /> */}
         </div>
         <DataTable
           columns={columns}
@@ -291,6 +348,7 @@ export function ClassroomGrading(props: {
             ...item,
             index: index + 1,
           }))}
+          onRowClick={handleRowClick}
           pagination={10}
         />
       </header>
