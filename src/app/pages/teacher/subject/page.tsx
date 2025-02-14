@@ -20,6 +20,7 @@ export default function Page() {
     getTeachData().then((item: any) => {
       setTeacherId(item?.teacherId);
     });
+    //test
   }, []);
   useEffect(() => {
     setLoading(true);
