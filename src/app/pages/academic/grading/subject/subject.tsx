@@ -26,12 +26,14 @@ export function Subject(props: {
   console.log(gradingData);
   // filter data
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear(); // Get the current year as a number
+  const currentYear = new Date().getFullYear() - 1;
   const yearsList = Array.from({ length: 5 }, (_, i) =>
     (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString()
+  );
 
   const handleSelectedSubjectData = (id: number) => {
     if (!selectedTerm || !selectedYear) {
@@ -114,6 +116,7 @@ export function Subject(props: {
                 value: item,
                 label: item,
               }))}
+              defaultValue="1"
               buttonLabel="เลือกภาคเรียน"
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />
@@ -125,6 +128,7 @@ export function Subject(props: {
                 value: item,
                 label: item,
               }))}
+              defaultValue={currentYear.toString()}
               buttonLabel="เลือกปีการศึกษา"
               onSelect={(selectedYear) => setSelectedYear(selectedYear)}
             />
