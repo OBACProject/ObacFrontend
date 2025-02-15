@@ -84,14 +84,16 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           let totalGradePoints = 0;
 
           termQuery.forEach((term) => {
-            const grade = parseFloat(term.finalGrade);
-            const credit = parseFloat(term.credit);
+            const grade = parseFloat(parseFloat(term.finalGrade).toFixed(2));
+            const credit = parseFloat(parseFloat(term.credit).toFixed(2));
+
             totalGradePoints += grade * credit;
           });
 
           if (totalCredit === 0) return "0.00";
 
           const gpa = totalGradePoints / totalCredit;
+          console.log("GPA: ", gpa);
           return gpa.toFixed(2);
         };
 
