@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { Subject } from "./subject/subject";
 import { ClassSubjectPage } from "./classSubject/classSubject";
 import { ChevronRight } from "lucide-react";
 import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
+import { MethodDto } from "@/dto/methodDto";
+import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
 
 export interface ClassSubject {
   id: number;
@@ -26,7 +29,9 @@ export function Main() {
 
   // State for grading popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [gradingMode, setGradingMode] = useState<"manual" | "period">("manual");
+  const [isActive, setIsActive] = useState(false);
+
+  const [gradingMode, setGradingMode] = useState<"manual" | "period" | null>();
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
@@ -50,6 +55,37 @@ export function Main() {
     setClassInfoData(data);
   };
 
+  const fetchData = async () => {
+    try {
+      const response: MethodDto[] = await getMethodViewData(); // Fetch initial method data
+
+      const editResponse = response.find(
+        (item) => item.methodName === "Edit_Score"
+      );
+      console.log("Edit Response:", editResponse);
+      if (editResponse) {
+        setIsActive(editResponse.isActive);
+        if (!editResponse.isActive) {
+          setGradingMode(null);
+        } else {
+          if (
+            editResponse.isAuto &&
+            editResponse.startDate &&
+            editResponse.endDate
+          ) {
+            setGradingMode("period");
+            setStartTime(editResponse.startDate);
+            setEndTime(editResponse.endDate);
+          } else {
+            setGradingMode("manual");
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch initial method data:", error);
+    }
+  };
+
   const handleConfirm = async () => {
     if (gradingMode === "period" && (!startTime || !endTime)) {
       alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนน");
@@ -59,24 +95,46 @@ export function Main() {
       alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนนให้ถูกต้อง");
       return;
     }
-    let isAuto = true;
-    if (gradingMode === "period") {
-      isAuto = false;
-    }
+    const isAuto = gradingMode == "period";
 
     const methodData = {
       id: 1,
       methodName: "Edit_Score",
       isAuto: isAuto,
-      startDate: startTime,
-      endDate: endTime,
-      isActive: true,
+      startDate: gradingMode === "period" ? startTime : null,
+      endDate: gradingMode === "period" ? endTime : null,
+      isActive: isActive,
     };
 
-    // Call API to set grading mode
     await fetchPutMethodData(methodData);
     setIsPopupOpen(false);
+    try {
+      await fetchPutMethodData(methodData);
+      setIsPopupOpen(false);
+      Swal.fire({
+        title: "Success!",
+        icon: "success",
+      });
+
+      // Fetch data again after the update
+      fetchData();
+    } catch (error) {
+      console.error("Failed to update method data:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to update method data",
+        icon: "error",
+      });
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setIsActive(gradingMode !== null ? true : false);
+  }, [gradingMode]);
 
   return (
     <div className="w-full">
@@ -152,7 +210,7 @@ export function Main() {
 
       {activeTab === "infoClass" && classSubjectData && classInfoData && (
         <>
-        <h1 className="text-5xl font-extrabold text-black"></h1>
+          <h1 className="text-5xl font-extrabold text-black"></h1>
           <AcademicStudentInfo
             subjectId={classInfoData.subjectId}
             scheduleSubjectId={classInfoData.scheduleSubjectId}
@@ -169,56 +227,68 @@ export function Main() {
               ระบบเปิด/ปิดช่วงการลงคะแนน
             </h2>
 
-            {/* Manual Option */}
-            <label className="flex items-center space-x-2 cursor-pointer">
-              <input
-                type="radio"
-                name="gradingMode"
-                value="manual"
-                checked={gradingMode === "manual"}
-                onChange={() => setGradingMode("manual")}
-              />
-              <span>เปิดระบบการกรอกคะแนน (On / Off)</span>
-            </label>
+            {/* Manual Mode Toggle */}
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-medium text-gray-900">
+                เปิดระบบการกรอกคะแนน (on/off)
+              </span>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={gradingMode === "manual"}
+                  onChange={() =>
+                    setGradingMode(gradingMode === "manual" ? null : "manual")
+                  }
+                  className="sr-only peer"
+                />
+                <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"></div>
+              </label>
+            </div>
 
-            {/* Period Time Option */}
-            <label className="flex items-center space-x-2 cursor-pointer mt-2">
-              <input
-                type="radio"
-                name="gradingMode"
-                value="period"
-                checked={gradingMode === "period"}
-                onChange={() => setGradingMode("period")}
-              />
-              <span>ช่วงเวลาในการกรอกคะแนน</span>
-            </label>
+            {/* Period Mode Option */}
+            <div className="flex items-center justify-between  mb-4">
+              <span className="ml-2 text-sm text-gray-900">
+                เปิดระบบการกรอกคะแนนตามช่วงเวลา
+              </span>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={gradingMode === "period"}
+                  onChange={() =>
+                    setGradingMode(gradingMode === "period" ? null : "period")
+                  }
+                  className="sr-only peer"
+                />
+                <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"></div>
+              </label>
+            </div>
 
-            {/* Time Pickers */}
+            {/* Time Pickers for Period Mode */}
             {gradingMode === "period" && (
-              <div className="mt-4 space-y-2">
-                <label className="block">
-                  วันที่เริ่มต้นการกรอกคะแนน:
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm">วันที่เริ่มต้น:</label>
                   <input
                     type="datetime-local"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full border p-2 rounded mt-1"
+                    className="w-full border rounded p-2 mt-1"
                   />
-                </label>
-                <label className="block">
-                  วันที่สิ้นสุดการกรอกคะแนน:
+                </div>
+                <div>
+                  <label className="block text-sm">วันที่สิ้นสุด:</label>
                   <input
                     type="datetime-local"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full border p-2 rounded mt-1"
+                    className="w-full border rounded p-2 mt-1"
                   />
-                </label>
+                </div>
               </div>
             )}
 
-            {/* Buttons */}
-            <div className="mt-6 flex justify-end space-x-2">
+            {/* Popup Action Buttons */}
+            <div className="flex justify-end space-x-3 mt-6">
               <button
                 className="px-4 py-2 bg-gray-300 rounded"
                 onClick={() => setIsPopupOpen(false)}
