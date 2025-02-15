@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { useRouter } from "next/navigation";
 import { Combobox } from "@/app/components/combobox/combobox";
+import { toast } from "react-toastify";
 
 interface Props {
   grads?: GetGradBySubjectId[];
@@ -54,8 +55,8 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           );
         }
       }
-      alert("บันทึกคะแนนสำเร็จ");
-      router.push("/pages/teacher/subject");
+      toast.success("บันทึกคะแนนสำเร็จ");
+      window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
       alert("Failed to save grades. Please try again.");
@@ -223,7 +224,8 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       ))}
       <div className="my-5 w-full grid place-items-end  ">
         <button
-          onClick={saveChanges} disabled={!onEdit}
+          onClick={saveChanges}
+          disabled={!onEdit}
           className="px-4 py-2  enabled:bg-green-500 enabled:hover:bg-green-300 duration-300   bg-green-300 text-white rounded hover:bg-green-300"
         >
           บันทึกคะแนน

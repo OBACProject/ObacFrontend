@@ -31,12 +31,7 @@ export default function Page() {
         </p>
       </div>
       {isLoading ? (
-        <div>
-          { teacherId &&
-            <Form teacherId={Number(teacherId)} />
-          }
-          
-        </div>
+        <div>{teacherId && <Form teacherId={Number(teacherId)} />}</div>
       ) : (
         <div className="px-10  grid place-items-center py-4">
           <div className="px-10 animate-pulse py-10 grid place-items-center text-4xl font-extrabold text-gray-600   w-full border-2 border-dashed border-gray-400 rounded-md">
