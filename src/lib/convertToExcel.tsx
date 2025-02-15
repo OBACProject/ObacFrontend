@@ -1,4 +1,8 @@
 import {
+  GeneralData,
+  StudentList,
+} from "@/app/pages/academic/grading/management/classroom/classroomByGroupId";
+import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
 } from "@/dto/gradDto";
@@ -174,5 +178,103 @@ export async function ConvertClassroomToExcel(
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
   link.download = filename;
+  link.click();
+}
+
+export async function ConvertClassroomGradingToExcel(
+  generalData: GeneralData,
+  studentList: StudentList[]
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Grading Sheet");
+
+  worksheet.mergeCells("A1:G1");
+  const titleCell = worksheet.getCell("A1");
+  titleCell.value = `วันที่พิมพ์: ${new Date().toLocaleDateString()} วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ`;
+  titleCell.alignment = { horizontal: "center" };
+  titleCell.font = { size: 14, bold: true };
+
+  worksheet.mergeCells("A2:G2");
+  const classCell = worksheet.getCell("A2");
+  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ห้อง: ${generalData.groupCode}`;
+  classCell.alignment = { horizontal: "center" };
+  classCell.font = { size: 12, bold: true };
+
+  const uniqueSubjects = Array.from(
+    new Set(studentList.flatMap((student) => Object.keys(student.subjects)))
+  );
+
+  // const headerRow = worksheet.addRow([
+  //   "ลำดับ",
+  //   "รหัสนักศึกษา",
+  //   "ชื่อ - นามสกุล",
+  //   "ชื่อวิชา", // have like a subjects.length
+  //   "เฉลี่ย",
+  //   "เฉลี่ยสะสม",
+  // ]);
+
+  const headerRowValues = [
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    "ชื่อ - นามสกุล",
+    ...uniqueSubjects, // have like a subjects.length
+    "เฉลี่ย",
+    "เฉลี่ยสะสม",
+  ];
+  const headerRow = worksheet.addRow(headerRowValues);
+
+  headerRow.eachCell((cell) => {
+    cell.font = { bold: true };
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentCode", width: 15 },
+    { key: "name", width: 25 },
+    ...uniqueSubjects.map(() => ({ width: 20 })), // Set all subject columns to same width
+    { key: "gpa", width: 12 },
+    { key: "gpax", width: 12 },
+  ];
+
+  studentList.forEach((student, index) => {
+    const rowData = [
+      index + 1,
+      student.studentCode,
+      student.name,
+      ...uniqueSubjects.map((subject) => student.subjects[subject] || "-"), // Show "-" if subject doesn't exist
+      student.gpa.toFixed(2),
+      student.gpax.toFixed(2),
+    ];
+
+    const row = worksheet.addRow(rowData);
+
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = {
+        vertical: "middle",
+        horizontal: colNumber === 3 ? "left" : "center",
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `ออกคะแนนห้อง ${generalData.groupCode}.xlsx`;
   link.click();
 }
