@@ -338,7 +338,7 @@ export function ClassSubjectPage(props: {
                   variant={"outline"}
                   className="h-10 text-lg hover:bg-slate-200 transition:duration-500 rounded-md"
                 >
-                  publish Grade
+                  ตัดเกรด
                 </Badge>
               </button>
             </div>
