@@ -6,6 +6,7 @@ import { exampleStudentData } from "@/resource/students/infoStudent";
 import React, { useState } from "react";
 import { LabelText } from "@/app/components/labelText/labelText";
 
+
 export default function Form() {
   const [isGeneralInfoVisible, setGeneralInfoVisible] = useState(true);
 

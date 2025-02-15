@@ -85,3 +85,35 @@ export interface GetStudentByGroupId {
   totalCredit: number;
   subject: GetSubjectByGroupId[];
 }
+
+
+export interface GetStudentUser {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  thaiName: string;
+  thaiLastName: string;
+  gender: string;
+  groupName: string;
+  studentGroupId: number;
+  studentCode: string;
+  thaiId: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  nationality: string;
+  religion: string;
+  role: string;
+  userId: string;
+  isActive: boolean;
+  class: string;
+  enrollYear: number;
+  currentYear: number;
+  graduateYear: number;
+  currentRoom: string;
+  programId: number;
+  programName: string;
+  facultyId: number;
+  facultyName: string;
+  birthDate: string;
+}

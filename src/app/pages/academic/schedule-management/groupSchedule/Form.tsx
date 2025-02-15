@@ -29,7 +29,6 @@ export default function Form({ term, year, groupId }: Props) {
       setSchedules(item);
     });
   }, []);
-  console.log(schedules);
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
