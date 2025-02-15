@@ -21,7 +21,7 @@ export function makeColumns<T extends { [key: string]: any }>(
     cell: customRenderers?.[key] // make a custom renderer
       ? ({ row }) => customRenderers[key]!(row.original)
       : ({ row }) => (
-          <div className="px-6 py-4 flex justify-center text-center">
+          <div className="flex justify-center text-center">
             {row.original[key]}
           </div>
         ),
@@ -35,7 +35,7 @@ export function makeColumns<T extends { [key: string]: any }>(
       cell: ({ row }) => {
         const id = row.original[idColumn];
         return (
-          <div className="flex justify-center gap-2 whitespace-nowrap px-6 py-4 text-center">
+          <div className="flex justify-center gap-2 whitespace-nowrap p-2 text-center">
             {CustomAction?.map((action, index) => (
               <Button
                 onClick={(e) => {

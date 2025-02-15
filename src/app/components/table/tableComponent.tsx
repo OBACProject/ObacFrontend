@@ -83,7 +83,7 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
                         index === headerGroup.headers.length - 1
                           ? "sticky right-0  z-10"
                           : ""
-                      } text-center px-6 py-3 text-base font-medium tracking-wider`}
+                      } text-center text-base font-medium tracking-wider`}
                     >
                       {header.isPlaceholder
                         ? null
