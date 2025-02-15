@@ -50,6 +50,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-select": "^5.10.0",
     "react-toastify": "^10.0.6",
+    "sweetalert2": "^11.16.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-animated": "^1.1.2",
