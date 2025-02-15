@@ -47,7 +47,6 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           }
         );
         const responseBody = await response.json();
-        console.log("Response from server:", responseBody);
 
         if (!response.ok) {
           throw new Error(
@@ -85,7 +84,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     }
   }
   const onChangeGrade = (value: string) => {
-    console.log(value);
+    
   };
 
   const gradeValue = [

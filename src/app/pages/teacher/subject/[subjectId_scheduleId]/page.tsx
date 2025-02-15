@@ -5,7 +5,6 @@ export default function Page({
 }: {
   params: { subjectId_scheduleId?: string };
 }) {
-  console.log("Params received:", params);
 
   if (!params?.subjectId_scheduleId) {
     return <div>Error: Missing or invalid route parameters</div>;
