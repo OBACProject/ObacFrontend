@@ -2,10 +2,8 @@
 
 import { Combobox } from "@/app/components/combobox/combobox";
 import { ClassroomByGroupIdProps } from "./main";
-import { GetStudentByGroupId } from "@/dto/studentDto";
 import { useEffect, useMemo, useState } from "react";
 import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewData/classroomByGroupIdViewData";
-import { GetSubjectByGroupId } from "@/dto/subjectDto";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
