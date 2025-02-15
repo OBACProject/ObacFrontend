@@ -11,9 +11,10 @@ import {
   ConvertScoreToExcel,
 } from "@/lib/convertToExcel";
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
-import { CircleX, Pencil } from "lucide-react";
+import { CircleX, ClipboardCheck, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export function AcademicStudentInfo(props: {
   subjectId: number;
@@ -32,9 +33,6 @@ export function AcademicStudentInfo(props: {
     []
   );
   const [onEdit, setOnEdit] = useState<boolean>(false);
-
-  let subject_group_list = [];
-  for (let i = 0; i < scheduleData.length; i++) {}
 
   console.log("data :", scheduleData);
   console.log("code :", 0);
@@ -99,14 +97,25 @@ export function AcademicStudentInfo(props: {
     name: `${item.firstName} ${item.lastName}`,
   }));
 
-  // const convertGrad: {
-  //   studentCode: string;
-  //   studentName: string;
-  //   collectScore: number;
-  //   testScore: number;
-  //   affectiveScore: number;
-  //   totalScore: number;
-  // }[];
+  const CompleteGrade = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success("บันทึกคะแนนสำเร็จ");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      alert("Failed to save grades. Please try again.");
+    }
+  };
 
   const saveChanges = async () => {
     try {
@@ -137,7 +146,22 @@ export function AcademicStudentInfo(props: {
         }
       }
       setOnEdit(!onEdit);
-      toast.success("บันทึกคะแนนสำเร็จ");
+      Swal.fire({
+        title: "ยืนยันข้อมูล?",
+        text: "จะไม่สามารถแก้ไขได้",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ตกลง",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "บันทึกข้อมูลสำเร็จ",
+            icon: "success",
+          });
+        }
+      });
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -253,14 +277,25 @@ export function AcademicStudentInfo(props: {
           <Input
             type="text"
             placeholder="Search..."
-            className="w-full pr-10" // Add padding to the right for the icon
+            className="w-full pr-10"
             onChange={(event) => setSearchStudent(event.target.value)}
           />
         </div>
         <div className="w-2/3 my-4 flex gap-6 justify-end">
+          <button
+            className="bg-blue-400 duration-300 h-fit px-4 text-white text-lg rounded-md hover:opacity-75 w-1/4 gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
+            onClick={CompleteGrade}
+          >
+            ยืนยันการตรวจสอบคะแนน{" "}
+            <ClipboardCheck
+              style={{ width: "1.0rem", height: "1.5rem" }}
+              className="text-white"
+            />
+          </button>
+
           {onEdit ? (
             <button
-              className={`bg-red-500 duration-300 text-white h-fit text-center text-lg    rounded-md hover:opacity-75 flex items-center justify-center gap-2 w-[120px] py-1 hover:rounded-sm `}
+              className={`bg-red-500 duration-300 text-white h-fit text-center text-lg rounded-md hover:opacity-75 flex items-center justify-center gap-2 w-[120px] py-1 hover:rounded-sm `}
               onClick={handleEdit}
             >
               ยกเลิก
