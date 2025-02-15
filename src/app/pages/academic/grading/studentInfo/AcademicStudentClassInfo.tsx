@@ -22,23 +22,22 @@ export function AcademicStudentInfo(props: {
 }) {
   const room = props.room;
 
+  const [gradValue, setGradValue] = useState<string>("");
+
   const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId[]>([]);
   const [searchStudent, setSearchStudent] = useState<string>("");
-  
-  
+
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   const [gradDataFilter, setGradDataFilter] = useState<GetGradBySubjectId[]>(
     []
   );
   const [onEdit, setOnEdit] = useState<boolean>(false);
 
-  let subject_group_list =[];
-  for (let i = 0 ; i< scheduleData.length ; i++){
+  let subject_group_list = [];
+  for (let i = 0; i < scheduleData.length; i++) {}
 
-  }
-
-  console.log("data :",scheduleData)
-  console.log("code :",0)
+  console.log("data :", scheduleData);
+  console.log("code :", 0);
   const handleEdit = () => {
     setOnEdit(!onEdit);
   };
@@ -116,6 +115,7 @@ export function AcademicStudentInfo(props: {
         collectScore: item.collectScore,
         testScore: item.testScore,
         affectiveScore: item.affectiveScore,
+        finalGrade: gradValue,
       }));
       for (let i = 0; i < payload.length; i++) {
         const response = await fetch(
@@ -137,7 +137,7 @@ export function AcademicStudentInfo(props: {
         }
       }
       setOnEdit(!onEdit);
-      toast.success("บันทึกคะแนนสำเร็จ")
+      toast.success("บันทึกคะแนนสำเร็จ");
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -145,29 +145,8 @@ export function AcademicStudentInfo(props: {
     }
   };
 
-  function calculateGrade(totalScore: number) {
-    // Update the item to hold the totalScore
-
-    if (totalScore >= 80) {
-      return 4;
-    } else if (totalScore >= 75) {
-      return 3.5;
-    } else if (totalScore >= 70) {
-      return 3;
-    } else if (totalScore >= 65) {
-      return 2.5;
-    } else if (totalScore >= 60) {
-      return 2;
-    } else if (totalScore >= 55) {
-      return 1.5;
-    } else if (totalScore >= 50) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
   const onChangeGrade = (value: string) => {
-
+    setGradValue(value);
   };
 
   const gradeValue = [
@@ -208,10 +187,12 @@ export function AcademicStudentInfo(props: {
             disabled={!room}
             className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
             onClick={() => {
-              GenSubjectScore({ grads: gradDatas,
+              GenSubjectScore({
+                grads: gradDatas,
                 studentGroup: room,
                 subjectId: scheduleData[0]?.subjectCode,
-                subjectName:  gradDatas[0]?.subjectName,})
+                subjectName: gradDatas[0]?.subjectName,
+              });
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
@@ -219,13 +200,12 @@ export function AcademicStudentInfo(props: {
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             onClick={() => {
-                GenStudentNameInSubject({
-                  grads: gradDatas,
-                  studentGroup: room,
-                  subjectId: scheduleData[0]?.subjectCode,
-                  subjectName: gradDatas[0]?.subjectName,
-              }
-            )
+              GenStudentNameInSubject({
+                grads: gradDatas,
+                studentGroup: room,
+                subjectId: scheduleData[0]?.subjectCode,
+                subjectName: gradDatas[0]?.subjectName,
+              });
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดรายชื่อนักเรียน</p>
@@ -395,27 +375,18 @@ export function AcademicStudentInfo(props: {
               {item.collectScore + item.testScore + item.affectiveScore}
             </span>
             <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 ">
-              {(() => {
-                const totalSum =
-                  item.collectScore + item.testScore + item.affectiveScore;
-                const grade = calculateGrade(totalSum);
-                return (
-                  <>
-                    <div className="flex justify-center px-2 py-1">
-                      <Combobox
-                        buttonLabel="เกรด"
-                        disabled={!onEdit}
-                        options={gradeValue.map((item) => ({
-                          label: item,
-                          value: item,
-                        }))}
-                        onSelect={(seletedGrade) => onChangeGrade(seletedGrade)}
-                        defaultValue={String(grade)}
-                      />
-                    </div>
-                  </>
-                );
-              })()}
+              <div className="flex justify-center px-2 py-1">
+                <Combobox
+                  buttonLabel="เกรด"
+                  disabled={!onEdit}
+                  options={gradeValue.map((item) => ({
+                    label: item,
+                    value: item,
+                  }))}
+                  onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                  defaultValue={item.grade}
+                />
+              </div>
             </span>
             <input
               type="text"

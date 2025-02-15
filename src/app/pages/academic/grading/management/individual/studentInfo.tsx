@@ -15,9 +15,8 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
     const fetchData = async () => {
       try {
         const data = await getStudentDataById(props.studentId);
-        const studentData = data[0];
-        setStudentTranscriptDataById(studentData);
-        setTermData(studentData.year);
+        setStudentTranscriptDataById(data);
+        setTermData(data.year);
       } catch (error) {
         console.error("Error fetching student data:", error);
       }

@@ -13,7 +13,7 @@ export async function GetAllStudentDataApi(): Promise<GetAllStudent[]> {
 
 export async function GetStudentByIdDataApi(
   id: number
-): Promise<StudentTranscriptData[]> {
+): Promise<StudentTranscriptData> {
   try {
     const response = await api.get(
       `Student/GetStudentGradeDetail?studentId=${id}`

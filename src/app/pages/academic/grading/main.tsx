@@ -8,6 +8,7 @@ import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
 import { MethodDto } from "@/dto/methodDto";
 import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
+import Cookies from "js-cookie";
 
 export interface ClassSubject {
   id: number;

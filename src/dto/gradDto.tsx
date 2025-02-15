@@ -13,7 +13,7 @@ export interface GetGradBySubjectId {
   testScore: number;
   affectiveScore: number;
   totalScore: number;
-  grade: number;
+  grade: string;
 }
 
 export interface convertGradBySubjectId {
