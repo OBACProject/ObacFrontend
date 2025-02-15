@@ -281,7 +281,7 @@ export function ClassroomGrading(props: {
         </div>
         <div className="flex gap-12 justify-start p-2 w-full">
           <div className="w-1/6 flex flex-col p-2 relative">
-            <h1>เทอม</h1>
+            <h1>ภาคเรียน</h1>
             <Combobox
               options={term.map((item) => ({
                 value: item,
