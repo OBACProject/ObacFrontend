@@ -9,10 +9,12 @@ import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import GenerateMockData from "@/resource/teachers/exceldata";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+import { MethodDto } from "@/dto/methodDto";
 interface Props {
   grads?: GetGradBySubjectId[];
   schedules?: GetScheduleBysubjectId;
   subjects: GetSubjectBySubjectId;
+  method: MethodDto;
   onEditReturn: (data: boolean) => void;
 }
 
@@ -20,13 +22,14 @@ export default function MenuBar({
   schedules,
   grads,
   subjects,
+  method,
   onEditReturn,
 }: Props) {
   const [gradData, setGradData] = useState<GetGradBySubjectId[]>([]);
   const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjectData, setSubject] = useState<GetSubjectBySubjectId>();
   const [onEdit, setOnEdit] = useState<boolean>(false);
-  const convertGrad = GenerateMockData()
+  const convertGrad = GenerateMockData();
   useEffect(() => {
     setGradData(grads ?? []);
   }, grads);
@@ -39,7 +42,7 @@ export default function MenuBar({
     student_group_list.push(gradData[i].studentGroup);
   }
   const student_group = student_group_list[0];
-
+  console.log("Method : ", method);
   const handleEditChange = () => {
     onEditReturn(true);
     setOnEdit(true);
@@ -52,7 +55,7 @@ export default function MenuBar({
   return (
     <div className="bg-white border-[1px] border-gray-200 ">
       <div className="flex justify-between h-fit">
-        <div className="grid gap-2  rounded-md bg-gray-700 px-10 text-white py-3 ">
+        <div className="grid gap-2  rounded-md bg-white px-10 text-gray-600 border-2 border-blue-300 py-3 ">
           <div className="flex items-center gap-4">
             <span className=" text-xl">
               รหัสวิชา : {subjectData?.subjectCode}
@@ -72,10 +75,12 @@ export default function MenuBar({
               disabled={!student_group}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GenSubjectScore({ grads: grads,
+                GenSubjectScore({
+                  grads: grads,
                   studentGroup: student_group,
                   subjectId: subjectData?.subjectCode,
-                  subjectName: subjectData?.subjectName,})
+                  subjectName: subjectData?.subjectName,
+                });
               }}
             >
               <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
@@ -94,7 +99,7 @@ export default function MenuBar({
               <p className="line-clamp-1">ดาวน์โหลดรายชื่อนักเรียน</p>
             </button>
           </div>
-          <div className="flex justify-end gap-3 ">
+          <div className="flex justify-end items-center gap-3 ">
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={async () => {
@@ -122,16 +127,24 @@ export default function MenuBar({
                 />
               </button>
             ) : (
-              <button
-                className={`bg-blue-400 duration-300 h-fit text-white  text-lg    rounded-md hover:opacity-75 w-[120px]  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm `}
-                onClick={handleEditChange}
-              >
-                แก้ไข{" "}
-                <Pencil
-                  style={{ width: "1.0rem", height: "1.5rem" }}
-                  className="text-white "
-                />
-              </button>
+              <div>
+                {method.isActive ? (
+                  <button
+                    className={`bg-blue-400 duration-300 h-fit text-white  text-lg    rounded-md hover:opacity-75 w-[120px]  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm `}
+                    onClick={handleEditChange}
+                  >
+                    แก้ไข
+                    <Pencil
+                      style={{ width: "1.0rem", height: "1.5rem" }}
+                      className="text-white "
+                    />
+                  </button>
+                ) : (
+                  <div className="text-sm bg-gray-600 text-white py-1.5 rounded-sm px-10">
+                    Closed
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

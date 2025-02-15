@@ -47,7 +47,6 @@ export default function ProfileForm() {
               </div>
               <div className=" flex">
                 <div className="text-xl pl-4 font-semibold ">
-                  {/* {teachers?.teacherGender || "คุณ"} */}
                   นาย
                 </div>
                 <div className="mx-4 text-gray-700">{teachers?.thaiName}</div>
