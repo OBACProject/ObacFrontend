@@ -39,7 +39,7 @@ export function Navbar() {
           <div className="hidden sm:flex justify-end items-center">
             <a
               href="/pages/login"
-              className="px-4 py-2 flex gap-2 group rounded-md text-[16px] border-[1.5px] justify-center items-center border-blue-800  text-blue-800 hover:text-blue-600 hover:border-blue-600"
+              className="px-4 py-1 flex gap-2 group rounded-md text-[16px] border-[1.5px] justify-center items-center border-blue-800  text-blue-800 hover:text-blue-600 hover:border-blue-600"
             >
               เข้าสู่ระบบ
                 <Shield style={{width:"1.5rem" , height:"1.5rem"}} className="text-blue-800 group-hover:text-blue-600"/>
@@ -64,7 +64,6 @@ export function Navbar() {
           {isMenuOpen ? (
             <DropDownMobile menuData={NavbarData} />
           ) : (
-            // Show DropMenu for larger screens
             <DropMenu menuData={NavbarData} />
           )}
         </div>
