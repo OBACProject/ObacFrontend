@@ -42,7 +42,7 @@ export default function MenuBar({
     student_group_list.push(gradData[i].studentGroup);
   }
   const student_group = student_group_list[0];
-  console.log("Method : ", method);
+  
   const handleEditChange = () => {
     onEditReturn(true);
     setOnEdit(true);

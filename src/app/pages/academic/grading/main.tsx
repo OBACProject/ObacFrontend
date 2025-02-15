@@ -290,13 +290,13 @@ export function Main() {
             {/* Popup Action Buttons */}
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                className="px-4 py-2 bg-gray-300 rounded"
+                className="px-4 py-1 bg-gray-300 rounded"
                 onClick={() => setIsPopupOpen(false)}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className="px-4 py-1 bg-blue-500 text-white rounded"
                 onClick={handleConfirm}
               >
                 Confirm
