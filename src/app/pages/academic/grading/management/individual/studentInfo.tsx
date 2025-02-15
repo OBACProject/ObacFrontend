@@ -1,7 +1,7 @@
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { LabelText } from "@/app/components/labelText/labelText";
 import { Badge } from "@/components/ui/badge";
-import { StudentTranscriptData, YearData } from "@/dto/studentDto";
+import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
 import { useEffect, useState } from "react";
 
@@ -79,11 +79,36 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           finalGrade: term.finalGrade,
         }));
 
+        // GPA = Sum(FinalGrade  * subj.Credits ) / yearTermGroup.Sum(subj.Credits)
+        const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
+          let totalGradePoints = 0;
+
+          termQuery.forEach((term) => {
+            const grade = parseFloat(term.finalGrade);
+            const credit = parseFloat(term.credit);
+            totalGradePoints += grade * credit;
+          });
+
+          if (totalCredit === 0) return "0.00";
+
+          const gpa = totalGradePoints / totalCredit;
+          return gpa.toFixed(2);
+        };
+
         return (
           <div key={index} className="mb-6 border p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2">
-              ปีการศึกษา {year.year} เทอม {year.term}
-            </h3>
+            <div className="mx-6 justify-between flex text-xl">
+              <Badge variant={"outline"}>
+                <h3 className="text-lg font-bold ">
+                  ปีการศึกษา {year.year} เทอม {year.term}
+                </h3>
+              </Badge>
+              <Badge variant={"outline"}>
+                <h3 className="text-lg font-bold ">
+                  GPA: {calculateGpa(year.termQuery, year.totalCredit)}
+                </h3>
+              </Badge>
+            </div>
 
             <DataTable
               columns={columns}

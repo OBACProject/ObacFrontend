@@ -8,6 +8,7 @@ import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewD
 import { GetSubjectByGroupId } from "@/dto/subjectDto";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
+import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
 
 export interface GeneralData {
   groupId: number;
@@ -97,17 +98,36 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
     ...GradeColumns,
   ];
 
+  const handleExportToExcel = async () => {
+    if (summaryData) {
+      ConvertClassroomGradingToExcel(
+        summaryData.generalData,
+        summaryData.students
+      );
+    } else {
+      console.error("Summary data is not available");
+    }
+  };
+
   return (
     <>
       <header className="flex flex-col  p-4 border-2 mt-4 rounded-lg">
         {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
-        <div className="flex gap-10 mt-4">
+        <div className="flex gap-10 mt-4 justify-between">
           <Badge variant={"outline"}>
             <h1 className="text-xl">
               สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}
               ห้องเรียน {summaryData?.generalData.groupCode}{" "}
             </h1>
           </Badge>
+          <div>
+            <button
+              onClick={handleExportToExcel}
+              className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+            >
+              เกรดนักเรียนห้อง {summaryData?.generalData.groupCode} Excel
+            </button>
+          </div>
         </div>
         <div className="flex gap-10 mt-4">
           <div className="w-1/6 ">
