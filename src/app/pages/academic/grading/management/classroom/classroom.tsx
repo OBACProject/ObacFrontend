@@ -19,7 +19,6 @@ interface ClassroomTable {
   faculty: string;
   program: string;
   groupId: string;
-  room: string;
 }
 
 export function ClassroomGrading(props: {
@@ -148,7 +147,7 @@ export function ClassroomGrading(props: {
           groupId: parseInt(item.groupId),
           term: selectedTerm || "",
           year: selectedYear || "",
-          classroom: item.room,
+          classroom: item.classLevel,
         });
       } else {
         alert("ไม่พบข้อมูล");
@@ -167,15 +166,13 @@ export function ClassroomGrading(props: {
 
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
-          classLevel: item.class,
+          classLevel: `${item.class}. ${item.groupName}`,
           faculty: item.facultyName,
           groupId: item.groupId,
           program: item.programName,
-          room: item.groupName,
         })
       );
 
-      // console.log("formattedData", formattedData);
       setDataTable(formattedData);
 
       // set for filter data
@@ -198,7 +195,7 @@ export function ClassroomGrading(props: {
     // const normalizedSearch = searchClassroom.toLowerCase();
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
-        ? item.classLevel === selectedClassLevel
+        ? item.classLevel.substring(0, 3) === selectedClassLevel
         : true;
       const matchFaculty = selectedFaculty
         ? item.faculty === selectedFaculty
@@ -206,18 +203,13 @@ export function ClassroomGrading(props: {
       const matchProgram = selectedProgram
         ? item.program === selectedProgram
         : true;
-      const matchGradeLevel = selectedGradeLevel
-        ? item.room.charAt(0) === selectedGradeLevel
+      const matchRoom = selectedRoom
+        ? item.classLevel === selectedClassLevel
         : true;
-      const matchRoom = selectedRoom ? item.room === selectedRoom : true;
 
       return (
         // matchSearch &&
-        matchClassLevel &&
-        matchFaculty &&
-        matchProgram &&
-        matchGradeLevel &&
-        matchRoom
+        matchClassLevel && matchFaculty && matchProgram && matchRoom
       );
     });
     const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
@@ -235,11 +227,10 @@ export function ClassroomGrading(props: {
   // console.log("filteredData", filteredData);
 
   const columns = [
-    { label: "ลำดับ", key: "groupId", className: "w-1/12" },
-    { label: "ระดับชั้น", key: "classLevel", className: "w-1/12" },
-    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-4/12" },
+    { label: "ลำดับ", key: "groupId", className: "w-2/12" },
+    { label: "ระดับชั้น", key: "classLevel", className: "w-2/12" },
+    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-5/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
-    { label: "ห้องเรียน", key: "room", className: "w-3/12" },
   ];
 
   return (
@@ -247,7 +238,7 @@ export function ClassroomGrading(props: {
       <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
         <div className="flex gap-12 mt-4">
           <div className="flex justify-center w-full">
-            <div className="flex mx-auto justify-center gap-6 w-full p-2 rounded-lg">
+            <div className="flex mx-auto justify-start gap-6 w-full p-2 rounded-lg">
               <div className="w-1/6 flex flex-col gap-4">
                 <Combobox
                   options={classLevels.map((classData) => ({
@@ -284,33 +275,11 @@ export function ClassroomGrading(props: {
                   disabled={!selectedFaculty}
                 />
               </div>
-              <div className="w-1/6 flex flex-col gap-2">
-                <Combobox
-                  buttonLabel="กรุณาเลือกชั้นปี"
-                  options={levels.map((item) => ({
-                    value: item,
-                    label: item,
-                  }))}
-                  onSelect={(selected) => handleGlassLevelChange(selected)}
-                  disabled={!selectedProgram}
-                />
-              </div>
-              <div className="w-1/6 flex flex-col gap-4">
-                <Combobox
-                  buttonLabel="กรุณาเลือกห้องเรียน"
-                  options={room.map((item) => ({
-                    value: item,
-                    label: item,
-                  }))}
-                  onSelect={(selected) => handleRoom(selected)}
-                  disabled={!selectedGradeLevel}
-                />
-              </div>
             </div>
           </div>
           <hr className="bg-black mt-4 text-black" />
         </div>
-        <div className="flex gap-12 justify-start p-2 ml-20 w-full">
+        <div className="flex gap-12 justify-start p-2 w-full">
           <div className="w-1/6 flex flex-col p-2 relative">
             <h1>เทอม</h1>
             <Combobox
@@ -335,12 +304,6 @@ export function ClassroomGrading(props: {
               onSelect={(selectedYear) => setSelectedYear(selectedYear)}
             />
           </div>
-          {/* <Input
-            type="text"
-            placeholder="Search..."
-            className="w-1/3"
-            onChange={(event) => setSearchClassroom(event.target.value)}
-          /> */}
         </div>
         <DataTable
           columns={columns}
