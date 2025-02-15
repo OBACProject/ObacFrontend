@@ -58,6 +58,7 @@ export type GetTeacherByTeacherId = {
 export interface TeacherEnrollment {
   id: number;
   teacherId: number;
+  teacherCode:string;
   teacherName: string;
   teacherLastName: string;
   teacherThaiName: string;
@@ -71,4 +72,5 @@ export interface TeacherEnrollment {
   day: string;
   period: number;
   subjectStatus: number;
+  isComplete:boolean;
 }

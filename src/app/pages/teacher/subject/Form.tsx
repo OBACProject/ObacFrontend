@@ -40,7 +40,8 @@ export default function Form({teacherId}:Props) {
             <div className="lg:w-9/12 sm:w-full md:w-full">
               {subjectCards.map((items) => (
                 <Link
-                  href={`/pages/teacher/subject/${items.subjectId}_${items.scheduleSubjectId}`}
+                key={items.id}
+                  href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&schedule=${items.scheduleSubjectId}&iscomplete=${items.isComplete}`}
                 >
                   <CardSubject cardSubjectData={items} />
                 </Link>

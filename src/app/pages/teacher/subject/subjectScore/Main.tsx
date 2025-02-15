@@ -6,7 +6,7 @@ import { GetGradBySubjectId } from "@/dto/gradDto";
 import { fetchGetGradBySubjectId } from "@/api/grad/gradAPI";
 import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
-import {  fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
+import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { MethodDto } from "@/dto/methodDto";
 import { fetchMethod } from "@/api/method/methodAPI";
@@ -14,16 +14,17 @@ import { fetchMethod } from "@/api/method/methodAPI";
 interface Props {
   subjectId: number;
   scheduleId: number;
+  isComplete: boolean;
 }
 
-const getMethodData = async ()=>{
-  try{
-    const response = await fetchMethod()
-    return response
-  }catch(err){
-    console.log("Fetch error in FE")
+const getMethodData = async () => {
+  try {
+    const response = await fetchMethod();
+    return response;
+  } catch (err) {
+    console.log("Fetch error in FE");
   }
-}
+};
 
 const getGradData = async (subjectId: number, scheduleId: number) => {
   try {
@@ -56,7 +57,7 @@ export default function Main({ subjectId, scheduleId }: Props) {
   const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
-  const [methods , setMethod] = useState<MethodDto>()
+  const [methods, setMethod] = useState<MethodDto>();
 
   useEffect(() => {
     getGradData(subjectId, scheduleId).then((items) => {
@@ -68,16 +69,16 @@ export default function Main({ subjectId, scheduleId }: Props) {
     getSubjectBySubjectId(subjectId).then((items) => {
       setSubjects(items);
     });
-    getMethodData().then((items)=>{
-      setMethod(items)
-    })
+    getMethodData().then((items) => {
+      setMethod(items);
+    });
   }, []);
 
   const [edit, setEdit] = useState<boolean | null | undefined>();
   const getEdit = (data: boolean) => {
     setEdit(data);
   };
-  
+
   return (
     <div className="pl-20">
       {subjects && methods && (
