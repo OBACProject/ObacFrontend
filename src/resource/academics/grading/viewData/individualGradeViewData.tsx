@@ -27,7 +27,7 @@ export async function getAllStudentViewData() {
 
 export async function getStudentDataById(
   studentId: number
-): Promise<StudentTranscriptData[]> {
+): Promise<StudentTranscriptData> {
   const data = await GetStudentByIdDataApi(studentId);
 
   return data;
