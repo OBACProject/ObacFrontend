@@ -1,4 +1,9 @@
-import { GetScheduleBysubjectId, StudentGroupScheduleSubject, TeacherScheduleSubject,CreateScheduleSubjectRequest } from "@/dto/schedule";
+import {
+  GetScheduleBysubjectId,
+  StudentGroupScheduleSubject,
+  TeacherScheduleSubject,
+  CreateScheduleSubjectRequest,
+} from "@/dto/schedule";
 
 export const fetchGetScheduleBysubjectId = async (
   subjectId: number
@@ -64,6 +69,28 @@ export const fetchGetScheduleOfStudentGroupByGroupID = async (
     throw err;
   }
 };
+export const fetchGetScheduleOfStudentByStudentID = async (
+  studentId: number,
+  term: string,
+  year: number
+): Promise<StudentGroupScheduleSubject> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch Schedule");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: StudentGroupScheduleSubject = json.data;
+    return data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 export const fetchCreateScheduleSubject = async (
   requestBody: CreateScheduleSubjectRequest
 ): Promise<void> => {

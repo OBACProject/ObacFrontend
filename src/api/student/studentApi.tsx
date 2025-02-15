@@ -1,6 +1,10 @@
-"use server"
-import { StudentCreateData, StudentGroup } from "@/dto/studentDto";
-import {cookies} from "next/headers"
+"use server";
+import {
+  GetStudentUser,
+  StudentCreateData,
+  StudentGroup,
+} from "@/dto/studentDto";
+import { cookies } from "next/headers";
 
 export const fetchCreateStudentAsync = async (
   studentData: StudentCreateData
@@ -28,15 +32,16 @@ export const fetchCreateStudentAsync = async (
 };
 
 export const fetchGetAllStudentGroup = async (): Promise<StudentGroup[]> => {
-  const token = cookies().get("token")?.value
+  const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudentGroup`,{
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudentGroup`,
+      {
         method: "GET",
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
     );
     if (!response.ok) {
@@ -54,5 +59,32 @@ export const fetchGetAllStudentGroup = async (): Promise<StudentGroup[]> => {
   } catch (err) {
     console.error("Error fetching Group:", err);
     return [];
+  }
+};
+
+export const fetchStudentUser = async (): Promise<GetStudentUser> => {
+  try {
+    const userId = cookies().get("userId")?.value;
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByUserId?userId=${userId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch in API");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: GetStudentUser = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
   }
 };

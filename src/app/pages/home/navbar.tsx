@@ -39,10 +39,10 @@ export function Navbar() {
           <div className="hidden sm:flex justify-end items-center">
             <a
               href="/pages/login"
-              className="px-4 py-2 flex gap-2 rounded-md bg-blue-900 text-white hover:bg-blue-700"
+              className="px-4 py-2 flex gap-2 group rounded-md text-[16px] border-[1.5px] justify-center items-center border-blue-800  text-blue-800 hover:text-blue-600 hover:border-blue-600"
             >
-              ลงชื่อเข้าใช้
-                <Shield style={{width:"1.5rem" , height:"1.5rem"}} className="text-white"/>
+              เข้าสู่ระบบ
+                <Shield style={{width:"1.5rem" , height:"1.5rem"}} className="text-blue-800 group-hover:text-blue-600"/>
             </a>
           </div>
 
@@ -72,7 +72,7 @@ export function Navbar() {
         <div className="flex flex-col sm:flex-row justify-end items-start sm:px-2 sm:py-1 gap-2 lg:w-1/6 w-fit">
           <a
             href="/pages/register"
-            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-blue-950 border-white border-2 rounded-full text-white text-base hover:bg-blue-700"
+            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-blue-950 border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
           >
             <p className="line-clamp-1">สมัครออนไลน์</p>
               <CircleCheck style={{width:"1.5rem",height:"1.5rem"}} />

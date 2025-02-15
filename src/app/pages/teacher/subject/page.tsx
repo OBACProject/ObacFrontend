@@ -6,7 +6,6 @@ import { fetchTeacherUser } from "@/api/teacher/teacherAPI";
 const getTeachData = async () => {
   try {
     const teacher = await fetchTeacherUser();
-    console.log(teacher);
     return teacher;
   } catch (err) {
     console.error("Failed to fetch teacher by ID:", err);
@@ -20,7 +19,6 @@ export default function Page() {
     getTeachData().then((item: any) => {
       setTeacherId(item?.teacherId);
     });
-    //test
   }, []);
   useEffect(() => {
     setLoading(true);
