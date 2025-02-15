@@ -72,13 +72,12 @@ export function StudentSidebar({
           </p>
           <button
             onClick={handleLogout}
-            className="text-red-500 hover:text-red-700"
+            className="px-5 items-center rounded-md py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
           >
-            <LogOut className="w-6 h-6" />
+            Logout
           </button>
         </div>
       </header>
-
       <SidebarMenu
         menuItems={menuItems}
         isVisible={isVisible}

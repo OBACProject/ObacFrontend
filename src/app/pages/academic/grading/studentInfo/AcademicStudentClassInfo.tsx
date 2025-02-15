@@ -13,6 +13,7 @@ import {
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export function AcademicStudentInfo(props: {
   subjectId: number;
@@ -136,7 +137,8 @@ export function AcademicStudentInfo(props: {
         }
       }
       setOnEdit(!onEdit);
-      alert("Grades updated successfully!");
+      toast.success("บันทึกคะแนนสำเร็จ")
+      window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
       alert("Failed to save grades. Please try again.");
