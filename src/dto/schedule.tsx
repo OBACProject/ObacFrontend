@@ -35,7 +35,12 @@ export type TeacherScheduleSubject = {
 };
 
 export type StudentGroupScheduleSubject = {
-  day: string;
+  groupName:string;
+  class:string;
+  year:string;
+  term:string;
+  totalCredit:number;
+  totalSubject:number;
   scheduleSubjects: ScheduleSubject[];
 };
 export type CreateScheduleSubjectRequest = {

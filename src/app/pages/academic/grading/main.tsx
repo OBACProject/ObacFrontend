@@ -147,9 +147,9 @@ export function Main() {
               className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
               onClick={() => handleTab("subject")}
             >
-              <span className="text-black text-sm font-bold">
+              <p className="text-black text-sm line-clamp-1 font-bold">
                 {classSubjectData?.subjectName ?? "Subject"}
-              </span>
+              </p>
             </button>
             <ChevronRight />
           </div>
@@ -222,8 +222,9 @@ export function Main() {
 
       {/* Grading Popup */}
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onClick={()=>setIsPopupOpen(false)}>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96" 
+          onClick={(e)=>e.stopPropagation()}>
             <h2 className="text-lg font-semibold mb-4">
               ระบบเปิด/ปิดช่วงการลงคะแนน
             </h2>
@@ -231,7 +232,7 @@ export function Main() {
             {/* Manual Mode Toggle */}
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-gray-900">
-                เปิดระบบการกรอกคะแนน (on/off)
+                เปิดระบบการกรอกคะแนน (เปิด/ปิด)
               </span>
               <label className="inline-flex items-center cursor-pointer">
                 <input
@@ -248,7 +249,7 @@ export function Main() {
 
             {/* Period Mode Option */}
             <div className="flex items-center justify-between  mb-4">
-              <span className="ml-2 text-sm text-gray-900">
+              <span className=" text-sm text-gray-900">
                 เปิดระบบการกรอกคะแนนตามช่วงเวลา
               </span>
               <label className="inline-flex items-center cursor-pointer">
@@ -291,16 +292,16 @@ export function Main() {
             {/* Popup Action Buttons */}
             <div className="flex justify-end space-x-3 mt-6">
               <button
-                className="px-4 py-1 bg-gray-300 rounded"
+                className="px-4 py-1 bg-gray-300 rounded hover:bg-gray-400 duration-200"
                 onClick={() => setIsPopupOpen(false)}
               >
-                Cancel
+                ยกเลิก
               </button>
               <button
-                className="px-4 py-1 bg-blue-500 text-white rounded"
+                className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-700 duration-200"
                 onClick={handleConfirm}
               >
-                Confirm
+                ตกลง
               </button>
             </div>
           </div>
