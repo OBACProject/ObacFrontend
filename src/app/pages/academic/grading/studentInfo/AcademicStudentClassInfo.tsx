@@ -33,6 +33,7 @@ export function AcademicStudentInfo(props: {
     []
   );
   const [onEdit, setOnEdit] = useState<boolean>(false);
+  const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
   console.log("data :", scheduleData);
   console.log("code :", 0);
@@ -191,7 +192,7 @@ export function AcademicStudentInfo(props: {
 
   return (
     <div className="w-full mt-4">
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between">
         <div className="flex items-center">
           <Badge variant={"outline"} className="text-xl">
             วิชา :
@@ -202,7 +203,7 @@ export function AcademicStudentInfo(props: {
           <Badge variant={"outline"} className=" ml-4 text-xl">
             รหัสวิชา :
             <span className="font-semibold ml-2">
-              {gradDatas[0]?.subjectId}
+              ....
             </span>
           </Badge>
         </div>
@@ -272,8 +273,8 @@ export function AcademicStudentInfo(props: {
           </button>
         </div>
       </div>
-      <div className="w-full flex justify-between items-end ">
-        <div className="bg-white w-1/3 my-4">
+      <div className="w-full flex justify-between  items-center ">
+        <div className="bg-white w-1/3 py-2">
           <Input
             type="text"
             placeholder="Search..."
@@ -281,14 +282,14 @@ export function AcademicStudentInfo(props: {
             onChange={(event) => setSearchStudent(event.target.value)}
           />
         </div>
-        <div className="w-2/3 my-4 flex gap-6 justify-end">
+        <div className="w-2/3 flex gap-6 justify-end">
           <button
-            className="bg-blue-400 duration-300 h-fit px-4 text-white text-lg rounded-md hover:opacity-75 w-1/4 gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
-            onClick={CompleteGrade}
+            className="bg-green-400 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-green-600 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
+            onClick={() => setVerifyGradPopUp(true)}
           >
             ยืนยันการตรวจสอบคะแนน{" "}
             <ClipboardCheck
-              style={{ width: "1.0rem", height: "1.5rem" }}
+              style={{ width: "1.5rem", height: "1.8rem" }}
               className="text-white"
             />
           </button>
@@ -441,6 +442,35 @@ export function AcademicStudentInfo(props: {
         </div>
         <hr />
       </div>
+      {verifyGradPopUp && (
+        <div
+          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          onClick={() => setVerifyGradPopUp(false)}
+        >
+          <div
+            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="py-4 w-full text-center text-2xl font-semibold">
+              ยืนยันการตรวจ
+            </div>
+            <div className="grid place-items-center py-3">
+              <p className="w-[300px] text-center">
+                โปรดตรวจสอบให้แน่ใจว่าคะแนนถูกต้อง
+              </p>
+              <p className="text-gray-600 w-[300px] text-center">หากเกิดความผิดพลาดอาจทำให้เกิดความล่าช้าในการประมวลผลเกรด</p>
+            </div>
+            <div className="flex gap-5 justify-center py-5 w-full">
+              <button className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black " onClick={()=>setVerifyGradPopUp(false)}>
+                ยกเลิก
+              </button>
+              <button className="text-sm w-[90px] py-1.5 bg-blue-500 hover:bg-blue-600 rounded-md text-white " onClick={CompleteGrade}>
+                ตกลง
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
