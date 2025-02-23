@@ -57,3 +57,15 @@ export interface ClassroomByGroupIdData {
   year: number;
   student: GetStudentByGroupId[];
 }
+
+export interface UpdateStudentGrade {
+  gradeId: number;
+  collectScore: number;
+  testScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finalScore: number;
+  totalScore: number;
+  finalGrade: string;
+  remark: string;
+}
