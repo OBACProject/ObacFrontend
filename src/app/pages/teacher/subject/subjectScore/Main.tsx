@@ -80,7 +80,7 @@ export default function Main({ subjectId, scheduleId,isComplete }: Props) {
   };
 
   return (
-    <div className="pl-20">
+    <div className="pl-16">
       {subjects && methods && (
         <MenuBar
           schedules={schedules}
@@ -91,7 +91,7 @@ export default function Main({ subjectId, scheduleId,isComplete }: Props) {
           onEditReturn={getEdit}
         />
       )}
-      <div className="px-5 py-5">
+      <div className="px-0 py-5">
         {grads && <SubjectTableForm grads={grads} onEdit={edit} />}
       </div>
     </div>

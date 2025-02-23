@@ -111,7 +111,7 @@ export default function Form() {
       </div>
       <div className="w-full rounded-sm px-10">
         <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
-          <div className="text-center">ลำดับ</div>
+          <div className="text-center text-black">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
           <div className="text-center">สถานะ</div>
@@ -124,8 +124,8 @@ export default function Form() {
               index % 2 == 0 ? "bg-white" : "bg-gray-100"
             } grid grid-cols-[5%_30%_35%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
           >
-            <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
-              {index + 1}
+            <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
+              {index + 1}.
             </div>
             <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
               <p className="line-clamp-1">{item.subjectCode}</p>
@@ -205,7 +205,9 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="w-full flex justify-center rounded-t-md text-center text-xl  bg-white">
-          <p className="py-2 text-xl font-semibold text-gray-800">เพิ่มวิชาเรียน</p>
+          <p className="py-2 text-xl font-semibold text-gray-800">
+            เพิ่มวิชาเรียน
+          </p>
           {/* <button
             className="px-5  rounded-sm   hover:bg-red-300"
             onClick={() => onClosePopUp(false)}
