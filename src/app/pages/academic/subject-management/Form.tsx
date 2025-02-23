@@ -24,7 +24,7 @@ export default function Form() {
       setSubject(d);
     });
   }, []);
-  console.log(subjects)
+  console.log(subjects);
 
   const [getEditSubjectId, setGetEditIdSubject] = useState<number>(0);
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
@@ -111,7 +111,7 @@ export default function Form() {
       </div>
       <div className="w-full rounded-sm px-10">
         <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
-          <div className="text-center">ลำดับ</div>
+          <div className="text-center text-black">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
           <div className="text-center">สถานะ</div>
@@ -124,8 +124,8 @@ export default function Form() {
               index % 2 == 0 ? "bg-white" : "bg-gray-100"
             } grid grid-cols-[5%_30%_35%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
           >
-            <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
-              {index + 1}
+            <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
+              {index + 1}.
             </div>
             <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
               <p className="line-clamp-1">{item.subjectCode}</p>
@@ -204,15 +204,16 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
         className="bg-white rounded-md   lg:w-[500px]  z-100 shadow-lg shadow-gray-500 "
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-full flex justify-between rounded-t-md text-center text-xl  bg-[#cfe4ff]">
-          <div></div>
-          <p className="py-2 translate-x-10 text-gray-600">เพิ่มวิชาเรียน</p>
-          <button
+        <div className="w-full flex justify-center rounded-t-md text-center text-xl  bg-white">
+          <p className="py-2 text-xl font-semibold text-gray-800">
+            เพิ่มวิชาเรียน
+          </p>
+          {/* <button
             className="px-5  rounded-sm   hover:bg-red-300"
             onClick={() => onClosePopUp(false)}
           >
             <X className="text-white w-5 h-5" />
-          </button>
+          </button> */}
         </div>
         <div className="w-full px-10 py-5 grid place-items-center gap-4">
           <div className="flex items-center gap-2">
@@ -236,16 +237,16 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
           <button
-            className="px-5 w-[80px] bg-blue-400 text-white py-1 rounded-sm  hover:bg-blue-600"
-            onClick={() => Save()}
-          >
-            เพิ่ม
-          </button>
-          <button
-            className="px-5 w-[80px] bg-gray-500 text-white py-1 rounded-sm  hover:bg-gray-700"
+            className="px-5 w-[90px] bg-gray-300 text-black py-1 rounded-sm  hover:bg-gray-500"
             onClick={() => onClosePopUp(false)}
           >
             ยกเลิก
+          </button>{" "}
+          <button
+            className="px-5 w-[90px] bg-blue-500 text-white py-1 rounded-sm  hover:bg-blue-700"
+            onClick={() => Save()}
+          >
+            เพิ่ม
           </button>
         </div>
       </div>

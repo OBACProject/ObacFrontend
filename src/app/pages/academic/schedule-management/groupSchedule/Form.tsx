@@ -1,5 +1,6 @@
 import { fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/scheduleAPI";
 import { StudentGroupScheduleSubject } from "@/dto/schedule";
+import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -12,7 +13,7 @@ const getSchedule = async (term: string, year: string, groupId: number) => {
   try {
     const response = await fetchGetScheduleOfStudentGroupByGroupID(
       groupId,
-     term,
+      term,
       Number(year)
     );
     return response;
@@ -36,6 +37,40 @@ export default function Form({ term, year, groupId }: Props) {
           ตารางสอนของห้องเรียน
         </h1>
       </div>
+      <div className="w-full py-5 flex justify-between items-start ">
+        {schedules.map((item, index) => (
+          <div
+            key={index}
+            className=" rounded-md flex border group shadow-md shadow-gray-200 border-gray-200 w-fit px-5"
+          >
+            <div className="py-4 grid gap-2 px-5">
+              <div className="flex gap-2 items-center">
+                <p className="text-lg text-gray-700">ชื่อกลุ่มเรียน :</p>
+                <p className="font-semibold text-lg">
+                  {item.class}.{item.groupName}
+                </p>
+                <p className="text-gray-600">|</p>
+                <p className="text-gray-600">จำนวนวิชาเรียน {item.totalSubject} วิชา</p>
+                <p className="text-gray-600">|</p>
+                <p className="text-gray-600">ทั้งหมด {item.totalCredit / 2} หน่วยกิต</p>
+              </div>
+              <div className="flex gap-2 text-gray-900">
+                <p>ภาคเรียนที่ {item.term}</p>
+                <p>ปีการศึกษา {item.year}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <div className="">
+          {" "}
+          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl">
+            <PlusCircle className="w-5 h-5 text-white  " />
+            เพิ่มตารางเรียน
+          </button>
+        </div>
+      </div>
+
       <div className="w-full ">
         <div className="w-full grid grid-cols-[5%_10%_20%_20%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
@@ -68,7 +103,8 @@ export default function Form({ term, year, groupId }: Props) {
                       {subject.subjectName}
                     </p>
                     <p className="text-center flex items-center justify-center border-r border-gray-400">
-                      {subject.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;{subject.teacherLastName}
+                      {subject.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;
+                      {subject.teacherLastName}
                     </p>
 
                     <p className="text-center flex items-center justify-center border-r border-gray-400">

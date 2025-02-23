@@ -145,16 +145,16 @@ export default function Form() {
               <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-400">
                 {index + 1}
               </div>
-              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                 <p className="line-clamp-1">T10221501</p>
               </div>
-              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300 ">
                 <p className="line-clamp-1">{item.thaiName}</p>
               </div>
-              <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r ">
+              <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r border-gray-300">
                 <p className="line-clamp-1">{item.thaiLastName}</p>
               </div>
-              <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
+              <div className=" flex items-center text-gray-700 justify-center gap-2 border-r py-1 border-gray-300">
                 <p className="line-clamp-1">{item.facultyName}</p>
               </div>
               <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
@@ -174,7 +174,8 @@ export default function Form() {
             <div className="text-center">จำนวนนักเรียน</div>
           </div>
           {studentGroup?.map((item: StudentGroup, index) => (
-            <Link href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.studentGroupId}`}
+            <Link
+              href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.studentGroupId}`}
               key={item.studentGroupId}
               className={` ${
                 index % 2 == 0 ? "bg-white" : "bg-gray-100"
@@ -183,16 +184,18 @@ export default function Form() {
               <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
                 {index + 1}
               </div>
-              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
-                <p className="line-clamp-1">{item.class}.{item.studentGroupName}</p>
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
+                <p className="line-clamp-1">
+                  {item.class}.{item.studentGroupName}
+                </p>
               </div>
-              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                 <p className="line-clamp-1">{item.program}</p>
               </div>
-              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+              <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                 <p className="line-clamp-1">{item.program}</p>
               </div>
-              <div className="text-center flex items-center w-full justify-start px-4 py-1 border-r ">
+              <div className="text-center flex items-center w-full justify-start px-4 py-1 border-r border-gray-300">
                 <p className="line-clamp-1">{item.program}</p>
               </div>
               <div className=" flex items-center justify-center gap-2 py-1">

@@ -15,7 +15,7 @@ export default function LoginForm({ session }: LoginFormProps) {
 
   const [role, setRole] = useState<string | null>(session?.role || null);
   const [name, setName] = useState<string | null>(session?.name || null);
-
+  const [trigger, setTrigger] = useState<boolean>(false);
   useEffect(() => {
     if (!role || !name) {
       // Fetch cookies only if session is not passed
@@ -31,6 +31,7 @@ export default function LoginForm({ session }: LoginFormProps) {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setTrigger(true);
     try {
       const formData = new FormData(event.currentTarget);
       await login(formData);
@@ -41,7 +42,7 @@ export default function LoginForm({ session }: LoginFormProps) {
       if (!newRole || !newName) {
         throw new Error("Invalid token: Missing role or name.");
       }
-
+      setTrigger(false);
       setRole(newRole || null);
       setName(newName || null);
 
@@ -64,6 +65,7 @@ export default function LoginForm({ session }: LoginFormProps) {
           toast.error("Unknown role");
       }
     } catch (error) {
+      setTrigger(false);
       toast.error("Login failed. Please try again.");
     }
   };
@@ -75,6 +77,7 @@ export default function LoginForm({ session }: LoginFormProps) {
     await Cookies.remove("role");
     await Cookies.remove("name");
     toast.info("Logout successful");
+    setTrigger(false);
     window.location.reload();
   };
 
@@ -125,13 +128,18 @@ export default function LoginForm({ session }: LoginFormProps) {
             placeholder="Password / รหัสผ่าน"
             required
           />
-
-          <button
-            type="submit"
-            className="bg-blue-900 px-20 text-white my-3 rounded-md py-2"
-          >
-            Login
-          </button>
+          {trigger ? (
+            <button className="bg-blue-900 px-20 text-white my-3 rounded-md py-2">
+              Loading...
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="bg-blue-900 px-20 text-white my-3 rounded-md py-2"
+            >
+              Login
+            </button>
+          )}
         </form>
       )}
     </div>

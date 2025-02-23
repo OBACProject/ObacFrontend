@@ -14,7 +14,9 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   const router = useRouter();
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
-    setGradData(grads ?? []);
+    const sortedData = [...(grads ?? [])].sort((a, b) => a.studentId - b.studentId);
+    setGradData(sortedData);
+    
   }, [grads]);
   const handleInputChange = (
     index: number,
@@ -104,7 +106,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   ];
 
   return (
-    <div className="w-full ">
+    <div className="w-full px-5 ">
       <div className="  bg-[#cfe4ff] grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border-2 border-gray-400">
         <span className="grid place-items-center text-xl py-2">No.</span>
         <span className="grid place-items-center text-xl  py-2">

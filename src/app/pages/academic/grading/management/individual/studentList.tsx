@@ -49,7 +49,7 @@ export function StudentListPage(props: {
     { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
     { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-6/16" },
     { label: "ระดับชั้น", key: "class", className: "w-2/16" },
-    { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-4/16" },
+    { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-4/16 text-start line-clamp-1" },
   ];
 
   const filteredData = useMemo(() => {
@@ -84,7 +84,7 @@ export function StudentListPage(props: {
                 onSelect={setSelectedClassLevel}
               />
             </div>
-            <div className="w-1/6">
+            <div className="w-1/6 ">
               <Combobox
                 options={uniqueFaculties.map((faculty) => ({
                   value: faculty,

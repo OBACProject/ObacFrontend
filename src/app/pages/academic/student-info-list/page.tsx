@@ -3,7 +3,7 @@ import Form from "./form";
 
 export default function page() {
   return (
-    <div className="pl-20">
+    <div className="pl-16">
       <Form />
     </div>
   );

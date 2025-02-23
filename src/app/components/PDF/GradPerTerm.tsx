@@ -38,9 +38,9 @@ const GradPerTerms = (grads:GetGradPerTermByStudentIdDto) => {
     doc.text("รายงานผลการศึกษา", 90, 24);
 
     doc.setFontSize(14);
-    doc.text(`รหัสนักศึกษา : ${grads.studentCode}`, 30, 30);
+    doc.text(`รหัสนักศึกษา : ${grads?.studentCode || "none"}`, 30, 30);
     doc.text("ชื่อ - สกุล   : ", 110.5, 30)
-    doc.text(`นาย ${grads.firstName} ${grads.lastName}`, 130, 30);
+    doc.text(`นาย ${grads?.firstName} ${grads?.lastName}`, 130, 30);
 
     doc.setFont("THSarabun", "normal");
     doc.text("รอบ : เช้า", 42, 35);
@@ -71,60 +71,25 @@ const GradPerTerms = (grads:GetGradPerTermByStudentIdDto) => {
     let startRows = 70;
 
     for (let i = 0; i < grads.subject.length; i++) {
-      doc.text(grads.subject[i].subjectCode, 11, startRows);
+      doc.text(`${grads.subject[i].subjectCode}`, 11, startRows);
       startRows += 7;
     }
 
-    // doc.text("00000-0000", 11 , 77)
-    // doc.text("00000-0000", 11 , 84)
-    // doc.text("00000-0000", 11 , 91)
-    // doc.text("00000-0000", 11 , 98)
-    // doc.text("00000-0000", 11 , 105)
-    // doc.text("00000-0000", 11 , 112)
-    // doc.text("00000-0000", 11 , 119)
-    // doc.text("00000-0000", 11 , 126)
     startRows = 70;
     for (let i = 0; i < grads.subject.length; i++) {
-      doc.text(grads.subject[i].subjectName, 45, startRows);
+      doc.text(`${grads.subject[i].subjectName}`, 45, startRows);
       startRows += 7;
     }
-
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 77)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 84)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 91)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 98)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 105)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 112)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 119)
-    // doc.text("-- รายชื่อวิชาเรียน --", 45 , 126)
-
     startRows = 70;
     for (let i = 0 ; i < grads.subject.length; i++){
         doc.text(`0-${grads.subject[i].credit}-0`, 127 , startRows)
         startRows+=7
     }
-    // doc.text("0-2-0", 127 , 77)
-    // doc.text("0-2-0", 127 , 84)
-    // doc.text("0-2-0", 127 , 91)
-    // doc.text("0-2-0", 127 , 98)
-    // doc.text("0-2-0", 127 , 105)
-    // doc.text("0-2-0", 127 , 112)
-    // doc.text("0-2-0", 127 , 119)
-    // doc.text("0-2-0", 127 , 126)
     startRows = 70;
-    for (let i = 0 ; i <grads.subject.length; i++){
-        doc.text(grads.subject[i].grade, 165 , startRows)
+    for (let i = 0 ; i < grads.subject.length; i++){
+      doc.text(`${grads.subject[i].grade || ""}`, 165, startRows);
         startRows+=7
     }
-    // doc.text("2.5", 165 , 77)
-    // doc.text("2.5", 165 , 84)
-    // doc.text("2.5", 165 , 91)
-    // doc.text("2.5", 165 , 98)
-    // doc.text("2.5", 165 , 105)
-    // doc.text("2.5", 165 , 112)
-    // doc.text("2.5", 165 , 119)
-    // doc.text("2.5", 165 , 126)
-
     doc.text(`หน่วยกิตประจำภาค : ${grads.totalCredit}`, 50, 135);
     doc.text(`หน่วยกิตสะสม : ${grads.totalCredit}`, 57, 142);
 

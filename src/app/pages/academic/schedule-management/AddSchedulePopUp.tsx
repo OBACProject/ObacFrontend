@@ -263,18 +263,18 @@ export default function AddSchedulePopUp({
           </div>
 
           <div className="flex justify-center gap-5 ">
-            <button
-              className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-600"
-              disabled={!period || !day || !room || !teacherID || !subjectID || !studentGroup}
-              onClick={onSubmit}
-            >
-              ตกลง
-            </button>
+           
             <button
               className="px-8 text-white py-1 hover:bg-gray-300 hover:text-black bg-gray-400 rounded-sm"
               onClick={() => onClosePopUp(false)}
             >
               ยกเลิก
+            </button> <button
+              className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-600"
+              disabled={!period || !day || !room || !teacherID || !subjectID || !studentGroup}
+              onClick={onSubmit}
+            >
+              ตกลง
             </button>
           </div>
         </div>

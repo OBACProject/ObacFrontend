@@ -15,6 +15,7 @@ interface Props {
   schedules?: GetScheduleBysubjectId;
   subjects: GetSubjectBySubjectId;
   method: MethodDto;
+  isComplete: string;
   onEditReturn: (data: boolean) => void;
 }
 
@@ -23,6 +24,7 @@ export default function MenuBar({
   grads,
   subjects,
   method,
+  isComplete,
   onEditReturn,
 }: Props) {
   const [gradData, setGradData] = useState<GetGradBySubjectId[]>([]);
@@ -42,7 +44,7 @@ export default function MenuBar({
     student_group_list.push(gradData[i].studentGroup);
   }
   const student_group = student_group_list[0];
-  
+
   const handleEditChange = () => {
     onEditReturn(true);
     setOnEdit(true);
@@ -128,7 +130,7 @@ export default function MenuBar({
               </button>
             ) : (
               <div>
-                {method.isActive ? (
+                {method.isActive && isComplete == "false" ? (
                   <button
                     className={`bg-blue-400 duration-300 h-fit text-white  text-lg    rounded-md hover:opacity-75 w-[120px]  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm `}
                     onClick={handleEditChange}
