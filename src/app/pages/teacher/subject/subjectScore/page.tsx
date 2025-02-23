@@ -12,7 +12,7 @@ export default function Page() {
         <Main
           subjectId={Number(subjectId)}
           scheduleId={Number(shceduleId)}
-          isComplete={Boolean(iscomplete)}
+          isComplete={iscomplete}
         />
       ) : (
         <div className="border-2 px-5 grid place-items-center border-gray-200 text-gray-500 text-3xl font-semibold  py-20  border-dashed">

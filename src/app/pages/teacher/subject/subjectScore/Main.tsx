@@ -14,7 +14,7 @@ import { fetchMethod } from "@/api/method/methodAPI";
 interface Props {
   subjectId: number;
   scheduleId: number;
-  isComplete: boolean;
+  isComplete: string;
 }
 
 const getMethodData = async () => {
@@ -53,7 +53,7 @@ const getSubjectBySubjectId = async (subjectId: number) => {
   }
 };
 
-export default function Main({ subjectId, scheduleId }: Props) {
+export default function Main({ subjectId, scheduleId,isComplete }: Props) {
   const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
@@ -87,6 +87,7 @@ export default function Main({ subjectId, scheduleId }: Props) {
           grads={grads}
           method={methods}
           subjects={subjects}
+          isComplete={isComplete}
           onEditReturn={getEdit}
         />
       )}
