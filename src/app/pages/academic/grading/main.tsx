@@ -195,7 +195,7 @@ export function Main() {
             >
               <span className="text-black text-sm font-bold line-clamp-1">
                 {classSubjectData?.subjectName ?? "Subject"}
-              </p>
+              </span>
             </button>
             <ChevronRight />
           </div>
@@ -270,9 +270,14 @@ export function Main() {
 
       {/* Grading Popup */}
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" onClick={()=>setIsPopupOpen(false)}>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96" 
-          onClick={(e)=>e.stopPropagation()}>
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setIsPopupOpen(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg w-96"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="text-lg font-semibold mb-4">
               ระบบเปิด/ปิดช่วงการลงคะแนน
             </h2>
