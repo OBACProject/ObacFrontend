@@ -49,6 +49,7 @@ export interface filterProgramsParamsData {
   class: string;
   groupId: string;
   groupName: string;
+  groupCode: string;
 }
 
 export interface StudentColumns {
@@ -141,7 +142,6 @@ export interface StudentTranscriptData {
   subProgramName: string;
   year: YearData[];
 }
-
 
 export interface GetStudentUser {
   studentId: number;

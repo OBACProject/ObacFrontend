@@ -14,11 +14,18 @@ import {
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
 import { useEffect, useMemo, useState } from "react";
 
+// "facultyName": "บริหารธุรกิจ",
+//       "programName": "การเงินและบัญชี",
+//       "class": "ปวช",
+//       "groupId": 1,
+//       "groupName": "1/1",
+//       "groupCode": "AC-101"
 interface ClassroomTable {
-  classLevel: string;
-  faculty: string;
-  program: string;
+  class: string;
+  facultyName: string;
+  programName: string;
   groupId: string;
+  groupCode: string;
 }
 
 export function ClassroomGrading(props: {
@@ -147,7 +154,7 @@ export function ClassroomGrading(props: {
           groupId: parseInt(item.groupId),
           term: selectedTerm || "",
           year: selectedYear || "",
-          classroom: item.classLevel,
+          classroom: item.class,
         });
       } else {
         alert("ไม่พบข้อมูล");
@@ -166,10 +173,11 @@ export function ClassroomGrading(props: {
 
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
-          classLevel: `${item.class}. ${item.groupName}`,
-          faculty: item.facultyName,
+          class: `${item.class}. ${item.groupName}`,
+          facultyName: item.facultyName,
           groupId: item.groupId,
-          program: item.programName,
+          programName: item.programName,
+          groupCode: item.groupCode,
         })
       );
 
@@ -195,17 +203,15 @@ export function ClassroomGrading(props: {
     // const normalizedSearch = searchClassroom.toLowerCase();
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
-        ? item.classLevel.substring(0, 3) === selectedClassLevel
+        ? item.class.substring(0, 3) === selectedClassLevel
         : true;
       const matchFaculty = selectedFaculty
-        ? item.faculty === selectedFaculty
+        ? item.facultyName === selectedFaculty
         : true;
       const matchProgram = selectedProgram
-        ? item.program === selectedProgram
+        ? item.programName === selectedProgram
         : true;
-      const matchRoom = selectedRoom
-        ? item.classLevel === selectedClassLevel
-        : true;
+      const matchRoom = selectedRoom ? item.class === selectedClassLevel : true;
 
       return (
         // matchSearch &&
@@ -224,13 +230,20 @@ export function ClassroomGrading(props: {
     selectedRoom,
     // searchClassroom,
   ]);
-  // console.log("filteredData", filteredData);
+  console.log("filteredData", filteredData);
 
+  // "facultyName": "บริหารธุรกิจ",
+  //     "programName": "การเงินและบัญชี",
+  //     "class": "ปวช",
+  //     "groupId": 1,
+  //     "groupName": "1/1",
+  //     "groupCode": "AC-101"
   const columns = [
     { label: "ลำดับ", key: "groupId", className: "w-2/12" },
-    { label: "ระดับชั้น", key: "classLevel", className: "w-2/12" },
-    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-5/12" },
-    { label: "สาขาวิชา", key: "program", className: "w-3/12" },
+    { label: "ระดับชั้น", key: "class", className: "w-2/12" },
+    { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
+    { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-5/12" },
+    { label: "สาขาวิชา", key: "programName", className: "w-3/12 text-start" },
   ];
 
   return (
