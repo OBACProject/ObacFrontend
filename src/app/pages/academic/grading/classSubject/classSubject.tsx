@@ -1,6 +1,6 @@
+"use client";
+
 import { Combobox } from "@/app/components/combobox/combobox";
-import { makeColumns } from "@/app/components/table/makeColumns";
-import { DataTable } from "@/app/components/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ClassSubjectColumn, ClassSubjectData } from "@/dto/gradingDto";
@@ -11,6 +11,8 @@ import {
   getClassSubjectData,
   putPublishGrade,
 } from "@/resource/academics/grading/api/subjectClassData";
+import { DataTable } from "@/app/components/bellTable/table_style_1";
+import Swal from "sweetalert2";
 
 export function ClassSubjectPage(props: {
   handleTab: (tab: string) => void;
@@ -66,90 +68,124 @@ export function ClassSubjectPage(props: {
   };
 
   const handlePusblishGrade = async () => {
-    console.log("publish Grade");
-    const list_of_schudule_subject_id = classSubjectDataFiltered.map(
-      (item) => item.id
-    );
+    const result = await Swal.fire({
+      title: "คุณแน่ใช้ไหมที่จะยืนยันการตัดคะแนน?",
+      text: "เมื่อยืนยันแล้วจะไม่สามารถแก้ไขได้ กรุณาทบทวนข้อมูอีกครั้งก่อนตกลง",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: "ไม่",
+      confirmButtonText: "ใช่",
+    });
 
-    try {
-      for (const item of list_of_schudule_subject_id) {
-        await putPublishGrade(item);
+    if (result.isConfirmed) {
+      console.log("publish Grade");
+      const list_of_schudule_subject_id = classSubjectDataFiltered.map(
+        (item) => item.id
+      );
+
+      try {
+        for (const item of list_of_schudule_subject_id) {
+          await putPublishGrade(item);
+        }
+        console.log("Grades published successfully!");
+
+        // Reload data after publishing grades
+        const rawData = await getClassSubjectData(
+          classSubjecPassingData.id,
+          classSubjecPassingData.term,
+          classSubjecPassingData.year
+        );
+        setRawClassSubjectData(rawData);
+
+        const data = await getSubjectClassViewData(
+          classSubjecPassingData.id,
+          classSubjecPassingData.term,
+          classSubjecPassingData.year
+        );
+        setClassSubjectData(data);
+
+        // Reinitialize filters
+        const roomNumbers = Array.from(
+          new Set(data.map((item) => item.room).filter((room) => room))
+        );
+        const periodNumbers = Array.from(
+          new Set(data.map((item) => item.period).filter((period) => period))
+        );
+        const teacherNames = Array.from(
+          new Set(
+            data
+              .map((item) => item.teacherName)
+              .filter((teacherName) => teacherName)
+          )
+        );
+
+        setRoomNumbers(roomNumbers);
+        setPeriodNumbers(periodNumbers);
+        setTeacherNames(teacherNames);
+
+        // Optionally clear selected filters
+        setSelectedRoom(null);
+        setSelectedPeriod(null);
+        setSelectedTeacher(null);
+
+        console.log("Data reloaded successfully!");
+      } catch (error) {
+        console.error("Error publishing grade or reloading data:", error);
       }
-      console.log("Grades published successfully!");
-
-      // Reload data after publishing grades
-      const rawData = await getClassSubjectData(
-        classSubjecPassingData.id,
-        classSubjecPassingData.term,
-        classSubjecPassingData.year
-      );
-      setRawClassSubjectData(rawData);
-
-      const data = await getSubjectClassViewData(
-        classSubjecPassingData.id,
-        classSubjecPassingData.term,
-        classSubjecPassingData.year
-      );
-      setClassSubjectData(data);
-
-      // Reinitialize filters
-      const roomNumbers = Array.from(
-        new Set(data.map((item) => item.room).filter((room) => room))
-      );
-      const periodNumbers = Array.from(
-        new Set(data.map((item) => item.period).filter((period) => period))
-      );
-      const teacherNames = Array.from(
-        new Set(
-          data
-            .map((item) => item.teacherName)
-            .filter((teacherName) => teacherName)
-        )
-      );
-
-      setRoomNumbers(roomNumbers);
-      setPeriodNumbers(periodNumbers);
-      setTeacherNames(teacherNames);
-
-      // Optionally clear selected filters
-      setSelectedRoom(null);
-      setSelectedPeriod(null);
-      setSelectedTeacher(null);
-
-      console.log("Data reloaded successfully!");
-    } catch (error) {
-      console.error("Error publishing grade or reloading data:", error);
+    } else {
+      console.log("Publishing grade canceled.");
     }
   };
 
-  const columns = makeColumns<ClassSubjectColumn>(
+  // const columns = makeColumns<ClassSubjectColumn>(
+  //   {
+  //     isPublish: false,
+  //     id: 1,
+  //     day: "",
+  //     period: "",
+  //     room: "",
+  //     teacherName: "",
+  //   },
+  //   "id",
+  //   {
+  //     id: "ID",
+  //     day: "วัน",
+  //     period: "คาบ",
+  //     room: "ห้อง",
+  //     teacherName: "ชื่อครู",
+  //     isPublish: "เผยแพร่",
+  //   },
+  //   [
+  //     {
+  //       label: "ตรวจสอบรายละเอียด",
+  //       onClick: (id: string | number | boolean) =>
+  //         handleSelectedInfoClassData(Number(id)),
+  //       className: "hover:bg-blue-600 bg-blue-500",
+  //     },
+  //   ],
+  //   {
+  //     isPublish: (row) => (
+  //       <div className={`flex items-center justify-center`}>
+  //         {row.isPublish ? (
+  //           <div className="text-green-500">✅ Published</div>
+  //         ) : (
+  //           <div className="text-red-500">❌ Unpublished</div>
+  //         )}
+  //       </div>
+  //     ),
+  //   }
+  // );
+  const columns = [
+    { label: "ลำดับ", key: "id", className: "w-1/12" },
+    { label: "วัน", key: "day", className: "w-1/12" },
+    { label: "คาบ", key: "period", className: "w-2/12" },
+    { label: "ห้อง", key: "room", className: "w-2/12" },
+    { label: "ชื่อครู", key: "teacherName", className: "w-4/12" },
     {
-      isPublish: false,
-      id: 1,
-      day: "",
-      period: "",
-      room: "",
-      teacherName: "",
-    },
-    "id",
-    {
-      id: "ID",
-      day: "วัน",
-      period: "คาบ",
-      room: "ห้อง",
-      teacherName: "ชื่อครู",
-      isPublish: "เผยแพร่",
-    },
-    [
-      {
-        label: "ตรวจสอบรายละเอียด",
-        onClick: (id: string | number | boolean) =>
-          handleSelectedInfoClassData(Number(id)),
-        className: "hover:bg-blue-600 bg-blue-500",
-      },
-    ],
-    {
-      isPublish: (row) => (
+      label: "เผยแพร่",
+      key: "isPublish",
+      className: "w-2/12",
+      render: (row: { isPublish: boolean }) => (
         <div className={`flex items-center justify-center`}>
           {row.isPublish ? (
             <div className="text-green-500">✅ Published</div>
@@ -158,8 +194,16 @@ export function ClassSubjectPage(props: {
           )}
         </div>
       ),
-    }
-  );
+    },
+  ];
+
+  // const columns = [
+  //   { label: "ลำดับ", key: "groupId", className: "w-2/12" },
+  //   { label: "ระดับชั้น", key: "class", className: "w-2/12" },
+  //   { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
+  //   { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-5/12" },
+  //   { label: "สาขาวิชา", key: "programName", className: "w-3/12 text-start" },
+  // ];
 
   // get a init data from api
   useEffect(() => {
@@ -172,6 +216,7 @@ export function ClassSubjectPage(props: {
           classSubjecPassingData.year
         );
         setRawClassSubjectData(rawData);
+
         const data = await getSubjectClassViewData(
           classSubjecPassingData.id,
           classSubjecPassingData.term,
@@ -319,7 +364,7 @@ export function ClassSubjectPage(props: {
           </div>
           {/* data zone */}
           <div className="mt-4 w-full p-4">
-            <DataTable
+            {/* <DataTable
               columns={columns}
               data={classSubjectDataFiltered}
               selectedValue="id"
@@ -331,6 +376,20 @@ export function ClassSubjectPage(props: {
                 teacherName: "w-4/12",
                 isPublish: "w-1/12",
               }}
+            /> */}
+
+            <DataTable
+              columns={columns}
+              data={classSubjectDataFiltered.map((item, index) => ({
+                id: item.id,
+                day: item.day,
+                period: item.period,
+                room: item.room,
+                teacherName: item.teacherName,
+                isPublish: item.isPublish,
+              }))}
+              pagination={classSubjectDataFiltered.length}
+              onRowClick={(item) => handleSelectedInfoClassData(item.id)}
             />
             <div className="flex justify-end mt-4">
               <button onClick={handlePusblishGrade}>

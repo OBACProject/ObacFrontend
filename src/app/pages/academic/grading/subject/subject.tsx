@@ -1,8 +1,8 @@
 "use client";
 
+import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { makeColumns } from "@/app/components/table/makeColumns";
-import { DataTable } from "@/app/components/table/tableComponent";
 import { Input } from "@/components/ui/input";
 import { GradingDataColumn } from "@/dto/gradingDto";
 import { getGradingViewData } from "@/resource/academics/grading/viewData/gradingViewData";
@@ -55,28 +55,35 @@ export function Subject(props: {
     }
   };
 
-  const columns = makeColumns<GradingDataColumn>(
-    {
-      id: 1,
-      subjectCode: "",
-      subjectName: "",
-      description: "",
-    },
-    "id",
-    {
-      id: "ID",
-      subjectCode: "รหัสวิชา",
-      subjectName: "ชื่อวิชา",
-      description: "รายละเอียด",
-    },
-    [
-      {
-        label: "ตรวจสอบรายละเอียด",
-        onClick: (id: string | number) => handleSelectedSubjectData(Number(id)),
-        className: "hover:bg-blue-600 bg-blue-500",
-      },
-    ]
-  );
+  // const columns = makeColumns<GradingDataColumn>(
+  //   {
+  //     id: 1,
+  //     subjectCode: "",
+  //     subjectName: "",
+  //     description: "",
+  //   },
+  //   "id",
+  //   {
+  //     id: "ID",
+  //     subjectCode: "รหัสวิชา",
+  //     subjectName: "ชื่อวิชา",
+  //     description: "รายละเอียด",
+  //   },
+  //   [
+  //     {
+  //       label: "ตรวจสอบรายละเอียด",
+  //       onClick: (id: string | number) => handleSelectedSubjectData(Number(id)),
+  //       className: "hover:bg-blue-600 bg-blue-500",
+  //     },
+  //   ]
+  // );
+
+  const columns = [
+    { label: "ลำดับ", key: "id", className: "w-1/12" },
+    { label: "รหัสวิชา", key: "subjectCode", className: "w-2/12" },
+    { label: "ชื่อวิชา", key: "subjectName", className: "w-6/12" },
+    { label: "รายละเอียด", key: "description", className: "w-3/12" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,8 +153,8 @@ export function Subject(props: {
           </div>
         </div>
         {/* data zone */}
-        <div className="mt-4 w-full p-4">
-          <DataTable
+        <div className="w-full p-4">
+          {/* <DataTable
             columns={columns}
             data={gradingDataFiltered}
             selectedValue="id"
@@ -157,6 +164,17 @@ export function Subject(props: {
               subjectName: "w-1/6",
               description: "w-3/6",
             }}
+          /> */}
+          <DataTable
+            columns={columns}
+            data={gradingDataFiltered.map((item, index) => ({
+              id: index + 1,
+              subjectCode: item.subjectCode,
+              subjectName: item.subjectName,
+              description: item.description,
+            }))}
+            pagination={10}
+            onRowClick={(item) => handleSelectedSubjectData(item.id)}
           />
         </div>
         {/* breadcrumb zone */}

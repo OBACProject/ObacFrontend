@@ -23,7 +23,7 @@ export const putPublishGrade = async (
 ): Promise<void> => {
   try {
     await api.put(
-      `Grade/PublishGrade?schedule_subject_id=${schudule_subject_id}&isPublished=true`
+      `/Grade/PublishGrade?scheduleSubject_id=${schudule_subject_id}&isPublished=true`
     );
   } catch (error) {
     console.error(error);
