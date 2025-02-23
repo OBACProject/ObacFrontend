@@ -9,6 +9,7 @@ import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPerio
 import { MethodDto } from "@/dto/methodDto";
 import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
 import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
 
 export interface ClassSubject {
   id: number;
@@ -21,6 +22,7 @@ export function Main() {
   const [classSubjectData, setClassSubjectData] = useState<ClassSubject | null>(
     null
   );
+  const pathname = usePathname();
   const [classInfoData, setClassInfoData] = useState<{
     subjectId: number;
     scheduleSubjectId: number;
@@ -36,16 +38,9 @@ export function Main() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
-  const handleTab = (tab: string) => {
-    if (activeTab === tab) return;
-    setActiveTab(tab);
-    if (classSubjectData && tab === "subject") setClassSubjectData(null);
-    if (classSubjectData && classInfoData && tab === "class")
-      setClassInfoData(null);
-  };
-
   const handleSelectedSubjectData = (data: ClassSubject) => {
     setClassSubjectData(data);
+    localStorage.setItem("classSubjectData", JSON.stringify(data));
   };
 
   const handleSelectedClassInfo = (data: {
@@ -54,7 +49,62 @@ export function Main() {
     room: string;
   }) => {
     setClassInfoData(data);
+    localStorage.setItem("classInfoData", JSON.stringify(data));
   };
+
+  const handleTab = (tab: string) => {
+    if (activeTab === tab) return;
+    setActiveTab(tab);
+    localStorage.setItem("activeTab", tab);
+
+    if (tab === "subject") {
+      setClassSubjectData(null);
+      setClassInfoData(null);
+      localStorage.removeItem("classSubjectData");
+      localStorage.removeItem("classInfoData");
+    }
+
+    if (tab === "class") {
+      setClassInfoData(null);
+      localStorage.removeItem("classInfoData");
+    }
+  };
+
+  useEffect(() => {
+    const savedTab = localStorage.getItem("activeTab");
+    const savedClassSubjectData = localStorage.getItem("classSubjectData");
+    const savedClassInfoData = localStorage.getItem("classInfoData");
+
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
+
+    if (savedClassSubjectData) {
+      setClassSubjectData(JSON.parse(savedClassSubjectData));
+    }
+
+    if (savedClassInfoData) {
+      setClassInfoData(JSON.parse(savedClassInfoData));
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (
+        typeof window !== "undefined" &&
+        pathname !== "/academic/grading/management/classroom"
+      ) {
+        localStorage.removeItem("activeTab");
+        localStorage.removeItem("selectedClassroomData");
+        localStorage.removeItem("classSubjectData");
+        localStorage.removeItem("classInfoData");
+      }
+    };
+
+    handleRouteChange(); // Call function on component mount to clean up if needed
+  }, [pathname]);
 
   const fetchData = async () => {
     try {
@@ -130,10 +180,6 @@ export function Main() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     setIsActive(gradingMode !== null ? true : false);
   }, [gradingMode]);
 
@@ -147,7 +193,7 @@ export function Main() {
               className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
               onClick={() => handleTab("subject")}
             >
-              <span className="text-black text-sm font-bold">
+              <span className="text-black text-sm font-bold line-clamp-1">
                 {classSubjectData?.subjectName ?? "Subject"}
               </span>
             </button>
@@ -156,10 +202,10 @@ export function Main() {
           {classSubjectData && (
             <div className="w-full flex items-center justify-center">
               <button
-                className="min-w-32 w-full hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-48 w-full hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("class")}
               >
-                <span className="text-black text-sm font-bold">
+                <span className="text-black text-sm font-bold ">
                   {classInfoData?.room ?? "Class"}
                 </span>
               </button>
@@ -172,7 +218,9 @@ export function Main() {
                 className="min-w-32 w-auto  hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("infoClass")}
               >
-                <span className="text-black text-sm font-bold">Info Class</span>
+                <span className="text-black text-sm font-bold line-clamp-1">
+                  Info Class
+                </span>
               </button>
               <ChevronRight />
             </div>
