@@ -1,20 +1,21 @@
 import React, { useMemo, useState } from "react";
-import Link from "next/link";
 
-type Column = {
+type Column<T> = {
   label: string;
-  key: string;
+  key?: string;
   className?: string;
+  render?: (row: T) => React.ReactNode; // Ensures render returns ReactNode
 };
 
-type TableProps<T> = {
-  columns: Column[];
+interface TableProps<T> {
+  columns: Column<T>[];
   data: T[];
   pagination: number;
   onRowClick?: (item: T) => void;
-};
+  isEdit?: boolean;
+}
 
-export function DataTable<T>({
+export function DataTable<T extends Record<string, any>>({
   columns,
   data,
   pagination,
@@ -22,7 +23,6 @@ export function DataTable<T>({
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Compute paginated data efficiently
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * pagination;
     return data.slice(startIndex, startIndex + pagination);
@@ -42,32 +42,35 @@ export function DataTable<T>({
       <div className="w-full flex border border-gray-400">
         {columns.map((col, index) => (
           <div
-            key={col.key || index}
+            key={col.key || `header-${index}`}
             className={`bg-[#cfe4ff] text-gray-800 border border-gray-400 py-2 px-4 text-center font-semibold flex items-center justify-center ${col.className}`}
           >
-            {col.label}
+            {col.label || "-"}
           </div>
         ))}
       </div>
 
       {/* Table Body */}
       {paginatedData.length > 0 ? (
-        paginatedData.map((item, index) => (
+        paginatedData.map((item, rowIndex) => (
           <div
-            key={index}
+            key={`row-${rowIndex}`}
             className={`w-full flex border border-gray-400 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-              index % 2 === 0 ? "bg-white" : "bg-gray-100"
+              rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
             }`}
             onClick={() => onRowClick && onRowClick(item)}
           >
             {columns.map((col, colIndex) => {
-              const cellValue = (item as any)[col.key] ?? "-";
+              const cellValue = col.key ? item[col.key] : null;
+              const renderContent = col.render ? col.render(item) : cellValue;
+
               return (
                 <div
-                  key={`${index}-${colIndex}`}
+                  key={`cell-${rowIndex}-${colIndex}`}
                   className={`text-center flex items-center px-4 py-2 border-r border-gray-400 ${col.className}`}
                 >
-                  <p className="whitespace-normal break-words">{cellValue}</p>
+                  {/* Ensure renderContent is a valid ReactNode */}
+                  {renderContent != null ? renderContent : "-"}
                 </div>
               );
             })}
