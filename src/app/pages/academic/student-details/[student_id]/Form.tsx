@@ -6,6 +6,10 @@ import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 import { CircleX, Pencil } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
+type Props = {
+  studentId :number;
+}
+
 const fetchStudentGrad = async (
   studentId: number,
   term: number,
@@ -20,186 +24,16 @@ const fetchStudentGrad = async (
   }
 };
 
-export default function Form() {
+export default function Form({studentId}:Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto[]>([
-    {
-      studentId: 1,
-      studentCode: "S001002",
-      firstName: "Somchai",
-      lastName: "Sukjai",
-      facultyName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-      programName: "ธุรกิจการจัดการ",
-      class: "ปวช.1/6",
-      groupName: "กลุ่ม A",
-      isActive: true,
-      term: 1,
-      year: 2567,
-      gpa: 3.50,
-      gpax: 3.60,
-      totalCredit: 12,
-      subject: [
-        {
-          subjectName: "คณิตศาสตร์พื้นฐาน",
-          subjectCode: "MATH101",
-          grade: "A",
-          credit: 3,
-        },
-        {
-          subjectName: "พื้นฐานวิทยาการคอมพิวเตอร์",
-          subjectCode: "CS101",
-          grade: "B+",
-          credit: 3,
-        },
-        {
-          subjectName: "ภาษาอังกฤษ",
-          subjectCode: "ENG101",
-          grade: "B",
-          credit: 3,
-        },
-        {
-          subjectName: "การจัดการธุรกิจ",
-          subjectCode: "BUS101",
-          grade: "A",
-          credit: 3,
-        },
-      ],
-    },
-    {
-      studentId: 1,
-      studentCode: "S001003",
-      firstName: "jjjjj",
-      lastName: "Sukjai",
-      facultyName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-      programName: "ธุรกิจการจัดการ",
-      class: "ปวช.1/6",
-      groupName: "กลุ่ม A",
-      isActive: true,
-      term: 1,
-      year: 2567,
-      gpa: 3.50,
-      gpax: 3.60,
-      totalCredit: 12,
-      subject: [
-        {
-          subjectName: "คณิตศาสตร์พื้นฐาน",
-          subjectCode: "MATH101",
-          grade: "A",
-          credit: 3,
-        },
-        {
-          subjectName: "พื้นฐานวิทยาการคอมพิวเตอร์",
-          subjectCode: "CS101",
-          grade: "B+",
-          credit: 3,
-        },
-        {
-          subjectName: "ภาษาอังกฤษ",
-          subjectCode: "ENG101",
-          grade: "B",
-          credit: 3,
-        },
-        {
-          subjectName: "การจัดการธุรกิจ",
-          subjectCode: "BUS101",
-          grade: "A",
-          credit: 3,
-        },
-      ],
-    },
-    {
-      studentId: 1,
-      studentCode: "S001004",
-      firstName: "Somffffchai",
-      lastName: "Sufffkjai",
-      facultyName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-      programName: "ธุรกิจการจัดการ",
-      class: "ปวช.1/6",
-      groupName: "กลุ่ม A",
-      isActive: true,
-      term: 1,
-      year: 2567,
-      gpa: 3.50,
-      gpax: 3.60,
-      totalCredit: 12,
-      subject: [
-        {
-          subjectName: "คณิตศาสตร์พื้นฐาน",
-          subjectCode: "MATH101",
-          grade: "A",
-          credit: 3,
-        },
-        {
-          subjectName: "พื้นฐานวิทยาการคอมพิวเตอร์",
-          subjectCode: "CS101",
-          grade: "B+",
-          credit: 3,
-        },
-        {
-          subjectName: "ภาษาอังกฤษ",
-          subjectCode: "ENG101",
-          grade: "B",
-          credit: 3,
-        },
-        {
-          subjectName: "การจัดการธุรกิจ",
-          subjectCode: "BUS101",
-          grade: "A",
-          credit: 3,
-        },
-      ],
-    },
-    {
-      studentId: 2,
-      studentCode: "S001005",
-      firstName: "fgfsegf",
-      lastName: "Sukjai",
-      facultyName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-      programName: "ธุรกิจการจัดการ",
-      class: "ปวช.1/6",
-      groupName: "กลุ่ม A",
-      isActive: true,
-      term: 1,
-      year: 2567,
-      gpa: 3.50,
-      gpax: 3.60,
-      totalCredit: 12,
-      subject: [
-        {
-          subjectName: "คณิตศาสตร์พื้นฐาน",
-          subjectCode: "MATH101",
-          grade: "A",
-          credit: 3,
-        },
-        {
-          subjectName: "พื้นฐานวิทยาการคอมพิวเตอร์",
-          subjectCode: "CS101",
-          grade: "B+",
-          credit: 3,
-        },
-        {
-          subjectName: "ภาษาอังกฤษ",
-          subjectCode: "ENG101",
-          grade: "B",
-          credit: 3,
-        },
-        {
-          subjectName: "การจัดการธุรกิจ",
-          subjectCode: "BUS101",
-          grade: "A",
-          credit: 3,
-        },
-      ],
-    },
+
   ]);
   useEffect(() => {
-    // fetchStudentGrad(1, 1, 2024).then((d) => {
-    //   if (d) {
-    //     setGrad(d);
-    //   }
-    // });
+    fetchStudentGrad(studentId, 1, 2024).then((d) => {
+        setGrad(d);
+    });
   }, []);
-  console.log("Grads:", grads.length);
 
   const handleEditChange = () => {
     setOnEdit((onEdit) => !onEdit);
@@ -208,16 +42,14 @@ export default function Form() {
     <div className="px-40">
       <div className="flex justify-between my-5">
         <div className="border-[1px] rounded-md text-white bg-gray-700  border-slate-300 text-lg w-fit px-5 py-2 ">
-          รายละเอียดนักเรียน
+          รายละเอียดนักเรียน {studentId}
         </div>
         <div className="flex gap-4">
-          {grads.length >= 1 ? (
+          {grads.length > 0 ? (
             <button
               className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit"
               onClick={() => {
-                for (let i = 0 ; i <= 3 ; i++ ){
-                  GradPerTerms(grads[i]);
-                }
+                  GradPerTerms(grads[0]);
               }}
             >
               ดาวโหลดน์ผลการเรียนล่าสุด
