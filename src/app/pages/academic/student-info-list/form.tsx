@@ -92,7 +92,9 @@ export default function Form() {
             />
           </div>
           <div>
-            <button className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600">
+            <button className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600" onClick={()=>{
+              router.push("/pages/academic/student-info-list/studentList")
+            }}>
               รายชื่อนักเรียนทั้งหมด
             </button>
           </div>
