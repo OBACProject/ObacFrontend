@@ -53,7 +53,7 @@ export default function Main({ groupId }: Props) {
                 {index + 1}
               </div>
               <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
-                {item.studentId}
+                {item.studentCode}
               </p>
               <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
                 {item.studentName}

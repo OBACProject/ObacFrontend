@@ -8,8 +8,16 @@ import { cookies } from "next/headers";
 
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
+    const token = cookies().get("token")?.value
     const response = await fetch(
-      `http://localhost:5111/api/Teacher/GetAllTeacher`
+      `http://localhost:5111/api/Teacher/GetAllTeacher`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch teacher data");

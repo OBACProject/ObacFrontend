@@ -5,6 +5,7 @@ import { fetchGetAllStudent } from "@/api/student/studentApi";
 import { GetAllStudent } from "@/dto/studentDto";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
+import { Search } from "lucide-react";
 export interface ClassroomByGroupIdProps {
   groupId: number;
   term: string;
@@ -61,7 +62,7 @@ export default function Form() {
 
   const studentNameOptions = studentListName.map((item) => ({
     value: item.studentId,
-    label: `${item.studentCode} : ${item.thaiName} ${item.thaiLastName}`,
+    label: `${item.studentCode} ${item.thaiName} ${item.thaiLastName}`,
   }));
 
   return (
@@ -72,7 +73,8 @@ export default function Form() {
         </h1>
         <div className=" flex items-center gap-4  px-10">
           <div className="flex w-[350px] gap-1 items-center">
-            <button className="bg-gray-400  py-1.5 enabled:bg-gray-500 enabled:hover:bg-gray-700  text-white rounded-md px-4" onClick={()=>{ onSearch()}} disabled={!selectedStudent}> 
+            <button className="bg-gray-400  py-1.5 enabled:bg-gray-500 enabled:hover:bg-gray-700 flex gap-2 items-center text-white rounded-md px-4" onClick={()=>{ onSearch()}} disabled={!selectedStudent}> 
+              <Search className="w-5 h-5"/>
               ค้นหา
             </button>
             <Select
