@@ -7,6 +7,7 @@ import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewD
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
+import { StudentPopup } from "./component/studentPopup";
 
 export interface GeneralData {
   groupId: number;
@@ -29,6 +30,16 @@ export interface StudentList {
   subjects: Record<string, string>;
 }
 
+export interface StudentInRowClick {
+  studentId: number;
+  studentCode: string;
+  name: string;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  subjects: Record<string, string>;
+}
+
 export interface GroupSummaryGradeResponse {
   generalData: GeneralData;
   students: StudentList[];
@@ -41,6 +52,11 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
+
+  const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
+  const [selectedStudent, setSelectedStudent] = useState<StudentList | null>(
+    null
+  );
 
   // filter data
   const filteredData = useMemo(() => {
@@ -78,14 +94,31 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   const baseColumns = [
     { label: "ลำดับ", key: "index", className: "w-1/16" },
-    { label: "รหัสนักศึกษา", key: "studentCode", className: "w-1/16" },
-    { label: "ชื่อ-นามสกุล", key: "name", className: "w-2/16" },
+    { label: "รหัสนักศึกษา", key: "studentCode", className: "w-2/16" },
+    { label: "ชื่อ-นามสกุล", key: "name", className: "w-2/16 text-start" },
   ];
-  const subjectColumns = summaryData?.subjects.map((subject) => ({
-    label: subject,
-    key: subject,
-    className: "w-1/16 text-center",
-  }));
+  // const subjectColumns = summaryData?.subjects.map((subject) => ({
+  //   label: subject,
+  //   key: subject,
+  //   className: "w-1/16 text-center",
+  // }));
+
+  const subjectColumns = Array.from({ length: 10 }, (_, index) => {
+    if (summaryData?.subjects && index < summaryData.subjects.length) {
+      return {
+        label: summaryData.subjects[index],
+        key: summaryData.subjects[index],
+        className: "w-1/16 text-center",
+      };
+    } else {
+      return {
+        label: "",
+        key: `empty_${index}`,
+        className: "w-1/16 text-center",
+      };
+    }
+  });
+
   const GradeColumns = [
     { label: "เฉลี่ย", key: "gpa", className: "w-1/16" },
     { label: "เฉลี่ยสะสม", key: "gpax", className: "w-1/16" },
@@ -105,6 +138,25 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
     } else {
       console.error("Summary data is not available");
     }
+  };
+  const studentInStudentList = (studentCode: string) => {
+    const student = summaryData?.students.find(
+      (student) => student.studentCode === studentCode
+    );
+
+    return student;
+  };
+
+  const onRowClick = (studentCode: string) => {
+    const student = studentInStudentList(studentCode);
+    if (student) {
+      setSelectedStudent(student);
+      setIsOpenPopUp(true);
+    }
+  };
+
+  const closePopUp = () => {
+    setIsOpenPopUp(false);
   };
 
   return (
@@ -166,9 +218,17 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
                 ...student.subjects,
               })) || []
             }
+            // isEdit={true}
+            onRowClick={(student) => onRowClick(student.studentCode)}
             pagination={summaryData?.students.length || 0}
           />
         </div>
+        <StudentPopup
+          isOpen={isOpenPopUp}
+          onClose={() => setIsOpenPopUp(false)}
+          student={selectedStudent}
+          subjects={summaryData?.subjects || []}
+        />
       </header>
     </>
   );
