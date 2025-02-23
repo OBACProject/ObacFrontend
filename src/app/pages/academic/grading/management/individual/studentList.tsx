@@ -60,9 +60,9 @@ export function StudentListPage(props: {
       const matchFaculty = selectedFaculty
         ? student.facultyName === selectedFaculty
         : true;
-      const matchSearch = searchInput
-        ? student.studentCode.includes(searchInput) ||
-          student.thaiName.includes(searchInput)
+      const matchSearch = searchInput.toLocaleLowerCase()
+        ? student.studentCode.toLocaleLowerCase().includes(searchInput) ||
+          student.thaiName.toLocaleLowerCase().includes(searchInput)
         : true;
 
       return matchClassLevel && matchFaculty && matchSearch;
