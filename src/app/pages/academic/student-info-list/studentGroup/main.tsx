@@ -26,11 +26,19 @@ export default function Main({ groupId }: Props) {
   }, []);
   console.log(studentList);
   return (
-    <div className="py-5 w-full">
-      <div className="flex justify-center py-5 items-center">
+    <div className="py-5 w-full ">
+      <div className="flex px-5 justify-between py-5 items-center">
         <h1 className="px-10 w-fit text-white bg-gray-700 rounded-3xl py-1 text-lg">
           รายชื่อนักเรียน
         </h1>
+        <div className="flex gap-2">
+          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600">
+            เอกสารใบตรวจเกรด PDF
+          </button>
+          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600">
+            เอกสารใบตรวจเกรด Excel
+          </button>
+        </div>
       </div>
       <div className="w-full px-5 ">
         <div className="w-full  grid grid-cols-[5%_10%_25%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg py-2 rounded-t-md">
@@ -43,7 +51,7 @@ export default function Main({ groupId }: Props) {
         <div className="w-full px-5">
           {studentList?.map((item: StudentListInGroup, index) => (
             <Link
-            href={`/pages/academic/student-details/${item.studentId}`}
+              href={`/pages/academic/student-details/${item.studentId}`}
               key={index}
               className={` ${
                 index % 2 == 0 ? "bg-white" : "bg-gray-100"
