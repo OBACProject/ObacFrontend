@@ -293,15 +293,9 @@ const EditSubjectPopUp = ({
         className="bg-white rounded-md   lg:w-[500px]  z-100 shadow-lg shadow-gray-500 "
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-full flex justify-between rounded-t-md text-center text-xl  bg-[#cfe4ff]">
-          <div></div>
-          <p className="py-2 translate-x-10 text-gray-600">แก้ไขวิชาเรียน</p>
-          <button
-            className="px-5  rounded-sm   hover:bg-red-300"
-            onClick={() => onClosePopUp(false)}
-          >
-            <X className="text-white w-5 h-5" />
-          </button>
+        <div className="w-full flex justify-center rounded-t-md text-center text-xl  ">
+          <p className="py-4  text-gray-800">แก้ไขวิชาเรียน</p>
+        
         </div>
         <div className="w-full px-10 py-5 grid place-items-center gap-4">
           <div className="flex items-center gap-2">

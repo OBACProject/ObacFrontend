@@ -45,12 +45,12 @@ export function StudentListPage(props: {
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16" },
     { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
-    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-6/16" },
+    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-5/16" },
     { label: "ระดับชั้น", key: "class", className: "w-2/16" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-4/16 text-start line-clamp-1",
+      className: "w-5/16 text-start line-clamp-1",
     },
   ];
 

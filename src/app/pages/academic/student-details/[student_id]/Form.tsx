@@ -1,14 +1,16 @@
 "use client";
 import { fetchGetGradPerTermByStudentId } from "@/api/grad/gradAPI";
+import { fetchGetStudentByStudentId } from "@/api/student/studentApi";
 import GenTranscript from "@/app/components/PDF/genTranscript";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
+import { GetStudentByStudentId } from "@/dto/studentDto";
 import { CircleX, Pencil } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 type Props = {
-  studentId :number;
-}
+  studentId: number;
+};
 
 const fetchStudentGrad = async (
   studentId: number,
@@ -24,15 +26,26 @@ const fetchStudentGrad = async (
   }
 };
 
-export default function Form({studentId}:Props) {
-  const [onEdit, setOnEdit] = useState<boolean>(false);
-  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto[]>([
+const fetchStudentData = async (studentId: number) => {
+  try {
+    const data = await fetchGetStudentByStudentId(studentId)
+    return data;
+  } catch (err) {
+    return null
+  }
+};
 
-  ]);
+export default function Form({ studentId }: Props) {
+  const [onEdit, setOnEdit] = useState<boolean>(false);
+  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto[]>([]);
+  const [students ,setStudent] = useState<GetStudentByStudentId>()
   useEffect(() => {
     fetchStudentGrad(studentId, 1, 2024).then((d) => {
-        setGrad(d);
+      setGrad(d);
     });
+    fetchStudentData(studentId).then((d:any)=>{
+      setStudent(d)
+    })
   }, []);
 
   const handleEditChange = () => {
@@ -49,7 +62,7 @@ export default function Form({studentId}:Props) {
             <button
               className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit"
               onClick={() => {
-                  GradPerTerms(grads[0]);
+                GradPerTerms(grads[0]);
               }}
             >
               ดาวโหลดน์ผลการเรียนล่าสุด
@@ -106,7 +119,7 @@ export default function Form({studentId}:Props) {
               disabled={!onEdit}
               className=" text-md enabled:text-gray-600 border-2 focus:outline-blue-300 border-gray-300 text-gray-700 bg-white enabled:bg-blue-50 border-l-0 w-[200px] mr-5 px-4 py-1  rounded-r-md"
               placeholder="ชื่อ"
-              defaultValue={"นาย ภัทรจาริน"}
+              defaultValue={students?.thaiName}
             />
 
             <div className="rounded-l-md text-gray-700 border-2 border-gray-300 border-r-0 bg-white py-1 pl-4 pr-1">
@@ -117,7 +130,7 @@ export default function Form({studentId}:Props) {
               type="text"
               className="text-md focus:outline-blue-300 border-2 mr-5 text-gray-700 border-gray-300 enabled:text-gray-600 bg-white enabled:bg-blue-50 border-l-0 w-[200px]  px-4 py-1  rounded-r-md"
               placeholder="นามสกุล"
-              defaultValue={"นภากาญจน์"}
+              defaultValue={students?.thaiLastName}
             />
           </div>
           <div className="mt-5 flex">

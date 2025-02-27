@@ -1,6 +1,7 @@
 "use server";
 import {
   GetAllStudent,
+  GetStudentByStudentId,
   GetStudentUser,
   StudentCreateData,
   StudentGroup,
@@ -146,5 +147,32 @@ export const fetchGetAllStudent= async (
   }
 };
 
+export const fetchGetStudentByStudentId = async (studentId: number): Promise<GetStudentByStudentId | null> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) throw new Error("Missing authentication token");
 
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByStudentID?studentId=${studentId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error(`Failed to fetch API: ${response.status} ${response.statusText}`);
+    }
+
+    const text = await response.text();
+    if (!text) throw new Error("Empty response from API");
+
+    const json = JSON.parse(text);
+    const data: GetStudentByStudentId = json.data;
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching student data:", err);
+    return null; 
+  }
+};
