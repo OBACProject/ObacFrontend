@@ -1,5 +1,8 @@
+"use server";
 import { ClassSubjectData } from "@/dto/gradingDto";
 import api from "@/lib/apiCentralized";
+import axios from "axios";
+import { cookies } from "next/headers";
 
 export const getClassSubjectData = async (
   subjectId: number,
@@ -7,23 +10,48 @@ export const getClassSubjectData = async (
   year: number
 ): Promise<ClassSubjectData[]> => {
   try {
-    const response = await api.get(
-      `Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`
-      // `Schedule/GetListOfClassBySubjectId?subjectId=${subjectId}&term=${term}&year=${year}`
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api
+      Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
-    return response.data.data;
+    if (!response.ok) {
+      throw new Error("Failed to get teacher enrollment data");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: ClassSubjectData[] = json.data;
+    return data;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch class subject data.");
   }
 };
 
-export const putPublishGrade = async (
-  schudule_subject_id: number
-): Promise<void> => {
+export const putPublishGrade = async (schedule_subject_id: number): Promise<void> => {
   try {
-    await api.put(
-      `/Grade/PublishGrade?scheduleSubject_id=${schudule_subject_id}&isPublished=true`
+    const token = cookies().get("token")?.value; 
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    await axios.put(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
   } catch (error) {
     console.error(error);

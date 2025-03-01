@@ -89,7 +89,6 @@ export function ClassSubjectPage(props: {
         }
         console.log("Grades published successfully!");
 
-        // Reload data after publishing grades
         const rawData = await getClassSubjectData(
           classSubjecPassingData.id,
           classSubjecPassingData.term,
@@ -104,7 +103,6 @@ export function ClassSubjectPage(props: {
         );
         setClassSubjectData(data);
 
-        // Reinitialize filters
         const roomNumbers = Array.from(
           new Set(data.map((item) => item.room).filter((room) => room))
         );
@@ -122,8 +120,6 @@ export function ClassSubjectPage(props: {
         setRoomNumbers(roomNumbers);
         setPeriodNumbers(periodNumbers);
         setTeacherNames(teacherNames);
-
-        // Optionally clear selected filters
         setSelectedRoom(null);
         setSelectedPeriod(null);
         setSelectedTeacher(null);
@@ -136,45 +132,6 @@ export function ClassSubjectPage(props: {
       console.log("Publishing grade canceled.");
     }
   };
-
-  // const columns = makeColumns<ClassSubjectColumn>(
-  //   {
-  //     isPublish: false,
-  //     id: 1,
-  //     day: "",
-  //     period: "",
-  //     room: "",
-  //     teacherName: "",
-  //   },
-  //   "id",
-  //   {
-  //     id: "ID",
-  //     day: "วัน",
-  //     period: "คาบ",
-  //     room: "ห้อง",
-  //     teacherName: "ชื่อครู",
-  //     isPublish: "เผยแพร่",
-  //   },
-  //   [
-  //     {
-  //       label: "ตรวจสอบรายละเอียด",
-  //       onClick: (id: string | number | boolean) =>
-  //         handleSelectedInfoClassData(Number(id)),
-  //       className: "hover:bg-blue-600 bg-blue-500",
-  //     },
-  //   ],
-  //   {
-  //     isPublish: (row) => (
-  //       <div className={`flex items-center justify-center`}>
-  //         {row.isPublish ? (
-  //           <div className="text-green-500">✅ Published</div>
-  //         ) : (
-  //           <div className="text-red-500">❌ Unpublished</div>
-  //         )}
-  //       </div>
-  //     ),
-  //   }
-  // );
   const columns = [
     { label: "ลำดับ", key: "id", className: "w-1/12" },
     { label: "วัน", key: "day", className: "w-1/12" },
@@ -197,17 +154,8 @@ export function ClassSubjectPage(props: {
     },
   ];
 
-  // const columns = [
-  //   { label: "ลำดับ", key: "groupId", className: "w-2/12" },
-  //   { label: "ระดับชั้น", key: "class", className: "w-2/12" },
-  //   { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
-  //   { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-5/12" },
-  //   { label: "สาขาวิชา", key: "programName", className: "w-3/12 text-start" },
-  // ];
 
-  // get a init data from api
   useEffect(() => {
-    // setClassSubjectData(SubjectClassMockData);
     const fetchData = async () => {
       try {
         const rawData = await getClassSubjectData(
@@ -392,13 +340,8 @@ export function ClassSubjectPage(props: {
               onRowClick={(item) => handleSelectedInfoClassData(item.id)}
             />
             <div className="flex justify-end mt-4">
-              <button onClick={handlePusblishGrade}>
-                <Badge
-                  variant={"outline"}
-                  className="h-10 text-lg hover:bg-slate-200 transition:duration-500 rounded-md"
-                >
-                  ตัดเกรด
-                </Badge>
+              <button onClick={handlePusblishGrade} className="px-10 py-1 rounded-md text-white bg-sky-400 hover:bg-blue-600 hover:scale-[102%] duration-300">
+                ตัดเกรด
               </button>
             </div>
           </div>

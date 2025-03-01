@@ -8,7 +8,6 @@ import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
 import { MethodDto } from "@/dto/methodDto";
 import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
-import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
 
 export interface ClassSubject {
@@ -30,7 +29,7 @@ export function Main() {
   } | null>(null);
   const [activeTab, setActiveTab] = useState<string>("subject");
 
-  // State for grading popup
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
 

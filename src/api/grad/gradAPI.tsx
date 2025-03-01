@@ -1,16 +1,26 @@
+"use server";
 import {
   GetGradBySubjectId,
   GetGradPerTermByStudentIdDto,
 } from "@/dto/gradDto";
 import Cookies from "js-cookie";
+import { cookies } from "next/headers";
 
 export const fetchGetGradBySubjectId = async (
   subjectId: number,
   scheduleId: number
 ): Promise<GetGradBySubjectId[]> => {
   try {
+    const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to get teacher enrollment data");
