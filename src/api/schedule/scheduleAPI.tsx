@@ -1,9 +1,11 @@
+"use server";
 import {
   GetScheduleBysubjectId,
   StudentGroupScheduleSubject,
   TeacherScheduleSubject,
   CreateScheduleSubjectRequest,
 } from "@/dto/schedule";
+import { cookies } from "next/headers";
 
 export const fetchGetScheduleBysubjectId = async (
   subjectId: number
@@ -31,8 +33,16 @@ export const fetchGetScheduleOfTeacherByTeacherID = async (
   year: number
 ): Promise<TeacherScheduleSubject> => {
   try {
+    const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Schedule");

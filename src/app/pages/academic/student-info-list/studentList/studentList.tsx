@@ -4,6 +4,7 @@ import { Combobox } from "@/app/components/combobox/combobox";
 import { Input } from "@/components/ui/input";
 import { GetAllStudentTableDto } from "@/dto/studentDto";
 import { getAllStudentViewData } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 export function StudentListPage(props: {
@@ -36,20 +37,21 @@ export function StudentListPage(props: {
     fetchData();
   }, []);
 
-  const handleRowClick = (rowData: GetAllStudentTableDto) => {
-    props.handleTab("individualStudentInfo");
-    props.handleData({
-      studentId: rowData.studentId,
-      studentName: rowData.thaiName,
-    });
+  const router = useRouter();
+  const handleRowClick = (item: GetAllStudentTableDto) => {
+    router.push(`/pages/academic/student-details/${item.studentId}`);
   };
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16" },
     { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
-    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-6/16" },
+    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-5/16" },
     { label: "ระดับชั้น", key: "class", className: "w-2/16" },
-    { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-4/16 text-start line-clamp-1" },
+    {
+      label: "หลักสูตรการศึกษา",
+      key: "facultyName",
+      className: "w-5/16 text-start line-clamp-1",
+    },
   ];
 
   const filteredData = useMemo(() => {
@@ -98,7 +100,7 @@ export function StudentListPage(props: {
               <Input
                 type="text"
                 placeholder="Search..."
-                className="w-full pr-10" 
+                className="w-full pr-10"
                 onChange={(event) => setSearchInput(event.target.value)}
               />
             </div>

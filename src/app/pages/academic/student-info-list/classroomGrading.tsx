@@ -10,6 +10,7 @@ import {
   filterProgramsViewData,
   getRawProgramViewData,
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 interface ClassroomTable {
@@ -44,7 +45,6 @@ export function ClassroomGrading(props: {
   );
   // data in table
   const [dataTable, setDataTable] = useState<ClassroomTable[]>([]);
-  console.log("dataTable", dataTable);
 
   // use for selected filter
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
@@ -95,8 +95,6 @@ export function ClassroomGrading(props: {
     return group?.map((item) => item.groupName) || [];
   };
 
-  //   console.log(studentColumnsData);
-  // Function to handle selection change
 
   const handleClassLevelChange = (selected: string) => {
     setSelectedClassLevel(selected);
@@ -132,33 +130,14 @@ export function ClassroomGrading(props: {
   const handleRoom = (selected: string) => {
     setSelectedRoom(selected);
   };
-  // console.log("selectedRoom", selectedRoom);
 
+ const router = useRouter()
   const handleRowClick = (item: ClassroomTable) => {
-    if (!selectedTerm || !selectedYear) {
-      alert("กรุณาเลือกภาคเรียนและปีการศึกษา");
-      return;
-    } else {
-      if (item) {
-        // props.handleTab("classroomByGroupId");
-        props.handleSelectedData({
-          groupId: parseInt(item.groupId),
-          term: selectedTerm || "",
-          year: selectedYear || "",
-          classroom: item.classLevel,
-        });
-      } else {
-        alert("ไม่พบข้อมูล");
-      }
-    }
-    console.log("Clicked Group ID:", item.groupId);
+    router.push(`/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`)
   };
 
   useEffect(() => {
     const fetchFilterData = async () => {
-      // const data = await getStudentByGroupIdDataView(groupId);
-
-      // set for table data
       const rawData = await getRawProgramViewData();
       console.log("rawData", rawData);
 
@@ -173,7 +152,6 @@ export function ClassroomGrading(props: {
 
       setDataTable(formattedData);
 
-      // set for filter data
       const data = await filterProgramsViewData();
       const vocational = data.filter(
         (item: EducationData) => item.classLevel === "ปวช"
@@ -190,7 +168,6 @@ export function ClassroomGrading(props: {
   }, []);
 
   const filteredData = useMemo(() => {
-    // const normalizedSearch = searchClassroom.toLowerCase();
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
         ? item.classLevel.substring(0, 3) === selectedClassLevel
@@ -225,9 +202,9 @@ export function ClassroomGrading(props: {
   // console.log("filteredData", filteredData);
 
   const columns = [
-    { label: "ลำดับ", key: "groupId", className: "w-2/12" },
+    { label: "ลำดับ", key: "groupId", className: "w-1/12 flex justify-center text-center" },
     { label: "ระดับชั้น", key: "classLevel", className: "w-2/12" },
-    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-5/12" },
+    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-6/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
   ];
 

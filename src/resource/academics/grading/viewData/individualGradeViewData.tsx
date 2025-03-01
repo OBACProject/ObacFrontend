@@ -17,7 +17,7 @@ export async function getAllStudentViewData() {
       class: `${student.class}.${student.groupName}`,
       currentYear: student.currentYear,
       facultyName: student.facultyName,
-      subProgramName: student.subProgramName,
+      subProgramName: student.programName,
       programName: student.programName,
     })
   );

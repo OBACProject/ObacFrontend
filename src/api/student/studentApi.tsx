@@ -1,8 +1,11 @@
 "use server";
 import {
+  GetAllStudent,
+  GetStudentByStudentId,
   GetStudentUser,
   StudentCreateData,
   StudentGroup,
+  StudentListInGroup,
 } from "@/dto/studentDto";
 import { cookies } from "next/headers";
 
@@ -86,5 +89,90 @@ export const fetchStudentUser = async (): Promise<GetStudentUser> => {
   } catch (err) {
     console.error("Error:", err);
     throw err;
+  }
+};
+
+export const fetchStudentListInGroup = async (
+  groupId: number
+): Promise<StudentListInGroup[]> => {
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentListByGroupID?groupid=${groupId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch in API");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: StudentListInGroup[] = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error fetching student list:", err);
+    return [];
+  }
+};
+
+export const fetchGetAllStudent= async (
+): Promise<GetAllStudent[]> => {
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudent`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch in API");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    const data: GetAllStudent[] = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error fetching student list:", err);
+    return [];
+  }
+};
+
+export const fetchGetStudentByStudentId = async (studentId: number): Promise<GetStudentByStudentId | null> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) throw new Error("Missing authentication token");
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByStudentID?studentId=${studentId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch API: ${response.status} ${response.statusText}`);
+    }
+
+    const text = await response.text();
+    if (!text) throw new Error("Empty response from API");
+
+    const json = JSON.parse(text);
+    const data: GetStudentByStudentId = json.data;
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching student data:", err);
+    return null; 
   }
 };

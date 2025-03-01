@@ -10,7 +10,14 @@ export default function Page({ params }: { params: { student_id?: string } }) {
 
   return (
     <div className="pl-20">
-        <Form/>
+      {
+        student_id ?(
+          <Form studentId={Number(student_id)}/>
+        ):(
+          <div>Loading...</div>
+        )
+      }
+        
     </div>
   );
 }

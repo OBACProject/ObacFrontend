@@ -67,7 +67,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       ),
       subMenu: [
         {
-          title: "จัดการเกรดรายห้องเรียน",
+          title: "จัดการคะแนน(ห้อง)",
           href: "/pages/academic/grading/management/classroom",
           icon: (
             <School
@@ -77,7 +77,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
           ),
         },
         {
-          title: "จัดการเกรดรายบุคคล",
+          title: "จัดการคะแนน(รายบุคคล)",
           href: "/pages/academic/grading/management/individual",
           icon: (
             <UsersRound
@@ -98,16 +98,16 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
-    {
-      title: "ข้อมูลอาจารย์",
-      href: "/pages/academic/teacher-info-list",
-      icon: (
-        <ContactRound
-          style={{ width: "2.1rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
+    // {
+    //   title: "ข้อมูลอาจารย์",
+    //   href: "/pages/academic/teacher-info-list",
+    //   icon: (
+    //     <ContactRound
+    //       style={{ width: "2.1rem", height: "2.5rem" }}
+    //       className="text-[#0C2943]"
+    //     />
+    //   ),
+    // },
     
     {
       title: "จัดตารางเรียนตารางสอน",
