@@ -25,7 +25,7 @@ export function AcademicStudentInfo(props: {
 
   const [gradValue, setGradValue] = useState<string>("");
 
-  const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId[]>([]);
+  const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId>();
   const [searchStudent, setSearchStudent] = useState<string>("");
 
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
@@ -34,6 +34,8 @@ export function AcademicStudentInfo(props: {
   );
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
+
+  const [remark, setRemark] = useState<string>("");
 
   console.log("data :", scheduleData);
   console.log("code :", 0);
@@ -53,7 +55,7 @@ export function AcademicStudentInfo(props: {
 
         const schedule: GetScheduleBysubjectId =
           await fetchGetScheduleBysubjectId(props.subjectId);
-        setSchedules([schedule]);
+        setSchedules(schedule);
       } catch (error) {
         console.error("Error fetching grad data:", error);
         setGradData([]);
@@ -72,7 +74,7 @@ export function AcademicStudentInfo(props: {
         item.lastName.toLowerCase().includes(normalizedSearch)
     );
     setGradDataFilter(filteredData);
-  }, [gradDatas, searchStudent]);
+  }, [gradDatas, searchStudent, scheduleData]);
 
   const handleInputChange = (
     index: number,
@@ -100,17 +102,29 @@ export function AcademicStudentInfo(props: {
 
   const CompleteGrade = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const result = await Swal.fire({
+        title: "คุณแน่ใช้ไหมที่จะยืนยันการตรวจสอบคะแนน?",
+        text: "เมื่อยืนยันแล้วจะไม่สามารถแก้ไขได้ กรุณาทบทวนข้อมูอีกครั้งก่อนตกลง",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "ไม่",
+        confirmButtonText: "ใช่",
+      });
 
-      toast.success("บันทึกคะแนนสำเร็จ");
+      if (result.isConfirmed) {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        toast.success("บันทึกคะแนนสำเร็จ");
+      }
+
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -120,34 +134,7 @@ export function AcademicStudentInfo(props: {
 
   const saveChanges = async () => {
     try {
-      const payload = gradDatas.map((item) => ({
-        gradeId: item.gradeId ?? 0,
-        collectScore: item.collectScore,
-        testScore: item.testScore,
-        affectiveScore: item.affectiveScore,
-        finalGrade: gradValue,
-      }));
-      for (let i = 0; i < payload.length; i++) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload[i]),
-          }
-        );
-        const responseBody = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            responseBody.message || "Failed to update student grades"
-          );
-        }
-      }
-      setOnEdit(!onEdit);
-      Swal.fire({
+      const result = await Swal.fire({
         title: "ยืนยันข้อมูล?",
         text: "จะไม่สามารถแก้ไขได้",
         icon: "warning",
@@ -155,15 +142,39 @@ export function AcademicStudentInfo(props: {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "ตกลง",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "บันทึกข้อมูลสำเร็จ",
-            icon: "success",
-          });
-        }
       });
-      window.location.reload();
+
+      if (result.isConfirmed) {
+        const payload = gradDatas.map((item) => ({
+          gradeId: item.gradeId ?? 0,
+          collectScore: item.collectScore,
+          testScore: item.testScore,
+          affectiveScore: item.affectiveScore,
+          totalScore: item.affectiveScore + item.collectScore + item.testScore,
+          finalGrade: gradValue,
+          remark: remark,
+        }));
+        for (let i = 0; i < payload.length; i++) {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload[i]),
+            }
+          );
+          const responseBody = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              responseBody.message || "Failed to update student grades"
+            );
+          }
+        }
+        setOnEdit(!onEdit);
+      }
     } catch (error) {
       console.error("Error saving changes:", error);
       alert("Failed to save grades. Please try again.");
@@ -172,6 +183,10 @@ export function AcademicStudentInfo(props: {
 
   const onChangeGrade = (value: string) => {
     setGradValue(value);
+  };
+
+  const onChangeRemark = (value: string) => {
+    setRemark(value);
   };
 
   const gradeValue = [
@@ -190,6 +205,19 @@ export function AcademicStudentInfo(props: {
     "มส.",
   ];
 
+  const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+
+  const gradingScorce = (totalScore: number) => {
+    if (totalScore >= 80) return "4";
+    if (totalScore >= 75) return "3.5";
+    if (totalScore >= 70) return "3";
+    if (totalScore >= 65) return "2.5";
+    if (totalScore >= 60) return "2";
+    if (totalScore >= 55) return "1.5";
+    if (totalScore >= 50) return "1";
+    return "0";
+  };
+
   return (
     <div className="w-full mt-4">
       <div className="flex justify-between">
@@ -200,10 +228,10 @@ export function AcademicStudentInfo(props: {
               {gradDatas[0]?.subjectName}
             </span>
           </Badge>
-          <Badge variant={"outline"} className=" ml-4 text-xl">
+          <Badge variant={"outline"} className="ml-4 text-xl">
             รหัสวิชา :
             <span className="font-semibold ml-2">
-              ....
+              {scheduleData?.subjectCode ?? "......"}
             </span>
           </Badge>
         </div>
@@ -215,7 +243,7 @@ export function AcademicStudentInfo(props: {
               GenSubjectScore({
                 grads: gradDatas,
                 studentGroup: room,
-                subjectId: scheduleData[0]?.subjectCode,
+                subjectId: scheduleData?.subjectCode,
                 subjectName: gradDatas[0]?.subjectName,
               });
             }}
@@ -228,7 +256,7 @@ export function AcademicStudentInfo(props: {
               GenStudentNameInSubject({
                 grads: gradDatas,
                 studentGroup: room,
-                subjectId: scheduleData[0]?.subjectCode,
+                subjectId: scheduleData?.subjectCode,
                 subjectName: gradDatas[0]?.subjectName,
               });
             }}
@@ -240,9 +268,9 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertScoreToExcel(
                 convertGrad,
-                String(scheduleData[0]?.term ?? ""),
-                String(scheduleData[0]?.year ?? ""),
-                scheduleData[0]?.subjectCode || "",
+                String(scheduleData?.term ?? ""),
+                String(scheduleData?.year ?? ""),
+                scheduleData?.subjectCode || "",
                 gradDatas[0]?.subjectName || "",
                 room || ""
               );
@@ -255,18 +283,10 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertClassroomToExcel(
                 covertStudentExcel,
-                scheduleData[0]?.subjectCode || "",
+                scheduleData?.subjectCode || "",
                 gradDatas[0]?.subjectName || "",
                 room || ""
               );
-              // ConvertScoreToExcel(
-              //   convertGrad,
-              //   String(scheduleData?.term ?? ""),
-              //   String(scheduleData?.year ?? ""),
-              //   scheduleData?.subjectCode || "",
-              //   gradDatas[0]?.subjectName || "",
-              //   room || ""
-              // );
             }}
           >
             <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อนักเรียน excel</p>
@@ -414,21 +434,30 @@ export function AcademicStudentInfo(props: {
               <div className="flex justify-center px-2 py-1">
                 <Combobox
                   buttonLabel="เกรด"
-                  disabled={!onEdit}
+                  disabled={true}
                   options={gradeValue.map((item) => ({
                     label: item,
                     value: item,
                   }))}
                   onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
-                  defaultValue={item.grade}
+                  defaultValue={gradingScorce(
+                    item.collectScore + item.testScore + item.affectiveScore
+                  )}
                 />
               </div>
             </span>
-            <input
-              type="text"
-              placeholder={"-"}
-              className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"
-            />
+            <div className="flex justify-center px-2 py-1">
+              <Combobox
+                buttonLabel="หมายเหตุ"
+                disabled={!onEdit}
+                options={remarkValue.map((item) => ({
+                  label: item,
+                  value: item,
+                }))}
+                onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
+                defaultValue={item.remark}
+              />
+            </div>
           </div>
         ))}
         <div className="my-5 w-full grid place-items-end  ">
@@ -458,13 +487,21 @@ export function AcademicStudentInfo(props: {
               <p className="w-[300px] text-center">
                 โปรดตรวจสอบให้แน่ใจว่าคะแนนถูกต้อง
               </p>
-              <p className="text-gray-600 w-[300px] text-center">หากเกิดความผิดพลาดอาจทำให้เกิดความล่าช้าในการประมวลผลเกรด</p>
+              <p className="text-gray-600 w-[300px] text-center">
+                หากเกิดความผิดพลาดอาจทำให้เกิดความล่าช้าในการประมวลผลเกรด
+              </p>
             </div>
             <div className="flex gap-5 justify-center py-5 w-full">
-              <button className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black " onClick={()=>setVerifyGradPopUp(false)}>
+              <button
+                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
+                onClick={() => setVerifyGradPopUp(false)}
+              >
                 ยกเลิก
               </button>
-              <button className="text-sm w-[90px] py-1.5 bg-blue-500 hover:bg-blue-600 rounded-md text-white " onClick={CompleteGrade}>
+              <button
+                className="text-sm w-[90px] py-1.5 bg-blue-500 hover:bg-blue-600 rounded-md text-white "
+                onClick={CompleteGrade}
+              >
                 ตกลง
               </button>
             </div>

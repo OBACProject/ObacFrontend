@@ -131,18 +131,6 @@ export function ClassroomGrading(props: {
     setLevels(fetchedLevels);
   };
 
-  const handleGlassLevelChange = (selected: string) => {
-    setSelectedGradeLevel(selected);
-    setSelectedRoom("");
-    const fetchRooms = getRoom(selected);
-    setRoom(fetchRooms);
-  };
-
-  const handleRoom = (selected: string) => {
-    setSelectedRoom(selected);
-  };
-  // console.log("selectedRoom", selectedRoom);
-
   const handleRowClick = (item: ClassroomTable) => {
     if (!selectedTerm || !selectedYear) {
       alert("กรุณาเลือกภาคเรียนและปีการศึกษา");

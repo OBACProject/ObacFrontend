@@ -27,7 +27,6 @@ export function StudentPopup({
   const [collectScore, setCollectScore] = useState({
     testScore: "",
     affectiveScore: "",
-    midtermScore: "",
     finalScore: "",
   });
 
@@ -76,12 +75,7 @@ export function StudentPopup({
             }
           />
           <Input
-            placeholder="คะแนนกลางภาค"
-            value={collectScore.midtermScore}
-            onChange={(e) => handleInputChange("midtermScore", e.target.value)}
-          />
-          <Input
-            placeholder="คะแนนปลายภาค"
+            placeholder="คะแนนสอบ"
             value={collectScore.finalScore}
             onChange={(e) => handleInputChange("finalScore", e.target.value)}
           />

@@ -14,6 +14,7 @@ export interface GetGradBySubjectId {
   affectiveScore: number;
   totalScore: number;
   grade: string;
+  remark: string;
 }
 
 export interface convertGradBySubjectId {
