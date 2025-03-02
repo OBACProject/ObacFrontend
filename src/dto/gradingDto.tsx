@@ -16,7 +16,7 @@ export interface ClassSubjectData {
   subjectId: number;
   studentGroupId: number;
   studentGroupName: string;
-  class:string;
+  class: string;
   room: string;
   isPublish: boolean;
   subjectCode: string; // ไม่เอาคับ
@@ -64,8 +64,8 @@ export interface UpdateStudentGrade {
   collectScore: number;
   testScore: number;
   affectiveScore: number;
-  midtermScore: number;
-  finalScore: number;
+  // midtermScore: number;
+  // finalScore: number;
   totalScore: number;
   finalGrade: string;
   remark: string;
