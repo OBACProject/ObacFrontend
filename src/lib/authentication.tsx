@@ -63,6 +63,9 @@ export async function logout() {
     Cookies.remove("name");
     Cookies.remove("userId");
     Cookies.remove("token");
+    localStorage.removeItem("activeTab");
+    localStorage.removeItem("classSubjectData");
+    localStorage.removeItem("classInfoData");
   } catch (err) {
     console.log(err);
     throw new Error("Failed to logout");

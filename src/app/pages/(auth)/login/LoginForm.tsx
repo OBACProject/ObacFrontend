@@ -73,9 +73,6 @@ export default function LoginForm({ session }: LoginFormProps) {
   const handleLogout = async () => {
     await logout();
 
-    await Cookies.remove("token");
-    await Cookies.remove("role");
-    await Cookies.remove("name");
     toast.info("Logout successful");
     setTrigger(false);
     window.location.reload();
