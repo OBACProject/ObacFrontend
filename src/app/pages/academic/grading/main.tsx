@@ -18,10 +18,10 @@ export interface ClassSubject {
 }
 
 export function Main() {
+  const pathname = usePathname();
   const [classSubjectData, setClassSubjectData] = useState<ClassSubject | null>(
     null
   );
-  const pathname = usePathname();
   const [classInfoData, setClassInfoData] = useState<{
     subjectId: number;
     scheduleSubjectId: number;
@@ -29,13 +29,41 @@ export function Main() {
   } | null>(null);
   const [activeTab, setActiveTab] = useState<string>("subject");
 
-
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
-
-  const [gradingMode, setGradingMode] = useState<"manual" | "period" | null>();
+  const [gradingMode, setGradingMode] = useState<"manual" | "period" | null>(
+    null
+  );
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+
+  // Fetch stored data and initialize the state
+  useEffect(() => {
+    const savedTab = localStorage.getItem("activeTab");
+    const savedClassSubjectData = localStorage.getItem("classSubjectData");
+    const savedClassInfoData = localStorage.getItem("classInfoData");
+
+    // Initialize state based on localStorage data
+    if (savedTab) {
+      setActiveTab(savedTab);
+      if (savedClassInfoData) {
+        handleSelectedClassInfo(JSON.parse(savedClassInfoData));
+      }
+      if (savedClassSubjectData) {
+        handleSelectedSubjectData(JSON.parse(savedClassSubjectData));
+      }
+    }
+
+    fetchData();
+  }, []); // Run only once when the component is mounted
+
+  useEffect(() => {
+    if (pathname !== "/pages/academic/grading") {
+      localStorage.removeItem("activeTab");
+      localStorage.removeItem("classSubjectData");
+      localStorage.removeItem("classInfoData");
+    }
+  }, [pathname]);
 
   const handleSelectedSubjectData = (data: ClassSubject) => {
     setClassSubjectData(data);
@@ -62,57 +90,19 @@ export function Main() {
       localStorage.removeItem("classSubjectData");
       localStorage.removeItem("classInfoData");
     }
-
     if (tab === "class") {
       setClassInfoData(null);
       localStorage.removeItem("classInfoData");
     }
   };
 
-  useEffect(() => {
-    const savedTab = localStorage.getItem("activeTab");
-    const savedClassSubjectData = localStorage.getItem("classSubjectData");
-    const savedClassInfoData = localStorage.getItem("classInfoData");
-
-    if (savedTab) {
-      setActiveTab(savedTab);
-    }
-
-    if (savedClassSubjectData) {
-      setClassSubjectData(JSON.parse(savedClassSubjectData));
-    }
-
-    if (savedClassInfoData) {
-      setClassInfoData(JSON.parse(savedClassInfoData));
-    }
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      if (
-        typeof window !== "undefined" &&
-        pathname !== "/academic/grading/management/classroom"
-      ) {
-        localStorage.removeItem("activeTab");
-        localStorage.removeItem("selectedClassroomData");
-        localStorage.removeItem("classSubjectData");
-        localStorage.removeItem("classInfoData");
-      }
-    };
-
-    handleRouteChange(); // Call function on component mount to clean up if needed
-  }, [pathname]);
-
   const fetchData = async () => {
     try {
-      const response: MethodDto[] = await getMethodViewData(); // Fetch initial method data
-
+      const response: MethodDto[] = await getMethodViewData();
       const editResponse = response.find(
         (item) => item.methodName === "Edit_Score"
       );
-      console.log("Edit Response:", editResponse);
+
       if (editResponse) {
         setIsActive(editResponse.isActive);
         if (!editResponse.isActive) {
@@ -145,19 +135,16 @@ export function Main() {
       alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนนให้ถูกต้อง");
       return;
     }
-    const isAuto = gradingMode == "period";
 
     const methodData = {
       id: 1,
       methodName: "Edit_Score",
-      isAuto: isAuto,
+      isAuto: gradingMode === "period",
       startDate: gradingMode === "period" ? startTime : null,
       endDate: gradingMode === "period" ? endTime : null,
       isActive: isActive,
     };
 
-    await fetchPutMethodData(methodData);
-    setIsPopupOpen(false);
     try {
       await fetchPutMethodData(methodData);
       setIsPopupOpen(false);
@@ -165,9 +152,7 @@ export function Main() {
         title: "Success!",
         icon: "success",
       });
-
-      // Fetch data again after the update
-      fetchData();
+      fetchData(); // Refresh data after update
     } catch (error) {
       console.error("Failed to update method data:", error);
       Swal.fire({
@@ -178,93 +163,66 @@ export function Main() {
     }
   };
 
-  useEffect(() => {
-    setIsActive(gradingMode !== null ? true : false);
-  }, [gradingMode]);
-
   return (
     <div className="w-full">
       {/* Breadcrumb and navigation */}
-      <div className="w-full flex gap-2 transition-all duration-500 ease-in-out justify-between">
-        <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
-          <div className="flex items-center">
-            <button
-              className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
-              onClick={() => handleTab("subject")}
-            >
-              <span className="text-black text-sm font-bold line-clamp-1">
-                {classSubjectData?.subjectName ?? "Subject"}
-              </span>
-            </button>
-            <ChevronRight />
-          </div>
+      <div className="w-full flex gap-2 justify-between">
+        <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full rounded-br-full">
+          <button
+            className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+            onClick={() => handleTab("subject")}
+          >
+            <span className="text-black text-sm font-bold">
+              {classSubjectData?.subjectName ?? "Subject"}
+            </span>
+          </button>
+          <ChevronRight />
           {classSubjectData && (
-            <div className="w-full flex items-center justify-center">
+            <>
               <button
                 className="min-w-32 max-w-48 w-full hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("class")}
               >
-                <span className="text-black text-sm font-bold ">
+                <span className="text-black text-sm font-bold">
                   {classInfoData?.room ?? "Class"}
                 </span>
               </button>
               <ChevronRight />
-            </div>
+            </>
           )}
           {classSubjectData && classInfoData && (
-            <div className="w-full flex items-center justify-center">
+            <>
               <button
-                className="min-w-32 w-auto  hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 w-auto hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("infoClass")}
               >
-                <span className="text-black text-sm font-bold line-clamp-1">
-                  Info Class
-                </span>
+                <span className="text-black text-sm font-bold">Info Class</span>
               </button>
               <ChevronRight />
-            </div>
+            </>
           )}
-        </div>
-        {/* Button to open grading popup */}
-        <div className="mt-6 flex justify-center">
-          <button
-            className="px-6 py-2 bg-blue-500 text-white rounded"
-            onClick={() => setIsPopupOpen(true)}
-          >
-            ระบบเปิด/ปิดช่วงการลงคะแนน
-          </button>
         </div>
       </div>
 
-      {/* Conditional Rendering for Active Tab */}
       {activeTab === "subject" && (
-        <div className="opacity-100 w-full  transition-opacity duration-500 ease-in-out">
-          <Subject
-            handleTab={handleTab}
-            handleSelectedData={handleSelectedSubjectData}
-          />
-        </div>
+        <Subject
+          handleTab={handleTab}
+          handleSelectedData={handleSelectedSubjectData}
+        />
       )}
-
       {activeTab === "class" && classSubjectData && (
-        <div className="opacity-100 transition-opacity duration-500 ease-in-out">
-          <ClassSubjectPage
-            classSubjecPassingData={classSubjectData}
-            handleTab={handleTab}
-            handleSelectedData={handleSelectedClassInfo}
-          />
-        </div>
+        <ClassSubjectPage
+          classSubjecPassingData={classSubjectData}
+          handleTab={handleTab}
+          handleSelectedData={handleSelectedClassInfo}
+        />
       )}
-
       {activeTab === "infoClass" && classSubjectData && classInfoData && (
-        <>
-          <h1 className="text-5xl font-extrabold text-black"></h1>
-          <AcademicStudentInfo
-            subjectId={classInfoData.subjectId}
-            scheduleSubjectId={classInfoData.scheduleSubjectId}
-            room={classInfoData.room}
-          />
-        </>
+        <AcademicStudentInfo
+          subjectId={classInfoData.subjectId}
+          scheduleSubjectId={classInfoData.scheduleSubjectId}
+          room={classInfoData.room}
+        />
       )}
 
       {/* Grading Popup */}
