@@ -1,3 +1,4 @@
+"use client";
 import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
@@ -10,6 +11,7 @@ import {
   ConvertClassroomToExcel,
   ConvertScoreToExcel,
 } from "@/lib/convertToExcel";
+import { updateGradingStundetData } from "@/resource/academics/grading/api/gradingApiData";
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
 import { CircleX, ClipboardCheck, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -32,15 +34,21 @@ export function AcademicStudentInfo(props: {
   const [gradDataFilter, setGradDataFilter] = useState<GetGradBySubjectId[]>(
     []
   );
+
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
   const [remark, setRemark] = useState<string>("");
-
-  console.log("data :", scheduleData);
-  console.log("code :", 0);
+  console.log("gradData :", gradDatas);
+  console.log("gradDataFilter :", gradDataFilter);
+  // console.log("data :", scheduleData);
+  // console.log("code :", 0);
   const handleEdit = () => {
-    setOnEdit(!onEdit);
+    setOnEdit(true);
+  };
+  const handleNotEdit = () => {
+    setOnEdit(false);
+    setGradDataFilter([...gradDatas]);
   };
 
   useEffect(() => {
@@ -53,9 +61,9 @@ export function AcademicStudentInfo(props: {
         setGradData(grads ?? []);
         setGradDataFilter(grads ?? []);
 
-        const schedule: GetScheduleBysubjectId =
-          await fetchGetScheduleBysubjectId(props.subjectId);
-        setSchedules(schedule);
+        // const schedule: GetScheduleBysubjectId =
+        //   await fetchGetScheduleBysubjectId(props.subjectId);
+        // setSchedules(schedule);
       } catch (error) {
         console.error("Error fetching grad data:", error);
         setGradData([]);
@@ -81,12 +89,14 @@ export function AcademicStudentInfo(props: {
     field: keyof GetGradBySubjectId,
     value: string
   ) => {
-    const updatedStudents = [...gradDatas];
-    updatedStudents[index][field] = (parseFloat(value) as number) || 0;
-    setGradData(updatedStudents);
+    const updatedStudents = gradDataFilter.map((student) => ({ ...student }));
+
+    updatedStudents[index][field] = parseFloat(value) || 0;
+
+    setGradDataFilter(updatedStudents);
   };
 
-  const convertGrad = gradDatas.map((item) => ({
+  const convertGrad = gradDataFilter.map((item) => ({
     studentCode: item.studentCode,
     name: `${item.firstName} ${item.lastName}`,
     collectScore: item.collectScore,
@@ -95,7 +105,7 @@ export function AcademicStudentInfo(props: {
     totalScore: item.collectScore + item.testScore + item.affectiveScore,
   }));
 
-  const covertStudentExcel = gradDatas.map((item) => ({
+  const covertStudentExcel = gradDataFilter.map((item) => ({
     studentCode: item.studentCode,
     name: `${item.firstName} ${item.lastName}`,
   }));
@@ -145,7 +155,7 @@ export function AcademicStudentInfo(props: {
       });
 
       if (result.isConfirmed) {
-        const payload = gradDatas.map((item) => ({
+        const payload = gradDataFilter.map((item) => ({
           gradeId: item.gradeId ?? 0,
           collectScore: item.collectScore,
           testScore: item.testScore,
@@ -155,22 +165,10 @@ export function AcademicStudentInfo(props: {
           remark: remark,
         }));
         for (let i = 0; i < payload.length; i++) {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload[i]),
-            }
-          );
-          const responseBody = await response.json();
-
-          if (!response.ok) {
-            throw new Error(
-              responseBody.message || "Failed to update student grades"
-            );
+          try {
+            const response = await updateGradingStundetData(payload[i]);
+          } catch (error) {
+            console.error("Error saving changes:", error);
           }
         }
         setOnEdit(!onEdit);
@@ -225,7 +223,7 @@ export function AcademicStudentInfo(props: {
           <Badge variant={"outline"} className="text-xl">
             วิชา :
             <span className="font-semibold ml-2">
-              {gradDatas[0]?.subjectName}
+              {gradDataFilter[0]?.subjectName}
             </span>
           </Badge>
           <Badge variant={"outline"} className="ml-4 text-xl">
@@ -241,10 +239,10 @@ export function AcademicStudentInfo(props: {
             className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
             onClick={() => {
               GenSubjectScore({
-                grads: gradDatas,
+                grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: scheduleData?.subjectCode,
-                subjectName: gradDatas[0]?.subjectName,
+                subjectName: gradDataFilter[0]?.subjectName,
               });
             }}
           >
@@ -254,10 +252,10 @@ export function AcademicStudentInfo(props: {
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             onClick={() => {
               GenStudentNameInSubject({
-                grads: gradDatas,
+                grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: scheduleData?.subjectCode,
-                subjectName: gradDatas[0]?.subjectName,
+                subjectName: gradDataFilter[0]?.subjectName,
               });
             }}
           >
@@ -271,7 +269,7 @@ export function AcademicStudentInfo(props: {
                 String(scheduleData?.term ?? ""),
                 String(scheduleData?.year ?? ""),
                 scheduleData?.subjectCode || "",
-                gradDatas[0]?.subjectName || "",
+                gradDataFilter[0]?.subjectName || "",
                 room || ""
               );
             }}
@@ -284,7 +282,7 @@ export function AcademicStudentInfo(props: {
               ConvertClassroomToExcel(
                 covertStudentExcel,
                 scheduleData?.subjectCode || "",
-                gradDatas[0]?.subjectName || "",
+                gradDataFilter[0]?.subjectName || "",
                 room || ""
               );
             }}
@@ -317,7 +315,7 @@ export function AcademicStudentInfo(props: {
           {onEdit ? (
             <button
               className={`bg-red-500 duration-300 text-white h-fit text-center text-lg rounded-md hover:opacity-75 flex items-center justify-center gap-2 w-[120px] py-1 hover:rounded-sm `}
-              onClick={handleEdit}
+              onClick={handleNotEdit}
             >
               ยกเลิก
               <CircleX
