@@ -55,7 +55,7 @@ export function Main() {
     }
 
     fetchData();
-  }, []); // Run only once when the component is mounted
+  }, []);
 
   useEffect(() => {
     if (pathname !== "/pages/academic/grading") {
@@ -220,6 +220,8 @@ export function Main() {
       {activeTab === "infoClass" && classSubjectData && classInfoData && (
         <AcademicStudentInfo
           subjectId={classInfoData.subjectId}
+          term={classSubjectData.term}
+          year={classSubjectData.year}
           scheduleSubjectId={classInfoData.scheduleSubjectId}
           room={classInfoData.room}
         />

@@ -1,12 +1,12 @@
 "use client";
-import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
+import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GetGradBySubjectId } from "@/dto/gradDto";
-import { GetScheduleBysubjectId } from "@/dto/schedule";
+import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import {
   ConvertClassroomToExcel,
   ConvertScoreToExcel,
@@ -21,13 +21,15 @@ import Swal from "sweetalert2";
 export function AcademicStudentInfo(props: {
   subjectId: number;
   scheduleSubjectId: number;
+  term: number;
+  year: number;
   room: string;
 }) {
   const room = props.room;
 
   const [gradValue, setGradValue] = useState<string>("");
 
-  const [scheduleData, setSchedules] = useState<GetScheduleBysubjectId>();
+  const [subjectByGroupId, setSchedules] = useState<GetSubjectBySubjectId>();
   const [searchStudent, setSearchStudent] = useState<string>("");
 
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
@@ -41,7 +43,7 @@ export function AcademicStudentInfo(props: {
   const [remark, setRemark] = useState<string>("");
   console.log("gradData :", gradDatas);
   console.log("gradDataFilter :", gradDataFilter);
-  // console.log("data :", scheduleData);
+  // console.log("data :", subjectByGroupId);
   // console.log("code :", 0);
   const handleEdit = () => {
     setOnEdit(true);
@@ -61,9 +63,9 @@ export function AcademicStudentInfo(props: {
         setGradData(grads ?? []);
         setGradDataFilter(grads ?? []);
 
-        // const schedule: GetScheduleBysubjectId =
-        //   await fetchGetScheduleBysubjectId(props.subjectId);
-        // setSchedules(schedule);
+        const schedule: GetSubjectBySubjectId =
+          await fetchGetSubjectBySubjectId(props.subjectId);
+        setSchedules(schedule);
       } catch (error) {
         console.error("Error fetching grad data:", error);
         setGradData([]);
@@ -82,7 +84,7 @@ export function AcademicStudentInfo(props: {
         item.lastName.toLowerCase().includes(normalizedSearch)
     );
     setGradDataFilter(filteredData);
-  }, [gradDatas, searchStudent, scheduleData]);
+  }, [gradDatas, searchStudent, subjectByGroupId]);
 
   const handleInputChange = (
     index: number,
@@ -229,7 +231,7 @@ export function AcademicStudentInfo(props: {
           <Badge variant={"outline"} className="ml-4 text-xl">
             รหัสวิชา :
             <span className="font-semibold ml-2">
-              {scheduleData?.subjectCode ?? "......"}
+              {subjectByGroupId?.subjectCode ?? "......"}
             </span>
           </Badge>
         </div>
@@ -241,7 +243,7 @@ export function AcademicStudentInfo(props: {
               GenSubjectScore({
                 grads: gradDataFilter,
                 studentGroup: room,
-                subjectId: scheduleData?.subjectCode,
+                subjectId: subjectByGroupId?.subjectCode,
                 subjectName: gradDataFilter[0]?.subjectName,
               });
             }}
@@ -254,7 +256,7 @@ export function AcademicStudentInfo(props: {
               GenStudentNameInSubject({
                 grads: gradDataFilter,
                 studentGroup: room,
-                subjectId: scheduleData?.subjectCode,
+                subjectId: subjectByGroupId?.subjectCode,
                 subjectName: gradDataFilter[0]?.subjectName,
               });
             }}
@@ -266,9 +268,9 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertScoreToExcel(
                 convertGrad,
-                String(scheduleData?.term ?? ""),
-                String(scheduleData?.year ?? ""),
-                scheduleData?.subjectCode || "",
+                String(props?.term ?? ""),
+                String(props?.year ?? ""),
+                subjectByGroupId?.subjectCode || "",
                 gradDataFilter[0]?.subjectName || "",
                 room || ""
               );
@@ -281,7 +283,7 @@ export function AcademicStudentInfo(props: {
             onClick={async () => {
               ConvertClassroomToExcel(
                 covertStudentExcel,
-                scheduleData?.subjectCode || "",
+                subjectByGroupId?.subjectCode || "",
                 gradDataFilter[0]?.subjectName || "",
                 room || ""
               );
