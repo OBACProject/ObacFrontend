@@ -2,7 +2,6 @@
 
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { Combobox } from "@/app/components/combobox/combobox";
-import { makeColumns } from "@/app/components/table/makeColumns";
 import { Input } from "@/components/ui/input";
 import { GradingDataColumn } from "@/dto/gradingDto";
 import { getGradingViewData } from "@/resource/academics/grading/viewData/gradingViewData";

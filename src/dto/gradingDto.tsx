@@ -16,6 +16,7 @@ export interface ClassSubjectData {
   subjectId: number;
   studentGroupId: number;
   studentGroupName: string;
+  class:string;
   room: string;
   isPublish: boolean;
   subjectCode: string; // ไม่เอาคับ

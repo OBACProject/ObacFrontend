@@ -14,7 +14,7 @@ export const getSubjectClassViewData = async (
       id: item.scheduleSubjectId,
       day: item.day,
       period: item.period,
-      room: item.room,
+      room: item.class+"."+item.studentGroupName,
       teacherName: item.teacherName,
       isPublish: item.isPublish,
     }));
