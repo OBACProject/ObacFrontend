@@ -63,9 +63,17 @@ export const fetchGetScheduleOfStudentGroupByGroupID = async (
   term: string,
   year: number
 ): Promise<StudentGroupScheduleSubject> => {
+  const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Schedule");
@@ -84,9 +92,17 @@ export const fetchGetScheduleOfStudentByStudentID = async (
   term: string,
   year: number
 ): Promise<StudentGroupScheduleSubject> => {
+  const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch Schedule");

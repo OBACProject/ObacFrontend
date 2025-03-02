@@ -1,9 +1,17 @@
+"use server";
 import { MethodDto } from "@/dto/methodDto";
 import api from "@/lib/apiCentralized";
+import { cookies } from "next/headers";
 
 export const fetchGetAllMethodData = async (): Promise<MethodDto[]> => {
+  const token = cookies().get("token")?.value;
+
   try {
-    const response = await api.get(`Method/GetAllMethod`);
+    const response = await api.get(`Method/GetAllMethod`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (err) {
     console.log(err);
@@ -14,8 +22,13 @@ export const fetchGetAllMethodData = async (): Promise<MethodDto[]> => {
 export const fetchPutMethodData = async (
   data: MethodDto
 ): Promise<MethodDto> => {
+  const token = cookies().get("token")?.value;
   try {
-    const response = await api.put(`Method/UpdateMethod`, data);
+    const response = await api.put(`Method/UpdateMethod`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (err) {
     console.log(err);
