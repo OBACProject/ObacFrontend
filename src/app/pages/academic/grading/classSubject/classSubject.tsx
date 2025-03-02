@@ -39,8 +39,6 @@ export function ClassSubjectPage(props: {
     ClassSubjectColumn[]
   >([]);
   console.log("classSubjectDataFiltered", classSubjectDataFiltered);
-
-  //filter data
   const [roomNumbers, setRoomNumbers] = useState<string[]>([]);
   const [periodNumbers, setPeriodNumbers] = useState<string[]>([]);
   const [teacherNames, setTeacherNames] = useState<string[]>([]);
@@ -134,26 +132,25 @@ export function ClassSubjectPage(props: {
   };
   const columns = [
     { label: "ลำดับ", key: "id", className: "w-1/12" },
-    { label: "วัน", key: "day", className: "w-1/12" },
-    { label: "คาบ", key: "period", className: "w-2/12" },
+    { label: "วัน", key: "day", className: "w-2/12" },
+    { label: "คาบ", key: "period", className: "w-1/12" },
     { label: "ห้อง", key: "room", className: "w-2/12" },
     { label: "ชื่อครู", key: "teacherName", className: "w-4/12" },
     {
-      label: "เผยแพร่",
+      label: "สถานะเกรด",
       key: "isPublish",
       className: "w-2/12",
       render: (row: { isPublish: boolean }) => (
-        <div className={`flex items-center justify-center`}>
+        <div className={`flex items-center w-full justify-center`}>
           {row.isPublish ? (
-            <div className="text-green-500">✅ Published</div>
+            <div className="text-green-500">✅ ตัดเกรดแล้ว</div>
           ) : (
-            <div className="text-red-500">❌ Unpublished</div>
+            <div className="text-red-500">❌ ยังไม่ตัดเกรด</div>
           )}
         </div>
       ),
     },
   ];
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -340,7 +337,10 @@ export function ClassSubjectPage(props: {
               onRowClick={(item) => handleSelectedInfoClassData(item.id)}
             />
             <div className="flex justify-end mt-4">
-              <button onClick={handlePusblishGrade} className="px-10 py-1 rounded-md text-white bg-sky-400 hover:bg-blue-600 hover:scale-[102%] duration-300">
+              <button
+                onClick={handlePusblishGrade}
+                className="px-10 py-1 rounded-md text-white bg-sky-400 hover:bg-blue-600 hover:scale-[102%] duration-300"
+              >
                 ตัดเกรด
               </button>
             </div>

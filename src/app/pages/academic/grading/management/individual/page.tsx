@@ -12,7 +12,7 @@ export default function page() {
             จัดการคะแนน (รายบุคคล)
           </div>
           <div className="px-5 flex">
-            <Link href="/pages/academic/grading/upLevel" className="px-10 bg-blue-500 py-1 text-white rounded-md hover:bg-blue-600">
+            <Link href="/pages/academic/grading/upLevel" className="px-10 bg-blue-500 py-1  flex items-center justify-center  text-white rounded-md hover:bg-blue-600">
             ปรับเลื่อนชั้น
             </Link>
           </div>

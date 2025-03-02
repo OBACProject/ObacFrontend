@@ -12,8 +12,7 @@ export const getClassSubjectData = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api
-      Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
       {
         method: "GET",
         headers: {
@@ -35,9 +34,11 @@ export const getClassSubjectData = async (
   }
 };
 
-export const putPublishGrade = async (schedule_subject_id: number): Promise<void> => {
+export const putPublishGrade = async (
+  schedule_subject_id: number
+): Promise<void> => {
   try {
-    const token = cookies().get("token")?.value; 
+    const token = cookies().get("token")?.value;
 
     if (!token) {
       throw new Error("No authentication token found");
