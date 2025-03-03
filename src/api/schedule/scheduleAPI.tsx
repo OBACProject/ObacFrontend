@@ -9,17 +9,23 @@ import { cookies } from "next/headers";
 
 export const fetchGetScheduleBysubjectId = async (
   subjectId: number
-): Promise<GetScheduleBysubjectId> => {
+): Promise<GetScheduleBysubjectId[]> => {
   try {
+    const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to get  data");
     }
     const text = await response.text();
     const json = JSON.parse(text);
-    const data: GetScheduleBysubjectId = json.data;
+    const data: GetScheduleBysubjectId[] = json.data;
     return data;
   } catch (err) {
     console.log(err);

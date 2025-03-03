@@ -14,15 +14,15 @@ export interface GetScheduleBysubjectId {
   day: string;
   period: number;
   year: number;
-  term: number;
+  term: string;
 }
 
 export interface ScheduleSubject {
   groupName: string;
   subjectName: string;
   subjectCode: string;
-  teacherName:string;
-  teacherLastName:string;
+  teacherName: string;
+  teacherLastName: string;
   day: string;
   period: string;
   room: string;
@@ -35,21 +35,21 @@ export type TeacherScheduleSubject = {
 };
 
 export type StudentGroupScheduleSubject = {
-  groupName:string;
-  class:string;
-  year:string;
-  term:string;
-  totalCredit:number;
-  totalSubject:number;
+  groupName: string;
+  class: string;
+  year: string;
+  term: string;
+  totalCredit: number;
+  totalSubject: number;
   scheduleSubjects: ScheduleSubject[];
 };
 export type CreateScheduleSubjectRequest = {
-  day:string;
-  period:string;
+  day: string;
+  period: string;
   subject_id: number;
   year: number;
   term: string;
   student_group_id: number;
   teacher_id: number;
   room: string;
-}
+};
