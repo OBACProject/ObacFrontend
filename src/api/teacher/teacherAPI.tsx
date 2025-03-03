@@ -65,8 +65,16 @@ export const fetchGetTeacherEnrollmentsByTeacherId = async (
   year: number
 ): Promise<TeacherEnrollment[]> => {
   try {
+    const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to get teacher enrollment data");

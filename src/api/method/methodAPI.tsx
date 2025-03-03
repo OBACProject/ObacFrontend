@@ -7,13 +7,13 @@ export const fetchMethod = async (): Promise<MethodDto> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/GetEditGradeMethod`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch subject");
