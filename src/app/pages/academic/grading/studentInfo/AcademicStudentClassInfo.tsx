@@ -41,8 +41,8 @@ export function AcademicStudentInfo(props: {
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
   const [remark, setRemark] = useState<string>("");
-  console.log("gradData :", gradDatas);
-  console.log("gradDataFilter :", gradDataFilter);
+  // console.log("gradData :", gradDatas);
+  // console.log("gradDataFilter :", gradDataFilter);
   // console.log("data :", subjectByGroupId);
   // console.log("code :", 0);
   const handleEdit = () => {
@@ -52,7 +52,7 @@ export function AcademicStudentInfo(props: {
     setOnEdit(false);
     setGradDataFilter([...gradDatas]);
   };
-
+  console.log(gradDatas);
   useEffect(() => {
     const fetchData = async () => {
       try {

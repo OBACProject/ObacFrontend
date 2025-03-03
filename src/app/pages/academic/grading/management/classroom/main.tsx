@@ -20,16 +20,24 @@ export function Main() {
   >(undefined);
 
   const pathname = usePathname();
-
-  // Load from localStorage only on the client side
+  console.log(pathname);
+  // Load state from localStorage
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setActiveTab(localStorage.getItem("activeTab") || "classroom");
+    const savedTab = localStorage.getItem("activeTabClassroom");
+    const savedData = localStorage.getItem("selectedClassroomData");
 
-      const storedData = localStorage.getItem("selectedClassroomData");
-      if (storedData) {
-        setSelectedClassroomData(JSON.parse(storedData));
+    if (savedTab) {
+      setActiveTab(savedTab);
+      if (savedTab === "classroomByGroupId" && savedData) {
+        setSelectedClassroomData(JSON.parse(savedData));
       }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (pathname === "/pages/academic/grading/management/classroom") {
+      localStorage.removeItem("activeTabClassroom");
+      localStorage.removeItem("selectedClassroomData");
     }
   }, []);
 
@@ -37,15 +45,11 @@ export function Main() {
     if (activeTab === tab) return;
 
     setActiveTab(tab);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("activeTab", tab);
-    }
+    localStorage.setItem("activeTabClassroom", tab);
 
-    if (tab !== "classroomByGroupId") {
+    if (tab === "classroom") {
       setSelectedClassroomData(undefined);
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("selectedClassroomData");
-      }
+      localStorage.removeItem("selectedClassroomData");
     }
   };
 
@@ -55,26 +59,9 @@ export function Main() {
     setSelectedClassroomData(data);
     setActiveTab("classroomByGroupId");
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedClassroomData", JSON.stringify(data));
-      localStorage.setItem("activeTab", "classroomByGroupId");
-    }
+    localStorage.setItem("selectedClassroomData", JSON.stringify(data));
+    localStorage.setItem("activeTabClassroom", "classroomByGroupId");
   };
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("activeTab");
-        localStorage.removeItem("selectedClassroomData");
-      }
-    };
-
-    return () => {
-      if (pathname !== "/academic/grading/management/classroom") {
-        handleRouteChange();
-      }
-    };
-  }, [pathname]);
 
   return (
     <header className="flex flex-col">

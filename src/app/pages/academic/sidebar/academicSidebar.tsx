@@ -58,12 +58,18 @@ export function AcademicSidebar({
               objectFit: "contain",
             }}
           />
-          <span className="text-center text-lg py-2" style={{ userSelect: "none" }}>
+          <span
+            className="text-center text-lg py-2"
+            style={{ userSelect: "none" }}
+          >
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
           </span>
         </div>
         <div className="flex items-center px-5 gap-6">
-          <div className="flex gap-2 items-center" style={{ userSelect: "none" }}>
+          <div
+            className="flex gap-2 items-center"
+            style={{ userSelect: "none" }}
+          >
             {" "}
             <Link href={profileData.href} className="flex items-center">
               <CircleUserRound className="w-10 h-10 text-[#0C2943]" />

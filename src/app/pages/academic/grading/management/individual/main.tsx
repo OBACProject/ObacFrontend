@@ -1,32 +1,65 @@
 "use client";
+
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StudentListPage } from "./studentList";
 import { StudentInfoByIdPage } from "./studentInfo";
+import { usePathname } from "next/navigation";
 
-interface individualStudentInfoData {
+interface IndividualStudentInfoData {
   studentId: number;
   studentName: string;
 }
 
 export function Main() {
   const [activeTab, setActiveTab] = useState<string>("individual");
+  const [individualStudent, setIndividualStudentInfoData] = useState<
+    IndividualStudentInfoData | undefined
+  >();
 
-  const [individualStudent, setIndividualStudentInfoData] =
-    useState<individualStudentInfoData>();
+  const pathname = usePathname();
+
+  // Load tab state from localStorage
+  useEffect(() => {
+    const savedTab = localStorage.getItem("activeTabStudent");
+    const savedStudentData = localStorage.getItem("selectedStudentData");
+
+    if (savedTab) {
+      setActiveTab(savedTab);
+      if (savedTab === "individualStudentInfo" && savedStudentData) {
+        setIndividualStudentInfoData(JSON.parse(savedStudentData));
+      }
+    }
+  }, []);
+
+  // Remove stored data when leaving the page
+  useEffect(() => {
+    if (pathname === "/pages/academic/grading/management/individual") {
+      localStorage.removeItem("activeTabClassroom");
+      localStorage.removeItem("selectedClassroomData");
+    }
+  }, []);
+
   const handleTab = (tab: string) => {
     if (activeTab === tab) return;
+
     setActiveTab(tab);
-    if (activeTab === "individualStudentInfo") {
+    localStorage.setItem("activeTabStudent", tab);
+
+    if (tab === "individual") {
       setIndividualStudentInfoData(undefined);
+      localStorage.removeItem("selectedStudentData");
     }
   };
 
-  const handleSelectedStudentData = (data: individualStudentInfoData) => {
+  const handleSelectedStudentData = (data: IndividualStudentInfoData) => {
     setIndividualStudentInfoData(data);
     setActiveTab("individualStudentInfo");
+
+    localStorage.setItem("selectedStudentData", JSON.stringify(data));
+    localStorage.setItem("activeTabStudent", "individualStudentInfo");
   };
-  console.log(individualStudent);
+
   return (
     <header className="flex flex-col">
       <div className="w-full flex gap-2 transition-all duration-500 ease-in-out justify-between">
@@ -47,7 +80,7 @@ export function Main() {
             <div className="flex items-center">
               <button
                 className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
-                onClick={() => handleTab("individual")}
+                onClick={() => handleTab("individualStudentInfo")}
               >
                 <span className="text-black text-sm font-bold">
                   {individualStudent.studentName}
@@ -59,7 +92,7 @@ export function Main() {
         </div>
       </div>
 
-      {/* active tab */}
+      {/* Active tab content */}
       {activeTab === "individual" && (
         <StudentListPage
           handleTab={handleTab}
@@ -69,7 +102,6 @@ export function Main() {
       {activeTab === "individualStudentInfo" && individualStudent && (
         <StudentInfoByIdPage studentId={individualStudent.studentId} />
       )}
-      {/* Tables */}
     </header>
   );
 }
