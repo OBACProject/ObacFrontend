@@ -14,29 +14,38 @@ export interface ClassroomByGroupIdProps {
 }
 
 export function Main() {
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    // Get from localStorage on initial load
-    return localStorage.getItem("activeTab") || "classroom";
-  });
+  const [activeTab, setActiveTab] = useState<string>("classroom");
+  const [selectedClassroomData, setSelectedClassroomData] = useState<
+    ClassroomByGroupIdProps | undefined
+  >(undefined);
 
   const pathname = usePathname();
 
-  const [selectedClassroomData, setSelectedClassroomData] = useState<
-    ClassroomByGroupIdProps | undefined
-  >(() => {
-    const storedData = localStorage.getItem("selectedClassroomData");
-    return storedData ? JSON.parse(storedData) : undefined;
-  });
+  // Load from localStorage only on the client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setActiveTab(localStorage.getItem("activeTab") || "classroom");
+
+      const storedData = localStorage.getItem("selectedClassroomData");
+      if (storedData) {
+        setSelectedClassroomData(JSON.parse(storedData));
+      }
+    }
+  }, []);
 
   const handleTab = (tab: string) => {
     if (activeTab === tab) return;
 
     setActiveTab(tab);
-    localStorage.setItem("activeTab", tab);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("activeTab", tab);
+    }
 
     if (tab !== "classroomByGroupId") {
       setSelectedClassroomData(undefined);
-      localStorage.removeItem("selectedClassroomData");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("selectedClassroomData");
+      }
     }
   };
 
@@ -44,9 +53,12 @@ export function Main() {
     data: ClassroomByGroupIdProps
   ) => {
     setSelectedClassroomData(data);
-    localStorage.setItem("selectedClassroomData", JSON.stringify(data));
     setActiveTab("classroomByGroupId");
-    localStorage.setItem("activeTab", "classroomByGroupId");
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedClassroomData", JSON.stringify(data));
+      localStorage.setItem("activeTab", "classroomByGroupId");
+    }
   };
 
   useEffect(() => {
