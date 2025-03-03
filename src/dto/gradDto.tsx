@@ -56,6 +56,15 @@ export interface GetGradPerTermByStudentIdDto {
   subject: Subject[];
 }
 
+export interface ConvertGradBySubjectId {
+  studentCode: string;
+  name: string;
+  collectScore: number;
+  testScore: number;
+  affectiveScore: number;
+  totalScore: number;
+}
+
 export type Student = {
   studentId: number;
   studentCode: string;
@@ -75,7 +84,7 @@ export interface GetGropGradeAboveModel {
   term: string;
   year: number;
   student: Student[];
-};
+}
 export interface GetGropGradeBelowModel {
   studentId: number;
   studentCode: string;
