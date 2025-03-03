@@ -76,3 +76,16 @@ export interface GetGropGradeAboveModel {
   year: number;
   student: Student[];
 };
+export interface GetGropGradeBelowModel {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  programName: string;
+  class: string;
+  groupName: string;
+  term: string;
+  year: number;
+  gpa: number;
+}

@@ -97,7 +97,7 @@ export default function Main() {
           ปรับเลื่อนชั้นเรียน
         </div>
       </div>
-      <div className="w-full flex items-start gap-4 justify-center py-5 ">
+      <div className="w-full flex items-center gap-4 justify-start py-5 px-10 ">
         <div
           className="flex justify-center items-center gap-2 "
           style={{ userSelect: "none" }}
@@ -131,7 +131,7 @@ export default function Main() {
           <label className="text-black text-[16px]">เกรดขั้นต่ำ</label>
           <input
             type="number"
-            className="border-2 py-1 border-gray-200 rounded-sm w-[80px] text-center"
+            className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
             value={grads.toFixed(2)}
             onChange={handleChange}
             step={0.25}
@@ -161,12 +161,12 @@ export default function Main() {
 
       <div className="px-10  py-0">
         {newGroup ? (
-          <div className="px-10 grid gap-4">
-            <div className="py-1 px-5 text-white w-fit  rounded-md bg-gray-500">
+          <div className="grid gap-4">
+            <div className="py-1 px-5 text-gray-600 font-semibold w-fit border-2 border-gray-400  rounded-md bg-white ">
               ชั้นเรียนปัจจุบัน {newGroup.class}.{newGroup.groupName}
             </div>
             <div className="flex gap-3 items-center">
-              <li className="text-[16px] text-gray-600 ">ระบุชั้นเรียนต่อไป</li>
+              <li className="text-[18px] text-gray-700 ">ระบุชั้นเรียนต่อไป</li>
               <select
                 className="px-4 py-1 rounded-md border border-gray-300 "
                 value={nextLevel}
@@ -186,7 +186,7 @@ export default function Main() {
               <div className="border-2 border-gray-400 bg-blue-200 text-black grid h-fit grid-cols-[10%_20%_30%_40%] ">
                 <div className="py-1 text-lg text-center">ลำดับ</div>
                 <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
-                <div className="py-1 text-lg text-center">ชื่อ-นามสกุล</div>
+                <div className="py-1 text-lg text-center">ชื่อ - นามสกุล</div>
                 <div className="py-1 text-lg text-center">เกรดเทอมล่าสุด</div>
               </div>
               {newGroup.student.map((item, index) => (

@@ -3,6 +3,7 @@ import {
   GetGradBySubjectId,
   GetGradPerTermByStudentIdDto,
   GetGropGradeAboveModel,
+  GetGropGradeBelowModel,
 } from "@/dto/gradDto";
 import { cookies } from "next/headers";
 
@@ -90,7 +91,9 @@ export const GetGropGradeAbove = async (
       groupId: groupId.toString(),
     });
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGropGradeAbove?${queryParams.toString()}`;
+    const url = `${
+      process.env.NEXT_PUBLIC_API_URL_V1
+    }/api/Grade/GetGropGradeAbove?${queryParams.toString()}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -114,5 +117,55 @@ export const GetGropGradeAbove = async (
   } catch (err) {
     console.error("Error in API fetching data:", err);
     return null;
+  }
+};
+
+export const GetGropGradeBelow = async (
+  className: string,
+  currentYear: number,
+  term: string,
+  year: number,
+  grade: number
+): Promise<GetGropGradeBelowModel[]> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const queryParams = new URLSearchParams({
+      class: className,
+      currentYear: currentYear.toString(),
+      term: term,
+      year: year.toString(),
+      grade: grade.toString(),
+    });
+
+    const url = `${
+      process.env.NEXT_PUBLIC_API_URL_V1
+    }/api/Grade/GetStudentIfGradeBelow?${queryParams.toString()}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to get data");
+    }
+
+    const json = await response.json();
+    if (!json?.data) {
+      throw new Error("API response does not contain 'data'");
+    }
+
+    const data: GetGropGradeBelowModel[] = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error in API fetching data:", err);
+    return [];
   }
 };
