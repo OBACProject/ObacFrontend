@@ -69,10 +69,10 @@ export function Main() {
         <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
           <div className="flex items-center">
             <button
-              className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+              className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
               onClick={() => handleTab("classroom")}
             >
-              <span className="text-black text-sm font-bold">
+              <span className="text-black text-sm font-bold truncate">
                 รายชื่อห้องทั้งหมด
               </span>
             </button>
@@ -81,10 +81,10 @@ export function Main() {
           {selectedClassroomData && (
             <div className="w-full flex items-center justify-center">
               <button
-                className="min-w-32 w-auto hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("classroomByGroupId")}
               >
-                <span className="text-black text-sm font-bold">
+                <span className="text-black text-sm font-bold truncate">
                   {selectedClassroomData.classroom}
                 </span>
               </button>

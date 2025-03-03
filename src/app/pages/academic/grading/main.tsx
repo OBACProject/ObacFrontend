@@ -169,22 +169,22 @@ export function Main() {
       <div className="w-full flex gap-2 justify-between">
         <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full rounded-br-full">
           <button
-            className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+            className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
             onClick={() => handleTab("subject")}
           >
-            <span className="text-black text-sm font-bold">
-              {classSubjectData?.subjectName ?? "Subject"}
+            <span className="text-black text-sm font-bold truncate">
+              {classSubjectData?.subjectName ?? "รายวิชา"}
             </span>
           </button>
           <ChevronRight />
           {classSubjectData && (
             <>
               <button
-                className="min-w-32 max-w-48 w-full hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("class")}
               >
-                <span className="text-black text-sm font-bold">
-                  {classInfoData?.room ?? "Class"}
+                <span className="text-black text-sm font-bold truncate">
+                  {classInfoData?.room ?? "ชั้นเรียน"}
                 </span>
               </button>
               <ChevronRight />
@@ -193,10 +193,12 @@ export function Main() {
           {classSubjectData && classInfoData && (
             <>
               <button
-                className="min-w-32 w-auto hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("infoClass")}
               >
-                <span className="text-black text-sm font-bold">Info Class</span>
+                <span className="text-black text-sm font-bold">
+                  รายละเอียดชั้นเรียน
+                </span>
               </button>
               <ChevronRight />
             </>
