@@ -43,7 +43,7 @@ export function StudentListPage(props: {
   };
 
   const columns = [
-    { label: "ลำดับ", key: "index", className: "w-2/16" },
+    { label: "ลำดับ", key: "index", className: "w-2/16 justify-center" },
     { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
     { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-5/16" },
     { label: "ระดับชั้น", key: "class", className: "w-2/16" },

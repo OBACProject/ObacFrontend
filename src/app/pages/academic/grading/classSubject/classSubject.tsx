@@ -238,18 +238,18 @@ export function ClassSubjectPage(props: {
                 </h1>
               </Badge>
             </div>
-            <div className="flex w-1/6 gap-6 text-base">
+            <div className="flex w-1/5 gap-6 text-base">
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
-                    year : {classSubjecPassingData.year}
+                    ชั้นปีการศึกษา : {classSubjecPassingData.year}
                   </h1>
                 </Badge>
               </div>
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
-                    term : {classSubjecPassingData.term}
+                    ภาคเรียนที่ : {classSubjecPassingData.term}
                   </h1>
                 </Badge>
               </div>

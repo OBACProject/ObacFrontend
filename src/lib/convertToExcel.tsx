@@ -196,7 +196,7 @@ export async function ConvertClassroomGradingToExcel(
 
   worksheet.mergeCells("A2:G2");
   const classCell = worksheet.getCell("A2");
-  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ห้อง: ${generalData.groupCode}`;
+  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ห้อง: ${generalData.class}.${generalData.groupName}`;
   classCell.alignment = { horizontal: "center" };
   classCell.font = { size: 12, bold: true };
 
@@ -275,6 +275,6 @@ export async function ConvertClassroomGradingToExcel(
   });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = `ออกคะแนนห้อง ${generalData.groupCode}.xlsx`;
+  link.download = `ออกคะแนนห้อง ${generalData.class}${generalData.groupName}.xlsx`;
   link.click();
 }

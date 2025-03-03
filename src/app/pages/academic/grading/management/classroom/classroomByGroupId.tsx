@@ -93,7 +93,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   }, []);
 
   const baseColumns = [
-    { label: "ลำดับ", key: "index", className: "w-1/16" },
+    { label: "ลำดับ", key: "index", className: "w-1/16 justify-center" },
     { label: "รหัสนักศึกษา", key: "studentCode", className: "w-2/16" },
     { label: "ชื่อ-นามสกุล", key: "name", className: "w-2/16 text-start" },
   ];
@@ -108,20 +108,20 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       return {
         label: summaryData.subjects[index],
         key: summaryData.subjects[index],
-        className: "w-1/16 text-center",
+        className: "w-1/16 justify-center",
       };
     } else {
       return {
         label: "",
         key: `empty_${index}`,
-        className: "w-1/16 text-center",
+        className: "w-1/16 justify-center",
       };
     }
   });
 
   const GradeColumns = [
-    { label: "เฉลี่ย", key: "gpa", className: "w-1/16" },
-    { label: "เฉลี่ยสะสม", key: "gpax", className: "w-1/16" },
+    { label: "เฉลี่ย", key: "gpa", className: "w-1/16 justify-center" },
+    { label: "เฉลี่ยสะสม", key: "gpax", className: "w-1/16 justify-center" },
   ];
   const finalColumns = [
     ...baseColumns,
@@ -167,7 +167,8 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
           <Badge variant={"outline"}>
             <h1 className="text-xl">
               สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}
-              ห้องเรียน {summaryData?.generalData.groupCode}{" "}
+              ห้องเรียน {summaryData?.generalData.class}.
+              {summaryData?.generalData.groupName}{" "}
             </h1>
           </Badge>
           <div>
@@ -175,7 +176,8 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
               onClick={handleExportToExcel}
               className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             >
-              เกรดนักเรียนห้อง {summaryData?.generalData.groupCode} Excel
+              เกรดนักเรียนห้อง {summaryData?.generalData.class}.
+              {summaryData?.generalData.groupName} Excel
             </button>
           </div>
         </div>
