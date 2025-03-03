@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { Main } from "./main";
+import { ArrowUpDown } from "lucide-react";
 
 export default function page() {
   return (
@@ -14,8 +15,9 @@ export default function page() {
           <div className="px-5 flex">
             <Link
               href="/pages/academic/grading/upLevel"
-              className="px-10 bg-blue-500 flex items-center justify-center py-1 text-white rounded-md hover:bg-blue-600"
+              className="px-10 bg-blue-500 flex items-center justify-center py-1 text-white rounded-md hover:bg-blue-600 gap-2"
             >
+              <ArrowUpDown className="w-5 h-5"/>
               ปรับเลื่อนชั้น
             </Link>
           </div>

@@ -58,12 +58,12 @@ export function AcademicSidebar({
               objectFit: "contain",
             }}
           />
-          <span className="text-center text-lg py-2">
+          <span className="text-center text-lg py-2" style={{ userSelect: "none" }}>
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
           </span>
         </div>
         <div className="flex items-center px-5 gap-6">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center" style={{ userSelect: "none" }}>
             {" "}
             <Link href={profileData.href} className="flex items-center">
               <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
@@ -76,6 +76,7 @@ export function AcademicSidebar({
           <button
             onClick={handleLogout}
             className="px-5 items-center rounded-md py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
+            style={{ userSelect: "none" }}
           >
             Logout
           </button>
@@ -123,7 +124,7 @@ export function SidebarMenu({
   };
 
   return (
-    <div className="absolute left-0 top-20">
+    <div className="absolute left-0 top-20" style={{ userSelect: "none" }}>
       <div
         className={`${
           !isVisible

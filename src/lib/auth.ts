@@ -27,7 +27,7 @@ export async function login(formData: FormData) {
 
   const session = await encrypt({ user });
   cookies().set("session", session, {
-    expires: new Date(Date.now() + 1800 * 1000),
+    expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
     httpOnly: true,
   });
 }

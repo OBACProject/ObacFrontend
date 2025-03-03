@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Subject } from "./subject/subject";
 import { ClassSubjectPage } from "./classSubject/classSubject";
-import { ChevronRight } from "lucide-react";
+import { AlarmClock, ChevronRight } from "lucide-react";
 import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
 import { MethodDto } from "@/dto/methodDto";
@@ -201,6 +201,13 @@ export function Main() {
               <ChevronRight />
             </>
           )}
+        </div>
+        <div
+          className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1.5  text-white flex justify-center items-center gap-2"
+          onClick={() => setIsPopupOpen(true)}
+        >
+          <AlarmClock className="w-5 h-5" />
+          ระบบเปิด/ปิดการกรอกคะแนน
         </div>
       </div>
 

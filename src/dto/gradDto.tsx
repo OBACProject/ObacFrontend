@@ -55,3 +55,24 @@ export interface GetGradPerTermByStudentIdDto {
   totalCredit: number;
   subject: Subject[];
 }
+
+export type Student = {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
+  gpa: number;
+};
+
+export interface GetGropGradeAboveModel {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  facultyName: string;
+  programName: string;
+  term: string;
+  year: number;
+  student: Student[];
+};

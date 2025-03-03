@@ -14,12 +14,6 @@ import {
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
 import { useEffect, useMemo, useState } from "react";
 
-// "facultyName": "บริหารธุรกิจ",
-//       "programName": "การเงินและบัญชี",
-//       "class": "ปวช",
-//       "groupId": 1,
-//       "groupName": "1/1",
-//       "groupCode": "AC-101"
 interface ClassroomTable {
   class: string;
   facultyName: string;
