@@ -97,7 +97,7 @@ export default function Main() {
           ปรับเลื่อนชั้นเรียน
         </div>
       </div>
-      <div className="w-full flex items-center gap-4 justify-center py-5 ">
+      <div className="w-full flex items-start gap-4 justify-center py-5 ">
         <div
           className="flex justify-center items-center gap-2 "
           style={{ userSelect: "none" }}
@@ -159,14 +159,14 @@ export default function Main() {
         </button>
       </div>
 
-      <div className="px-10  py-5">
+      <div className="px-10  py-0">
         {newGroup ? (
           <div className="px-10 grid gap-4">
-            <div className="py-1 px-10 text-white w-fit  rounded-md bg-gray-500">
-              {newGroup.class}.{newGroup.groupName}
+            <div className="py-1 px-5 text-white w-fit  rounded-md bg-gray-500">
+              ชั้นเรียนปัจจุบัน {newGroup.class}.{newGroup.groupName}
             </div>
-            <div className="flex gap-2 item-center">
-              <label className="text-lg ">ระบุชั้นเรียนต่อไป</label>
+            <div className="flex gap-3 items-center">
+              <li className="text-[16px] text-gray-600 ">ระบุชั้นเรียนต่อไป</li>
               <select
                 className="px-4 py-1 rounded-md border border-gray-300 "
                 value={nextLevel}
@@ -174,7 +174,7 @@ export default function Main() {
                   setNextLevel(e.target.value);
                 }}
               >
-                <option defaultValue="">- เลือก -</option>
+                <option defaultValue=""> เลือก </option>
                 <option value="ปวช.2/2">ปวช.2/2</option>
                 <option value="ปวช.2/3">ปวช.2/3</option>
                 <option value="ปวช.2/1">ปวช.2/1</option>

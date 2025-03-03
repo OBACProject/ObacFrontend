@@ -130,7 +130,7 @@ export function SidebarMenu({
           !isVisible
             ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1"
             : "pr-0"
-        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 pl-1 py-4`}
+        } absolute left-0 h-full w-16 z-50 min-h-screen bg-white border-t border-t-gray-200 pl-1 py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => (
@@ -200,7 +200,7 @@ export function SidebarMenu({
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -160 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md px-2 py-4"
+        className="h-full fixed top-20 left-0 w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md px-2 py-4"
       >
         <div className="grid gap-2 relative">
           {menuItems.map((item, index) => (
