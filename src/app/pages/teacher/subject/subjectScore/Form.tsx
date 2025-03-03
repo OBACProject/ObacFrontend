@@ -4,6 +4,8 @@ import { GetGradBySubjectId } from "@/dto/gradDto";
 import { useRouter } from "next/navigation";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 interface Props {
   grads?: GetGradBySubjectId[];
@@ -11,12 +13,13 @@ interface Props {
 }
 
 export default function SubjectTableForm({ grads, onEdit }: Props) {
-  const router = useRouter();
+  const [remark, setRemark] = useState<string>("");
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
-    const sortedData = [...(grads ?? [])].sort((a, b) => a.studentId - b.studentId);
+    const sortedData = [...(grads ?? [])].sort(
+      (a, b) => a.studentId - b.studentId
+    );
     setGradData(sortedData);
-    
   }, [grads]);
   const handleInputChange = (
     index: number,
@@ -27,35 +30,48 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     updatedStudents[index][field] = (parseFloat(value) as number) || 0;
     setGradData(updatedStudents);
   };
-
+  const token = Cookies.get("token");
   const saveChanges = async () => {
     try {
-      const payload = gradDatas.map((item) => ({
-        gradeId: item.gradeId,
-        collectScore: item.collectScore,
-        affectiveScore: item.affectiveScore,
-        testScore: item.testScore,
-        totalScore: item.affectiveScore + item.collectScore + item.testScore,
-      }));
-      for (let i = 0; i < payload.length; i++) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload[i]),
-          }
-        );
-        const responseBody = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            responseBody.message || "Failed to update student grades"
+      const result = await Swal.fire({
+        title: "ยืนยันข้อมูล?",
+        text: "จะไม่สามารถแก้ไขได้",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ตกลง",
+      });
+      if (result.isConfirmed) {
+        const payload = gradDatas.map((item) => ({
+          gradeId: item.gradeId,
+          collectScore: item.collectScore,
+          affectiveScore: item.affectiveScore,
+          testScore: item.testScore,
+          totalScore: item.affectiveScore + item.collectScore + item.testScore,
+        }));
+        for (let i = 0; i < payload.length; i++) {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(payload[i]),
+            }
           );
+          const responseBody = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              responseBody.message || "Failed to update student grades"
+            );
+          }
         }
       }
+
       toast.success("บันทึกคะแนนสำเร็จ");
       window.location.reload();
     } catch (error) {
@@ -63,31 +79,18 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       alert("Failed to save grades. Please try again.");
     }
   };
-
-  function calculateGrade(totalScore: number) {
-    // Update the item to hold the totalScore
-
-    if (totalScore >= 80) {
-      return 4;
-    } else if (totalScore >= 75) {
-      return 3.5;
-    } else if (totalScore >= 70) {
-      return 3;
-    } else if (totalScore >= 65) {
-      return 2.5;
-    } else if (totalScore >= 60) {
-      return 2;
-    } else if (totalScore >= 55) {
-      return 1.5;
-    } else if (totalScore >= 50) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-  const onChangeGrade = (value: string) => {
-    
+  const gradingScorce = (totalScore: number) => {
+    if (totalScore >= 80) return "4";
+    if (totalScore >= 75) return "3.5";
+    if (totalScore >= 70) return "3";
+    if (totalScore >= 65) return "2.5";
+    if (totalScore >= 60) return "2";
+    if (totalScore >= 55) return "1.5";
+    if (totalScore >= 50) return "1";
+    return "0";
   };
+
+  const onChangeGrade = (value: string) => {};
 
   const gradeValue = [
     "0",
@@ -104,6 +107,11 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     "ขร.",
     "มส.",
   ];
+
+  const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+  const onChangeRemark = (value: string) => {
+    setRemark(value);
+  };
 
   return (
     <div className="w-full px-5 ">
@@ -194,33 +202,33 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             {item.collectScore + item.testScore + item.affectiveScore}
           </span>
           <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 ">
-            {(() => {
-              const totalSum =
-                item.collectScore + item.testScore + item.affectiveScore;
-              const grade = calculateGrade(totalSum);
-              return (
-                <>
-                  <div className="flex justify-center px-2 py-1">
-                    <Combobox
-                      buttonLabel="เกรด"
-                      disabled={!onEdit}
-                      options={gradeValue.map((item) => ({
-                        label: item,
-                        value: item,
-                      }))}
-                      onSelect={(seletedGrade) => onChangeGrade(seletedGrade)}
-                      defaultValue={String(grade)}
-                    />
-                  </div>
-                </>
-              );
-            })()}
+            <div className="flex justify-center px-2 py-1">
+              <Combobox
+                buttonLabel="เกรด"
+                disabled={true}
+                options={gradeValue.map((item) => ({
+                  label: item,
+                  value: item,
+                }))}
+                onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                defaultValue={gradingScorce(
+                  item.collectScore + item.testScore + item.affectiveScore
+                )}
+              />
+            </div>
           </span>
-          <input
-            type="text"
-            placeholder={"-"}
-            className="text-center border-r-2 py-2 group-hover:bg-[#e8f3ff]"
-          />
+          <div className="flex justify-center px-2 py-1">
+            <Combobox
+              buttonLabel="หมายเหตุ"
+              disabled={!onEdit}
+              options={remarkValue.map((item) => ({
+                label: item,
+                value: item,
+              }))}
+              onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
+              defaultValue={item.remark}
+            />
+          </div>
         </div>
       ))}
       <div className="my-5 w-full grid place-items-end  ">
