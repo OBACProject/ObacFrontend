@@ -5,9 +5,15 @@ import { cookies } from "next/headers";
 export const fetchGetSubjectBySubjectId = async (
   id: number
 ): Promise<GetSubjectBySubjectId> => {
+  const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetSubjectByIdAsync?id=${id}`
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetSubjectByIdAsync?id=${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to get  data");
