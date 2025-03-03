@@ -95,7 +95,6 @@ export function ClassroomGrading(props: {
     return group?.map((item) => item.groupName) || [];
   };
 
-
   const handleClassLevelChange = (selected: string) => {
     setSelectedClassLevel(selected);
     setSelectedFaculty("");
@@ -131,9 +130,11 @@ export function ClassroomGrading(props: {
     setSelectedRoom(selected);
   };
 
- const router = useRouter()
+  const router = useRouter();
   const handleRowClick = (item: ClassroomTable) => {
-    router.push(`/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`)
+    router.push(
+      `/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`
+    );
   };
 
   useEffect(() => {
@@ -202,7 +203,11 @@ export function ClassroomGrading(props: {
   // console.log("filteredData", filteredData);
 
   const columns = [
-    { label: "ลำดับ", key: "groupId", className: "w-1/12 flex justify-center text-center" },
+    {
+      label: "ลำดับ",
+      key: "groupId",
+      className: "w-1/12 flex justify-center ",
+    },
     { label: "ระดับชั้น", key: "classLevel", className: "w-2/12" },
     { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-6/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },

@@ -57,7 +57,7 @@ export function ClassSubjectPage(props: {
       props.handleSelectedData({
         subjectId: item.subjectId,
         scheduleSubjectId: item.scheduleSubjectId,
-        room: item.room,
+        room: `${item.class}.${item.studentGroupName}`,
       });
       console.log("Selected data infoClass", id);
     } else {
@@ -131,9 +131,9 @@ export function ClassSubjectPage(props: {
     }
   };
   const columns = [
-    { label: "ลำดับ", key: "id", className: "w-1/12" },
+    { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
+    { label: "คาบ", key: "period", className: "w-1/12 justify-center" },
     { label: "วัน", key: "day", className: "w-2/12" },
-    { label: "คาบ", key: "period", className: "w-1/12" },
     { label: "ห้อง", key: "room", className: "w-2/12" },
     { label: "ชื่อครู", key: "teacherName", className: "w-4/12" },
     {
@@ -238,18 +238,18 @@ export function ClassSubjectPage(props: {
                 </h1>
               </Badge>
             </div>
-            <div className="flex w-1/6 gap-6 text-base">
+            <div className="flex w-1/5 gap-6 text-base">
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
-                    year : {classSubjecPassingData.year}
+                    ชั้นปีการศึกษา : {classSubjecPassingData.year}
                   </h1>
                 </Badge>
               </div>
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
-                    term : {classSubjecPassingData.term}
+                    ภาคเรียนที่ : {classSubjecPassingData.term}
                   </h1>
                 </Badge>
               </div>

@@ -44,8 +44,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
           className="text-[#0C2943]"
         />
       ),
-    }
-    ,
+    },
     {
       title: "ออกเกรดรายวิชา",
       href: "/pages/academic/grading",
@@ -108,7 +107,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     //     />
     //   ),
     // },
-    
+
     {
       title: "จัดตารางเรียนตารางสอน",
       href: "/pages/academic/schedule-management",
@@ -129,15 +128,15 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
-    {
-      title: "รายชื่อผู้สมัครเข้าศึกษา",
-      href: "/pages/academic/register-student",
-      icon: (
-        <UsersRound
-          style={{ width: "2.0rem", height: "2.0rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
+    // {
+    //   title: "รายชื่อผู้สมัครเข้าศึกษา",
+    //   href: "/pages/academic/register-student",
+    //   icon: (
+    //     <UsersRound
+    //       style={{ width: "2.0rem", height: "2.0rem" }}
+    //       className="text-[#0C2943]"
+    //     />
+    //   ),
+    // },
   ],
 };

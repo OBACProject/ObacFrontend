@@ -61,8 +61,6 @@ export function ClassroomGrading(props: {
   );
   const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
   const [program, setProgram] = useState<string[]>([]);
-  const [levels, setLevels] = useState<string[]>([]);
-  const [room, setRoom] = useState<string[]>([]);
 
   // get faculties from selected course
   const getFaculties = (courseData: EducationData[]): FacultyInfo[] => {
@@ -121,8 +119,6 @@ export function ClassroomGrading(props: {
     setSelectedProgram(selected);
     setSelectedGradeLevel("");
     setSelectedRoom("");
-    const fetchedLevels = getGradeLevels();
-    setLevels(fetchedLevels);
   };
 
   const handleRowClick = (item: ClassroomTable) => {
@@ -131,12 +127,13 @@ export function ClassroomGrading(props: {
       return;
     } else {
       if (item) {
+        console.log(item);
         // props.handleTab("classroomByGroupId");
         props.handleSelectedData({
           groupId: parseInt(item.groupId),
           term: selectedTerm || "",
           year: selectedYear || "",
-          classroom: item.class,
+          classroom: `${item.class}`,
         });
       } else {
         alert("ไม่พบข้อมูล");
@@ -221,11 +218,11 @@ export function ClassroomGrading(props: {
   //     "groupName": "1/1",
   //     "groupCode": "AC-101"
   const columns = [
-    { label: "ลำดับ", key: "groupId", className: "w-2/12" },
+    { label: "ลำดับ", key: "groupId", className: "w-2/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-2/12" },
     { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
     { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-5/12" },
-    { label: "สาขาวิชา", key: "programName", className: "w-3/12 text-start" },
+    { label: "สาขาวิชา", key: "programName", className: "w-3/12 " },
   ];
 
   return (
