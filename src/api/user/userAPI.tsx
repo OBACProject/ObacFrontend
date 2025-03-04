@@ -1,3 +1,4 @@
+"use server";
 import { GetAllAcademicUser } from "@/dto/userDto";
 import { cookies } from "next/headers";
 
