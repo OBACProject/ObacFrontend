@@ -26,7 +26,7 @@ export default function Main({ groupId }: Props) {
   }, []);
   console.log(studentList);
   return (
-    <div className="py-5 w-full ">
+    <div className="py-5 px-10 w-full ">
       <div className="flex px-5 justify-between py-5 items-center">
         <h1 className="px-10 w-fit text-white bg-gray-700 rounded-3xl py-1 text-lg">
           รายชื่อนักเรียน
@@ -41,10 +41,11 @@ export default function Main({ groupId }: Props) {
         </div>
       </div>
       <div className="w-full px-5 ">
-        <div className="w-full  grid grid-cols-[5%_10%_25%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg py-2 rounded-t-md">
+        <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg py-2 rounded-t-md">
           <div className="text-center">ลำดับ</div>
           <div className="text-center">รหัสนักเรียน</div>
           <div className="text-center">ชื่อ - นามสกุล</div>
+          <div className="text-center">หมายเหตุ</div>
         </div>
       </div>
       {studentList.length > 0 ? (

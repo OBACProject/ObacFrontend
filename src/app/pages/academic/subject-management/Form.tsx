@@ -136,11 +136,11 @@ export default function Form() {
             <div className="text-center flex items-center w-full justify-center py-1 border-r ">
               {item.isActive ? (
                 <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
-                  Enable
+                  เปิดสอน
                 </p>
               ) : (
                 <p className="text-red-500 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
-                  Disable
+                  ปิดสอน
                 </p>
               )}
             </div>
@@ -295,7 +295,6 @@ const EditSubjectPopUp = ({
       >
         <div className="w-full flex justify-center rounded-t-md text-center text-xl  ">
           <p className="py-4  text-gray-800">แก้ไขวิชาเรียน</p>
-        
         </div>
         <div className="w-full px-10 py-5 grid place-items-center gap-4">
           <div className="flex items-center gap-2">

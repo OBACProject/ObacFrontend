@@ -36,15 +36,23 @@ export default function Form() {
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>();
   const [teachers, setTeacher] = useState<GetAllTeacher[]>();
 
-  useEffect(() => {
-    getStudentGroup().then((d) => {
-      setStudentGroup(d);
-    });
-    getAllTeacher().then((d) => {
-      setTeacher(d);
-    });
-  }, []);
+  const fetchData = async () => {
+    try {
+      const [studentGroups, teachers] = await Promise.all([
+        getStudentGroup(),
+        getAllTeacher(),
+      ]);
+      setStudentGroup(studentGroups);
+      setTeacher(teachers);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+  console.log(studentGroup);
   const getDataAddSchedulePopUp = (
     subjectID: number,
     teacherID: number,
