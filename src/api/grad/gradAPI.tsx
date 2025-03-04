@@ -84,27 +84,19 @@ export const GetGropGradeAbove = async (
     if (!token) {
       throw new Error("No auth token found");
     }
-    const queryParams = new URLSearchParams({
-      grade: grade.toString(),
-      term,
-      year: year.toString(),
-      groupId: groupId.toString(),
-    });
-
-    const url = `${
-      process.env.NEXT_PUBLIC_API_URL_V1
-    }/api/Grade/GetGropGradeAbove?${queryParams.toString()}`;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
-      throw new Error("Failed to get data");
+      throw new Error("Failed to get data in API");
     }
 
     const json = await response.json();
@@ -123,9 +115,9 @@ export const GetGropGradeAbove = async (
 export const GetGropGradeBelow = async (
   className: string,
   currentYear: number,
+  grade: number,
   term: string,
-  year: number,
-  grade: number
+  year: number
 ): Promise<GetGropGradeBelowModel[]> => {
   try {
     const token = cookies().get("token")?.value;
@@ -167,5 +159,54 @@ export const GetGropGradeBelow = async (
   } catch (err) {
     console.error("Error in API fetching data:", err);
     return [];
+  }
+};
+
+export const fetchPromoteStudent = async (data: {
+  studentIds: number[];
+  newGroupName: string;
+  newGroupCode: string;
+  class: string;
+  programId: number;
+  year: number;
+  term: string;
+  level: number;
+}) => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Promote/PromoteStudents`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      let errorMessage = `Error: ${response.status} - ${response.statusText}`;
+
+      try {
+        const errorData = await response.json(); 
+        errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;
+      } catch {
+        console.warn("Response does not contain JSON.");
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    const text = await response.text();
+    return text ? JSON.parse(text) : {}; 
+  } catch (err) {
+    console.error("Error in API Promote Student", err);
+    return null;
   }
 };

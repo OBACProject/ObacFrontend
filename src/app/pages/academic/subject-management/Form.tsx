@@ -295,7 +295,6 @@ const EditSubjectPopUp = ({
       >
         <div className="w-full flex justify-center rounded-t-md text-center text-xl  ">
           <p className="py-4  text-gray-800">แก้ไขวิชาเรียน</p>
-        
         </div>
         <div className="w-full px-10 py-5 grid place-items-center gap-4">
           <div className="flex items-center gap-2">
