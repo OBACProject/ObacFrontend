@@ -171,7 +171,7 @@ export default function Form() {
             <div className="text-center">ลำดับ</div>
             <div className="text-center">ระดับชั้น</div>
             <div className="text-center">ประเภทวิชา/สายอาชีพ</div>
-            <div className="text-center">กลุ่มอาชีพ</div>
+            <div className="text-center">กลุ่มอาชีพ</div>
             <div className="text-center">สาขาวิชา</div>
             <div className="text-center">จำนวนนักเรียน</div>
           </div>
