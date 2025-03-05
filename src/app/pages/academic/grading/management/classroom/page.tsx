@@ -4,7 +4,7 @@ import React from "react";
 import { Main } from "./main";
 import { ArrowUpDown, CircleX } from "lucide-react";
 
-export default function page() {
+export default function Page() {
   return (
     <header className="mx-4 sm:mx-10 lg:mx-10 p-4 mt-10 ">
       <div>
@@ -24,7 +24,7 @@ export default function page() {
               href="/pages/academic/FailedStudent"
               className="px-10 bg-gradient-to-tr from-pink-500 to-red-500 hover:from-red-600 hover:to-red-600 flex items-center justify-center py-1 text-white rounded-md  gap-2"
             >
-              <CircleX className="w-5 h-5 "/>
+              <CircleX className="w-5 h-5 " />
               นักเรียนที่ไม่ผ่านเกณฑ์
             </Link>
           </div>
