@@ -4,7 +4,7 @@ import { fetchPromoteStudent, GetGropGradeAbove } from "@/api/grad/gradAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import { StudentGroup } from "@/dto/studentDto";
-import { Search } from "lucide-react";
+import { ArrowUpDown, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -162,8 +162,9 @@ export default function Main() {
       <div className="flex justify-center">
         <div
           style={{ userSelect: "none" }}
-          className="px-10 rounded-3xl text-lg py-2 bg-gray-600 text-white "
+          className="px-10 rounded-3xl text-xl flex gap-2 items-center py-2 bg-blue-500 text-white "
         >
+          <ArrowUpDown className="w-8 h-8"/>
           ปรับเลื่อนชั้นเรียน
         </div>
       </div>

@@ -3,7 +3,7 @@ import {
   fetchGetAllSubject,
   fetchUpdateSubject,
 } from "@/api/subject/subjectAPI";
-import { Pencil, PlusCircle } from "lucide-react";
+import { LibraryBig, Pencil, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GetAllSubject } from "@/dto/subjectDto";
@@ -160,20 +160,20 @@ export default function Form() {
 
   return (
     <div className="w-full">
-      <div className="flex py-5 justify-between">
-        <div></div>
-        <h1 className="px-10 py-1 rounded-3xl text-lg w-fit bg-gray-600 text-white">
+      <div className="flex py-3 justify-center">
+        <h1 className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-sky-500 text-white">
+          <LibraryBig className="h-8 w-8" />
           ระบบจัดการรายวิชา
         </h1>
-        <div className="px-5 flex gap-2">
-          <button
-            className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-            onClick={() => setAddSubjectPopUp(true)}
-          >
-            <PlusCircle className="w-5 h-5 text-white  " />
-            เพิ่มวิชา
-          </button>
-        </div>
+      </div>
+      <div className="px-10 py-2 gap-2">
+        <button
+          className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+          onClick={() => setAddSubjectPopUp(true)}
+        >
+          <PlusCircle className="w-5 h-5 text-white  " />
+          เพิ่มวิชาและหลักสูตร
+        </button>
       </div>
       <div className="w-full rounded-sm px-10">
         <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">

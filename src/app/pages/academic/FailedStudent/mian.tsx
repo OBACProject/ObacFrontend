@@ -1,7 +1,7 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/grad/gradAPI";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 interface IndividualStudentInfoData {
@@ -69,8 +69,8 @@ export default function Main() {
   return (
     <div className="py-5">
       <div className="w-full justify-center flex">
-        <div className="px-10 rounded-3xl text-lg bg-gray-600 text-white py-1 text-center w-fit">
-          นักเรียนที่ไม่ผ่านเกณฑ์
+        <div className="px-10 rounded-3xl flex gap-2 items-center text-xl bg-red-600 text-white py-2 text-center w-fit">
+          <User className="w-8 h-8"/> นักเรียนที่ไม่ผ่านเกณฑ์
         </div>
       </div>
 

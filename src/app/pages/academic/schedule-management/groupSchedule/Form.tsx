@@ -1,6 +1,6 @@
 import { fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/scheduleAPI";
 import { StudentGroupScheduleSubject } from "@/dto/schedule";
-import { PlusCircle } from "lucide-react";
+import { Boxes, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import AddGroupSchedulePopUp from "./AddGroupSchedulePopUp";
 
@@ -38,8 +38,9 @@ export default function Form({ term, year, groupId }: Props) {
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
-        <h1 className="px-10 text-xl py-1 bg-gray-700 text-white rounded-3xl">
-          ตารางสอนของห้องเรียน
+        <h1 className="px-10 text-xl py-2 bg-pink-500 text-white flex gap-2 items-center rounded-3xl">
+          <Boxes className="h-8 w-8"/>
+          ตารางเรียนของห้องเรียน
         </h1>
       </div>
       <div className="w-full py-5 flex justify-between items-start ">

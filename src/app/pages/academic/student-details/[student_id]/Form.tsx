@@ -8,7 +8,7 @@ import GenTranscript from "@/app/components/PDF/genTranscript";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 import { GetStudentByStudentId, StudentGroup } from "@/dto/studentDto";
-import { CircleX, Pencil, Save } from "lucide-react";
+import { CircleX, Pencil, Save, UserRound } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 type Props = {
@@ -102,7 +102,8 @@ export default function Form({ studentId }: Props) {
   return (
     <div className="px-10">
       <div className="flex justify-between my-5">
-        <div className="border-[1px] rounded-md text-white bg-gray-700  border-slate-300 text-lg w-fit px-5 py-2 ">
+        <div className="rounded-3xl text-white bg-teal-600 flex gap-2 items-center  border-slate-300 text-xl w-fit px-5 py-2 ">
+          <UserRound className="w-8 h-8"/>
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-4">

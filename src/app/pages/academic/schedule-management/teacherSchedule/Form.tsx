@@ -3,7 +3,7 @@ import { fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
-import { PlusCircle } from "lucide-react";
+import { GraduationCap, PlusCircle } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import AddTeacherSchedulePopUp from "./AddTeacherSchedulePopUp";
@@ -53,7 +53,8 @@ export default function Form({ term, year, teacherID }: Props) {
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
-        <h1 className="px-10 text-xl py-1 bg-gray-700 text-white rounded-3xl">
+        <h1 className="px-10 text-xl py-2 bg-pink-500 text-white flex gap-2 items-center rounded-3xl">
+          <GraduationCap className="h-8 w-8"/>
           ตารางสอนอาจารย์
         </h1>
       </div>

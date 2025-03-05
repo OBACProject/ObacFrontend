@@ -212,11 +212,11 @@ export function ClassroomGrading(props: {
   ];
 
   return (
-    <>
-      <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
-        <div className="flex gap-12 mt-4">
+    < div className="px-5 py-2">
+      <header className="grid px-4 py-0 border  rounded-lg">
+
           <div className="flex justify-center w-full">
-            <div className="flex mx-auto justify-start gap-6 w-full p-2 rounded-lg">
+            <div className="flex  justify-center items-center gap-6 w-full p-2 rounded-lg">
               <div className="w-1/6 flex flex-col gap-4">
                 <Combobox
                   options={classLevels.map((classData) => ({
@@ -253,36 +253,34 @@ export function ClassroomGrading(props: {
                   disabled={!selectedFaculty}
                 />
               </div>
+              <div className="w-auto items-center gap-2  flex ">
+                <div>เทอม </div>
+                <Combobox
+                  options={term.map((item) => ({
+                    value: item,
+                    label: item,
+                  }))}
+                  defaultValue="1"
+                  buttonLabel="เลือกภาคเรียน"
+                  onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+                />
+              </div>
+              <div className="w-1/6 flex items-center gap-2  p-2 ">
+                <h1>ปี </h1>
+                <Combobox
+                  options={yearsList.map((item) => ({
+                    value: item,
+                    label: item,
+                  }))}
+                  defaultValue={currentYear.toString()}
+                  buttonLabel="เลือกปีการศึกษา"
+                  onSelect={(selectedYear) => setSelectedYear(selectedYear)}
+                />
+              </div>
             </div>
           </div>
-          <hr className="bg-black mt-4 text-black" />
-        </div>
-        <div className="flex gap-12 justify-start p-2 w-full">
-          <div className="w-1/6 flex flex-col p-2 relative">
-            <h1>ภาคเรียน</h1>
-            <Combobox
-              options={term.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-              defaultValue="1"
-              buttonLabel="เลือกภาคเรียน"
-              onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
-            />
-          </div>
-          <div className="w-1/6 flex flex-col p-2 relative">
-            <h1>ปีการศึกษา</h1>
-            <Combobox
-              options={yearsList.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-              defaultValue={currentYear.toString()}
-              buttonLabel="เลือกปีการศึกษา"
-              onSelect={(selectedYear) => setSelectedYear(selectedYear)}
-            />
-          </div>
-        </div>
+
+
         <DataTable
           columns={columns}
           data={filteredData.map((item, index) => ({
@@ -293,6 +291,6 @@ export function ClassroomGrading(props: {
           pagination={10}
         />
       </header>
-    </>
+    </div>
   );
 }
