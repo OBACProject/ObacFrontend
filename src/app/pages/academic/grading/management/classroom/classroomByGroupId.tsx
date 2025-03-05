@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
 import { StudentPopup } from "./component/studentPopup";
+import { useRouter } from "next/navigation";
 
 export interface GeneralData {
   groupId: number;
@@ -46,17 +47,23 @@ export interface GroupSummaryGradeResponse {
   subjects: string[];
 }
 
+interface IndividualStudentInfoData {
+  studentId: number;
+  studentName: string;
+}
+
 export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
+  const rounter = useRouter();
   const [summaryData, setSummaryData] =
     useState<GroupSummaryGradeResponse | null>(null);
 
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
 
-  const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
-  const [selectedStudent, setSelectedStudent] = useState<StudentList | null>(
-    null
-  );
+  // const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
+  // const [selectedStudent, setSelectedStudent] = useState<StudentList | null>(
+  //   null
+  // );
 
   // filter data
   const filteredData = useMemo(() => {
@@ -148,16 +155,31 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   };
 
   const onRowClick = (studentCode: string) => {
-    const student = studentInStudentList(studentCode);
-    if (student) {
-      setSelectedStudent(student);
-      setIsOpenPopUp(true);
-    }
+    // localStorage.setItem("studentCode", studentCode);
+    const studentData: IndividualStudentInfoData = {
+      studentId:
+        summaryData?.students.find(
+          (student) => student.studentCode === studentCode
+        )?.studentId || 0,
+      studentName:
+        summaryData?.students.find(
+          (student) => student.studentCode === studentCode
+        )?.name || "",
+    };
+
+    localStorage.setItem("activeTabStudent", "individualStudentInfo");
+    localStorage.setItem("selectedStudentData", JSON.stringify(studentData));
+    rounter.push(`/pages/academic/grading/management/individual`);
+    // const student = studentInStudentList(studentCode);
+    // if (student) {
+    //   setSelectedStudent(student);
+    //   setIsOpenPopUp(true);
+    // }
   };
 
-  const closePopUp = () => {
-    setIsOpenPopUp(false);
-  };
+  // const closePopUp = () => {
+  //   setIsOpenPopUp(false);
+  // };
 
   return (
     <>
@@ -225,12 +247,12 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
             pagination={summaryData?.students.length || 0}
           />
         </div>
-        <StudentPopup
+        {/* <StudentPopup
           isOpen={isOpenPopUp}
           onClose={() => setIsOpenPopUp(false)}
           student={selectedStudent}
           subjects={summaryData?.subjects || []}
-        />
+        /> */}
       </header>
     </>
   );
