@@ -24,7 +24,7 @@ export default function Page() {
               href="/pages/academic/FailedStudent"
               className="px-10 bg-white border-2  border-red-500 hover:bg-red-400 hover:text-white flex items-center justify-center py-1 text-red-500 rounded-md  gap-2"
             >
-              <CircleX className="w-5 h-5 "/>
+              <CircleX className="w-5 h-5 " />
               นักเรียนที่ไม่ผ่านเกณฑ์
             </Link>
           </div>
