@@ -125,13 +125,15 @@ export const fetchGetScheduleOfStudentByStudentID = async (
 
 export const fetchCreateScheduleSubject = async (
   requestBody: CreateScheduleSubjectRequest
-): Promise<void> => {
+): Promise<any> => {
   try {
+    const token = cookies().get("token")?.value;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/CreateScheduleSubjectAsync`,
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
@@ -139,10 +141,22 @@ export const fetchCreateScheduleSubject = async (
     );
 
     if (!response.ok) {
-      throw new Error("Failed to create Schedule Subject");
+      let errorMessage = `Error: ${response.status} - ${response.statusText}`;
+
+      try {
+        const errorData = await response.json();
+        errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;
+      } catch {
+        console.warn("Response does not contain JSON.");
+      }
+
+      throw new Error(errorMessage);
     }
 
-    console.log("Schedule Subject created successfully");
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
+
+    
   } catch (err) {
     console.log(err);
     throw err;

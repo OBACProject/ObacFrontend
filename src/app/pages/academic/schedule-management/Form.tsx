@@ -32,7 +32,7 @@ export default function Form() {
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<string>("2024");
-
+  const [isLoading , setLoading] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>();
   const [teachers, setTeacher] = useState<GetAllTeacher[]>();
 
@@ -43,6 +43,7 @@ export default function Form() {
     getAllTeacher().then((d) => {
       setTeacher(d);
     });
+    setLoading(true)
   }, []);
 
   const getDataAddSchedulePopUp = (
@@ -111,7 +112,7 @@ export default function Form() {
             setToggleMode(false);
           }}
         >
-          Student
+          นักเรียน
         </button>
         <button
           className={`px-10 py-1 duration-500 ${
@@ -121,10 +122,11 @@ export default function Form() {
           }   rounded-md`}
           onClick={() => setToggleMode(true)}
         >
-          Teacher
+          ครู
         </button>
       </div>
-      {toggleMode ? (
+      {isLoading ? (
+        <div>{toggleMode ? (
         <div className="w-full rounded-sm py-5 px-10">
           <div className="w-full grid grid-cols-[5%_20%_20%_20%_20%_15%] bg-[#cfe4ff] text-lg text-gray-800 border border-gray-400 py-2 rounded-t-md">
             <div className="text-center">ลำดับ</div>
@@ -205,6 +207,14 @@ export default function Form() {
           ))}
         </div>
       )}
+        </div>
+      ):(
+        <div className="py-5 px-5">
+        <div className="border-2 rounded-md border-dashed border-gray-400 grid place-items-center py-10 ">
+          <div className="text-4xl text-gray-500 font-semibold animate-pulse">Loading...</div>
+        </div></div>
+      )}
+      
       {popUpAddSubject == true && (
         <AddSchedulePopUp
           onClosePopUp={setpopUpAddSubject}

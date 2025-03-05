@@ -174,6 +174,11 @@ export function AcademicStudentInfo(props: {
           }
         }
         setOnEdit(!onEdit);
+        toast.success("บันทึกคะแนนสำเร็จ")
+        setTimeout(() => {
+          
+        }, (1000));
+        window.location.reload()
       }
     } catch (error) {
       console.error("Error saving changes:", error);

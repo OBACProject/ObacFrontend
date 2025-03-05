@@ -15,8 +15,6 @@ export async function getGroupSummaryGradeViewData(
   year: string
 ): Promise<GroupSummaryGradeResponse> {
   const data = await getClassroomByGroupId(groupId, term, year);
-  console.log(data);
-
   // Mapping to split data
   const generalData: GeneralData = {
     groupId: data.groupId,

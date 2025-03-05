@@ -108,7 +108,6 @@ export function DataTable<TData extends { [key: string]: any }, TValue>({
                       ? row.original[selectedValue]
                       : undefined;
                     const id = Number(value);
-                    console.log("ID:", id);
                     if (!isNaN(id)) {
                       onRowClick?.(id);
                     }

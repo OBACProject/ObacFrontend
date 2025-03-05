@@ -10,8 +10,10 @@ export const fetchGetSubjectBySubjectId = async (
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetSubjectByIdAsync?id=${id}`,
       {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       }
     );

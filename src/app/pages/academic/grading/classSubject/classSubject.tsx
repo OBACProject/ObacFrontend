@@ -34,11 +34,10 @@ export function ClassSubjectPage(props: {
   const [classSubjectData, setClassSubjectData] = useState<
     ClassSubjectColumn[]
   >([]);
-  console.log("classSubjectData", classSubjectData);
+
   const [classSubjectDataFiltered, setClassSubjectDataFiltered] = useState<
     ClassSubjectColumn[]
   >([]);
-  console.log("classSubjectDataFiltered", classSubjectDataFiltered);
   const [roomNumbers, setRoomNumbers] = useState<string[]>([]);
   const [periodNumbers, setPeriodNumbers] = useState<string[]>([]);
   const [teacherNames, setTeacherNames] = useState<string[]>([]);
@@ -52,14 +51,12 @@ export function ClassSubjectPage(props: {
     const item = rawClassSubjectData.find(
       (item) => item.scheduleSubjectId === id
     );
-    console.log("item", item);
     if (item) {
       props.handleSelectedData({
         subjectId: item.subjectId,
         scheduleSubjectId: item.scheduleSubjectId,
         room: `${item.class}.${item.studentGroupName}`,
       });
-      console.log("Selected data infoClass", id);
     } else {
       alert("ไม่พบข้อมูล");
     }
@@ -76,7 +73,6 @@ export function ClassSubjectPage(props: {
     });
 
     if (result.isConfirmed) {
-      console.log("publish Grade");
       const list_of_schudule_subject_id = classSubjectDataFiltered.map(
         (item) => item.id
       );
@@ -85,7 +81,6 @@ export function ClassSubjectPage(props: {
         for (const item of list_of_schudule_subject_id) {
           await putPublishGrade(item);
         }
-        console.log("Grades published successfully!");
 
         const rawData = await getClassSubjectData(
           classSubjecPassingData.id,
@@ -122,7 +117,6 @@ export function ClassSubjectPage(props: {
         setSelectedPeriod(null);
         setSelectedTeacher(null);
 
-        console.log("Data reloaded successfully!");
       } catch (error) {
         console.error("Error publishing grade or reloading data:", error);
       }
@@ -231,14 +225,14 @@ export function ClassSubjectPage(props: {
         <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
           {/* detail table */}
           <div className=" flex mb-4 justify-between">
-            <div className="flex w-1/5">
+            <div className="flex w-fit">
               <Badge variant={"outline"}>
                 <h1 className="text-base">
                   รายวิชา : {classSubjecPassingData.subjectName}
                 </h1>
               </Badge>
             </div>
-            <div className="flex w-1/5 gap-6 text-base">
+            <div className="flex w-fit gap-6 text-base">
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">

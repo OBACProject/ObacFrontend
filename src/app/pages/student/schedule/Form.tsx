@@ -39,7 +39,7 @@ export default function Form({ student_id }: Props) {
       setSchedules(item);
     });
   }, []);
-  console.log(schedules);
+
   return (
     <div className="mx-4 sm:mx-10 md:mx-20 lg:mx-44 px-16 lg:px-4 py-8">
       <div className="mx-10 w-full items-center text-center text-lg sm:text-xl flex justify-between">

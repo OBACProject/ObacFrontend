@@ -51,14 +51,14 @@ export type GetTeacherByTeacherId = {
   teacherQualification: string;
   teacherFaculty: string;
   teacherProgram: string;
-  teacherDateOfJoining: string; 
+  teacherDateOfJoining: string;
   teacherProfilePicture: string | null;
   nameTitle: string;
 };
 export interface TeacherEnrollment {
   id: number;
   teacherId: number;
-  teacherCode:string;
+  teacherCode: string;
   teacherName: string;
   teacherLastName: string;
   teacherThaiName: string;
@@ -72,5 +72,23 @@ export interface TeacherEnrollment {
   day: string;
   period: number;
   subjectStatus: number;
-  isComplete:boolean;
+  isComplete: boolean;
+}
+
+export interface TeacherInfoData {
+  teacherId: number | string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  email: string;
+}
+
+export interface TeacherColumns {
+  runningNumber: number;
+  teacherId: string;
+  teacherName: string;
+  teacherSurname: string;
+  programs: string;
+  email: string;
+  phoneNumber: string;
 }

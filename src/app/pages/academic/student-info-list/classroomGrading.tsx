@@ -140,8 +140,6 @@ export function ClassroomGrading(props: {
   useEffect(() => {
     const fetchFilterData = async () => {
       const rawData = await getRawProgramViewData();
-      console.log("rawData", rawData);
-
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
           classLevel: `${item.class}. ${item.groupName}`,

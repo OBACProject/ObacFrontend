@@ -1,8 +1,10 @@
+"use client";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { LabelText } from "@/app/components/labelText/labelText";
 import { Badge } from "@/components/ui/badge";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function StudentInfoByIdPage(props: { studentId: number }) {
@@ -21,48 +23,56 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         console.error("Error fetching student data:", error);
       }
     };
-
     fetchData();
   }, [props.studentId]);
 
   return (
-    <>
-      <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
-        <div className="flex gap-12">
-          <Badge variant={"outline"} className="text-xl">
+    <div className="">
+      <div className="flex justify-between w-full py-4">
+        <Link
+          href={
+            "/pages/academic/student-details/" +
+            studentTranscriptDataById?.studentId
+          }
+          className="grid align-middle lg:w-[800px] hover:bg-gray-50 duration-300   w-fit p-4 border  rounded-lg"
+        >
+          <div className="px-5 py-1 text-lg font-semibold rounded-sm text-black border ">
             ข้อมูลนักเรียน
-          </Badge>
+          </div>
+          <div className="flex items-center">
+            <LabelText
+              topic={"ชื่อ-นามสกุล"}
+              data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.lastName}`}
+            />
+            <LabelText
+              topic={"รหัสนักเรียน"}
+              data={`${studentTranscriptDataById?.studentCode}`}
+            />
+          </div>
+          <div className="flex items-center">
+            <LabelText
+              topic={"หลักสูตร"}
+              data={`${studentTranscriptDataById?.programName}`}
+            />
+            <LabelText
+              topic={"สาขาวิชา"}
+              data={`${studentTranscriptDataById?.subProgramName}`}
+            />
+          </div>
+        </Link>
+        <div className="px-40 py-10 border border-gray-300 rounded-md">
+          ไว้วางไฟล์
         </div>
-        <div className="flex">
-          <LabelText
-            topic={"ชื่อ-นามสกุล"}
-            data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.lastName}`}
-          />
-          <LabelText
-            topic={"รหัสนักเรียน"}
-            data={`${studentTranscriptDataById?.studentCode}`}
-          />
-        </div>
-        <div className="flex">
-          <LabelText
-            topic={"หลักสูตร"}
-            data={`${studentTranscriptDataById?.programName}`}
-          />
-          <LabelText
-            topic={"สาขาวิชา"}
-            data={`${studentTranscriptDataById?.subProgramName}`}
-          />
-        </div>
-      </header>
+      </div>
 
       <StudentTermTable termData={termData} />
-    </>
+    </div>
   );
 }
 
 function StudentTermTable({ termData }: { termData: YearData[] }) {
   return (
-    <div className="mt-6">
+    <div className="">
       {termData.map((year, index) => {
         const columns = [
           { label: "รายวิชา", key: "subject_name", className: "w-5/12" },
@@ -92,7 +102,6 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           if (totalCredit === 0) return "0.00";
 
           const gpa = totalGradePoints / totalCredit;
-          console.log("GPA: ", gpa);
           return gpa.toFixed(2);
         };
 

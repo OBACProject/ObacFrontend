@@ -24,7 +24,6 @@ export default function Main({ groupId }: Props) {
       setStudentList(item);
     });
   }, []);
-  console.log(studentList);
   return (
     <div className="py-5 w-full ">
       <div className="flex px-5 justify-between py-5 items-center">
@@ -74,7 +73,7 @@ export default function Main({ groupId }: Props) {
         </div>
       ) : (
         <div className="grid place-items-center border text-[24px] border-gray-400  text-gray-700 py-10 text-center">
-          ไม่มีตารางเรียน
+          ไม่พบข้อมูล
         </div>
       )}
     </div>

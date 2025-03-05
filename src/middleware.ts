@@ -2,12 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  console.log("Middleware triggered for:", req.nextUrl.pathname);
 
   const role = req.cookies.get("role")?.value || "";
   const urlPath = req.nextUrl.pathname;
-
-  console.log("Role:", role);
 
   if (!role) {
     return NextResponse.redirect(new URL("/pages/login", req.url));
@@ -24,7 +21,6 @@ export function middleware(req: NextRequest) {
   for (const path in allowedRoles) {
     if (urlPath.startsWith(path)) {
       if (!allowedRoles[path].includes(role)) {
-        console.log(`Access denied for role: ${role} on path: ${urlPath}`);
 
         switch (role) {
           case "Student":

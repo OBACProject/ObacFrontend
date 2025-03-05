@@ -8,7 +8,6 @@ export const getSubjectClassViewData = async (
 ): Promise<ClassSubjectColumn[]> => {
   try {
     const data = await getClassSubjectData(subjectId, term, year);
-    console.log("Fetched Data:", data);
 
     const subjectClassColumn = data.map((item: ClassSubjectData) => ({
       id: item.scheduleSubjectId,

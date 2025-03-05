@@ -57,7 +57,6 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
     );
 
     const editData: EducationData[] = Object.values(groupedData);
-    console.log("editData", editData);
     return editData;
   } catch (error) {
     console.error("Error fetching or transforming data:", error);
