@@ -2,6 +2,7 @@ import { fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/schedule
 import { StudentGroupScheduleSubject } from "@/dto/schedule";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import AddGroupSchedulePopUp from "./AddGroupSchedulePopUp";
 
 type Props = {
   term: string;
@@ -25,11 +26,15 @@ const getSchedule = async (term: string, year: string, groupId: number) => {
 
 export default function Form({ term, year, groupId }: Props) {
   const [schedules, setSchedules] = useState<StudentGroupScheduleSubject[]>([]);
+  const [scheduleBtn , setScheduleBtn] = useState<boolean>(false)
+  
   useEffect(() => {
     getSchedule(term, year, groupId).then((item: any) => {
       setSchedules(item);
     });
   }, []);
+  const GroupName = schedules?.length > 0 && `${schedules[0]?.class}.${schedules[0]?.groupName}`
+
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
@@ -64,7 +69,7 @@ export default function Form({ term, year, groupId }: Props) {
 
         <div className="">
           {" "}
-          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl">
+          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl" onClick={()=>setScheduleBtn(true)}>
             <PlusCircle className="w-5 h-5 text-white  " />
             เพิ่มตารางเรียน
           </button>
@@ -130,6 +135,13 @@ export default function Form({ term, year, groupId }: Props) {
           </div>
         )}
       </div>
+      {scheduleBtn && GroupName&&<AddGroupSchedulePopUp
+      term={term}
+      year={year}
+      groupId={groupId}
+      groupName={GroupName}
+      onClosePopUp={setScheduleBtn}
+      />}
     </div>
   );
 }

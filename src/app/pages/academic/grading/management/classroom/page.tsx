@@ -22,7 +22,7 @@ export default function page() {
             </Link>
             <Link
               href="/pages/academic/FailedStudent"
-              className="px-10 bg-gradient-to-tr from-pink-500 to-red-500 hover:from-red-600 hover:to-red-600 flex items-center justify-center py-1 text-white rounded-md  gap-2"
+              className="px-10 bg-pink-400 hover:bg-pink-600 flex items-center justify-center py-1 text-white rounded-md  gap-2"
             >
               <CircleX className="w-5 h-5 "/>
               นักเรียนที่ไม่ผ่านเกณฑ์

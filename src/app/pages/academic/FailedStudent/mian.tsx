@@ -145,7 +145,7 @@ export default function Main() {
           <div>
             {students.length > 0 ? (
               <div className="grid gap-4">
-                <div className="py-1 px-5 text-gray-600 font-semibold w-fit border-2 border-gray-400  rounded-md bg-white flex gap-3">
+                <div className="py-1 px-5 text-white bg-red-400 font-semibold w-fit border-2 border-red-400  rounded-md flex  gap-3">
                   จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{students.length}</p>คน
                 </div>
                 <div>

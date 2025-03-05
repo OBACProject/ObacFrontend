@@ -194,7 +194,7 @@ export const fetchPromoteStudent = async (data: {
       let errorMessage = `Error: ${response.status} - ${response.statusText}`;
 
       try {
-        const errorData = await response.json(); 
+        const errorData = await response.json();
         errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;
       } catch {
         console.warn("Response does not contain JSON.");
@@ -204,7 +204,7 @@ export const fetchPromoteStudent = async (data: {
     }
 
     const text = await response.text();
-    return text ? JSON.parse(text) : {}; 
+    return text ? JSON.parse(text) : {};
   } catch (err) {
     console.error("Error in API Promote Student", err);
     return null;
