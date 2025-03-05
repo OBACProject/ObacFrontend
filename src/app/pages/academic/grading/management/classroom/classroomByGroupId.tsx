@@ -7,7 +7,6 @@ import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewD
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
-import { StudentPopup } from "./component/studentPopup";
 import { useRouter } from "next/navigation";
 
 export interface GeneralData {
