@@ -4,7 +4,7 @@ import React from "react";
 import { Main } from "./main";
 import { ArrowUpDown, CircleX } from "lucide-react";
 
-export default function page() {
+export default function Page() {
   return (
     <header className="mx-4 sm:mx-10 lg:mx-10 p-4  ">
       <div>

@@ -7,7 +7,7 @@ import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { GetAllTeacher } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {

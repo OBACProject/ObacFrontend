@@ -94,7 +94,11 @@ export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
 
 export const fetchAddSubject = async (
   addSubjectCode: string,
-  addSubjectName: string
+  addSubjectName: string,
+  credits: number,
+  term: string,
+  programId: number,
+  isActive: boolean
 ): Promise<boolean> => {
   try {
     const token = cookies().get("token")?.value;
@@ -102,16 +106,22 @@ export const fetchAddSubject = async (
       console.error("No authentication token found.");
       return false;
     }
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/CreateSubject`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ addSubjectCode, addSubjectName }),
+        body: JSON.stringify({
+          subjectCode: addSubjectCode,  
+          subjectName: addSubjectName,  
+          credits: credits,
+          term: term,
+          programId: programId,
+          isActive: isActive,
+        }),
       }
     );
 
