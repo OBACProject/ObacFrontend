@@ -225,14 +225,14 @@ export function ClassSubjectPage(props: {
         <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
           {/* detail table */}
           <div className=" flex mb-4 justify-between">
-            <div className="flex w-1/5">
+            <div className="flex w-fit">
               <Badge variant={"outline"}>
                 <h1 className="text-base">
                   รายวิชา : {classSubjecPassingData.subjectName}
                 </h1>
               </Badge>
             </div>
-            <div className="flex w-1/5 gap-6 text-base">
+            <div className="flex w-fit gap-6 text-base">
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">

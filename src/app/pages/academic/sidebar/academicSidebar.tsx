@@ -5,7 +5,14 @@ import {
   ProfileData,
 } from "@/resource/academics/sidebarData";
 import { motion } from "framer-motion";
-import { ChevronRight, CircleUserRound, LogOut, Menu } from "lucide-react";
+import {
+  ChevronRight,
+  CircleUserRound,
+  DoorOpen,
+  Menu,
+  Settings,
+  Loader2,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -18,9 +25,10 @@ export function AcademicSidebar({
   ...props
 }: AcademicSidebarProps & { profileData: ProfileData }) {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [userName, setUserName] = useState(profileData.name);
+  const [triggerDropdown, setTriggerDropdown] = useState<boolean>(false);
   useEffect(() => {
     const cookieName = Cookies.get("name");
     if (cookieName) {
@@ -29,18 +37,19 @@ export function AcademicSidebar({
   }, []);
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       await logout();
       setUserName("");
       router.push("/pages/login");
     } catch (error) {
       console.error("Logout failed:", error);
-    }
+    } 
   };
   return (
     <div className="fixed flex flex-col z-20  w-full">
-      <header className="flex w-full items-center gap-2 bg-background border-b px-4 py-2 ">
-        <div className="flex h-[64px] items-center">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
+        <div className="flex h-[80px]  items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
             className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
@@ -65,28 +74,49 @@ export function AcademicSidebar({
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
           </span>
         </div>
-        <div className="flex items-center px-5 gap-6">
+        <button
+          onClick={() => setTriggerDropdown(!triggerDropdown)}
+          className="flex h-full py-2 hover:bg-gray-100 rounded-sm items-center px-5 gap-6"
+        >
           <div
             className="flex gap-2 items-center"
             style={{ userSelect: "none" }}
           >
-            {" "}
-            <Link href={profileData.href} className="flex items-center">
+            <div className="flex items-center">
               <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
-            </Link>
+            </div>
             <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
               {userName}
             </p>
           </div>
-
-          <button
-            onClick={handleLogout}
-            className="px-5 items-center rounded-md py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
-            style={{ userSelect: "none" }}
-          >
-            Logout
-          </button>
-        </div>
+        </button>
+        {triggerDropdown && (
+          <div className="px-4 py-4 z-50 rounded-sm bg-white shadow-md border border-gray-200 fixed grid gap-1 top-20 right-5">
+            <div className="py-1 justify-center cursor-not-allowed w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
+              <Settings className="w-5 h-5" />
+              ตั้งค่าผู้ใช้งาน
+            </div>
+            {loading ? (
+              <button
+                className=" w-[150px] justify-center items-center duration-300 text-sm rounded-sm py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
+                style={{ userSelect: "none" }}
+              >
+                <Loader2 className="w-5 h-5 animate-spin" />
+                ออกจากระบบ
+              </button>
+            ) : (
+              <button
+                onClick={handleLogout}
+                disabled={loading}
+                className=" w-[150px] justify-center items-center duration-300 text-sm rounded-sm py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
+                style={{ userSelect: "none" }}
+              >
+                <DoorOpen className="w-5 h-5" />
+                ออกจากระบบ
+              </button>
+            )}
+          </div>
+        )}
       </header>
 
       <SidebarMenu
@@ -181,7 +211,6 @@ export function SidebarMenu({
           ))}
         </div>
       </div>
-
       {/* Sidebar Toggle Button */}
       <motion.div
         animate={isVisible ? { x: 270 } : { x: 60 }}

@@ -1,7 +1,7 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/grad/gradAPI";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 interface IndividualStudentInfoData {
@@ -128,17 +128,30 @@ export default function Main() {
           <option value="ปวส&1">ปวส.1</option>
           <option value="ปวส&2">ปวส.2</option>
         </select>
-        <button
-          className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
-          onClick={onFilterGroup}
-          style={{ userSelect: "none" }}
-          disabled={
-            !classSelect || !currentYearSelect || !term || !year || !grads
-          }
-        >
-          <Search className="w-5 h-5" />
-          {searchTrigger ? <p>กำลังค้นหา...</p> : <p>ค้นหา</p>}
-        </button>
+        {!searchTrigger ? (
+          <button
+            className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
+            onClick={onFilterGroup}
+            style={{ userSelect: "none" }}
+            disabled={
+              !classSelect || !currentYearSelect || !term || !year || !grads
+            }
+          >
+            <Search className="w-5 h-5" />
+            <p>ค้นหา</p>
+          </button>
+        ) : (
+          <button
+            className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
+            style={{ userSelect: "none" }}
+            disabled={
+              !classSelect || !currentYearSelect || !term || !year || !grads
+            }
+          >
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <p>กำลังค้นหา</p>
+          </button>
+        )}
       </div>
       <div className="px-10  py-0">
         {isSearch ? (
