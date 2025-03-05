@@ -24,7 +24,6 @@ export default function Form() {
       setSubject(d);
     });
   }, []);
-  console.log(subjects);
 
   const [getEditSubjectId, setGetEditIdSubject] = useState<number>(0);
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
@@ -88,8 +87,7 @@ export default function Form() {
   }, [triggerEditSubject]);
 
   const getAndDelete = (id: number) => {
-    console.log("test");
-    console.log(id);
+
   };
 
   return (

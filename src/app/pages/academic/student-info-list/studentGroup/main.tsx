@@ -24,7 +24,6 @@ export default function Main({ groupId }: Props) {
       setStudentList(item);
     });
   }, []);
-  console.log(studentList);
   return (
     <div className="py-5 w-full ">
       <div className="flex px-5 justify-between py-5 items-center">

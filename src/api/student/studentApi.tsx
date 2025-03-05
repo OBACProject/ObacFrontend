@@ -28,7 +28,6 @@ export const fetchCreateStudentAsync = async (
     }
 
     const data = await response.json();
-    console.log("Posted Data:", data);
   } catch (err) {
     console.error("Error:", err);
   }

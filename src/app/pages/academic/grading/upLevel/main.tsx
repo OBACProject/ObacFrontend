@@ -45,7 +45,8 @@ export default function Main() {
   const [confirmPromoteTrigger, setConfirmPromoteTrigger] =
     useState<boolean>(false);
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
-  const [resetPromote , setResetPromote] = useState<boolean>(false);
+  const [resetPromote, setResetPromote] = useState<boolean>(false);
+  const [isSearch , setIsSeacrh] = useState<boolean>(false)
 
   useEffect(() => {
     getStudentGroupData().then((d: StudentGroup[]) => {
@@ -66,8 +67,9 @@ export default function Main() {
         (item) => item.studentGroupId === selectedOption.value
       );
       if (selectedGroup) {
-        setResetPromote(false)
+        setResetPromote(false);
         setGroupID(selectedGroup.studentGroupId);
+
       }
     } else {
       setGroupID(0);
@@ -93,6 +95,7 @@ export default function Main() {
         }
       );
       setSearchTrigger(false);
+      setIsSeacrh(true)
     } catch (err) {
       console.error("Error in onFilterGroup:", err);
       setSearchTrigger(false);
@@ -124,17 +127,6 @@ export default function Main() {
           65 + Math.floor(Math.random() * 26)
         )}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
         const randomNumber = Math.floor(100 + Math.random() * 900);
-        console.log("Promoting Students with Data:", {
-          studentIds: studentIds,
-          newGroupName: nextGroupName,
-          newGroupCode: `${randomPrefix}-${randomNumber}`,
-          class: newGroup.class,
-          programId: newGroup?.programId,
-          year: Number(year),
-          term: term,
-          level: Number(nextGroupNameA),
-        });
-
         const response = await fetchPromoteStudent({
           studentIds: studentIds,
           newGroupName: nextGroupName,
@@ -148,9 +140,9 @@ export default function Main() {
         if (response && response.ok !== false) {
           SetPromoteTrigger(false);
           toast.success("เลื่อนชั้นเรียนสำเร็จ");
-          setNextGroupNameA("")
-          setNextGroupNameB("")
-          setResetPromote(true)
+          setNextGroupNameA("");
+          setNextGroupNameB("");
+          setResetPromote(true);
         } else {
           toast.error("เกิดข้อผิดพลาดในการเลื่อนชั้นเรียน");
         }
@@ -238,98 +230,111 @@ export default function Main() {
       </div>
 
       <div className="px-10  py-0">
-        {newGroup ? (
-          <div className="grid gap-4">
-            <div className="py-1 px-5 text-gray-600 font-semibold w-fit border-2 border-gray-400  rounded-md bg-white ">
-              ชั้นเรียนปัจจุบัน {newGroup.class}.{newGroup.groupName}
-            </div>
-            <div className="flex gap-3 items-center">
-              <li className="text-[18px] text-gray-700 ">ระบุชั้นเรียนต่อไป</li>
-              {/* <select
-                className="px-4 py-1 rounded-md border border-gray-300 "
-                value={nextClass}
-                onChange={(e) => {
-                  setNextClass(e.target.value);
-                }}
-              >
-                <option defaultValue=""> เลือกชั้น </option>
-                <option value="ปวช">ปวช.</option>
-                <option value="ปวส">ปวส.</option>
-              </select> */}
-              <p className="px-2 py-1 bg-gray-200 rounded-md">{newGroup.class}</p>
-              :
-              <select
-                className="px-4 py-1 rounded-md border border-gray-300 "
-                value={nextGroupNameA}
-                onChange={(e) => {
-                  setNextGroupNameA(e.target.value);
-                }}
-              >
-                <option defaultValue=""> เลือกปี </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-              <p className="text-xl  text-black">/</p>
-              
-              <select
-                className="px-4 py-1 rounded-md border border-gray-300 "
-                value={nextGroupNameB}
-                onChange={(e) => {
-                  setNextGroupNameB(e.target.value);
-                }}
-              >
-                <option defaultValue=""> เลือกห้อง </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-            </div>
-            <div>
-              <div className="border-2 border-gray-400 bg-blue-200 text-black grid h-fit grid-cols-[10%_20%_30%_40%] ">
-                <div className="py-1 text-lg text-center">ลำดับ</div>
-                <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
-                <div className="py-1 text-lg text-center">ชื่อ - นามสกุล</div>
-                <div className="py-1 text-lg text-center">เกรดเทอมล่าสุด</div>
-              </div>
-              {newGroup.student.map((item, index) => (
-                <div
-                  key={index}
-                  className="border border-t-0 border-gray-400 bg-white text-black grid h-fit grid-cols-[10%_20%_15%_15%_40%]"
-                >
-                  <div className="text-center py-1 border-r border-gray-400">
-                    {index + 1}
-                  </div>
-                  <div className="text-center py-1 border-r border-gray-400">
-                    {item.studentCode}
-                  </div>
-                  <div className="text-start py-1 pl-8">{item.firstName}</div>
-                  <div className="text-start py-1 border-r border-gray-400">
-                    {item.lastName}
-                  </div>
-                  <div className="text-center py-1">{item.gpa.toFixed(2)}</div>
+        {isSearch ? (
+          <div>
+            {newGroup ? (
+              <div className="grid gap-4">
+                <div className="py-1 px-5 text-gray-600 font-semibold w-fit border-2 border-gray-400  rounded-md bg-white ">
+                  ชั้นเรียนปัจจุบัน {newGroup.class}.{newGroup.groupName}
                 </div>
-              ))}
-              <div className="w-full py-5 flex justify-end">
-                <button
-                  style={{ userSelect: "none" }}
-                  disabled={ !nextGroupNameA || !nextGroupNameB}
-                  className={`${resetPromote ? "hidden":"block" } px-10 py-1 rounded-md text-white bg-gray-400 enabled:bg-green-400 enabled:hover:bg-green-600`}
-                  onClick={() => {
-                    SetPromoteTrigger(true);
-                  }}
-                >
-                  เลื่อนชั้นนักเรียน
-                </button>
+                <div className="flex gap-3 items-center">
+                  <li className="text-[18px] text-gray-700 ">
+                    ระบุชั้นเรียนต่อไป
+                  </li>
+                  <p className="px-2 py-1 bg-gray-200 rounded-md">
+                    {newGroup.class}
+                  </p>
+                  :
+                  <select
+                    className="px-4 py-1 rounded-md border border-gray-300 "
+                    value={nextGroupNameA}
+                    onChange={(e) => {
+                      setNextGroupNameA(e.target.value);
+                    }}
+                  >
+                    <option defaultValue=""> เลือกปี </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                  <p className="text-xl  text-black">/</p>
+                  <select
+                    className="px-4 py-1 rounded-md border border-gray-300 "
+                    value={nextGroupNameB}
+                    onChange={(e) => {
+                      setNextGroupNameB(e.target.value);
+                    }}
+                  >
+                    <option defaultValue=""> เลือกห้อง </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                  </select>
+                </div>
+                <div>
+                  <div className="border-2 border-gray-400 bg-blue-200 text-black grid h-fit grid-cols-[10%_20%_30%_40%] ">
+                    <div className="py-1 text-lg text-center">ลำดับ</div>
+                    <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
+                    <div className="py-1 text-lg text-center">
+                      ชื่อ - นามสกุล
+                    </div>
+                    <div className="py-1 text-lg text-center">
+                      เกรดเทอมล่าสุด
+                    </div>
+                  </div>
+                  {newGroup.student.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border border-t-0 border-gray-400 bg-white text-black grid h-fit grid-cols-[10%_20%_15%_15%_40%]"
+                    >
+                      <div className="text-center py-1 border-r border-gray-400">
+                        {index + 1}
+                      </div>
+                      <div className="text-center py-1 border-r border-gray-400">
+                        {item.studentCode}
+                      </div>
+                      <div className="text-start py-1 pl-8">
+                        {item.firstName}
+                      </div>
+                      <div className="text-start py-1 border-r border-gray-400">
+                        {item.lastName}
+                      </div>
+                      <div className="text-center py-1">
+                        {item.gpa.toFixed(2)}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="w-full py-5 flex justify-end">
+                    <button
+                      style={{ userSelect: "none" }}
+                      disabled={!nextGroupNameA || !nextGroupNameB}
+                      className={`${
+                        resetPromote ? "hidden" : "block"
+                      } px-10 py-1 rounded-md text-white bg-gray-400 enabled:bg-green-400 enabled:hover:bg-green-600`}
+                      onClick={() => {
+                        SetPromoteTrigger(true);
+                      }}
+                    >
+                      เลื่อนชั้นนักเรียน
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div
+                style={{ userSelect: "none" }}
+                className="w-full  border-2 grid place-items-center border-gray-300 border-dashed rounded-md py-10 text-gray-500 text-2xl font-semibold"
+              >
+                ไม่พบข้อมูล
+              </div>
+            )}
           </div>
         ) : (
           <div
@@ -362,8 +367,8 @@ export default function Main() {
                 อื่นๆของนักเรียนว่าข้อมูลถูกต้อง
               </p>
               <p className="pt-2 w-full text-center">
-                {newGroup?.class}.{newGroup?.groupName} &gt;&gt; {newGroup?.class}.
-                {nextGroupNameA}/{nextGroupNameB}
+                {newGroup?.class}.{newGroup?.groupName} &gt;&gt;{" "}
+                {newGroup?.class}.{nextGroupNameA}/{nextGroupNameB}
               </p>
             </div>
             <div className="flex w-full justify-center gap-5 item-center py-5 px-10">

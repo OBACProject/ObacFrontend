@@ -8,7 +8,6 @@ import { GetTeacherByTeacherId } from "@/dto/teacherDto";
 const getTeachData = async (id: number) => {
   try {
     const teacher = await fetchGetTeacherByTeacherIdAsync(id);
-    console.log(teacher);
     return teacher;
   } catch (err) {
     console.error("Failed to fetch teacher by ID:", err);
@@ -23,7 +22,6 @@ export default function ProfileForm() {
     });
   }, []);
 
-  console.log(teachers);
   return (
     <div className="text-xl font-sans">
       <div className="grid gap-4 px-5">

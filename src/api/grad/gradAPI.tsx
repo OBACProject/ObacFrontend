@@ -84,33 +84,33 @@ export const GetGropGradeAbove = async (
     if (!token) {
       throw new Error("No auth token found");
     }
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+
+    const url = `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to get data in API");
+      const errorText = await response.text();
+      throw new Error(`Failed to get data in API: ${response.status} ${response.statusText} | ${errorText}`);
     }
-
     const json = await response.json();
     if (!json?.data) {
       throw new Error("API response does not contain 'data'");
     }
 
-    const data: GetGropGradeAboveModel = json.data;
-    return data;
+    return json.data as GetGropGradeAboveModel;
   } catch (err) {
     console.error("Error in API fetching data:", err);
     return null;
   }
 };
+
 
 export const GetGropGradeBelow = async (
   className: string,

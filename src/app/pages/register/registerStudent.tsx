@@ -52,7 +52,6 @@ export function RegisterStudent() {
       handleChange("thaiId", id);
     }
   };
-  console.log("Boolean:", booleanThaiId);
 
   const handleChange = (
     key: keyof StudentCreateData,
@@ -63,7 +62,6 @@ export function RegisterStudent() {
       [key]: value,
     }));
   };
-  console.log("Data:", createStudentData);
   const genderData: string[] = ["Male", "Female"];
   return (
     <div className="mx-4 sm:mx-10 lg:mx-44 p-4 mt-10 flex-col">

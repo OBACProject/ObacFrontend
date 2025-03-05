@@ -102,7 +102,6 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           if (totalCredit === 0) return "0.00";
 
           const gpa = totalGradePoints / totalCredit;
-          console.log("GPA: ", gpa);
           return gpa.toFixed(2);
         };
 

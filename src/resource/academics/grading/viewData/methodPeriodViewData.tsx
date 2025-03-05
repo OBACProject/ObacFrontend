@@ -4,7 +4,6 @@ import { fetchGetAllMethodData } from "../api/methodPeriodApiData";
 export const getMethodViewData = async (): Promise<MethodDto[]> => {
   try {
     const data = await fetchGetAllMethodData();
-    console.log("Fetched Data:", data);
 
     const methodViewData = data.map((item: MethodDto) => ({
       id: item.id,
