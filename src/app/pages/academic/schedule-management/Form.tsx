@@ -112,7 +112,7 @@ export default function Form() {
             setToggleMode(false);
           }}
         >
-          Student
+          นักเรียน
         </button>
         <button
           className={`px-10 py-1 duration-500 ${
@@ -122,7 +122,7 @@ export default function Form() {
           }   rounded-md`}
           onClick={() => setToggleMode(true)}
         >
-          Teacher
+          ครู
         </button>
       </div>
       {isLoading ? (
