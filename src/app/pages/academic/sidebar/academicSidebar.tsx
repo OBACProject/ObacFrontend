@@ -44,8 +44,29 @@ export function AcademicSidebar({
       router.push("/pages/login");
     } catch (error) {
       console.error("Logout failed:", error);
-    } 
+    }
   };
+  const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
+  const [submenuTimeout, setSubmenuTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  const handleMouseEnter = (index: number) => {
+    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear any existing timeout
+    const timeout = setTimeout(() => {
+      setOpenSubMenu(index);
+    }, 200); // Delay before showing submenu
+    setSubmenuTimeout(timeout);
+  };
+
+  const handleMouseLeave = () => {
+    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear timeout before hiding
+    const timeout = setTimeout(() => {
+      setOpenSubMenu(null);
+    }, 200); // Delay before hiding submenu
+    setSubmenuTimeout(timeout);
+  };
+
   return (
     <div className="fixed flex flex-col z-20  w-full">
       <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
@@ -284,8 +305,8 @@ export function SidebarMenu({
               </button>
 
               {/* Display submenu if it exists */}
-              {item.subMenu && isVisible && (
-                <div className="absolute left-full top-0 ml-2 bg-white shadow-lg border border-gray-200 rounded-md w-60 z-50">
+              {item.subMenu && openSubMenu === index && (
+                <div className="absolute left-full top-0 ml-2 bg-white shadow-lg border -translate-x-2 border-gray-200 rounded-md w-60 z-50">
                   {item.subMenu.map((subItem, subIndex) => (
                     <a key={subIndex} href={subItem.href}>
                       <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
