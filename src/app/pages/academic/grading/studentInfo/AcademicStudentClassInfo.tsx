@@ -250,7 +250,7 @@ export function AcademicStudentInfo(props: {
               });
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน PDF</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -263,7 +263,7 @@ export function AcademicStudentInfo(props: {
               });
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดรายชื่อนักเรียน</p>
+            <p className="line-clamp-1">ดาวน์โหลดรายชื่อ PDF</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -278,7 +278,7 @@ export function AcademicStudentInfo(props: {
               );
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบคะแนนนักเรียน excel</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน Excel</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -291,7 +291,7 @@ export function AcademicStudentInfo(props: {
               );
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อนักเรียน excel</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อ Excel</p>
           </button>
         </div>
       </div>
