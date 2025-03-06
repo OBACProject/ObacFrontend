@@ -30,7 +30,7 @@ export default function Main({ groupId }: Props) {
     });
   }, [groupId]);
   return (
-    <div className="py-2 w-full ">
+    <div className="py-2 w-full px-10">
       <div className="flex px-5 justify-center py-3 items-center">
         <h1 className="px-10 w-fit text-white flex gap-2 items-center bg-blue-800 rounded-3xl py-2 text-xl">
           <UsersRound className="h-8 w-8" />
