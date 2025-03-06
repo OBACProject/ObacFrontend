@@ -90,8 +90,7 @@ export default function Form({ term, year, teacherID }: Props) {
       </div>
 
       <div className="w-full ">
-        <div className="w-full grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
-          <div className="text-center">ลำดับ</div>
+        <div className="w-full grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border border-blue-100 text-lg py-2 rounded-t-md">
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
           <div className="text-center">สายชั้น</div>
@@ -108,14 +107,11 @@ export default function Form({ term, year, teacherID }: Props) {
             <div key={index}>
               {item.scheduleSubjects.map((subject, subIndex) => (
                 <div
-                  key={index}
+                  key={subIndex}
                   className={` ${
-                    index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                  } grid grid-cols-[5%_10%_20%_10%_10%_10%_10%_10%_15%]  border text-[16px] border-gray-400 text-gray-700  border-t-0`}
+                    subIndex % 2 == 0 ? "bg-white" : "bg-gray-100"
+                  } grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_15%]  border text-[16px] border-gray-400 text-gray-700  border-t-0`}
                 >
-                  <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-2  border-gray-400">
-                    {index + 1}
-                  </div>
                   <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
                     {subject.subjectCode}
                   </p>
