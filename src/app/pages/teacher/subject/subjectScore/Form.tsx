@@ -49,6 +49,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           affectiveScore: item.affectiveScore,
           testScore: item.testScore,
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
+          remark: item.remark,
         }));
         for (let i = 0; i < payload.length; i++) {
           const response = await fetch(

@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
     const token = cookies().get("token")?.value
+    const api = process.env.NEXT_PUBLIC_API_URL_V1;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetAllTeacher`,
       {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { BookText, PlusCircle } from "lucide-react";
 import { StudentGroup } from "@/dto/studentDto";
@@ -36,6 +36,19 @@ export default function Form() {
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>();
   const [teachers, setTeacher] = useState<GetAllTeacher[]>();
 
+  const fetchData = async () => {
+    try {
+      const [studentGroups, teachers] = await Promise.all([
+        getStudentGroup(),
+        getAllTeacher(),
+      ]);
+      setStudentGroup(studentGroups);
+      setTeacher(teachers);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
     getStudentGroup().then((d) => {
       setStudentGroup(d);
@@ -45,7 +58,7 @@ export default function Form() {
     });
     setLoading(true);
   }, []);
-
+  console.log(studentGroup);
   const getDataAddSchedulePopUp = (
     subjectID: number,
     teacherID: number,
@@ -58,6 +71,7 @@ export default function Form() {
       `1-${studentGroupID} , 2-${teacherID} , 3-${subjectID} , 4-${room} 5-${period} 6-${day}`
     );
   };
+
   return (
     <div className="w-full">
       <div className="flex items-center py-5 justify-center">
