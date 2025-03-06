@@ -170,7 +170,7 @@ export function Main() {
     <div className="w-full">
       {/* Breadcrumb and navigation */}
       <div className="w-full flex gap-2 justify-between">
-        <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full rounded-br-full">
+        <div className="mt-4 w-auto flex p-2 bg-slate-100 items-center rounded-tr-full rounded-br-full">
           <button
             className="min-w-32 max-w-72 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
             onClick={() => handleTab("subject")}
