@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY
 
 export async function login(formData: FormData) {
-  console.log("ENV SECRET KEY", secretKey);
   
   try {
     const userName = formData.get("userName") as string;

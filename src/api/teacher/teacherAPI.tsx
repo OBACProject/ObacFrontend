@@ -9,8 +9,10 @@ import { cookies } from "next/headers";
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
     const token = cookies().get("token")?.value
+    const api = process.env.NEXT_PUBLIC_API_URL_V1;
     const response = await fetch(
-      `http://localhost:5111/api/Teacher/GetAllTeacher`,
+      // `http://localhost:5111/api/Teacher/GetAllTeacher`,
+      api + `/api/Teacher/GetAllTeacher`,
       {
         method: "GET",
         headers: {
