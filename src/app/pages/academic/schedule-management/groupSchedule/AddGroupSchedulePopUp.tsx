@@ -46,7 +46,7 @@ export default function AddGroupSchedulePopUp({
   term,
   year,
   groupId,
-  groupName
+  groupName,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
@@ -128,12 +128,15 @@ export default function AddGroupSchedulePopUp({
     };
 
     try {
+      console.log("data : ", requestBody);
       const response = await fetchCreateScheduleSubject(requestBody);
-      if (response.ok) {
+      if (response.success) {
         toast.success("สร้างสำเร็จ");
         onClosePopUp(false);
+        setTimeout(() => {}, 2000);
+        window.location.reload();
       } else {
-        toast.error("สร้างไม่สำเร็จ");
+        toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
       }
     } catch (err) {
       console.error("Error creating schedule:", err);
@@ -229,7 +232,9 @@ export default function AddGroupSchedulePopUp({
               </div>
               <div className="flex items-center gap-3">
                 <label className="py-1 ">กลุ่มเรียน</label>
-                <p className="px-4 py-1 rounded-sm border border-gray-300">{groupName}</p>
+                <p className="px-4 py-1 rounded-sm border border-gray-300">
+                  {groupName}
+                </p>
               </div>
             </span>
           </div>

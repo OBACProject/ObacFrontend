@@ -32,7 +32,7 @@ const GenSubjectScore = ({
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${studentGroup}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน ${studentGroup}`, 36, 10, {
     align: "center",
   });
   doc.setFontSize(14);

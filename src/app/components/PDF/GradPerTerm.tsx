@@ -47,7 +47,7 @@ const GradPerTerms = (grads:GetGradPerTermByStudentIdDto) => {
     doc.text("ประเภทวิชา : ", 110.5, 35);
     doc.text(`${grads.facultyName}`, 130, 35);
 
-    doc.text("ชั้นปี : ปวช.1/6", 42, 40);
+    doc.text(`ชั้นปี : ${grads.class}.${grads.groupName}`, 42, 40);
     doc.text("สาขาวิชา     : ", 110, 40);
     doc.text(`${grads.programName}`, 130, 40);
 

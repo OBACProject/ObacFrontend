@@ -190,12 +190,24 @@ export interface GetStudentUser {
   birthDate: string;
 }
 
-export interface StudentListInGroup {
+export type Student = {
+  studentCode: string;
   studentId: number;
-  studentCode:string;
   studentName: string;
   studentSurname: string;
-}
+};
+
+export type GetStudentListByGroupIDDto = {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  programName: string;
+  programId: number;
+  facultyName: string;
+  subProgramName: string;
+  class: string;
+  students: Student[];
+};
 export type GetStudentByStudentId = {
   studentId: number;
   firstName: string;
@@ -224,5 +236,23 @@ export type GetStudentByStudentId = {
   programName: string;
   facultyId: number;
   facultyName: string;
-  birthDate: string; // Assuming it is stored as a string (ISO format or Thai calendar)
+  birthDate: string; 
+};
+
+export type GetStudentGroupsByTermYearDto = {
+  id: number;
+  groupName: string;
+  class: string;
+  groupCode: string;
+  level: number;
+  programId: number;
+  facultyName:string;
+  programName:string;
+  subProgramName:string;
+  teacherId: number | null;
+  limit: number;
+  year: number;
+  term: string;
+  program: any | null; 
+  scheduleSubject: any[]; 
 };

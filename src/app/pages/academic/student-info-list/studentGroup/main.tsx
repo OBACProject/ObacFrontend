@@ -1,6 +1,6 @@
 "use client";
-import { fetchStudentListInGroup } from "@/api/student/studentApi";
-import { StudentListInGroup } from "@/dto/studentDto";
+import { GetStudentListByGroupID } from "@/api/student/studentApi";
+import { GetStudentListByGroupIDDto, Student } from "@/dto/studentDto";
 import { UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ type Props = {
 
 const getStudentDataList = async (groupId: number) => {
   try {
-    const response = await fetchStudentListInGroup(groupId);
+    const response = await GetStudentListByGroupID(groupId);
     return response;
   } catch (err) {
     return [];
@@ -19,12 +19,16 @@ const getStudentDataList = async (groupId: number) => {
 };
 
 export default function Main({ groupId }: Props) {
-  const [studentList, setStudentList] = useState<StudentListInGroup[]>([]);
+  const [studentInGroup, setStudentInGroup] = useState<GetStudentListByGroupIDDto | null>();
   useEffect(() => {
-    getStudentDataList(groupId).then((item) => {
-      setStudentList(item);
+    getStudentDataList(groupId).then((item: GetStudentListByGroupIDDto | never[] | null) => {
+      if (item && !Array.isArray(item)) {
+        setStudentInGroup(item);
+      } else {
+        setStudentInGroup(null);
+      }
     });
-  }, []);
+  }, [groupId]);
   return (
     <div className="py-2 w-full ">
       <div className="flex px-5 justify-center py-3 items-center">
@@ -33,8 +37,16 @@ export default function Main({ groupId }: Props) {
           รายชื่อนักเรียนในห้องเรียน
         </h1>
       </div>
-      <div className="flex justify-end py-2 px-5">
-        {" "}
+      <div className="flex justify-between items-center py-2 px-5">
+        <div className=" flex gap-3 items-center">
+          <div className="border border-gray-400 rounded-sm px-2 py-1">
+           ห้อง {studentInGroup?.class}.{studentInGroup?.groupName} 
+          </div>
+          <div className="border border-gray-400 rounded-sm px-2 py-1">
+            หลักสูตร {studentInGroup?.facultyName}
+          </div>
+          
+        </div>
         <div className="flex gap-2">
           <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600">
             เอกสารใบตรวจเกรด PDF
@@ -45,7 +57,7 @@ export default function Main({ groupId }: Props) {
         </div>
       </div>
       <div className="w-full px-5 ">
-        <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  rounded-t-md">
+        <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  ">
           <div className="text-center py-2 border-r border-gray-400">
             ลำดับ
           </div>
@@ -56,9 +68,9 @@ export default function Main({ groupId }: Props) {
             ชื่อ - นามสกุล
           </div>
         </div>{" "}
-        {studentList.length > 0 ? (
-          <div className="w-full px-5">
-            {studentList?.map((item: StudentListInGroup, index) => (
+        {studentInGroup ? (
+          <div className="w-full ">
+            {studentInGroup.students?.map((item: Student, index) => (
               <Link
                 href={`/pages/academic/student-details/${item.studentId}`}
                 key={index}
