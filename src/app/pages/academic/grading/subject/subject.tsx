@@ -25,7 +25,7 @@ export function Subject(props: {
   console.log(gradingData);
   // filter data
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1;
+  const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 5 }, (_, i) =>
     (currentYear - i).toString()
   );

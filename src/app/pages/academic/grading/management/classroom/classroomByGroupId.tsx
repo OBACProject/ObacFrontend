@@ -59,11 +59,6 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
 
-  // const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
-  // const [selectedStudent, setSelectedStudent] = useState<StudentList | null>(
-  //   null
-  // );
-
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
