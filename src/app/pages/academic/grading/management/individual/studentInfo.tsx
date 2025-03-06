@@ -4,6 +4,7 @@ import { LabelText } from "@/app/components/labelText/labelText";
 import { Badge } from "@/components/ui/badge";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import { count } from "console";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -71,6 +72,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
 }
 
 function StudentTermTable({ termData }: { termData: YearData[] }) {
+  console.log(termData);
   return (
     <div className="">
       {termData.map((year, index) => {
@@ -88,18 +90,28 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           finalGrade: term.finalGrade,
         }));
 
-        // GPA = Sum(FinalGrade  * subj.Credits ) / yearTermGroup.Sum(subj.Credits)
         const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
           let totalGradePoints = 0;
 
           termQuery.forEach((term) => {
-            const grade = parseFloat(parseFloat(term.finalGrade).toFixed(2));
-            const credit = parseFloat(parseFloat(term.credit).toFixed(2));
+            if (!term.finalGrade || term.finalGrade === "N/A") {
+              return;
+            }
 
+            const grade = parseFloat(term.finalGrade);
+            const credit = parseFloat(term.credit);
+
+            if (isNaN(grade) || isNaN(credit)) {
+              return;
+            }
+
+            console.log("grade", grade);
+            console.log("credit", credit);
             totalGradePoints += grade * credit;
+            console.log("totalGradePoints", totalGradePoints);
           });
 
-          if (totalCredit === 0) return "0.00";
+          if (totalCredit <= 0) return "0.00";
 
           const gpa = totalGradePoints / totalCredit;
           return gpa.toFixed(2);
