@@ -172,7 +172,7 @@ export function Main() {
       <div className="w-full flex gap-2 justify-between">
         <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full rounded-br-full">
           <button
-            className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+            className="min-w-32 max-w-72 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
             onClick={() => handleTab("subject")}
           >
             <span className="text-black text-sm font-bold truncate">
@@ -183,7 +183,7 @@ export function Main() {
           {classSubjectData && (
             <>
               <button
-                className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-72 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("class")}
               >
                 <span className="text-black text-sm font-bold truncate">
@@ -196,7 +196,7 @@ export function Main() {
           {classSubjectData && classInfoData && (
             <>
               <button
-                className="min-w-32 max-w-48 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
+                className="min-w-32 max-w-72 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
                 onClick={() => handleTab("infoClass")}
               >
                 <span className="text-black text-sm font-bold">

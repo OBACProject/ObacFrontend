@@ -4,6 +4,18 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
+import { fetchGetUserInfoById } from "@/resource/academics/userInfo/api/userInfoApi";
+import { GetUserInfoById } from "@/dto/userDto";
+import cookies from "js-cookie";
+
+const getUserInfoById = async (userId: string) => {
+  try {
+    const user = await fetchGetUserInfoById(userId);
+    return user;
+  } catch (err) {
+    console.error("Failed to fetch user by ID:", err);
+  }
+};
 
 const getTeachData = async (id: number) => {
   try {
@@ -15,11 +27,20 @@ const getTeachData = async (id: number) => {
 };
 
 export default function ProfileForm() {
-  const [teachers, setTeacher] = useState<GetTeacherByTeacherId>();
+  const [teachers, setTeacher] = useState<GetTeacherByTeacherId>(); // profile
+  const [academics, setAcademics] = useState<GetUserInfoById>(); // academic
+  const userId = cookies.get("userId");
+  // console.log(userId);
   useEffect(() => {
-    getTeachData(2).then((items) => {
-      setTeacher(items);
-    });
+    if (userId) {
+      getUserInfoById(userId).then((items) => {
+        setAcademics(items);
+      });
+    } else {
+      getTeachData(27).then((items) => {
+        setTeacher(items);
+      });
+    }
   }, []);
 
   return (
@@ -44,9 +65,7 @@ export default function ProfileForm() {
                 <div className="ml-2">{teachers?.teacherCode}</div>
               </div>
               <div className=" flex">
-                <div className="text-xl pl-4 font-semibold ">
-                  นาย
-                </div>
+                <div className="text-xl pl-4 font-semibold ">นาย</div>
                 <div className="mx-4 text-gray-700">{teachers?.thaiName}</div>
                 <div className="mx-4 text-gray-700">
                   {teachers?.thaiLastName}
