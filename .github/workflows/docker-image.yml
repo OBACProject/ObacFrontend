@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: . # Use the root of the repository as build context
-          file: ./Dockerfile # Dockerfile at the top level
+          file: ./dockerfile # Dockerfile at the top level
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/obac_fe:latest
