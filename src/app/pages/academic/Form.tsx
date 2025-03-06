@@ -6,7 +6,7 @@ import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
 import { fetchGetUserInfoById } from "@/resource/academics/userInfo/api/userInfoApi";
 import { GetUserInfoById } from "@/dto/userDto";
-import { cookies } from "next/headers";
+import cookies from "js-cookie";
 
 const getUserInfoById = async (userId: string) => {
   try {
@@ -19,7 +19,6 @@ const getUserInfoById = async (userId: string) => {
 
 const getTeachData = async (id: number) => {
   try {
-    console.log(2);
     const teacher = await fetchGetTeacherByTeacherIdAsync(id);
     return teacher;
   } catch (err) {
@@ -30,11 +29,12 @@ const getTeachData = async (id: number) => {
 export default function ProfileForm() {
   const [teachers, setTeacher] = useState<GetTeacherByTeacherId>(); // profile
   const [academics, setAcademics] = useState<GetUserInfoById>(); // academic
-  const userId = cookies().get("userId")?.value;
+  const userId = cookies.get("userId");
+  // console.log(userId);
   useEffect(() => {
     if (userId) {
       getUserInfoById(userId).then((items) => {
-        // setTeacher(items);
+        setAcademics(items);
       });
     } else {
       getTeachData(27).then((items) => {
