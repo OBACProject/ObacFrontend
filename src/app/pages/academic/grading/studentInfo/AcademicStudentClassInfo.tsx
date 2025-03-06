@@ -246,7 +246,7 @@ export function AcademicStudentInfo(props: {
                 grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: subjectByGroupId?.subjectCode,
-                subjectName: gradDataFilter[0]?.subjectName,
+                subjectName: subjectByGroupId?.subjectName,
               });
             }}
           >
@@ -259,7 +259,7 @@ export function AcademicStudentInfo(props: {
                 grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: subjectByGroupId?.subjectCode,
-                subjectName: gradDataFilter[0]?.subjectName,
+                subjectName: subjectByGroupId?.subjectName,
               });
             }}
           >
@@ -273,7 +273,7 @@ export function AcademicStudentInfo(props: {
                 String(props?.term ?? ""),
                 String(props?.year ?? ""),
                 subjectByGroupId?.subjectCode || "",
-                gradDataFilter[0]?.subjectName || "",
+                subjectByGroupId?.subjectName || "",
                 room || ""
               );
             }}
@@ -286,7 +286,7 @@ export function AcademicStudentInfo(props: {
               ConvertClassroomToExcel(
                 covertStudentExcel,
                 subjectByGroupId?.subjectCode || "",
-                gradDataFilter[0]?.subjectName || "",
+                subjectByGroupId?.subjectName || "",
                 room || ""
               );
             }}
