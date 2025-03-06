@@ -65,7 +65,7 @@ export function Main() {
     <header className="flex flex-col">
       <div className="w-full flex gap-2 items-center transition-all duration-500 ease-in-out justify-between">
         {/* Breadcrumb */}
-        <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
+        <div className="mt-4 w-auto flex p-2 bg-slate-100 items-center rounded-tr-full overflow-hidden rounded-br-full relative">
           <div className="flex items-center">
             <button
               className="min-w-32 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
