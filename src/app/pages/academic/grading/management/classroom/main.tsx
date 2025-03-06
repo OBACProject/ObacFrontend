@@ -1,10 +1,11 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
+import { ArrowUpDown, ChevronRight, CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ClassroomGrading } from "./classroom";
 import { ClassroomByGroupId } from "./classroomByGroupId";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export interface ClassroomByGroupIdProps {
   groupId: number;
@@ -65,7 +66,7 @@ export function Main() {
 
   return (
     <header className="flex flex-col">
-      <div className="w-full flex gap-2 transition-all duration-500 ease-in-out justify-between">
+      <div className="w-full items-center flex gap-2 transition-all duration-500 ease-in-out justify-between">
         <div className="mt-4 w-auto flex p-2 bg-slate-100 rounded-tr-full overflow-hidden rounded-br-full relative">
           <div className="flex items-center">
             <button
@@ -91,6 +92,22 @@ export function Main() {
               <ChevronRight />
             </div>
           )}
+        </div>
+        <div className="px-5 flex gap-4">
+          <Link
+            href="/pages/academic/grading/upLevel"
+            className="px-10 bg-blue-400 flex h-fit items-center justify-center py-1.5 text-white rounded-md hover:bg-blue-600 gap-2"
+          >
+            <ArrowUpDown className="w-5 h-5" />
+            ปรับเลื่อนชั้น
+          </Link>
+          <Link
+            href="/pages/academic/FailedStudent"
+            className="px-10 bg-white border-2 h-fit  border-red-500 hover:bg-red-400 hover:text-white flex items-center justify-center py-1 text-red-500 rounded-md  gap-2"
+          >
+            <CircleX className="w-5 h-5 " />
+            นักเรียนที่ไม่ผ่านเกณฑ์
+          </Link>
         </div>
       </div>
 

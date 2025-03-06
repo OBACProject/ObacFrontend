@@ -17,7 +17,6 @@ export async function login(formData: FormData) {
       throw new Error("Login failed. Please check your credentials.");
     }
     const token = res.data.data.token;
-    console.log(token);
     if (!token) {
       throw new Error("No token returned from server.");
     }
@@ -25,9 +24,7 @@ export async function login(formData: FormData) {
       token,
       new TextEncoder().encode(secretKey)
     );
-    console.log(payload);
     const decodedPayload = JSON.parse(new TextDecoder().decode(payload));
-    console.log(decodedPayload);
     const role = decodedPayload.Role;
     const name = decodedPayload.Name;
     const userId = decodedPayload.UserID;
@@ -57,7 +54,6 @@ export async function login(formData: FormData) {
 
 export async function logout() {
   try {
-    console.log("logout");
     // Clear token and role from cookies
     Cookies.remove("role");
     Cookies.remove("name");

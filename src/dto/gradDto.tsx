@@ -81,9 +81,11 @@ export interface GetGropGradeAboveModel {
   class: string;
   facultyName: string;
   programName: string;
+  programId:number
   term: string;
   year: number;
   student: Student[];
+  level:number;
 }
 export interface GetGropGradeBelowModel {
   studentId: number;

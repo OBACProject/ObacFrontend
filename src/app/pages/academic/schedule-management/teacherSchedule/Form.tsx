@@ -3,9 +3,10 @@ import { fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
-import { PlusCircle } from "lucide-react";
+import { GraduationCap, PlusCircle } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
+import AddTeacherSchedulePopUp from "./AddTeacherSchedulePopUp";
 type Props = {
   term: string;
   year: string;
@@ -39,6 +40,7 @@ const getSchedule = async (teacherID: string, term: string, year: string) => {
 export default function Form({ term, year, teacherID }: Props) {
   const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
   const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
+  const [scheduleBtn ,setschduleBtn] = useState<boolean>(false)
   useEffect(() => {
     getSchedule(teacherID, term, year).then((d: any) => {
       setSchedules(d);
@@ -51,7 +53,8 @@ export default function Form({ term, year, teacherID }: Props) {
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
-        <h1 className="px-10 text-xl py-1 bg-gray-700 text-white rounded-3xl">
+        <h1 className="px-10 text-xl py-2 bg-pink-500 text-white flex gap-2 items-center rounded-3xl">
+          <GraduationCap className="h-8 w-8"/>
           ตารางสอนอาจารย์
         </h1>
       </div>
@@ -79,7 +82,7 @@ export default function Form({ term, year, teacherID }: Props) {
         </div>
         <div className="">
           {" "}
-          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl">
+          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl" onClick={()=>setschduleBtn(true)}>
             <PlusCircle className="w-5 h-5 text-white  " />
             เพิ่มตารางเรียน
           </button>
@@ -164,6 +167,15 @@ export default function Form({ term, year, teacherID }: Props) {
           ))}
         </div>
       ))} */}
+      {scheduleBtn && (
+        <AddTeacherSchedulePopUp
+        term={term}
+        year={year}
+        teacherId={Number(teacherID)}
+        teacherName={`${teacherData?.thaiName} ${teacherData?.thaiLastName}`}
+        onClosePopUp={setschduleBtn}
+        />
+      )}
     </div>
   );
 }

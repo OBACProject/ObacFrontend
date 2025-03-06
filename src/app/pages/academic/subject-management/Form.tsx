@@ -1,8 +1,15 @@
-import { fetchGetAllSubject } from "@/api/subject/subjectAPI";
-import { Pencil, PlusCircle, X } from "lucide-react";
+import {
+  fetchAddSubject,
+  fetchGetAllSubject,
+  fetchUpdateSubject,
+} from "@/api/subject/subjectAPI";
+import { LibraryBig, Pencil, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GetAllSubject } from "@/dto/subjectDto";
+import { fetchGetAllProgram } from "@/api/program/programAPI";
+import { GetAllProgram } from "@/dto/programDto";
+import Select, { SingleValue } from "react-select";
 
 const getAllSubject = async () => {
   try {
@@ -16,15 +23,21 @@ const getAllSubject = async () => {
 export default function Form() {
   const [addSubjectCode, setAddSubjectCode] = useState<string | null>(null);
   const [addSubjectName, setAddSubjectName] = useState<string | null>(null);
+  const [addProgramId, setAddProgramId] = useState<number | null>(null);
+  const [addTerm, setAddTerm] = useState<string | null>(null);
+  const [addCredits, setCredits] = useState<number>(0);
+  const [addIsActive, setIsActive] = useState<boolean>(false);
+
   const [editSubjectCode, setEditSubjectCode] = useState<string | null>(null);
   const [editSubjectName, setEditSubjectName] = useState<string | null>(null);
+  const [editCreditSubject, setEditCredisSubject] = useState<number>(0);
+  const [editSubjectStatus, setEditSubjectStatus] = useState<boolean>(false);
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   useEffect(() => {
     getAllSubject().then((d) => {
       setSubject(d);
     });
   }, []);
-  console.log(subjects);
 
   const [getEditSubjectId, setGetEditIdSubject] = useState<number>(0);
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
@@ -36,23 +49,59 @@ export default function Form() {
 
   const [triggerEditSubject, setTriggerEditSubject] = useState<boolean>(false);
 
-  const getAddSubjectProps = (subjectName: string, subjectCode: string) => {
+  const getAddSubjectProps = (
+    subjectName: string,
+    subjectCode: string,
+    term: string,
+    programId: number,
+    credits: number,
+    isActive: boolean
+  ) => {
     setAddSubjectName(subjectName);
     setAddSubjectCode(subjectCode);
+    setAddProgramId(programId);
+    setAddTerm(term);
+    setCredits(credits);
+    setIsActive(isActive);
+    console.log("get", {
+      subjectName,
+      subjectCode,
+      term,
+      programId,
+      credits,
+      isActive,
+    });
     setTriggerAddSubject(true);
   };
   const AddSubject = async () => {
-    // const response = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ addSubjectCode, addSubjectName }),
-    //   }
-    // );
-    toast.success("เพิ่มวิชาสำเร็จ");
+    try {
+      if (addSubjectCode && addSubjectName && addTerm && addProgramId) {
+        const response = await fetchAddSubject(
+          addSubjectCode,
+          addSubjectName,
+          addCredits,
+          addTerm,
+          addProgramId,
+          addIsActive
+        );
+        if (response) {
+          toast.success("เพิ่มวิชาสำเร็จ");
+          window.location.reload();
+        } else {
+          toast.error("เพิ่มวิชาไม่สำเร็จ");
+        }
+      }
+    } catch (err) {
+      toast.error("เพิ่มวิชาไม่สำเร็จ");
+    }
+    console.log("api", {
+      addSubjectCode,
+      addSubjectName,
+      addTerm,
+      addProgramId,
+      addCredits,
+      addIsActive,
+    });
   };
   useEffect(() => {
     if (triggerAddSubject) {
@@ -61,23 +110,43 @@ export default function Form() {
     setTriggerAddSubject(false);
   }, [triggerAddSubject]);
 
-  const getEditSubjectProps = (subjectName: string, subjectCode: string) => {
+  const getEditSubjectProps = (
+    id: number,
+    subjectName: string,
+    subjectCode: string,
+    subjectCredits: number,
+    getIsActive: boolean
+  ) => {
+    setGetEditIdSubject(id);
     setEditSubjectName(subjectName);
     setEditSubjectCode(subjectCode);
+    setEditCredisSubject(subjectCredits);
+    setEditSubjectStatus(getIsActive);
     setTriggerEditSubject(true);
   };
   const EditSubject = async () => {
-    // const response = await fetch(
-    //   `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ addSubjectCode, addSubjectName }),
-    //   }
-    // );
-    toast.success("แก้ไขวิชาสำเร็จ");
+    try {
+      if (editSubjectCode && editSubjectName) {
+        const isUpdated = await fetchUpdateSubject(
+          getEditSubjectId,
+          editSubjectCode,
+          editSubjectName,
+          editCreditSubject,
+          editSubjectStatus
+        );
+        if (isUpdated) {
+          toast.success("แก้ไขวิชาสำเร็จ");
+          setTimeout(() => {
+            1000;
+          });
+          window.location.reload();
+        } else {
+          toast.error("แก้ไขไม่สำเร็จ");
+        }
+      }
+    } catch (err) {
+      toast.error("ผิดพลาด");
+    }
   };
 
   useEffect(() => {
@@ -87,78 +156,89 @@ export default function Form() {
     setTriggerEditSubject(false);
   }, [triggerEditSubject]);
 
-  const getAndDelete = (id: number) => {
-    console.log("test");
-    console.log(id);
-  };
+  const getAndDelete = (id: number) => {};
 
   return (
     <div className="w-full">
-      <div className="flex py-5 justify-between">
-        <div></div>
-        <h1 className="px-10 py-1 rounded-3xl text-lg w-fit bg-gray-600 text-white">
+      <div className="flex py-3 justify-center">
+        <h1 className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-sky-500 text-white">
+          <LibraryBig className="h-8 w-8" />
           ระบบจัดการรายวิชา
         </h1>
-        <div className="px-5 flex gap-2">
-          <button
-            className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-            onClick={() => setAddSubjectPopUp(true)}
-          >
-            <PlusCircle className="w-5 h-5 text-white  " />
-            เพิ่มวิชา
-          </button>
-        </div>
+      </div>
+      <div className="px-10 py-2 gap-2">
+        <button
+          className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+          onClick={() => setAddSubjectPopUp(true)}
+        >
+          <PlusCircle className="w-5 h-5 text-white  " />
+          เพิ่มวิชาและหลักสูตร
+        </button>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_30%_35%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
+        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
           <div className="text-center text-black">ลำดับ</div>
           <div className="text-center">รหัสวิชา</div>
           <div className="text-center">ชื่อวิชา</div>
+          <div className="text-center">หน่วยกิต</div>
           <div className="text-center">สถานะ</div>
           <div className="text-center">Action</div>
         </div>
-        {subjects?.map((item: GetAllSubject, index) => (
-          <div
-            key={item.id}
-            className={` ${
-              index % 2 == 0 ? "bg-white" : "bg-gray-100"
-            } grid grid-cols-[5%_30%_35%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
-          >
-            <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
-              {index + 1}.
-            </div>
-            <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
-              <p className="line-clamp-1">{item.subjectCode}</p>
-            </div>
-            <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
-              <p className="line-clamp-1">{item.subjectName}</p>
-            </div>
-            <div className="text-center flex items-center w-full justify-center py-1 border-r ">
-              {item.isActive ? (
-                <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
-                  เปิดสอน
-                </p>
-              ) : (
-                <p className="text-red-500 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
-                  ปิดสอน
-                </p>
-              )}
-            </div>
-            <div className=" flex items-center justify-center gap-2 py-1">
-              <button
-                className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-200 bg-white-400 border border-gray-400 shadow-md  bg-white"
-                onClick={() => {
-                  setEditSubjectPopUp(true);
-                  setGetEditIdSubject(item.id);
-                  setGetEditSubjectCode(item.subjectCode);
-                  setGetEditSubjectName(item.subjectName);
-                }}
+        {subjects.length > 0 ? (
+          <div>
+            {subjects?.map((item: GetAllSubject, index) => (
+              <div
+                key={item.id}
+                className={` ${
+                  index % 2 == 0 ? "bg-white" : "bg-gray-100"
+                } grid grid-cols-[5%_20%_35%_10%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
               >
-                <Pencil className="w-5 h-5 " />
-              </button>
-            </div>
+                <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
+                  {index + 1}.
+                </div>
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
+                  <p className="line-clamp-1">{item.subjectCode}</p>
+                </div>
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
+                  <p className="line-clamp-1">{item.subjectName}</p>
+                </div>
+                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+                  <p className="line-clamp-1">{item.credits}</p>
+                </div>
+                <div className="text-center flex items-center w-full justify-center py-1 border-r ">
+                  {item.isActive ? (
+                    <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
+                      ใช้งาน
+                    </p>
+                  ) : (
+                    <p className="text-red-500 font-thin lg:text-[16px] line-clamp-1 text-[14px]]">
+                      ไม่ใช้งาน
+                    </p>
+                  )}
+                </div>
+                <div className=" flex items-center justify-center gap-2 py-1">
+                  <button
+                    className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-200 bg-white-400 border border-gray-400 shadow-md  bg-white"
+                    onClick={() => {
+                      setEditSubjectPopUp(true);
+                      setGetEditIdSubject(item.id);
+                      setGetEditSubjectCode(item.subjectCode);
+                      setGetEditSubjectName(item.subjectName);
+                      setEditCredisSubject(item.credits);
+                      setEditSubjectStatus(item.isActive);
+                    }}
+                  >
+                    <Pencil className="w-5 h-5 " />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <div className="w-full border-2 border-t-0 border-dashed border-gray-300 grid place-items-center rounded-md  py-10 ">
+            <p className="text-2xl  text-gray-600">ไม่มีข้อมูล</p>
+          </div>
+        )}
       </div>
       {addSubject_popup && (
         <AddSubjectPopUp
@@ -174,6 +254,8 @@ export default function Form() {
           ID={getEditSubjectId}
           SubjectCode={getEditSubjectCode}
           SubjectName={getEditSubjectName}
+          SubjectCredits={editCreditSubject}
+          isActive={editSubjectStatus}
         />
       )}
     </div>
@@ -182,18 +264,47 @@ export default function Form() {
 
 type AddPopUpProps = {
   onClosePopUp: (value: boolean) => void;
-  onSave: (name: string, id: string) => void;
+  onSave: (
+    name: string,
+    id: string,
+    term: string,
+    programID: number,
+    credits: number,
+    isActive: boolean
+  ) => void;
 };
 
 const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
   const [subjectName, setSubjectName] = useState<string>("");
   const [subjectCode, setSubjectCode] = useState<string>("");
+  const [term, setTerm] = useState<string>("");
+  const [programID, setProgramID] = useState<number | null>(null);
+  const [credits, setCredits] = useState<number>(0);
+  const [isActive, setActive] = useState<boolean>(false);
+  const [programs, setPrograms] = useState<GetAllProgram[]>([]);
+  const [checked, setChecked] = useState(false);
 
+  useEffect(() => {
+    fetchGetAllProgram().then((item: GetAllProgram[]) => {
+      setPrograms(item);
+    });
+  }, []);
   const Save = () => {
-    if (subjectName && subjectCode) {
-      onSave(subjectName, subjectCode);
+    if (subjectName && subjectCode && programID) {
+      onSave(subjectName, subjectCode, term, programID, credits, isActive);
       onClosePopUp(false);
     }
+  };
+
+  const programOptions = programs.map((item) => ({
+    value: item.programId,
+    label: `${item.facultyName} : ${item.programName}`,
+  }));
+  const handleProgramChange = (
+    selectedOption: { value: number; label: string } | null
+  ) => {
+    setProgramID(selectedOption ? selectedOption.value : null);
+    setChecked(false);
   };
   return (
     <div
@@ -208,14 +319,8 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           <p className="py-2 text-xl font-semibold text-gray-800">
             เพิ่มวิชาเรียน
           </p>
-          {/* <button
-            className="px-5  rounded-sm   hover:bg-red-300"
-            onClick={() => onClosePopUp(false)}
-          >
-            <X className="text-white w-5 h-5" />
-          </button> */}
         </div>
-        <div className="w-full px-10 py-5 grid place-items-center gap-4">
+        <div className="w-full px-10 py-5 grid place-items-start gap-4">
           <div className="flex items-center gap-2">
             <label>รหัสวิชา : </label>
             <input
@@ -233,6 +338,74 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
               onChange={(e) => setSubjectName(e.target.value)}
               value={subjectName}
             />
+          </div>
+        </div>
+        <div className="flex items-center justify-start px-10 gap-3">
+          <div className="flex items-center gap-2 ">
+            <label>หน่วยกิต :</label>
+            <input
+              type="number"
+              className="w-[50px] border rounded-sm px-2"
+              onChange={(e) => setCredits(Number(e.target.value))}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <label>ภาคเรียน :</label>
+            <select
+              className=" px-2 py-1 border border-gray-300 rounded-sm"
+              onChange={(e) => setTerm(e.target.value)}
+              value={term}
+            >
+              <option value="">เลือก</option>
+              <option value="1">ปี 1 เทอม 1</option>
+              <option value="2">ปี 1 เทอม 2</option>
+              <option value="3">ปี 2 เทอม 1</option>
+              <option value="4">ปี 2 เทอม 2</option>
+              <option value="5">ปี 3 เทอม 1</option>
+              <option value="6">ปี 3 เทอม 2</option>
+            </select>
+          </div>
+        </div>
+        <div className="w-full px-10 py-5 grid place-items-start gap-8">
+          <div className="flex items-center gap-2">
+            <label>สถานะใช้งาน :</label>
+            <button
+              onClick={() => setActive(!isActive)}
+              className={`relative w-[46px] h-6 flex items-center rounded-full py-1 px-1transition-all duration-300 ${
+                isActive ? "bg-green-500" : "bg-gray-300"
+              }`}
+            >
+              <div
+                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300 ${
+                  isActive ? "translate-x-6" : "translate-x-0.5"
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+        <div className="w-full px-10 py-2 flex justify-start items-center gap-8">
+          <Select
+            options={programOptions}
+            value={
+              programOptions.find((option) => option.value === programID) ||
+              null
+            }
+            onChange={handleProgramChange}
+            isSearchable
+            placeholder="หลักสูตร"
+          />
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="checkbox"
+              checked={checked}
+              onChange={() => {
+                setProgramID(99);
+                setChecked(!checked);
+              }}
+              className="w-5 h-5 accent-blue-500"
+            />
+            <label>ทุกหลักสูตร</label>
           </div>
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
@@ -256,11 +429,19 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
 
 type EditPopUpProps = {
   onClosePopUp: (value: boolean) => void;
-  onSave: (name: string, id: string) => void;
+  onSave: (
+    id: number,
+    name: string,
+    code: string,
+    credits: number,
+    isActive: boolean
+  ) => void;
   onDelete: (Id: number) => void;
   ID: number;
   SubjectName: string;
   SubjectCode: string;
+  SubjectCredits: number;
+  isActive: boolean;
 };
 
 const EditSubjectPopUp = ({
@@ -270,13 +451,23 @@ const EditSubjectPopUp = ({
   ID,
   SubjectName,
   SubjectCode,
+  SubjectCredits,
+  isActive,
 }: EditPopUpProps) => {
   const [subjectName, setSubjectName] = useState<string>(SubjectName);
   const [subjectCode, setSubjectCode] = useState<string>(SubjectCode);
+  const [subjectCredits, setSubjectCredits] = useState<number>(SubjectCredits);
+  const [editIsActive, setIsActive] = useState<boolean>(isActive);
 
   const Save = () => {
     if (subjectName && subjectCode) {
-      onSave(subjectName, subjectCode);
+      console.log(">>>>>", {
+        ID,
+        subjectName,
+        subjectCode,
+        subjectCredits,
+      });
+      onSave(ID, subjectName, subjectCode, subjectCredits, editIsActive);
       onClosePopUp(false);
     }
   };
@@ -312,6 +503,32 @@ const EditSubjectPopUp = ({
               onChange={(e) => setSubjectName(e.target.value)}
               value={subjectName}
             />
+          </div>
+          <div className="flex w-full justify-center items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label>หน่วยกิต : </label>
+              <input
+                type="number"
+                className="w-[60px] px-5 py-1 border border-gray-200 rounded-sm"
+                onChange={(e) => setSubjectCredits(Number(e.target.value))}
+                value={subjectCredits}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label>สถานะ</label>
+              <button
+                onClick={() => setIsActive(!editIsActive)}
+                className={`relative w-[46px] h-6 flex items-center rounded-full py-1 px-1transition-all duration-300 ${
+                  editIsActive ? "bg-green-500" : "bg-gray-300"
+                }`}
+              >
+                <div
+                  className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300 ${
+                    editIsActive ? "translate-x-6" : "translate-x-0.5"
+                  }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">

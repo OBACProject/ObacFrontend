@@ -5,7 +5,7 @@ import { fetchGetAllStudent } from "@/api/student/studentApi";
 import { GetAllStudent } from "@/dto/studentDto";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
-import { Search } from "lucide-react";
+import { BookUser, Loader2, Search } from "lucide-react";
 export interface ClassroomByGroupIdProps {
   groupId: number;
   term: string;
@@ -22,16 +22,23 @@ const getStudentList = async () => {
 
 export default function Form() {
   const [studentListName, setStudentListName] = useState<GetAllStudent[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("classroom");
+  const [selectedClassroomData, setSelectedClassroomData] =
+    useState<ClassroomByGroupIdProps>();
+  const router = useRouter();
+  const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
+
   useEffect(() => {
     getStudentList().then((item: any) => {
       setStudentListName(item);
     });
   }, []);
+
   const [selectedStudent, setSelectedStudent] = useState<{
     value: number;
     label: string;
   } | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("classroom");
+
   const handleTab = (tab: string) => {
     if (activeTab === tab) return;
     setActiveTab(tab);
@@ -39,10 +46,7 @@ export default function Form() {
       setSelectedClassroomData(undefined);
     }
   };
-  const [selectedClassroomData, setSelectedClassroomData] =
-    useState<ClassroomByGroupIdProps>();
 
-  const router = useRouter();
   const handleSelectedClassRoomDataByGroupId = (
     data: ClassroomByGroupIdProps
   ) => {
@@ -55,10 +59,10 @@ export default function Form() {
     setSelectedStudent(option);
   };
 
-  const onSearch = ()=>{
-      router.push(`/pages/academic/student-details/${selectedStudent?.value}`);
-    
-  }
+  const onSearch = () => {
+    setSearchTrigger(true);
+    router.push(`/pages/academic/student-details/${selectedStudent?.value}`);
+  };
 
   const studentNameOptions = studentListName.map((item) => ({
     value: item.studentId,
@@ -67,16 +71,33 @@ export default function Form() {
 
   return (
     <div className="py-5 w-full">
-      <div className="flex justify-between items-center">
-        <h1 className="px-10 py-2 rounded-3xl translate-x-16 text-xl w-fit bg-gray-600 text-white">
+      <div className="flex justify-center items-center">
+        <div className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-blue-800 text-white">
+          <BookUser className="w-8 h-8"/>
           รายชื่อและข้อมูลนักเรียน
-        </h1>
-        <div className=" flex items-center gap-4  px-10">
-          <div className="flex w-[350px] gap-1 items-center">
-            <button className="bg-gray-400  py-1.5 enabled:bg-gray-500 enabled:hover:bg-gray-700 flex gap-2 items-center text-white rounded-md px-4" onClick={()=>{ onSearch()}} disabled={!selectedStudent}> 
-              <Search className="w-5 h-5"/>
-              ค้นหา
-            </button>
+        </div>
+      </div>
+      <div className="pt-2 grid place-items-start">
+        <div className=" flex justify-between w-full items-center gap-4 ">
+          <div className="flex w-[350px] gap-1 items-center px-5">
+            {searchTrigger ? (
+              <button className=" py-1.5 bg-blue-400 flex gap-2 items-center text-white rounded-md px-4">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                ค้นหา
+              </button>
+            ) : (
+              <button
+                className="bg-gray-400  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
+                onClick={() => {
+                  onSearch();
+                }}
+                disabled={!selectedStudent}
+              >
+                <Search className="w-5 h-5" />
+                ค้นหา
+              </button>
+            )}
+
             <Select
               options={studentNameOptions}
               value={selectedStudent}
@@ -86,15 +107,18 @@ export default function Form() {
               styles={{
                 container: (provided) => ({
                   ...provided,
-                  width: "100%", 
+                  width: "100%",
                 }),
               }}
             />
           </div>
-          <div>
-            <button className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600" onClick={()=>{
-              router.push("/pages/academic/student-info-list/studentList")
-            }}>
+          <div className="px-5">
+            <button
+              className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600"
+              onClick={() => {
+                router.push("/pages/academic/student-info-list/studentList");
+              }}
+            >
               รายชื่อนักเรียนทั้งหมด
             </button>
           </div>

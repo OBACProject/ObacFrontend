@@ -2,13 +2,12 @@
 
 import React from "react";
 import { useState, useEffect } from "react";
-import { fetchGetTeacherByTeacherIdAsync, fetchTeacherUser } from "@/api/teacher/teacherAPI";
+import {  fetchTeacherUser } from "@/api/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
 
 const getTeachData = async () => {
   try {
     const teacher = await fetchTeacherUser();
-    console.log(teacher);
     return teacher;
   } catch (err) {
     console.error("Failed to fetch teacher by ID:", err);
@@ -22,8 +21,6 @@ export default function ProfileForm() {
       setTeacher(items);
     });
   }, []);
-
-  console.log(teachers);
   return (
     <div className="text-xl font-sans">
       <div className="grid gap-4 px-5">

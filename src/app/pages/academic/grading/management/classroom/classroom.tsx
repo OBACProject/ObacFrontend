@@ -127,7 +127,6 @@ export function ClassroomGrading(props: {
       return;
     } else {
       if (item) {
-        console.log(item);
         // props.handleTab("classroomByGroupId");
         props.handleSelectedData({
           groupId: parseInt(item.groupId),
@@ -139,7 +138,6 @@ export function ClassroomGrading(props: {
         alert("ไม่พบข้อมูล");
       }
     }
-    console.log("Clicked Group ID:", item.groupId);
   };
 
   useEffect(() => {
@@ -148,7 +146,6 @@ export function ClassroomGrading(props: {
 
       // set for table data
       const rawData = await getRawProgramViewData();
-      console.log("rawData", rawData);
 
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({

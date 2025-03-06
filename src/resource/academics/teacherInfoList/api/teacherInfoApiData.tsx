@@ -1,6 +1,12 @@
-// type TeacherInfoData = {
-
-// }
+type TeacherInfoData = {
+  runningNumber: number;
+  teacherId: string;
+  teacherName: string;
+  teacherSurname: string;
+  programs: string;
+  email: string;
+  phoneNumber: string;
+};
 
 // import api from "@/lib/apiCentralized";
 

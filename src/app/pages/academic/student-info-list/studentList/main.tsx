@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { StudentListPage } from "./studentList";
+import { UserRound } from "lucide-react";
 
 interface individualStudentInfoData {
   studentId: number;
@@ -25,9 +26,10 @@ export default function Main() {
     setActiveTab("individualStudentInfo");
   };
   return (
-    <div className="py-5 w-full">
-      <div className="flex justify-center py-5 items-center">
-        <h1 className="px-10 w-fit text-white bg-gray-700 rounded-3xl py-1 text-lg">
+    <div className="py-2 w-full">
+      <div className="flex justify-center py-3 items-center">
+        <h1 className="px-10 w-fit text-white flex items-center gap-2 bg-blue-800 rounded-3xl py-2 text-xl">
+          <UserRound className="h-8 w-8"/>
           รายชื่อนักเรียนทั้งหมด
         </h1>
       </div>

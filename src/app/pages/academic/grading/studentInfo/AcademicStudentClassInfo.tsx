@@ -174,6 +174,9 @@ export function AcademicStudentInfo(props: {
           }
         }
         setOnEdit(!onEdit);
+        toast.success("บันทึกคะแนนสำเร็จ");
+        setTimeout(() => {}, 1000);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -303,16 +306,7 @@ export function AcademicStudentInfo(props: {
           />
         </div>
         <div className="w-2/3 flex gap-6 justify-end">
-          <button
-            className="bg-green-400 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-green-600 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
-            onClick={() => setVerifyGradPopUp(true)}
-          >
-            ยืนยันการตรวจสอบคะแนน{" "}
-            <ClipboardCheck
-              style={{ width: "1.5rem", height: "1.8rem" }}
-              className="text-white"
-            />
-          </button>
+         
 
           {onEdit ? (
             <button
@@ -460,7 +454,17 @@ export function AcademicStudentInfo(props: {
             </div>
           </div>
         ))}
-        <div className="my-5 w-full grid place-items-end  ">
+        <div className="my-5 w-full flex justify-between items-center  ">
+        <button
+            className="bg-teal-500 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-blue-700 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
+            onClick={() => setVerifyGradPopUp(true)}
+          >
+            ยืนยันการตรวจสอบคะแนน{" "}
+            <ClipboardCheck
+              style={{ width: "1.5rem", height: "1.8rem" }}
+              className="text-white"
+            />
+          </button>
           <button
             onClick={saveChanges}
             disabled={!onEdit}
