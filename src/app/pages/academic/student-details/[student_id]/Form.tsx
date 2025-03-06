@@ -26,7 +26,7 @@ const getStudentGroupData = async () => {
 
 const fetchStudentGrad = async (
   studentId: number,
-  term: number,
+  term: string,
   year: number
 ) => {
   try {
@@ -54,11 +54,11 @@ export default function Form({ studentId }: Props) {
   const [educateStatus, setEducateStatus] = useState<string>("");
   const [allGroup, setAllGroup] = useState<StudentGroup[]>([]);
   const [term, setTerm] = useState<string>("2");
-  const [year, setYear] = useState<number>(2024);
+  const [year, setYear] = useState<number>(2567);
   const [groupID, setGroupID] = useState<number>(0);
   const [promoteTrigger, setPromoteTrigger] = useState<boolean>(false);
   useEffect(() => {
-    fetchStudentGrad(studentId, 1, 2024).then((d) => {
+    fetchStudentGrad(studentId, term, year).then((d) => {
       setGrad(d);
     });
     fetchStudentData(studentId).then((d: any) => {
@@ -76,6 +76,9 @@ export default function Form({ studentId }: Props) {
   useEffect(() => {
     getStudentGroupData().then((d: StudentGroup[]) => {
       setAllGroup(d);
+    });
+    fetchStudentGrad(studentId, term, year).then((d) => {
+      setGrad(d);
     });
   }, [term, year]);
 

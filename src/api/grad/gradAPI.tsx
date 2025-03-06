@@ -38,7 +38,7 @@ export const fetchGetGradBySubjectId = async (
 
 export const fetchGetGradPerTermByStudentId = async (
   studentId: number,
-  term: number,
+  term: string,
   year: number
 ): Promise<GetGradPerTermByStudentIdDto[]> => {
   try {

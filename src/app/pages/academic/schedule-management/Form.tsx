@@ -112,9 +112,9 @@ export default function Form() {
           <button
             className={`px-10 py-1 ${
               !toggleMode
-                ? "bg-blue-500 text-white"
-                : "bg-white border-gray-300  shadow-md  border  text-blue-800 hover:bg-gray-200"
-            } duration-500 flex items-center  rounded-md`}
+                ? "bg-blue-500  text-white"
+                : "bg-white border-blue-500  border  text-blue-800 hover:bg-gray-200"
+            } duration-300 flex items-center  rounded-md`}
             onClick={() => {
               setToggleMode(false);
             }}
@@ -124,12 +124,12 @@ export default function Form() {
           <button
             className={`px-10 py-1 duration-500 ${
               !toggleMode
-                ? "bg-white border-gray-300  shadow-md shadow-gray-200  border  text-blue-800 hover:bg-gray-200"
+                ?  "bg-white border-blue-500  border   text-blue-800 hover:bg-gray-200"
                 : "bg-blue-500  text-white"
-            }   rounded-md`}
+            } duration-300 flex items-cente  rounded-md`}
             onClick={() => setToggleMode(true)}
           >
-            ครู
+            อาจารย์
           </button>
         </div>
         <button

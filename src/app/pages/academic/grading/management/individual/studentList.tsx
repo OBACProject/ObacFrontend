@@ -71,9 +71,9 @@ export function StudentListPage(props: {
 
   return (
     <>
-      <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
-        <div className="flex gap-12 mt-4">
-          <div className="flex mx-auto gap-6 w-full p-2 rounded-lg">
+      <header className="flex flex-col px-4 py-2 border-2 mt-4 rounded-lg">
+        <div className="flex gap-12">
+          <div className="flex mx-auto gap-6 w-full px-2 pt-2 rounded-lg">
             <div className="w-1/6">
               <Combobox
                 options={classLevels.map((classData) => ({
