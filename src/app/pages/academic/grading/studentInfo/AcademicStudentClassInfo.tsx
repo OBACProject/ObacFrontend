@@ -125,7 +125,7 @@ export function AcademicStudentInfo(props: {
 
       if (result.isConfirmed) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
+          `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
           {
             method: "PUT",
             headers: {
@@ -306,8 +306,6 @@ export function AcademicStudentInfo(props: {
           />
         </div>
         <div className="w-2/3 flex gap-6 justify-end">
-         
-
           {onEdit ? (
             <button
               className={`bg-red-500 duration-300 text-white h-fit text-center text-lg rounded-md hover:opacity-75 flex items-center justify-center gap-2 w-[120px] py-1 hover:rounded-sm `}
@@ -455,7 +453,7 @@ export function AcademicStudentInfo(props: {
           </div>
         ))}
         <div className="my-5 w-full flex justify-between items-center  ">
-        <button
+          <button
             className="bg-teal-500 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-blue-700 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
             onClick={() => setVerifyGradPopUp(true)}
           >
