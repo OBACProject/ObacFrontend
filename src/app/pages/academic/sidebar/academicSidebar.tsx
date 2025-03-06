@@ -40,31 +40,11 @@ export function AcademicSidebar({
     try {
       await logout();
       setUserName("");
-      Cookies.remove("token")
+      Cookies.remove("token");
       router.push("/pages/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }
-  };
-  const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
-  const [submenuTimeout, setSubmenuTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
-
-  const handleMouseEnter = (index: number) => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear any existing timeout
-    const timeout = setTimeout(() => {
-      setOpenSubMenu(index);
-    }, 200); // Delay before showing submenu
-    setSubmenuTimeout(timeout);
-  };
-
-  const handleMouseLeave = () => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear timeout before hiding
-    const timeout = setTimeout(() => {
-      setOpenSubMenu(null);
-    }, 200); // Delay before hiding submenu
-    setSubmenuTimeout(timeout);
   };
 
   return (

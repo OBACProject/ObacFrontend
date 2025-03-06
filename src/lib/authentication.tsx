@@ -12,7 +12,7 @@ export async function login(formData: FormData) {
       userName,
       password,
     });
-
+    console.log(res);
     if (res.status < 200 || res.status >= 300) {
       throw new Error("Login failed. Please check your credentials.");
     }
