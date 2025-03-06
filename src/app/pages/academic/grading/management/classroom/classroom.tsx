@@ -37,7 +37,7 @@ export function ClassroomGrading(props: {
     ปวส: ["1", "2"],
   };
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1;
+  const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 5 }, (_, i) =>
     (currentYear - i).toString()
   );
@@ -77,23 +77,6 @@ export function ClassroomGrading(props: {
       (item) => item.facultyName === selectedFaculty
     );
     return faculties[0]?.groupProgram.map((item) => item.programName) || [];
-  };
-  // get grade level from selected Program
-  const getGradeLevels = () => {
-    return levelGrade[selectedClassLevel];
-  };
-
-  const getRoom = (selectedGradeLevel: string) => {
-    const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
-      (item) => item.facultyName === selectedFaculty
-    );
-    const program = faculties[0]?.groupProgram.filter(
-      (item) => item.programName === selectedProgram
-    );
-    const group = program[0]?.group.filter((item) => {
-      return item.groupName[0] === selectedGradeLevel;
-    });
-    return group?.map((item) => item.groupName) || [];
   };
 
   //   console.log(studentColumnsData);
