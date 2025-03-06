@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { fetchGetAllProgram } from "@/api/program/programAPI";
 import { GetAllProgram } from "@/dto/programDto";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 
 const getAllSubject = async () => {
   try {
@@ -177,11 +177,21 @@ export default function Form() {
       </div>
       <div className="w-full rounded-sm px-10">
         <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border-2 border-gray-400  rounded-t-md">
-          <div className="text-center border-r-2 border-gray-400  py-2 text-black">ลำดับ</div>
-          <div className="text-center  border-r-2 border-gray-400  py-2">รหัสวิชา</div>
-          <div className="text-center border-r-2 border-gray-400  py-2">ชื่อวิชา</div>
-          <div className="text-center border-r-2 border-gray-400  py-2">หน่วยกิต</div>
-          <div className="text-center border-r-2 border-gray-400  py-2">สถานะ</div>
+          <div className="text-center border-r-2 border-gray-400  py-2 text-black">
+            ลำดับ
+          </div>
+          <div className="text-center  border-r-2 border-gray-400  py-2">
+            รหัสวิชา
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            ชื่อวิชา
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            หน่วยกิต
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            สถานะ
+          </div>
           <div className="text-center py-2">Action</div>
         </div>
         {subjects.length > 0 ? (
