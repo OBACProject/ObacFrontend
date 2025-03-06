@@ -42,7 +42,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
           <div className="flex items-center">
             <LabelText
               topic={"ชื่อ-นามสกุล"}
-              data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.lastName}`}
+              data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.thaiLastName}`}
             />
             <LabelText
               topic={"รหัสนักเรียน"}
