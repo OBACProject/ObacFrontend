@@ -13,7 +13,7 @@ export const fetchGetScheduleBysubjectId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export const fetchGetScheduleOfTeacherByTeacherID = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -72,7 +72,7 @@ export const fetchGetScheduleOfStudentGroupByGroupID = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -101,7 +101,7 @@ export const fetchGetScheduleOfStudentByStudentID = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -129,7 +129,7 @@ export const fetchCreateScheduleSubject = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/CreateScheduleSubjectAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/CreateScheduleSubjectAsync`,
       {
         method: "POST",
         headers: {
@@ -146,7 +146,9 @@ export const fetchCreateScheduleSubject = async (
     if (!response.ok) {
       return {
         success: false,
-        error: `Error: ${response.status} - ${response.statusText} | ${data.responseMessage || JSON.stringify(data)}`,
+        error: `Error: ${response.status} - ${response.statusText} | ${
+          data.responseMessage || JSON.stringify(data)
+        }`,
       };
     }
 
@@ -156,4 +158,3 @@ export const fetchCreateScheduleSubject = async (
     return { success: false, error: "Unexpected error occurred" };
   }
 };
-

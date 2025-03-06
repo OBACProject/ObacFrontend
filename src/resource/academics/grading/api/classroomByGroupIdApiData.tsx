@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export async function getClassroomByGroupId(
   groupId: number,
   term: string,
-  year: string
+  year: number
 ): Promise<ClassroomByGroupIdData> {
   try {
     const token = cookies().get("token")?.value;

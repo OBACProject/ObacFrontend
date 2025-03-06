@@ -15,7 +15,7 @@ export const fetchCreateStudentAsync = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/CreateStudent`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/CreateStudent`,
       {
         method: "POST",
         headers: {
@@ -38,7 +38,7 @@ export const fetchGetAllStudentGroup = async (): Promise<StudentGroup[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudentGroup`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudentGroup`,
       {
         method: "GET",
         headers: {
@@ -70,7 +70,7 @@ export const fetchStudentUser = async (): Promise<GetStudentUser> => {
     const userId = cookies().get("userId")?.value;
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByUserId?userId=${userId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentByUserId?userId=${userId}`,
       {
         method: "GET",
         headers: {
@@ -98,7 +98,7 @@ export const GetStudentListByGroupID = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentListByGroupID?groupid=${groupId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentListByGroupID?groupid=${groupId}`,
       {
         method: "GET",
         headers: {
@@ -124,7 +124,7 @@ export const fetchGetAllStudent = async (): Promise<GetAllStudent[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudent`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudent`,
       {
         method: "GET",
         headers: {
@@ -154,7 +154,7 @@ export const fetchGetStudentByStudentId = async (
     if (!token) throw new Error("Missing authentication token");
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByStudentID?studentId=${studentId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentByStudentID?studentId=${studentId}`,
       {
         method: "GET",
         headers: {
@@ -191,7 +191,7 @@ export const fetchGetStudentGroupsByTermYear = async (
     const token = cookies().get("token")?.value;
     if (!token) throw new Error("Missing authentication token");
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentGroupsByTermYear?term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGroupsByTermYear?term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {

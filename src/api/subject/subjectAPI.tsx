@@ -8,7 +8,7 @@ export const fetchGetSubjectBySubjectId = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetSubjectByIdAsync?id=${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetSubjectByIdAsync?id=${id}`,
       {
         method: "GET",
         headers: {
@@ -34,7 +34,7 @@ export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetAllSubjectAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetAllSubjectAsync`,
       {
         method: "GET",
         headers: {
@@ -65,7 +65,7 @@ export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/GetAllActiveSubjectAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetAllActiveSubjectAsync`,
       {
         method: "GET",
         headers: {
@@ -107,7 +107,7 @@ export const fetchAddSubject = async (
       return false;
     }
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/CreateSubject`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/CreateSubject`,
       {
         method: "POST",
         headers: {
@@ -115,8 +115,8 @@ export const fetchAddSubject = async (
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          subjectCode: addSubjectCode,  
-          subjectName: addSubjectName,  
+          subjectCode: addSubjectCode,
+          subjectName: addSubjectName,
           credits: credits,
           term: term,
           programId: programId,
@@ -155,7 +155,7 @@ export const fetchUpdateSubject = async (
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Subject/UpdateSubject`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/UpdateSubject`,
       {
         method: "PUT",
         headers: {
