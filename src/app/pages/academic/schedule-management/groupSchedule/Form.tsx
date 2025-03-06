@@ -56,9 +56,13 @@ export default function Form({ term, year, groupId }: Props) {
                   {item.class}.{item.groupName}
                 </p>
                 <p className="text-gray-600">|</p>
-                <p className="text-gray-600">จำนวนวิชาเรียน {item.totalSubject} วิชา</p>
+                <p className="text-gray-600">
+                  จำนวนวิชาเรียน {item.totalSubject} วิชา
+                </p>
                 <p className="text-gray-600">|</p>
-                <p className="text-gray-600">ทั้งหมด {item.totalCredit / 2} หน่วยกิต</p>
+                <p className="text-gray-600">
+                  ทั้งหมด {item.totalCredit / 2} หน่วยกิต
+                </p>
               </div>
               <div className="flex gap-2 text-gray-900">
                 <p>ภาคเรียนที่ {item.term}</p>

@@ -1,10 +1,10 @@
 import api from "./apiCentralized";
 import { compactVerify } from "jose";
 import Cookies from "js-cookie";
-const secretKey =
-  "0812113f5392b4d13d98837152805f7b232f60cacefa0a45081ff9f1ac97d5b6";
+const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY
 
 export async function login(formData: FormData) {
+  
   try {
     const userName = formData.get("userName") as string;
     const password = formData.get("password") as string;
@@ -13,6 +13,7 @@ export async function login(formData: FormData) {
       password,
     });
 
+    
     if (res.status < 200 || res.status >= 300) {
       throw new Error("Login failed. Please check your credentials.");
     }

@@ -20,7 +20,9 @@ export default function Main() {
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+    e
+  ) => {
     let newValue = parseFloat(e.target.value);
     if (isNaN(newValue)) return;
     if (newValue < 1) newValue = 1;
@@ -70,7 +72,7 @@ export default function Main() {
     <div className="py-5">
       <div className="w-full justify-center flex">
         <div className="px-10 rounded-3xl flex gap-2 items-center text-xl bg-red-600 text-white py-2 text-center w-fit">
-          <User className="w-8 h-8"/> นักเรียนที่ไม่ผ่านเกณฑ์
+          <User className="w-8 h-8" /> นักเรียนที่ไม่ผ่านเกณฑ์
         </div>
       </div>
 

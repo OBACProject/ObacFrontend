@@ -95,6 +95,9 @@ export function Main() {
       localStorage.removeItem("classInfoData");
     }
   };
+  const handleIsActive = () => {
+    setIsActive(!isActive);
+  };
 
   const fetchData = async () => {
     try {
@@ -125,7 +128,7 @@ export function Main() {
       console.error("Failed to fetch initial method data:", error);
     }
   };
-
+  console.log(isActive);
   const handleConfirm = async () => {
     if (gradingMode === "period" && (!startTime || !endTime)) {
       alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนน");
@@ -144,7 +147,7 @@ export function Main() {
       endDate: gradingMode === "period" ? endTime : null,
       isActive: isActive,
     };
-
+    console.log(isActive);
     try {
       await fetchPutMethodData(methodData);
       setIsPopupOpen(false);
@@ -259,9 +262,10 @@ export function Main() {
                 <input
                   type="checkbox"
                   checked={gradingMode === "manual"}
-                  onChange={() =>
-                    setGradingMode(gradingMode === "manual" ? null : "manual")
-                  }
+                  onChange={() => {
+                    setGradingMode(gradingMode === "manual" ? null : "manual");
+                    handleIsActive();
+                  }}
                   className="sr-only peer"
                 />
                 <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"></div>
@@ -277,9 +281,10 @@ export function Main() {
                 <input
                   type="checkbox"
                   checked={gradingMode === "period"}
-                  onChange={() =>
-                    setGradingMode(gradingMode === "period" ? null : "period")
-                  }
+                  onChange={() => {
+                    setGradingMode(gradingMode === "period" ? null : "period");
+                    handleIsActive();
+                  }}
                   className="sr-only peer"
                 />
                 <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"></div>

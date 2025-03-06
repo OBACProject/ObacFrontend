@@ -1,5 +1,4 @@
 import { GetAllStudentTableDto, StudentTranscriptData } from "@/dto/studentDto";
-import { faker } from "@faker-js/faker";
 import {
   GetAllStudentDataApi,
   GetStudentByIdDataApi,

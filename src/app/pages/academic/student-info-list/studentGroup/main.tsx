@@ -46,9 +46,7 @@ export default function Main({ groupId }: Props) {
       </div>
       <div className="w-full px-5 ">
         <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  rounded-t-md">
-          <div className="text-center py-2 border-r border-gray-400">
-            ลำดับ
-          </div>
+          <div className="text-center py-2 border-r border-gray-400">ลำดับ</div>
           <div className="text-center py-2 border-r border-gray-400">
             รหัสนักเรียน
           </div>
