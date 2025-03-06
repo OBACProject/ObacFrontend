@@ -111,7 +111,6 @@ export function AcademicStudentInfo(props: {
     studentCode: item.studentCode,
     name: `${item.firstName} ${item.lastName}`,
   }));
-
   const CompleteGrade = async () => {
     try {
       const result = await Swal.fire({
@@ -228,13 +227,13 @@ export function AcademicStudentInfo(props: {
           <Badge variant={"outline"} className="text-xl">
             วิชา :
             <span className="font-semibold ml-2">
-              {gradDataFilter[0]?.subjectName}
+              {subjectByGroupId?.subjectName}
             </span>
           </Badge>
           <Badge variant={"outline"} className="ml-4 text-xl">
             รหัสวิชา :
             <span className="font-semibold ml-2">
-              {subjectByGroupId?.subjectCode ?? "......"}
+              {subjectByGroupId?.subjectCode}
             </span>
           </Badge>
         </div>
