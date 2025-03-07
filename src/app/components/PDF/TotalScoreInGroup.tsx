@@ -3,12 +3,20 @@ import jsPDF from "jspdf";
 import THSarabunFont from "../font/THSarabunFont";
 import THSarabunFontBold from "../font/THSarabunBold";
 import autoTable from "jspdf-autotable";
+import {
+  GeneralData,
+  StudentList,
+} from "@/app/pages/academic/grading/management/classroom/classroomByGroupId";
 
 // max 280 y
 // max 205 x
 type Data = {};
+export interface DataList {
+  generalData: GeneralData;
+  studentList: StudentList[];
+}
 
-export default function TotalScoreInGroup() {
+export default function TotalScoreInGroup(data: DataList) {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -22,15 +30,47 @@ export default function TotalScoreInGroup() {
 
   doc.setFont("THSarabun");
 
-  doc.text("วันที่พิมพ์ 04 ตุลาคม 2567", 10, 15);
+  const dateTime = new Date();
+  const thaiMonths = [
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม",
+  ];
+
+  // Format date to match "04 ตุลาคม 2567"
+  const day = dateTime.getDate().toString().padStart(2, "0");
+  const month = thaiMonths[dateTime.getMonth()];
+  const year = dateTime.getFullYear() + 543;
+
+  const formattedDate = `วันที่พิมพ์ ${day} ${month} ${year}`;
+
+  doc.text(formattedDate, 10, 15);
 
   doc.setFont("THSarabunBold");
   doc.text("วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ", 100, 15);
   doc.text(
-    "สรุปเกรดนักศึกษา ภาคเรียนที่ 1 ปีการศึกษา 2567 ห้อง xxx-xxx",
+    `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.generalData.term} ปีการศึกษา ${year} ห้อง ${data.generalData.class}.${data.generalData.groupName}`,
     10,
     25
   );
+  const subjectNames = Object.keys(data.studentList[0].subjects);
+  const header = [
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    `   ชื่อ - นามสกุล   `,
+    ...subjectNames.map((_, index) => `${index + 1}`), // Numbers for each subject
+    "เฉลี่ย",
+    "เฉลี่ยสะสม",
+  ];
 
   autoTable(doc, {
     startY: 28,
@@ -90,26 +130,26 @@ export default function TotalScoreInGroup() {
   });
 
   let y2 = doc.lastAutoTable.finalY;
-  for (let i = 0; i < 55; i++) {
+  // Loop through studentList dynamically
+  data.studentList.forEach((student, index) => {
+    const { studentCode, name, gpa, gpax, subjects } = student;
+    const subjectGrades = Object.values(subjects);
+
+    const subjectsWithGrades = [
+      ...subjectGrades.map((grade) => (grade ? grade : "-")),
+      ...Array(10 - subjectGrades.length).fill("-"),
+    ];
+
     autoTable(doc, {
       startY: y2,
       body: [
         [
-          `${i + 1}`,
-          "1234567",
-          `นาย ภัทรจาริน นภากาญจน์`,
-          "1",
-          "2",
-          "3",
-          "4",
-          "ข.ว.",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "3.11",
-          "3.11",
+          `${index + 1}`,
+          studentCode,
+          name,
+          ...subjectsWithGrades.slice(0, 10),
+          gpa.toFixed(2),
+          gpax.toFixed(2),
         ],
       ],
       alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -152,12 +192,14 @@ export default function TotalScoreInGroup() {
       },
       margin: { left: 10, right: 0 },
     });
-    y2 += 7;
-    if (y2 >= 280) {
-      y2 = 14;
-    }
-  }
-  doc.setFont("THSarabun");
 
+    y2 = doc.lastAutoTable.finalY; // Update y position
+    if (y2 >= 280) {
+      y2 = 14; // Reset to top of the next page if it exceeds 280
+      doc.addPage(); // Add a new page if the current page is filled
+    }
+  });
+
+  doc.setFont("THSarabun");
   doc.save(`ใบคะแนนรวมของห้อง.pdf`);
 }

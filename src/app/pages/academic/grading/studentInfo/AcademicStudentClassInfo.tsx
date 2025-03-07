@@ -1,4 +1,5 @@
 "use client";
+import { fetchUpdateCompleteScheduleSubject } from "@/api/grad/gradAPI";
 import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
@@ -126,17 +127,14 @@ export function AcademicStudentInfo(props: {
       });
 
       if (result.isConfirmed) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        const response = await fetchUpdateCompleteScheduleSubject(
+          props.scheduleSubjectId
         );
-
-        toast.success("บันทึกคะแนนสำเร็จ");
+        if (response.success) {
+          toast.success("ตรวจสำเร็จ");
+        } else {
+          toast.error("ผิดพลาด");
+        }
       }
 
       window.location.reload();
