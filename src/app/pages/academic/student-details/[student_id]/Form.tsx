@@ -49,7 +49,7 @@ const fetchStudentData = async (studentId: number) => {
 
 export default function Form({ studentId }: Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
-  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto[]>([]);
+  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto | null>();
   const [students, setStudent] = useState<GetStudentByStudentId>();
   const [educateStatus, setEducateStatus] = useState<string>("");
   const [allGroup, setAllGroup] = useState<StudentGroup[]>([]);
@@ -58,7 +58,7 @@ export default function Form({ studentId }: Props) {
   const [groupID, setGroupID] = useState<number>(0);
   const [promoteTrigger, setPromoteTrigger] = useState<boolean>(false);
   useEffect(() => {
-    fetchStudentGrad(studentId, term, year).then((d) => {
+    fetchStudentGrad(studentId, term, year).then((d : any) => {
       setGrad(d);
     });
     fetchStudentData(studentId).then((d: any) => {
@@ -77,7 +77,7 @@ export default function Form({ studentId }: Props) {
     getStudentGroupData().then((d: StudentGroup[]) => {
       setAllGroup(d);
     });
-    fetchStudentGrad(studentId, term, year).then((d) => {
+    fetchStudentGrad(studentId, term, year).then((d:any) => {
       setGrad(d);
     });
   }, [term, year]);
@@ -106,15 +106,15 @@ export default function Form({ studentId }: Props) {
     <div className="px-10">
       <div className="flex justify-between my-5">
         <div className="rounded-3xl text-white bg-teal-600 flex gap-2 items-center  border-slate-300 text-xl w-fit px-5 py-2 ">
-          <UserRound className="w-8 h-8"/>
+          <UserRound className="w-8 h-8" />
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-4">
-          {grads.length > 0 ? (
+          {grads? (
             <button
               className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit"
               onClick={() => {
-                GradPerTerms(grads[0]);
+                GradPerTerms(grads);
               }}
             >
               ดาวโหลดน์ผลการเรียนล่าสุด
@@ -129,7 +129,10 @@ export default function Form({ studentId }: Props) {
             className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 shadow-sm shadow-slate-300 h-fit"
             onClick={() => GenTranscript({ score: 10 })}
           >
-            ดาวน์โหลดทรานสคริป
+            ดาวน์โหลดน์ Transcript.pdf
+          </button>
+          <button className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 shadow-sm shadow-slate-300 h-fit cursor-not-allowed">
+            ประวัติส่วนตัว.pdf
           </button>
         </div>
       </div>
@@ -202,7 +205,7 @@ export default function Form({ studentId }: Props) {
       </div>
 
       <div className=" flex justify-between gap-2 rounded-md bg-slate-100 px-10 py-5">
-        <div className="">
+        {/* <div className="">
           <div className="flex">
             <div className="rounded-l-md  text-gray-700 border border-gray-300 border-r-0  bg-white py-1 pl-4 pr-1">
               ชื่อ :{" "}
@@ -269,8 +272,40 @@ export default function Form({ studentId }: Props) {
               defaultValue={students?.programName}
             />
           </div>
+        </div> */}
+        <div className="w-full">
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2">
+              {students?.gender == "Male" ? (
+                <p>นาย</p>
+              ) : students?.gender == "FeMale" ? (
+                <p>นางสาว</p>
+              ) : (
+                <p>Laoding..</p>
+              )}
+              <input
+                type="text"
+                className="w-[150px] rounded-sm px-2 py-1"
+                defaultValue={students?.thaiName}
+              />
+              <input
+                type="text"
+                className="w-[150px] rounded-sm px-2 py-1"
+                defaultValue={students?.thaiLastName}
+              />
+              
+            </div>
+            <div className="flex items-center gap-3">
+              <div>รหัสนักเรียน</div>
+              <input type="text" className="px-2 py-1 w-[100px] text-center" defaultValue={students?.studentCode}/>
+                <div>ห้อง</div>
+                <div className="px-2 bg-white py-1 rounded-sm">
+                  {students?.class}.{students?.currentRoom}
+                </div>
+              </div>
+          </div>
         </div>
-        <div className="">
+        <div className="w-fit">
           <img width={100} className="rounded-sm" src="/asset/user.jpg" />
         </div>
       </div>
@@ -296,8 +331,12 @@ export default function Form({ studentId }: Props) {
                 <option value="กำลังติดตาม">กำลังติดตาม</option>
                 <option value="เงินอุดหนุน">เงินอุดหนุน</option>
               </select>
-              <button className="px-5 text-white enabled:bg-green-500 enabled:hover:bg-green-600  bg-gray-300 rounded-md py-1 " 
-              disabled={!educateStatus}>ปรับสถานะ</button>
+              <button
+                className="px-5 text-white enabled:bg-green-500 enabled:hover:bg-green-600  bg-gray-300 rounded-md py-1 "
+                disabled={!educateStatus}
+              >
+                ปรับสถานะ
+              </button>
             </div>
           </div>
         </div>

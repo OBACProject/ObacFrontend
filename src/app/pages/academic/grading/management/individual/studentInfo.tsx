@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -14,41 +15,12 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   const [studentTranscriptDataById, setStudentTranscriptDataById] =
     useState<StudentTranscriptData | null>(null);
 
-  const [term, setTerm] = useState<string>("");
-  const [year, setYear] = useState<number>(0);
-  // const [scoreFileData , setScoreFileData] = useState<GetGradPerTermByStudentIdDto[]>([])
+  const [term, setTerm] = useState<string>("1");
+  const [year, setYear] = useState<number>(2567);
+  const [loadingFile, setLoadingFile] = useState<boolean>(false);
+
   const [scoreFileData, setScoreFileData] =
-    useState<GetGradPerTermByStudentIdDto>();
-  //   {
-  //   studentId: 1,
-  //   studentCode: "S001001",
-  //   firstName: "จอห์น",
-  //   lastName: "โด",
-  //   facultyName: "บริหารธุรกิจ",
-  //   programName: "การเงินและบัญชี",
-  //   class: "ปวช",
-  //   groupName: "1/1",
-  //   isActive: true,
-  //   term: "1",
-  //   year: 2024,
-  //   gpa: 3.625,
-  //   gpax: 3.625,
-  //   totalCredit: 4,
-  //   subject: [
-  //     {
-  //       subjectName: "การบัญชีเบื้องต้น",
-  //       subjectCode: "ACC101",
-  //       grade: "4.00",
-  //       credit: 1,
-  //     },
-  //     {
-  //       subjectName: "การบัญชีชั้นสูง",
-  //       subjectCode: "ACC102",
-  //       grade: "3.50",
-  //       credit: 3,
-  //     },
-  //   ],
-  // }
+    useState<GetGradPerTermByStudentIdDto | null>();
 
   const [termData, setTermData] = useState<YearData[]>([]);
 
@@ -58,6 +30,35 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         const data = await getStudentDataById(props.studentId);
         setStudentTranscriptDataById(data);
         setTermData(data.year);
+
+        const k = Number(term);
+        const y = studentTranscriptDataById?.currentYear;
+        let newTerm = ''
+        if (y == 1) {
+          if (k == 1) {
+            newTerm = "1"
+          } else {
+            newTerm = "2"
+          }
+        } else if (y == 2) {
+          if (k == 1) {
+            newTerm = "3"
+          } else {
+            newTerm = "4"
+          }
+        } else if (y == 1) {
+          if (k == 3) {
+            setTerm("5");
+          } else {
+            setTerm("6");
+          }
+        }
+        const data2 = await fetchGetGradPerTermByStudentId(
+          props.studentId,
+          newTerm,
+          year
+        );
+        setScoreFileData(data2);
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -65,18 +66,47 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
     fetchData();
   }, [props.studentId]);
 
-  // useEffect(()=>{
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetchGetGradPerTermByStudentId(props.studentId , term , year);
-  //       setScoreFileData(data)
-  //     } catch (error) {
-  //       console.error("Error fetching student data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // },[term,year])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const k = Number(term);
+        const y = studentTranscriptDataById?.currentYear || 0;
+        const termMapping: Record<number, Record<number, string>> = {
+          1: { 1: "1", 2: "2" },
+          2: { 1: "3", 2: "4" },
+          3: { 3: "5", 4: "6" },
+        };
+        const newTerm = termMapping[y]?.[k] || "";
+        const data = await fetchGetGradPerTermByStudentId(
+          props.studentId,
+          newTerm,
+          year
+        );
+        setScoreFileData(data);
+        setLoadingFile(false);
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+      }
+    };
+    fetchData();
+    console.log(scoreFileData);
+  }, [term, year]);
+  useEffect(() => {
+    console.log("Updated scoreFileData:", scoreFileData);
+  }, [scoreFileData]);
 
+  const handleChangeTerm = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLoadingFile(true);
+    // const k = Number(e.target.value);
+    // const y = studentTranscriptDataById?.currentYear || 0;
+    // const termMapping: Record<number, Record<number, string>> = {
+    //   1: { 1: "1", 2: "2" },
+    //   2: { 1: "3", 2: "4" },
+    //   3: { 3: "5", 4: "6" },
+    // };
+    // const newTerm = termMapping[y]?.[k] || "";
+    setTerm(e.target.value);
+  };
   return (
     <div className="">
       <div className="flex justify-between w-full py-4">
@@ -123,7 +153,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
               <div>เทอม</div>
               <select
                 className="px-2 py-1 border border-gray-300 rounded-md"
-                onChange={(e) => setTerm(e.target.value)}
+                onChange={handleChangeTerm}
                 value={term}
               >
                 <option value="1">1</option>
@@ -134,7 +164,10 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
               <div>ปีการศึกษา</div>
               <select
                 className="px-2 py-1 border border-gray-300 rounded-md"
-                onChange={(e) => setYear(Number(e.target.value))}
+                onChange={(e) => {
+                  setYear(Number(e.target.value));
+                  setLoadingFile(true);
+                }}
                 value={year}
               >
                 <option value={2567}>2567</option>
@@ -151,13 +184,28 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
                   GradPerTerms(scoreFileData);
                 }}
               >
-                ดาวโหลดน์ผลการเรียน.pdf
+                {loadingFile ? (
+                  <div className="flex gap-2 items-center">
+                    <Loader2 />
+                    Loading..
+                  </div>
+                ) : (
+                  <p>ดาวโหลดน์ผลการเรียน.pdf</p>
+                )}
               </button>
             ) : (
               <button className=" px-4 py-1 bg-red-100  rounded-md text-gray-700 text-center">
-                ไม่มีข้อมูลคะแนน
+                {loadingFile ? (
+                  <div className="flex gap-2 items-center">
+                    <Loader2 />
+                    Loading..
+                  </div>
+                ) : (
+                  <p>ไม่มีข้อมูลคะแนน</p>
+                )}
               </button>
             )}
+
             <button
               className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
               // onClick={() => {
@@ -169,14 +217,12 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
           </div>
         </div>
       </div>
-
       <StudentTermTable termData={termData} />
     </div>
   );
 }
 
 function StudentTermTable({ termData }: { termData: YearData[] }) {
-  console.log(termData);
   return (
     <div className="">
       {termData.map((year, index) => {
@@ -209,10 +255,7 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
               return;
             }
 
-            console.log("grade", grade);
-            console.log("credit", credit);
             totalGradePoints += grade * credit;
-            console.log("totalGradePoints", totalGradePoints);
           });
 
           if (totalCredit <= 0) return "0.00";

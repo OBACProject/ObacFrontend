@@ -77,7 +77,7 @@ const GradPerTerms = (grads: GetGradPerTermByStudentIdDto) => {
   doc.text("หน่วยกิต", 125, 56.5);
   doc.text("เกรด", 165, 56.5);
 
-  doc.text("ปีการศึกษา 1/2567", 45, 65);
+  doc.text(`ปีการศึกษา ${grads.term}/${grads.year}`, 45, 65);
 
   doc.setFont("THSarabun", "normal");
 
@@ -100,7 +100,7 @@ const GradPerTerms = (grads: GetGradPerTermByStudentIdDto) => {
   }
   startRows = 70;
   for (let i = 0; i < grads.subject.length; i++) {
-    doc.text(`${grads.subject[i].grade || ""}`, 165, startRows);
+    doc.text(`${grads.subject[i].grade || "ผ"}`, 165, startRows);
     startRows += 7;
   }
   doc.text(`หน่วยกิตประจำภาค : ${grads.totalCredit}`, 50, 135);

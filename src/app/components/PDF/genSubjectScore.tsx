@@ -90,11 +90,12 @@ const GenSubjectScore = ({
   });
 
   doc.setFont("THSarabun");
-  let n = 0;
+  let y2 = doc.lastAutoTable.finalY;
   if (grads) {
     for (let i = 0; i < grads.length; i++) {
+
       autoTable(doc, {
-        startY: 19 + n,
+        startY: y2,
         body: [
           [
             i + 1,
@@ -144,7 +145,10 @@ const GenSubjectScore = ({
         },
         margin: { left: 4, right: 0 },
       });
-      n += 7;
+      y2 += 7;
+      if (y2 >= 280) {
+        y2 = 14;
+      }
     }
   }
 
