@@ -15,7 +15,7 @@ export default function page() {
         <button
           className="px-0 py-1.5 text-white bg-blue-500 hover:bg-blue-600 rounded-sm w-[250px]"
           onClick={() => {
-            TotalScoreInGroup();
+            // TotalScoreInGroup();
           }}
         >
           ดาวโหลดใบรวมเกรดของห้อง
