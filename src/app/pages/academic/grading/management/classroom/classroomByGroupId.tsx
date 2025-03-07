@@ -59,11 +59,6 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
 
-  // const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
-  // const [selectedStudent, setSelectedStudent] = useState<StudentList | null>(
-  //   null
-  // );
-
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
@@ -114,7 +109,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       return {
         label: summaryData.subjects[index],
         key: summaryData.subjects[index],
-        className: "w-1/16 justify-center",
+        className: "w-1/16 justify-center overflow-hidden",
       };
     } else {
       return {
@@ -182,9 +177,9 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   return (
     <>
-      <header className="flex flex-col  p-4 border-2 mt-4 rounded-lg">
+      <header className="flex flex-col  px-2 py-4 border-2 mt-4 rounded-lg">
         {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
-        <div className="flex gap-10 mt-4 justify-between">
+        <div className="flex gap-10  justify-between">
           <Badge variant={"outline"}>
             <h1 className="text-xl">
               สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}

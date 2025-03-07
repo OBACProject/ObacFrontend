@@ -4,15 +4,16 @@ import {
   GetTeacherByTeacherId,
   TeacherEnrollment,
 } from "@/dto/teacherDto";
+import api from "@/lib/apiCentralized";
 import { cookies } from "next/headers";
 
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
-    const token = cookies().get("token")?.value
+    const token = cookies().get("token")?.value;
     const api = process.env.NEXT_PUBLIC_API_URL_V1;
+    console.log(api);
     const response = await fetch(
-      // `http://localhost:5111/api/Teacher/GetAllTeacher`,
-      api + `/api/Teacher/GetAllTeacher`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetAllTeacher`,
       {
         method: "GET",
         headers: {
@@ -38,24 +39,33 @@ export const fetchGetTeacherByTeacherIdAsync = async (
 ): Promise<GetTeacherByTeacherId> => {
   try {
     const token = cookies().get("token")?.value;
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
+    const response = await api.get(
+      `/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
       {
-        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       }
     );
-    if (!response.ok) {
-      throw new Error("Failed to get teacher data");
-    }
-    const text = await response.text();
-    const json = JSON.parse(text);
-    const data: GetTeacherByTeacherId = json.data;
-    return data;
+    // const response = await fetch(
+    //   `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
+    //   {
+    //     method: "GET",
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
+    // if (!response.ok) {
+    //   throw new Error("Failed to get teacher data");
+    // }
+    // const text = await response.text();
+    // const json = JSON.parse(text);
+    // const data: GetTeacherByTeacherId = json.data;
+    return response.data.data;
   } catch (err) {
+    console.log(1);
     console.error("Error:", err);
     throw err;
   }
@@ -69,7 +79,7 @@ export const fetchGetTeacherEnrollmentsByTeacherId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -91,13 +101,12 @@ export const fetchGetTeacherEnrollmentsByTeacherId = async (
   }
 };
 
-export const fetchTeacherUser = async (
-): Promise<GetTeacherByTeacherId> => {
+export const fetchTeacherUser = async (): Promise<GetTeacherByTeacherId> => {
   try {
     const userId = cookies().get("userId")?.value;
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/GetTeacherByUserId?userId=${userId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherByUserId?userId=${userId}`,
       {
         method: "GET",
         headers: {
@@ -118,4 +127,3 @@ export const fetchTeacherUser = async (
     throw err;
   }
 };
-

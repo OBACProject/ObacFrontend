@@ -22,6 +22,14 @@
 # EXPOSE 3000
 
 # CMD ["npm", "run", "start"]
+#
+# Dockerfile adapted from the official Vercel Next.js example
+# Source: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+# Last copied: 2024-02-25
+#
+
+# syntax=docker.io/docker/dockerfile:1
+
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed

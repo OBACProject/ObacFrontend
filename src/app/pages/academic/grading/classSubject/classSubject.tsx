@@ -116,7 +116,6 @@ export function ClassSubjectPage(props: {
         setSelectedRoom(null);
         setSelectedPeriod(null);
         setSelectedTeacher(null);
-
       } catch (error) {
         console.error("Error publishing grade or reloading data:", error);
       }
@@ -193,6 +192,7 @@ export function ClassSubjectPage(props: {
     const normalizedSearch = searchClassSubject.toLowerCase();
     const filterData = classSubjectData.filter((item) => {
       const matchSearch =
+        item.id.toString().includes(normalizedSearch) ||
         item.day?.toLowerCase().includes(normalizedSearch) ||
         item.period?.toLowerCase().includes(normalizedSearch) ||
         item.room?.toLowerCase().includes(normalizedSearch) ||
@@ -250,9 +250,9 @@ export function ClassSubjectPage(props: {
             </div>
           </div>
           {/* filter Data */}
-          <div className="flex gap-12 p-4 bg-slate-50 rounded-lg">
+          <div className="flex gap-12 px-4 py-2 bg-slate-50 rounded-lg">
             {/* filter */}
-            <div className="w-1/4 flex flex-col gap-4">
+            <div className="w-1/4 flex flex-col gap-1">
               <h1>รายชื่ออาจารย์</h1>
               <Combobox
                 options={teacherNames.map((item) => ({
@@ -264,7 +264,7 @@ export function ClassSubjectPage(props: {
               />
             </div>
 
-            <div className="w-1/4 flex flex-col gap-4">
+            <div className="w-1/4 flex flex-col gap-1">
               <h1>ห้องเรียน</h1>
               <Combobox
                 options={roomNumbers.map((item) => ({
@@ -276,7 +276,7 @@ export function ClassSubjectPage(props: {
               />
             </div>
 
-            <div className="w-1/4 flex flex-col gap-4">
+            <div className="w-1/4 flex flex-col gap-1">
               <h1>คาบเรียน</h1>
               <Combobox
                 options={periodNumbers.map((item) => ({
@@ -302,7 +302,7 @@ export function ClassSubjectPage(props: {
             </div>
           </div>
           {/* data zone */}
-          <div className="mt-4 w-full p-4">
+          <div className="w-full px-4 py-2">
             {/* <DataTable
               columns={columns}
               data={classSubjectDataFiltered}
@@ -330,10 +330,10 @@ export function ClassSubjectPage(props: {
               pagination={classSubjectDataFiltered.length}
               onRowClick={(item) => handleSelectedInfoClassData(item.id)}
             />
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end px-10">
               <button
                 onClick={handlePusblishGrade}
-                className="px-10 py-1 rounded-md text-white bg-sky-400 hover:bg-blue-600 hover:scale-[102%] duration-300"
+                className="px-10 py-1 rounded-md text-white bg-gradient-to-tr from-teal-400 to-blue-800 hover:bg-blue-600 hover:scale-[102%] duration-300"
               >
                 ตัดเกรด
               </button>

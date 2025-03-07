@@ -48,7 +48,7 @@ export interface GetGradPerTermByStudentIdDto {
   class: string;
   groupName: string;
   isActive: boolean;
-  term: number;
+  term: string;
   year: number;
   gpa: number;
   gpax: number;

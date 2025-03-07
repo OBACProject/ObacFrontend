@@ -53,7 +53,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
         }));
         for (let i = 0; i < payload.length; i++) {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/UpdateStudentGrade`,
+            `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/UpdateStudentGrade`,
             {
               method: "PUT",
               headers: {
@@ -77,7 +77,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
-      alert("Failed to save grades. Please try again.");
+
     }
   };
   const gradingScorce = (totalScore: number) => {

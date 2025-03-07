@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { fetchGetAllProgram } from "@/api/program/programAPI";
 import { GetAllProgram } from "@/dto/programDto";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 
 const getAllSubject = async () => {
   try {
@@ -168,7 +168,7 @@ export default function Form() {
       </div>
       <div className="px-10 py-2 gap-2">
         <button
-          className="px-10 py-1 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+          className="px-10 py-1.5 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
           onClick={() => setAddSubjectPopUp(true)}
         >
           <PlusCircle className="w-5 h-5 text-white  " />
@@ -176,13 +176,23 @@ export default function Form() {
         </button>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border border-gray-400 py-2 rounded-t-md">
-          <div className="text-center text-black">ลำดับ</div>
-          <div className="text-center">รหัสวิชา</div>
-          <div className="text-center">ชื่อวิชา</div>
-          <div className="text-center">หน่วยกิต</div>
-          <div className="text-center">สถานะ</div>
-          <div className="text-center">Action</div>
+        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border-2 border-gray-400  rounded-t-md">
+          <div className="text-center border-r-2 border-gray-400  py-2 text-black">
+            ลำดับ
+          </div>
+          <div className="text-center  border-r-2 border-gray-400  py-2">
+            รหัสวิชา
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            ชื่อวิชา
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            หน่วยกิต
+          </div>
+          <div className="text-center border-r-2 border-gray-400  py-2">
+            สถานะ
+          </div>
+          <div className="text-center py-2">Action</div>
         </div>
         {subjects.length > 0 ? (
           <div>
@@ -196,16 +206,16 @@ export default function Form() {
                 <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
                   {index + 1}.
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r border-gray-400 ">
                   <p className="line-clamp-1">{item.subjectCode}</p>
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r ">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r  border-gray-400">
                   <p className="line-clamp-1">{item.subjectName}</p>
                 </div>
-                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r ">
+                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r  border-gray-400">
                   <p className="line-clamp-1">{item.credits}</p>
                 </div>
-                <div className="text-center flex items-center w-full justify-center py-1 border-r ">
+                <div className="text-center flex items-center w-full justify-center py-1 border-r border-gray-400">
                   {item.isActive ? (
                     <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                       ใช้งาน

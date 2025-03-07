@@ -1,6 +1,5 @@
 "use server";
 import { ClassSubjectData } from "@/dto/gradingDto";
-import api from "@/lib/apiCentralized";
 import axios from "axios";
 import { cookies } from "next/headers";
 
@@ -11,8 +10,9 @@ export const getClassSubjectData = async (
 ): Promise<ClassSubjectData[]> => {
   try {
     const token = cookies().get("token")?.value;
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
       {
         method: "GET",
         headers: {
@@ -45,7 +45,7 @@ export const putPublishGrade = async (
     }
 
     await axios.put(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
       {},
       {
         headers: {

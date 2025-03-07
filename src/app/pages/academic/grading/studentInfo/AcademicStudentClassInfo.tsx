@@ -61,7 +61,10 @@ export function AcademicStudentInfo(props: {
           props.scheduleSubjectId
         );
         setGradData(grads ?? []);
-        setGradDataFilter(grads ?? []);
+        const sortedGrads = (grads ?? []).sort((a, b) =>
+          a.studentCode.localeCompare(b.studentCode)
+        );
+        setGradDataFilter(sortedGrads);
 
         const schedule: GetSubjectBySubjectId =
           await fetchGetSubjectBySubjectId(props.subjectId);
@@ -111,7 +114,6 @@ export function AcademicStudentInfo(props: {
     studentCode: item.studentCode,
     name: `${item.firstName} ${item.lastName}`,
   }));
-
   const CompleteGrade = async () => {
     try {
       const result = await Swal.fire({
@@ -125,7 +127,7 @@ export function AcademicStudentInfo(props: {
 
       if (result.isConfirmed) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
+          `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${props.scheduleSubjectId}&isCompleted=true`,
           {
             method: "PUT",
             headers: {
@@ -163,8 +165,8 @@ export function AcademicStudentInfo(props: {
           testScore: item.testScore,
           affectiveScore: item.affectiveScore,
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
-          finalGrade: gradValue,
-          remark: remark,
+          finalGrade: item.finalGrade ? String(item.finalGrade) : "",
+          remark: item.remark,
         }));
         for (let i = 0; i < payload.length; i++) {
           try {
@@ -184,12 +186,20 @@ export function AcademicStudentInfo(props: {
     }
   };
 
-  const onChangeGrade = (value: string) => {
-    setGradValue(value);
+  const onChangeGrade = (value: string, studentId: number) => {
+    gradDataFilter.map((item) => {
+      if (item.studentId === studentId) {
+        item.finalGrade = value;
+      }
+    });
   };
 
-  const onChangeRemark = (value: string) => {
-    setRemark(value);
+  const onChangeRemark = (value: string, studentId: number) => {
+    gradDataFilter.map((item) => {
+      if (item.studentId === studentId) {
+        item.remark = value;
+      }
+    });
   };
 
   const gradeValue = [
@@ -228,13 +238,13 @@ export function AcademicStudentInfo(props: {
           <Badge variant={"outline"} className="text-xl">
             วิชา :
             <span className="font-semibold ml-2">
-              {gradDataFilter[0]?.subjectName}
+              {subjectByGroupId?.subjectName}
             </span>
           </Badge>
           <Badge variant={"outline"} className="ml-4 text-xl">
             รหัสวิชา :
             <span className="font-semibold ml-2">
-              {subjectByGroupId?.subjectCode ?? "......"}
+              {subjectByGroupId?.subjectCode}
             </span>
           </Badge>
         </div>
@@ -247,11 +257,11 @@ export function AcademicStudentInfo(props: {
                 grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: subjectByGroupId?.subjectCode,
-                subjectName: gradDataFilter[0]?.subjectName,
+                subjectName: subjectByGroupId?.subjectName,
               });
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน PDF</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -260,11 +270,11 @@ export function AcademicStudentInfo(props: {
                 grads: gradDataFilter,
                 studentGroup: room,
                 subjectId: subjectByGroupId?.subjectCode,
-                subjectName: gradDataFilter[0]?.subjectName,
+                subjectName: subjectByGroupId?.subjectName,
               });
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดรายชื่อนักเรียน</p>
+            <p className="line-clamp-1">ดาวน์โหลดรายชื่อ PDF</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -274,12 +284,12 @@ export function AcademicStudentInfo(props: {
                 String(props?.term ?? ""),
                 String(props?.year ?? ""),
                 subjectByGroupId?.subjectCode || "",
-                gradDataFilter[0]?.subjectName || "",
+                subjectByGroupId?.subjectName || "",
                 room || ""
               );
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบคะแนนนักเรียน excel</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบคะแนน Excel</p>
           </button>
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
@@ -287,12 +297,12 @@ export function AcademicStudentInfo(props: {
               ConvertClassroomToExcel(
                 covertStudentExcel,
                 subjectByGroupId?.subjectCode || "",
-                gradDataFilter[0]?.subjectName || "",
+                subjectByGroupId?.subjectName || "",
                 room || ""
               );
             }}
           >
-            <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อนักเรียน excel</p>
+            <p className="line-clamp-1">ดาวน์โหลดใบรายชื่อ Excel</p>
           </button>
         </div>
       </div>
@@ -306,8 +316,6 @@ export function AcademicStudentInfo(props: {
           />
         </div>
         <div className="w-2/3 flex gap-6 justify-end">
-         
-
           {onEdit ? (
             <button
               className={`bg-red-500 duration-300 text-white h-fit text-center text-lg rounded-md hover:opacity-75 flex items-center justify-center gap-2 w-[120px] py-1 hover:rounded-sm `}
@@ -433,7 +441,9 @@ export function AcademicStudentInfo(props: {
                     label: item,
                     value: item,
                   }))}
-                  onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                  onSelect={(selectedGrade) =>
+                    onChangeGrade(selectedGrade, item.studentId)
+                  }
                   defaultValue={gradingScorce(
                     item.collectScore + item.testScore + item.affectiveScore
                   )}
@@ -448,14 +458,16 @@ export function AcademicStudentInfo(props: {
                   label: item,
                   value: item,
                 }))}
-                onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
+                onSelect={(selectedGrade) =>
+                  onChangeRemark(selectedGrade, item.studentId)
+                }
                 defaultValue={item.remark}
               />
             </div>
           </div>
         ))}
         <div className="my-5 w-full flex justify-between items-center  ">
-        <button
+          <button
             className="bg-teal-500 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-blue-700 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
             onClick={() => setVerifyGradPopUp(true)}
           >

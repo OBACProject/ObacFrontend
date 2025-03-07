@@ -25,7 +25,7 @@ export function Subject(props: {
   console.log(gradingData);
   // filter data
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1;
+  const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 5 }, (_, i) =>
     (currentYear - i).toString()
   );
@@ -105,21 +105,20 @@ export function Subject(props: {
     const filteredData = gradingData?.filter((item) => {
       const matchSearch =
         item.subjectCode.toLowerCase().includes(normalizedSearch) ||
-        item.subjectName.toLowerCase().includes(normalizedSearch) ||
-        item.description.toLowerCase().includes(normalizedSearch);
+        item.subjectName.toLowerCase().includes(normalizedSearch);
       return matchSearch;
     });
 
     setGradingDataFiltered(filteredData);
   }, [searchSubject, gradingData]);
-  // console.log(gradingDataFiltered);
+  console.log(gradingData);
   return (
     <>
-      <header className="flex flex-col p-4 w-full border-2 mt-4 rounded-lg">
+      <header className="flex flex-col p-4 w-full border-2 mt-2 rounded-lg">
         {/* filter Data */}
-        <div className="flex gap-6 mt-6 p-4 bg-slate-50 rounded-lg">
+        <div className="flex gap-6  px-4 bg-slate-50 rounded-lg">
           {/* filter */}
-          <div className="w-1/4 flex flex-col gap-4 p-4 relative">
+          <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ภาคเรียน</h1>
             <Combobox
               options={term.map((item) => ({
@@ -131,7 +130,7 @@ export function Subject(props: {
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />
           </div>
-          <div className="w-1/4 flex flex-col gap-4 p-4 relative">
+          <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ปีการศึกษา</h1>
             <Combobox
               options={yearsList.map((item) => ({
@@ -143,7 +142,7 @@ export function Subject(props: {
               onSelect={(selectedYear) => setSelectedYear(selectedYear)}
             />
           </div>
-          <div className="relative w-1/3 flex flex-col gap-4 p-4">
+          <div className="relative w-1/3 flex flex-col gap-1 px-4 py-2">
             <h1>ค้นหารายวิชา</h1>
             <div className="bg-white">
               <Input
@@ -156,7 +155,7 @@ export function Subject(props: {
           </div>
         </div>
         {/* data zone */}
-        <div className="w-full p-4">
+        <div className="w-full px-4">
           {/* <DataTable
             columns={columns}
             data={gradingDataFiltered}
@@ -171,7 +170,7 @@ export function Subject(props: {
           <DataTable
             columns={columns}
             data={gradingDataFiltered.map((item, index) => ({
-              id: index + 1,
+              id: item.id,
               subjectCode: item.subjectCode,
               subjectName: item.subjectName,
               description: item.description,

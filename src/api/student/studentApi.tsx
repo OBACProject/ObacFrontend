@@ -2,10 +2,11 @@
 import {
   GetAllStudent,
   GetStudentByStudentId,
+  GetStudentGroupsByTermYearDto,
+  GetStudentListByGroupIDDto,
   GetStudentUser,
   StudentCreateData,
   StudentGroup,
-  StudentListInGroup,
 } from "@/dto/studentDto";
 import { cookies } from "next/headers";
 
@@ -14,7 +15,7 @@ export const fetchCreateStudentAsync = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/CreateStudent`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/CreateStudent`,
       {
         method: "POST",
         headers: {
@@ -37,7 +38,7 @@ export const fetchGetAllStudentGroup = async (): Promise<StudentGroup[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudentGroup`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudentGroup`,
       {
         method: "GET",
         headers: {
@@ -69,7 +70,7 @@ export const fetchStudentUser = async (): Promise<GetStudentUser> => {
     const userId = cookies().get("userId")?.value;
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByUserId?userId=${userId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentByUserId?userId=${userId}`,
       {
         method: "GET",
         headers: {
@@ -91,13 +92,13 @@ export const fetchStudentUser = async (): Promise<GetStudentUser> => {
   }
 };
 
-export const fetchStudentListInGroup = async (
+export const GetStudentListByGroupID = async (
   groupId: number
-): Promise<StudentListInGroup[]> => {
+): Promise<GetStudentListByGroupIDDto | null> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentListByGroupID?groupid=${groupId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentListByGroupID?groupid=${groupId}`,
       {
         method: "GET",
         headers: {
@@ -111,20 +112,19 @@ export const fetchStudentListInGroup = async (
     }
     const text = await response.text();
     const json = JSON.parse(text);
-    const data: StudentListInGroup[] = json.data;
+    const data: GetStudentListByGroupIDDto = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching student list:", err);
-    return [];
+    return null;
   }
 };
 
-export const fetchGetAllStudent= async (
-): Promise<GetAllStudent[]> => {
+export const fetchGetAllStudent = async (): Promise<GetAllStudent[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetAllStudent`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudent`,
       {
         method: "GET",
         headers: {
@@ -146,21 +146,28 @@ export const fetchGetAllStudent= async (
   }
 };
 
-export const fetchGetStudentByStudentId = async (studentId: number): Promise<GetStudentByStudentId | null> => {
+export const fetchGetStudentByStudentId = async (
+  studentId: number
+): Promise<GetStudentByStudentId | null> => {
   try {
     const token = cookies().get("token")?.value;
     if (!token) throw new Error("Missing authentication token");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_V1}/api/Student/GetStudentByStudentID?studentId=${studentId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentByStudentID?studentId=${studentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch API: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch API: ${response.status} ${response.statusText}`
+      );
     }
 
     const text = await response.text();
@@ -172,6 +179,42 @@ export const fetchGetStudentByStudentId = async (studentId: number): Promise<Get
     return data;
   } catch (err) {
     console.error("Error fetching student data:", err);
-    return null; 
+    return null;
+  }
+};
+
+export const fetchGetStudentGroupsByTermYear = async (
+  term: string,
+  year: number
+): Promise<GetStudentGroupsByTermYearDto[]> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) throw new Error("Missing authentication token");
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGroupsByTermYear?term=${term}&year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch API: ${response.status} ${response.statusText}`
+      );
+    }
+    const text = await response.text();
+    if (!text) throw new Error("Empty response from API");
+
+    const json = JSON.parse(text);
+    const data: GetStudentGroupsByTermYearDto[] = json.data;
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching student data:", err);
+    return [];
   }
 };

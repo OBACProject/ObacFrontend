@@ -131,12 +131,12 @@ export default function AddTeacherSchedulePopUp({
     console.log(requestBody)
     try {
       const response = await fetchCreateScheduleSubject(requestBody);
-      if (response.ok){
-      toast.success("สร้างสำเร็จ");
-      onClosePopUp(false);
-      window.location.reload()  
-      }else{
-        toast.error("สร้างไม่สำเร็จ")
+      if (response.success) {
+        toast.success("สร้างสำเร็จ");
+        onClosePopUp(false);
+        window.location.reload()
+      } else {
+        toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
       }
       
     } catch (err) {

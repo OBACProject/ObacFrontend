@@ -14,7 +14,7 @@ export const fetchGetGradBySubjectId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`,
       {
         method: "GET",
         headers: {
@@ -38,9 +38,9 @@ export const fetchGetGradBySubjectId = async (
 
 export const fetchGetGradPerTermByStudentId = async (
   studentId: number,
-  term: number,
+  term: string,
   year: number
-): Promise<GetGradPerTermByStudentIdDto[]> => {
+): Promise<GetGradPerTermByStudentIdDto | null> => {
   try {
     const token = cookies().get("token")?.value;
     if (!token) {
@@ -48,7 +48,7 @@ export const fetchGetGradPerTermByStudentId = async (
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetStudentGradeByTermYear?studentId=${studentId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetStudentGradeByTermYear?studentId=${studentId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -65,11 +65,11 @@ export const fetchGetGradPerTermByStudentId = async (
     if (!json?.data) {
       throw new Error("API response does not contain 'data'");
     }
-    const data: GetGradPerTermByStudentIdDto[] = json.data;
+    const data: GetGradPerTermByStudentIdDto = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching data:", err);
-    return [];
+    return null;
   }
 };
 
@@ -85,7 +85,7 @@ export const GetGropGradeAbove = async (
       throw new Error("No auth token found");
     }
 
-    const url = `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -97,7 +97,9 @@ export const GetGropGradeAbove = async (
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Failed to get data in API: ${response.status} ${response.statusText} | ${errorText}`);
+      throw new Error(
+        `Failed to get data in API: ${response.status} ${response.statusText} | ${errorText}`
+      );
     }
     const json = await response.json();
     if (!json?.data) {
@@ -110,7 +112,6 @@ export const GetGropGradeAbove = async (
     return null;
   }
 };
-
 
 export const GetGropGradeBelow = async (
   className: string,
@@ -135,7 +136,7 @@ export const GetGropGradeBelow = async (
 
     const url = `${
       process.env.NEXT_PUBLIC_API_URL_V1
-    }/api/Grade/GetStudentIfGradeBelow?${queryParams.toString()}`;
+    }/Grade/GetStudentIfGradeBelow?${queryParams.toString()}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -179,7 +180,7 @@ export const fetchPromoteStudent = async (data: {
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Promote/PromoteStudents`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Promote/PromoteStudents`,
       {
         method: "POST",
         headers: {
