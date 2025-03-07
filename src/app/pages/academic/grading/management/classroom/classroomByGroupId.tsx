@@ -220,6 +220,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
               onClick={() => {
                 TotalScoreInGroup(convertTOPDFData);
               }}
+              className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             >
               ใบรวมเกรด.pdf
             </button>

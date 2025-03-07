@@ -62,6 +62,15 @@ export default function TotalScoreInGroup(data: DataList) {
     10,
     25
   );
+  const subjectNames = Object.keys(data.studentList[0].subjects);
+  const header = [
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    `   ชื่อ - นามสกุล   `,
+    ...subjectNames.map((_, index) => `${index + 1}`), // Numbers for each subject
+    "เฉลี่ย",
+    "เฉลี่ยสะสม",
+  ];
 
   autoTable(doc, {
     startY: 28,
