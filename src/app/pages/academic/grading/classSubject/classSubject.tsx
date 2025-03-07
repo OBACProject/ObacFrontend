@@ -116,7 +116,6 @@ export function ClassSubjectPage(props: {
         setSelectedRoom(null);
         setSelectedPeriod(null);
         setSelectedTeacher(null);
-
       } catch (error) {
         console.error("Error publishing grade or reloading data:", error);
       }
@@ -193,6 +192,7 @@ export function ClassSubjectPage(props: {
     const normalizedSearch = searchClassSubject.toLowerCase();
     const filterData = classSubjectData.filter((item) => {
       const matchSearch =
+        item.id.toString().includes(normalizedSearch) ||
         item.day?.toLowerCase().includes(normalizedSearch) ||
         item.period?.toLowerCase().includes(normalizedSearch) ||
         item.room?.toLowerCase().includes(normalizedSearch) ||
