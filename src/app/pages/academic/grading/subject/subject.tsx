@@ -170,7 +170,7 @@ export function Subject(props: {
           <DataTable
             columns={columns}
             data={gradingDataFiltered.map((item, index) => ({
-              id: index + 1,
+              id: item.id,
               subjectCode: item.subjectCode,
               subjectName: item.subjectName,
               description: item.description,
