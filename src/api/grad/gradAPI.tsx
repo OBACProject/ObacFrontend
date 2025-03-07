@@ -38,9 +38,9 @@ export const fetchGetGradBySubjectId = async (
 
 export const fetchGetGradPerTermByStudentId = async (
   studentId: number,
-  term: number,
+  term: string,
   year: number
-): Promise<GetGradPerTermByStudentIdDto[]> => {
+): Promise<GetGradPerTermByStudentIdDto | null> => {
   try {
     const token = cookies().get("token")?.value;
     if (!token) {
@@ -65,11 +65,11 @@ export const fetchGetGradPerTermByStudentId = async (
     if (!json?.data) {
       throw new Error("API response does not contain 'data'");
     }
-    const data: GetGradPerTermByStudentIdDto[] = json.data;
+    const data: GetGradPerTermByStudentIdDto = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching data:", err);
-    return [];
+    return null;
   }
 };
 

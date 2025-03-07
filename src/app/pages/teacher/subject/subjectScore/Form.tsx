@@ -77,7 +77,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
-      alert("Failed to save grades. Please try again.");
+
     }
   };
   const gradingScorce = (totalScore: number) => {

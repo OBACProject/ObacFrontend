@@ -56,7 +56,7 @@ export default function Main({ groupId }: Props) {
           </button>
         </div>
       </div>
-      <div className="w-full px-5 ">
+      <div className="w-full px-5 pb-10">
         <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  ">
           <div className="text-center py-2 border-r border-gray-400">
             ลำดับ
