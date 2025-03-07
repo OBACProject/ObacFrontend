@@ -201,8 +201,16 @@ export function ClassroomGrading(props: {
     { label: "ลำดับ", key: "groupId", className: "w-2/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-2/12" },
     { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
-    { label: "หลักสูตรการศึกษา", key: "facultyName", className: "w-5/12" },
-    { label: "สาขาวิชา", key: "programName", className: "w-3/12 " },
+    {
+      label: "หลักสูตรการศึกษา",
+      key: "facultyName",
+      className: "w-5/12 xl:justify-start justify-center",
+    },
+    {
+      label: "สาขาวิชา",
+      key: "programName",
+      className: "w-3/12 xl:justify-start justify-center",
+    },
   ];
 
   return (

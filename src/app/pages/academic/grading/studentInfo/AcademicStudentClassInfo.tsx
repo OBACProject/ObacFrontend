@@ -61,7 +61,10 @@ export function AcademicStudentInfo(props: {
           props.scheduleSubjectId
         );
         setGradData(grads ?? []);
-        setGradDataFilter(grads ?? []);
+        const sortedGrads = (grads ?? []).sort((a, b) =>
+          a.studentCode.localeCompare(b.studentCode)
+        );
+        setGradDataFilter(sortedGrads);
 
         const schedule: GetSubjectBySubjectId =
           await fetchGetSubjectBySubjectId(props.subjectId);
@@ -162,8 +165,8 @@ export function AcademicStudentInfo(props: {
           testScore: item.testScore,
           affectiveScore: item.affectiveScore,
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
-          finalGrade: gradValue,
-          remark: remark,
+          finalGrade: item.finalGrade ? String(item.finalGrade) : "",
+          remark: item.remark,
         }));
         for (let i = 0; i < payload.length; i++) {
           try {
@@ -183,12 +186,20 @@ export function AcademicStudentInfo(props: {
     }
   };
 
-  const onChangeGrade = (value: string) => {
-    setGradValue(value);
+  const onChangeGrade = (value: string, studentId: number) => {
+    gradDataFilter.map((item) => {
+      if (item.studentId === studentId) {
+        item.finalGrade = value;
+      }
+    });
   };
 
-  const onChangeRemark = (value: string) => {
-    setRemark(value);
+  const onChangeRemark = (value: string, studentId: number) => {
+    gradDataFilter.map((item) => {
+      if (item.studentId === studentId) {
+        item.remark = value;
+      }
+    });
   };
 
   const gradeValue = [
@@ -430,7 +441,9 @@ export function AcademicStudentInfo(props: {
                     label: item,
                     value: item,
                   }))}
-                  onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                  onSelect={(selectedGrade) =>
+                    onChangeGrade(selectedGrade, item.studentId)
+                  }
                   defaultValue={gradingScorce(
                     item.collectScore + item.testScore + item.affectiveScore
                   )}
@@ -445,7 +458,9 @@ export function AcademicStudentInfo(props: {
                   label: item,
                   value: item,
                 }))}
-                onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
+                onSelect={(selectedGrade) =>
+                  onChangeRemark(selectedGrade, item.studentId)
+                }
                 defaultValue={item.remark}
               />
             </div>
