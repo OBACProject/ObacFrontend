@@ -52,9 +52,9 @@ export default function CardSubject({ cardSubjectData }: CardSubjectProps) {
               : cardSubjectData.day == "วันศุกร์"
               ? "bg-blue-200"
               : cardSubjectData.day == "วันเสาร์"
-              ? "bg-red-200"
+              ? "bg-purple-200"
               : cardSubjectData.day == "วันอาทิตย์"
-              ? "bg-purple-300"
+              ? "bg-red-300"
               : ""
           } text-center font-semibold mt-4 shadow-sm shadow-gray-400  py-1 rounded-sm `}
         >

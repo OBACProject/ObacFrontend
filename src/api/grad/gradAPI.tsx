@@ -211,3 +211,44 @@ export const fetchPromoteStudent = async (data: {
     return null;
   }
 };
+
+export const fetchUpdateCompleteScheduleSubject = async (
+  scheduleSubjectId: number
+) => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${scheduleSubjectId}&isCompleted=true`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      let errorMessage = `Error: ${response.status} - ${response.statusText}`;
+
+      try {
+        const errorData = await response.json();
+        errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;
+      } catch {
+        console.warn("Response does not contain JSON.");
+      }
+
+      return { success: false, error: errorMessage };
+    }
+
+    const text = await response.text();
+    return { success: true, data: text ? JSON.parse(text) : {} };
+  } catch (err: any) {
+    console.error("Error in API CompleteGrade", err);
+    return { success: false, error: err.message };
+  }
+};
