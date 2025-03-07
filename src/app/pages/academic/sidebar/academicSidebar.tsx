@@ -52,18 +52,18 @@ export function AcademicSidebar({
   );
 
   const handleMouseEnter = (index: number) => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear any existing timeout
+    if (submenuTimeout) clearTimeout(submenuTimeout); 
     const timeout = setTimeout(() => {
       setOpenSubMenu(index);
-    }, 200); // Delay before showing submenu
+    }, 200); 
     setSubmenuTimeout(timeout);
   };
 
   const handleMouseLeave = () => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); // Clear timeout before hiding
+    if (submenuTimeout) clearTimeout(submenuTimeout); 
     const timeout = setTimeout(() => {
       setOpenSubMenu(null);
-    }, 200); // Delay before hiding submenu
+    }, 200); 
     setSubmenuTimeout(timeout);
   };
 

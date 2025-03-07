@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
 import { useRouter } from "next/navigation";
+import TotalScoreInGroup from "@/app/components/PDF/TotalScoreInGroup";
 
 export interface GeneralData {
   groupId: number;
@@ -188,6 +189,11 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
             </h1>
           </Badge>
           <div>
+            <button onClick={()=>{
+              TotalScoreInGroup()
+            }}>
+              ใบรวมเกรด.pdf
+            </button>
             <button
               onClick={handleExportToExcel}
               className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
