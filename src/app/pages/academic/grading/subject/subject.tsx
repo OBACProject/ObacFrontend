@@ -105,14 +105,13 @@ export function Subject(props: {
     const filteredData = gradingData?.filter((item) => {
       const matchSearch =
         item.subjectCode.toLowerCase().includes(normalizedSearch) ||
-        item.subjectName.toLowerCase().includes(normalizedSearch) ||
-        item.description.toLowerCase().includes(normalizedSearch);
+        item.subjectName.toLowerCase().includes(normalizedSearch);
       return matchSearch;
     });
 
     setGradingDataFiltered(filteredData);
   }, [searchSubject, gradingData]);
-  // console.log(gradingDataFiltered);
+  console.log(gradingData);
   return (
     <>
       <header className="flex flex-col p-4 w-full border-2 mt-4 rounded-lg">
