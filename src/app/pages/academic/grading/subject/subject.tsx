@@ -44,7 +44,7 @@ export function Subject(props: {
         props.handleSelectedData({
           id: id,
           year: Number(selectedYear),
-          term: Number(selectedTerm),
+          term: Number(selectedTerm) +2 * (Number(currentYear) - Number(selectedYear)),
           subjectName: item.subjectName,
         });
       } else {
@@ -118,7 +118,7 @@ export function Subject(props: {
         {/* filter Data */}
         <div className="flex gap-6  px-4 bg-slate-50 rounded-lg">
           {/* filter */}
-          <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
+         {/* <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ภาคเรียน</h1>
             <Combobox
               options={term.map((item) => ({
@@ -141,7 +141,7 @@ export function Subject(props: {
               buttonLabel="เลือกปีการศึกษา"
               onSelect={(selectedYear) => setSelectedYear(selectedYear)}
             />
-          </div>
+          </div>*/}
           <div className="relative w-1/3 flex flex-col gap-1 px-4 py-2">
             <h1>ค้นหารายวิชา</h1>
             <div className="bg-white">
