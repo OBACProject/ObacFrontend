@@ -234,7 +234,7 @@ export function ClassroomGrading(props: {
               <div className="w-1/6 flex flex-col gap-4 pt-5">
                 <Combobox
                   buttonLabel="กรุณาเลือกหลักสูตร"
-                  options={(selectedClassLevel === "ปวช."
+                  options={(selectedClassLevel === "ปวช"
                     ? vocationalFaculties
                     : diplomaFaculties
                   ).map((item) => ({

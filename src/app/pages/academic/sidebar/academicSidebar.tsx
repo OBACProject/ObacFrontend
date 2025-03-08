@@ -40,7 +40,7 @@ export function AcademicSidebar({
     try {
       await logout();
       setUserName("");
-      Cookies.remove("token")
+      Cookies.remove("token");
       router.push("/pages/login");
     } catch (error) {
       console.error("Logout failed:", error);

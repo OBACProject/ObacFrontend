@@ -121,7 +121,10 @@ export function Main() {
         <ClassroomByGroupId
           groupId={selectedClassroomData.groupId}
           classroom={selectedClassroomData.classroom}
-          term={selectedClassroomData.term}
+          term={(
+            parseInt(selectedClassroomData.term) +
+            2 * (parseInt(selectedClassroomData.classroom.substring(4)) - 1)
+          ).toString()}
           year={selectedClassroomData.year}
         />
       )}

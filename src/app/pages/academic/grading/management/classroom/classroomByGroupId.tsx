@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
 import { useRouter } from "next/navigation";
-import TotalScoreInGroup from "@/app/components/PDF/TotalScoreInGroup";
+import TotalScoreInGroup, {
+  DataList,
+} from "@/app/components/PDF/TotalScoreInGroup";
 
 export interface GeneralData {
   groupId: number;
@@ -59,7 +61,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
-
+  console.log(summaryData);
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
@@ -171,10 +173,35 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
     //   setIsOpenPopUp(true);
     // }
   };
+  // export interface DataList {
+  //   generalData: GeneralData;
+  //   studentList: StudentList[];
+  // }
 
-  // const closePopUp = () => {
-  //   setIsOpenPopUp(false);
-  // };
+  const convertTOPDFData: DataList = {
+    generalData: summaryData?.generalData
+      ? {
+          groupId: summaryData.generalData.groupId,
+          groupName: summaryData.generalData.groupName,
+          groupCode: summaryData.generalData.groupCode,
+          class: summaryData.generalData.class,
+          facultyName: summaryData.generalData.facultyName,
+          programName: summaryData.generalData.programName,
+          term: summaryData.generalData.term,
+          year: summaryData.generalData.year,
+        }
+      : {
+          groupId: 0,
+          groupName: "",
+          groupCode: "",
+          class: "",
+          facultyName: "",
+          programName: "",
+          term: "",
+          year: 0,
+        },
+    studentList: summaryData?.students || [],
+  };
 
   return (
     <>
@@ -189,9 +216,12 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
             </h1>
           </Badge>
           <div>
-            <button onClick={()=>{
-              TotalScoreInGroup()
-            }}>
+            <button
+              onClick={() => {
+                TotalScoreInGroup(convertTOPDFData);
+              }}
+              className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+            >
               ใบรวมเกรด.pdf
             </button>
             <button
