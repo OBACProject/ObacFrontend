@@ -12,7 +12,7 @@ export const getClassSubjectData = async (
     const token = cookies().get("token")?.value;
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
       {
         method: "GET",
         headers: {
