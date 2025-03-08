@@ -1,6 +1,7 @@
 "use client";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
-import { GetStudentListByGroupIDDto, Student } from "@/dto/studentDto";
+import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
+import { GetStudentListByGroupIDDto, StudentDto } from "@/dto/studentDto";
 import { UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -29,6 +30,12 @@ export default function Main({ groupId }: Props) {
       }
     });
   }, [groupId]);
+  const onGetStudentNameListPDF =  ()=>{
+    if (studentInGroup){
+      const studentClass = studentInGroup?.class + "." + studentInGroup?.groupName
+      StudentNameListPDF({studentGroup: studentClass , student: studentInGroup.students })
+    }
+  }
   return (
     <div className="py-2 w-full px-10">
       <div className="flex px-5 justify-center py-3 items-center">
@@ -48,12 +55,12 @@ export default function Main({ groupId }: Props) {
           
         </div>
         <div className="flex gap-2">
-          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600">
-            เอกสารใบตรวจเกรด PDF
+          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600"
+          onClick={onGetStudentNameListPDF}
+          >
+            ใบรายชื่อนักเรียน.pdf
           </button>
-          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600">
-            เอกสารใบตรวจเกรด Excel
-          </button>
+         
         </div>
       </div>
       <div className="w-full px-5 pb-10">
@@ -70,7 +77,7 @@ export default function Main({ groupId }: Props) {
         </div>{" "}
         {studentInGroup ? (
           <div className="w-full ">
-            {studentInGroup.students?.map((item: Student, index) => (
+            {studentInGroup.students?.map((item: StudentDto, index) => (
               <Link
                 href={`/pages/academic/student-details/${item.studentId}`}
                 key={index}

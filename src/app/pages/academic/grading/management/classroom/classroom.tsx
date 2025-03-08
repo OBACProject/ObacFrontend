@@ -204,12 +204,12 @@ export function ClassroomGrading(props: {
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-5/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
     {
       label: "สาขาวิชา",
       key: "programName",
-      className: "w-3/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
   ];
 
