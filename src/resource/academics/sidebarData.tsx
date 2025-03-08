@@ -2,7 +2,6 @@ import {
   BookUser,
   TableProperties,
   Grid2X2Plus,
-  ContactRound,
   FileSpreadsheet,
   UsersRound,
   UserRound,

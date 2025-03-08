@@ -1,9 +1,10 @@
 "use client"
-import { fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/scheduleAPI";
+import { fetchDeleteScheduleSubject, fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/scheduleAPI";
 import { ScheduleSubject, StudentGroupScheduleSubject } from "@/dto/schedule";
 import { Boxes, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import AddGroupSchedulePopUp from "./AddGroupSchedulePopUp";
+import { toast } from "react-toastify";
 
 type Props = {
   term: string;
@@ -39,6 +40,12 @@ export default function Form({ term, year, groupId }: Props) {
     });
     
   }, []);
+  const onDeleteSchedule = async (id:number , subjectName : string)=>{
+    const response  = await fetchDeleteScheduleSubject(id)
+    if (response.success){
+     toast.success(`ลบวิชา ${subjectName} สำเร็จ`)
+    }
+  }
 console.log(schedules)
   return (
     <div className="w-full px-10">
@@ -76,15 +83,15 @@ console.log(schedules)
       </div>
 
       <div className="w-full">
-        <div className="w-full grid grid-cols-[5%_10%_20%_20%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
-          <div className="text-center py-2 border-r-2 border-gray-400">ลำดับ</div>
+        <div className="w-full grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
           <div className="text-center py-2 border-r-2 border-gray-400">รหัสวิชา</div>
           <div className="text-center py-2 border-r-2 border-gray-400">ชื่อวิชา</div>
           <div className="text-center py-2 border-r-2 border-gray-400">อาจารย์ผู้สอน</div>
           <div className="text-center py-2 border-r-2 border-gray-400">ห้องเรียน</div>
           <div className="text-center py-2 border-r-2 border-gray-400">หน่วยกิต</div>
           <div className="text-center py-2 border-r-2 border-gray-400">คาบเรียน</div>
-          <div className="text-center py-2">วันสอน</div>
+          <div className="text-center py-2 border-r-2 border-gray-400">วันสอน</div>
+          <div className="text-center py-2 "></div>
         </div>
 
         {schedules && schedules.scheduleSubjects?.length > 0 ? (
@@ -93,11 +100,9 @@ console.log(schedules)
               key={index}
               className={`${
                 index % 2 === 0 ? "bg-white" : "bg-gray-100"
-              } grid grid-cols-[5%_10%_20%_20%_10%_10%_10%_15%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
+              } grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
             >
-              <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-2 border-gray-400">
-                {index + 1}
-              </div>
+            
               <p className="text-start flex items-center px-4 border-r border-gray-400 py-1 line-clamp-1">
                 {item.subjectCode}
               </p>
@@ -116,9 +121,17 @@ console.log(schedules)
               <p className="text-center flex items-center justify-center border-r border-gray-400">
                 {item.period}
               </p>
-              <p className="text-center py-2 flex items-center justify-center">
+              <p className="text-center py-2 flex items-center justify-center border-r border-gray-400">
                 {item.day}
               </p>
+              <div className="text-center flex items-center w-full justify-center text-gray-700  py-2 ">
+                <p className="px-4 py-1 bg-red-500 hover:bg-red-700 text-white rounded-sm" onClick={()=>{
+                  onDeleteSchedule(item.id , item.subjectName)
+                }}>
+                  ลบ
+                </p>
+                  
+              </div>
             </div>
           ))
         ) : (

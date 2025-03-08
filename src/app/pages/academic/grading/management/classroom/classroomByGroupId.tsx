@@ -215,14 +215,15 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
               {summaryData?.generalData.groupName}{" "}
             </h1>
           </Badge>
-          <div>
+          <div className="flex items-center gap-3">
             <button
               onClick={() => {
                 TotalScoreInGroup(convertTOPDFData);
               }}
               className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             >
-              ใบรวมเกรด.pdf
+              ใบตรวจเกรด {summaryData?.generalData.class}.
+              {summaryData?.generalData.groupName} .pdf
             </button>
             <button
               onClick={handleExportToExcel}

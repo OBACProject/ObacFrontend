@@ -158,3 +158,38 @@ export const fetchCreateScheduleSubject = async (
     return { success: false, error: "Unexpected error occurred" };
   }
 };
+
+export const fetchDeleteScheduleSubject = async (
+  scheduleSubjectId:number
+): Promise<{ success: boolean; data?: any; error?: string }> => {
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/DeleteScheduleSubjectByID?scheduelSubjectID=${scheduleSubjectId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: `Error: ${response.status} - ${response.statusText} | ${
+          data.responseMessage || JSON.stringify(data)
+        }`,
+      };
+    }
+
+    return { success: true, data };
+  } catch (err) {
+    console.error("Request failed:", err);
+    return { success: false, error: "Unexpected error occurred" };
+  }
+};

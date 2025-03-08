@@ -2,16 +2,16 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { BookText, PlusCircle } from "lucide-react";
-import { StudentGroup } from "@/dto/studentDto";
-import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
+import { GetStudentGroupsByTermYearDto, StudentGroup } from "@/dto/studentDto";
+import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
 import { GetAllTeacher } from "@/dto/teacherDto";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
 import Link from "next/link";
 import AddSchedulePopUp from "./AddSchedulePopUp";
 
-const getStudentGroup = async () => {
+const getStudentGroup = async (term: string, year: number) => {
   try {
-    const response = await fetchGetAllStudentGroup();
+    const response = await fetchGetStudentGroupsByTermYear(term, year);
     return response;
   } catch (err) {
     return [];
@@ -31,46 +31,43 @@ export default function Form() {
   const [toggleMode, setToggleMode] = useState<boolean>(false);
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<string>("2024");
+  const [year, setYear] = useState<string>("2568");
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [studentGroup, setStudentGroup] = useState<StudentGroup[]>();
+  const [studentGroup, setStudentGroup] = useState<
+    GetStudentGroupsByTermYearDto[]
+  >([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>();
-
-  const fetchData = async () => {
-    try {
-      const [studentGroups, teachers] = await Promise.all([
-        getStudentGroup(),
-        getAllTeacher(),
-      ]);
-      setStudentGroup(studentGroups);
-      setTeacher(teachers);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+  // const fetchData = async () => {
+  //   try {
+  //     const [studentGroups, teachers] = await Promise.all([
+  //       getStudentGroup(term , Number(year)),
+  //       getAllTeacher(),
+  //     ]);
+  //     setStudentGroup(studentGroups);
+  //     setTeacher(teachers);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
   useEffect(() => {
-    getStudentGroup().then((d) => {
-      setStudentGroup(d);
-    });
+    getStudentGroup(term, Number(year)).then(
+      (d: GetStudentGroupsByTermYearDto[]) => {
+        setStudentGroup(d);
+      }
+    );
     getAllTeacher().then((d) => {
       setTeacher(d);
     });
     setLoading(true);
   }, []);
-  console.log(studentGroup);
-  const getDataAddSchedulePopUp = (
-    subjectID: number,
-    teacherID: number,
-    studentGroupID: number,
-    room: string,
-    period: string,
-    day: string
-  ) => {
-    alert(
-      `1-${studentGroupID} , 2-${teacherID} , 3-${subjectID} , 4-${room} 5-${period} 6-${day}`
+
+  useEffect(() => {
+    getStudentGroup(term, Number(year)).then(
+      (d: GetStudentGroupsByTermYearDto[]) => {
+        setStudentGroup(d);
+      }
     );
-  };
+  }, [term, year]);
 
   return (
     <div className="w-full">
@@ -102,7 +99,7 @@ export default function Form() {
                 onChange={(e) => setYear(e.target.value)}
                 value={year}
               >
-                <option value="2024">2568</option>
+                <option value="2568">2568</option>
                 <option value="2567">2567</option>
                 <option value="2566">2566</option>
                 <option value="2565">2565</option>
@@ -124,7 +121,7 @@ export default function Form() {
           <button
             className={`px-10 py-1 duration-500 ${
               !toggleMode
-                ?  "bg-white border-blue-500  border   text-blue-800 hover:bg-gray-200"
+                ? "bg-white border-blue-500  border   text-blue-800 hover:bg-gray-200"
                 : "bg-blue-500  text-white"
             } duration-300 flex items-cente  rounded-md`}
             onClick={() => setToggleMode(true)}
@@ -145,79 +142,118 @@ export default function Form() {
           {toggleMode ? (
             <div className="w-full rounded-sm py-5 px-10">
               <div className="w-full grid grid-cols-[5%_20%_20%_20%_20%_15%] bg-[#cfe4ff] text-lg text-gray-800 border-2 border-gray-400  rounded-t-md">
-                <div className="text-center py-2 border-r-2 border-gray-400">ลำดับ</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">รหัสอาจารย์</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">ชื่อ</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">นามสกุล</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">หมวดวิชา</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">เบอร์ติดต่อ</div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  ลำดับ
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  รหัสอาจารย์
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  ชื่อ
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  นามสกุล
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  หมวดวิชา
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  เบอร์ติดต่อ
+                </div>
               </div>
-              {teachers?.map((item: GetAllTeacher, index) => (
-                <Link
-                  href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
-                  key={item.teacherId}
-                  className={` ${
-                    index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                  } grid grid-cols-[5%_20%_20%_20%_20%_15%]  hover:bg-blue-50 border border-gray-400  border-t-0`}
-                >
-                  <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-400">
-                    {index + 1}
-                  </div>
-                  <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                    <p className="line-clamp-1">T10221501</p>
-                  </div>
-                  <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400 ">
-                    <p className="line-clamp-1">{item.thaiName}</p>
-                  </div>
-                  <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r border-gray-400">
-                    <p className="line-clamp-1">{item.thaiLastName}</p>
-                  </div>
-                  <div className=" flex items-center text-gray-700 justify-center gap-2 border-r py-1 border-gray-400">
-                    <p className="line-clamp-1">{item.facultyName}</p>
-                  </div>
-                  <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
-                    091-874-1224
-                  </div>
-                </Link>
-              ))}
+              {teachers && teachers?.length > 0 ? (
+                <div>
+                  {" "}
+                  {teachers?.map((item: GetAllTeacher, index) => (
+                    <Link
+                      href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
+                      key={item.teacherId}
+                      className={` ${
+                        index % 2 == 0 ? "bg-white" : "bg-gray-100"
+                      } grid grid-cols-[5%_20%_20%_20%_20%_15%]  hover:bg-blue-50 border border-gray-400  border-t-0`}
+                    >
+                      <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-400">
+                        {index + 1}
+                      </div>
+                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                        <p className="line-clamp-1">{item.teacherCode}</p>
+                      </div>
+                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400 ">
+                        <p className="line-clamp-1">{item.thaiName}</p>
+                      </div>
+                      <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r border-gray-400">
+                        <p className="line-clamp-1">{item.thaiLastName}</p>
+                      </div>
+                      <div className=" flex items-center text-gray-700 justify-center gap-2 border-r py-1 border-gray-400">
+                        <p className="line-clamp-1">{item.facultyName}</p>
+                      </div>
+                      <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
+                        091-874-1224
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="border-2 py-10 border-dashed grid place-items-center border-t-0  text-2xl text-gray-500 border-gray-400">
+                  ไม่มีข้อมูลอาจารย์
+                </div>
+              )}
             </div>
           ) : (
             <div className="w-full rounded-sm py-5 px-10">
               <div className="w-full grid grid-cols-[5%_15%_30%_40%_10%] bg-[#cfe4ff] text-gray-800 border-2  text-lg border-gray-400  rounded-t-md">
-                <div className="text-center border-r-2 py-2 border-gray-400">ลำดับ</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">ระดับชั้น</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">หลักสูตร</div>
-                <div className="text-center py-2 border-r-2 border-gray-400">ประเภท</div>
+                <div className="text-center border-r-2 py-2 border-gray-400">
+                  ลำดับ
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  ระดับชั้น
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  หลักสูตร
+                </div>
+                <div className="text-center py-2 border-r-2 border-gray-400">
+                  ประเภท
+                </div>
                 {/* <div className="text-center">สาขาวิชา</div> */}
                 <div className="text-center py-2">จำนวนนักเรียน</div>
               </div>
-              {studentGroup?.map((item: StudentGroup, index) => (
-                <Link
-                  href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.studentGroupId}`}
-                  key={item.studentGroupId}
-                  className={` ${
-                    index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                  } grid grid-cols-[5%_15%_30%_40%_10%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
-                >
-                  <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
-                    {index + 1}
-                  </div>
-                  <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                    <p className="line-clamp-1">
-                      {item.class}.{item.studentGroupName}
-                    </p>
-                  </div>
-                  <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                    <p className="line-clamp-1">{item.program}</p>
-                  </div>
-                  <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                    <p className="line-clamp-1">{item.program}</p>
-                  </div>
-                  <div className=" flex items-center justify-center gap-2 py-1">
-                    {item.studentCount}
-                  </div>
-                </Link>
-              ))}
+              {studentGroup && studentGroup.length > 0 ? (
+                <div>
+                  {studentGroup?.map(
+                    (item: GetStudentGroupsByTermYearDto, index) => (
+                      <Link
+                        href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.id}`}
+                        key={item.id}
+                        className={` ${
+                          index % 2 == 0 ? "bg-white" : "bg-gray-100"
+                        } grid grid-cols-[5%_15%_30%_40%_10%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
+                      >
+                        <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
+                          {index + 1}
+                        </div>
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                          <p className="line-clamp-1">
+                            {item.class}.{item.groupName}
+                          </p>
+                        </div>
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                          <p className="line-clamp-1">{item.program}</p>
+                        </div>
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                          <p className="line-clamp-1">{item.program}</p>
+                        </div>
+                        <div className=" flex items-center justify-center gap-2 py-1">
+                          {/* {item.studentCount} */}-
+                        </div>
+                      </Link>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="border-2 py-10 border-dashed grid place-items-center border-t-0  text-2xl text-gray-500 border-gray-400">
+                  ไม่มีข้อมูลชั้นเรียน
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpDown, ChevronRight, CircleX } from "lucide-react";
+import {  ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StudentListPage } from "./studentList";
 import { StudentInfoByIdPage } from "./studentInfo";
@@ -91,7 +91,7 @@ export function Main() {
             </div>
           )}
         </div>
-        <div className="px-5 flex gap-4">
+        {/* <div className="px-5 flex gap-4">
           <Link
             href="/pages/academic/grading/upLevel"
             className="px-10 bg-blue-500 py-1.5  flex items-center justify-center h-fit  text-white gap-2 rounded-md hover:bg-blue-600"
@@ -106,7 +106,7 @@ export function Main() {
             <CircleX className="w-5 h-5 " />
             นักเรียนที่ไม่ผ่านเกณฑ์
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Active tab content */}

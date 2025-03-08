@@ -1,5 +1,5 @@
 "use client";
-
+import { usePathname } from "next/navigation"; 
 import {
   AcademicSidebarProps,
   ProfileData,
@@ -158,6 +158,7 @@ export function SidebarMenu({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const pathname = usePathname(); 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
   const [delayedSubMenu, setDelayedSubMenu] = useState<number | null>(null);
@@ -167,7 +168,7 @@ export function SidebarMenu({
     if (subMenu) {
       setTimeout(() => {
         setDelayedSubMenu(index);
-      }, 200); // Delay of 200ms before showing the submenu
+      }, 200);
     }
   };
 
@@ -176,7 +177,7 @@ export function SidebarMenu({
     if (subMenu) {
       setTimeout(() => {
         setDelayedSubMenu(null);
-      }, 200); // Delay of 200ms before showing the submenu
+      }, 200);
     }
   };
 
@@ -190,7 +191,9 @@ export function SidebarMenu({
         } absolute left-0 h-full w-16 z-50 min-h-screen bg-white border-t border-t-gray-200 pl-1 py-4`}
       >
         <div className="grid gap-2">
-          {menuItems.map((item, index) => (
+          {menuItems.map((item, index) => {
+            const isActive = pathname === item.href;
+          return (
             <div
               key={index}
               onMouseEnter={() => handleMouseEnter(index, item.subMenu)}
@@ -203,7 +206,9 @@ export function SidebarMenu({
                     isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
                   } h-12 flex items-center w-full px-1 group duration-300 ${
                     hoveredIndex === index ? "bg-gray-200" : ""
-                  }`}
+                  } ${
+                      isActive ? "bg-gradient-to-tr from-sky-200 to-emerald-100 text-white" : "bg-white"
+                    }`}
                 >
                   <div className="flex items-center gap-4 w-full">
                     <div className="w-10 h-10 flex items-center justify-center">
@@ -229,7 +234,7 @@ export function SidebarMenu({
                 </motion.div>
               )}
             </div>
-          ))}
+          )})}
         </div>
       </div>
       {/* Sidebar Toggle Button */}
@@ -259,7 +264,9 @@ export function SidebarMenu({
         className="h-full fixed top-20 left-0 w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md px-2 py-4"
       >
         <div className="grid gap-2 relative">
-          {menuItems.map((item, index) => (
+          {menuItems.map((item, index) => {
+            const isActive = pathname === item.href;
+          return (
             <div
               key={index}
               onMouseEnter={() => {
@@ -277,8 +284,8 @@ export function SidebarMenu({
                   if (!item.subMenu) router.push(item.href);
                 }}
                 className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
-                  hoveredIndex === index ? "bg-gray-200" : ""
-                } relative`}
+                  hoveredIndex === index ? "bg-gray-200 " : ""
+                } relative `}
               >
                 <div className="flex items-center gap-4 w-full">
                   <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden duration-300">
@@ -317,7 +324,7 @@ export function SidebarMenu({
                 </div>
               )}
             </div>
-          ))}
+          )})}
         </div>
       </motion.div>
     </div>

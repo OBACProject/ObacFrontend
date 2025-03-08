@@ -93,7 +93,7 @@ export function Main() {
             </div>
           )}
         </div>
-        <div className="px-5 flex gap-4">
+        {/* <div className="px-5 flex gap-4">
           <Link
             href="/pages/academic/grading/upLevel"
             className="px-10 bg-blue-400 flex h-fit items-center justify-center py-1.5 text-white rounded-md hover:bg-blue-600 gap-2"
@@ -108,7 +108,7 @@ export function Main() {
             <CircleX className="w-5 h-5 " />
             นักเรียนที่ไม่ผ่านเกณฑ์
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {activeTab === "classroom" && (
