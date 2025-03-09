@@ -139,3 +139,24 @@ export interface GetStudentGradeDetailDto {
   subProgramName: string;
   year: YearDataDetail[];
 }
+
+export type GetStudentGroupGradeByGroupIdTermYearDto = {
+  gradeId: number;
+  subjectId: number;
+  scheduleSubjectId: number;
+  studentId: number;
+  class: string;
+  studentGroup: string;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  subjectName: string;
+  collectScore: number | null;
+  testScore: number | null;
+  affectiveScore: number | null;
+  midtermScore: number | null;
+  finalScore: number | null;
+  totalScore: number | null;
+  grade: number;
+  remark: string | null;
+};

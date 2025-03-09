@@ -1,12 +1,12 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { GetGradBySubjectId } from "@/dto/gradDto";
+import {  GetStudentGroupGradeByGroupIdTermYearDto } from "@/dto/gradDto";
 import THSarabunFont from "../font/THSarabunFont";
 import THSarabunFontBold from "../font/THSarabunBold";
 
 interface DataList {
-  grads?: GetGradBySubjectId[];
+  grads?: GetStudentGroupGradeByGroupIdTermYearDto[];
   studentGroup: string;
   subjectName: string | undefined;
   subjectId: string | undefined;

@@ -1,7 +1,7 @@
 "use client";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
-import { ConvertGradBySubjectId, GetGradBySubjectId } from "@/dto/gradDto";
+import { ConvertGradBySubjectId, GetGradBySubjectId, GetStudentGroupGradeByGroupIdTermYearDto } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { ConvertScoreToExcel } from "@/lib/convertToExcel";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { MethodDto } from "@/dto/methodDto";
 
 interface Props {
-  grads?: GetGradBySubjectId[];
+  grads?: GetStudentGroupGradeByGroupIdTermYearDto[];
   schedules?: GetScheduleBysubjectId[];
   subjects: GetSubjectBySubjectId;
   method: MethodDto;
@@ -27,7 +27,7 @@ export default function MenuBar({
   isComplete,
   onEditReturn,
 }: Props) {
-  const [gradData, setGradData] = useState<GetGradBySubjectId[]>([]);
+  const [gradData, setGradData] = useState<GetStudentGroupGradeByGroupIdTermYearDto[]>([]);
   const [scheduleData, setSchedules] = useState<
     GetScheduleBysubjectId[] | null
   >(null);
@@ -65,10 +65,10 @@ export default function MenuBar({
     const convertedData: ConvertGradBySubjectId[] = gradData.map((item) => ({
       studentCode: item.studentCode,
       name: `${item.firstName} ${item.lastName}`,
-      collectScore: item.collectScore,
-      testScore: item.testScore,
-      affectiveScore: item.affectiveScore,
-      totalScore: item.totalScore,
+      collectScore: item.collectScore ??0,
+      testScore: item.testScore ??0,
+      affectiveScore: item.affectiveScore ??0,
+      totalScore: item.totalScore ??0,
     }));
     return convertedData;
   };
