@@ -175,8 +175,9 @@ export function AcademicStudentInfo(props: {
         }
         setOnEdit(!onEdit);
         toast.success("บันทึกคะแนนสำเร็จ");
-        setTimeout(() => {}, 1000);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -330,7 +331,7 @@ export function AcademicStudentInfo(props: {
               className={`bg-blue-400 duration-300 h-fit text-white  text-lg    rounded-md hover:opacity-75 w-[120px]  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm `}
               onClick={handleEdit}
             >
-              แก้ไข{" "}
+              แก้ไข
               <Pencil
                 style={{ width: "1.0rem", height: "1.5rem" }}
                 className="text-white "

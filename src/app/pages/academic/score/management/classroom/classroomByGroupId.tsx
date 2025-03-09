@@ -166,7 +166,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
     localStorage.setItem("activeTabStudent", "individualStudentInfo");
     localStorage.setItem("selectedStudentData", JSON.stringify(studentData));
-    rounter.push(`/pages/academic/grading/management/individual`);
+    rounter.push(`/pages/academic/score/management/individual`);
     // const student = studentInStudentList(studentCode);
     // if (student) {
     //   setSelectedStudent(student);

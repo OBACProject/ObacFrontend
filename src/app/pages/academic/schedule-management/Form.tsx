@@ -30,8 +30,8 @@ const getAllTeacher = async () => {
 export default function Form() {
   const [toggleMode, setToggleMode] = useState<boolean>(false);
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
-  const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<string>("2568");
+  const [term, setTerm] = useState<string>("2");
+  const [year, setYear] = useState<string>("2567");
   const [isLoading, setLoading] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<
     GetStudentGroupsByTermYearDto[]
@@ -99,7 +99,7 @@ export default function Form() {
                 onChange={(e) => setYear(e.target.value)}
                 value={year}
               >
-                <option value="2568">2568</option>
+                {/* <option value="2568">2568</option> */}
                 <option value="2567">2567</option>
                 <option value="2566">2566</option>
                 <option value="2565">2565</option>
@@ -212,7 +212,7 @@ export default function Form() {
                   หลักสูตร
                 </div>
                 <div className="text-center py-2 border-r-2 border-gray-400">
-                  ประเภท
+                  รหัสห้อง
                 </div>
                 {/* <div className="text-center">สาขาวิชา</div> */}
                 <div className="text-center py-2">จำนวนนักเรียน</div>
@@ -222,8 +222,8 @@ export default function Form() {
                   {studentGroup?.map(
                     (item: GetStudentGroupsByTermYearDto, index) => (
                       <Link
-                        href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.id}`}
-                        key={item.id}
+                        href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.groupId}`}
+                        key={item.groupId}
                         className={` ${
                           index % 2 == 0 ? "bg-white" : "bg-gray-100"
                         } grid grid-cols-[5%_15%_30%_40%_10%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
@@ -237,10 +237,10 @@ export default function Form() {
                           </p>
                         </div>
                         <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                          <p className="line-clamp-1">{item.program}</p>
+                          <p className="line-clamp-1">{item.facultyName}</p>
                         </div>
                         <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
-                          <p className="line-clamp-1">{item.program}</p>
+                          <p className="line-clamp-1">{item.groupCode}</p>
                         </div>
                         <div className=" flex items-center justify-center gap-2 py-1">
                           {/* {item.studentCount} */}-

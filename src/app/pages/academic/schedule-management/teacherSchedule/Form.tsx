@@ -1,5 +1,5 @@
 "use client";
-import { fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI";
+import { fetchDeleteScheduleSubject, fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI";
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
@@ -7,6 +7,7 @@ import { GraduationCap, PlusCircle } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import AddTeacherSchedulePopUp from "./AddTeacherSchedulePopUp";
+import { toast } from "react-toastify";
 type Props = {
   term: string;
   year: string;
@@ -41,6 +42,9 @@ export default function Form({ term, year, teacherID }: Props) {
   const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
   const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
   const [scheduleBtn ,setschduleBtn] = useState<boolean>(false)
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
+    const [deleteID, setDeleteID] = useState<number>(0);
+    const [deleteName, setDeleteName] = useState<string>("");
   useEffect(() => {
     getSchedule(teacherID, term, year).then((d: any) => {
       setSchedules(d);
@@ -49,7 +53,18 @@ export default function Form({ term, year, teacherID }: Props) {
       setTeacherData(data);
     });
   }, []);
-
+ const onDeleteSchedule = async (id: number, subjectName: string) => {
+    const response = await fetchDeleteScheduleSubject(id);
+    if (response.success) {
+      toast.success(`ลบวิชา ${subjectName} สำเร็จ`);
+      setDeleteTrigger(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      toast.error("ไม่สำเร็จ");
+    }
+  };
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
@@ -90,7 +105,7 @@ export default function Form({ term, year, teacherID }: Props) {
       </div>
 
       <div className="w-full ">
-        <div className="w-full grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_15%] bg-[#cfe4ff] text-blue-950 border-2  border-gray-400 text-lg rounded-t-md">
+        <div className="w-full grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_10%_5%] bg-[#cfe4ff] text-blue-950 border-2  border-gray-400 text-lg rounded-t-md">
           <div className="text-center border-r-2  border-gray-400 py-2 ">รหัสวิชา</div>
           <div className="text-center border-r-2  border-gray-400 py-2 ">ชื่อวิชา</div>
           <div className="text-center border-r-2  border-gray-400 py-2 ">สายชั้น</div>
@@ -98,7 +113,8 @@ export default function Form({ term, year, teacherID }: Props) {
           <div className="text-center border-r-2  border-gray-400 py-2 ">ห้องเรียน</div>
           <div className="text-center border-r-2  border-gray-400 py-2 ">หน่วยกิต</div>
           <div className="text-center border-r-2  border-gray-400 py-2 ">คาบเรียน</div>
-          <div className="text-center  py-2 ">วันสอน</div>
+          <div className="text-center  py-2 border-r-2  border-gray-400 ">วันสอน</div>
+          <div className="text-center  py-2 "></div>
         </div>
       </div>
       {schedules.length > 0 ? (
@@ -110,7 +126,7 @@ export default function Form({ term, year, teacherID }: Props) {
                   key={subIndex}
                   className={` ${
                     subIndex % 2 == 0 ? "bg-white" : "bg-gray-100"
-                  } grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_15%]  border-2 text-[16px] border-gray-400 text-gray-700  border-t-0`}
+                  } grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_10%_5%]  border-2 text-[16px] border-gray-400 text-gray-700  border-t-0`}
                 >
                   <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
                     {subject.subjectCode}
@@ -133,9 +149,16 @@ export default function Form({ term, year, teacherID }: Props) {
                   <p className="text-center flex items-center justify-center border-r border-gray-400">
                     {subject.period}
                   </p>
-                  <p className="text-center py-2 flex items-center justify-center  ">
+                  <p className="text-center py-2 flex items-center justify-center  border-r  border-gray-400  ">
                     {subject.day}
                   </p>
+                  <div className="text-center py-2 flex items-center justify-center  ">
+                    <p  onClick={() => {
+                    setDeleteTrigger(true);
+                    setDeleteID(subject.id);
+                    setDeleteName(subject.subjectName);
+                  }} className="px-4 py-1 bg-red-400 text-white rounded-sm hover:bg-red-600">ลบ</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -147,22 +170,44 @@ export default function Form({ term, year, teacherID }: Props) {
         </div>
       )}
 
-      {/* {schedules.map((item, index) => (
-        <div className="px-10 text-xl text-black" key={index}>
-          <h2>{item.day}</h2>
-          {item.scheduleSubjects.map((subject, subIndex) => (
-            <div key={subIndex}>
-              <p>Group: {subject.groupName}</p>
-              <p>
-                Subject: {subject.subjectName} ({subject.subjectCode})
-              </p>
-              <p>
-                Room: {subject.room}, Period: {subject.period}
+{deleteTrigger && (
+        <div
+          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          onClick={() => setDeleteTrigger(false)}
+        >
+          <div
+            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="py-4 w-full text-center text-2xl font-semibold">
+              ยืนยันการลบ
+            </div>
+            <div className="grid place-items-center py-3">
+              <p className="w-[300px] text-center">ลบวิชา {deleteName}</p>
+              <p className="text-gray-600 w-[300px] text-center">
+                ตรวจสอบให้แน่ใจก่อนลบ
               </p>
             </div>
-          ))}
+            <div className="flex gap-5 justify-center py-5 w-full">
+              <button
+                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
+                onClick={() => setDeleteTrigger(false)}
+              >
+                ยกเลิก
+              </button>
+              <button
+                className="text-sm w-[90px] py-1.5 bg-red-500 hover:bg-red-600 rounded-md text-white "
+                onClick={() => {
+                  onDeleteSchedule(deleteID, deleteName);
+                }}
+                disabled={!deleteID || !deleteName}
+              >
+                ลบ
+              </button>
+            </div>
+          </div>
         </div>
-      ))} */}
+      )}
       {scheduleBtn && (
         <AddTeacherSchedulePopUp
         term={term}
