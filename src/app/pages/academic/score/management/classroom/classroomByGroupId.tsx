@@ -12,6 +12,11 @@ import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
 import { Loader2 } from "lucide-react";
+import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
+import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
+import { toast } from "react-toastify";
+import { GetStudentGradeDetailDto } from "@/dto/gradDto";
+import GroupSummaryGradPDF from "@/app/components/PDF/GroupSummaryGrade";
 
 export interface GeneralData {
   groupId: number;
@@ -63,6 +68,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
+  const [gropDownLoadPDFTrigger , setGropDownLoadPDFTrigger] = useState<boolean>(false)
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
@@ -186,6 +192,55 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
         },
     studentList: summaryData?.students || [],
   };
+  const handleDownLoadAllStudentGradDetailPDF = async () => {
+    setGropDownLoadPDFTrigger(true)
+    if (!summaryData || summaryData.students.length === 0) {
+      toast.error("ไม่พบข้อมูลนักศึกษา");
+      return;
+    }
+    try {
+      const studentDataPromises = summaryData.students.map((student) =>
+        fetchGetStudentGradeDetail(student.studentId)
+      );
+  
+      const studentDataList = await Promise.all(studentDataPromises);
+      const validStudentDataList = studentDataList.filter(
+        (data) => data !== null
+      ) as GetStudentGradeDetailDto[];
+  
+      if (validStudentDataList.length === 0) {
+        toast.error("ไม่มีข้อมูลนักศึกษาที่สามารถดาวน์โหลดได้");
+        return;
+      }
+  
+      for (const data of validStudentDataList) {
+        const pdfBlob = await GroupSummaryGradPDF(data);
+        if (!pdfBlob) {
+          console.error(`PDF generation failed for student: ${data.studentId}`);
+          continue;
+        }
+  
+        const url = window.URL.createObjectURL(new Blob([pdfBlob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `ใบแสดงผล ${data.thaiName} ${data.studentCode}.pdf`
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
+      setGropDownLoadPDFTrigger(false)
+      toast.success("ดาวน์โหลด PDF สำเร็จทั้งหมด!");
+    } catch (error) {
+      console.error("Error downloading PDFs:", error);
+      toast.error("เกิดข้อผิดพลาดในการดาวน์โหลดไฟล์ PDF");
+    }
+  };
+  
 
   return (
     <>
@@ -200,23 +255,38 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
                 {summaryData?.generalData.groupName}{" "}
               </h1>
             </Badge>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => {
-                  TotalScoreInGroup(convertTOPDFData);
-                }}
-                className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
-              >
-                ใบตรวจเกรด {summaryData?.generalData.class}.
-                {summaryData?.generalData.groupName} .pdf
-              </button>
-              <button
-                onClick={handleExportToExcel}
-                className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
-              >
-                เกรดนักเรียนห้อง {summaryData?.generalData.class}.
-                {summaryData?.generalData.groupName} Excel
-              </button>
+            <div className="grid gap-1">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    TotalScoreInGroup(convertTOPDFData);
+                  }}
+                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                >
+                  ใบตรวจเกรด {summaryData?.generalData.class}.
+                  {summaryData?.generalData.groupName} .pdf
+                </button>
+                <button
+                  onClick={handleExportToExcel}
+                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                >
+                  เกรดนักเรียนห้อง {summaryData?.generalData.class}.
+                  {summaryData?.generalData.groupName} Excel
+                </button>
+              </div>
+              <div className="flex gap-2 items-center justify-end">
+                <button
+                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                  onClick={handleDownLoadAllStudentGradDetailPDF}
+                >
+                  {gropDownLoadPDFTrigger ? (
+                    <p className="flex gap-2 itemc-center"><Loader2 className="h-5 w-5 animate-spin"/>ใบแสดงผลการเรียน</p>
+                  ):(
+                    <p>ใบแสดงผลการเรียน {summaryData?.students.length} คน</p>
+                  )}
+                  
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex gap-10 mt-4">

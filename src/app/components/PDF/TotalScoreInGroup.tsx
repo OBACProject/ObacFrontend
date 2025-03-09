@@ -133,7 +133,7 @@ export default function TotalScoreInGroup(data: DataList) {
     const subjectGrades = Object.values(subjects || {});
 
     const subjectsWithGrades = [
-      ...subjectGrades.map((grade) => (grade ? grade : "-")),
+      ...subjectGrades.map((grade) => (grade ? grade : "0")),
       ...Array(10 - subjectGrades.length).fill("-"),
     ];
 
