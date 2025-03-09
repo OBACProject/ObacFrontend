@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { StudentListPage } from "./studentList";
 import { StudentInfoByIdPage } from "./studentInfo";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 
 interface IndividualStudentInfoData {
   studentId: number;
@@ -25,6 +24,7 @@ export function Main() {
     const savedTab = localStorage.getItem("activeTabStudent");
     const savedStudentData = localStorage.getItem("selectedStudentData");
 
+
     if (savedTab) {
       setActiveTab(savedTab);
       if (savedTab === "individualStudentInfo" && savedStudentData) {
@@ -35,7 +35,7 @@ export function Main() {
 
   // Remove stored data when leaving the page
   useEffect(() => {
-    if (pathname === "/pages/academic/grading/management/individual") {
+    if (pathname === "/pages/academic/score/management/individual") {
       localStorage.removeItem("activeTabClassroom");
       localStorage.removeItem("selectedClassroomData");
     }
@@ -91,22 +91,6 @@ export function Main() {
             </div>
           )}
         </div>
-        {/* <div className="px-5 flex gap-4">
-          <Link
-            href="/pages/academic/grading/upLevel"
-            className="px-10 bg-blue-500 py-1.5  flex items-center justify-center h-fit  text-white gap-2 rounded-md hover:bg-blue-600"
-          >
-            <ArrowUpDown className="w-5 h-5" />
-            ปรับเลื่อนชั้น
-          </Link>
-          <Link
-            href="/pages/academic/FailedStudent"
-            className="px-10 bg-white border-2  border-red-500 hover:bg-red-400 hover:text-white flex items-center h-fit justify-center py-1 text-red-500 rounded-md  gap-2"
-          >
-            <CircleX className="w-5 h-5 " />
-            นักเรียนที่ไม่ผ่านเกณฑ์
-          </Link>
-        </div> */}
       </div>
 
       {/* Active tab content */}

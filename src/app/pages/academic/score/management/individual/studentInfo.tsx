@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import { Loader2 } from "lucide-react";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
 
   const [scoreFileData, setScoreFileData] =
     useState<GetStudentGradeDetailDto | null>();
+    const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
 
   const [termData, setTermData] = useState<YearData[]>([]);
   console.log("termData", termData);
@@ -33,6 +35,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         setTermData(data.year);
         const data2 = await fetchGetStudentGradeDetail(props.studentId);
         setScoreFileData(data2);
+        setIsLoadingPage(true)
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -41,7 +44,9 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   }, [props.studentId]);
 
   return (
-    <div className="">
+    <div className=""> 
+    {isLoadingPage ? (
+      <div>
       <div className="flex justify-between w-full py-4">
         <Link
           href={
@@ -107,6 +112,16 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         </div>
       </div>
       <StudentTermTable termData={termData} />
+      </div>
+    ):(
+      <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+    )}
+      
     </div>
   );
 }
