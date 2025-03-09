@@ -34,8 +34,12 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     format: "a4",
   });
   const thaiDate = getThaiDate();
-//   let gender = ""
-//   if (grads.)
+  let gender = "";
+  if (grads.gender == "Female") {
+    gender = "นางสาว";
+  } else {
+    gender = "นาย";
+  }
 
   doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
   doc.addFileToVFS("THSarabunBold.ttf", THSarabunFontBold);
@@ -65,7 +69,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   doc.setFontSize(14);
   doc.text(`รหัสนักศึกษา : ${grads?.studentCode}`, 30, 30);
   doc.text("ชื่อ - สกุล   : ", 110.5, 30);
-  doc.text(` ${grads?.thaiName} ${grads?.thaiLastName}`, 130, 30);
+  doc.text(`${gender} ${grads?.thaiName} ${grads?.thaiLastName}`, 130, 30);
 
   doc.setFont("THSarabun", "normal");
   doc.text("รอบ : เช้า", 42, 35);
@@ -93,7 +97,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   doc.line(83, 50, 83, 257);
 
   doc.text("หน่วย", 83.5, 54);
-  doc.text("กิต", 84, 58);
+  doc.text("กิต", 85, 58);
   doc.line(90, 50, 90, 257);
   doc.text("ผล", 92, 52.5);
   doc.text("การ", 91, 55.5);
@@ -108,7 +112,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   doc.line(183, 50, 183, 257);
 
   doc.text("หน่วย", 183.5, 54);
-  doc.text("กิต", 184, 58);
+  doc.text("กิต", 185, 58);
   doc.line(190, 50, 190, 257);
   doc.text("ผล", 192, 52.5);
   doc.text("การ", 191, 55.5);
@@ -122,11 +126,11 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   let swift = false;
 
   for (let i = 0; i < grads.year.length; i++) {
-    if (swift == false && startColumn >= 255) {
+    if (swift == false && startColumn >= 250) {
       startColumn = 64;
       Xaxis = 130;
       swift = true;
-    } else if (swift == true && startColumn > 255) {
+    } else if (swift == true && startColumn > 250) {
       doc.addPage();
       Xaxis = 30;
       swift = false;
@@ -143,12 +147,12 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     let CreditCount = 0;
     let CountGrad = 0;
     for (let j = 0; j < grads.year[i].termQuery.length; j++) {
-      if (swift == false && inStartColoume >= 255) {
+      if (swift == false && inStartColoume >= 250) {
         inStartColoume = 63;
         inStartColoume = inStartColoume + 5;
         Xaxis = 130;
         swift = true;
-      } else if (swift == true && inStartColoume > 255) {
+      } else if (swift == true && inStartColoume > 250) {
         doc.addPage();
         inStartColoume = 20;
         Xaxis = 30;
@@ -196,13 +200,13 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     startColumn += 8;
   }
 
-//   doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
-//   doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);
-//   doc.text(`${thaiDate}`, 105, 290);
+  //   doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
+  //   doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);
+  //   doc.text(`${thaiDate}`, 105, 290);
 
-//   doc.text("(นายวิทวัต โยธินนรธรรม)", 160, 280);
-//   doc.text("ผู้อำนวยการ", 168, 285);
-//   doc.text(`${thaiDate}`, 165, 290);
+  //   doc.text("(นายวิทวัต โยธินนรธรรม)", 160, 280);
+  //   doc.text("ผู้อำนวยการ", 168, 285);
+  //   doc.text(`${thaiDate}`, 165, 290);
 
   doc.text(`${thaiDate}`, 180, 295);
 

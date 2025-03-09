@@ -26,7 +26,7 @@ export default function Credit() {
         </div>
       </div>
       <div className="text-center  py-4  text-white">
-        <p>© 2024 วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC</p>
+        <p>©2024 วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC</p>
       </div>
     </div>
   );

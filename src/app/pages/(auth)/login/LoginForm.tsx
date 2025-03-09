@@ -57,7 +57,7 @@ export default function LoginForm({ session }: LoginFormProps) {
           router.push("/pages/teacher/profile");
           break;
         case "Academic":
-          router.push("/pages/academic");
+          router.push("/pages/academic/profile");
           break;
         case "Admin":
           router.push("/pages/admin/academicManagement");

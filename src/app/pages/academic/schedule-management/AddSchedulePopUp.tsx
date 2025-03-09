@@ -14,7 +14,6 @@ type AddSchedulePopUp = {
   onClosePopUp: (value: boolean) => void;
   term: string;
   year: string;
-
 };
 
 interface TeacherOption {
@@ -99,10 +98,10 @@ export default function AddSchedulePopUp({
         (sub) => sub.id === selectedOption.value
       );
       if (selectedSubject) {
-        setSubjectID(selectedSubject.id)
+        setSubjectID(selectedSubject.id);
       }
     } else {
-      setSubjectID(0)
+      setSubjectID(0);
     }
   };
 
@@ -123,7 +122,9 @@ export default function AddSchedulePopUp({
 
   const teacherOptions = teachers.map((teacher, index) => ({
     value: teacher.teacherId,
-    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.thaiName} ${teacher.thaiLastName}`,
+    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.thaiName} ${
+      teacher.thaiLastName
+    }`,
   }));
 
   const handleGroupChange = (
@@ -146,12 +147,20 @@ export default function AddSchedulePopUp({
   }));
 
   const onSubmit = async () => {
+    const studentGroupById = studentGroup.find(
+      (item) => item.studentGroupId === studentGroupId
+    );
+    const studentGroupName = studentGroupById?.studentGroupName;
+    // console.log(studentGroupName);
     const requestBody: CreateScheduleSubjectRequest = {
       day: day,
       period: period,
       subject_id: subjectID,
       year: Number(year),
-      term: term,
+      term: (
+        parseInt(term) +
+        2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
+      ).toString(),
       student_group_id: studentGroupId,
       teacher_id: teacherID,
       room: room,
@@ -159,12 +168,11 @@ export default function AddSchedulePopUp({
 
     try {
       await fetchCreateScheduleSubject(requestBody);
-      toast.success("สร้างสำเร็จ")
-      onClosePopUp(false)
+      toast.success("สร้างสำเร็จ");
+      onClosePopUp(false);
     } catch (err) {
       console.error("Error creating schedule:", err);
     }
-
   };
 
   return (
@@ -183,8 +191,11 @@ export default function AddSchedulePopUp({
           <div className="flex justify-start gap-4">
             <span className="flex gap-2 justify-center">
               <label className="py-1 px-2 ">วัน</label>
-              <select className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                onChange={(e) => setDay(e.target.value)} value={day}>
+              <select
+                className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 "
+                onChange={(e) => setDay(e.target.value)}
+                value={day}
+              >
                 <option value="">- เลือก -</option>
                 {days.map((items) => (
                   <option key={items} value={items}>
@@ -195,8 +206,11 @@ export default function AddSchedulePopUp({
             </span>
             <span className="flex gap-2 justify-start">
               <label className="py-1 px-2">คาบเรียน</label>
-              <select className="rounded-md px-5 py-1 bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                onChange={(e) => setPeriod(e.target.value)} value={period}>
+              <select
+                className="rounded-md px-5 py-1 bg-gray-50 border border-gray-300 focus:outline-blue-500 "
+                onChange={(e) => setPeriod(e.target.value)}
+                value={period}
+              >
                 <option value="">- เลือก -</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -244,7 +258,8 @@ export default function AddSchedulePopUp({
                   type="text"
                   className="w-[100px] focus:outline-blue-400 border-[1px] rounded-md border-gray-300 px-4 py-1"
                   placeholder="room"
-                  onChange={(e) => setRoom(e.target.value)} value={room}
+                  onChange={(e) => setRoom(e.target.value)}
+                  value={room}
                 />
               </div>
               <div className="flex items-center gap-3">
@@ -263,15 +278,22 @@ export default function AddSchedulePopUp({
           </div>
 
           <div className="flex justify-center gap-5 ">
-
             <button
               className="px-8 text-white py-1 hover:bg-gray-300 hover:text-black bg-gray-400 rounded-sm"
               onClick={() => onClosePopUp(false)}
             >
               ยกเลิก
-            </button> <button
+            </button>{" "}
+            <button
               className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-600"
-              disabled={!period || !day || !room || !teacherID || !subjectID || !studentGroup}
+              disabled={
+                !period ||
+                !day ||
+                !room ||
+                !teacherID ||
+                !subjectID ||
+                !studentGroup
+              }
               onClick={onSubmit}
             >
               ตกลง

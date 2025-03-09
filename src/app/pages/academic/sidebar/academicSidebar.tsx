@@ -193,7 +193,7 @@ export function SidebarMenu({
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname.startsWith(item.headLink)
           return (
             <div
               key={index}

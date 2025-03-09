@@ -134,6 +134,11 @@ export interface TermQuery {
   subject_code: string;
   credit: string;
   finalGrade: string;
+  remark: string;
+  collectScore: number;
+  affectiveScore: number;
+  testScore: number;
+  gradeId: number;
 }
 
 export interface YearData {
@@ -236,23 +241,23 @@ export type GetStudentByStudentId = {
   programName: string;
   facultyId: number;
   facultyName: string;
-  birthDate: string; 
+  birthDate: string;
 };
 
 export type GetStudentGroupsByTermYearDto = {
-  id: number;
+  groupId: number;
   groupName: string;
   class: string;
   groupCode: string;
   level: number;
   programId: number;
-  facultyName:string;
-  programName:string;
-  subProgramName:string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
   teacherId: number | null;
   limit: number;
   year: number;
   term: string;
-  program: any | null; 
-  scheduleSubject: any[]; 
+  program: any | null;
+  scheduleSubject: any[];
 };

@@ -6,7 +6,7 @@ import autoTable from "jspdf-autotable";
 import {
   GeneralData,
   StudentList,
-} from "@/app/pages/academic/grading/management/classroom/classroomByGroupId";
+} from "@/app/pages/academic/score/management/classroom/classroomByGroupId";
 
 // max 280 y
 // max 205 x
@@ -46,7 +46,6 @@ export default function TotalScoreInGroup(data: DataList) {
     "ธันวาคม",
   ];
 
-  // Format date to match "04 ตุลาคม 2567"
   const day = dateTime.getDate().toString().padStart(2, "0");
   const month = thaiMonths[dateTime.getMonth()];
   const year = dateTime.getFullYear() + 543;
@@ -62,12 +61,10 @@ export default function TotalScoreInGroup(data: DataList) {
     10,
     25
   );
-  const subjectNames = Object.keys(data.studentList[0].subjects);
   const header = [
     "ลำดับ",
     "รหัสนักศึกษา",
     `   ชื่อ - นามสกุล   `,
-    ...subjectNames.map((_, index) => `${index + 1}`), // Numbers for each subject
     "เฉลี่ย",
     "เฉลี่ยสะสม",
   ];
@@ -130,13 +127,13 @@ export default function TotalScoreInGroup(data: DataList) {
   });
 
   let y2 = doc.lastAutoTable.finalY;
-  // Loop through studentList dynamically
+
   data.studentList.forEach((student, index) => {
     const { studentCode, name, gpa, gpax, subjects } = student;
-    const subjectGrades = Object.values(subjects);
+    const subjectGrades = Object.values(subjects || {});
 
     const subjectsWithGrades = [
-      ...subjectGrades.map((grade) => (grade ? grade : "-")),
+      ...subjectGrades.map((grade) => (grade ? grade : "0")),
       ...Array(10 - subjectGrades.length).fill("-"),
     ];
 
@@ -193,13 +190,15 @@ export default function TotalScoreInGroup(data: DataList) {
       margin: { left: 10, right: 0 },
     });
 
-    y2 = doc.lastAutoTable.finalY; // Update y position
+    y2 = doc.lastAutoTable.finalY;
     if (y2 >= 280) {
-      y2 = 14; // Reset to top of the next page if it exceeds 280
-      doc.addPage(); // Add a new page if the current page is filled
+      y2 = 14;
+      doc.addPage();
     }
   });
 
   doc.setFont("THSarabun");
-  doc.save(`ใบคะแนนรวมของห้อง.pdf`);
+  doc.save(
+    `ใบคะแนนรวมของห้อง ${data.generalData.class}-${data.generalData.groupName}.pdf`
+  );
 }

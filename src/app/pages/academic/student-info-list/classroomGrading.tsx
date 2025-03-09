@@ -10,6 +10,7 @@ import {
   filterProgramsViewData,
   getRawProgramViewData,
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -131,6 +132,7 @@ export function ClassroomGrading(props: {
   };
 
   const router = useRouter();
+  const [isLoadingPage , setIsLoadingPage] = useState<boolean>(false)
   const handleRowClick = (item: ClassroomTable) => {
     router.push(
       `/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`
@@ -161,11 +163,11 @@ export function ClassroomGrading(props: {
 
       setVocationalFaculties(getFaculties(vocational));
       setDiplomaFaculties(getFaculties(diploma));
+      setIsLoadingPage(true)
     };
-
     fetchFilterData();
+   
   }, []);
-  console.log(vocationalFaculties, diplomaFaculties);
 
   const filteredData = useMemo(() => {
     const filtered = dataTable.filter((item) => {
@@ -214,7 +216,9 @@ export function ClassroomGrading(props: {
 
   return (
     <div className="px-5 py-2">
-      <header className="grid px-4 py-0 border  rounded-lg">
+      {
+        isLoadingPage ? (
+           <header className="grid px-4 py-0 border  rounded-lg">
         <div className="flex justify-center w-full">
           <div className="flex  justify-start items-center gap-6 w-full p-2 rounded-lg">
             <div className="w-1/6 flex flex-col gap-4">
@@ -279,6 +283,16 @@ export function ClassroomGrading(props: {
           pagination={10}
         />
       </header>
+        ):(
+          <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+        )
+      }
+     
     </div>
   );
 }

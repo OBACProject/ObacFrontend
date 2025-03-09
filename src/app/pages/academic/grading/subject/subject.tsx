@@ -26,9 +26,9 @@ export function Subject(props: {
   // filter data
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
-  const yearsList = Array.from({ length: 5 }, (_, i) =>
-    (currentYear - i).toString()
-  );
+  // const yearsList = Array.from({ length: 5 }, (_, i) =>
+  //   (currentYear - i).toString()
+  // );
   const [selectedTerm, setSelectedTerm] = useState<string>("1");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
@@ -44,7 +44,7 @@ export function Subject(props: {
         props.handleSelectedData({
           id: id,
           year: Number(selectedYear),
-          term: Number(selectedTerm) +2 * (Number(currentYear) - Number(selectedYear)),
+          term: Number(item.term),
           subjectName: item.subjectName,
         });
       } else {
@@ -79,25 +79,29 @@ export function Subject(props: {
 
   const columns = [
     {
+      label: "ลำดับ",
+      key: "index",
+      className: "w-2/12 justify-start",
+    },
+    {
       label: "รหัสวิชา",
       key: "subjectCode",
-      className: "w-3/12 justify-start",
+      className: "w-4/12 justify-start",
     },
     { label: "ชื่อวิชา", key: "subjectName", className: "w-6/12" },
-    { label: "รายละเอียด", key: "description", className: "w-3/12" },
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getGradingViewData();
+        const data = await getGradingViewData(Number(selectedTerm));
         setGradingData(data);
       } catch (error) {
         console.error("Error fetching grading data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [selectedTerm]);
 
   useEffect(() => {
     const normalizedSearch = searchSubject.toLowerCase();
@@ -117,7 +121,7 @@ export function Subject(props: {
         {/* filter Data */}
         <div className="flex gap-6  px-4 bg-slate-50 rounded-lg">
           {/* filter */}
-         <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
+          <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ภาคเรียน</h1>
             <Combobox
               options={term.map((item) => ({
@@ -155,24 +159,13 @@ export function Subject(props: {
         </div>
         {/* data zone */}
         <div className="w-full px-4">
-          {/* <DataTable
-            columns={columns}
-            data={gradingDataFiltered}
-            selectedValue="id"
-            columnWidths={{
-              id: "w-1/12",
-              subjectCode: "w-2/12",
-              subjectName: "w-1/6",
-              description: "w-3/6",
-            }}
-          /> */}
           <DataTable
             columns={columns}
             data={gradingDataFiltered.map((item, index) => ({
+              index: index + 1,
               id: item.id,
               subjectCode: item.subjectCode,
               subjectName: item.subjectName,
-              description: item.description,
             }))}
             pagination={10}
             onRowClick={(item) => handleSelectedSubjectData(item.id)}

@@ -2,7 +2,7 @@
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
 import { GetStudentListByGroupIDDto, StudentDto } from "@/dto/studentDto";
-import { UsersRound } from "lucide-react";
+import { Loader2, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -21,12 +21,16 @@ const getStudentDataList = async (groupId: number) => {
 
 export default function Main({ groupId }: Props) {
   const [studentInGroup, setStudentInGroup] = useState<GetStudentListByGroupIDDto | null>();
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   useEffect(() => {
+    setIsLoadingPage(false)
     getStudentDataList(groupId).then((item: GetStudentListByGroupIDDto | never[] | null) => {
       if (item && !Array.isArray(item)) {
         setStudentInGroup(item);
+        setIsLoadingPage(true)
       } else {
         setStudentInGroup(null);
+        setIsLoadingPage(true)
       }
     });
   }, [groupId]);
@@ -63,7 +67,8 @@ export default function Main({ groupId }: Props) {
          
         </div>
       </div>
-      <div className="w-full px-5 pb-10">
+      {isLoadingPage ? (
+        <div className="w-full px-5 pb-10">
         <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  ">
           <div className="text-center py-2 border-r border-gray-400">
             ลำดับ
@@ -106,6 +111,15 @@ export default function Main({ groupId }: Props) {
           </div>
         )}
       </div>
+      ):(
+        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+      )}
+      
     </div>
   );
 }
