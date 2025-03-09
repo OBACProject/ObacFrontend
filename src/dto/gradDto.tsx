@@ -125,6 +125,7 @@ export interface YearDataDetail {
 }
 
 export interface GetStudentGradeDetailDto {
+  gender:string;
   studentId: number;
   firstName: string | null;
   lastName: string | null;

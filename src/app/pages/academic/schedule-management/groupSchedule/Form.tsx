@@ -151,7 +151,7 @@ export default function Form({ term, year, groupId }: Props) {
               </p>
               <div className="text-center flex items-center w-full justify-center text-gray-700  py-2 ">
                 <p
-                  className="px-4 py-1 bg-red-500 hover:bg-red-700 text-white rounded-sm"
+                  className="px-4 py-1 bg-red-400 hover:bg-red-700 text-white rounded-sm"
                   onClick={() => {
                     setDeleteTrigger(true);
                     setDeleteID(item.id);
@@ -207,7 +207,6 @@ export default function Form({ term, year, groupId }: Props) {
           </div>
         </div>
       )}
-
       {scheduleBtn && groupName && (
         <AddGroupSchedulePopUp
           term={term}

@@ -24,6 +24,7 @@ export interface ScheduleSubject {
   teacherName: string;
   teacherLastName: string;
   day: string;
+  groupName: string;
   period: string;
   room: string;
   class: string;
