@@ -10,15 +10,13 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
 interface Props {
-  grads?: GetStudentGroupGradeByGroupIdTermYearDto[];
+  grads?: GetGradBySubjectId[];
   onEdit: boolean | null | undefined;
 }
 
 export default function SubjectTableForm({ grads, onEdit }: Props) {
   const [remark, setRemark] = useState<string>("");
-  const [gradDatas, setGradData] = useState<
-    GetStudentGroupGradeByGroupIdTermYearDto[]
-  >([]);
+  const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
     const sortedData = [...(grads ?? [])].sort(
       (a, b) => a.studentId - b.studentId

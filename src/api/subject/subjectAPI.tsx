@@ -60,6 +60,36 @@ export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
     return [];
   }
 };
+export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
+  const token = cookies().get("token")?.value;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetAllActiveSubjectAsync`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch subject");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+
+    if (!json?.data) {
+      throw new Error("Invalid API response: Missing 'data' field");
+    }
+
+    const data: GetAllSubject[] = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error fetching subjects:", err);
+    return [];
+  }
+};
 
 export const fetchGetAllSubjectByTerm = async (
   term: number

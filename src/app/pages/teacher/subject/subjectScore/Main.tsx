@@ -69,8 +69,7 @@ export default function Main({
   term,
   year,
 }: Props) {
-  const [grads, setGrads] =
-    useState<GetStudentGroupGradeByGroupIdTermYearDto[]>();
+  const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId[]>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
   const [methods, setMethod] = useState<MethodDto>();
