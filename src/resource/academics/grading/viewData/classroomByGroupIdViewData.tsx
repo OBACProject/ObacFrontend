@@ -29,7 +29,8 @@ export async function getGroupSummaryGradeViewData(
       (student: GetStudentByGroupId) => {
         const subjects: Record<string, string> = {};
         student.subject.forEach((item) => {
-          subjects[item.subjectName] = item.grade;
+          subjects[item.subjectName] =
+            item.remark === null ? item.grade : item.remark;
         });
 
         return {

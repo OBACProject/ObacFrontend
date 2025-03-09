@@ -143,13 +143,13 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       console.error("Summary data is not available");
     }
   };
-  const studentInStudentList = (studentCode: string) => {
-    const student = summaryData?.students.find(
-      (student) => student.studentCode === studentCode
-    );
+  // const studentInStudentList = (studentCode: string) => {
+  //   const student = summaryData?.students.find(
+  //     (student) => student.studentCode === studentCode
+  //   );
 
-    return student;
-  };
+  //   return student;
+  // };
 
   const onRowClick = (studentCode: string) => {
     // localStorage.setItem("studentCode", studentCode);

@@ -1,5 +1,5 @@
 "use client";
-import {fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
+import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { LabelText } from "@/app/components/labelText/labelText";
 import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
@@ -15,14 +15,15 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   const [studentTranscriptDataById, setStudentTranscriptDataById] =
     useState<StudentTranscriptData | null>(null);
 
-  const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<number>(2567);
-  const [loadingFile, setLoadingFile] = useState<boolean>(false);
+  // const [term, setTerm] = useState<string>("1");
+  // const [year, setYear] = useState<number>(2567);
+  // const [loadingFile, setLoadingFile] = useState<boolean>(false);
 
   const [scoreFileData, setScoreFileData] =
     useState<GetStudentGradeDetailDto | null>();
 
   const [termData, setTermData] = useState<YearData[]>([]);
+  console.log("termData", termData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,8 +31,8 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         const data = await getStudentDataById(props.studentId);
         setStudentTranscriptDataById(data);
         setTermData(data.year);
-        const data2  = await fetchGetStudentGradeDetail(props.studentId)
-        setScoreFileData(data2)
+        const data2 = await fetchGetStudentGradeDetail(props.studentId);
+        setScoreFileData(data2);
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -82,17 +83,18 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         <div className="px-5 ">
           <div className="flex items-center gap-2 py-3 ">
             {scoreFileData ? (
-               <button
-              className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
-              onClick={() => {
-                SummaryGradPDF(scoreFileData);
-              }}
-            >
-              <p>ดาวโหลดน์ผลการเรียน.pdf</p>
-            </button>
-            ):
-            (<div>ไม่มี</div>)}
-           
+              <button
+                className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
+                onClick={() => {
+                  SummaryGradPDF(scoreFileData);
+                }}
+              >
+                <p>ดาวโหลดน์ผลการเรียน.pdf</p>
+              </button>
+            ) : (
+              <div>ไม่มี</div>
+            )}
+
             <button
               className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
               // onClick={() => {
@@ -113,19 +115,51 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
   return (
     <div className="">
       {termData.map((year, index) => {
-        const columns = [
-          { label: "รายวิชา", key: "subject_name", className: "w-5/12" },
-          { label: "รหัสวิชา", key: "subject_code", className: "w-2/12" },
-          { label: "หน่วยกิต", key: "credit", className: "w-2/12" },
-          { label: "เกรด", key: "finalGrade", className: "w-3/12" },
-        ];
-
         const transformedData = year.termQuery.map((term) => ({
           subject_name: term.subject_name,
           subject_code: term.subject_code,
           credit: term.credit,
-          finalGrade: term.finalGrade,
+          finalGrade: term.remark === "N/A" ? term.finalGrade : term.remark,
+          // isNegative: term.remark !== "ผ" && Number(term.finalGrade) <= 0,
+          // isPass: term.remark === "ผ",
         }));
+
+        // Define columns after checking transformedData
+        const columns = [
+          {
+            label: "รายวิชา",
+            key: "subject_name",
+            className: "w-5/12 px-4 py-2 text-left font-semibold",
+          },
+          {
+            label: "รหัสวิชา",
+            key: "subject_code",
+            className: "w-2/12 px-4 py-2 text-center font-semibold",
+          },
+          {
+            label: "หน่วยกิต",
+            key: "credit",
+            className: "w-2/12 px-4 py-2 text-center font-semibold",
+          },
+          {
+            label: "เกรด",
+            key: "finalGrade",
+            className: "w-3/12 px-4 py-2 text-center font-semibold",
+            render: (row: any) => (
+              <span
+                className={`px-2 py-1 rounded ${
+                  row.isNegative
+                    ? "bg-red-600 text-white"
+                    : row.isPass
+                    ? "bg-green-600 text-white"
+                    : ""
+                }`}
+              >
+                {row.finalGrade}
+              </span>
+            ),
+          },
+        ];
 
         const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
           let totalGradePoints = 0;
@@ -169,7 +203,7 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
             <DataTable
               columns={columns}
               data={transformedData}
-              pagination={10}
+              pagination={year.termQuery.length}
               onRowClick={(item: any) => console.log("Clicked row: ", item)}
             />
           </div>

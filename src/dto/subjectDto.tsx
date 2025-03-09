@@ -19,4 +19,5 @@ export interface GetSubjectByGroupId {
   subjectCode: string;
   grade: string;
   credit: number;
+  remark: string;
 }
