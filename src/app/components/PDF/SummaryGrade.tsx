@@ -34,6 +34,8 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     format: "a4",
   });
   const thaiDate = getThaiDate();
+//   let gender = ""
+//   if (grads.)
 
   doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
   doc.addFileToVFS("THSarabunBold.ttf", THSarabunFontBold);
@@ -63,7 +65,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   doc.setFontSize(14);
   doc.text(`รหัสนักศึกษา : ${grads?.studentCode}`, 30, 30);
   doc.text("ชื่อ - สกุล   : ", 110.5, 30);
-  doc.text(`นาย ${grads?.thaiName} ${grads?.thaiLastName}`, 130, 30);
+  doc.text(` ${grads?.thaiName} ${grads?.thaiLastName}`, 130, 30);
 
   doc.setFont("THSarabun", "normal");
   doc.text("รอบ : เช้า", 42, 35);
@@ -194,13 +196,15 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     startColumn += 8;
   }
 
-  doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
-  doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);
-  doc.text(`${thaiDate}`, 105, 290);
+//   doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
+//   doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);
+//   doc.text(`${thaiDate}`, 105, 290);
 
-  doc.text("(นายวิทวัต โยธินนรธรรม)", 160, 280);
-  doc.text("ผู้อำนวยการ", 168, 285);
-  doc.text(`${thaiDate}`, 165, 290);
+//   doc.text("(นายวิทวัต โยธินนรธรรม)", 160, 280);
+//   doc.text("ผู้อำนวยการ", 168, 285);
+//   doc.text(`${thaiDate}`, 165, 290);
+
+  doc.text(`${thaiDate}`, 180, 295);
 
   doc.save(`${grads.studentCode} ${grads.thaiName} ${grads.thaiLastName}.pdf`);
 };
