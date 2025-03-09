@@ -80,32 +80,6 @@ export default function Form() {
       </div>
       <div className="w-full items-center justify-between px-5 flex gap-2">
         <div className="flex gap-2 items-center">
-          <div className="flex gap-5  px-5 ">
-            <div className="flex items-center gap-2">
-              <p>เทอม</p>
-              <select
-                className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"
-                onChange={(e) => setTerm(e.target.value)}
-                value={term}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-              </select>
-            </div>
-            <div className="flex items-center gap-2 ">
-              <p>ปีการศึกษา</p>
-              <select
-                className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"
-                onChange={(e) => setYear(e.target.value)}
-                value={year}
-              >
-                {/* <option value="2568">2568</option> */}
-                <option value="2567">2567</option>
-                <option value="2566">2566</option>
-                <option value="2565">2565</option>
-              </select>
-            </div>
-          </div>
           <button
             className={`px-10 py-1 ${
               !toggleMode
@@ -268,11 +242,7 @@ export default function Form() {
       )}
 
       {popUpAddSubject == true && (
-        <AddSchedulePopUp
-          onClosePopUp={setpopUpAddSubject}
-          term={term}
-          year={year}
-        />
+        <AddSchedulePopUp onClosePopUp={setpopUpAddSubject} year={year} />
       )}
     </div>
   );

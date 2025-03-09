@@ -3,13 +3,17 @@ import { get } from "http";
 import { fetchGetSubjectBySubjectIdData } from "../api/academicStudentApiData";
 
 export const getSubjectBySubjectIdViewData = async (
-  subjectId: number,
-  scheduleSubjectId: number
+  groupId: number,
+  term: number,
+  year: number,
+  subjectId: number
 ): Promise<GetGradBySubjectId[]> => {
   try {
     const data = await fetchGetSubjectBySubjectIdData(
-      subjectId,
-      scheduleSubjectId
+      groupId,
+      term,
+      year,
+      subjectId
     );
 
     // const editResponse = data.map((item: GetGradBySubjectId) => {

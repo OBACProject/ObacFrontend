@@ -4,13 +4,15 @@ import api from "@/lib/apiCentralized";
 import { cookies } from "next/headers";
 
 export const fetchGetSubjectBySubjectIdData = async (
-  subjectId: number,
-  scheduleSubjectId: number
+  groupId: number,
+  term: number,
+  year: number,
+  subjectId: number
 ): Promise<GetGradBySubjectId[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await api.get(
-      `Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleSubjectId}`,
+      `Grade/GetStudentGroupGradeByGroupIdTermYear?groupId=${groupId}&term=${term}&year=${year}&subjectId=${subjectId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

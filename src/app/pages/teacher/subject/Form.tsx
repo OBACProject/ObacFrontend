@@ -3,12 +3,15 @@
 import CardSubject from "@/app/components/card/card-subject";
 import React, { useEffect, useState } from "react";
 import { TeacherEnrollment } from "@/dto/teacherDto";
-import { fetchGetTeacherEnrollmentsByTeacherId, fetchTeacherUser } from "@/api/teacher/teacherAPI";
+import {
+  fetchGetTeacherEnrollmentsByTeacherId,
+  fetchTeacherUser,
+} from "@/api/teacher/teacherAPI";
 import Link from "next/link";
 
 type Props = {
   teacherId: number;
-}
+};
 
 const getSubjectData = async (
   teacherId: number,
@@ -26,27 +29,28 @@ const getSubjectData = async (
 export default function Form({ teacherId }: Props) {
   const currentYear = new Date().getFullYear() + 542;
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
-  const [year , setYear] = useState<number>(2567)
-  const [term , setTerm] = useState<string>("2")
+  const [year, setYear] = useState<number>(2567);
+  const [term, setTerm] = useState<string>("2");
   useEffect(() => {
-    getSubjectData(teacherId,  term,year).then((item) => {
+    getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
     });
   }, []);
-  
-  useEffect(()=>{
-    setCard([])
-    getSubjectData(teacherId, term ,year).then((item) => {
+
+  useEffect(() => {
+    setCard([]);
+    getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
     });
-  },[term , year])
+  }, [term, year]);
 
   return (
     <>
       <div className="text-xl px-10 ">
         <div>
-        <div className="flex gap-5  px-5 py-1 ">
+          <div className="flex gap-5  px-5 py-1 ">
             <div className="flex items-center gap-2">
+              {/* {teacherId} */}
               <p>เทอม</p>
               <select
                 className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"
@@ -76,14 +80,19 @@ export default function Form({ teacherId }: Props) {
             <div className="lg:w-9/12 sm:w-full md:w-full">
               {subjectCards.map((items) => {
                 const adjustedTerm = Number(items.term) % 2 === 1 ? 1 : 2;
-                return(
-                <Link
-                  key={items.id}
-                  href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}`}
-                >
-                  <CardSubject cardSubjectData={items} term={adjustedTerm.toString()} year={items.year} />
-                </Link>
-              ) })}
+                return (
+                  <Link
+                    key={items.id}
+                    href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}`}
+                  >
+                    <CardSubject
+                      cardSubjectData={items}
+                      term={adjustedTerm.toString()}
+                      year={items.year}
+                    />
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="grid text-gray-500 text-3xl font-semibold place-items-center py-10">

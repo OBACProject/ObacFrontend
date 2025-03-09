@@ -1,18 +1,20 @@
 import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
-import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
+import { fetchGetAllSubjectByTerm } from "@/api/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { Combobox } from "@/app/components/combobox/combobox";
+import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { GetAllTeacher } from "@/dto/teacherDto";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {
   onClosePopUp: (value: boolean) => void;
-  term: string;
   year: string;
 };
 
@@ -20,9 +22,13 @@ interface TeacherOption {
   value: string;
   label: string;
 }
-const getAllSubject = async () => {
+interface SubjectOption {
+  value: number;
+  label: string;
+}
+const getAllSubjectByTerm = async (term: number) => {
   try {
-    const response = await fetchGetAllActiveSubject();
+    const response = await fetchGetAllSubjectByTerm(term);
     return response;
   } catch (err) {
     console.log(err);
@@ -50,17 +56,21 @@ const getAllStudentGroup = async () => {
 
 export default function AddSchedulePopUp({
   onClosePopUp,
-  term,
   year,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>([]);
-
+  const term = ["1", "2", "3", "4", "5", "6"];
+  const currentYear = new Date().getFullYear() - 1 + 543;
+  const yearsList = Array.from({ length: 3 }, (_, i) =>
+    (currentYear - i).toString()
+  );
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString()
+  );
   useEffect(() => {
-    getAllSubject().then((item) => {
-      setSubject(item);
-    });
     getAllTeacher().then((item) => {
       setTeacher(item);
     });
@@ -68,6 +78,19 @@ export default function AddSchedulePopUp({
       setStudentGroup(item);
     });
   }, []);
+
+  useEffect(() => {
+    const studentGroupById = studentGroup.find(
+      (item) => item.studentGroupId === studentGroupId
+    );
+    const studentGroupName = studentGroupById?.studentGroupName;
+    getAllSubjectByTerm(
+      parseInt(selectedTerm) +
+        2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
+    ).then((item) => {
+      setSubject(item);
+    });
+  }, [selectedTerm]);
 
   const days = [
     "วันอาทิตย์",
@@ -85,40 +108,10 @@ export default function AddSchedulePopUp({
   const [subjectID, setSubjectID] = useState<number>(0);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
 
-  const subjectOptions = subjects.map((item) => ({
+  const subjectOptions: SubjectOption[] = subjects.map((item) => ({
     value: item.id,
     label: `${item.subjectCode} : ${item.subjectName}`,
   }));
-
-  const handleSubjectChange = (
-    selectedOption: { value: number; label: string } | null
-  ) => {
-    if (selectedOption) {
-      const selectedSubject = subjects.find(
-        (sub) => sub.id === selectedOption.value
-      );
-      if (selectedSubject) {
-        setSubjectID(selectedSubject.id);
-      }
-    } else {
-      setSubjectID(0);
-    }
-  };
-
-  const handleTeacherChange = (
-    selectedOption: { value: number; label: string } | null
-  ) => {
-    if (selectedOption) {
-      const selectedTeacher = teachers.find(
-        (sub) => sub.teacherId === selectedOption.value
-      );
-      if (selectedTeacher) {
-        setTeacherID(selectedTeacher.teacherId);
-      }
-    } else {
-      setTeacherID(0);
-    }
-  };
 
   const teacherOptions = teachers.map((teacher, index) => ({
     value: teacher.teacherId,
@@ -127,20 +120,6 @@ export default function AddSchedulePopUp({
     }`,
   }));
 
-  const handleGroupChange = (
-    selectedOption: { value: number; label: string } | null
-  ) => {
-    if (selectedOption) {
-      const selectedGroup = studentGroup.find(
-        (sub) => sub.studentGroupId === selectedOption.value
-      );
-      if (selectedGroup) {
-        setStudentGroupId(selectedGroup.studentGroupId);
-      }
-    } else {
-      setStudentGroupId(0);
-    }
-  };
   const groupOptions = studentGroup.map((item) => ({
     value: item.studentGroupId,
     label: `${item.class}.${item.studentGroupName}`,
@@ -158,7 +137,7 @@ export default function AddSchedulePopUp({
       subject_id: subjectID,
       year: Number(year),
       term: (
-        parseInt(term) +
+        parseInt(selectedTerm) +
         2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
       ).toString(),
       student_group_id: studentGroupId,
@@ -184,100 +163,123 @@ export default function AddSchedulePopUp({
         className=" bg-white shadow-lg shadow-gray-400   rounded-lg w-4/12 z-100 duration-500"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
-          เพิ่มวิชาสอน
-        </div>
-        <div className="px-10 py-5">
-          <div className="flex justify-start gap-4">
-            <span className="flex gap-2 justify-center">
-              <label className="py-1 px-2 ">วัน</label>
-              <select
-                className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                onChange={(e) => setDay(e.target.value)}
-                value={day}
-              >
-                <option value="">- เลือก -</option>
-                {days.map((items) => (
-                  <option key={items} value={items}>
-                    {items}
-                  </option>
-                ))}
-              </select>
-            </span>
-            <span className="flex gap-2 justify-start">
-              <label className="py-1 px-2">คาบเรียน</label>
-              <select
-                className="rounded-md px-5 py-1 bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                onChange={(e) => setPeriod(e.target.value)}
-                value={period}
-              >
-                <option value="">- เลือก -</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="3">4</option>
-                <option value="3">5</option>
-              </select>
-            </span>
+        <div className="px-4 py-5">
+          <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
+            เพิ่มวิชาสอน
           </div>
-          <div className=" my-3 grid gap-1 ">
-            <label className="py-1">วิชาเรียน </label>
-            <div className="w-[350px]">
-              <Select
-                options={subjectOptions}
-                value={subjectOptions.find(
-                  (option) => option.value === subjectID || null
-                )}
-                onChange={handleSubjectChange}
-                isSearchable
-                placeholder="-- เลือกวิชา --"
+          <div className="flex  px-4 py-2">
+            <div className="w-full flex flex-col p-2 relative">
+              <h1>ภาคเรียน</h1>
+              <Combobox
+                options={term.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                defaultValue="1"
+                buttonLabel="เลือกภาคเรียน"
+                onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+              />
+            </div>
+            <div className="w-full flex flex-col p-2 relative">
+              <h1>ปีการศึกษา</h1>
+              <Combobox
+                options={yearsList.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                defaultValue={currentYear.toString()}
+                buttonLabel="เลือกปีการศึกษา"
+                onSelect={(selectedYear) => setSelectedYear(selectedYear)}
               />
             </div>
           </div>
-
-          <div className=" my-3 grid gap-1 ">
-            <label className="py-1">อาจารย์ผู้สอน </label>
-            <div className="w-[350px]">
-              <Select
-                options={teacherOptions}
-                value={
-                  teacherOptions.find((option) => option.value === teacherID) ||
-                  null
+          <div className="flex px-4 py-2">
+            <div className="w-full px-2">
+              <h1>ห้องเรียน</h1>
+              <Input
+                type="text"
+                placeholder="ห้องเรียน"
+                className="w-full pr-10"
+                onChange={(e) => setRoom(e.target.value)}
+              />
+            </div>
+            <div className="w-full">
+              <h1>กลุ่มเรียน</h1>
+              <Combobox
+                options={groupOptions.map((item) => ({
+                  value: item.value.toString(),
+                  label: `${item.label} `,
+                }))}
+                defaultValue=""
+                buttonLabel="เลือกกลุ่มเรียน"
+                onSelect={(selectedGroupId) =>
+                  setStudentGroupId(Number(selectedGroupId))
                 }
-                onChange={handleTeacherChange}
-                isSearchable
-                placeholder="-- เลือกอาจารย์ผู้สอน --"
               />
             </div>
           </div>
-          <div className="my-4">
-            <span className="flex items-center  justify-start gap-5 ">
-              <div className="flex gap-2">
-                <label className="py-1  ">ห้องเรียน</label>
-                <input
-                  type="text"
-                  className="w-[100px] focus:outline-blue-400 border-[1px] rounded-md border-gray-300 px-4 py-1"
-                  placeholder="room"
-                  onChange={(e) => setRoom(e.target.value)}
-                  value={room}
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <label className="py-1 ">กลุ่มเรียน</label>
-                <Select
-                  options={groupOptions}
-                  value={groupOptions.find(
-                    (option) => option.value === studentGroupId
-                  )}
-                  onChange={handleGroupChange}
-                  isSearchable
-                  placeholder="-- เลือกกลุ่ม --"
-                />
-              </div>
-            </span>
+          <div className="flex px-4 py-2">
+            <div className="w-full px-2">
+              <h1>วิชาเรียน</h1>
+              <Combobox
+                options={subjectOptions.map((item) => ({
+                  value: item.value.toString(),
+                  label: `${item.label} `,
+                }))}
+                defaultValue=""
+                buttonLabel="เลือกวิชา"
+                onSelect={(selectedSubjectId) =>
+                  setSubjectID(Number(selectedSubjectId))
+                }
+              />
+            </div>
+          </div>
+          <div className="flex  px-4 py-2">
+            <div className="w-full flex flex-col  px-2 relative">
+              <h1>วันที่สอน</h1>
+              <Combobox
+                options={days.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                defaultValue=""
+                buttonLabel="เลือกวันที่สอน"
+                onSelect={(selectedDay) => setDay(selectedDay)}
+              />
+            </div>
+            <div className="w-full flex flex-col px-2 relative">
+              <h1>คาบเรียน</h1>
+              <Combobox
+                options={Array.from({ length: 5 }, (_, i) => i + 1).map(
+                  (item) => ({
+                    value: item.toString(),
+                    label: item.toString(),
+                  })
+                )}
+                defaultValue=""
+                buttonLabel="เลือกคาบเรียน"
+                onSelect={(selectedPeriod) => setPeriod(selectedPeriod)}
+              />
+            </div>
+          </div>
+          <div className="flex  px-4 py-2">
+            <div className="w-full px-2">
+              <h1>อาจารย์ผู้สอน</h1>
+              <Combobox
+                options={teacherOptions.map((item) => ({
+                  value: item.value.toString(),
+                  label: `${item.label} `,
+                }))}
+                defaultValue=""
+                buttonLabel="เลือกวิชา"
+                onSelect={(selectedSubjectId) =>
+                  setSubjectID(Number(selectedSubjectId))
+                }
+              />
+            </div>
           </div>
 
-          <div className="flex justify-center gap-5 ">
+          <div className="flex justify-center gap-5 mt-4">
             <button
               className="px-8 text-white py-1 hover:bg-gray-300 hover:text-black bg-gray-400 rounded-sm"
               onClick={() => onClosePopUp(false)}
