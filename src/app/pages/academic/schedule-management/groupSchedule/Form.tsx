@@ -1,5 +1,8 @@
-"use client"
-import { fetchDeleteScheduleSubject, fetchGetScheduleOfStudentGroupByGroupID } from "@/api/schedule/scheduleAPI";
+"use client";
+import {
+  fetchDeleteScheduleSubject,
+  fetchGetScheduleOfStudentGroupByGroupID,
+} from "@/api/schedule/scheduleAPI";
 import { ScheduleSubject, StudentGroupScheduleSubject } from "@/dto/schedule";
 import { Boxes, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -27,9 +30,13 @@ const getSchedule = async (term: string, year: string, groupId: number) => {
 };
 
 export default function Form({ term, year, groupId }: Props) {
-  const [schedules, setSchedules] = useState<StudentGroupScheduleSubject | null>(null);
+  const [schedules, setSchedules] =
+    useState<StudentGroupScheduleSubject | null>(null);
   const [scheduleBtn, setScheduleBtn] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>("");
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
+  const [deleteID, setDeleteID] = useState<number>(0);
+  const [deleteName, setDeleteName] = useState<string>("");
 
   useEffect(() => {
     getSchedule(term, year, groupId).then((item: any) => {
@@ -38,15 +45,20 @@ export default function Form({ term, year, groupId }: Props) {
         setGroupName(`${item.class}.${item.groupName}`);
       }
     });
-    
   }, []);
-  const onDeleteSchedule = async (id:number , subjectName : string)=>{
-    const response  = await fetchDeleteScheduleSubject(id)
-    if (response.success){
-     toast.success(`ลบวิชา ${subjectName} สำเร็จ`)
+  const onDeleteSchedule = async (id: number, subjectName: string) => {
+    const response = await fetchDeleteScheduleSubject(id);
+    if (response.success) {
+      toast.success(`ลบวิชา ${subjectName} สำเร็จ`);
+      setDeleteTrigger(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      toast.error("ไม่สำเร็จ");
     }
-  }
-console.log(schedules)
+  };
+  console.log(schedules);
   return (
     <div className="w-full px-10">
       <div className="py-5 flex justify-center">
@@ -84,13 +96,27 @@ console.log(schedules)
 
       <div className="w-full">
         <div className="w-full grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
-          <div className="text-center py-2 border-r-2 border-gray-400">รหัสวิชา</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">ชื่อวิชา</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">อาจารย์ผู้สอน</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">ห้องเรียน</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">หน่วยกิต</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">คาบเรียน</div>
-          <div className="text-center py-2 border-r-2 border-gray-400">วันสอน</div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            รหัสวิชา
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            ชื่อวิชา
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            อาจารย์ผู้สอน
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            ห้องเรียน
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            หน่วยกิต
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            คาบเรียน
+          </div>
+          <div className="text-center py-2 border-r-2 border-gray-400">
+            วันสอน
+          </div>
           <div className="text-center py-2 "></div>
         </div>
 
@@ -102,7 +128,6 @@ console.log(schedules)
                 index % 2 === 0 ? "bg-white" : "bg-gray-100"
               } grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
             >
-            
               <p className="text-start flex items-center px-4 border-r border-gray-400 py-1 line-clamp-1">
                 {item.subjectCode}
               </p>
@@ -125,12 +150,16 @@ console.log(schedules)
                 {item.day}
               </p>
               <div className="text-center flex items-center w-full justify-center text-gray-700  py-2 ">
-                <p className="px-4 py-1 bg-red-500 hover:bg-red-700 text-white rounded-sm" onClick={()=>{
-                  onDeleteSchedule(item.id , item.subjectName)
-                }}>
+                <p
+                  className="px-4 py-1 bg-red-500 hover:bg-red-700 text-white rounded-sm"
+                  onClick={() => {
+                    setDeleteTrigger(true);
+                    setDeleteID(item.id);
+                    setDeleteName(item.subjectName);
+                  }}
+                >
                   ลบ
                 </p>
-                  
               </div>
             </div>
           ))
@@ -140,6 +169,44 @@ console.log(schedules)
           </div>
         )}
       </div>
+      {deleteTrigger && (
+        <div
+          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          onClick={() => setDeleteTrigger(false)}
+        >
+          <div
+            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="py-4 w-full text-center text-2xl font-semibold">
+              ยืนยันการลบ
+            </div>
+            <div className="grid place-items-center py-3">
+              <p className="w-[300px] text-center">ลบวิชา {deleteName}</p>
+              <p className="text-gray-600 w-[300px] text-center">
+                ตรวจสอบให้แน่ใจก่อนลบ
+              </p>
+            </div>
+            <div className="flex gap-5 justify-center py-5 w-full">
+              <button
+                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
+                onClick={() => setDeleteTrigger(false)}
+              >
+                ยกเลิก
+              </button>
+              <button
+                className="text-sm w-[90px] py-1.5 bg-red-500 hover:bg-red-600 rounded-md text-white "
+                onClick={() => {
+                  onDeleteSchedule(deleteID, deleteName);
+                }}
+                disabled={!deleteID || !deleteName}
+              >
+                ลบ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {scheduleBtn && groupName && (
         <AddGroupSchedulePopUp

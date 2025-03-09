@@ -243,7 +243,7 @@ export type GetStudentByStudentId = {
 };
 
 export type GetStudentGroupsByTermYearDto = {
-  id: number;
+  groupId: number;
   groupName: string;
   class: string;
   groupCode: string;

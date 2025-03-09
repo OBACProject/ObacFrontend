@@ -128,7 +128,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       ),
     },
     {
-      title: "รายชื่อนักเรียนไม่ผ่านเกณฑ์",
+      title: "นักเรียนไม่ผ่านเกณฑ์",
       href: "/pages/academic/FailedStudent",
       icon: (
         <OctagonMinus

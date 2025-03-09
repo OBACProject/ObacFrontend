@@ -38,7 +38,7 @@ export default function Main() {
   const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2.0);
   const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<number>(2024);
+  const [year, setYear] = useState<number>(2567);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>();
   const [nextGroupNameB, setNextGroupNameB] = useState<string>();
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);
@@ -193,9 +193,10 @@ export default function Main() {
             onChange={(e) => setYear(Number(e.target.value))}
             value={year}
           >
-            <option value={2024}>2568</option>
-            <option value={2024}>2567</option>
-            <option value={2024}>2566</option>
+            <option value={2567}>2567</option>
+            <option value={2566}>2566</option>
+            <option value={2565}>2565</option>
+            <option value={2564}>2564</option>
           </select>
         </div>
         <div className="flex items-center gap-2" style={{ userSelect: "none" }}>

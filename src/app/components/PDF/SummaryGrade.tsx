@@ -122,11 +122,11 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   let swift = false;
 
   for (let i = 0; i < grads.year.length; i++) {
-    if (swift == false && startColumn >= 255) {
+    if (swift == false && startColumn >= 250) {
       startColumn = 64;
       Xaxis = 130;
       swift = true;
-    } else if (swift == true && startColumn > 255) {
+    } else if (swift == true && startColumn > 250) {
       doc.addPage();
       Xaxis = 30;
       swift = false;
@@ -143,12 +143,12 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     let CreditCount = 0;
     let CountGrad = 0;
     for (let j = 0; j < grads.year[i].termQuery.length; j++) {
-      if (swift == false && inStartColoume >= 255) {
+      if (swift == false && inStartColoume >= 250) {
         inStartColoume = 63;
         inStartColoume = inStartColoume + 5;
         Xaxis = 130;
         swift = true;
-      } else if (swift == true && inStartColoume > 255) {
+      } else if (swift == true && inStartColoume > 250) {
         doc.addPage();
         inStartColoume = 20;
         Xaxis = 30;
