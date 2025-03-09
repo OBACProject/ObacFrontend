@@ -6,8 +6,8 @@ import { TeacherEnrollment } from "@/dto/teacherDto";
 import { fetchGetTeacherEnrollmentsByTeacherId, fetchTeacherUser } from "@/api/teacher/teacherAPI";
 import Link from "next/link";
 
-type Props  = {
-  teacherId:number;
+type Props = {
+  teacherId: number;
 }
 
 const getSubjectData = async (
@@ -23,15 +23,14 @@ const getSubjectData = async (
   }
 };
 
-
-export default function Form({teacherId}:Props) {
+export default function Form({ teacherId }: Props) {
+  const currentYear = new Date().getFullYear() + 542;
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   useEffect(() => {
-    getSubjectData(teacherId, 1, 2024).then((item) => {
+    getSubjectData(teacherId, 1, currentYear).then((item) => {
       setCard(item);
     });
   }, []);
-
   return (
     <>
       <div className="text-xl px-10 ">
@@ -40,7 +39,7 @@ export default function Form({teacherId}:Props) {
             <div className="lg:w-9/12 sm:w-full md:w-full">
               {subjectCards.map((items) => (
                 <Link
-                key={items.id}
+                  key={items.id}
                   href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&schedule=${items.scheduleSubjectId}&iscomplete=${items.isComplete}`}
                 >
                   <CardSubject cardSubjectData={items} />
