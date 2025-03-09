@@ -133,7 +133,7 @@ export default function TotalScoreInGroup(data: DataList) {
   // Loop through studentList dynamically
   data.studentList.forEach((student, index) => {
     const { studentCode, name, gpa, gpax, subjects } = student;
-    const subjectGrades = Object.values(subjects);
+    const subjectGrades = Object.values(subjects || {});
 
     const subjectsWithGrades = [
       ...subjectGrades.map((grade) => (grade ? grade : "-")),
@@ -201,5 +201,7 @@ export default function TotalScoreInGroup(data: DataList) {
   });
 
   doc.setFont("THSarabun");
-  doc.save(`ใบคะแนนรวมของห้อง.pdf`);
+  doc.save(
+    `ใบคะแนนรวมของห้อง ${data.generalData.class}-${data.generalData.groupName}.pdf`
+  );
 }
