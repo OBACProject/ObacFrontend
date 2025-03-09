@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { GetGradBySubjectId } from "@/dto/gradDto";
-import { useRouter } from "next/navigation";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";

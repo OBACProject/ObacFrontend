@@ -8,7 +8,6 @@ import { ConvertScoreToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import { MethodDto } from "@/dto/methodDto";
 
 interface Props {
@@ -46,7 +45,7 @@ export default function MenuBar({
     setSubject(subjects ?? null);
   }, [schedules, subjects]);
 
-  // Prepare student group list
+ 
   const student_group_list = gradData.map((item) => item.studentGroup);
   const student_group = student_group_list[0];
 
@@ -59,8 +58,6 @@ export default function MenuBar({
     onEditReturn(false);
     setOnEdit(false);
   };
-  console.log(scheduleData?.[0]?.subjectId);
-  // console.log(scheduleData.subjectId);
 
   const [convertGrad, setConvertGrad] = useState<ConvertGradBySubjectId[]>([]);
 
