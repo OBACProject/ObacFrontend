@@ -135,8 +135,10 @@ export interface TermQuery {
   credit: string;
   finalGrade: string;
   remark: string;
-  // isNegative: boolean;
-  // isPass: boolean;
+  collectScore: number;
+  affectiveScore: number;
+  testScore: number;
+  gradeId: number;
 }
 
 export interface YearData {
