@@ -27,7 +27,7 @@ export default function Form({ teacherId }: Props) {
   const currentYear = new Date().getFullYear() + 542;
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   const [year , setYear] = useState<number>(2567)
-  const [term , setTerm] = useState<string>("1")
+  const [term , setTerm] = useState<string>("2")
   useEffect(() => {
     getSubjectData(teacherId,  term,year).then((item) => {
       setCard(item);
@@ -47,7 +47,6 @@ export default function Form({ teacherId }: Props) {
         <div>
         <div className="flex gap-5  px-5 py-1 ">
             <div className="flex items-center gap-2">
-              {teacherId}
               <p>เทอม</p>
               <select
                 className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"
