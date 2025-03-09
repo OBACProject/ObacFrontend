@@ -1,13 +1,13 @@
 "use client";
-import { fetchGetGradPerTermByStudentId } from "@/api/grad/gradAPI";
+import {fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { LabelText } from "@/app/components/labelText/labelText";
-import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
 import { Badge } from "@/components/ui/badge";
-import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
+import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";
 import { getStudentDataById } from "@/resource/academics/grading/viewData/individualGradeViewData";
-import { Loader2 } from "lucide-react";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -20,7 +20,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   const [loadingFile, setLoadingFile] = useState<boolean>(false);
 
   const [scoreFileData, setScoreFileData] =
-    useState<GetGradPerTermByStudentIdDto | null>();
+    useState<GetStudentGradeDetailDto | null>();
 
   const [termData, setTermData] = useState<YearData[]>([]);
 
@@ -30,35 +30,8 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         const data = await getStudentDataById(props.studentId);
         setStudentTranscriptDataById(data);
         setTermData(data.year);
-
-        const k = Number(term);
-        const y = studentTranscriptDataById?.currentYear;
-        let newTerm = ''
-        if (y == 1) {
-          if (k == 1) {
-            newTerm = "1"
-          } else {
-            newTerm = "2"
-          }
-        } else if (y == 2) {
-          if (k == 1) {
-            newTerm = "3"
-          } else {
-            newTerm = "4"
-          }
-        } else if (y == 1) {
-          if (k == 3) {
-            setTerm("5");
-          } else {
-            setTerm("6");
-          }
-        }
-        const data2 = await fetchGetGradPerTermByStudentId(
-          props.studentId,
-          newTerm,
-          year
-        );
-        setScoreFileData(data2);
+        const data2  = await fetchGetStudentGradeDetail(props.studentId)
+        setScoreFileData(data2)
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -66,47 +39,6 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
     fetchData();
   }, [props.studentId]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const k = Number(term);
-        const y = studentTranscriptDataById?.currentYear || 0;
-        const termMapping: Record<number, Record<number, string>> = {
-          1: { 1: "1", 2: "2" },
-          2: { 1: "3", 2: "4" },
-          3: { 3: "5", 4: "6" },
-        };
-        const newTerm = termMapping[y]?.[k] || "";
-        const data = await fetchGetGradPerTermByStudentId(
-          props.studentId,
-          newTerm,
-          year
-        );
-        setScoreFileData(data);
-        setLoadingFile(false);
-      } catch (error) {
-        console.error("Error fetching student data:", error);
-      }
-    };
-    fetchData();
-    console.log(scoreFileData);
-  }, [term, year]);
-  useEffect(() => {
-    console.log("Updated scoreFileData:", scoreFileData);
-  }, [scoreFileData]);
-
-  const handleChangeTerm = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLoadingFile(true);
-    // const k = Number(e.target.value);
-    // const y = studentTranscriptDataById?.currentYear || 0;
-    // const termMapping: Record<number, Record<number, string>> = {
-    //   1: { 1: "1", 2: "2" },
-    //   2: { 1: "3", 2: "4" },
-    //   3: { 3: "5", 4: "6" },
-    // };
-    // const newTerm = termMapping[y]?.[k] || "";
-    setTerm(e.target.value);
-  };
   return (
     <div className="">
       <div className="flex justify-between w-full py-4">
@@ -133,7 +65,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
             />
             <LabelText
               topic={"รหัสนักเรียน"}
-              data={`${studentTranscriptDataById?.studentCode}`}
+              data={`${studentTranscriptDataById?.studentCode}  (${props.studentId})`}
             />
           </div>
           <div className="flex items-center">
@@ -148,64 +80,19 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
           </div>
         </Link>
         <div className="px-5 ">
-          <div className="w-full flex gap-4 items-center">
-            <div className="flex gap-2 items-center">
-              <div>เทอม</div>
-              <select
-                className="px-2 py-1 border border-gray-300 rounded-md"
-                onChange={handleChangeTerm}
-                value={term}
-              >
-                <option value="1">1</option>
-                <option value="2">2</option>
-              </select>
-            </div>
-            <div className="flex w-full gap-2 items-center">
-              <div>ปีการศึกษา</div>
-              <select
-                className="px-2 py-1 border border-gray-300 rounded-md"
-                onChange={(e) => {
-                  setYear(Number(e.target.value));
-                  setLoadingFile(true);
-                }}
-                value={year}
-              >
-                <option value={2567}>2567</option>
-                <option value={2566}>2566</option>
-                <option value={2565}>2565</option>
-              </select>
-            </div>
-          </div>
           <div className="flex items-center gap-2 py-3 ">
             {scoreFileData ? (
-              <button
-                className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
-                onClick={() => {
-                  GradPerTerms(scoreFileData);
-                }}
-              >
-                {loadingFile ? (
-                  <div className="flex gap-2 items-center">
-                    <Loader2 />
-                    Loading..
-                  </div>
-                ) : (
-                  <p>ดาวโหลดน์ผลการเรียน.pdf</p>
-                )}
-              </button>
-            ) : (
-              <button className=" px-4 py-1 bg-red-100  rounded-md text-gray-700 text-center">
-                {loadingFile ? (
-                  <div className="flex gap-2 items-center">
-                    <Loader2 />
-                    Loading..
-                  </div>
-                ) : (
-                  <p>ไม่มีข้อมูลคะแนน</p>
-                )}
-              </button>
-            )}
-
+               <button
+              className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
+              onClick={() => {
+                SummaryGradPDF(scoreFileData);
+              }}
+            >
+              <p>ดาวโหลดน์ผลการเรียน.pdf</p>
+            </button>
+            ):
+            (<div>ไม่มี</div>)}
+           
             <button
               className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
               // onClick={() => {

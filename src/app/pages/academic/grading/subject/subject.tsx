@@ -78,11 +78,10 @@ export function Subject(props: {
   // );
 
   const columns = [
-    { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
     {
       label: "รหัสวิชา",
       key: "subjectCode",
-      className: "w-2/12 justify-start",
+      className: "w-3/12 justify-start",
     },
     { label: "ชื่อวิชา", key: "subjectName", className: "w-6/12" },
     { label: "รายละเอียด", key: "description", className: "w-3/12" },
