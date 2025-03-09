@@ -6,7 +6,7 @@ export interface GradingData {
   subjectCode: string;
   subjectName: string;
   credits: number;
-  description: string;
+  term: string;
   isActive: boolean;
 }
 
@@ -33,7 +33,7 @@ export interface GradingDataColumn {
   id: number;
   subjectCode: string;
   subjectName: string;
-  description: string;
+  term: string;
 }
 
 export interface ClassSubjectColumn {

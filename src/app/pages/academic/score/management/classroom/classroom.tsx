@@ -39,10 +39,10 @@ export function ClassroomGrading(props: {
   }) => void;
 }) {
   const classLevels = ["ปวช", "ปวส"];
-  const levelGrade: Record<string, string[]> = {
-    ปวช: ["1", "2", "3"],
-    ปวส: ["1", "2"],
-  };
+  // const levelGrade: Record<string, string[]> = {
+  //   ปวช: ["1", "2", "3"],
+  //   ปวส: ["1", "2"],
+  // };
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 5 }, (_, i) =>
@@ -163,6 +163,7 @@ export function ClassroomGrading(props: {
 
     fetchFilterData();
   }, []);
+
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
 
   const filteredData = useMemo(() => {
