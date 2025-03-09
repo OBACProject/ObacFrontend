@@ -1,7 +1,7 @@
 "use client";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
-import { GetStudentListByGroupIDDto, StudentDto } from "@/dto/studentDto";
+import { GetStudentListByGroupIDDto, StudentDto, StudentListByGroupIDDto } from "@/dto/studentDto";
 import { Loader2, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -82,7 +82,7 @@ export default function Main({ groupId }: Props) {
         </div>{" "}
         {studentInGroup ? (
           <div className="w-full ">
-            {studentInGroup.students?.map((item: StudentDto, index) => (
+            {studentInGroup.students?.map((item: StudentListByGroupIDDto, index) => (
               <Link
                 href={`/pages/academic/student-details/${item.studentId}`}
                 key={index}
@@ -97,10 +97,10 @@ export default function Main({ groupId }: Props) {
                   {item.studentCode}
                 </p>
                 <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
-                  {item.studentName}
+                  {item.firstName}
                 </p>
                 <p className="text-start flex items-center  px-4 border-r border-gray-400  py-1 line-clamp-1">
-                  {item.studentSurname}
+                  {item.lastName}
                 </p>
               </Link>
             ))}
