@@ -2,12 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, CircleUserRound, DoorOpen, Loader2, LogOut, Menu, Settings } from "lucide-react";
+import {
+  ChevronRight,
+  CircleUserRound,
+  DoorOpen,
+  Loader2,
+  LogOut,
+  Menu,
+  Settings,
+} from "lucide-react";
 import {
   ProfileData,
   TeacherSidebarProps,
 } from "@/resource/teachers/sidebarData";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { logout } from "@/lib/authentication";
 
@@ -41,7 +49,7 @@ export default function TeacherSidebar({
   };
   return (
     <div className="fixed flex flex-col z-20  w-full">
-         <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
+      <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
         <div className="flex h-[80px]  items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
@@ -112,7 +120,6 @@ export default function TeacherSidebar({
         )}
       </header>
 
-
       <SidebarMenu
         menuItems={menuItems}
         isVisible={isVisible}
@@ -132,6 +139,7 @@ export function SidebarMenu({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // Track which index is hovered
 
   return (
@@ -144,25 +152,32 @@ export function SidebarMenu({
         } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
       >
         <div className="grid gap-2">
-          {menuItems.map((item, index) => (
-            <a key={index} href={item.href}>
-              <button
-                className={`${
-                  isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
-                }  h-12 flex items-center w-full px-1 group  duration-300 ${
-                  hoveredIndex === index ? "bg-gray-200 " : ""
-                }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div className="flex items-center gap-4 w-full">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    {item.icon}
+          {menuItems.map((item, index) => {
+            const isActive = pathname.startsWith(item.href);
+            return (
+              <a key={index} href={item.href}>
+                <button
+                  className={`${
+                    isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
+                  }  h-12 flex items-center w-full px-1 group  duration-300 ${
+                    hoveredIndex === index ? "bg-gray-200 " : ""
+                  }  ${
+                    isActive
+                      ? "bg-gradient-to-tr from-pink-300 to-orange-200 text-white"
+                      : "bg-white"
+                  }`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      {item.icon}
+                    </div>
                   </div>
-                </div>
-              </button>
-            </a>
-          ))}
+                </button>
+              </a>
+            );
+          })}
         </div>
       </div>
 
@@ -173,7 +188,7 @@ export function SidebarMenu({
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
+          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-pink-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}
@@ -191,23 +206,25 @@ export function SidebarMenu({
         className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
       >
         <div className="grid gap-2">
-          {menuItems.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => router.push(item.href)}
-              className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
-                hoveredIndex === index ? "bg-gray-200" : ""
-              }`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <div className="flex items-center gap-4 w-full">
-                <span className=" text-[#0C2943] text-[16px] overflow-hidden h-fit duration-300">
-                  <p className="line-clamp-1 h-fit">{item.title}</p>
-                </span>
-              </div>
-            </button>
-          ))}
+          {menuItems.map((item, index) => {
+            return (
+              <button
+                key={index}
+                onClick={() => router.push(item.href)}
+                className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
+                  hoveredIndex === index ? "bg-gray-200" : ""
+                } `}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <div className="flex items-center gap-4 w-full">
+                  <span className=" text-[#0C2943] text-[16px] overflow-hidden h-fit duration-300">
+                    <p className="line-clamp-1 h-fit">{item.title}</p>
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </motion.div>
     </div>

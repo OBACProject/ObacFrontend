@@ -30,7 +30,7 @@ export default function Form({ teacherId }: Props) {
   const currentYear = new Date().getFullYear() + 542;
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   const [year, setYear] = useState<number>(2567);
-  const [term, setTerm] = useState<string>("1");
+  const [term, setTerm] = useState<string>("2");
   useEffect(() => {
     getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
