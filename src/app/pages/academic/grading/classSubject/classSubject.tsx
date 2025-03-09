@@ -21,6 +21,7 @@ export function ClassSubjectPage(props: {
     subjectId: number;
     scheduleSubjectId: number;
     room: string;
+    groupId: number;
   }) => void;
 }) {
   const { classSubjecPassingData } = props;
@@ -56,6 +57,7 @@ export function ClassSubjectPage(props: {
         subjectId: item.subjectId,
         scheduleSubjectId: item.scheduleSubjectId,
         room: `${item.class}.${item.studentGroupName}`,
+        groupId: item.studentGroupId,
       });
     } else {
       alert("ไม่พบข้อมูล");

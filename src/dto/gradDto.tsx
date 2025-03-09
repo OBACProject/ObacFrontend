@@ -81,11 +81,11 @@ export interface GetGropGradeAboveModel {
   class: string;
   facultyName: string;
   programName: string;
-  programId:number
+  programId: number;
   term: string;
   year: number;
   student: Student[];
-  level:number;
+  level: number;
 }
 export interface GetGropGradeBelowModel {
   studentId: number;
@@ -100,7 +100,6 @@ export interface GetGropGradeBelowModel {
   year: number;
   gpa: number;
 }
-
 
 export interface SubjectDetail {
   subject_name: string;
@@ -125,7 +124,7 @@ export interface YearDataDetail {
 }
 
 export interface GetStudentGradeDetailDto {
-  gender:string;
+  gender: string;
   studentId: number;
   firstName: string | null;
   lastName: string | null;
@@ -140,4 +139,3 @@ export interface GetStudentGradeDetailDto {
   subProgramName: string;
   year: YearDataDetail[];
 }
-

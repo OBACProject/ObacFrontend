@@ -25,10 +25,9 @@ export function AcademicStudentInfo(props: {
   term: number;
   year: number;
   room: string;
+  groupId: number;
 }) {
   const room = props.room;
-
-  const [gradValue, setGradValue] = useState<string>("");
 
   const [subjectByGroupId, setSchedules] = useState<GetSubjectBySubjectId>();
   const [searchStudent, setSearchStudent] = useState<string>("");
@@ -41,7 +40,6 @@ export function AcademicStudentInfo(props: {
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
-  const [remark, setRemark] = useState<string>("");
   // console.log("gradData :", gradDatas);
   // console.log("gradDataFilter :", gradDataFilter);
   // console.log("data :", subjectByGroupId);
@@ -58,8 +56,10 @@ export function AcademicStudentInfo(props: {
     const fetchData = async () => {
       try {
         const grads = await getSubjectBySubjectIdViewData(
-          props.subjectId,
-          props.scheduleSubjectId
+          props.groupId,
+          props.term,
+          props.year,
+          props.subjectId
         );
         setGradData(grads ?? []);
         const sortedGrads = (grads ?? []).sort((a, b) =>
@@ -163,7 +163,6 @@ export function AcademicStudentInfo(props: {
           testScore: item.testScore,
           affectiveScore: item.affectiveScore,
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
-          finalGrade: item.finalGrade ? String(item.finalGrade) : "",
           remark: item.remark,
         }));
         for (let i = 0; i < payload.length; i++) {
@@ -384,7 +383,7 @@ export function AcademicStudentInfo(props: {
               {item.firstName} {item.lastName}
             </span>
             <input
-              disabled={onEdit != true}
+              disabled={onEdit != true || item.remark !== null}
               type="number"
               value={item.collectScore}
               min={0}
@@ -399,7 +398,7 @@ export function AcademicStudentInfo(props: {
               }
             />
             <input
-              disabled={!onEdit}
+              disabled={!onEdit || item.remark !== null}
               type="number"
               value={item.affectiveScore}
               min={0}
@@ -414,7 +413,7 @@ export function AcademicStudentInfo(props: {
               }
             />
             <input
-              disabled={onEdit != true}
+              disabled={onEdit != true || item.remark !== null}
               type="number"
               value={item.testScore}
               min={0}
@@ -443,9 +442,15 @@ export function AcademicStudentInfo(props: {
                   onSelect={(selectedGrade) =>
                     onChangeGrade(selectedGrade, item.studentId)
                   }
-                  defaultValue={gradingScorce(
-                    item.collectScore + item.testScore + item.affectiveScore
-                  )}
+                  defaultValue={
+                    item.remark
+                      ? item.remark
+                      : gradingScorce(
+                          item.collectScore +
+                            item.testScore +
+                            item.affectiveScore
+                        )
+                  }
                 />
               </div>
             </span>

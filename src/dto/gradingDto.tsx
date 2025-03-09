@@ -67,6 +67,5 @@ export interface UpdateStudentGrade {
   // midtermScore: number;
   // finalScore: number;
   totalScore: number;
-  finalGrade: string;
   remark?: string;
 }
