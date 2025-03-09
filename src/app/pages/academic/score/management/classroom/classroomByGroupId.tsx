@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
+import { Loader2 } from "lucide-react";
 
 export interface GeneralData {
   groupId: number;
@@ -61,7 +62,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   const [selectedGPA, setSelectedGPA] = useState<string>("");
   const [selectedGPAX, setSelectedGPAX] = useState<string>("");
-  console.log(summaryData);
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
@@ -92,6 +93,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
         data.year
       );
       setSummaryData(result);
+      setIsLoadingPage(true);
     };
     fetchData();
   }, []);
@@ -143,16 +145,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       console.error("Summary data is not available");
     }
   };
-  // const studentInStudentList = (studentCode: string) => {
-  //   const student = summaryData?.students.find(
-  //     (student) => student.studentCode === studentCode
-  //   );
-
-  //   return student;
-  // };
-
   const onRowClick = (studentCode: string) => {
-    // localStorage.setItem("studentCode", studentCode);
     const studentData: IndividualStudentInfoData = {
       studentId:
         summaryData?.students.find(
@@ -167,16 +160,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
     localStorage.setItem("activeTabStudent", "individualStudentInfo");
     localStorage.setItem("selectedStudentData", JSON.stringify(studentData));
     rounter.push(`/pages/academic/score/management/individual`);
-    // const student = studentInStudentList(studentCode);
-    // if (student) {
-    //   setSelectedStudent(student);
-    //   setIsOpenPopUp(true);
-    // }
   };
-  // export interface DataList {
-  //   generalData: GeneralData;
-  //   studentList: StudentList[];
-  // }
 
   const convertTOPDFData: DataList = {
     generalData: summaryData?.generalData
@@ -205,86 +189,95 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
 
   return (
     <>
-      <header className="flex flex-col  px-2 py-4 border-2 mt-4 rounded-lg">
-        {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
-        <div className="flex gap-10  justify-between">
-          <Badge variant={"outline"}>
-            <h1 className="text-xl">
-              สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}
-              ห้องเรียน {summaryData?.generalData.class}.
-              {summaryData?.generalData.groupName}{" "}
-            </h1>
-          </Badge>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                TotalScoreInGroup(convertTOPDFData);
-              }}
-              className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
-            >
-              ใบตรวจเกรด {summaryData?.generalData.class}.
-              {summaryData?.generalData.groupName} .pdf
-            </button>
-            <button
-              onClick={handleExportToExcel}
-              className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
-            >
-              เกรดนักเรียนห้อง {summaryData?.generalData.class}.
-              {summaryData?.generalData.groupName} Excel
-            </button>
+      {isLoadingPage ? (
+        <header className="flex flex-col  px-2 py-4 border-2 mt-4 rounded-lg">
+          {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
+          <div className="flex gap-10  justify-between">
+            <Badge variant={"outline"}>
+              <h1 className="text-xl">
+                สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}
+                ห้องเรียน {summaryData?.generalData.class}.
+                {summaryData?.generalData.groupName}{" "}
+              </h1>
+            </Badge>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  TotalScoreInGroup(convertTOPDFData);
+                }}
+                className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+              >
+                ใบตรวจเกรด {summaryData?.generalData.class}.
+                {summaryData?.generalData.groupName} .pdf
+              </button>
+              <button
+                onClick={handleExportToExcel}
+                className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+              >
+                เกรดนักเรียนห้อง {summaryData?.generalData.class}.
+                {summaryData?.generalData.groupName} Excel
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-10 mt-4">
-          <div className="w-1/6 ">
-            <Combobox
-              buttonLabel="GPA"
-              options={[
-                { label: "0 - 1", value: "0-1" },
-                { label: "1 - 2", value: "1-2" },
-                { label: "2 - 3", value: "2-3" },
-                { label: "3 - 4", value: "3-4" },
-              ]}
-              onSelect={(value) => setSelectedGPA(value)}
+          <div className="flex gap-10 mt-4">
+            <div className="w-1/6 ">
+              <Combobox
+                buttonLabel="GPA"
+                options={[
+                  { label: "0 - 1", value: "0-1" },
+                  { label: "1 - 2", value: "1-2" },
+                  { label: "2 - 3", value: "2-3" },
+                  { label: "3 - 4", value: "3-4" },
+                ]}
+                onSelect={(value) => setSelectedGPA(value)}
+              />
+            </div>
+            <div className="w-1/6">
+              <Combobox
+                buttonLabel="GPAX "
+                options={[
+                  { label: "0 - 1", value: "0-1" },
+                  { label: "1 - 2", value: "1-2" },
+                  { label: "2 - 3", value: "2-3" },
+                  { label: "3 - 4", value: "3-4" },
+                ]}
+                onSelect={(value) => setSelectedGPAX(value)}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <DataTable
+              columns={finalColumns}
+              data={
+                filteredData.map((student, index) => ({
+                  index: index + 1,
+                  studentCode: student.studentCode,
+                  name: student.name,
+                  gpa: student.gpa.toFixed(2),
+                  gpax: student.gpax.toFixed(2),
+                  ...student.subjects,
+                })) || []
+              }
+              // isEdit={true}
+              onRowClick={(student) => onRowClick(student.studentCode)}
+              pagination={summaryData?.students.length || 0}
             />
           </div>
-          <div className="w-1/6">
-            <Combobox
-              buttonLabel="GPAX "
-              options={[
-                { label: "0 - 1", value: "0-1" },
-                { label: "1 - 2", value: "1-2" },
-                { label: "2 - 3", value: "2-3" },
-                { label: "3 - 4", value: "3-4" },
-              ]}
-              onSelect={(value) => setSelectedGPAX(value)}
-            />
-          </div>
-        </div>
-        <div className="mt-4">
-          <DataTable
-            columns={finalColumns}
-            data={
-              filteredData.map((student, index) => ({
-                index: index + 1,
-                studentCode: student.studentCode,
-                name: student.name,
-                gpa: student.gpa.toFixed(2),
-                gpax: student.gpax.toFixed(2),
-                ...student.subjects,
-              })) || []
-            }
-            // isEdit={true}
-            onRowClick={(student) => onRowClick(student.studentCode)}
-            pagination={summaryData?.students.length || 0}
-          />
-        </div>
-        {/* <StudentPopup
+          {/* <StudentPopup
           isOpen={isOpenPopUp}
           onClose={() => setIsOpenPopUp(false)}
           student={selectedStudent}
           subjects={summaryData?.subjects || []}
         /> */}
-      </header>
+        </header>
+      ) : (
+        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+      )}
     </>
   );
 }

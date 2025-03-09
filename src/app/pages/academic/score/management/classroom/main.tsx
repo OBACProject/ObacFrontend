@@ -21,7 +21,7 @@ export function Main() {
   >(undefined);
 
   const pathname = usePathname();
-  console.log(pathname);
+
   // Load state from localStorage
   useEffect(() => {
     const savedTab = localStorage.getItem("activeTabClassroom");
@@ -36,7 +36,7 @@ export function Main() {
   }, []);
 
   useEffect(() => {
-    if (pathname === "/pages/academic/grading/management/classroom") {
+    if (pathname === "/pages/academic/score/management/classroom") {
       localStorage.removeItem("activeTabClassroom");
       localStorage.removeItem("selectedClassroomData");
     }
@@ -93,22 +93,6 @@ export function Main() {
             </div>
           )}
         </div>
-        {/* <div className="px-5 flex gap-4">
-          <Link
-            href="/pages/academic/grading/upLevel"
-            className="px-10 bg-blue-400 flex h-fit items-center justify-center py-1.5 text-white rounded-md hover:bg-blue-600 gap-2"
-          >
-            <ArrowUpDown className="w-5 h-5" />
-            ปรับเลื่อนชั้น
-          </Link>
-          <Link
-            href="/pages/academic/FailedStudent"
-            className="px-10 bg-white border-2 h-fit  border-red-500 hover:bg-red-400 hover:text-white flex items-center justify-center py-1 text-red-500 rounded-md  gap-2"
-          >
-            <CircleX className="w-5 h-5 " />
-            นักเรียนที่ไม่ผ่านเกณฑ์
-          </Link>
-        </div> */}
       </div>
 
       {activeTab === "classroom" && (

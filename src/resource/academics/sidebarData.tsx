@@ -39,8 +39,8 @@ export const AcademicSideBarData: AcademicSidebarProps = {
   menuItems: [
     {
       title: "ข้อมูลผู้ใช้",
-      href: "/pages/academic",
-      headLink: "none",
+      href: "/pages/academic/profile",
+      headLink: "/pages/academic/profile",
       icon: (
         <UserRound
           style={{ width: "2.0rem", height: "2.5rem" }}

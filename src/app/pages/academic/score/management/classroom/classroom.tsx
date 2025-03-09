@@ -12,6 +12,7 @@ import {
   filterProgramsViewData,
   getRawProgramViewData,
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
+import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 interface ClassroomTable {
@@ -47,7 +48,6 @@ export function ClassroomGrading(props: {
   );
   // data in table
   const [dataTable, setDataTable] = useState<ClassroomTable[]>([]);
-  console.log("dataTable", dataTable);
 
   // use for selected filter
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
@@ -61,7 +61,7 @@ export function ClassroomGrading(props: {
   );
   const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
   const [program, setProgram] = useState<string[]>([]);
-
+  const [isLoadingPage , setIsLoadingPage] = useState<boolean>(false);
   // get faculties from selected course
   const getFaculties = (courseData: EducationData[]): FacultyInfo[] => {
     return courseData.flatMap((faculty) =>
@@ -125,9 +125,6 @@ export function ClassroomGrading(props: {
 
   useEffect(() => {
     const fetchFilterData = async () => {
-      // const data = await getStudentByGroupIdDataView(groupId);
-
-      // set for table data
       const rawData = await getRawProgramViewData();
 
       const formattedData: ClassroomTable[] = rawData.map(
@@ -153,6 +150,7 @@ export function ClassroomGrading(props: {
 
       setVocationalFaculties(getFaculties(vocational));
       setDiplomaFaculties(getFaculties(diploma));
+      setIsLoadingPage(true)
     };
 
     fetchFilterData();
@@ -215,6 +213,7 @@ export function ClassroomGrading(props: {
 
   return (
     <>
+    {isLoadingPage  ? (
       <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
         <div className="flex gap-12 mt-4">
           <div className="flex justify-center w-full">
@@ -293,6 +292,10 @@ export function ClassroomGrading(props: {
           pagination={10}
         />
       </header>
+    ):(
+      <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center"><p className="flex gap-2"><Loader2 className="h-10 w-10 animate-spin"/>Loading...</p></div>
+    )}
+      
     </>
   );
 }

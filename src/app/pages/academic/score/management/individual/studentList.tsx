@@ -4,6 +4,7 @@ import { Combobox } from "@/app/components/combobox/combobox";
 import { Input } from "@/components/ui/input";
 import { GetAllStudentTableDto } from "@/dto/studentDto";
 import { getAllStudentViewData } from "@/resource/academics/grading/viewData/individualGradeViewData";
+import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 export function StudentListPage(props: {
@@ -13,7 +14,7 @@ export function StudentListPage(props: {
   const [individualStudentData, setIndividualStudentData] = useState<
     GetAllStudentTableDto[]
   >([]);
-
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   // Class levels from API
   const classLevels = Array.from(
     new Set(individualStudentData.map((student) => student.class))
@@ -31,6 +32,7 @@ export function StudentListPage(props: {
     const fetchData = async () => {
       const data = await getAllStudentViewData();
       setIndividualStudentData(data);
+      setIsLoadingPage(true)
     };
 
     fetchData();
@@ -71,7 +73,9 @@ export function StudentListPage(props: {
 
   return (
     <>
-      <header className="flex flex-col px-4 py-2 border-2 mt-4 rounded-lg">
+    {
+      isLoadingPage ? (
+        <header className="flex flex-col px-4 py-2 border-2 mt-4 rounded-lg">
         <div className="flex gap-12">
           <div className="flex mx-auto gap-6 w-full px-2 pt-2 rounded-lg">
             <div className="w-1/6">
@@ -115,6 +119,16 @@ export function StudentListPage(props: {
           pagination={10}
         />
       </header>
+      ):(
+        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+      )
+    }
+      
     </>
   );
 }
