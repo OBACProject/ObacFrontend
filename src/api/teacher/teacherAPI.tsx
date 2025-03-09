@@ -73,7 +73,7 @@ export const fetchGetTeacherByTeacherIdAsync = async (
 
 export const fetchGetTeacherEnrollmentsByTeacherId = async (
   teacherId: number,
-  term: number,
+  term: string,
   year: number
 ): Promise<TeacherEnrollment[]> => {
   try {
