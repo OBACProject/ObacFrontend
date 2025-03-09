@@ -6,7 +6,7 @@ import autoTable from "jspdf-autotable";
 import {
   GeneralData,
   StudentList,
-} from "@/app/pages/academic/grading/management/classroom/classroomByGroupId";
+} from "@/app/pages/academic/score/management/classroom/classroomByGroupId";
 
 // max 280 y
 // max 205 x
