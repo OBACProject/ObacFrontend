@@ -10,7 +10,7 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { StudentPopup, subjectData } from "./component/studentPopup";
+import { StudentPopup, SubjectData } from "./component/studentPopup";
 
 interface StudentDataProps {
   name: string;
@@ -47,7 +47,9 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   }, [props.studentId]);
 
   const studentData: StudentDataProps = {
-    name: studentTranscriptDataById?.thaiName || "",
+    name:
+      `${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.thaiLastName}` ||
+      "",
     studentCode: studentTranscriptDataById?.studentCode || "",
   };
 
@@ -131,7 +133,7 @@ function StudentTermTable({
 }) {
   const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
   const [subjectDataByRowClick, setSubjectDataByRowClick] =
-    useState<subjectData | null>(null);
+    useState<SubjectData | null>(null);
 
   const handleRowClick = (subjectName: string) => {
     const subject = termData.flatMap((year) =>
