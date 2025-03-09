@@ -45,7 +45,7 @@ export function ClassroomGrading(props: {
   // };
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
-  const yearsList = Array.from({ length: 5 }, (_, i) =>
+  const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
   const [selectedTerm, setSelectedTerm] = useState<string>("1");
@@ -167,12 +167,11 @@ export function ClassroomGrading(props: {
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
 
   const filteredData = useMemo(() => {
-    // const normalizedSearch = searchClassroom.toLowerCase();
-
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
         ? item.class.substring(0, 3) === selectedClassLevel
         : true;
+
       const matchFaculty = selectedFaculty
         ? item.facultyName === selectedFaculty
         : true;
@@ -181,22 +180,43 @@ export function ClassroomGrading(props: {
         : true;
       const matchRoom = selectedRoom ? item.class === selectedClassLevel : true;
 
+      // Extract year level from item.class (e.g., xxx. 1/x → yearLevel = 1)
+      const yearLevel = parseInt(item.class.substring(5, 6), 10);
+
+      // Calculate matchYearLevel
+      const matchYearLevel = currentYear - Number(selectedYear);
+      console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
+
+      // Year filtering logic
+      let isYearLevelValid = false;
+
+      if (matchYearLevel === 0) {
+        isYearLevelValid = true; // Show all years
+      } else if (matchYearLevel === 1) {
+        isYearLevelValid = yearLevel > 1; // Show only year 2, 3, ...
+      } else if (matchYearLevel === 2) {
+        isYearLevelValid = yearLevel === 3; // Show only year 3
+      }
+
       return (
-        // matchSearch &&
-        matchClassLevel && matchFaculty && matchProgram && matchRoom
+        matchClassLevel &&
+        matchFaculty &&
+        matchProgram &&
+        matchRoom &&
+        isYearLevelValid
       );
     });
-    const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
 
+    const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
     return sortedData;
   }, [
     dataTable,
     selectedClassLevel,
     selectedFaculty,
     selectedProgram,
-    selectedGradeLevel,
     selectedRoom,
-    // searchClassroom,
+    selectedYear,
+    currentYear,
   ]);
   console.log("filteredData", filteredData);
 
