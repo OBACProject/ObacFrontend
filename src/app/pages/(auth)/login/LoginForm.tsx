@@ -79,6 +79,26 @@ export default function LoginForm({ session }: LoginFormProps) {
     window.location.reload();
   };
 
+  const handleLoginButton = async() => {
+    const newRole = Cookies.get("role");
+    switch (newRole) {
+      case "Student":
+        router.push("/pages/student/schedule");
+        break;
+      case "Teacher":
+        router.push("/pages/teacher/profile");
+        break;
+      case "Academic":
+        router.push("/pages/academic/profile");
+        break;
+      case "Admin":
+        router.push("/pages/admin/academicManagement");
+        break;
+      default:
+        toast.error("Unknown role");
+    }
+  }
+
   return (
     <div className="relative  bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
       <img
@@ -92,6 +112,12 @@ export default function LoginForm({ session }: LoginFormProps) {
             <div className="text-2xl">Welcome {name}</div>
             <div className="text-lg">Role: {role}</div>
             <div className="grid place-items-center mt-5">
+            <button
+                onClick={handleLoginButton}
+                className="bg-green-600 z-10 px-10 text-white my-3 rounded-md py-2"
+              >
+               เข้าสู่ระบบ
+              </button>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 z-10 px-10 text-white my-3 rounded-md py-2"
