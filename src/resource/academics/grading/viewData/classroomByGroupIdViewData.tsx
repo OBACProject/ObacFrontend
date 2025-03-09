@@ -1,10 +1,10 @@
-import {
-  GeneralData,
-  GroupSummaryGradeResponse,
-  StudentList,
-} from "@/app/pages/academic/grading/management/classroom/classroomByGroupId";
 import { GetStudentByGroupId } from "@/dto/studentDto";
 import { getClassroomByGroupId } from "../api/classroomByGroupIdApiData";
+import {
+  GroupSummaryGradeResponse,
+  GeneralData,
+  StudentList,
+} from "@/app/pages/academic/score/management/classroom/classroomByGroupId";
 
 export async function getGroupSummaryGradeViewData(
   groupId: number,
