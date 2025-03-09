@@ -2,12 +2,13 @@ import {
   BookUser,
   TableProperties,
   Grid2X2Plus,
-  ContactRound,
   FileSpreadsheet,
   UsersRound,
   UserRound,
   School,
   FileSliders,
+  ArrowUpDown,
+  OctagonMinus,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -97,17 +98,6 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
-    // {
-    //   title: "ข้อมูลอาจารย์",
-    //   href: "/pages/academic/teacher-info-list",
-    //   icon: (
-    //     <ContactRound
-    //       style={{ width: "2.1rem", height: "2.5rem" }}
-    //       className="text-[#0C2943]"
-    //     />
-    //   ),
-    // },
-
     {
       title: "จัดตารางเรียนตารางสอน",
       href: "/pages/academic/schedule-management",
@@ -128,15 +118,24 @@ export const AcademicSideBarData: AcademicSidebarProps = {
         />
       ),
     },
-    // {
-    //   title: "รายชื่อผู้สมัครเข้าศึกษา",
-    //   href: "/pages/academic/register-student",
-    //   icon: (
-    //     <UsersRound
-    //       style={{ width: "2.0rem", height: "2.0rem" }}
-    //       className="text-[#0C2943]"
-    //     />
-    //   ),
-    // },
+    {
+      title: "ระบบเลื่อนชั้นเรียน",
+      href: "/pages/academic/grading/upLevel",
+      icon: (
+        <ArrowUpDown
+          className="text-[#0C2943] h-8 w-8"
+        />
+      ),
+    },
+    {
+      title: "รายชื่อนักเรียนไม่ผ่านเกณฑ์",
+      href: "/pages/academic/FailedStudent",
+      icon: (
+        <OctagonMinus
+          
+          className="text-[#0C2943] h-8 w-8"
+        />
+      ),
+    },
   ],
 };

@@ -204,12 +204,12 @@ export function ClassroomGrading(props: {
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-5/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
     {
       label: "สาขาวิชา",
       key: "programName",
-      className: "w-3/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
   ];
 
@@ -234,7 +234,7 @@ export function ClassroomGrading(props: {
               <div className="w-1/6 flex flex-col gap-4 pt-5">
                 <Combobox
                   buttonLabel="กรุณาเลือกหลักสูตร"
-                  options={(selectedClassLevel === "ปวช."
+                  options={(selectedClassLevel === "ปวช"
                     ? vocationalFaculties
                     : diplomaFaculties
                   ).map((item) => ({

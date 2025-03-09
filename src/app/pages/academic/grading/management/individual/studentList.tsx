@@ -84,7 +84,7 @@ export function StudentListPage(props: {
                 onSelect={setSelectedClassLevel}
               />
             </div>
-            <div className="w-1/6 ">
+            {/* <div className="w-1/6 ">
               <Combobox
                 options={uniqueFaculties.map((faculty) => ({
                   value: faculty,
@@ -93,7 +93,7 @@ export function StudentListPage(props: {
                 buttonLabel="หลักสูตรการศึกษา"
                 onSelect={setSelectedFaculty}
               />
-            </div>
+            </div> */}
             <div className="w-1/3">
               <Input
                 type="text"

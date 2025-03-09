@@ -18,7 +18,7 @@ export interface GetScheduleBysubjectId {
 }
 
 export interface ScheduleSubject {
-  groupName: string;
+  id:number;
   subjectName: string;
   subjectCode: string;
   teacherName: string;

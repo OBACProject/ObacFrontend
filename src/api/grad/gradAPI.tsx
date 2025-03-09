@@ -4,6 +4,7 @@ import {
   GetGradPerTermByStudentIdDto,
   GetGropGradeAboveModel,
   GetGropGradeBelowModel,
+  GetStudentGradeDetailDto,
 } from "@/dto/gradDto";
 import { cookies } from "next/headers";
 
@@ -250,5 +251,40 @@ export const fetchUpdateCompleteScheduleSubject = async (
   } catch (err: any) {
     console.error("Error in API CompleteGrade", err);
     return { success: false, error: err.message };
+  }
+};
+
+export const fetchGetStudentGradeDetail = async (
+  studentId: number,
+): Promise<GetStudentGradeDetailDto | null> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGradeDetail?studentId=${studentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get data");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    if (!json?.data) {
+      throw new Error("API response does not contain 'data'");
+    }
+    const data: GetStudentGradeDetailDto = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    return null;
   }
 };

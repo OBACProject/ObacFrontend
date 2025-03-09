@@ -100,3 +100,43 @@ export interface GetGropGradeBelowModel {
   year: number;
   gpa: number;
 }
+
+
+export interface SubjectDetail {
+  subject_name: string;
+  subject_code: string;
+  gradeId: number;
+  collectScore: number | null;
+  testScore: number | null;
+  affectiveScore: number | null;
+  midtermScore: number | null;
+  finalScore: number | null;
+  totalScore: number | null;
+  credit: string;
+  finalGrade: string;
+  remark: string;
+}
+
+export interface YearDataDetail {
+  term: string;
+  year: number;
+  totalCredit: number;
+  termQuery: SubjectDetail[];
+}
+
+export interface GetStudentGradeDetailDto {
+  studentId: number;
+  firstName: string | null;
+  lastName: string | null;
+  thaiName: string;
+  thaiLastName: string;
+  class: string;
+  currentYear: number;
+  studentCode: string;
+  groupName: string;
+  programName: string;
+  facultyName: string;
+  subProgramName: string;
+  year: YearDataDetail[];
+}
+

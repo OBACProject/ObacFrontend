@@ -190,7 +190,7 @@ export interface GetStudentUser {
   birthDate: string;
 }
 
-export type Student = {
+export type StudentDto = {
   studentCode: string;
   studentId: number;
   studentName: string;
@@ -206,7 +206,7 @@ export type GetStudentListByGroupIDDto = {
   facultyName: string;
   subProgramName: string;
   class: string;
-  students: Student[];
+  students: StudentDto[];
 };
 export type GetStudentByStudentId = {
   studentId: number;
