@@ -10,6 +10,12 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { StudentPopup, subjectData } from "./component/studentPopup";
+
+interface StudentDataProps {
+  name: string;
+  studentCode: string;
+}
 
 export function StudentInfoByIdPage(props: { studentId: number }) {
   const [studentTranscriptDataById, setStudentTranscriptDataById] =
@@ -39,6 +45,11 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
     };
     fetchData();
   }, [props.studentId]);
+
+  const studentData: StudentDataProps = {
+    name: studentTranscriptDataById?.thaiName || "",
+    studentCode: studentTranscriptDataById?.studentCode || "",
+  };
 
   return (
     <div className="">
@@ -106,12 +117,94 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
           </div>
         </div>
       </div>
-      <StudentTermTable termData={termData} />
+      <StudentTermTable termData={termData} studentData={studentData} />
     </div>
   );
 }
 
-function StudentTermTable({ termData }: { termData: YearData[] }) {
+function StudentTermTable({
+  termData,
+  studentData,
+}: {
+  termData: YearData[];
+  studentData: StudentDataProps;
+}) {
+  const [isOpenPopUp, setIsOpenPopUp] = useState<boolean>(false);
+  const [subjectDataByRowClick, setSubjectDataByRowClick] =
+    useState<subjectData | null>(null);
+
+  const handleRowClick = (subjectName: string) => {
+    const subject = termData.flatMap((year) =>
+      year.termQuery.filter((term) => term.subject_name === subjectName)
+    )[0];
+
+    if (subject) {
+      setSubjectDataByRowClick(subject);
+      setIsOpenPopUp(true);
+    }
+  };
+
+  // Define columns for the DataTable
+  const columns = [
+    {
+      label: "รายวิชา",
+      key: "subject_name",
+      className: "w-5/12 px-4 py-2 text-left font-semibold ",
+    },
+    {
+      label: "รหัสวิชา",
+      key: "subject_code",
+      className: "w-2/12 px-4 py-2 text-center font-semibold justify-start",
+    },
+    {
+      label: "หน่วยกิต",
+      key: "credit",
+      className: "w-2/12 px-4 py-2 text-center font-semibold justify-center",
+    },
+    {
+      label: "เกรด",
+      key: "finalGrade",
+      className: "w-3/12 px-4 py-2 text-center font-semibold justify-center",
+      render: (row: any) => (
+        <span
+          className={`px-2 py-1 rounded ${
+            row.isNegative
+              ? "bg-red-600 text-white"
+              : row.isPass
+              ? "bg-green-600 text-white"
+              : ""
+          }`}
+        >
+          {row.finalGrade}
+        </span>
+      ),
+    },
+  ];
+
+  const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
+    let totalGradePoints = 0;
+
+    termQuery.forEach((term) => {
+      if (!term.finalGrade || term.finalGrade === "N/A") {
+        return;
+      }
+
+      const grade = parseFloat(term.finalGrade);
+      const credit = parseFloat(term.credit);
+
+      if (isNaN(grade) || isNaN(credit)) {
+        return;
+      }
+
+      totalGradePoints += grade * credit;
+    });
+
+    if (totalCredit <= 0) return "0.00";
+
+    const gpa = totalGradePoints / totalCredit;
+    return gpa.toFixed(2);
+  };
+
   return (
     <div className="">
       {termData.map((year, index) => {
@@ -119,71 +212,8 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
           subject_name: term.subject_name,
           subject_code: term.subject_code,
           credit: term.credit,
-          finalGrade: term.remark === "N/A" ? term.finalGrade : term.remark,
-          // isNegative: term.remark !== "ผ" && Number(term.finalGrade) <= 0,
-          // isPass: term.remark === "ผ",
+          finalGrade: term.remark === null ? term.finalGrade : term.remark,
         }));
-
-        // Define columns after checking transformedData
-        const columns = [
-          {
-            label: "รายวิชา",
-            key: "subject_name",
-            className: "w-5/12 px-4 py-2 text-left font-semibold",
-          },
-          {
-            label: "รหัสวิชา",
-            key: "subject_code",
-            className: "w-2/12 px-4 py-2 text-center font-semibold",
-          },
-          {
-            label: "หน่วยกิต",
-            key: "credit",
-            className: "w-2/12 px-4 py-2 text-center font-semibold",
-          },
-          {
-            label: "เกรด",
-            key: "finalGrade",
-            className: "w-3/12 px-4 py-2 text-center font-semibold",
-            render: (row: any) => (
-              <span
-                className={`px-2 py-1 rounded ${
-                  row.isNegative
-                    ? "bg-red-600 text-white"
-                    : row.isPass
-                    ? "bg-green-600 text-white"
-                    : ""
-                }`}
-              >
-                {row.finalGrade}
-              </span>
-            ),
-          },
-        ];
-
-        const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
-          let totalGradePoints = 0;
-
-          termQuery.forEach((term) => {
-            if (!term.finalGrade || term.finalGrade === "N/A") {
-              return;
-            }
-
-            const grade = parseFloat(term.finalGrade);
-            const credit = parseFloat(term.credit);
-
-            if (isNaN(grade) || isNaN(credit)) {
-              return;
-            }
-
-            totalGradePoints += grade * credit;
-          });
-
-          if (totalCredit <= 0) return "0.00";
-
-          const gpa = totalGradePoints / totalCredit;
-          return gpa.toFixed(2);
-        };
 
         return (
           <div key={index} className="mb-6 border p-4 rounded-lg">
@@ -204,7 +234,13 @@ function StudentTermTable({ termData }: { termData: YearData[] }) {
               columns={columns}
               data={transformedData}
               pagination={year.termQuery.length}
-              onRowClick={(item: any) => console.log("Clicked row: ", item)}
+              onRowClick={(item: any) => handleRowClick(item.subject_name)} // Trigger state update on click
+            />
+            <StudentPopup
+              isOpen={isOpenPopUp}
+              onClose={() => setIsOpenPopUp(false)}
+              student={studentData}
+              subjects={subjectDataByRowClick}
             />
           </div>
         );
