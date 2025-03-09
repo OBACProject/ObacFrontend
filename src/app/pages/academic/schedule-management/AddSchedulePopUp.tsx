@@ -2,6 +2,7 @@ import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
 import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { Combobox } from "@/app/components/combobox/combobox";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
@@ -12,7 +13,6 @@ import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {
   onClosePopUp: (value: boolean) => void;
-  term: string;
   year: string;
 };
 
@@ -50,7 +50,6 @@ const getAllStudentGroup = async () => {
 
 export default function AddSchedulePopUp({
   onClosePopUp,
-  term,
   year,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
@@ -84,6 +83,17 @@ export default function AddSchedulePopUp({
   const [teacherID, setTeacherID] = useState<number>(0);
   const [subjectID, setSubjectID] = useState<number>(0);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
+
+  const term = ["1", "2"];
+  const currentYear = new Date().getFullYear() - 1 + 543;
+  const yearsList = Array.from({ length: 3 }, (_, i) =>
+    (currentYear - i).toString()
+  );
+
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedYear, setSelectedYear] = useState<string>(
+    currentYear.toString()
+  );
 
   const subjectOptions = subjects.map((item) => ({
     value: item.id,
@@ -158,7 +168,7 @@ export default function AddSchedulePopUp({
       subject_id: subjectID,
       year: Number(year),
       term: (
-        parseInt(term) +
+        parseInt(selectedTerm) +
         2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
       ).toString(),
       student_group_id: studentGroupId,
@@ -187,23 +197,46 @@ export default function AddSchedulePopUp({
         <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
           เพิ่มวิชาสอน
         </div>
+        <div className="flex p-4">
+          <div className="w-full flex flex-col p-2 relative">
+            <h1>ภาคเรียน</h1>
+            <Combobox
+              options={term.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+              defaultValue="1"
+              buttonLabel="เลือกภาคเรียน"
+              onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+            />
+          </div>
+          <div className="w-full flex flex-col p-2 relative">
+            <h1>ปีการศึกษา</h1>
+            <Combobox
+              options={yearsList.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+              defaultValue={currentYear.toString()}
+              buttonLabel="เลือกปีการศึกษา"
+              onSelect={(selectedYear) => setSelectedYear(selectedYear)}
+            />
+          </div>
+        </div>
         <div className="px-10 py-5">
           <div className="flex justify-start gap-4">
-            <span className="flex gap-2 justify-center">
-              <label className="py-1 px-2 ">วัน</label>
-              <select
-                className="px-5 py-1 rounded-md bg-gray-50 border border-gray-300 focus:outline-blue-500 "
-                onChange={(e) => setDay(e.target.value)}
-                value={day}
-              >
-                <option value="">- เลือก -</option>
-                {days.map((items) => (
-                  <option key={items} value={items}>
-                    {items}
-                  </option>
-                ))}
-              </select>
-            </span>
+            <div className="w-full flex flex-col p-2 relative">
+              <h1>วันที่สอน</h1>
+              <Combobox
+                options={days.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                defaultValue=""
+                buttonLabel="เลือกวันที่สอน"
+                onSelect={(selectedDay) => setDay(selectedDay)}
+              />
+            </div>
             <span className="flex gap-2 justify-start">
               <label className="py-1 px-2">คาบเรียน</label>
               <select

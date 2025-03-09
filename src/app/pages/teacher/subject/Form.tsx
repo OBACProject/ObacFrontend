@@ -3,12 +3,15 @@
 import CardSubject from "@/app/components/card/card-subject";
 import React, { useEffect, useState } from "react";
 import { TeacherEnrollment } from "@/dto/teacherDto";
-import { fetchGetTeacherEnrollmentsByTeacherId, fetchTeacherUser } from "@/api/teacher/teacherAPI";
+import {
+  fetchGetTeacherEnrollmentsByTeacherId,
+  fetchTeacherUser,
+} from "@/api/teacher/teacherAPI";
 import Link from "next/link";
 
 type Props = {
   teacherId: number;
-}
+};
 
 const getSubjectData = async (
   teacherId: number,
@@ -26,27 +29,27 @@ const getSubjectData = async (
 export default function Form({ teacherId }: Props) {
   const currentYear = new Date().getFullYear() + 542;
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
-  const [year , setYear] = useState<number>(2567)
-  const [term , setTerm] = useState<string>("1")
+  const [year, setYear] = useState<number>(2567);
+  const [term, setTerm] = useState<string>("1");
   useEffect(() => {
-    getSubjectData(teacherId,  term,year).then((item) => {
+    getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
     });
   }, []);
-  
-  useEffect(()=>{
-    getSubjectData(teacherId, term ,year).then((item) => {
+
+  useEffect(() => {
+    getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
     });
-  },[])
+  }, []);
 
   return (
     <>
       <div className="text-xl px-10 ">
         <div>
-        <div className="flex gap-5  px-5 py-1 ">
+          <div className="flex gap-5  px-5 py-1 ">
             <div className="flex items-center gap-2">
-              {teacherId}
+              {/* {teacherId} */}
               <p>เทอม</p>
               <select
                 className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"

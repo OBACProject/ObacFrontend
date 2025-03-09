@@ -13,7 +13,6 @@ interface Props {
 }
 
 export default function SubjectTableForm({ grads, onEdit }: Props) {
-  const [remark, setRemark] = useState<string>("");
   const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
   useEffect(() => {
     const sortedData = [...(grads ?? [])].sort(
@@ -77,7 +76,6 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
-
     }
   };
   const gradingScorce = (totalScore: number) => {
@@ -91,7 +89,13 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     return "0";
   };
 
-  const onChangeGrade = (value: string) => {};
+  const onChangeGrade = (value: string, studentId: number) => {
+    grads?.map((item) => {
+      if (item.studentId === studentId) {
+        item.finalGrade = value;
+      }
+    });
+  };
 
   const gradeValue = [
     "0",
@@ -110,9 +114,14 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   ];
 
   const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
-  const onChangeRemark = (value: string) => {
-    setRemark(value);
+  const onChangeRemark = (remark: string, studentId: number) => {
+    grads?.map((item) => {
+      if (item.studentId === studentId) {
+        item.remark = remark;
+      }
+    });
   };
+  // console.log(gradDatas);
 
   return (
     <div className="w-full px-5 ">
@@ -211,7 +220,9 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                   label: item,
                   value: item,
                 }))}
-                onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                onSelect={(selectedGrade) =>
+                  onChangeGrade(selectedGrade, item.studentId)
+                }
                 defaultValue={gradingScorce(
                   item.collectScore + item.testScore + item.affectiveScore
                 )}
@@ -226,7 +237,9 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                 label: item,
                 value: item,
               }))}
-              onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
+              onSelect={(selectedGrade) =>
+                onChangeRemark(selectedGrade, item.studentId)
+              }
               defaultValue={item.remark}
             />
           </div>
