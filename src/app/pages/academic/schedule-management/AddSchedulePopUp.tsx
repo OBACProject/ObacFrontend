@@ -156,7 +156,10 @@ export default function AddSchedulePopUp({
       period: period,
       subject_id: subjectID,
       year: Number(year),
-      term: term + 2 * (parseInt(studentGroupName?.substring(4) ?? "1") - 1),
+      term: (
+        parseInt(term) +
+        2 * (parseInt(studentGroupName?.substring(4) ?? "1") - 1)
+      ).toString(),
       student_group_id: studentGroupId,
       teacher_id: teacherID,
       room: room,
