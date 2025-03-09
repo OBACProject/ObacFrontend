@@ -204,10 +204,16 @@ export function ClassroomGrading(props: {
   //     "groupId": 1,
   //     "groupName": "1/1",
   //     "groupCode": "AC-101"
-  const handleDownloadPDF = async (groupId: number) => {
+  const handleDownloadPDF = async (
+    groupId: number,
+    findAClassLevel: string
+  ) => {
     const result = await getGroupSummaryGradeViewData(
       groupId,
-      selectedTerm,
+      (
+        parseInt(selectedTerm) +
+        2 * (parseInt(findAClassLevel.substring(4)) - 1)
+      ).toString(),
       selectedYear
     );
 
@@ -267,7 +273,7 @@ export function ClassroomGrading(props: {
           className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent row click from being triggered
-            handleDownloadPDF(Number(row.groupId)); // Trigger PDF download
+            handleDownloadPDF(Number(row.groupId), row.class); // Trigger PDF download
           }}
         >
           {!triggerDownLoadPDF ? (
