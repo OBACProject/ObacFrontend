@@ -38,10 +38,11 @@ export default function Form({ teacherId }: Props) {
   }, []);
 
   useEffect(() => {
+    setCard([]);
     getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
     });
-  }, []);
+  }, [term, year]);
 
   return (
     <>
@@ -82,7 +83,11 @@ export default function Form({ teacherId }: Props) {
                   key={items.id}
                   href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&schedule=${items.scheduleSubjectId}&iscomplete=${items.isComplete}`}
                 >
-                  <CardSubject cardSubjectData={items} />
+                  <CardSubject
+                    cardSubjectData={items}
+                    term={term}
+                    year={year}
+                  />
                 </Link>
               ))}
             </div>
