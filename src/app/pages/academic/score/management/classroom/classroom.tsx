@@ -168,6 +168,7 @@ export function ClassroomGrading(props: {
 
   const filteredData = useMemo(() => {
     // const normalizedSearch = searchClassroom.toLowerCase();
+
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
         ? item.class.substring(0, 3) === selectedClassLevel

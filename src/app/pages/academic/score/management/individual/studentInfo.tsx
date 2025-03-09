@@ -11,7 +11,6 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StudentPopup, SubjectData } from "./component/studentPopup";
-import { Loader2 } from "lucide-react";
 
 interface StudentDataProps {
   name: string;
@@ -30,7 +29,6 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
     useState<GetStudentGradeDetailDto | null>();
 
   const [termData, setTermData] = useState<YearData[]>([]);
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   console.log("termData", termData);
 
   useEffect(() => {
@@ -41,7 +39,6 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
         setTermData(data.year);
         const data2 = await fetchGetStudentGradeDetail(props.studentId);
         setScoreFileData(data2);
-        setIsLoadingPage(true);
       } catch (error) {
         console.error("Error fetching student data:", error);
       }
@@ -58,82 +55,71 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
 
   return (
     <div className="">
-      {isLoadingPage ? (
-        <div>
-          <div className="flex justify-between w-full py-4">
-            <Link
-              href={
-                "/pages/academic/student-details/" +
-                studentTranscriptDataById?.studentId
-              }
-              className="grid align-middle lg:w-[800px] hover:bg-gray-50 duration-300   w-fit px-4 py-2 border  rounded-lg"
-            >
-              <div className="flex gap-8 items-center">
-                <div className="bg-gray-600 text-white px-5 py-0.5 text-xl rounded-md">
-                  ข้อมูลนักเรียน
-                </div>
-                <div className="text-lg text-black">
-                  {studentTranscriptDataById?.class}.
-                  {studentTranscriptDataById?.groupName}
-                </div>
-              </div>
-              <div className="flex items-center">
-                <LabelText
-                  topic={"ชื่อ-นามสกุล"}
-                  data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.thaiLastName}`}
-                />
-                <LabelText
-                  topic={"รหัสนักเรียน"}
-                  data={`${studentTranscriptDataById?.studentCode}  (${props.studentId})`}
-                />
-              </div>
-              <div className="flex items-center">
-                <LabelText
-                  topic={"หลักสูตร"}
-                  data={`${studentTranscriptDataById?.programName}`}
-                />
-                <LabelText
-                  topic={"สาขาวิชา"}
-                  data={`${studentTranscriptDataById?.subProgramName}`}
-                />
-              </div>
-            </Link>
-            <div className="px-5 ">
-              <div className="flex items-center gap-2 py-3 ">
-                {scoreFileData ? (
-                  <button
-                    className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
-                    onClick={() => {
-                      SummaryGradPDF(scoreFileData);
-                    }}
-                  >
-                    <p>ดาวโหลดน์ผลการเรียน.pdf</p>
-                  </button>
-                ) : (
-                  <div>ไม่มี</div>
-                )}
-
-                <button
-                  className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
-                  // onClick={() => {
-                  //   GradPerTerms(scoreFileData);
-                  // }}
-                >
-                  ดาวโหลดน์ Transcript.pdf
-                </button>
-              </div>
+      <div className="flex justify-between w-full py-4">
+        <Link
+          href={
+            "/pages/academic/student-details/" +
+            studentTranscriptDataById?.studentId
+          }
+          className="grid align-middle lg:w-[800px] hover:bg-gray-50 duration-300   w-fit px-4 py-2 border  rounded-lg"
+        >
+          <div className="flex gap-8 items-center">
+            <div className="bg-gray-600 text-white px-5 py-0.5 text-xl rounded-md">
+              ข้อมูลนักเรียน
+            </div>
+            <div className="text-lg text-black">
+              {studentTranscriptDataById?.class}.
+              {studentTranscriptDataById?.groupName}
             </div>
           </div>
-          <StudentTermTable termData={termData} studentData={studentData} />
+          <div className="flex items-center">
+            <LabelText
+              topic={"ชื่อ-นามสกุล"}
+              data={`${studentTranscriptDataById?.thaiName} ${studentTranscriptDataById?.thaiLastName}`}
+            />
+            <LabelText
+              topic={"รหัสนักเรียน"}
+              data={`${studentTranscriptDataById?.studentCode}  (${props.studentId})`}
+            />
+          </div>
+          <div className="flex items-center">
+            <LabelText
+              topic={"หลักสูตร"}
+              data={`${studentTranscriptDataById?.programName}`}
+            />
+            <LabelText
+              topic={"สาขาวิชา"}
+              data={`${studentTranscriptDataById?.subProgramName}`}
+            />
+          </div>
+        </Link>
+        <div className="px-5 ">
+          <div className="flex items-center gap-2 py-3 ">
+            {scoreFileData ? (
+              <button
+                className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
+                onClick={() => {
+                  SummaryGradPDF(scoreFileData);
+                }}
+              >
+                <p>ดาวโหลดน์ผลการเรียน.pdf</p>
+              </button>
+            ) : (
+              <div>ไม่มี</div>
+            )}
+
+            <button
+              className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
+              // onClick={() => {
+              //   GradPerTerms(scoreFileData);
+              // }}
+            >
+              ดาวโหลดน์ Transcript.pdf
+            </button>
+          </div>
         </div>
-      ) : (
-        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
-          <p className="flex gap-2">
-            <Loader2 className="h-10 w-10 animate-spin" />
-            Loading...
-          </p>
-        </div>
-      )}
+      </div>
+      <StudentTermTable termData={termData} studentData={studentData} />
     </div>
   );
 }

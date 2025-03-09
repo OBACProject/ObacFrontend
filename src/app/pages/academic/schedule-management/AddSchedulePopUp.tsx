@@ -151,6 +151,7 @@ export default function AddSchedulePopUp({
       (item) => item.studentGroupId === studentGroupId
     );
     const studentGroupName = studentGroupById?.studentGroupName;
+    // console.log(studentGroupName);
     const requestBody: CreateScheduleSubjectRequest = {
       day: day,
       period: period,
@@ -158,7 +159,7 @@ export default function AddSchedulePopUp({
       year: Number(year),
       term: (
         parseInt(term) +
-        2 * (parseInt(studentGroupName?.substring(4) ?? "1") - 1)
+        2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
       ).toString(),
       student_group_id: studentGroupId,
       teacher_id: teacherID,
