@@ -75,14 +75,16 @@ export default function Form({ teacherId }: Props) {
         <div className="border-2 py-2 px-5 grid place-items-center border-gray-200 border-dashed">
           {subjectCards && subjectCards.length > 0 ? (
             <div className="lg:w-9/12 sm:w-full md:w-full">
-              {subjectCards.map((items) => (
+              {subjectCards.map((items) => {
+                const adjustedTerm = Number(items.term) % 2 === 1 ? 1 : 2;
+                return(
                 <Link
                   key={items.id}
-                  href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&schedule=${items.scheduleSubjectId}&iscomplete=${items.isComplete}`}
+                  href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}`}
                 >
-                  <CardSubject cardSubjectData={items} term={term} year={year} />
+                  <CardSubject cardSubjectData={items} term={adjustedTerm.toString()} year={items.year} />
                 </Link>
-              ))}
+              ) })}
             </div>
           ) : (
             <div className="grid text-gray-500 text-3xl font-semibold place-items-center py-10">
