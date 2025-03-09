@@ -97,13 +97,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     return "0";
   };
 
-  const onChangeGrade = (value: string, studentId: number) => {
-    grads?.map((item) => {
-      if (item.studentId === studentId) {
-        item.finalGrade = value;
-      }
-    });
-  };
+  const onChangeGrade = (value: string) => {};
 
   const gradeValue = [
     "0",
@@ -122,14 +116,13 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   ];
 
   const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
-  const onChangeRemark = (remark: string, studentId: number) => {
-    grads?.map((item) => {
+  const onChangeRemark = (value: string, studentId: number) => {
+    gradDatas.map((item) => {
       if (item.studentId === studentId) {
-        item.remark = remark;
+        item.remark = value;
       }
     });
   };
-  // console.log(gradDatas);
 
   return (
     <div className="w-full px-5 ">
@@ -230,14 +223,16 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                   label: item,
                   value: item,
                 }))}
-                onSelect={(selectedGrade) =>
-                  onChangeGrade(selectedGrade, item.studentId)
+                onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                defaultValue={
+                  item.remark
+                    ? item.remark
+                    : gradingScorce(
+                        (item?.collectScore ?? 0) +
+                          (item?.testScore ?? 0) +
+                          (item?.affectiveScore ?? 0)
+                      )
                 }
-                defaultValue={gradingScorce(
-                  (item.collectScore ?? 0) +
-                    (item.testScore ?? 0) +
-                    (item.affectiveScore ?? 0)
-                )}
               />
             </div>
           </span>
@@ -249,8 +244,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                 label: item,
                 value: item,
               }))}
-              onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
-              defaultValue={item.remark ?? "0"}
+              onSelect={(selectedGrade) =>
+                onChangeRemark(selectedGrade, item.studentId)
+              }
+              defaultValue={item.remark || ""}
             />
           </div>
         </div>
