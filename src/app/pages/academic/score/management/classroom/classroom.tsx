@@ -19,6 +19,7 @@ import { GroupSummaryGradeResponse } from "./classroomByGroupId";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
+import { toast } from "react-toastify";
 
 interface ClassroomTable {
   class: string;
@@ -162,6 +163,7 @@ export function ClassroomGrading(props: {
 
     fetchFilterData();
   }, []);
+  const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
 
   const filteredData = useMemo(() => {
     // const normalizedSearch = searchClassroom.toLowerCase();
@@ -203,26 +205,29 @@ export function ClassroomGrading(props: {
   //     "groupName": "1/1",
   //     "groupCode": "AC-101"
   const handleDownloadPDF = async (groupId: number) => {
-    const fetchPDFData = async () => {
-      const result = await getGroupSummaryGradeViewData(
-        groupId,
-        selectedTerm,
-        selectedYear
-      );
-      setSummaryData(result);
-    };
-    fetchPDFData();
+    const result = await getGroupSummaryGradeViewData(
+      groupId,
+      selectedTerm,
+      selectedYear
+    );
+
+    if (!result) {
+      toast.error("ไม่พบข้อมูลสำหรับดาวน์โหลด PDF");
+      return;
+    }
+    setSummaryData(result);
+
     const convertTOPDFData: DataList = {
-      generalData: summaryData?.generalData
+      generalData: result.generalData
         ? {
-            groupId: summaryData.generalData.groupId,
-            groupName: summaryData.generalData.groupName,
-            groupCode: summaryData.generalData.groupCode,
-            class: summaryData.generalData.class,
-            facultyName: summaryData.generalData.facultyName,
-            programName: summaryData.generalData.programName,
-            term: summaryData.generalData.term,
-            year: summaryData.generalData.year,
+            groupId: result.generalData.groupId,
+            groupName: result.generalData.groupName,
+            groupCode: result.generalData.groupCode,
+            class: result.generalData.class,
+            facultyName: result.generalData.facultyName,
+            programName: result.generalData.programName,
+            term: result.generalData.term,
+            year: result.generalData.year,
           }
         : {
             groupId: 0,
@@ -234,24 +239,24 @@ export function ClassroomGrading(props: {
             term: "",
             year: 0,
           },
-      studentList: summaryData?.students || [],
+      studentList: result.students || [],
     };
+
+    if (!convertTOPDFData.generalData.groupId) {
+      toast.error("ข้อมูลไม่ครบถ้วน");
+      return;
+    }
     TotalScoreInGroup(convertTOPDFData);
   };
 
   const columns = [
     { label: "ลำดับ", key: "groupId", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-2/12" },
-    { label: "รหัสห้อง", key: "groupCode", className: "w-1/12" },
+    { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-3/12 xl:justify-start justify-center",
-    },
-    {
-      label: "สาขาวิชา",
-      key: "programName",
-      className: "w-3/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
     {
       label: "ใบออกเกรด",
@@ -259,13 +264,20 @@ export function ClassroomGrading(props: {
       className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
         <button
-          className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1.5 text-white flex justify-center items-center gap-2"
+          className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent row click from being triggered
             handleDownloadPDF(Number(row.groupId)); // Trigger PDF download
           }}
         >
-          ใบออกเกรดห้อง {row.class}
+          {!triggerDownLoadPDF ? (
+            <p>ใบออกเกรด PDF</p>
+          ) : (
+            <p className="flex gap-1 items-center">
+              <Loader2 className="h-5 w-5 animate-spin" />
+              กำลังดาวโหลด
+            </p>
+          )}
         </button>
       ),
     },

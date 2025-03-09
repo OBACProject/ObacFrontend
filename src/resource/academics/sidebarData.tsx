@@ -31,7 +31,7 @@ export interface ProfileData {
 }
 
 export const ProfileData: ProfileData = {
-  name: "Patarajarin Napakarn",
+  name: "username",
   href: "/pages/academic",
 };
 
