@@ -37,18 +37,29 @@ export default function Form() {
     GetStudentGroupsByTermYearDto[]
   >([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>();
-  // const fetchData = async () => {
-  //   try {
-  //     const [studentGroups, teachers] = await Promise.all([
-  //       getStudentGroup(term , Number(year)),
-  //       getAllTeacher(),
-  //     ]);
-  //     setStudentGroup(studentGroups);
-  //     setTeacher(teachers);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+  const [searchStudent, setSearchStudent] = useState<string>("");
+  const [searchTeacher, setSearchTeacher] = useState<string>("");
+
+  const filteredTeachers = teachers?.filter(
+    (item) =>
+      (item.teacherCode?.toLowerCase() || "").includes(
+        searchTeacher.toLowerCase()
+      ) ||
+      (item.thaiName?.toLowerCase() || "").includes(
+        searchTeacher.toLowerCase()
+      ) ||
+      (item.thaiLastName?.toLowerCase() || "").includes(
+        searchTeacher.toLowerCase()
+      ) ||
+      (item.facultyName?.toLowerCase() || "").includes(
+        searchTeacher.toLowerCase()
+      )
+  );
+  const filteredStudent = studentGroup?.filter((item) =>
+    (`${item.class}.${item.groupName}`.toLowerCase()).includes(searchStudent.toLowerCase()) ||
+    (item.facultyName?.toLowerCase() || "").includes(searchStudent.toLowerCase())
+  );
+  
   useEffect(() => {
     getStudentGroup(term, Number(year)).then(
       (d: GetStudentGroupsByTermYearDto[]) => {
@@ -102,6 +113,29 @@ export default function Form() {
           >
             อาจารย์
           </button>
+          <div className="px-5 flex items-center">
+            {toggleMode ? (
+              <div>
+                <input
+                  type="text"
+                  placeholder="ค้นหาอาจารย์..."
+                  value={searchTeacher}
+                  onChange={(e) => setSearchTeacher(e.target.value)}
+                  className="border border-gray-300 px-4 py-1 rounded-md  w-full"
+                />
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="text"
+                  placeholder="ค้นหาห้องเรียน..."
+                  value={searchStudent}
+                  onChange={(e) => setSearchStudent(e.target.value)}
+                  className="border border-gray-300 px-4 py-1 rounded-md  w-full"
+                />
+              </div>
+            )}
+          </div>
         </div>
         <button
           className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
@@ -135,10 +169,10 @@ export default function Form() {
                   เบอร์ติดต่อ
                 </div>
               </div>
-              {teachers && teachers?.length > 0 ? (
+              {filteredTeachers && filteredTeachers?.length > 0 ? (
                 <div>
                   {" "}
-                  {teachers?.map((item: GetAllTeacher, index) => (
+                  {filteredTeachers?.map((item: GetAllTeacher, index) => (
                     <Link
                       href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
                       key={item.teacherId}
@@ -191,9 +225,9 @@ export default function Form() {
                 {/* <div className="text-center">สาขาวิชา</div> */}
                 <div className="text-center py-2">จำนวนนักเรียน</div>
               </div>
-              {studentGroup && studentGroup.length > 0 ? (
+              {filteredStudent && filteredStudent.length > 0 ? (
                 <div>
-                  {studentGroup?.map(
+                  {filteredStudent?.map(
                     (item: GetStudentGroupsByTermYearDto, index) => (
                       <Link
                         href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.groupId}`}
