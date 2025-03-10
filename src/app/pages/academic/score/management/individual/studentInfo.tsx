@@ -1,6 +1,5 @@
 "use client";
 import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
-import { DataTable } from "@/app/components/bellTable/table_style_1";
 import { LabelText } from "@/app/components/labelText/labelText";
 import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +11,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StudentPopup, SubjectData } from "./component/studentPopup";
 import { Loader2 } from "lucide-react";
+import { DataTableStudentInfo } from "@/app/components/bellTable/table_style_studentInfo";
 
 interface StudentDataProps {
   name: string;
@@ -224,11 +224,17 @@ function StudentTermTable({
   return (
     <div className="">
       {termData.map((year, index) => {
+        console.log(year.termQuery);
         const transformedData = year.termQuery.map((term) => ({
           subject_name: term.subject_name,
           subject_code: term.subject_code,
           credit: term.credit,
           finalGrade: term.remark === null ? term.finalGrade : term.remark,
+          isFailed:
+            (term.remark !== "ผ." && term.remark !== null) ||
+            term.finalGrade === "0"
+              ? true
+              : false,
         }));
 
         return (
@@ -246,11 +252,11 @@ function StudentTermTable({
               </Badge>
             </div>
 
-            <DataTable
+            <DataTableStudentInfo
               columns={columns}
               data={transformedData}
               pagination={year.termQuery.length}
-              onRowClick={(item: any) => handleRowClick(item.subject_name)} // Trigger state update on click
+              onRowClick={(item: any) => handleRowClick(item.subject_name)}
             />
             <StudentPopup
               isOpen={isOpenPopUp}

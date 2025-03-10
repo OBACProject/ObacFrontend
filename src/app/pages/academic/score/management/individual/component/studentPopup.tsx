@@ -20,12 +20,12 @@ export interface SubjectData {
 
 interface StudentPopupProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (value: boolean) => void;
   student: { studentCode: string; name: string } | null;
   subjects: SubjectData | null;
 }
 
-const remarkOptions = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+const remarkOptions = ["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
 
 export function StudentPopup({
   isOpen,
@@ -40,7 +40,6 @@ export function StudentPopup({
   });
 
   const [remark, setRemark] = useState("");
-  const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (subjects) {
@@ -53,26 +52,6 @@ export function StudentPopup({
     }
   }, [subjects]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    // Clean up the event listener when the component unmounts or modal is closed
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
-
   const handleInputChange = (field: string, value: string) => {
     setScore((prevScore) => ({
       ...prevScore,
@@ -80,16 +59,16 @@ export function StudentPopup({
     }));
   };
 
-  const gradingScorce = (totalScore: number) => {
-    if (totalScore >= 80) return "4";
-    if (totalScore >= 75) return "3.5";
-    if (totalScore >= 70) return "3";
-    if (totalScore >= 65) return "2.5";
-    if (totalScore >= 60) return "2";
-    if (totalScore >= 55) return "1.5";
-    if (totalScore >= 50) return "1";
-    return "0";
-  };
+  // const gradingScorce = (totalScore: number) => {
+  //   if (totalScore >= 80) return "4";
+  //   if (totalScore >= 75) return "3.5";
+  //   if (totalScore >= 70) return "3";
+  //   if (totalScore >= 65) return "2.5";
+  //   if (totalScore >= 60) return "2";
+  //   if (totalScore >= 55) return "1.5";
+  //   if (totalScore >= 50) return "1";
+  //   return "0";
+  // };
 
   const handleConfirm = async () => {
     try {
@@ -113,9 +92,6 @@ export function StudentPopup({
           testScore: score.finalScore,
           totalScore:
             score.collectScore + score.affectiveScore + score.finalScore,
-          // finalGrade: gradingScorce(
-          //   score.collectScore + score.affectiveScore + score.finalScore
-          // ),
           remark: finalRemark,
         };
 
@@ -128,7 +104,7 @@ export function StudentPopup({
           confirmButtonColor: "#3085d6",
         });
 
-        onClose();
+        onClose(false);
         window.location.reload(); // Optional reload after update
       }
     } catch (error) {
@@ -142,27 +118,40 @@ export function StudentPopup({
       });
     }
   };
-
+  console.log(isOpen);
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-25 z-50">
+        <div
+          className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-25 z-50"
+          onClick={() => onClose(false)}
+        >
           <div
-            ref={modalRef}
             className="bg-white rounded-lg shadow-lg p-6 w-1/3"
+            onClick={(e) => e.stopPropagation()}
           >
             <div>
-              <h1 className="text-xl font-bold mb-4">
-                {student?.name} ({student?.studentCode})
+              <h1 className="text-xl font-bold mb-4 flex justify-between">
+                {student?.name}
+                {subjects?.finalGrade === "0" ||
+                (subjects?.remark !== null && subjects?.remark !== "ผ.") ? (
+                  <span className="text-red-500">ไม่ผ่าน</span>
+                ) : (
+                  <span className="text-green-500">ผ่าน</span>
+                )}
               </h1>
               <div className="space-y-4">
                 <div className="flex justify-between">
-                  <h1>วิชา: {subjects?.subject_name || "ไม่มีข้อมูลวิชา"}</h1>
-                  <h1>รหัสวิชา: {subjects?.subject_code || "ไม่มีข้อมูล"}</h1>
+                  <h1>{subjects?.subject_name || "ไม่มีข้อมูลวิชา"}</h1>
+                  <h1>{subjects?.subject_code || "ไม่มีข้อมูล"}</h1>
                 </div>
                 <div className="flex justify-between">
-                  <h1>หน่วยกิต: {subjects?.credit || "ไม่มีข้อมูล"}</h1>
-                  <h1>เกรด: {subjects?.finalGrade || "ไม่มีข้อมูล"}</h1>
+                  <h1>หน่วยกิต: {subjects?.credit || "0"}</h1>
+                  {subjects?.remark !== null ? (
+                    <h1>เกรดเดิม: {subjects?.remark}</h1>
+                  ) : (
+                    <h1>เกรดเดิม: {subjects?.finalGrade || "ไม่มีข้อมูล"}</h1>
+                  )}
                 </div>
 
                 <div className="p-2">
@@ -207,19 +196,23 @@ export function StudentPopup({
                     value: item,
                   }))}
                   onSelect={setRemark}
-                  defaultValue={subjects?.remark || ""}
+                  defaultValue={subjects?.remark}
                 />
               </div>
 
               <div className="flex justify-between mt-4">
                 <Button
+                  onClick={() => onClose(false)}
+                  variant="outline"
+                  className="w-1/4"
+                >
+                  กลับ
+                </Button>
+                <Button
                   onClick={handleConfirm}
                   className="w-1/4 bg-blue-500 hover:bg-blue-600"
                 >
                   ยืนยัน
-                </Button>
-                <Button onClick={onClose} variant="outline" className="w-1/4">
-                  กลับ
                 </Button>
               </div>
             </div>
