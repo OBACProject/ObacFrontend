@@ -149,7 +149,7 @@ export function SidebarMenu({
           !isVisible
             ? "shadow-md shadow-gray-300 border-r border-r-gray-200 pr-1"
             : "pr-0"
-        } absolute left-0 h-full w-16 z-10 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
+        } absolute left-0 h-full w-16 z-50 min-h-screen bg-white border-t border-t-gray-200 text-white pl-1  py-4`}
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => {
@@ -183,12 +183,12 @@ export function SidebarMenu({
 
       <motion.div
         animate={isVisible ? { x: 242 } : { x: 60 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className="w-fit text-white"
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-pink-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
+          className="absolute  py-5 px-0 translate-y-1 bg-gradient-to-b from-pink-600/30 to-gray-800/30 backdrop-blur-md z-50 text-white rounded-r-md"
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}
@@ -201,9 +201,9 @@ export function SidebarMenu({
 
       <motion.div
         initial={{ x: -232, opacity: 1 }}
-        animate={isVisible ? { x: 50 } : { x: -130 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="h-full w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
+        animate={isVisible ? { x: 50 } : { x: -160 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="h-full fixed top-20 left-0  w-48 z-40 min-h-screen bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md shadow-gray-200 text-white px-2 py-4"
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => {
