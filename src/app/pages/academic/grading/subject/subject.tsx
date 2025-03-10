@@ -128,7 +128,7 @@ export function Subject(props: {
                 value: item,
                 label: item,
               }))}
-              defaultValue="1"
+              defaultValue="2"
               buttonLabel="เลือกภาคเรียน"
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />
