@@ -27,10 +27,10 @@ const getTeachData = async (id: number) => {
 };
 
 export default function ProfileForm() {
-  const [teachers, setTeacher] = useState<GetTeacherByTeacherId>(); // profile
-  const [academics, setAcademics] = useState<GetUserInfoById>(); // academic
+  const [teachers, setTeacher] = useState<GetTeacherByTeacherId>(); 
+  const [academics, setAcademics] = useState<GetUserInfoById>(); 
   const userId = cookies.get("userId");
-  // console.log(userId);
+
   useEffect(() => {
     if (userId) {
       getUserInfoById(userId).then((items) => {
@@ -44,69 +44,35 @@ export default function ProfileForm() {
   }, []);
 
   return (
-    <div className="text-xl font-sans">
-      <div className="grid gap-4 px-5">
-        <div className=" lg:text-xl text-xl px-10 w-fit bg-gray-700 shadow-sm text-white py-1 rounded-3xl   ">
-          ข้อมูลฝ่ายทะเบียน
-        </div>
-        <div className="border-[1px] bg-white duration-1000 shadow-md w-full shadow-gray-200 border-gray-200 px-5 py-5 rounded-sm  ">
-          <div className="flex ">
-            <div className=" overflow-hidden">
-              <img
-                className="hover:scale-125  duration-700 justify-start border-[1px] border-gray-400 rounded-md"
-                src={"/asset/user.jpg"}
-                width="150"
-              />
-            </div>
+    <div className="text-xl py-10 w-full font-sans">
+      <div className="w-full  py-4 l flex justify-center "></div>
+      <div className="w-full mt-10 grid place-items-center">
+        <div className="relative w-full max-w-3xl flex justify-center items-center">
+          <div className="  absolute mix-blend-multiply filter blur-xl top-0 left-10 w-72 h-72  bg-sky-300 opacity-90 rounded-full animate-blob"></div>
+          <div className="  absolute mix-blend-multiply filter blur-xl top-0 right-10 w-72 h-72  bg-yellow-300 opacity-90 rounded-full  animate-blob animation-delay-2000"></div>
+          <div className=" absolute mix-blend-multiply filter blur-xl bottom-0 left-30 w-72 h-72 bg-pink-300 opacity-90 rounded-full  animate-blob animation-delay-4000"></div>
+{/* 
+          <div className=" absolute mix-blend-multiply filter blur-lg bottom-10 left-24 w-36 h-36 bg-teal-300 opacity-90 rounded-full  animate-blob animation-delay-2000"></div>
 
-            <div className="px-5 grid lg:gap-3 md:gap-2 gap-4">
-              {/* <div className="flex px-4 rounded-md py-1 w-fit bg-[#e4f1f8]">
-                <div className="text-xl font-semibold">เลขประจำตัว</div>
-                <div className="ml-2">{academics?.teacherCode}</div>
-              </div> */}
-              <div className=" flex">
-                <div className="text-xl pl-4 font-semibold ">นาย</div>
-                <div className="mx-4 text-gray-700">{academics?.thaiName}</div>
-                <div className="mx-4 text-gray-700">
-                  {academics?.thaiLastname}
-                </div>
-              </div>
-              <div className="flex pl-4 ">
-                <div className="mx-4 text-gray-700">{academics?.firstName}</div>
-                <div className="mx-2 text-gray-700">{academics?.lastName}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="border-[1px] bg-white duration-1000  shadow-md w-fit shadow-gray-200 border-gray-200 px-5  py-5 rounded-sm">
-            <div className="flex">
-              <div className="text-xl font-semibold">Email :</div>
-              <div className="mx-4 text-gray-700">{academics?.email}</div>
-              <div className="border-l-2 pl-4 font-semibold">
-                เบอร์ติดต่อ :{" "}
-              </div>
-              <div className="mx-4 text-gray-700">{academics?.phoneNumber}</div>
-            </div>
-          </div>
+          <div className=" absolute mix-blend-multiply filter blur-lg -bottom-32  w-36 h-36 bg-blue-400 opacity-90 rounded-full  animate-blob2 "></div> */}
 
-          <div className="border-[1px] bg-white duration-1000 shadow-md w-fit shadow-gray-200 border-gray-200 px-5  py-5 rounded-sm">
-            <div className="flex">
-              <div className="text-xl font-semibold">Gender : </div>
-              <div className="mx-4 text-gray-700">{academics?.gender}</div>
-              <div className="border-l-2 pl-4 text-xl font-semibold">
-                ศาสนา :{" "}
-              </div>
-              <div className="mx-4 text-gray-700">{academics?.religion}</div>
-              <div className="border-l-2 pl-4 text-xl font-semibold">
-                สัญชาติ :{" "}
-              </div>
-              <div className="mx-4 text-gray-700">{academics?.nationality}</div>
+          <div className="grid place-items-center gap-8">
+            <div className="px-10 py-3 rounded-full h-fit w-fit text-3x bg-white/50 text-gray-700 backdrop-blur-sm">
+            ข้อมูลฝ่ายทะเบียน
+          </div>
+          <div className="rounded-lg px-10 grid gap-4 py-4  bg-white z-10">
+            <div className="w-full text-center ">
+              ชื่อ  {academics?.thaiName}  {academics?.thaiLastname}
+            </div>
+            <div className="w-full flex gap-4 items-center ">
+              <div>อีเมลล์ {academics?.email || "-"}</div>
+              <div>เบอร์ติดต่อ {academics?.phoneNumber || ""}</div>
             </div>
           </div>
-        </div>{" "}
+          </div>
+          
+        </div>
       </div>
-      <div className="py-40"></div>
     </div>
   );
 }

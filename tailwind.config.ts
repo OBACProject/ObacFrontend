@@ -89,16 +89,30 @@ const config: Config = {
         },
         blob: {
           "0%": {
-            transform: "translate(0px,0px) scale(1)",
+            transform: "translate(10px,0px) scale(1)",
           },
           "33%": {
-            transform: "translate(40px,-60px) scale(1.2)",
+            transform: "translate(50px,-60px) scale(1.2)",
           },
           "66%": {
-            transform: "translate(-40px,60px) scale(0.8)",
+            transform: "translate(-50px,60px) scale(0.8)",
           },
           "100%": {
-            transform: "translate(0px,0px) scale(1)",
+            transform: "translate(10px,0px) scale(1)",
+          },
+        },
+        blob2: {
+          "0%": {
+            transform: "translate(20px,0px) scale(1)",
+          },
+          "40%": {
+            transform: "translate(-40px,60px) scale(0.8)",
+          },
+          "66%": {
+            transform: "translate(40px,-60px) scale(1.2)",
+          },
+          "100%": {
+            transform: "translate(20px,0px) scale(1)",
           },
         },
       },
@@ -108,6 +122,7 @@ const config: Config = {
         fadeStep1: "fadeIn 3s ease-in-out",
         fadeStep2: "fadeIn 4s ease-in-out",
         blob: "blob 7s infinite",
+        blob2: "blob2 7s infinite",
       },
       backgroundImage: {
         authBg: "/images/obac_view.jpg",
