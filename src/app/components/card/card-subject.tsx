@@ -48,19 +48,19 @@ export default function CardSubject({
         <div
           className={`${
             cardSubjectData.day == "วันจันทร์"
-              ? "bg-yellow-200"
+              ? " bg-gradient-to-tr from-yellow-300 via-yellow-200 to-red-200"
               : cardSubjectData.day == "วันอังคาร"
-              ? "bg-pink-200"
+              ? "bg-gradient-to-tr from-red-300 via-pink-300  to-purple-200"
               : cardSubjectData.day == "วันพุธ"
-              ? "bg-green-300"
+              ? "bg-gradient-to-tr from-teal-300  to-green-200"
               : cardSubjectData.day == "วันพฤหัสบดี"
-              ? "bg-orange-200"
+              ? "bg-gradient-to-tr from-red-400 via-orange-300 to-yellow-200"
               : cardSubjectData.day == "วันศุกร์"
-              ? "bg-blue-200"
+              ? "bg-gradient-to-tr from-teal-300 via-sky-300  to-blue-200"
               : cardSubjectData.day == "วันเสาร์"
-              ? "bg-purple-200"
+              ? "bg-gradient-to-tr from-purple-400 via-purple-300  to-teal-200"
               : cardSubjectData.day == "วันอาทิตย์"
-              ? "bg-red-300"
+              ? "bg-gradient-to-tr from-red-500 via-red-400  to-purple-200"
               : ""
           } text-center font-semibold mt-4 shadow-sm shadow-gray-400  py-1 rounded-sm `}
         >

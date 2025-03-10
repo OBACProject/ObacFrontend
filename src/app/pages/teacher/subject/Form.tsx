@@ -97,17 +97,11 @@ export default function Form({ teacherId }: Props) {
           {sortedSubjectCards && sortedSubjectCards.length > 0 ? (
             <div className="lg:w-9/12 sm:w-full md:w-full">
               {sortedSubjectCards.map((items) => {
-                let setClass = ""
                 const adjustedTerm = Number(items.term) % 2 === 1 ? 1 : 2;
-                if (items.studentClass == "ปวส"){
-                   setClass = adjustedTerm.toString()
-                }else{
-                   setClass = items.term
-                }
                 return (
                   <Link
                     key={items.id}
-                    href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${setClass}&year=${items.year}&class=${items.studentClass}`}
+                    href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}&class=${items.studentClass}`}
                   >
                     <CardSubject
                       cardSubjectData={items}
