@@ -3,14 +3,11 @@ import { useEffect, useState } from "react";
 import MenuBar from "./Menu";
 import SubjectTableForm from "./Form";
 import {
-  GetGradBySubjectId,
-  GetStudentGroupGradeByGroupIdTermYearDto,
+  GetGradBySubjectId
 } from "@/dto/gradDto";
 import {
-  fetchGetGradBySubjectId,
   fetchGetStudentGroupGradeByGroupIdTermYear,
 } from "@/api/grad/gradAPI";
-import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
@@ -23,6 +20,7 @@ interface Props {
   isComplete: string;
   term: string;
   year: number;
+  className:string;
 }
 
 const getMethodData = async () => {
@@ -68,7 +66,15 @@ export default function Main({
   isComplete,
   term,
   year,
+  className,
 }: Props) {
+  console.log("data : " , {
+    subjectId , 
+    groupId , 
+    isComplete,
+    term,
+    year
+  })
   const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId[]>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
@@ -100,6 +106,7 @@ export default function Main({
           method={methods}
           subjects={subjects}
           isComplete={isComplete}
+          className={className}
           onEditReturn={getEdit}
         />
       )}
