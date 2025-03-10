@@ -58,7 +58,20 @@ export default function Form({ term, year, groupId }: Props) {
       toast.error("ไม่สำเร็จ");
     }
   };
-  console.log(schedules);
+  const thaiDaysOrder = [
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์"
+  ];
+  const sortedScheduleSubjects = schedules?.scheduleSubjects
+  ? [...schedules.scheduleSubjects].sort((a, b) => {
+      return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
+    })
+  : [];
   return (
     <div className="w-full px-10">
       <div className="py-5 flex justify-center">
@@ -95,7 +108,7 @@ export default function Form({ term, year, groupId }: Props) {
       </div>
 
       <div className="w-full">
-        <div className="w-full grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
+        <div className="w-full grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
           <div className="text-center py-2 border-r-2 border-gray-400">
             รหัสวิชา
           </div>
@@ -120,18 +133,18 @@ export default function Form({ term, year, groupId }: Props) {
           <div className="text-center py-2 "></div>
         </div>
 
-        {schedules && schedules.scheduleSubjects?.length > 0 ? (
-          schedules.scheduleSubjects.map((item: ScheduleSubject, index) => (
+        {sortedScheduleSubjects?.length > 0 ? (
+           sortedScheduleSubjects.map((item: ScheduleSubject, index) => (
             <div
               key={index}
               className={`${
                 index % 2 === 0 ? "bg-white" : "bg-gray-100"
-              } grid grid-cols-[10%_20%_20%_10%_10%_10%_15%_5%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
+              } grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
             >
               <p className="text-start flex items-center px-4 border-r border-gray-400 py-1 line-clamp-1">
                 {item.subjectCode}
               </p>
-              <p className="text-start flex items-center px-4 border-r border-gray-400 py-1 line-clamp-1">
+              <p className="text-start flex items-center  px-4 border-r border-gray-400 py-1 line-clamp-1">
                 {item.subjectName}
               </p>
               <p className="text-center flex items-center justify-center border-r border-gray-400">

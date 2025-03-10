@@ -185,7 +185,7 @@ export function ClassroomGrading(props: {
 
       // Calculate matchYearLevel
       const matchYearLevel = currentYear - Number(selectedYear);
-      console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
+      // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
 
       // Year filtering logic
       let isYearLevelValid = false;
@@ -218,7 +218,7 @@ export function ClassroomGrading(props: {
     selectedYear,
     currentYear,
   ]);
-  console.log("filteredData", filteredData);
+  // console.log("filteredData", filteredData);
 
   // "facultyName": "บริหารธุรกิจ",
   //     "programName": "การเงินและบัญชี",
@@ -232,10 +232,7 @@ export function ClassroomGrading(props: {
   ) => {
     const result = await getGroupSummaryGradeViewData(
       groupId,
-      (
-        parseInt(selectedTerm) +
-        2 * (parseInt(findAClassLevel.substring(4)) - 1)
-      ).toString(),
+      selectedTerm,
       selectedYear
     );
 
@@ -292,7 +289,7 @@ export function ClassroomGrading(props: {
       className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
         <button
-          className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
+          className="px-10 bg-slate-400 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent row click from being triggered
             handleDownloadPDF(Number(row.groupId), row.class); // Trigger PDF download

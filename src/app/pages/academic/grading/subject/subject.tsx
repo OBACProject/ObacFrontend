@@ -29,7 +29,7 @@ export function Subject(props: {
   // const yearsList = Array.from({ length: 5 }, (_, i) =>
   //   (currentYear - i).toString()
   // );
-  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedTerm, setSelectedTerm] = useState<string>("2");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
@@ -128,7 +128,7 @@ export function Subject(props: {
                 value: item,
                 label: item,
               }))}
-              defaultValue="1"
+              defaultValue="2"
               buttonLabel="เลือกภาคเรียน"
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />

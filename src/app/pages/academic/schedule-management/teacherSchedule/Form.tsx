@@ -53,6 +53,18 @@ export default function Form({ term, year, teacherID }: Props) {
       setTeacherData(data);
     });
   }, []);
+  const thaiDaysOrder = [
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์"
+  ];
+  const sortedSchedules = [...schedules].sort((a, b) => {
+    return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
+  });
  const onDeleteSchedule = async (id: number, subjectName: string) => {
     const response = await fetchDeleteScheduleSubject(id);
     if (response.success) {
@@ -65,6 +77,7 @@ export default function Form({ term, year, teacherID }: Props) {
       toast.error("ไม่สำเร็จ");
     }
   };
+
   return (
     <div className="w-full  px-10 ">
       <div className="py-5 flex justify-center ">
@@ -117,9 +130,9 @@ export default function Form({ term, year, teacherID }: Props) {
           <div className="text-center  py-2 "></div>
         </div>
       </div>
-      {schedules.length > 0 ? (
+      {sortedSchedules.length > 0 ? (
         <div>
-          {schedules?.map((item: TeacherScheduleSubject, index) => (
+          {sortedSchedules?.map((item: TeacherScheduleSubject, index) => (
             <div key={index}>
               {item.scheduleSubjects.map((subject, subIndex) => (
                 <div

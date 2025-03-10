@@ -128,17 +128,16 @@ export default function AddTeacherSchedulePopUp({
       teacher_id: teacherId,
       room: room,
     };
-    console.log(requestBody)
+    // console.log(requestBody)
     try {
       const response = await fetchCreateScheduleSubject(requestBody);
       if (response.success) {
         toast.success("สร้างสำเร็จ");
         onClosePopUp(false);
-        window.location.reload()
+        window.location.reload();
       } else {
         toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
       }
-      
     } catch (err) {
       console.error("Error creating schedule:", err);
     }
@@ -206,7 +205,9 @@ export default function AddTeacherSchedulePopUp({
 
           <div className=" my-3 flex gap-2 items-center ">
             <label className="py-1">อาจารย์ผู้สอน </label>
-              <div className="py-1 px-2 border border-gray-300 rounded-md">{teacherName}</div>
+            <div className="py-1 px-2 border border-gray-300 rounded-md">
+              {teacherName}
+            </div>
           </div>
           <div className="my-4">
             <span className="flex items-center  justify-start gap-5 ">

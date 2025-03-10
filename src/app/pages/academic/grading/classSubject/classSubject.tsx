@@ -242,13 +242,13 @@ export function ClassSubjectPage(props: {
                   </h1>
                 </Badge>
               </div>
-              <div>
+              {/* <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
                     ภาคเรียนที่ : {classSubjecPassingData.term}
                   </h1>
                 </Badge>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* filter Data */}

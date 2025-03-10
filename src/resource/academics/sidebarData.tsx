@@ -6,9 +6,9 @@ import {
   UsersRound,
   UserRound,
   School,
-  FileSliders,
   ArrowUpDown,
   OctagonMinus,
+  ScrollText,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -53,7 +53,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       href: "/pages/academic/grading",
       headLink: "/pages/academic/grading",
       icon: (
-        <FileSliders
+        <ScrollText
           style={{ width: "2.2rem", height: "2.5rem" }}
           className="text-[#0C2943]"
         />
