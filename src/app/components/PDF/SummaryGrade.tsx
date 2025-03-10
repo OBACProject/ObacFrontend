@@ -179,7 +179,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
         inStartColoume
       );
       doc.text(
-        `${grads.year[i].termQuery[j].finalGrade}`,
+        `${grads.year[i].termQuery[j].remark || grads.year[i].termQuery[j].finalGrade || 0}`,
         Xaxis + 62,
         inStartColoume
       );
@@ -190,7 +190,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     doc.setFont("THSarabunBold", "bold");
     doc.text(`รวมหน่วยกิตทั้งหมด ${CreditCount}`, Xaxis - 4, startColumn - 2);
     doc.text(
-      `เกรดเฉลี่ย ${(CountGrad / parseFloat(CreditCount.toFixed(2))).toFixed(
+      `เกรดเฉลี่ย ${(CountGrad / parseFloat(CreditCount.toFixed(2)) || 0).toFixed(
         2
       )}`,
       Xaxis - 4,

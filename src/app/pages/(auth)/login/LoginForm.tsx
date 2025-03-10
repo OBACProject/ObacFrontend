@@ -115,13 +115,13 @@ export default function LoginForm({ session }: LoginFormProps) {
             <div className="grid place-items-center mt-5">
             <button
                 onClick={handleLoginButton}
-                className="bg-gradient-to-tr  from-emerald-800/60 to-sky-300 z-10 px-10 text-white my-3 rounded-md py-1 hover:from-green-500 hover:to-green-500"
+                className="bg-gradient-to-tr  from-emerald-800/60 to-sky-300 z-10 px-10 text-white my-3 rounded-md py-1 hover:from-emerald-900/80 hover:to-sky-500 hover:scale-105 duration-500"
               >
                กลับเข้าสู่ระบบ
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-gradient-to-tr from-red-500/70 to-pink-400 z-10 px-10 text-white my-3 rounded-md py-1  hover:from-red-500 hover:to-red-500"
+                className="bg-gradient-to-tr from-red-500/70 to-pink-400 z-10 px-10 text-white my-3 rounded-md py-1  hover:from-red-500 hover:to-red-500 hover:scale-105 duration-500"
               >
                 ออกจากระบบ
               </button>
