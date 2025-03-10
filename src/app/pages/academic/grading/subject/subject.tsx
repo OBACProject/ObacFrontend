@@ -44,7 +44,7 @@ export function Subject(props: {
         props.handleSelectedData({
           id: id,
           year: Number(selectedYear),
-          term: Number(item.term),
+          term: Number(selectedTerm),
           subjectName: item.subjectName,
         });
       } else {
