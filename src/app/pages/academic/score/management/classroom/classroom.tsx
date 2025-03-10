@@ -292,7 +292,7 @@ export function ClassroomGrading(props: {
       className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
         <button
-          className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
+          className="px-10 bg-slate-400 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
           onClick={(e) => {
             e.stopPropagation(); // Prevent row click from being triggered
             handleDownloadPDF(Number(row.groupId), row.class); // Trigger PDF download
