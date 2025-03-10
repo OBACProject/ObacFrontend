@@ -31,6 +31,20 @@ export default function Form({ teacherId }: Props) {
   const [subjectCards, setCard] = useState<TeacherEnrollment[]>();
   const [year, setYear] = useState<number>(2567);
   const [term, setTerm] = useState<string>("2");
+  const thaiDaysOrder = [
+    "วันอาทิตย์",
+    "วันจันทร์",
+    "วันอังคาร",
+    "วันพุธ",
+    "วันพฤหัสบดี",
+    "วันศุกร์",
+    "วันเสาร์"
+  ];
+  const sortedSubjectCards = subjectCards
+  ? [...subjectCards].sort((a, b) => {
+      return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
+    })
+  : [];
   useEffect(() => {
     getSubjectData(teacherId, term, year).then((item) => {
       setCard(item);
@@ -76,9 +90,9 @@ export default function Form({ teacherId }: Props) {
           </div>
         </div>
         <div className="border-2 py-2 px-5 grid place-items-center border-gray-200 border-dashed">
-          {subjectCards && subjectCards.length > 0 ? (
+          {sortedSubjectCards && sortedSubjectCards.length > 0 ? (
             <div className="lg:w-9/12 sm:w-full md:w-full">
-              {subjectCards.map((items) => {
+              {sortedSubjectCards.map((items) => {
                 const adjustedTerm = Number(items.term) % 2 === 1 ? 1 : 2;
                 return (
                   <Link

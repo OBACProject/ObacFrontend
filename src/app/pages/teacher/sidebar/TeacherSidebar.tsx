@@ -188,7 +188,7 @@ export function SidebarMenu({
       >
         <button
           onClick={() => setIsVisible(!isVisible)}
-          className="absolute  py-5 px-0 translate-y-1 bg-gradient-to-b from-pink-600/30 to-gray-800/30 backdrop-blur-md z-50 text-white rounded-r-md"
+          className="absolute  py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md z-40 text-white rounded-r-md"
         >
           <ChevronRight
             style={{ width: "2.0rem", height: "2.0rem" }}

@@ -59,8 +59,6 @@ export interface TeacherEnrollment {
     id: number;
     teacherId: number;
     teacherCode: string;
-    teacherName: string;
-    teacherLastName: string;
     teacherThaiName: string;
     teacherThaiLastName: string;
     scheduleSubjectId: number;
@@ -68,6 +66,8 @@ export interface TeacherEnrollment {
     subjectCode: string;
     subjectName: string;
     studentGroupId: number;
+    studentClass:string;
+    groupName:string
     totalStudent: number;
     room: string;
     day: string;

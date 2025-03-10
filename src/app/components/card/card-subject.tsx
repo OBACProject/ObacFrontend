@@ -5,11 +5,15 @@ import React from "react";
 
 interface CardSubjectProps {
   cardSubjectData: TeacherEnrollment;
-  term:string;
-  year:number;
+  term: string;
+  year: number;
 }
 
-export default function CardSubject({ cardSubjectData,year , term }: CardSubjectProps ) {
+export default function CardSubject({
+  cardSubjectData,
+  year,
+  term,
+}: CardSubjectProps) {
   return (
     <div className=" border-[1px] hover:border-black border-gray-200 rounded-md my-3 bg-card text-card-foreground w-full hover:scale-[102%] duration-500 hover:bg-gray-50 shadow-md shadow-gray-200 bg-white grid grid-cols-[40%_21%_3%_36%]">
       <div className="ml-5 py-4 ">
@@ -39,7 +43,7 @@ export default function CardSubject({ cardSubjectData,year , term }: CardSubject
 
       <div className="py-3 w-11/12">
         <p className="text-center text-gray-600 font-semibold shadow-sm shadow-gray-400 py-1 px-2 bg-[#e4f1f8] rounded-md">
-          ห้องสอน : {cardSubjectData.room}
+          {cardSubjectData.studentClass}.{cardSubjectData.groupName}
         </p>
         <div
           className={`${
