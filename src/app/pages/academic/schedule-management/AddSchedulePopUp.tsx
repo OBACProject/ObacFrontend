@@ -109,7 +109,6 @@ export default function AddSchedulePopUp({
       teacher.thaiLastName
     }`,
   }));
-  console.log(teacherOptions);
 
   const groupOptions = studentGroup.map((item) => ({
     value: item.studentGroupId,
@@ -126,10 +125,7 @@ export default function AddSchedulePopUp({
       period: period,
       subject_id: subjectID,
       year: Number(year),
-      term: (
-        parseInt(selectedTerm) +
-        2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
-      ).toString(),
+      term: selectedTerm,
       student_group_id: studentGroupId,
       teacher_id: teacherID,
       room: room,

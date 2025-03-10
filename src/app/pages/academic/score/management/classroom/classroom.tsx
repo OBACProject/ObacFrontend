@@ -185,7 +185,7 @@ export function ClassroomGrading(props: {
 
       // Calculate matchYearLevel
       const matchYearLevel = currentYear - Number(selectedYear);
-      console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
+      // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
 
       // Year filtering logic
       let isYearLevelValid = false;
@@ -218,7 +218,7 @@ export function ClassroomGrading(props: {
     selectedYear,
     currentYear,
   ]);
-  console.log("filteredData", filteredData);
+  // console.log("filteredData", filteredData);
 
   // "facultyName": "บริหารธุรกิจ",
   //     "programName": "การเงินและบัญชี",
@@ -232,10 +232,7 @@ export function ClassroomGrading(props: {
   ) => {
     const result = await getGroupSummaryGradeViewData(
       groupId,
-      (
-        parseInt(selectedTerm) +
-        2 * (parseInt(findAClassLevel.substring(4)) - 1)
-      ).toString(),
+      selectedTerm,
       selectedYear
     );
 
