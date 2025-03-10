@@ -67,7 +67,7 @@ export default function Form({ teacherId }: Props) {
         <div>
           <div className="flex gap-5  px-5 py-1 ">
             <div className="flex items-center gap-2">
-              {teacherId}
+              {/* {teacherId} */}
               <p>เทอม</p>
               <select
                 className="px-4 py-1 border border-gray-300 rounded-sm focus:outline-blue-400"
