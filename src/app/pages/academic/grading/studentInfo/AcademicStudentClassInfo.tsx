@@ -40,10 +40,7 @@ export function AcademicStudentInfo(props: {
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
-  // console.log("gradData :", gradDatas);
-  // console.log("gradDataFilter :", gradDataFilter);
-  // console.log("data :", subjectByGroupId);
-  // console.log("code :", 0);
+
   const handleEdit = () => {
     setOnEdit(true);
   };

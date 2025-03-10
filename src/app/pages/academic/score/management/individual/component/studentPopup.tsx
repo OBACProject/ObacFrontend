@@ -118,7 +118,7 @@ export function StudentPopup({
       });
     }
   };
-  console.log(isOpen);
+  // console.log(isOpen);
   return (
     <>
       {isOpen && (

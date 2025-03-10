@@ -63,7 +63,6 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
             {columns.map((col, colIndex) => {
               const cellValue = col.key ? item[col.key] : null;
               const renderContent = col.render ? col.render(item) : cellValue;
-              console.log(item.isFailed);
               return (
                 <div
                   key={`cell-${rowIndex}-${colIndex}`}

@@ -72,14 +72,14 @@ export default function Form() {
     setAddTerm(term);
     setCredits(credits);
     setIsActive(isActive);
-    console.log("get", {
-      subjectName,
-      subjectCode,
-      term,
-      programId,
-      credits,
-      isActive,
-    });
+    // console.log("get", {
+    //   subjectName,
+    //   subjectCode,
+    //   term,
+    //   programId,
+    //   credits,
+    //   isActive,
+    // });
     setTriggerAddSubject(true);
   };
   const AddSubject = async () => {
@@ -103,14 +103,14 @@ export default function Form() {
     } catch (err) {
       toast.error("เพิ่มวิชาไม่สำเร็จ");
     }
-    console.log("api", {
-      addSubjectCode,
-      addSubjectName,
-      addTerm,
-      addProgramId,
-      addCredits,
-      addIsActive,
-    });
+    // console.log("api", {
+    //   addSubjectCode,
+    //   addSubjectName,
+    //   addTerm,
+    //   addProgramId,
+    //   addCredits,
+    //   addIsActive,
+    // });
   };
   useEffect(() => {
     if (triggerAddSubject) {

@@ -224,7 +224,7 @@ function StudentTermTable({
   return (
     <div className="">
       {termData.map((year, index) => {
-        console.log(year.termQuery);
+        // console.log(year.termQuery);
         const transformedData = year.termQuery.map((term) => ({
           subject_name: term.subject_name,
           subject_code: term.subject_code,
