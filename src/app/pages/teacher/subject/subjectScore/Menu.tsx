@@ -19,6 +19,7 @@ interface Props {
   schedules?: GetScheduleBysubjectId[];
   subjects: GetSubjectBySubjectId;
   method: MethodDto;
+  className:string;
   isComplete: string;
   onEditReturn: (data: boolean) => void;
 }
@@ -29,6 +30,7 @@ export default function MenuBar({
   subjects,
   method,
   isComplete,
+  className,
   onEditReturn,
 }: Props) {
   const [gradData, setGradData] = useState<GetGradBySubjectId[]>([]);
@@ -81,15 +83,15 @@ export default function MenuBar({
   }, [gradData]);
 
   return (
-    <div className="bg-white border-[1px] border-gray-200 ">
+    <div className="bg-white  ">
       <div className="flex justify-between h-fit">
-        <div className="grid gap-2 rounded-md bg-white px-10 text-gray-600 border-2 border-blue-300 py-3 ">
+        <div className="grid gap-2 rounded-md bg-white px-10 text-gray-600 bg-gradient-to-tr from-sky-200 to-teal-100 py-3 ">
           <div className="flex items-center gap-4">
             <span className=" text-xl">
               รหัสวิชา : {subjectData?.subjectCode}
             </span>
             <span className="text-md text-gray-500 font-semibold bg-white rounded-sm text-center py-1 w-fit px-2">
-              กลุ่มเรียน : {student_group}{" "}
+              กลุ่มเรียน : {className}.{student_group}{" "}
             </span>
           </div>
 
@@ -105,7 +107,7 @@ export default function MenuBar({
               onClick={() => {
                 GenSubjectScore({
                   grads: grads,
-                  studentGroup: student_group,
+                  studentGroup: `${className}.${student_group}`,
                   subjectId: subjectData?.subjectCode,
                   subjectName: subjectData?.subjectName,
                 });
@@ -118,7 +120,7 @@ export default function MenuBar({
               onClick={() => {
                 GenStudentNameInSubject({
                   grads: grads,
-                  studentGroup: student_group,
+                  studentGroup: `${className}.${student_group}`,
                   subjectId: subjectData?.subjectCode,
                   subjectName: subjectData?.subjectName,
                 });

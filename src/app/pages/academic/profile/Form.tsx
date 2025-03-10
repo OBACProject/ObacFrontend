@@ -45,7 +45,6 @@ export default function ProfileForm() {
 
   return (
     <div className="text-xl py-10 w-full font-sans">
-      <div className="w-full  py-4 l flex justify-center "></div>
       <div className="w-full mt-10 grid place-items-center">
         <div className="relative w-full max-w-3xl flex justify-center items-center">
           <div className="  absolute mix-blend-multiply filter blur-xl top-0 left-10 w-72 h-72  bg-sky-300 opacity-90 rounded-full animate-blob"></div>
@@ -61,12 +60,22 @@ export default function ProfileForm() {
             ข้อมูลฝ่ายทะเบียน
           </div>
           <div className="rounded-lg px-10 grid gap-4 py-4  bg-white z-10">
-            <div className="w-full text-center ">
-              ชื่อ  {academics?.thaiName}  {academics?.thaiLastname}
+            <div className="w-full text-center flex gap-4 items-center  ">
+              ชื่อ   <p className="text-gray-600">{academics?.thaiName}  {academics?.thaiLastname}</p>
             </div>
             <div className="w-full flex gap-4 items-center ">
-              <div>อีเมลล์ {academics?.email || "-"}</div>
-              <div>เบอร์ติดต่อ {academics?.phoneNumber || ""}</div>
+            <div className="flex gap-4 items-center">
+                  อีเมลล์{" "}
+                  <p className="text-gray-600">
+                    {academics?.email || "-"}
+                  </p>
+                </div>
+                <div className="flex gap-4 items-center">
+                  เบอร์ติดต่อ{" "}
+                  <p className="text-gray-600">
+                    {academics?.phoneNumber || "-"}
+                  </p>
+                </div>
             </div>
           </div>
           </div>

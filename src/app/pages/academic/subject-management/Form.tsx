@@ -334,7 +334,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
 
   const programOptions = programs.map((item) => ({
     value: item.programId,
-    label: `${item.facultyName} : ${item.programName}`,
+    label: `${item.facultyName}`,
   }));
   const handleProgramChange = (
     selectedOption: { value: number; label: string } | null
@@ -428,9 +428,10 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             }
             onChange={handleProgramChange}
             isSearchable
+           className="w-full"
             placeholder="หลักสูตร"
           />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center w-full gap-2">
             <input
               type="checkbox"
               id="checkbox"

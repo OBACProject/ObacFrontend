@@ -9,8 +9,9 @@ export default function OtherPage() {
   const isComplete = searchParams.get("iscomplete");
   const term = searchParams.get("term")
   const year = searchParams.get("year")
+  const className = searchParams.get("class")
 
-  if (!subjectId || !groupId || !isComplete || !term || !year) {
+  if (!subjectId || !groupId || !isComplete || !term || !year || !className) {
     return (
       <div className="border-2 px-5 grid place-items-center border-gray-200 text-gray-500 text-3xl font-semibold py-20 border-dashed">
         Loading...
@@ -26,6 +27,7 @@ export default function OtherPage() {
         isComplete={isComplete}
         term={term}
         year={Number(year)}
+        className={className}
       />
     </div>
   );

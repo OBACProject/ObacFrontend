@@ -133,18 +133,7 @@ export function Subject(props: {
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />
           </div>
-          {/* <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
-            <h1>ปีการศึกษา</h1>
-            <Combobox
-              options={yearsList.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-              defaultValue={currentYear.toString()}
-              buttonLabel="เลือกปีการศึกษา"
-              onSelect={(selectedYear) => setSelectedYear(selectedYear)}
-            />
-          </div> */}
+
           <div className="relative w-1/3 flex flex-col gap-1 px-4 py-2">
             <h1>ค้นหารายวิชา</h1>
             <div className="bg-white">
