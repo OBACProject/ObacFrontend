@@ -63,6 +63,7 @@ export function ClassSubjectPage(props: {
       alert("ไม่พบข้อมูล");
     }
   };
+  // console.log(classSubjecPassingData.id, classSubjecPassingData.term);
 
   const handlePusblishGrade = async () => {
     const result = await Swal.fire({
