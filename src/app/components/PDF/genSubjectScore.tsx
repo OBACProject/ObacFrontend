@@ -108,7 +108,7 @@ const GenSubjectScore = ({
             `${grads[i].affectiveScore}`,
             `${grads[i].testScore}`,
             `${grads[i].totalScore}`,
-            "",
+            `${grads[i].remark !== null ? grads[i].remark : ""}`,
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
