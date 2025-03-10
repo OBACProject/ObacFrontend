@@ -2,7 +2,6 @@ import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
 import { fetchGetAllSubjectByTerm } from "@/api/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
-import { Combobox } from "@/app/components/combobox/combobox";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
