@@ -97,7 +97,7 @@ export const fetchGetAllSubjectByTerm = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetSubjectByTerm1to6?term=${term}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Subject/GetSubjectByTerm?term=${term}`,
       {
         method: "GET",
         headers: {
