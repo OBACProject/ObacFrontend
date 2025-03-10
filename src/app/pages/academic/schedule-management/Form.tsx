@@ -73,7 +73,7 @@ export default function Form() {
     <div className="w-full">
       <div className="flex items-center py-5 justify-center">
         <div></div>
-        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit bg-purple-500 text-white flex gap-2 items-center">
+        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit bg-gradient-to-tr from-purple-500 via-pink-400 to-orange-300 text-white flex gap-2 items-center">
           <BookText className="w-8 h-8" />
           ระบบจัดการตารางเรียน - ตารางสอน
         </h1>

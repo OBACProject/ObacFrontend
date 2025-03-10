@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserRound } from "lucide-react";
 
 interface LoginFormProps {
   session?: { role?: string; name?: string };
@@ -109,20 +109,21 @@ export default function LoginForm({ session }: LoginFormProps) {
       {role && name ? (
         <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">
           <div className="space-y-4">
-            <div className="text-2xl">Welcome {name}</div>
-            <div className="text-lg">Role: {role}</div>
+            <div className="flex justify-center "><UserRound className="h-12 w-12 rounded-full"/></div>
+            <div className="text-2xl">{name}</div>
+            {/* <div className="text-lg">Role: {role}</div> */}
             <div className="grid place-items-center mt-5">
             <button
                 onClick={handleLoginButton}
-                className="bg-green-600 z-10 px-10 text-white my-3 rounded-md py-2"
+                className="bg-gradient-to-tr  from-emerald-800/60 to-sky-300 z-10 px-10 text-white my-3 rounded-md py-1 hover:from-green-500 hover:to-green-500"
               >
-               เข้าสู่ระบบ
+               กลับเข้าสู่ระบบ
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 z-10 px-10 text-white my-3 rounded-md py-2"
+                className="bg-gradient-to-tr from-red-500/70 to-pink-400 z-10 px-10 text-white my-3 rounded-md py-1  hover:from-red-500 hover:to-red-500"
               >
-                Logout
+                ออกจากระบบ
               </button>
             </div>
           </div>

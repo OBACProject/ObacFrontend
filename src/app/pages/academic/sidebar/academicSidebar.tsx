@@ -241,7 +241,7 @@ export function SidebarMenu({
       {/* Sidebar Toggle Button */}
       <motion.div
         animate={isVisible ? { x: 270 } : { x: 60 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className="w-fit text-white"
       >
         <button
@@ -261,7 +261,7 @@ export function SidebarMenu({
       <motion.div
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -160 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         className="h-full fixed top-20 left-0 w-56 z-40 min-h-screen border bg-white border-r border-t border-t-gray-200 border-gray-200 shadow-md px-2 py-4"
       >
         <div className="grid gap-2 relative">

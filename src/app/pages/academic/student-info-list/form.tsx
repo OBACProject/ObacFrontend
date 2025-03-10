@@ -72,7 +72,7 @@ export default function Form() {
   return (
     <div className="py-5 w-full">
       <div className="flex justify-center items-center">
-        <div className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-blue-800 text-white">
+        <div className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-gradient-to-tr from-blue-700 to-gray-500 text-white">
           <BookUser className="w-8 h-8"/>
           รายชื่อและข้อมูลนักเรียน
         </div>

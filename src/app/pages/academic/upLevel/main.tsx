@@ -162,7 +162,7 @@ export default function Main() {
       <div className="flex justify-center">
         <div
           style={{ userSelect: "none" }}
-          className="px-10 rounded-3xl text-xl flex gap-2 items-center py-2 bg-blue-500 text-white "
+          className="px-10 rounded-3xl text-xl flex gap-2 items-center py-2 bg-gradient-to-tr from-blue-700 to-teal-500 text-white "
         >
           <ArrowUpDown className="w-8 h-8"/>
           ปรับเลื่อนชั้นเรียน
