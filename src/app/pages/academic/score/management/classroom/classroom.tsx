@@ -232,10 +232,7 @@ export function ClassroomGrading(props: {
   ) => {
     const result = await getGroupSummaryGradeViewData(
       groupId,
-      (
-        parseInt(selectedTerm) +
-        2 * (parseInt(findAClassLevel.substring(4)) - 1)
-      ).toString(),
+      selectedTerm,
       selectedYear
     );
 
