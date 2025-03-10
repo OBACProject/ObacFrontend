@@ -1,5 +1,6 @@
 import {
   fetchAddSubject,
+  fetchDeleteSubject,
   fetchGetAllSubject,
   fetchUpdateSubject,
 } from "@/api/subject/subjectAPI";
@@ -33,11 +34,19 @@ export default function Form() {
   const [editCreditSubject, setEditCredisSubject] = useState<number>(0);
   const [editSubjectStatus, setEditSubjectStatus] = useState<boolean>(false);
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   useEffect(() => {
     getAllSubject().then((d) => {
       setSubject(d);
     });
   }, []);
+
+  const filteredSubjects = subjects.filter(
+    (subject) =>
+      subject.subjectCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      subject.subjectName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const [getEditSubjectId, setGetEditIdSubject] = useState<number>(0);
   const [getEditSubjectCode, setGetEditSubjectCode] = useState<string>("");
@@ -156,7 +165,16 @@ export default function Form() {
     setTriggerEditSubject(false);
   }, [triggerEditSubject]);
 
-  const getAndDelete = (id: number) => {};
+  const getAndDelete = async (id: number) => {
+    const isDeleted = await fetchDeleteSubject(id);
+
+    if (isDeleted) {
+      toast.success("ลบสำเร็จ");
+      getAllSubject().then((d) => setSubject(d));
+    } else {
+      toast.error("ลบไม่สำเร็จ");
+    }
+  };
 
   return (
     <div className="w-full">
@@ -166,7 +184,7 @@ export default function Form() {
           ระบบจัดการรายวิชา
         </h1>
       </div>
-      <div className="px-10 py-2 gap-2">
+      <div className="px-10 py-2 flex gap-5">
         <button
           className="px-10 py-1.5 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
           onClick={() => setAddSubjectPopUp(true)}
@@ -174,48 +192,55 @@ export default function Form() {
           <PlusCircle className="w-5 h-5 text-white  " />
           เพิ่มวิชาและหลักสูตร
         </button>
+        <input
+          type="text"
+          placeholder="ค้นหาวิชา..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border px-4 py-2 rounded-md"
+        />
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border-2 border-gray-400  rounded-t-md">
-          <div className="text-center border-r-2 border-gray-400  py-2 text-black">
+        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border-2 border-blue-300  rounded-t-md">
+          <div className="text-center border-r-2 border-blue-300   py-2 text-black">
             ลำดับ
           </div>
-          <div className="text-center  border-r-2 border-gray-400  py-2">
+          <div className="text-center  border-r-2 border-blue-300   py-2">
             รหัสวิชา
           </div>
-          <div className="text-center border-r-2 border-gray-400  py-2">
+          <div className="text-center border-r-2 border-blue-300   py-2">
             ชื่อวิชา
           </div>
-          <div className="text-center border-r-2 border-gray-400  py-2">
+          <div className="text-center border-r-2 border-blue-300   py-2">
             หน่วยกิต
           </div>
-          <div className="text-center border-r-2 border-gray-400  py-2">
+          <div className="text-center border-r-2 border-blue-300   py-2">
             สถานะ
           </div>
           <div className="text-center py-2">Action</div>
         </div>
         {subjects.length > 0 ? (
           <div>
-            {subjects?.map((item: GetAllSubject, index) => (
+            {filteredSubjects?.map((item: GetAllSubject, index) => (
               <div
                 key={item.id}
                 className={` ${
                   index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                } grid grid-cols-[5%_20%_35%_10%_15%_15%]  hover:bg-blue-100 border border-gray-400  border-t-0`}
+                } grid grid-cols-[5%_20%_35%_10%_15%_15%]  hover:bg-blue-100 border border-blue-400  border-t-0`}
               >
                 <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
                   {index + 1}.
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r border-gray-400 ">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r border-blue-400 ">
                   <p className="line-clamp-1">{item.subjectCode}</p>
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r  border-gray-400">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r  border-blue-400">
                   <p className="line-clamp-1">{item.subjectName}</p>
                 </div>
-                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r  border-gray-400">
+                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r  border-blue-400">
                   <p className="line-clamp-1">{item.credits}</p>
                 </div>
-                <div className="text-center flex items-center w-full justify-center py-1 border-r border-gray-400">
+                <div className="text-center flex items-center w-full justify-center py-1 border-r border-blue-400">
                   {item.isActive ? (
                     <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                       ใช้งาน
@@ -228,7 +253,7 @@ export default function Form() {
                 </div>
                 <div className=" flex items-center justify-center gap-2 py-1">
                   <button
-                    className="w-fit px-2 flex justify-center py-1 text-sm rounded-sm hover:bg-gray-400 text-gray-400 hover:text-white hover:border-gray-200 bg-white-400 border border-gray-400 shadow-md  bg-white"
+                    className="w-fit px-2 flex justify-center py-1 text-sm rounded-full hover:bg-gray-400 text-gray-400 hover:text-white  bg-white-400  shadow-md duration-500  bg-white"
                     onClick={() => {
                       setEditSubjectPopUp(true);
                       setGetEditIdSubject(item.id);
@@ -238,7 +263,7 @@ export default function Form() {
                       setEditSubjectStatus(item.isActive);
                     }}
                   >
-                    <Pencil className="w-5 h-5 " />
+                    <Pencil className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -250,6 +275,7 @@ export default function Form() {
           </div>
         )}
       </div>
+
       {addSubject_popup && (
         <AddSubjectPopUp
           onClosePopUp={setAddSubjectPopUp}
@@ -477,12 +503,13 @@ const EditSubjectPopUp = ({
     }
   };
   const Delete = () => {
-    
     setDeleteTrigger(true);
   };
-  const deleteHandler = ()=>{
+  const deleteHandler = () => {
     onDelete(ID);
-  }
+    setDeleteTrigger(false);
+    onClosePopUp(false);
+  };
   return (
     <div
       className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
