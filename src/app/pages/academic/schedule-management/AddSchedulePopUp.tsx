@@ -8,7 +8,6 @@ import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { GetAllTeacher } from "@/dto/teacherDto";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -18,10 +17,6 @@ type AddSchedulePopUp = {
   year: string;
 };
 
-interface TeacherOption {
-  value: string;
-  label: string;
-}
 interface SubjectOption {
   value: number;
   label: string;
@@ -61,7 +56,7 @@ export default function AddSchedulePopUp({
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>([]);
-  const term = ["1", "2", "3", "4", "5", "6"];
+  const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
@@ -83,11 +78,7 @@ export default function AddSchedulePopUp({
     const studentGroupById = studentGroup.find(
       (item) => item.studentGroupId === studentGroupId
     );
-    const studentGroupName = studentGroupById?.studentGroupName;
-    getAllSubjectByTerm(
-      parseInt(selectedTerm) +
-        2 * (parseInt(studentGroupName?.substring(0) ?? "1") - 1)
-    ).then((item) => {
+    getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
       setSubject(item);
     });
   }, [selectedTerm]);
@@ -119,6 +110,7 @@ export default function AddSchedulePopUp({
       teacher.thaiLastName
     }`,
   }));
+  console.log(teacherOptions);
 
   const groupOptions = studentGroup.map((item) => ({
     value: item.studentGroupId,
@@ -130,7 +122,6 @@ export default function AddSchedulePopUp({
       (item) => item.studentGroupId === studentGroupId
     );
     const studentGroupName = studentGroupById?.studentGroupName;
-    // console.log(studentGroupName);
     const requestBody: CreateScheduleSubjectRequest = {
       day: day,
       period: period,
@@ -170,26 +161,37 @@ export default function AddSchedulePopUp({
           <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col p-2 relative">
               <h1>ภาคเรียน</h1>
-              <Combobox
+              <Select
                 options={term.map((item) => ({
                   value: item,
                   label: item,
                 }))}
-                defaultValue="1"
-                buttonLabel="เลือกภาคเรียน"
-                onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+                value={
+                  selectedTerm
+                    ? { value: selectedTerm, label: selectedTerm }
+                    : null
+                }
+                onChange={(selectedOption) =>
+                  setSelectedTerm(selectedOption?.value || "")
+                }
               />
             </div>
             <div className="w-full flex flex-col p-2 relative">
               <h1>ปีการศึกษา</h1>
-              <Combobox
+              <Select
                 options={yearsList.map((item) => ({
                   value: item,
                   label: item,
                 }))}
-                defaultValue={currentYear.toString()}
-                buttonLabel="เลือกปีการศึกษา"
-                onSelect={(selectedYear) => setSelectedYear(selectedYear)}
+                value={
+                  selectedYear
+                    ? { value: selectedYear, label: selectedYear }
+                    : null
+                }
+                onChange={(selectedOption) =>
+                  setSelectedYear(selectedOption?.value || "")
+                }
+                placeholder="-- เลือกปีการศึกษา --"
               />
             </div>
           </div>
@@ -205,76 +207,108 @@ export default function AddSchedulePopUp({
             </div>
             <div className="w-full">
               <h1>กลุ่มเรียน</h1>
-              <Combobox
+              <Select
                 options={groupOptions.map((item) => ({
-                  value: item.value.toString(),
+                  value: item.value,
                   label: `${item.label} `,
                 }))}
-                defaultValue=""
-                buttonLabel="เลือกกลุ่มเรียน"
-                onSelect={(selectedGroupId) =>
-                  setStudentGroupId(Number(selectedGroupId))
+                value={
+                  studentGroupId
+                    ? groupOptions.find(
+                        (item) => item.value === studentGroupId
+                      ) || null
+                    : null
                 }
+                onChange={(selectedOption) =>
+                  setStudentGroupId(Number(selectedOption?.value || 0))
+                }
+                placeholder="-- เลือกกลุ่มเรียน --"
               />
             </div>
           </div>
           <div className="flex px-4 py-2">
             <div className="w-full px-2">
               <h1>วิชาเรียน</h1>
-              <Combobox
+              <Select
                 options={subjectOptions.map((item) => ({
-                  value: item.value.toString(),
-                  label: `${item.label} `,
+                  value: item.value,
+                  label: `${item.label}`,
                 }))}
-                defaultValue=""
-                buttonLabel="เลือกวิชา"
-                onSelect={(selectedSubjectId) =>
-                  setSubjectID(Number(selectedSubjectId))
+                value={
+                  subjectID
+                    ? subjectOptions.find(
+                        (item) => item.value.toString() === subjectID.toString()
+                      ) || null
+                    : null
                 }
+                onChange={(selectedOption) =>
+                  setSubjectID(Number(selectedOption?.value || 0))
+                }
+                placeholder="-- เลือกวิชา --"
               />
             </div>
           </div>
           <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col  px-2 relative">
               <h1>วันที่สอน</h1>
-              <Combobox
+              <Select
                 options={days.map((item) => ({
                   value: item,
                   label: item,
                 }))}
-                defaultValue=""
-                buttonLabel="เลือกวันที่สอน"
-                onSelect={(selectedDay) => setDay(selectedDay)}
+                value={
+                  day
+                    ? {
+                        value: day,
+                        label: day,
+                      }
+                    : null
+                }
+                onChange={(selectedOption) =>
+                  setDay(selectedOption?.value || "")
+                }
+                placeholder="-- เลือกวันที่สอน --"
               />
             </div>
             <div className="w-full flex flex-col px-2 relative">
               <h1>คาบเรียน</h1>
-              <Combobox
-                options={Array.from({ length: 5 }, (_, i) => i + 1).map(
-                  (item) => ({
-                    value: item.toString(),
-                    label: item.toString(),
-                  })
-                )}
-                defaultValue=""
-                buttonLabel="เลือกคาบเรียน"
-                onSelect={(selectedPeriod) => setPeriod(selectedPeriod)}
+              <Select
+                options={["1", "2", "3", "4", "5"].map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                value={
+                  period
+                    ? {
+                        value: period,
+                        label: period,
+                      }
+                    : null
+                }
+                onChange={(selectedOption) =>
+                  setPeriod(selectedOption?.value || "")
+                }
+                placeholder="-- เลือกคาบเรียน --"
               />
             </div>
           </div>
           <div className="flex  px-4 py-2">
             <div className="w-full px-2">
               <h1>อาจารย์ผู้สอน</h1>
-              <Combobox
+              <Select
                 options={teacherOptions.map((item) => ({
-                  value: item.value.toString(),
+                  value: item.value,
                   label: `${item.label} `,
                 }))}
-                defaultValue=""
-                buttonLabel="เลือกวิชา"
-                onSelect={(selectedSubjectId) =>
-                  setSubjectID(Number(selectedSubjectId))
+                value={
+                  teacherID
+                    ? teacherOptions.find((item) => item.value === teacherID)
+                    : null
                 }
+                onChange={(selectedOption) =>
+                  setTeacherID(Number(selectedOption?.value || 0))
+                }
+                placeholder="-- เลือกอาจารย์ผู้สอน --"
               />
             </div>
           </div>
