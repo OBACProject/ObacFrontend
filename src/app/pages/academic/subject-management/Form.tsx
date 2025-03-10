@@ -161,7 +161,7 @@ export default function Form() {
   return (
     <div className="w-full">
       <div className="flex py-3 justify-center">
-        <h1 className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-sky-500 text-white">
+        <h1 className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-gradient-to-tr from-sky-500 to-purple-300 text-white">
           <LibraryBig className="h-8 w-8" />
           ระบบจัดการรายวิชา
         </h1>

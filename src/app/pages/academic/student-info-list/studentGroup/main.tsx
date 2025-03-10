@@ -43,7 +43,7 @@ export default function Main({ groupId }: Props) {
   return (
     <div className="py-2 w-full px-10">
       <div className="flex px-5 justify-center py-3 items-center">
-        <h1 className="px-10 w-fit text-white flex gap-2 items-center bg-blue-800 rounded-3xl py-2 text-xl">
+        <h1 className="px-10 w-fit text-white flex gap-2 items-center bg-gradient-to-tr from-blue-600 to-gray-400 rounded-3xl py-2 text-xl">
           <UsersRound className="h-8 w-8" />
           รายชื่อนักเรียนในห้องเรียน
         </h1>
