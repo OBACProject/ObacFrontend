@@ -2,8 +2,14 @@
 import { useEffect, useState } from "react";
 import MenuBar from "./Menu";
 import SubjectTableForm from "./Form";
-import { GetGradBySubjectId } from "@/dto/gradDto";
-import { fetchGetGradBySubjectId } from "@/api/grad/gradAPI";
+import {
+  GetGradBySubjectId,
+  GetStudentGroupGradeByGroupIdTermYearDto,
+} from "@/dto/gradDto";
+import {
+  fetchGetGradBySubjectId,
+  fetchGetStudentGroupGradeByGroupIdTermYear,
+} from "@/api/grad/gradAPI";
 import { fetchGetScheduleBysubjectId } from "@/api/schedule/scheduleAPI";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
@@ -13,8 +19,10 @@ import { fetchMethod } from "@/api/method/methodAPI";
 
 interface Props {
   subjectId: number;
-  scheduleId: number;
+  groupId: number;
   isComplete: string;
+  term: string;
+  year: number;
 }
 
 const getMethodData = async () => {
@@ -26,21 +34,22 @@ const getMethodData = async () => {
   }
 };
 
-const getGradData = async (subjectId: number, scheduleId: number) => {
+const getStudentGroupGradData = async (
+  groupId: number,
+  term: string,
+  year: number,
+  subjectId: number
+) => {
   try {
-    const data = await fetchGetGradBySubjectId(subjectId, scheduleId);
-    return data;
+    const response = await fetchGetStudentGroupGradeByGroupIdTermYear(
+      groupId,
+      term,
+      year,
+      subjectId
+    );
+    return response;
   } catch (err) {
-    console.log(err);
-  }
-};
-
-const getScheduleData = async (subjectId: number) => {
-  try {
-    const data = await fetchGetScheduleBysubjectId(subjectId);
-    return data;
-  } catch (err) {
-    console.log(err);
+    console.log("fetch API errors");
   }
 };
 
@@ -53,18 +62,21 @@ const getSubjectBySubjectId = async (subjectId: number) => {
   }
 };
 
-export default function Main({ subjectId, scheduleId, isComplete }: Props) {
+export default function Main({
+  subjectId,
+  groupId,
+  isComplete,
+  term,
+  year,
+}: Props) {
   const [grads, setGrads] = useState<GetGradBySubjectId[]>();
   const [schedules, setSchedules] = useState<GetScheduleBysubjectId[]>();
   const [subjects, setSubjects] = useState<GetSubjectBySubjectId>();
   const [methods, setMethod] = useState<MethodDto>();
 
   useEffect(() => {
-    getGradData(subjectId, scheduleId).then((items) => {
-      setGrads(items);
-    });
-    getScheduleData(subjectId).then((items) => {
-      setSchedules(items);
+    getStudentGroupGradData(groupId, term, year, subjectId).then((d: any) => {
+      setGrads(d);
     });
     getSubjectBySubjectId(subjectId).then((items) => {
       setSubjects(items);

@@ -468,23 +468,21 @@ const EditSubjectPopUp = ({
   const [subjectCode, setSubjectCode] = useState<string>(SubjectCode);
   const [subjectCredits, setSubjectCredits] = useState<number>(SubjectCredits);
   const [editIsActive, setIsActive] = useState<boolean>(isActive);
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
 
   const Save = () => {
     if (subjectName && subjectCode) {
-      console.log(">>>>>", {
-        ID,
-        subjectName,
-        subjectCode,
-        subjectCredits,
-      });
       onSave(ID, subjectName, subjectCode, subjectCredits, editIsActive);
       onClosePopUp(false);
     }
   };
   const Delete = () => {
-    onDelete(ID);
-    onClosePopUp(false);
+    
+    setDeleteTrigger(true);
   };
+  const deleteHandler = ()=>{
+    onDelete(ID);
+  }
   return (
     <div
       className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
@@ -562,6 +560,35 @@ const EditSubjectPopUp = ({
           </button>
         </div>
       </div>
+      {deleteTrigger && (
+        <div
+          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          onClick={() => setDeleteTrigger(false)}
+        >
+          <div
+            className="bg-white rounded-md   lg:w-[300px]  z-100 shadow-lg shadow-gray-500 "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="">
+              <h1 className="py-5 w-full text-center text-xl">ยืนยันการลบ</h1>
+              <div className="flex justify-center gap-5 py-5 w-full">
+                <button
+                  className="px-4 bg-gray-300 rounded-md hover:bg-gray-400 py-1 text-black"
+                  onClick={() => setDeleteTrigger(false)}
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  className="px-4 bg-red-500 rounded-md text-white hover:bg-red-600 py-1 "
+                  onClick={deleteHandler}
+                >
+                  ตกลง
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

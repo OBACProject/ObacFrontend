@@ -3,10 +3,10 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../font/THSarabunFont";
 import THSarabunFontBold from "../font/THSarabunBold";
-import { StudentDto } from "@/dto/studentDto";
+import { StudentListByGroupIDDto } from "@/dto/studentDto";
 
 interface DataList {
-  student?: StudentDto[];
+  student?: StudentListByGroupIDDto[];
   studentGroup: string;
 }
 
@@ -76,8 +76,8 @@ const StudentNameListPDF = ({
           [
             i + 1,
             student[i].studentCode,
-            `${student[i].studentName}`,
-            `${student[i].studentSurname}`,
+            `${student[i].firstName}`,
+            `${student[i].lastName}`,
             "",
             "",
           ],

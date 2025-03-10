@@ -26,6 +26,7 @@ export function Main() {
     subjectId: number;
     scheduleSubjectId: number;
     room: string;
+    groupId: number;
   } | null>(null);
   const [activeTab, setActiveTab] = useState<string>("subject");
 
@@ -74,6 +75,7 @@ export function Main() {
     subjectId: number;
     scheduleSubjectId: number;
     room: string;
+    groupId: number;
   }) => {
     setClassInfoData(data);
     localStorage.setItem("classInfoData", JSON.stringify(data));
@@ -236,6 +238,7 @@ export function Main() {
           year={classSubjectData.year}
           scheduleSubjectId={classInfoData.scheduleSubjectId}
           room={classInfoData.room}
+          groupId={classInfoData.groupId}
         />
       )}
 

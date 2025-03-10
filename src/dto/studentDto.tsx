@@ -201,7 +201,12 @@ export type StudentDto = {
   studentName: string;
   studentSurname: string;
 };
-
+export type StudentListByGroupIDDto = {
+  studentCode: string;
+  studentId: number;
+  firstName: string;
+  lastName: string;
+}
 export type GetStudentListByGroupIDDto = {
   groupId: number;
   groupName: string;
@@ -211,7 +216,7 @@ export type GetStudentListByGroupIDDto = {
   facultyName: string;
   subProgramName: string;
   class: string;
-  students: StudentDto[];
+  students: StudentListByGroupIDDto[];
 };
 export type GetStudentByStudentId = {
   studentId: number;

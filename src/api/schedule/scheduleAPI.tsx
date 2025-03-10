@@ -8,12 +8,13 @@ import {
 import { cookies } from "next/headers";
 
 export const fetchGetScheduleBysubjectId = async (
-  subjectId: number
+  subjectId: number,
+  term: string
 ): Promise<GetScheduleBysubjectId[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

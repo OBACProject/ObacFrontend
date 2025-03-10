@@ -5,6 +5,7 @@ import {
   GetGropGradeAboveModel,
   GetGropGradeBelowModel,
   GetStudentGradeDetailDto,
+  GetStudentGroupGradeByGroupIdTermYearDto,
 } from "@/dto/gradDto";
 import { cookies } from "next/headers";
 
@@ -286,5 +287,43 @@ export const fetchGetStudentGradeDetail = async (
   } catch (err) {
     console.error("Error fetching data:", err);
     return null;
+  }
+};
+
+export const fetchGetStudentGroupGradeByGroupIdTermYear = async (
+  groupId:number,
+  term:string,
+  year:number,
+  subjectId:number,
+): Promise<GetStudentGroupGradeByGroupIdTermYearDto[] | null> => {
+  try {
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetStudentGroupGradeByGroupIdTermYear?groupId=${groupId}&term=${term}&year=${year}&subjectId=${subjectId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get data");
+    }
+    const text = await response.text();
+    const json = JSON.parse(text);
+    if (!json?.data) {
+      throw new Error("API response does not contain 'data'");
+    }
+    const data: GetStudentGroupGradeByGroupIdTermYearDto[] = json.data;
+    return data;
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    return [];
   }
 };

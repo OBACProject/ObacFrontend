@@ -113,9 +113,9 @@ export function StudentPopup({
           testScore: score.finalScore,
           totalScore:
             score.collectScore + score.affectiveScore + score.finalScore,
-          finalGrade: gradingScorce(
-            score.collectScore + score.affectiveScore + score.finalScore
-          ),
+          // finalGrade: gradingScorce(
+          //   score.collectScore + score.affectiveScore + score.finalScore
+          // ),
           remark: finalRemark,
         };
 

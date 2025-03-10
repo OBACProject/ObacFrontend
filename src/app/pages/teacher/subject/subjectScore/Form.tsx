@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { GetGradBySubjectId } from "@/dto/gradDto";
-import { useRouter } from "next/navigation";
+import {
+  GetGradBySubjectId,
+  GetStudentGroupGradeByGroupIdTermYearDto,
+} from "@/dto/gradDto";
 import { Combobox } from "@/app/components/combobox/combobox";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -27,7 +29,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     value: string
   ) => {
     const updatedStudents = [...gradDatas];
-    updatedStudents[index][field] = (parseFloat(value) as number) || 0;
+    (updatedStudents[index] as any)[field] = parseFloat(value) || 0;
     setGradData(updatedStudents);
   };
   const token = Cookies.get("token");
@@ -48,7 +50,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           collectScore: item.collectScore,
           affectiveScore: item.affectiveScore,
           testScore: item.testScore,
-          totalScore: item.affectiveScore + item.collectScore + item.testScore,
+          totalScore:
+            (item.affectiveScore ?? 0) +
+            (item.collectScore ?? 0) +
+            (item.testScore ?? 0),
           remark: item.remark,
         }));
         for (let i = 0; i < payload.length; i++) {
@@ -77,7 +82,6 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
       window.location.reload();
     } catch (error) {
       console.error("Error saving changes:", error);
-
     }
   };
   const gradingScorce = (totalScore: number) => {
@@ -110,8 +114,12 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   ];
 
   const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
-  const onChangeRemark = (value: string) => {
-    setRemark(value);
+  const onChangeRemark = (value: string, studentId: number) => {
+    gradDatas.map((item) => {
+      if (item.studentId === studentId) {
+        item.remark = value;
+      }
+    });
   };
 
   return (
@@ -157,11 +165,11 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <input
             disabled={onEdit != true}
             type="number"
-            value={item.collectScore}
+            value={item.collectScore ?? 0}
             min={0}
             max={50}
             className={` text-center enabled:bg-blue-50   bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
-              item.collectScore > 50 || item.collectScore < 0
+              (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
                 ? "outline-red-500 border-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
@@ -172,11 +180,11 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <input
             disabled={!onEdit}
             type="number"
-            value={item.affectiveScore}
+            value={item.affectiveScore ?? 0}
             min={0}
             max={20}
             className={`text-center enabled:bg-blue-50   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
-              item.affectiveScore > 20 || item.affectiveScore < 0
+              (item.affectiveScore ?? 0) > 20 || (item.affectiveScore ?? 0) < 0
                 ? "border-red-500 outline-red-500 rounded-md border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
@@ -187,11 +195,11 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           <input
             disabled={onEdit != true}
             type="number"
-            value={item.testScore}
+            value={item.testScore ?? 0}
             min={0}
             max={30}
             className={`text-center enabled:bg-blue-50   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
-              item.testScore > 30 || item.testScore < 0
+              (item.testScore ?? 0) > 30 || (item.testScore ?? 0) < 0
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                 : "border-gray-300 border-r-2"
             }`}
@@ -200,7 +208,9 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             }
           />
           <span className="text-center flex justify-center items-center border-r-2 py-2">
-            {item.collectScore + item.testScore + item.affectiveScore}
+            {(item.collectScore ?? 0) +
+              (item.testScore ?? 0) +
+              (item.affectiveScore ?? 0)}
           </span>
           <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 ">
             <div className="flex justify-center px-2 py-1">
@@ -212,9 +222,15 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                   value: item,
                 }))}
                 onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
-                defaultValue={gradingScorce(
-                  item.collectScore + item.testScore + item.affectiveScore
-                )}
+                defaultValue={
+                  item.remark
+                    ? item.remark
+                    : gradingScorce(
+                        (item?.collectScore ?? 0) +
+                          (item?.testScore ?? 0) +
+                          (item?.affectiveScore ?? 0)
+                      )
+                }
               />
             </div>
           </span>
@@ -226,8 +242,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                 label: item,
                 value: item,
               }))}
-              onSelect={(selectedGrade) => onChangeRemark(selectedGrade)}
-              defaultValue={item.remark}
+              onSelect={(selectedGrade) =>
+                onChangeRemark(selectedGrade, item.studentId)
+              }
+              defaultValue={item.remark || ""}
             />
           </div>
         </div>

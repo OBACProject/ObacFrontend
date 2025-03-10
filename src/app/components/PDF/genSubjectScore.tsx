@@ -1,7 +1,10 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { GetGradBySubjectId } from "@/dto/gradDto";
+import {
+  GetGradBySubjectId,
+  GetStudentGroupGradeByGroupIdTermYearDto,
+} from "@/dto/gradDto";
 import THSarabunFont from "../font/THSarabunFont";
 import THSarabunFontBold from "../font/THSarabunBold";
 
@@ -93,7 +96,6 @@ const GenSubjectScore = ({
   let y2 = doc.lastAutoTable.finalY;
   if (grads) {
     for (let i = 0; i < grads.length; i++) {
-
       autoTable(doc, {
         startY: y2,
         body: [

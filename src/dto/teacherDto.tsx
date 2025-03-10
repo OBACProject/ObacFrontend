@@ -56,23 +56,26 @@ export type GetTeacherByTeacherId = {
   nameTitle: string;
 };
 export interface TeacherEnrollment {
-  id: number;
-  teacherId: number;
-  teacherCode: string;
-  teacherName: string;
-  teacherLastName: string;
-  teacherThaiName: string;
-  teacherThaiLastName: string;
-  scheduleSubjectId: number;
-  subjectId: number;
-  subjectCode: string;
-  subjectName: string;
-  totalStudent: number;
-  room: string;
-  day: string;
-  period: number;
-  subjectStatus: number;
-  isComplete: boolean;
+    id: number;
+    teacherId: number;
+    teacherCode: string;
+    teacherName: string;
+    teacherLastName: string;
+    teacherThaiName: string;
+    teacherThaiLastName: string;
+    scheduleSubjectId: number;
+    subjectId: number;
+    subjectCode: string;
+    subjectName: string;
+    studentGroupId: number;
+    totalStudent: number;
+    room: string;
+    day: string;
+    period: string;
+    subjectStatus: boolean;
+    isComplete: boolean;
+    year: number;
+    term: string;
 }
 
 export interface TeacherInfoData {

@@ -1,14 +1,17 @@
 "use client";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
-import { ConvertGradBySubjectId, GetGradBySubjectId } from "@/dto/gradDto";
+import {
+  ConvertGradBySubjectId,
+  GetGradBySubjectId,
+  GetStudentGroupGradeByGroupIdTermYearDto,
+} from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { ConvertScoreToExcel } from "@/lib/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import { MethodDto } from "@/dto/methodDto";
 
 interface Props {
@@ -46,7 +49,6 @@ export default function MenuBar({
     setSubject(subjects ?? null);
   }, [schedules, subjects]);
 
-  // Prepare student group list
   const student_group_list = gradData.map((item) => item.studentGroup);
   const student_group = student_group_list[0];
 
@@ -59,8 +61,6 @@ export default function MenuBar({
     onEditReturn(false);
     setOnEdit(false);
   };
-  console.log(scheduleData?.[0]?.subjectId);
-  // console.log(scheduleData.subjectId);
 
   const [convertGrad, setConvertGrad] = useState<ConvertGradBySubjectId[]>([]);
 
@@ -68,10 +68,10 @@ export default function MenuBar({
     const convertedData: ConvertGradBySubjectId[] = gradData.map((item) => ({
       studentCode: item.studentCode,
       name: `${item.firstName} ${item.lastName}`,
-      collectScore: item.collectScore,
-      testScore: item.testScore,
-      affectiveScore: item.affectiveScore,
-      totalScore: item.totalScore,
+      collectScore: item.collectScore ?? 0,
+      testScore: item.testScore ?? 0,
+      affectiveScore: item.affectiveScore ?? 0,
+      totalScore: item.totalScore ?? 0,
     }));
     return convertedData;
   };
