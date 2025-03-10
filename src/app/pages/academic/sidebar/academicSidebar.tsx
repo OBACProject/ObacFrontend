@@ -41,6 +41,7 @@ export function AcademicSidebar({
       await logout();
       setUserName("");
       Cookies.remove("token");
+      Cookies.remove("token");
       router.push("/pages/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -52,18 +53,18 @@ export function AcademicSidebar({
   );
 
   const handleMouseEnter = (index: number) => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); 
+    if (submenuTimeout) clearTimeout(submenuTimeout);
     const timeout = setTimeout(() => {
       setOpenSubMenu(index);
-    }, 200); 
+    }, 200);
     setSubmenuTimeout(timeout);
   };
 
   const handleMouseLeave = () => {
-    if (submenuTimeout) clearTimeout(submenuTimeout); 
+    if (submenuTimeout) clearTimeout(submenuTimeout);
     const timeout = setTimeout(() => {
       setOpenSubMenu(null);
-    }, 200); 
+    }, 200);
     setSubmenuTimeout(timeout);
   };
 
