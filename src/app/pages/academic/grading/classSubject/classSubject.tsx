@@ -20,6 +20,7 @@ export function ClassSubjectPage(props: {
   handleSelectedData: (data: {
     subjectId: number;
     scheduleSubjectId: number;
+    term: number;
     room: string;
     groupId: number;
   }) => void;
@@ -57,6 +58,7 @@ export function ClassSubjectPage(props: {
         subjectId: item.subjectId,
         scheduleSubjectId: item.scheduleSubjectId,
         room: `${item.class}.${item.studentGroupName}`,
+        term: item.term,
         groupId: item.studentGroupId,
       });
     } else {
