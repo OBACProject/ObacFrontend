@@ -22,7 +22,7 @@ export function Subject(props: {
   const [gradingDataFiltered, setGradingDataFiltered] = useState<
     GradingDataColumn[]
   >([]);
-  console.log(gradingData);
+  // console.log(gradingData);
   // filter data
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
@@ -50,7 +50,7 @@ export function Subject(props: {
       } else {
         alert("ไม่พบข้อมูล");
       }
-      console.log("Selected data", id);
+      // console.log("Selected data", id);
     }
   };
 
@@ -114,7 +114,7 @@ export function Subject(props: {
 
     setGradingDataFiltered(filteredData);
   }, [searchSubject, gradingData]);
-  console.log(gradingData);
+  // console.log(gradingData);
   return (
     <>
       <header className="flex flex-col p-4 w-full border-2 mt-2 rounded-lg">
