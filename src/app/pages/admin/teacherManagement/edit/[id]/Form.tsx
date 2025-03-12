@@ -94,7 +94,7 @@ export default function Form({ id }: Props) {
           };
           
       const response = await fetch(
-        `${process.env.API_URL_V1}/api/Teacher/UpdateTeacher`,
+        `${process.env.NEXT_PUBLIC_API_URL_V1}/api/Teacher/UpdateTeacher`,
         {
           method: "PUT",
           headers: {
