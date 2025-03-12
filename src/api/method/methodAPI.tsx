@@ -6,7 +6,7 @@ export const fetchMethod = async (): Promise<MethodDto> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.API_URL_V1}/Method/GetEditGradeMethod`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/GetEditGradeMethod`,
       {
         method: "GET",
         headers: {

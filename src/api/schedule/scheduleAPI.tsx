@@ -14,7 +14,7 @@ export const fetchGetScheduleBysubjectId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export const fetchGetScheduleOfTeacherByTeacherID = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleOfTeacherByTeacherID?teacherID=${teacherID}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -73,7 +73,7 @@ export const fetchGetScheduleOfStudentGroupByGroupID = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleByStudentGroupID?studentGroupId=${groupId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -102,7 +102,7 @@ export const fetchGetScheduleOfStudentByStudentID = async (
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleOfStudentByStudentID?studentID=${studentId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -130,7 +130,7 @@ export const fetchCreateScheduleSubject = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/CreateScheduleSubjectAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/CreateScheduleSubjectAsync`,
       {
         method: "POST",
         headers: {
@@ -166,7 +166,7 @@ export const fetchDeleteScheduleSubject = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/DeleteScheduleSubjectByID?scheduelSubjectID=${scheduleSubjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/DeleteScheduleSubjectByID?scheduelSubjectID=${scheduleSubjectId}`,
       {
         method: "DELETE",
         headers: {

@@ -9,7 +9,7 @@ export const fetchGetAllAcademicUser = async (): Promise<
     const token = cookies().get("token")?.value;
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Academic/GetAllAcademicUserAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Academic/GetAllAcademicUserAsync`,
       {
         method: "GET",
         headers: {

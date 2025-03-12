@@ -16,7 +16,7 @@ export const fetchGetGradBySubjectId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetGradeBySubjectAndSchedulSubjectId?subjectId=${subjectId}&scheduleSubjectId=${scheduleId}`,
       {
         method: "GET",
         headers: {
@@ -50,7 +50,7 @@ export const fetchGetGradPerTermByStudentId = async (
     }
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Grade/GetStudentGradeByTermYear?studentId=${studentId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetStudentGradeByTermYear?studentId=${studentId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -87,7 +87,7 @@ export const GetGropGradeAbove = async (
       throw new Error("No auth token found");
     }
 
-    const url = `${process.env.API_URL_V1}/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetGroupGradeAbove?grade=${grade}&term=${term}&year=${year}&groupId=${groupId}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -137,7 +137,7 @@ export const GetGropGradeBelow = async (
     });
 
     const url = `${
-      process.env.API_URL_V1
+      process.env.NEXT_PUBLIC_API_URL_V1
     }/Grade/GetStudentIfGradeBelow?${queryParams.toString()}`;
 
     const response = await fetch(url, {
@@ -182,7 +182,7 @@ export const fetchPromoteStudent = async (data: {
     }
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Promote/PromoteStudents`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Promote/PromoteStudents`,
       {
         method: "POST",
         headers: {
@@ -224,7 +224,7 @@ export const fetchUpdateCompleteScheduleSubject = async (
     }
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${scheduleSubjectId}&isCompleted=true`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Method/UpdateCompleteScheduleSubject?scheduleSubjectId=${scheduleSubjectId}&isCompleted=true`,
       {
         method: "PUT",
         headers: {
@@ -265,7 +265,7 @@ export const fetchGetStudentGradeDetail = async (
     }
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Student/GetStudentGradeDetail?studentId=${studentId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGradeDetail?studentId=${studentId}`,
       {
         method: "GET",
         headers: {
@@ -303,7 +303,7 @@ export const fetchGetStudentGroupGradeByGroupIdTermYear = async (
     }
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Grade/GetStudentGroupGradeByGroupIdTermYear?groupId=${groupId}&term=${term}&year=${year}&subjectId=${subjectId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/GetStudentGroupGradeByGroupIdTermYear?groupId=${groupId}&term=${term}&year=${year}&subjectId=${subjectId}`,
       {
         method: "GET",
         headers: {
