@@ -20,6 +20,7 @@ export function ClassSubjectPage(props: {
   handleSelectedData: (data: {
     subjectId: number;
     scheduleSubjectId: number;
+    term: number;
     room: string;
     groupId: number;
   }) => void;
@@ -57,6 +58,7 @@ export function ClassSubjectPage(props: {
         subjectId: item.subjectId,
         scheduleSubjectId: item.scheduleSubjectId,
         room: `${item.class}.${item.studentGroupName}`,
+        term: item.term,
         groupId: item.studentGroupId,
       });
     } else {
@@ -127,8 +129,8 @@ export function ClassSubjectPage(props: {
     }
   };
   const columns = [
-    { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
-    { label: "คาบ", key: "period", className: "w-1/12 justify-center" },
+    // { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
+    { label: "คาบ", key: "period", className: "w-2/12 justify-center" },
     { label: "วัน", key: "day", className: "w-2/12" },
     { label: "ห้อง", key: "room", className: "w-2/12" },
     { label: "ชื่อครู", key: "teacherName", className: "w-4/12" },

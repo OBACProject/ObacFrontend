@@ -40,7 +40,6 @@ export function AcademicStudentInfo(props: {
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [verifyGradPopUp, setVerifyGradPopUp] = useState<boolean>(false);
 
-
   const handleEdit = () => {
     setOnEdit(true);
   };
@@ -48,7 +47,7 @@ export function AcademicStudentInfo(props: {
     setOnEdit(false);
     setGradDataFilter([...gradDatas]);
   };
-  console.log(gradDatas);
+  // console.log(gradDatas);
   useEffect(() => {
     const fetchData = async () => {
       try {
