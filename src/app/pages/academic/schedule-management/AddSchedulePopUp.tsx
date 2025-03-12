@@ -132,8 +132,19 @@ export default function AddSchedulePopUp({
     };
 
     try {
-      await fetchCreateScheduleSubject(requestBody);
-      toast.success("สร้างสำเร็จ");
+      const response = await fetchCreateScheduleSubject(requestBody);
+            if (response.success) {
+              toast.success("สร้างสำเร็จ");
+              setTeacherID(0)
+              setSubjectID(0)
+              setStudentGroupId(0)
+              setDay("")
+              setRoom("")
+              onClosePopUp(false);
+              
+            } else {
+              toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
+            }
       onClosePopUp(false);
     } catch (err) {
       console.error("Error creating schedule:", err);

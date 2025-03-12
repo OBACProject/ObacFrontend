@@ -1,16 +1,12 @@
 import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
 import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
 import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
-import {
-  fetchGetAllTeacherAsync,
-  fetchGetTeacherByTeacherIdAsync,
-} from "@/api/teacher/teacherAPI";
+
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
-import { GetAllTeacher, GetTeacherByTeacherId } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {
@@ -153,7 +149,7 @@ export default function AddTeacherSchedulePopUp({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
-          เพิ่มวิชาสอน
+          เพิ่มวิชาสอนสิ
         </div>
         <div className="px-10 py-5">
           <div className="flex justify-start gap-4">
