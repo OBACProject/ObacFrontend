@@ -1,6 +1,6 @@
-import React, { PropsWithChildren, useEffect } from "react";
+'use client'
+import  { PropsWithChildren, useEffect } from "react";
 import { useRouter } from "next/router";
-import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 function AuthLayout({ children }: PropsWithChildren) {
@@ -8,9 +8,7 @@ function AuthLayout({ children }: PropsWithChildren) {
 
   const newRole = Cookies.get("role");
   useEffect(() => {
-    if (!newRole) {
-      redirect("/"); // Redirect to home page if not authenticated
-    } else {
+    
       // Assuming you have a function to get the user's role from the token
       switch (newRole) {
         case "Student":
@@ -29,7 +27,7 @@ function AuthLayout({ children }: PropsWithChildren) {
           toast.error("Unknown role");
       }
     }
-  }, [newRole, router]);
+  , [newRole, router]);
 
   return {children};
 }
