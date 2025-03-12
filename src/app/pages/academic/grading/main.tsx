@@ -26,6 +26,7 @@ export function Main() {
     subjectId: number;
     scheduleSubjectId: number;
     room: string;
+    term: number;
     groupId: number;
   } | null>(null);
   const [activeTab, setActiveTab] = useState<string>("subject");
@@ -74,6 +75,7 @@ export function Main() {
   const handleSelectedClassInfo = (data: {
     subjectId: number;
     scheduleSubjectId: number;
+    term: number;
     room: string;
     groupId: number;
   }) => {
@@ -130,7 +132,7 @@ export function Main() {
       console.error("Failed to fetch initial method data:", error);
     }
   };
-  console.log(isActive);
+  // console.log(isActive);
   const handleConfirm = async () => {
     if (gradingMode === "period" && (!startTime || !endTime)) {
       alert("กรุณาเลือกวันเวลาเริ่มต้นและสิ้นสุดการกรอกคะแนน");
@@ -149,7 +151,7 @@ export function Main() {
       endDate: gradingMode === "period" ? endTime : null,
       isActive: isActive,
     };
-    console.log(isActive);
+    // console.log(isActive);
     try {
       await fetchPutMethodData(methodData);
       setIsPopupOpen(false);
@@ -234,7 +236,7 @@ export function Main() {
       {activeTab === "infoClass" && classSubjectData && classInfoData && (
         <AcademicStudentInfo
           subjectId={classInfoData.subjectId}
-          term={classSubjectData.term}
+          term={classInfoData.term}
           year={classSubjectData.year}
           scheduleSubjectId={classInfoData.scheduleSubjectId}
           room={classInfoData.room}

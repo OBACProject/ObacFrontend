@@ -11,7 +11,7 @@ export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
     const token = cookies().get("token")?.value;
     const api = process.env.NEXT_PUBLIC_API_URL_V1;
-    console.log(api);
+    // console.log(api);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetAllTeacher`,
       {
