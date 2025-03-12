@@ -58,7 +58,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
         }));
         for (let i = 0; i < payload.length; i++) {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/UpdateStudentGrade`,
+            `${process.env.API_URL_V1}/Grade/UpdateStudentGrade`,
             {
               method: "PUT",
               headers: {
