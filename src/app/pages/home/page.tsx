@@ -17,7 +17,7 @@ export default function Home() {
       <div className="w-full items-center text-center px-4 py-4">
         <FadeInOnScroll>
           <h1 className="lg:text-5xl text-3xl text-blue-950 my-5  font-extrabold px-5 py-1">
-            Ekkawit Business Administration Vocational College (OBAC)
+            Ekawit Business Administration Vocational College (OBAC)
           </h1>
         </FadeInOnScroll>
       </div>
