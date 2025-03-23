@@ -58,19 +58,19 @@ export default function Form() {
             Facebook
           </a>
           <a
-            href="https://www.youtube.com/obectvonline"
+            href="https://www.youtube.com/"
             className=" px-10 w-[250px] text-center bg-red-600 h-fit py-3 text-white font-semibold rounded-sm hover:opacity-80 hover:scale-[103%] duration-300"
           >
             Youtube
           </a>
           <a
-            href="/"
+            href="https://www.instagram.com/pr.obac?igsh=MTVveDlwMTZtZ3V6Nw%3D%3D&utm_source=qr"
             className="px-10 w-[250px] text-center bg-gradient-to-r from-orange-300 via-pink-400 to-purple-500 h-fit py-3 text-white font-semibold rounded-sm hover:opacity-80 hover:scale-[103%] duration-300"
           >
             Instagram
           </a>
           <a
-            href="/"
+            href="https://www.tiktok.com/@obac55?_t=ZS-8ucf5JQCwUr&_r=1"
             className="px-10 w-[250px] text-center bg-black h-fit py-3 text-white font-semibold rounded-sm hover:opacity-80 hover:scale-[103%] duration-300"
           >
             Tiktok

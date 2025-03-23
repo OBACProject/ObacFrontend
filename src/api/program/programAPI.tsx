@@ -6,7 +6,7 @@ export const fetchGetAllProgram = async (): Promise<GetAllProgram[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
-      `${process.env.API_URL_V1}/Program/GetAllProgramAsync`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Program/GetAllProgramAsync`,
       {
         method: "GET",
         headers: {

@@ -10,10 +10,10 @@ import { cookies } from "next/headers";
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
     const token = cookies().get("token")?.value;
-    const api = process.env.API_URL_V1;
+    const api = process.env.NEXT_PUBLIC_API_URL_V1;
     // console.log(api);
     const response = await fetch(
-      `${process.env.API_URL_V1}/Teacher/GetAllTeacher`,
+      `${api}/Teacher/GetAllTeacher`,
       {
         method: "GET",
         headers: {
@@ -48,7 +48,7 @@ export const fetchGetTeacherByTeacherIdAsync = async (
       }
     );
     // const response = await fetch(
-    //   `${process.env.API_URL_V1}/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
+    //   `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
     //   {
     //     method: "GET",
     //     headers: {
@@ -79,7 +79,7 @@ export const fetchGetTeacherEnrollmentsByTeacherId = async (
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherEnrollmentsByTeacherId?teacherId=${teacherId}&term=${term}&year=${year}`,
       {
         method: "GET",
         headers: {
@@ -106,7 +106,7 @@ export const fetchTeacherUser = async (): Promise<GetTeacherByTeacherId> => {
     const userId = cookies().get("userId")?.value;
     const token = cookies().get("token")?.value;
     const response = await fetch(
-      `${process.env.API_URL_V1}/Teacher/GetTeacherByUserId?userId=${userId}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Teacher/GetTeacherByUserId?userId=${userId}`,
       {
         method: "GET",
         headers: {

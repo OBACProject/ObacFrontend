@@ -1,10 +1,12 @@
+
 import api from "./apiCentralized";
 import { compactVerify } from "jose";
 import Cookies from "js-cookie";
-const secretKey = process.env.SECRET_KEY;
-
+import axios from "axios";
+// const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY;
 export async function login(formData: FormData) {
   try {
+    const secretKey =await axios.get("/api/secret").then((res) => res.data.secretKey);
     const userName = formData.get("userName") as string;
     const password = formData.get("password") as string;
     const res = await api.post("/User/UserLogin", {

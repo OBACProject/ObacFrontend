@@ -12,7 +12,7 @@ export const getClassSubjectData = async (
     const token = cookies().get("token")?.value;
 
     const response = await fetch(
-      `${process.env.API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
       {
         method: "GET",
         headers: {
@@ -45,7 +45,7 @@ export const putPublishGrade = async (
     }
 
     await axios.put(
-      `${process.env.API_URL_V1}/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
       {},
       {
         headers: {
