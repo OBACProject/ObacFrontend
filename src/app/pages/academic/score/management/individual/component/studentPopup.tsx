@@ -59,16 +59,16 @@ export function StudentPopup({
     }));
   };
 
-  // const gradingScorce = (totalScore: number) => {
-  //   if (totalScore >= 80) return "4";
-  //   if (totalScore >= 75) return "3.5";
-  //   if (totalScore >= 70) return "3";
-  //   if (totalScore >= 65) return "2.5";
-  //   if (totalScore >= 60) return "2";
-  //   if (totalScore >= 55) return "1.5";
-  //   if (totalScore >= 50) return "1";
-  //   return "0";
-  // };
+  const gradingScorce = (totalScore: number) => {
+    if (totalScore >= 80) return "4";
+    if (totalScore >= 75) return "3.5";
+    if (totalScore >= 70) return "3";
+    if (totalScore >= 65) return "2.5";
+    if (totalScore >= 60) return "2";
+    if (totalScore >= 55) return "1.5";
+    if (totalScore >= 50) return "1";
+    return "0";
+  };
 
   const handleConfirm = async () => {
     try {
@@ -90,6 +90,9 @@ export function StudentPopup({
           collectScore: score.collectScore,
           affectiveScore: score.affectiveScore,
           testScore: score.finalScore,
+          finalGrade: gradingScorce(
+            score.collectScore + score.affectiveScore + score.finalScore
+          ),
           totalScore:
             score.collectScore + score.affectiveScore + score.finalScore,
           remark: finalRemark,

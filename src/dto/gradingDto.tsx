@@ -65,7 +65,7 @@ export interface UpdateStudentGrade {
   testScore: number;
   affectiveScore: number;
   // midtermScore: number;
-  // finalScore: number;
+  finalGrade: string;
   totalScore: number;
   remark?: string;
 }

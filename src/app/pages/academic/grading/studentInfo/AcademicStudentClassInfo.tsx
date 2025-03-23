@@ -158,6 +158,9 @@ export function AcademicStudentInfo(props: {
           collectScore: item.collectScore,
           testScore: item.testScore,
           affectiveScore: item.affectiveScore,
+          finalGrade: gradingScorce(
+            item.collectScore + item.testScore + item.affectiveScore
+          ),
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
           remark: item.remark,
         }));

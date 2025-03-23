@@ -48,7 +48,7 @@ export function ClassroomGrading(props: {
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedTerm, setSelectedTerm] = useState<string>("2");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
