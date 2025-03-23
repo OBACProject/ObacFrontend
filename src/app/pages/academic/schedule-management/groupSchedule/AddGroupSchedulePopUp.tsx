@@ -128,7 +128,7 @@ export default function AddGroupSchedulePopUp({
     };
 
     try {
-
+      // console.log("data : ", requestBody);
       const response = await fetchCreateScheduleSubject(requestBody);
       if (response.success) {
         toast.success("สร้างสำเร็จ");

@@ -55,12 +55,12 @@ export default function AddSchedulePopUp({
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
   const [studentGroup, setStudentGroup] = useState<StudentGroup[]>([]);
-  const term = ["1","2"];
+  const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string>("2");
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
@@ -161,7 +161,7 @@ export default function AddSchedulePopUp({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-4 py-5">
-          <div className="py-2 text-center text-2xl text-gray-900 rounded-t-lg bg-white w-full">
+          <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
             เพิ่มวิชาสอน
           </div>
           <div className="flex  px-4 py-2">
@@ -177,7 +177,6 @@ export default function AddSchedulePopUp({
                     ? { value: selectedTerm, label: selectedTerm }
                     : null
                 }
-                isDisabled
                 onChange={(selectedOption) =>
                   setSelectedTerm(selectedOption?.value || "")
                 }
@@ -195,7 +194,6 @@ export default function AddSchedulePopUp({
                     ? { value: selectedYear, label: selectedYear }
                     : null
                 }
-                isDisabled
                 onChange={(selectedOption) =>
                   setSelectedYear(selectedOption?.value || "")
                 }
