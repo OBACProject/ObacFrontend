@@ -207,7 +207,7 @@ export default function Main() {
             value={grads.toFixed(2)}
             onChange={handleChange}
             step={0.25}
-            min={1.0}
+            min={0.0}
             max={4.0}
           />
         </div>
@@ -394,3 +394,6 @@ export default function Main() {
     </div>
   );
 }
+
+
+

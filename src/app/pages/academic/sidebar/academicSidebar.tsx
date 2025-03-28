@@ -208,7 +208,7 @@ export function SidebarMenu({
                   } h-12 flex items-center w-full px-1 group duration-300 ${
                     hoveredIndex === index ? "bg-gray-200" : ""
                   } ${
-                      isActive ? "bg-gradient-to-tr from-sky-200 to-emerald-100 text-white" : "bg-white"
+                      isActive ? "text-blue-600" : "text-black"
                     }`}
                 >
                   <div className="flex items-center gap-4 w-full">

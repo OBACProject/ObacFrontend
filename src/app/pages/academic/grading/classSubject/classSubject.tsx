@@ -25,11 +25,13 @@ export function ClassSubjectPage(props: {
     groupId: number;
   }) => void;
 }) {
+
   const { classSubjecPassingData } = props;
   // raw data
   const [rawClassSubjectData, setRawClassSubjectData] = useState<
     ClassSubjectData[]
   >([]);
+
 
   // search
   const [searchClassSubject, setSearchClassSubject] = useState<string>("");
@@ -47,7 +49,6 @@ export function ClassSubjectPage(props: {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
-
   const handleSelectedInfoClassData = (id: number) => {
     props.handleTab("infoClass");
     const item = rawClassSubjectData.find(
@@ -128,6 +129,7 @@ export function ClassSubjectPage(props: {
       console.log("Publishing grade canceled.");
     }
   };
+  console.log()
   const columns = [
     // { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
     { label: "คาบ", key: "period", className: "w-2/12 justify-center" },

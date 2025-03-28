@@ -44,7 +44,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <UserRound
           style={{ width: "2.0rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
     },
@@ -55,7 +55,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <ScrollText
           style={{ width: "2.2rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
     },
@@ -66,7 +66,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <FileSpreadsheet
           style={{ width: "2.1rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
       subMenu: [
@@ -76,7 +76,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
           icon: (
             <School
               style={{ width: "2.2rem", height: "2.5rem" }}
-              className="text-[#0C2943]"
+              
             />
           ),
         },
@@ -86,7 +86,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
           icon: (
             <UsersRound
               style={{ width: "2.2rem", height: "2.5rem" }}
-              className="text-[#0C2943]"
+              
             />
           ),
         },
@@ -99,7 +99,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <BookUser
           style={{ width: "2.2rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
     },
@@ -110,7 +110,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <TableProperties
           style={{ width: "2.0rem", height: "2.2rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
     },
@@ -121,7 +121,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       icon: (
         <Grid2X2Plus
           style={{ width: "2.0rem", height: "2.2rem" }}
-          className="text-[#0C2943]"
+          
         />
       ),
     },
@@ -129,13 +129,13 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       title: "ระบบเลื่อนชั้นเรียน",
       href: "/pages/academic/upLevel",
       headLink: "/pages/academic/upLevel",
-      icon: <ArrowUpDown className="text-[#0C2943] h-8 w-8" />,
+      icon: <ArrowUpDown className=" h-8 w-8" />,
     },
     {
       title: "นักเรียนไม่ผ่านเกณฑ์",
       href: "/pages/academic/FailedStudent",
       headLink: "/pages/academic/FailedStudent",
-      icon: <OctagonMinus className="text-[#0C2943] h-8 w-8" />,
+      icon: <OctagonMinus className=" h-8 w-8" />,
     },
   ],
 };

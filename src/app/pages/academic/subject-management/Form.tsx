@@ -178,45 +178,35 @@ export default function Form() {
 
   return (
     <div className="w-full">
-      <div className="flex py-3 justify-center">
-        <h1 className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-gradient-to-tr from-sky-500 to-purple-300 text-white">
+      <div className="flex py-3 px-10 justify-start">
+        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit  shadow-md text-black">
           <LibraryBig className="h-8 w-8" />
           ระบบจัดการรายวิชา
         </h1>
       </div>
-      <div className="px-10 py-2 flex gap-5">
-        <button
-          className="px-10 py-1.5 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-          onClick={() => setAddSubjectPopUp(true)}
-        >
-          <PlusCircle className="w-5 h-5 text-white  " />
-          เพิ่มวิชาและหลักสูตร
-        </button>
+      <div className="px-10 py-2 flex justify-between gap-5">
         <input
           type="text"
           placeholder="ค้นหาวิชา..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border px-4 py-2 rounded-md"
+          className="border px-4 py-1 rounded-md"
         />
+        <button
+          className="px-10 py-1 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+          onClick={() => setAddSubjectPopUp(true)}
+        >
+          <PlusCircle className="w-5 h-5 text-white  " />
+          เพิ่มวิชาและหลักสูตร
+        </button>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-[#cfe4ff] text-blue-950 text-lg border-2 border-blue-300  rounded-t-md">
-          <div className="text-center border-r-2 border-blue-300   py-2 text-black">
-            ลำดับ
-          </div>
-          <div className="text-center  border-r-2 border-blue-300   py-2">
-            รหัสวิชา
-          </div>
-          <div className="text-center border-r-2 border-blue-300   py-2">
-            ชื่อวิชา
-          </div>
-          <div className="text-center border-r-2 border-blue-300   py-2">
-            หน่วยกิต
-          </div>
-          <div className="text-center border-r-2 border-blue-300   py-2">
-            สถานะ
-          </div>
+        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-gray-200 text-blue-950 text-lg  rounded-t-lg">
+          <div className="text-center    py-2 text-black">ลำดับ</div>
+          <div className="text-center    py-2">รหัสวิชา</div>
+          <div className="text-center   py-2">ชื่อวิชา</div>
+          <div className="text-center  py-2">หน่วยกิต</div>
+          <div className="text-center   py-2">สถานะ</div>
           <div className="text-center py-2">Action</div>
         </div>
         {subjects.length > 0 ? (
@@ -225,22 +215,22 @@ export default function Form() {
               <div
                 key={item.id}
                 className={` ${
-                  index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                } grid grid-cols-[5%_20%_35%_10%_15%_15%]  hover:bg-blue-100 border border-blue-400  border-t-0`}
+                  index % 2 == 0 ? "bg-white" : "bg-white"
+                } grid grid-cols-[5%_20%_35%_10%_15%_15%]  hover:bg-blue-100 border border-gray-300  border-t-0`}
               >
-                <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-400">
+                <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-300">
                   {index + 1}.
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r border-blue-400 ">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                   <p className="line-clamp-1">{item.subjectCode}</p>
                 </div>
-                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r  border-blue-400">
+                <div className="text-start flex items-center text-gray-700 py-1 px-4 border-r  border-gray-300">
                   <p className="line-clamp-1">{item.subjectName}</p>
                 </div>
-                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r  border-blue-400">
+                <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r  border-gray-300">
                   <p className="line-clamp-1">{item.credits}</p>
                 </div>
-                <div className="text-center flex items-center w-full justify-center py-1 border-r border-blue-400">
+                <div className="text-center flex items-center w-full justify-center py-1 border-r border-gray-300">
                   {item.isActive ? (
                     <p className="text-green-500 font-thin line-clamp-1 lg:text-[16px] text-[14px]">
                       ใช้งาน
@@ -428,7 +418,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             }
             onChange={handleProgramChange}
             isSearchable
-           className="w-full"
+            className="w-full"
             placeholder="หลักสูตร"
           />
           <div className="flex items-center w-full gap-2">
