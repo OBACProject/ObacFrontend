@@ -74,7 +74,7 @@ export function AcademicSidebar({
         <div className="flex h-[80px]  items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
+            className=" text-gray-500 hover:text-gray-700 flex items-center"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -239,7 +239,7 @@ export function SidebarMenu({
         </div>
       </div>
       {/* Sidebar Toggle Button */}
-      <motion.div
+      {/* <motion.div
         animate={isVisible ? { x: 270 } : { x: 60 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="w-fit text-white"
@@ -255,7 +255,7 @@ export function SidebarMenu({
             } text-white duration-700`}
           />
         </button>
-      </motion.div>
+      </motion.div> */}
 
       {/* Expanded Sidebar */}
       <motion.div
