@@ -82,14 +82,14 @@ export default function Form() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-5 justify-center">
+      <div className="flex items-center py-5 justify-start px-10">
         <div></div>
-        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit bg-gradient-to-tr from-purple-500 via-pink-400 to-orange-300 text-white flex gap-2 items-center">
+        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
           <BookText className="w-8 h-8" />
           ระบบจัดการตารางเรียน - ตารางสอน
         </h1>
       </div>
-      <div className="w-full items-center justify-between px-5 flex gap-2">
+      <div className="w-full items-center justify-between px-10 flex gap-2">
         <div className="flex gap-2 items-center">
           <button
             className={`px-10 py-1 ${
@@ -149,23 +149,23 @@ export default function Form() {
         <div>
           {toggleMode ? (
             <div className="w-full rounded-sm py-5 px-10">
-              <div className="w-full grid grid-cols-[5%_20%_20%_20%_20%_15%] bg-[#cfe4ff] text-lg text-gray-800 border-2 border-gray-400  rounded-t-md">
-                <div className="text-center py-2 border-r-2 border-gray-400">
+              <div className="w-full grid grid-cols-[5%_20%_20%_20%_20%_15%] bg-slate-200 text-lg text-gray-800  rounded-t-md">
+                <div className="text-center py-1 ">
                   ลำดับ
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   รหัสอาจารย์
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   ชื่อ
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1">
                   นามสกุล
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   หมวดวิชา
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   เบอร์ติดต่อ
                 </div>
               </div>
@@ -177,22 +177,22 @@ export default function Form() {
                       href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
                       key={item.teacherId}
                       className={` ${
-                        index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                      } grid grid-cols-[5%_20%_20%_20%_20%_15%]  hover:bg-blue-50 border border-gray-400  border-t-0`}
+                        index % 2 == 0 ? "bg-white" : "bg-white"
+                      } grid grid-cols-[5%_20%_20%_20%_20%_15%]  hover:bg-blue-50 border border-gray-300  border-t-0`}
                     >
-                      <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-400">
+                      <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-300">
                         {index + 1}
                       </div>
-                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                         <p className="line-clamp-1">{item.teacherCode}</p>
                       </div>
-                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400 ">
+                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300 ">
                         <p className="line-clamp-1">{item.thaiName}</p>
                       </div>
-                      <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r border-gray-400">
+                      <div className="text-center flex items-center w-full text-gray-700 justify-start px-4 py-1 border-r border-gray-300">
                         <p className="line-clamp-1">{item.thaiLastName}</p>
                       </div>
-                      <div className=" flex items-center text-gray-700 justify-center gap-2 border-r py-1 border-gray-400">
+                      <div className=" flex items-center text-gray-700 justify-center gap-2 border-r py-1 border-gray-300">
                         <p className="line-clamp-1">{item.facultyName}</p>
                       </div>
                       <div className=" flex items-center text-gray-700 justify-center gap-2 py-1">
@@ -209,21 +209,21 @@ export default function Form() {
             </div>
           ) : (
             <div className="w-full rounded-sm py-5 px-10">
-              <div className="w-full grid grid-cols-[5%_15%_30%_40%_10%] bg-[#cfe4ff] text-gray-800 border-2  text-lg border-gray-400  rounded-t-md">
-                <div className="text-center border-r-2 py-2 border-gray-400">
+              <div className="w-full grid grid-cols-[5%_15%_30%_40%_10%] bg-slate-200  text-gray-800   text-lg  rounded-t-md">
+                <div className="text-center  py-1">
                   ลำดับ
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   ระดับชั้น
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   หลักสูตร
                 </div>
-                <div className="text-center py-2 border-r-2 border-gray-400">
+                <div className="text-center py-1 ">
                   รหัสห้อง
                 </div>
                 {/* <div className="text-center">สาขาวิชา</div> */}
-                <div className="text-center py-2">จำนวนนักเรียน</div>
+                <div className="text-center py-1">จำนวนนักเรียน</div>
               </div>
               {filteredStudent && filteredStudent.length > 0 ? (
                 <div>
@@ -233,21 +233,21 @@ export default function Form() {
                         href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.groupId}`}
                         key={item.groupId}
                         className={` ${
-                          index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                        } grid grid-cols-[5%_15%_30%_40%_10%] text-gray-700 hover:bg-blue-100 border border-gray-400  border-t-0`}
+                          index % 2 == 0 ? "bg-white" : "bg-white"
+                        } grid grid-cols-[5%_15%_30%_40%_10%] text-gray-700 hover:bg-blue-100 border border-gray-300  border-t-0`}
                       >
-                        <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
+                        <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-300">
                           {index + 1}
                         </div>
-                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                           <p className="line-clamp-1">
                             {item.class}.{item.groupName}
                           </p>
                         </div>
-                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                           <p className="line-clamp-1">{item.facultyName}</p>
                         </div>
-                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-400">
+                        <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                           <p className="line-clamp-1">{item.groupCode}</p>
                         </div>
                         <div className=" flex items-center justify-center gap-2 py-1">

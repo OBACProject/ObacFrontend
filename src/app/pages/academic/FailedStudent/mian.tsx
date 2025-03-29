@@ -70,8 +70,8 @@ export default function Main() {
 
   return (
     <div className="py-5">
-      <div className="w-full justify-center flex">
-        <div className="px-10 rounded-3xl flex gap-2 items-center text-xl bg-gradient-to-tr from-red-700 via-pink-600 to-red-400 text-white py-2 text-center w-fit">
+      <div className="w-full justify-start px-10 flex">
+        <div className="px-10 rounded-3xl flex gap-2 items-center text-xl  text-red-600 border border-gray-100 shadow-md py-2 text-center w-fit">
           <User className="w-8 h-8" /> นักเรียนที่ไม่ผ่านเกณฑ์
         </div>
       </div>

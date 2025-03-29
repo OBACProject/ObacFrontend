@@ -159,10 +159,10 @@ export default function Main() {
   };
   return (
     <div className="pl-16 py-5">
-      <div className="flex justify-center">
+      <div className="flex justify-start px-10">
         <div
           style={{ userSelect: "none" }}
-          className="px-10 rounded-3xl text-xl flex gap-2 items-center py-2 bg-gradient-to-tr from-blue-700 to-teal-500 text-white "
+          className="px-10 rounded-3xl text-xl shadow-md border border-gray-100 flex gap-2 items-center py-2 -500 text-blue-600 "
         >
           <ArrowUpDown className="w-8 h-8"/>
           ปรับเลื่อนชั้นเรียน

@@ -179,7 +179,7 @@ export default function Form() {
   return (
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
-        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit  shadow-md text-black">
+        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100  shadow-md text-blue-700">
           <LibraryBig className="h-8 w-8" />
           ระบบจัดการรายวิชา
         </h1>
