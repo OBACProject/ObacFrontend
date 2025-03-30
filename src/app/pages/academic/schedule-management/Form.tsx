@@ -148,14 +148,14 @@ export default function Form() {
       {isLoading ? (
         <div>
           {toggleMode ? (
-            <div className="w-full rounded-sm py-5 px-10">
-              <div className="w-full grid grid-cols-[5%_20%_20%_20%_20%_15%] bg-slate-200 text-lg text-gray-800  rounded-t-md">
+            <div className="w-full rounded-sm py-2 px-10">
+              <div className="w-full shadow-lg grid grid-cols-[5%_20%_20%_20%_15%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                 <div className="text-center py-1 ">
-                  ลำดับ
+                  No.
                 </div>
-                <div className="text-center py-1 ">
+                {/* <div className="text-center py-1 ">
                   รหัสอาจารย์
-                </div>
+                </div> */}
                 <div className="text-center py-1 ">
                   ชื่อ
                 </div>
@@ -170,7 +170,7 @@ export default function Form() {
                 </div>
               </div>
               {filteredTeachers && filteredTeachers?.length > 0 ? (
-                <div>
+                <div className="shadow-md">
                   {" "}
                   {filteredTeachers?.map((item: GetAllTeacher, index) => (
                     <Link
@@ -183,9 +183,9 @@ export default function Form() {
                       <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-300">
                         {index + 1}
                       </div>
-                      <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
+                      {/* <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
                         <p className="line-clamp-1">{item.teacherCode}</p>
-                      </div>
+                      </div> */}
                       <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300 ">
                         <p className="line-clamp-1">{item.thaiName}</p>
                       </div>
@@ -208,25 +208,24 @@ export default function Form() {
               )}
             </div>
           ) : (
-            <div className="w-full rounded-sm py-5 px-10">
-              <div className="w-full grid grid-cols-[5%_15%_30%_40%_10%] bg-slate-200  text-gray-800   text-lg  rounded-t-md">
-                <div className="text-center  py-1">
-                  ลำดับ
+            <div className="w-full rounded-sm py-2 px-10">
+              <div className="w-full shadow-lg grid grid-cols-[5%_15%_30%_40%_10%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg ">
+                <div className="text-center  py-1.5">
+                  No.
                 </div>
-                <div className="text-center py-1 ">
+                <div className="text-center py-1.5 ">
                   ระดับชั้น
                 </div>
-                <div className="text-center py-1 ">
+                <div className="text-center py-1.5 ">
                   หลักสูตร
                 </div>
-                <div className="text-center py-1 ">
+                <div className="text-center py-1.5 ">
                   รหัสห้อง
                 </div>
-                {/* <div className="text-center">สาขาวิชา</div> */}
-                <div className="text-center py-1">จำนวนนักเรียน</div>
+                <div className="text-center py-1.5">จำนวนนักเรียน</div>
               </div>
               {filteredStudent && filteredStudent.length > 0 ? (
-                <div>
+                <div className="shadow-md">
                   {filteredStudent?.map(
                     (item: GetStudentGroupsByTermYearDto, index) => (
                       <Link

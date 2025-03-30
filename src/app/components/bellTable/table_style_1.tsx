@@ -39,11 +39,11 @@ export function DataTable<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="w-full flex border border-gray-400">
+      <div className="w-full flex shadow-lg">
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}
-            className={`bg-[#cfe4ff] text-gray-800 border border-gray-400 py-2 px-4 text-center font-semibold flex items-center justify-center ${col.className}`}
+            className={`bg-white text-gray-800  border-t-2 border-b-2 border-gray-400  py-2 px-4 text-center  text-lg flex items-center justify-center ${col.className}`}
           >
             {col.label || "-"}
           </div>
@@ -55,8 +55,8 @@ export function DataTable<T extends Record<string, any>>({
         paginatedData.map((item, rowIndex) => (
           <div
             key={`row-${rowIndex}`}
-            className={`w-full flex border border-gray-400 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-              rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
+            className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
             }`}
             onClick={() => onRowClick && onRowClick(item)}
           >
@@ -67,7 +67,7 @@ export function DataTable<T extends Record<string, any>>({
               return (
                 <div
                   key={`cell-${rowIndex}-${colIndex}`}
-                  className={`text-center flex items-center px-4 py-2 border-r border-gray-400 ${col.className}`}
+                  className={`text-center flex items-center px-4 py-1 border-r border-gray-300  ${col.className}`}
                 >
                   {/* Ensure renderContent is a valid ReactNode */}
                   {renderContent != null ? renderContent : "-"}

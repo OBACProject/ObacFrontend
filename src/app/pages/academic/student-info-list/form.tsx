@@ -71,23 +71,23 @@ export default function Form() {
 
   return (
     <div className="py-5 w-full">
-      <div className="flex justify-center items-center">
-        <div className="px-10 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit bg-gradient-to-tr from-blue-700 to-gray-500 text-white">
+      <div className="flex justify-start py-2 items-center">
+        <div className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
           <BookUser className="w-8 h-8"/>
           รายชื่อและข้อมูลนักเรียน
         </div>
       </div>
       <div className="pt-2 grid place-items-start">
         <div className=" flex justify-between w-full items-center gap-4 ">
-          <div className="flex w-[350px] gap-1 items-center px-5">
+          <div className="flex w-[400px] gap-1 items-center px-5">
             {searchTrigger ? (
-              <button className=" py-1.5 bg-blue-400 flex gap-2 items-center text-white rounded-md px-4">
+              <button className=" py-1.5 bg-blue-400 flex gap-2  items-center text-white rounded-md px-4">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 ค้นหา
               </button>
             ) : (
               <button
-                className="bg-gray-400  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
+                className="bg-blue-300  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
                 onClick={() => {
                   onSearch();
                 }}
@@ -103,7 +103,7 @@ export default function Form() {
               value={selectedStudent}
               onChange={handleSubjectChange}
               isSearchable
-              placeholder="-- รหัสนักเรียน --"
+              placeholder="   -- รหัสนักเรียน --"
               styles={{
                 container: (provided) => ({
                   ...provided,

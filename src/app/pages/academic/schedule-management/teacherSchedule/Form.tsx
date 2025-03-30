@@ -1,5 +1,8 @@
 "use client";
-import { fetchDeleteScheduleSubject, fetchGetScheduleOfTeacherByTeacherID } from "@/api/schedule/scheduleAPI";
+import {
+  fetchDeleteScheduleSubject,
+  fetchGetScheduleOfTeacherByTeacherID,
+} from "@/api/schedule/scheduleAPI";
 import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
@@ -41,10 +44,10 @@ const getSchedule = async (teacherID: string, term: string, year: string) => {
 export default function Form({ term, year, teacherID }: Props) {
   const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
   const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
-  const [scheduleBtn ,setschduleBtn] = useState<boolean>(false)
+  const [scheduleBtn, setschduleBtn] = useState<boolean>(false);
   const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
-    const [deleteID, setDeleteID] = useState<number>(0);
-    const [deleteName, setDeleteName] = useState<string>("");
+  const [deleteID, setDeleteID] = useState<number>(0);
+  const [deleteName, setDeleteName] = useState<string>("");
   useEffect(() => {
     getSchedule(teacherID, term, year).then((d: any) => {
       setSchedules(d);
@@ -60,12 +63,12 @@ export default function Form({ term, year, teacherID }: Props) {
     "วันพุธ",
     "วันพฤหัสบดี",
     "วันศุกร์",
-    "วันเสาร์"
+    "วันเสาร์",
   ];
   const sortedSchedules = [...schedules].sort((a, b) => {
     return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
   });
- const onDeleteSchedule = async (id: number, subjectName: string) => {
+  const onDeleteSchedule = async (id: number, subjectName: string) => {
     const response = await fetchDeleteScheduleSubject(id);
     if (response.success) {
       toast.success(`ลบวิชา ${subjectName} สำเร็จ`);
@@ -80,9 +83,9 @@ export default function Form({ term, year, teacherID }: Props) {
 
   return (
     <div className="w-full  px-10 ">
-      <div className="py-5 flex justify-center ">
-        <h1 className="px-10 text-xl py-2 bg-pink-500 text-white flex gap-2 items-center rounded-3xl">
-          <GraduationCap className="h-8 w-8"/>
+      <div className="pt-5 flex justify-start ">
+        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
+          <GraduationCap className="h-8 w-8" />
           ตารางสอนอาจารย์
         </h1>
       </div>
@@ -95,7 +98,7 @@ export default function Form({ term, year, teacherID }: Props) {
             />
           </div>
           <div className="grid h-fit px-4  py-2 gap-1 ">
-            <div className="flex gap-2 text-[18px]">
+            <div className="flex gap-2 text-[20px]">
               <p>{teacherData?.nameTitle}</p>
               <p>{teacherData?.thaiName}</p>
               <p>{teacherData?.thaiLastName}</p>
@@ -110,7 +113,10 @@ export default function Form({ term, year, teacherID }: Props) {
         </div>
         <div className="">
           {" "}
-          <button className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl" onClick={()=>setschduleBtn(true)}>
+          <button
+            className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+            onClick={() => setschduleBtn(true)}
+          >
             <PlusCircle className="w-5 h-5 text-white  " />
             เพิ่มตารางเรียน
           </button>
@@ -118,59 +124,60 @@ export default function Form({ term, year, teacherID }: Props) {
       </div>
 
       <div className="w-full ">
-        <div className="w-full grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_10%_5%] bg-[#cfe4ff] text-blue-950 border-2  border-gray-400 text-lg rounded-t-md">
-          <div className="text-center border-r-2  border-gray-400 py-2 ">รหัสวิชา</div>
-          <div className="text-center border-r-2  border-gray-400 py-2 ">ชื่อวิชา</div>
-          <div className="text-center border-r-2  border-gray-400 py-2 ">สายชั้น</div>
-          <div className="text-center border-r-2  border-gray-400  py-2 ">กลุ่มนักเรียน</div>
-          <div className="text-center border-r-2  border-gray-400 py-2 ">ห้องเรียน</div>
-          <div className="text-center border-r-2  border-gray-400 py-2 ">หน่วยกิต</div>
-          <div className="text-center border-r-2  border-gray-400 py-2 ">คาบเรียน</div>
-          <div className="text-center  py-2 border-r-2  border-gray-400 ">วันสอน</div>
+        <div className="w-full shadow-lg grid grid-cols-[10%_35%_10%_10%_10%_10%_10%_5%]  bg-white border-t-2 border-b-2 text-lg border-gray-400">
+          <div className="text-center  py-2 ">รหัสวิชา</div>
+          <div className="text-center  py-2 ">ชื่อวิชา</div>
+          <div className="text-center  py-2 ">สายชั้น</div>
+          <div className="text-center  py-2 ">ห้องเรียน</div>
+          <div className="text-center  py-2 ">หน่วยกิต</div>
+          <div className="text-center  py-2 ">คาบเรียน</div>
+          <div className="text-center  py-2  ">วันสอน</div>
           <div className="text-center  py-2 "></div>
         </div>
       </div>
       {sortedSchedules.length > 0 ? (
         <div>
           {sortedSchedules?.map((item: TeacherScheduleSubject, index) => (
-            <div key={index}>
+            <div key={index} className="shadow-md">
               {item.scheduleSubjects.map((subject, subIndex) => (
                 <div
                   key={subIndex}
                   className={` ${
-                    subIndex % 2 == 0 ? "bg-white" : "bg-gray-100"
-                  } grid grid-cols-[10%_25%_10%_10%_10%_10%_10%_10%_5%]  border-2 text-[16px] border-gray-400 text-gray-700  border-t-0`}
+                    subIndex % 2 == 0 ? "bg-white" : "bg-white"
+                  } grid grid-cols-[10%_35%_10%_10%_10%_10%_10%_5%]  border text-[16px] border-gray-300 text-gray-700  border-t-0`}
                 >
-                  <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
+                  <p className="text-start flex items-center px-4 border-r border-gray-300   py-1 line-clamp-1">
                     {subject.subjectCode}
                   </p>
-                  <p className="text-start flex items-center  px-4 border-r border-gray-400  py-1 line-clamp-1">
+                  <p className="text-start flex items-center  px-4 border-r border-gray-300  py-1 line-clamp-1">
                     {subject.subjectName}
                   </p>
-                  <p className="text-center flex items-center justify-center border-r border-gray-400">
-                    {subject.class}
+                  <p className="text-center flex items-center justify-center border-r border-gray-300">
+                    {subject.class}.{subject.groupName}
                   </p>
-                  <p className="text-center flex items-center justify-center border-r border-gray-400">
-                    {subject.groupName}
-                  </p>
-                  <p className="text-center flex items-center justify-center border-r border-gray-400">
+                  <p className="text-center flex items-center justify-center border-r border-gray-300">
                     {subject.room}
                   </p>
-                  <p className="text-center flex items-center justify-center border-r border-gray-400">
+                  <p className="text-center flex items-center justify-center border-r border-gray-300">
                     {subject.credit}
                   </p>
-                  <p className="text-center flex items-center justify-center border-r border-gray-400">
+                  <p className="text-center flex items-center justify-center border-r border-gray-300">
                     {subject.period}
                   </p>
-                  <p className="text-center py-2 flex items-center justify-center  border-r  border-gray-400  ">
+                  <p className="text-center py-1 flex items-center justify-center  border-r  border-gray-300  ">
                     {subject.day}
                   </p>
-                  <div className="text-center py-2 flex items-center justify-center  ">
-                    <p  onClick={() => {
-                    setDeleteTrigger(true);
-                    setDeleteID(subject.id);
-                    setDeleteName(subject.subjectName);
-                  }} className="px-4 py-1 bg-red-400 text-white rounded-sm hover:bg-red-600">ลบ</p>
+                  <div className="text-center py-1 flex items-center justify-center  ">
+                    <p
+                      onClick={() => {
+                        setDeleteTrigger(true);
+                        setDeleteID(subject.id);
+                        setDeleteName(subject.subjectName);
+                      }}
+                      className="px-4 py-1 bg-red-400 text-white rounded-sm hover:bg-red-600"
+                    >
+                      ลบ
+                    </p>
                   </div>
                 </div>
               ))}
@@ -183,7 +190,7 @@ export default function Form({ term, year, teacherID }: Props) {
         </div>
       )}
 
-{deleteTrigger && (
+      {deleteTrigger && (
         <div
           className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
           onClick={() => setDeleteTrigger(false)}
@@ -223,11 +230,11 @@ export default function Form({ term, year, teacherID }: Props) {
       )}
       {scheduleBtn && (
         <AddTeacherSchedulePopUp
-        term={term}
-        year={year}
-        teacherId={Number(teacherID)}
-        teacherName={`${teacherData?.thaiName} ${teacherData?.thaiLastName}`}
-        onClosePopUp={setschduleBtn}
+          term={term}
+          year={year}
+          teacherId={Number(teacherID)}
+          teacherName={`${teacherData?.thaiName} ${teacherData?.thaiLastName}`}
+          onClosePopUp={setschduleBtn}
         />
       )}
     </div>

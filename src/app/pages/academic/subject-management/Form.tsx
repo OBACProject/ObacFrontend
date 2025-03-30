@@ -190,7 +190,7 @@ export default function Form() {
           placeholder="ค้นหาวิชา..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border px-4 py-1 rounded-md"
+          className="border border-gray-400 px-4 py-1 rounded-md"
         />
         <button
           className="px-10 py-1 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
@@ -201,7 +201,7 @@ export default function Form() {
         </button>
       </div>
       <div className="w-full rounded-sm px-10">
-        <div className="w-full grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-gray-200 text-blue-950 text-lg  rounded-t-lg">
+        <div className="w-full shadow-lg grid grid-cols-[5%_20%_35%_10%_15%_15%] bg-white text-blue-950 text-lg  border-t-2 border-b-2 border-gray-400 ">
           <div className="text-center    py-2 text-black">ลำดับ</div>
           <div className="text-center    py-2">รหัสวิชา</div>
           <div className="text-center   py-2">ชื่อวิชา</div>
@@ -210,7 +210,7 @@ export default function Form() {
           <div className="text-center py-2">Action</div>
         </div>
         {subjects.length > 0 ? (
-          <div>
+          <div className="shadow-md">
             {filteredSubjects?.map((item: GetAllSubject, index) => (
               <div
                 key={item.id}

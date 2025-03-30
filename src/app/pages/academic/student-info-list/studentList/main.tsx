@@ -27,8 +27,8 @@ export default function Main() {
   };
   return (
     <div className="py-2 w-full">
-      <div className="flex justify-center py-3 items-center">
-        <h1 className="px-10 w-fit text-white flex items-center gap-2 bg-blue-800 rounded-3xl py-2 text-xl">
+      <div className="flex justify-start pt-3 items-center">
+        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
           <UserRound className="h-8 w-8"/>
           รายชื่อนักเรียนทั้งหมด
         </h1>

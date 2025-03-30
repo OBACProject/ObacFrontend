@@ -108,61 +108,61 @@ export default function Form({ term, year, groupId }: Props) {
       </div>
 
       <div className="w-full">
-        <div className="w-full grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg rounded-t-sm">
-          <div className="text-center py-2 border-r-2 border-gray-400">
+        <div className="w-full grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] bg-white border-t-2 border-b-2 shadow-lg text-lg border-gray-400">
+          <div className="text-center py-2 ">
             รหัสวิชา
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             ชื่อวิชา
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             อาจารย์ผู้สอน
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             ห้องเรียน
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             หน่วยกิต
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             คาบเรียน
           </div>
-          <div className="text-center py-2 border-r-2 border-gray-400">
+          <div className="text-center py-2 ">
             วันสอน
           </div>
           <div className="text-center py-2 "></div>
         </div>
-
+        <div className="shadow-md">
         {sortedScheduleSubjects?.length > 0 ? (
            sortedScheduleSubjects.map((item: ScheduleSubject, index) => (
             <div
               key={index}
               className={`${
-                index % 2 === 0 ? "bg-white" : "bg-gray-100"
-              } grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] border text-[16px] border-gray-400 text-gray-700 border-t-0`}
+                index % 2 === 0 ? "bg-white" : ""
+              } grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] border text-[16px] border-gray-300 text-gray-700 border-t-0`}
             >
-              <p className="text-start flex items-center px-4 border-r border-gray-400 py-1 line-clamp-1">
+              <p className="text-start flex items-center px-4 border-r border-gray-300 py-1 line-clamp-1">
                 {item.subjectCode}
               </p>
-              <p className="text-start flex items-center  px-4 border-r border-gray-400 py-1 line-clamp-1">
+              <p className="text-start flex items-center  px-4 border-r border-gray-300 py-1 line-clamp-1">
                 {item.subjectName}
               </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-400">
+              <p className="text-center flex items-center justify-center border-r border-gray-300">
                 {item.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;{item.teacherLastName}
               </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-400">
+              <p className="text-center flex items-center justify-center border-r border-gray-300">
                 {item.room}
               </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-400">
+              <p className="text-center flex items-center justify-center border-r border-gray-300">
                 {item.credit}
               </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-400">
+              <p className="text-center flex items-center justify-center border-r border-gray-300">
                 {item.period}
               </p>
-              <p className="text-center py-2 flex items-center justify-center border-r border-gray-400">
+              <p className="text-center py-1 flex items-center justify-center border-r border-gray-300">
                 {item.day}
               </p>
-              <div className="text-center flex items-center w-full justify-center text-gray-700  py-2 ">
+              <div className="text-center flex items-center w-full justify-center text-gray-700  py-1 ">
                 <p
                   className="px-4 py-1 bg-red-400 hover:bg-red-700 text-white rounded-sm"
                   onClick={() => {
@@ -180,7 +180,7 @@ export default function Form({ term, year, groupId }: Props) {
           <div className="grid place-items-center border-2 border-dashed border-t-0 text-[24px] border-gray-400 text-gray-700 py-10 text-center">
             ไม่มีตารางเรียน
           </div>
-        )}
+        )}</div>
       </div>
       {deleteTrigger && (
         <div

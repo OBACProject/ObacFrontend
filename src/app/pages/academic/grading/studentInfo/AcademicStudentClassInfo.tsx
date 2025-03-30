@@ -471,7 +471,7 @@ export function AcademicStudentInfo(props: {
         ))}
         <div className="my-5 w-full flex justify-between items-center  ">
           <button
-            className="bg-teal-500 duration-300 h-fit px-5 text-white text-lg rounded-md hover:bg-blue-700 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:rounded-sm whitespace-nowrap"
+            className="bg-blue-500 duration-300 h-fit px-5 text-white text-lg rounded-full hover:bg-blue-700 w-fit  gap-2 flex items-center justify-center text-center py-1 hover:scale-105 whitespace-nowrap"
             onClick={() => setVerifyGradPopUp(true)}
           >
             ยืนยันการตรวจสอบคะแนน{" "}

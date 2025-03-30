@@ -42,18 +42,18 @@ export default function Main({ groupId }: Props) {
   }
   return (
     <div className="py-2 w-full px-10">
-      <div className="flex px-5 justify-center py-3 items-center">
-        <h1 className="px-10 w-fit text-white flex gap-2 items-center bg-gradient-to-tr from-blue-600 to-gray-400 rounded-3xl py-2 text-xl">
+      <div className="flex px-5 justify-start py-3 items-center">
+        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
           <UsersRound className="h-8 w-8" />
           รายชื่อนักเรียนในห้องเรียน
         </h1>
       </div>
       <div className="flex justify-between items-center py-2 px-5">
-        <div className=" flex gap-3 items-center">
-          <div className="border border-gray-400 rounded-sm px-2 py-1">
+        <div className=" flex gap-3 items-center text-lg">
+          <div className="border border-gray-300 rounded-sm px-5 py-1">
            ห้อง {studentInGroup?.class}.{studentInGroup?.groupName} 
           </div>
-          <div className="border border-gray-400 rounded-sm px-2 py-1">
+          <div className="border border-gray-300 rounded-sm px-5 py-1">
             หลักสูตร {studentInGroup?.facultyName}
           </div>
           
@@ -69,37 +69,37 @@ export default function Main({ groupId }: Props) {
       </div>
       {isLoadingPage ? (
         <div className="w-full px-5 pb-10">
-        <div className="w-full  grid grid-cols-[5%_10%_25%_60%] bg-[#cfe4ff] text-blue-950 border-2 border-gray-400 text-lg  ">
-          <div className="text-center py-2 border-r border-gray-400">
+        <div className="w-full shadow-lg grid grid-cols-[5%_10%_25%_60%] bg-white border-t-2 border-b-2 text-lg border-gray-400">
+          <div className="text-center py-2">
             ลำดับ
           </div>
-          <div className="text-center py-2 border-r border-gray-400">
+          <div className="text-center py-2">
             รหัสนักเรียน
           </div>
-          <div className="text-center py-2 border-r border-gray-400">
+          <div className="text-center py-2">
             ชื่อ - นามสกุล
           </div>
         </div>{" "}
         {studentInGroup ? (
-          <div className="w-full ">
+          <div className="w-full shadow-lg">
             {studentInGroup.students?.map((item: StudentListByGroupIDDto, index) => (
               <Link
                 href={`/pages/academic/student-details/${item.studentId}`}
                 key={index}
                 className={` ${
-                  index % 2 == 0 ? "bg-white" : "bg-gray-100"
-                } grid grid-cols-[5%_10%_10%_15%]  border text-[16px] hover:bg-blue-100 border-gray-400 text-gray-700  border-t-0`}
+                  index % 2 == 0 ? "bg-white" : ""
+                } grid grid-cols-[5%_10%_10%_15%]  border border-r-0 border-l-0 text-[16px] hover:bg-blue-100 border-gray-300 text-gray-700  border-t-0`}
               >
-                <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-400">
+                <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-300">
                   {index + 1}
                 </div>
-                <p className="text-start flex items-center px-4 border-r border-gray-400   py-1 line-clamp-1">
+                <p className="text-start flex items-center px-4 border-r border-gray-300   py-1 line-clamp-1">
                   {item.studentCode}
                 </p>
                 <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
                   {item.firstName}
                 </p>
-                <p className="text-start flex items-center  px-4 border-r border-gray-400  py-1 line-clamp-1">
+                <p className="text-start flex items-center  px-4 border-r border-gray-300  py-1 line-clamp-1">
                   {item.lastName}
                 </p>
               </Link>
