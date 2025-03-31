@@ -33,7 +33,7 @@ export default function Home() {
           </h1>
         </FadeInOnScroll>
       </div>
-
+    <hr/>
       <div className="flex w-full bg-white ">
         <div className="w-full items-center text-center px-4 py-4">
           <FadeInOnScroll>

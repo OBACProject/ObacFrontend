@@ -67,7 +67,7 @@ export function Navbar() {
         <div className="flex gap-2 justify-end items-center w-2/6">
           <Link
             href="/pages/register"
-            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-[#0b0f68] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
+            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-[#0C243C] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
           >
             <p className="line-clamp-1">สมัครออนไลน์</p>
             <CircleCheck className="w-5 h-5" />

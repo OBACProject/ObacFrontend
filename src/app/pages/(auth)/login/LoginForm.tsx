@@ -154,14 +154,14 @@ export default function LoginForm({ session }: LoginFormProps) {
             required
           />
           {trigger ? (
-            <button className="bg-blue-900 flex gap-2 items-center px-20 text-white my-3 rounded-md py-2">
+            <button className="bg-[#0C243C] flex gap-2 items-center px-20 text-white my-3 rounded-md py-2">
               <Loader2 className="w-5 h-5 animate-spin" />
               Loading...
             </button>
           ) : (
             <button
               type="submit"
-              className="bg-blue-900 px-20 text-white my-3 rounded-md py-2"
+              className="bg-[#0C243C] px-20 text-white my-3 rounded-md py-2"
             >
               Login
             </button>
