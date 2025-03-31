@@ -2,22 +2,24 @@ import { useState, useEffect, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-interface FadeInOnScrollProps {
-    children: ReactNode; 
-  }
+interface OpeningScrollProps {
+  children: ReactNode; 
+}
 
-const FadeInOnScroll: React.FC<FadeInOnScrollProps> = ({ children }) => {
+const OpeningScroll: React.FC<OpeningScrollProps> = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = React.useRef(null);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 } 
+      { threshold: 0.1 }
     );
 
     if (ref.current) {
@@ -34,8 +36,8 @@ const FadeInOnScroll: React.FC<FadeInOnScrollProps> = ({ children }) => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 100 }} 
-      animate={isVisible ? { opacity: 1, y: 0 } : {}} 
+      initial={{ opacity: 0, y: 100 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 1.8, ease: 'easeOut' }}
     >
       {children}
@@ -43,4 +45,4 @@ const FadeInOnScroll: React.FC<FadeInOnScrollProps> = ({ children }) => {
   );
 };
 
-export default FadeInOnScroll;
+export default OpeningScroll;

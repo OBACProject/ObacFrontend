@@ -7,6 +7,7 @@ import CardHorizontal from "@/app/components/card/card-horizontal";
 import StickerFacebook from "@/app/components/Effect/StickerFacebook";
 import StickerYoutube from "@/app/components/Effect/StickerYoutube";
 import FadeInOnScroll from "@/app/components/Effect/FadInScroll";
+import OpeningScroll from "@/app/components/Effect/OpeningScroll";
 
 export default function Home() {
   return (
@@ -14,28 +15,33 @@ export default function Home() {
       <StickerFacebook />
       <StickerYoutube />
       {/* <CLShomepage /> */}
-     
-      <div className="w-full py-4">
+
+      <div className="w-full pt-4">
         {/* <FadeInOnScroll> */}
-          <div className="relative  group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[400px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
-            <img
-              className="absolute lg:w-[100%] lg:h-[400px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
-              src="/images/obac_view.jpg"
-            />
-            <div className="relative w-full h-full bg-gradient-to-t from-white via-gray-800/10 to-gray-900/5"></div>
-          </div>
+        <div className="relative  group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[390px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
+          <img
+            className="absolute lg:w-[100%] lg:h-[390px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
+            src="/images/obac_view.jpg"
+          />
+          <div className="relative w-full h-full bg-gradient-to-t from-white via-gray-800/0 to-gray-900/5"></div>
+        </div>
         {/* </FadeInOnScroll> */}
       </div>
-      <div className="w-full items-center text-center px-4 py-2">
-        <FadeInOnScroll>
-          <h1 className="lg:text-5xl text-3xl text-blue-950 my-5  font-extrabold px-5 py-1">
+      <div className="w-full  items-center text-center px-4 ">
+        <OpeningScroll>
+          <h1 className="lg:text-5xl  text-3xl text-blue-950   font-extrabold px-5 py-1">
             Ekawit Business Administration Vocational College (OBAC)
           </h1>
-        </FadeInOnScroll>
+        </OpeningScroll>
       </div>
-    <hr/>
+      <OpeningScroll>
+        <div className="grid place-items-center my-5 w-full">
+          <hr className=" w-11/12 border border-blue-950" />
+        </div>
+      </OpeningScroll>
+
       <div className="flex w-full bg-white ">
-        <div className="w-full items-center text-center px-4 py-4">
+        <div className="w-full items-center text-center px-4 ">
           <FadeInOnScroll>
             <h1 className="text-5xl text-blue-950 my-5  font-extrabold px-5 py-1">
               News And Events
@@ -64,34 +70,34 @@ export default function Home() {
         <FadeInOnScroll>
           <div className="h-fit grid grid-cols-2 gap-3 overflow-hidden py-5 px-10 ">
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-            For Post
+              For Post
             </div>
 
             <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
               For Post
             </div>
-
           </div>
         </FadeInOnScroll>
       </div>
     </div>
   );
 }
+

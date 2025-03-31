@@ -9,9 +9,9 @@ import Link from "next/link";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // bg-[#0b0f68]
+  // bg-[#0b0f68] #0C243C
   return (
-    <header className="grid w-full top-0 left-0 bg-[#0C243C] shadow-xl fixed z-50">
+    <header className="grid w-full top-0 left-0 bg-[#143d66] shadow-xl fixed z-50">
       {/* Logo and Name */}
       <div className="h-fit">
         <div className="flex justify-between items-center  sm:px-2 py-1">
@@ -67,7 +67,7 @@ export function Navbar() {
         <div className="flex gap-2 justify-end items-center w-2/6">
           <Link
             href="/pages/register"
-            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-[#0C243C] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
+            className="flex gap-2 items-center justify-center sm:py-1 px-6  w-fit bg-[#143d66] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
           >
             <p className="line-clamp-1">สมัครออนไลน์</p>
             <CircleCheck className="w-5 h-5" />
