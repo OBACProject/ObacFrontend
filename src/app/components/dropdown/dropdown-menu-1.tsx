@@ -22,7 +22,7 @@ export default function DropMenu({
       <NavigationMenuList className="text-white  lg:flex md:flex hidden  ">
         {menuData.map((menu, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="  w-full py-0 lg:py-1 md:py-1 sm:py-1 px-4 h-8 md:h-fit lg:h-fit rounded-none duration-300 text-sm lg:text-md md:text-md">
+            <NavigationMenuTrigger className="  w-full py-0 lg:py-0 md:py-0 sm:py-1 px-4 h-8 md:h-fit lg:h-fit rounded-none duration-300 text-sm lg:text-md md:text-md">
               {menu.menuTopic}
               <NavigationMenuContent className="top-full  bg-zinc-700/30 backdrop-blur-lg rounded-sm">
                 <ul className="gap-2 lg:py-0 lg:text-md  md:py-1 py-0 px-0  lg:px-1 md:px-2 text-white  ">

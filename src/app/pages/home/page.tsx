@@ -13,23 +13,24 @@ export default function Home() {
     <div className="bg-white">
       <StickerFacebook />
       <StickerYoutube />
-      <CLShomepage />
-      <div className="w-full items-center text-center px-4 py-4">
-        <FadeInOnScroll>
-          <h1 className="lg:text-5xl text-3xl text-blue-950 my-5  font-extrabold px-5 py-1">
-            Ekawit Business Administration Vocational College (OBAC)
-          </h1>
-        </FadeInOnScroll>
-      </div>
-      <div className="w-full">
-        <FadeInOnScroll>
-          <div className="relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[400px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
+      {/* <CLShomepage /> */}
+     
+      <div className="w-full py-4">
+        {/* <FadeInOnScroll> */}
+          <div className="relative  group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[400px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
             <img
               className="absolute lg:w-[100%] lg:h-[400px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
               src="/images/obac_view.jpg"
             />
-            <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
+            <div className="relative w-full h-full bg-gradient-to-t from-white via-gray-800/10 to-gray-900/5"></div>
           </div>
+        {/* </FadeInOnScroll> */}
+      </div>
+      <div className="w-full items-center text-center px-4 py-2">
+        <FadeInOnScroll>
+          <h1 className="lg:text-5xl text-3xl text-blue-950 my-5  font-extrabold px-5 py-1">
+            Ekawit Business Administration Vocational College (OBAC)
+          </h1>
         </FadeInOnScroll>
       </div>
 

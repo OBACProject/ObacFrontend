@@ -23,7 +23,7 @@ export default function DropDownMobile({
         <Accordion type="single" collapsible className="w-full">
           {menuData.map((menu, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="hover:bg-blue-900 py-2 px-4 rounded-xl duration-300 text-md w-full">
+              <AccordionTrigger className="hover:bg-blue-900 py-1 px-4 rounded-xl duration-300 text-md w-full">
                 {menu.menuTopic}
               </AccordionTrigger>
               <AccordionContent>
