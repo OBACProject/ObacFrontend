@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import {
-  ConvertClassroomToExcel,
+  ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
 } from "@/lib/convertToExcel";
 import { updateGradingStundetData } from "@/resource/academics/grading/api/gradingApiData";
@@ -47,7 +47,6 @@ export function AcademicStudentInfo(props: {
     setOnEdit(false);
     setGradDataFilter([...gradDatas]);
   };
-  // console.log(gradDatas);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -291,7 +290,7 @@ export function AcademicStudentInfo(props: {
           <button
             className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
             onClick={async () => {
-              ConvertClassroomToExcel(
+              ConvertClassroomToExcelWithSubject(
                 covertStudentExcel,
                 subjectByGroupId?.subjectCode || "",
                 subjectByGroupId?.subjectName || "",
