@@ -337,7 +337,7 @@ export function ClassroomGrading(props: {
               handleDownloadExcel(Number(row.groupId));
             }}
           >
-            <p>รายชื่อ Excel</p>
+            <p>ใบออกเกรดExcel</p>
           </button>
         </div>
       ),
