@@ -20,6 +20,8 @@ import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
 import { toast } from "react-toastify";
+import { GetStudentListByGroupID } from "@/api/student/studentApi";
+import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
 
 interface ClassroomTable {
   class: string;
@@ -28,6 +30,15 @@ interface ClassroomTable {
   groupId: string;
   groupCode: string;
 }
+
+const getStudentDataList = async (groupId: number) => {
+  try {
+    const response = await GetStudentListByGroupID(groupId);
+    return response;
+  } catch (err) {
+    return [];
+  }
+};
 
 export function ClassroomGrading(props: {
   handleTab: (tab: string) => void;
@@ -183,19 +194,17 @@ export function ClassroomGrading(props: {
       // Extract year level from item.class (e.g., xxx. 1/x → yearLevel = 1)
       const yearLevel = parseInt(item.class.substring(5, 6), 10);
 
-      // Calculate matchYearLevel
       const matchYearLevel = currentYear - Number(selectedYear);
       // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
 
-      // Year filtering logic
       let isYearLevelValid = false;
 
       if (matchYearLevel === 0) {
-        isYearLevelValid = true; // Show all years
+        isYearLevelValid = true;
       } else if (matchYearLevel === 1) {
-        isYearLevelValid = yearLevel > 1; // Show only year 2, 3, ...
+        isYearLevelValid = yearLevel > 1;
       } else if (matchYearLevel === 2) {
-        isYearLevelValid = yearLevel === 3; // Show only year 3
+        isYearLevelValid = yearLevel === 3;
       }
 
       return (
@@ -274,6 +283,22 @@ export function ClassroomGrading(props: {
     TotalScoreInGroup(convertTOPDFData);
   };
 
+  const handleDownloadExcel = async (groupId: number) => {
+    try {
+      const item = await getStudentDataList(groupId);
+
+      if (item && !Array.isArray(item)) {
+        const studentClass = item.class + "." + item.groupName;
+        ConvertClassroomToExcel(item.students, studentClass);
+      } else {
+        alert("No student data available for this group.");
+      }
+    } catch (error) {
+      console.error("Error fetching student data:", error);
+      alert("Failed to fetch student data. Please try again.");
+    }
+  };
+
   const columns = [
     { label: "ลำดับ", key: "groupId", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-2/12" },
@@ -305,8 +330,14 @@ export function ClassroomGrading(props: {
               </p>
             )}
           </button>
-          <button className="px-3 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2">
-            <p>ใบออกเกรดExcel</p>
+          <button
+            className="px-3 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadExcel(Number(row.groupId));
+            }}
+          >
+            <p>รายชื่อ Excel</p>
           </button>
         </div>
       ),
