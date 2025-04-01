@@ -8,11 +8,11 @@ export default function Form() {
       <div className="relative ">
       
         <h1 className="mb-4 animate-fadeIn text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-blue-500 z-10">
-            Contact Us
+          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-blue-500 font-prompt z-10">
+            ช่องทางการติดต่อ
           </span>
         </h1>
-        <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-300 w-full"></div>
+        <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-500 w-full"></div>
       </div>
       <div className="my-5 animate-fastFade lg:flex gap-2  grid place-items-center lg:*:place-items-start lg:mx-5">
         <div className=" lg:w-[600px] lg:h-[450px]  ">
@@ -32,7 +32,7 @@ export default function Form() {
             Krabang, Khet Lat Krabang, Krung Thep Maha Nakhon 10520
           </div>
           <div className="mt-5 text-gray-600 ">
-            <b>Mian Phone :</b> 02-327-2992-4
+            <b>Main Phone :</b> 02-327-2992-4
           </div>
           <div className="mt-5 text-gray-600 text-lg">
             <b>Email :</b> obac@gmail.com

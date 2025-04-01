@@ -17,17 +17,21 @@ export default function Home() {
     router.push("/pages/home");
   };
   return (
-    <div className="py-5 px-1 lg:px-5">
-      <div className="grid place-items-center w-full ">
-        <img src="/images/obac_poster_2.jpg" className="h-40 lg:h-72  w-full" />
-      </div>
+    <div className=" px-1">
+      <div className=" relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[550px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
+          <img
+            className="absolute lg:w-[100%] lg:h-[550px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
+            src="/banner/banner.jpg"
+          />
+          <div className="relative w-full h-full bg-gradient-to-t from-gray-900/0 to-gray-900/0"></div>
+        </div>
       <div className="w-full mt-4 grid place-items-center">
         <div className="lg:px-10 px-10 py-3 rounded-md text-2xl bg-gradient-to-r from-gray-900 text-white  to-gray-500 ">
           แบบฟอร์มสมัครเข้าศึกษา
         </div>
       </div>
 
-      <div className="border-[1px] my-5 border-gray-200 w-full rounded-md shadow-sm shadow-gray-200 lg:px-12 px-2">
+      <div className="px-8 py-5 border-[1px] my-5 border-gray-200 w-full rounded-md shadow-sm shadow-gray-200 lg:px-12 ">
         <div className="px-8 text-xl py-2 mt-4 gap-2 flex bg-gradient-to-r from-blue-900 text-white  to-gray-500  w-fit rounded-md">
           {" "}
           <UserRound

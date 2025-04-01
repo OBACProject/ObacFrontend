@@ -31,15 +31,15 @@ interface CardHorizontalProp {
           </div>
           <div className=" lg:w-[600px] w-fit group-hover:bg-gray-50 duration-500  grid  py-2 px-2 lg:py-4 lg:px-4">
             <div className="flex justify-between ">
-              <div className="font-semibold text-blue-800 text-lg">
+              <div className="font-semibold text-blue-800 font-prompt_Light text-lg">
                 {topic}
               </div>
-              <div className="text-gray-700 lg:text-lg text-sm">
+              <div className="text-gray-700 lg:text-lg font-prompt_Light text-sm">
                 {date}
               </div>
             </div>
             <div className="h-fit overflow-hidden">
-              <p className=" text-gray-600 lg:text-[16px] text-[12px] line-clamp-4 ">
+              <p className=" text-gray-600 lg:text-[16px] font-prompt_Light text-[12px] line-clamp-4 ">
                 {description}
               </p>
             </div>

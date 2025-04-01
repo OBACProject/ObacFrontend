@@ -35,18 +35,18 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
                 <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
               </div>
               <div className="grid w-full px-10">
-                <span className="text-blue-800 text-sm mt-4">
+                <span className="text-blue-800 font-prompt_Light text-[18px] mt-4">
                   {data.category}
                 </span>
                 <div className="flex justify-between mt-1">
-                  <span className="font-semibold text-blue-800 text-xl">
+                  <span className="font-prompt text-blue-800 text-xl">
                     {data.topic}
                   </span>
                 </div>
-                <div className="mt-3 font-semibold text-black">
+                <div className="mt-2 font-prompt text-black">
                   {data.date}
                 </div>
-                <div className="mt-1 mb-4 line-clamp-3 text-gray-600">
+                <div className="mt-1 font-prompt_Light mb-4 line-clamp-3 text-gray-600">
                   {data.description}
                 </div>
               </div>

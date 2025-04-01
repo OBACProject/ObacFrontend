@@ -56,10 +56,10 @@ export default function ProfileForm() {
           <div className=" absolute mix-blend-multiply filter blur-lg -bottom-32  w-36 h-36 bg-blue-400 opacity-90 rounded-full  animate-blob2 "></div> */}
 
           <div className="grid place-items-center gap-8">
-            <div className="px-10 py-3 rounded-full h-fit w-fit text-3x bg-white/50 text-gray-700 backdrop-blur-sm">
+            <div className="px-10 py-3 rounded-full h-fit w-fit text-3x bg-white/50 text-gray-700 backdrop-blur-sm font-prompt">
             ข้อมูลฝ่ายทะเบียน
           </div>
-          <div className="rounded-lg px-10 grid gap-4 py-4  bg-white z-10">
+          <div className="rounded-lg px-20 grid gap-4 py-10  bg-white font-prompt z-10">
             <div className="w-full text-center flex gap-4 items-center  ">
               ชื่อ   <p className="text-gray-600">{academics?.thaiName}  {academics?.thaiLastname}</p>
             </div>

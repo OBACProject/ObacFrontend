@@ -47,7 +47,7 @@ export default function LoginForm({ session }: LoginFormProps) {
       setRole(newRole || null);
       setName(newName || null);
 
-      toast.success("Login successful");
+      toast.success("เข้าสู่ระบบสำเร็จ");
 
       switch (newRole) {
         case "Student":
@@ -67,19 +67,19 @@ export default function LoginForm({ session }: LoginFormProps) {
       }
     } catch (error) {
       setTrigger(false);
-      toast.error("Login failed. Please try again.");
+      toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง");
     }
   };
 
   const handleLogout = async () => {
     await logout();
 
-    toast.info("Logout successful");
+    toast.info("ออกจากระบบสำเร็จ");
     setTrigger(false);
     window.location.reload();
   };
 
-  const handleLoginButton = async() => {
+  const handleLoginButton = async () => {
     const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
@@ -95,9 +95,9 @@ export default function LoginForm({ session }: LoginFormProps) {
         router.push("/pages/admin/academicManagement");
         break;
       default:
-        toast.error("Unknown role");
+        toast.error("สิทธิการเข้าถึงผิดพลาด");
     }
-  }
+  };
 
   return (
     <div className="relative  bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
@@ -109,15 +109,17 @@ export default function LoginForm({ session }: LoginFormProps) {
       {role && name ? (
         <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">
           <div className="space-y-4">
-            <div className="flex justify-center "><UserRound className="h-12 w-12 rounded-full"/></div>
+            <div className="flex justify-center ">
+              <UserRound className="h-12 w-12 rounded-full" />
+            </div>
             <div className="text-2xl">{name}</div>
             {/* <div className="text-lg">Role: {role}</div> */}
             <div className="grid place-items-center mt-5">
-            <button
+              <button
                 onClick={handleLoginButton}
                 className="bg-gradient-to-tr  from-emerald-800/60 to-sky-300 z-10 px-10 text-white my-3 rounded-md py-1 hover:from-emerald-900/80 hover:to-sky-500 hover:scale-105 duration-500"
               >
-               กลับเข้าสู่ระบบ
+                กลับเข้าสู่ระบบ
               </button>
               <button
                 onClick={handleLogout}
@@ -131,15 +133,12 @@ export default function LoginForm({ session }: LoginFormProps) {
       ) : (
         <form
           onSubmit={handleLogin}
-          className="z-10 absolute lelf-1/2 pb-5 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm"
+          className="z-10 absolute lelf-1/2 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
-          <img src="/images/obac_navbar_logo.png" className="mt-5 h-28" />
-          <div className="mt-5 w-full grid place-items-center rounded-t-lg py-2 mb-5">
-            <div className="text-black text-2xl">เข้าสู่ระบบ</div>
-          </div>
-
+          <img src="/images/obac_navbar_logo.png" className="h-28" />
+        <div className="grid gap-3 w-full place-items-center">
           <input
-            className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
+            className="px-5 py-2 w-3/5  bg-gray-100 rounded-lg"
             type="text"
             name="userName"
             placeholder="Username / ชื่อผู้ใช้"
@@ -147,23 +146,25 @@ export default function LoginForm({ session }: LoginFormProps) {
           />
 
           <input
-            className="px-5 py-2 w-3/5 my-3 bg-gray-100 rounded-lg"
+            className="px-5 py-2 w-3/5 bg-gray-100 rounded-lg"
             type="password"
             name="password"
             placeholder="Password / รหัสผ่าน"
             required
           />
+        </div>
+          
           {trigger ? (
-            <button className="bg-[#143d66] flex gap-2 items-center px-20 text-white my-3 rounded-md py-2">
+            <button className="bg-[#143d66] flex gap-2 items-center px-20 text-white rounded-md py-2 font-prompt">
               <Loader2 className="w-5 h-5 animate-spin" />
-              Loading...
+              เข้าสู่ระบบ...
             </button>
           ) : (
             <button
               type="submit"
-              className="bg-[#143d66] px-20 text-white my-3 rounded-md py-2"
+              className="bg-[#143d66] font-prompt px-20 text-white  rounded-md py-2"
             >
-              Login
+              เข้าสู่ระบบ
             </button>
           )}
         </form>

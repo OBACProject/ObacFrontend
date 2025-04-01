@@ -57,17 +57,21 @@ export default function Home() {
           </i>
         </div>
       </FadeInOnScroll>
-      <div className="w-full mt-10 py-2 bg-blue-950"></div>
       <FadeInOnScroll>
-        <div className=" relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[600px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
+        <div className="w-full mt-10 py-4 bg-gradient-to-b from-white to-blue-950/30"></div>
+      </FadeInOnScroll>
+      <FadeInOnScroll>
+        <div className=" relative group flex items-center justify-center  lg:w-[100%] md:w-[100%] md:h-[400px] lg:h-[620px] w-full h-[220px] sm:w-[100%] sm:h-[300px] overflow-hidden">
           <img
-            className="absolute lg:w-[100%] lg:h-[600px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
+            className="absolute lg:w-[100%] lg:h-[620px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
             src="/banner/banner.jpg"
           />
           <div className="relative w-full h-full bg-gradient-to-t from-gray-900/0 to-gray-900/0"></div>
         </div>
       </FadeInOnScroll>
-      <div className="w-full mb-5 py-2 bg-blue-950"></div>
+      <FadeInOnScroll>
+        <div className="w-full mb-5 py-4 bg-gradient-to-t from-white to-blue-950/30"></div>
+      </FadeInOnScroll>
       <div className="flex w-full bg-white ">
         <div className="w-full items-center text-center px-4 ">
           <FadeInOnScroll>

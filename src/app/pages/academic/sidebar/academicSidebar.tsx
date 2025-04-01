@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation"; 
+import { usePathname } from "next/navigation";
 import {
   AcademicSidebarProps,
   ProfileData,
@@ -90,7 +90,7 @@ export function AcademicSidebar({
             }}
           />
           <span
-            className="text-center text-lg py-2"
+            className="text-center font-prompt text-lg py-2"
             style={{ userSelect: "none" }}
           >
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
@@ -107,7 +107,7 @@ export function AcademicSidebar({
             <div className="flex items-center">
               <CircleUserRound className="w-10 h-10 text-[#0C2943]" />
             </div>
-            <p className="text-[#0C2943] text-sm font-medium truncate w-auto">
+            <p className="text-[#0C2943] text-sm font-medium font-prompt_Light truncate w-auto">
               {userName}
             </p>
           </div>
@@ -159,7 +159,7 @@ export function SidebarMenu({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
   const [delayedSubMenu, setDelayedSubMenu] = useState<number | null>(null);
@@ -193,49 +193,48 @@ export function SidebarMenu({
       >
         <div className="grid gap-2">
           {menuItems.map((item, index) => {
-            const isActive = pathname.startsWith(item.headLink)
-          return (
-            <div
-              key={index}
-              onMouseEnter={() => handleMouseEnter(index, item.subMenu)}
-              onMouseLeave={() => handleMouseLeave(index, item.subMenu)}
-              className="relative"
-            >
-              <a href={item.href}>
-                <button
-                  className={`${
-                    isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
-                  } h-12 flex items-center w-full px-1 group duration-300 ${
-                    hoveredIndex === index ? "bg-gray-200" : ""
-                  } ${
-                      isActive ? "text-blue-600" : "text-black"
-                    }`}
-                >
-                  <div className="flex items-center gap-4 w-full">
-                    <div className="w-10 h-10 flex items-center justify-center">
-                      {item.icon}
+            const isActive = pathname.startsWith(item.headLink);
+            return (
+              <div
+                key={index}
+                onMouseEnter={() => handleMouseEnter(index, item.subMenu)}
+                onMouseLeave={() => handleMouseLeave(index, item.subMenu)}
+                className="relative"
+              >
+                <a href={item.href}>
+                  <button
+                    className={`${
+                      isVisible ? "rounded-r-none rounded-l-md" : "rounded-md"
+                    } h-12 flex items-center w-full px-1 group duration-300 ${
+                      hoveredIndex === index ? "bg-gray-200" : ""
+                    } ${isActive ? "text-blue-600" : "text-black"}`}
+                  >
+                    <div className="flex items-center gap-4 w-full">
+                      <div className="w-10 h-10 flex items-center justify-center">
+                        {item.icon}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              </a>
-              {item.subMenu && delayedSubMenu === index && (
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute left-full top-0 ml-2 bg-white shadow-lg border border-gray-200 rounded-md w-60 z-50"
-                >
-                  {item.subMenu.map((subItem, subIndex) => (
-                    <a key={subIndex} href={subItem.href}>
-                      <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
-                        {subItem.title}
-                      </button>
-                    </a>
-                  ))}
-                </motion.div>
-              )}
-            </div>
-          )})}
+                  </button>
+                </a>
+                {item.subMenu && delayedSubMenu === index && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute left-full top-0 ml-2 bg-white shadow-lg border border-gray-200 rounded-md w-60 z-50"
+                  >
+                    {item.subMenu.map((subItem, subIndex) => (
+                      <a key={subIndex} href={subItem.href}>
+                        <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100 font-prompt_Light">
+                          {subItem.title}
+                        </button>
+                      </a>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
       {/* Sidebar Toggle Button */}
@@ -267,65 +266,70 @@ export function SidebarMenu({
         <div className="grid gap-2 relative">
           {menuItems.map((item, index) => {
             const isActive = pathname === item.href;
-          return (
-            <div
-              key={index}
-              onMouseEnter={() => {
-                setHoveredIndex(index);
-                if (item.subMenu) setOpenSubMenu(index);
-              }}
-              onMouseLeave={() => {
-                setHoveredIndex(null);
-                setOpenSubMenu(null);
-              }}
-              className="relative"
-            >
-              <button
-                onClick={() => {
-                  if (!item.subMenu) router.push(item.href);
+            return (
+              <div
+                key={index}
+                onMouseEnter={() => {
+                  setHoveredIndex(index);
+                  if (item.subMenu) setOpenSubMenu(index);
                 }}
-                className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
-                  hoveredIndex === index ? "bg-gray-200 " : ""
-                } relative `}
+                onMouseLeave={() => {
+                  setHoveredIndex(null);
+                  setOpenSubMenu(null);
+                }}
+                className="relative"
               >
-                <div className="flex items-center gap-4 w-full">
-                  <p className="line-clamp-1 h-fit text-[#0C2943] text-[16px] overflow-hidden duration-300">
-                    {item.title}
-                  </p>
-                </div>
+                <button
+                  onClick={() => {
+                    if (!item.subMenu) router.push(item.href);
+                  }}
+                  className={`h-12 flex items-center w-full px-4 group rounded-md duration-300 ${
+                    hoveredIndex === index ? "bg-gray-200 " : ""
+                  } relative `}
+                >
+                  <div className="flex items-center gap-4 w-full">
+                    <p
+                      className={`${
+                        isActive ? "text-blue-600" : "text-[#0C2943]"
+                      } line-clamp-1 h-fit  text-[16px] overflow-hidden duration-300 font-prompt_Light`}
+                    >
+                      {item.title}
+                    </p>
+                  </div>
 
-                {/* Tooltip */}
-                {hoveredIndex === index && !item.subMenu && (
-                  <div
-                    className="absolute bg-slate-900 text-white p-2 rounded-md w-28"
-                    style={{
-                      left: "100%",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      marginLeft: "10px",
-                      padding: "4px 8px",
-                      zIndex: 100,
-                    }}
-                  >
-                    {item.title}
+                  {/* Tooltip */}
+                  {hoveredIndex === index && !item.subMenu && (
+                    <div
+                      className="absolute bg-slate-900 text-white p-2 rounded-md w-28"
+                      style={{
+                        left: "100%",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        marginLeft: "10px",
+                        padding: "4px 8px",
+                        zIndex: 100,
+                      }}
+                    >
+                      {item.title}
+                    </div>
+                  )}
+                </button>
+
+                {/* Display submenu if it exists */}
+                {item.subMenu && openSubMenu === index && (
+                  <div className="absolute left-full top-0 ml-2 bg-white shadow-lg border -translate-x-2 border-gray-200 rounded-md w-60 z-50">
+                    {item.subMenu.map((subItem, subIndex) => (
+                      <a key={subIndex} href={subItem.href}>
+                        <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
+                          {subItem.title}
+                        </button>
+                      </a>
+                    ))}
                   </div>
                 )}
-              </button>
-
-              {/* Display submenu if it exists */}
-              {item.subMenu && openSubMenu === index && (
-                <div className="absolute left-full top-0 ml-2 bg-white shadow-lg border -translate-x-2 border-gray-200 rounded-md w-60 z-50">
-                  {item.subMenu.map((subItem, subIndex) => (
-                    <a key={subIndex} href={subItem.href}>
-                      <button className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100">
-                        {subItem.title}
-                      </button>
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          )})}
+              </div>
+            );
+          })}
         </div>
       </motion.div>
     </div>

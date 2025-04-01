@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { NavbarData } from "@/resource/home/navbarData";
 import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
-import { CircleCheck, Menu,  X } from "lucide-react";
+import { CircleCheck, Menu, X } from "lucide-react";
 import DropDownMobile from "@/app/components/dropdown/dropdown-mobile";
 import Link from "next/link";
 
@@ -20,7 +20,6 @@ export function Navbar() {
               <img
                 src="/images/obac-logo.png"
                 alt="obac-logo"
-    
                 className="p-1 w-auto h-16 lg:h-20 md:h-18"
               />
               {/* Name university */}
@@ -37,9 +36,7 @@ export function Navbar() {
           </div>
 
           {/* Sign In Button */}
-          <div className="hidden sm:flex justify-end items-center lg:px-10 md:px-8">
-           
-          </div>
+          <div className="hidden sm:flex justify-end items-center lg:px-10 md:px-8"></div>
 
           {/* Hamburger Menu Icon */}
           <button
@@ -66,21 +63,17 @@ export function Navbar() {
         <div className="flex gap-2 justify-end items-center w-2/6">
           <Link
             href="/pages/register"
-            className="flex gap-2 lg:py-0.5 lg:h-fit items-center font-prompt justify-center sm:py-1 px-6  w-fit bg-[#143d66] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 "
+            className="flex gap-2 lg:py-0.5 lg:h-fit items-center font-prompt justify-center sm:py-1 px-6  w-fit bg-[#143d66] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 duration-500"
           >
             <p className="line-clamp-1">สมัครออนไลน์</p>
             <CircleCheck className="w-5 h-5" />
           </Link>
           <Link
-              href="/pages/login"
-              className="px-4 lg:py-0.5 lg:h-fit flex gap-2 group rounded-full text-[16px] border  justify-center items-center border-white   text-white  hover:bg-white hover:text-black duration-500 font-prompt_Light"
-            >
-              เข้าสู่ระบบ
-              {/* <Shield
-                style={{ width: "1.5rem", height: "1.5rem" }}
-                className="text-white group-hover:text-gray-100"
-              /> */}
-            </Link>
+            href="/pages/login"
+            className="px-4 lg:py-0.5 lg:h-fit flex gap-2 group rounded-full text-[16px] border  justify-center items-center border-white   text-white  hover:bg-white hover:text-black duration-500 font-prompt_Light"
+          >
+            เข้าสู่ระบบ
+          </Link>
         </div>
       </div>
     </header>
