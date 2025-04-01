@@ -150,7 +150,8 @@ export function ClassroomGrading(props: {
       `/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`
     );
   };
-const [studentInGroup, setStudentInGroup] = useState<GetStudentListByGroupIDDto | null>();
+  const [studentInGroup, setStudentInGroup] =
+    useState<GetStudentListByGroupIDDto | null>();
   useEffect(() => {
     const fetchFilterData = async () => {
       const rawData = await getRawProgramViewData();
@@ -211,51 +212,62 @@ const [studentInGroup, setStudentInGroup] = useState<GetStudentListByGroupIDDto 
     selectedGradeLevel,
     selectedRoom,
   ]);
-  const handleDownloadPDF =  async (groupId:number)=>{
+  const handleDownloadPDF = async (groupId: number) => {
     try {
-      const item = await getStudentDataList(groupId); 
-  
+      const item = await getStudentDataList(groupId);
+
       if (item && !Array.isArray(item)) {
-        setStudentInGroup(item); 
+        setStudentInGroup(item);
       } else {
         setStudentInGroup(null);
       }
-  
+
       if (item && !Array.isArray(item)) {
         const studentClass = item.class + "." + item.groupName;
-        StudentNameListPDF({ studentGroup: studentClass, student: item.students });
+        StudentNameListPDF({
+          studentGroup: studentClass,
+          student: item.students,
+        });
       } else {
         alert("No student data available for this group.");
       }
     } catch (error) {
       console.error("Error fetching student data:", error);
       alert("Failed to fetch student data. Please try again.");
-    } 
-  }
+    }
+  };
 
   const columns = [
     {
-      label: "ลำดับ",
+      label: "No.",
       key: "groupId",
       className: "w-1/12 flex justify-center ",
     },
     { label: "ระดับชั้น", key: "classLevel", className: "w-1/12" },
-    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-5/12" },
+    { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-4/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
     {
       label: "ใบออกเกรด",
       key: "action",
-      className: "w-2/12 justify-center",
+      className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
-        <button
-          className="px-4 bg-slate-400 hover:bg-blue-600 rounded-sm h-fit py-0.5 text-white flex justify-center items-center gap-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDownloadPDF(Number(row.groupId));
-          }}
+        <div className="flex gap-2">
+          <button
+            className="px-4 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadPDF(Number(row.groupId));
+            }}
+          >
+            <p>รายชื่อ PDF</p>
+          </button>
+          <button
+          className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+
         >
-          <p>ใบรายชื่อนักเรียน</p>
+          <p>รายชื่อ Excel</p>
         </button>
+        </div>
       ),
     },
   ];
