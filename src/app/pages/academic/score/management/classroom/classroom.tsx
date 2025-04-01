@@ -288,22 +288,27 @@ export function ClassroomGrading(props: {
       key: "action",
       className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
-        <button
-          className="px-10 bg-slate-400 hover:bg-blue-600 rounded-sm h-fit py-1 text-white flex justify-center items-center gap-2"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent row click from being triggered
-            handleDownloadPDF(Number(row.groupId), row.class); // Trigger PDF download
-          }}
-        >
-          {!triggerDownLoadPDF ? (
-            <p>ใบออกเกรด PDF</p>
-          ) : (
-            <p className="flex gap-1 items-center">
-              <Loader2 className="h-5 w-5 animate-spin" />
-              กำลังดาวโหลด
-            </p>
-          )}
-        </button>
+        <div className="flex gap-1">
+          <button
+            className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadPDF(Number(row.groupId), row.class);
+            }}
+          >
+            {!triggerDownLoadPDF ? (
+              <p>ใบออกเกรด PDF</p>
+            ) : (
+              <p className="flex gap-1 items-center">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                กำลังดาวโหลด
+              </p>
+            )}
+          </button>
+          <button className="px-3 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2">
+            <p>ใบออกเกรดExcel</p>
+          </button>
+        </div>
       ),
     },
   ];
