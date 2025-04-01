@@ -64,7 +64,7 @@ export default function Home() {
             className="absolute lg:w-[100%] lg:h-[600px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
             src="/banner/banner.jpg"
           />
-          <div className="relative w-full h-full bg-gradient-to-t from-gray-900/60 to-gray-900/0"></div>
+          <div className="relative w-full h-full bg-gradient-to-t from-gray-900/0 to-gray-900/0"></div>
         </div>
       </FadeInOnScroll>
       <div className="w-full mb-5 py-2 bg-blue-950"></div>

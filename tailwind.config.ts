@@ -76,6 +76,8 @@ const config: Config = {
         playfair: ["Playfair Display", "serif"],
         inter: ["Inter", "sans-serif"],
         sarabun: ["Sarabun", "sans-serif"],
+        prompt: ['Prompt', 'sans-serif'],
+        prompt_Light: ['Prompt-Light', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -148,3 +148,19 @@ input[type="number"] {
     animation-delay:4s;
   }
 }
+
+
+@font-face {
+  font-family: 'Prompt';
+  src: url('/font/Prompt/Prompt-Medium.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Prompt-Light';
+  src: url('/font/Prompt/Prompt-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
