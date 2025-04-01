@@ -9,6 +9,7 @@ import {
   filterProgramsParamsData,
   GetStudentListByGroupIDDto,
 } from "@/dto/studentDto";
+import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
 import {
   filterProgramsViewData,
   getRawProgramViewData,
@@ -196,10 +197,7 @@ export function ClassroomGrading(props: {
         ? item.classLevel === selectedClassLevel
         : true;
 
-      return (
-        // matchSearch &&
-        matchClassLevel && matchFaculty && matchProgram && matchRoom
-      );
+      return matchClassLevel && matchFaculty && matchProgram && matchRoom;
     });
     const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
 
@@ -236,6 +234,27 @@ export function ClassroomGrading(props: {
       alert("Failed to fetch student data. Please try again.");
     }
   };
+  const handleDownloadExcel = async (groupId: number) => {
+    try {
+      const item = await getStudentDataList(groupId);
+
+      if (item && !Array.isArray(item)) {
+        setStudentInGroup(item);
+      } else {
+        setStudentInGroup(null);
+      }
+
+      if (item && !Array.isArray(item)) {
+        const studentClass = item.class + "." + item.groupName;
+        ConvertClassroomToExcel(item.students, studentClass);
+      } else {
+        alert("No student data available for this group.");
+      }
+    } catch (error) {
+      console.error("Error fetching student data:", error);
+      alert("Failed to fetch student data. Please try again.");
+    }
+  };
 
   const columns = [
     {
@@ -262,11 +281,14 @@ export function ClassroomGrading(props: {
             <p>รายชื่อ PDF</p>
           </button>
           <button
-          className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
-
-        >
-          <p>รายชื่อ Excel</p>
-        </button>
+            className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadExcel(Number(row.groupId));
+            }}
+          >
+            <p>รายชื่อ Excel</p>
+          </button>
         </div>
       ),
     },
