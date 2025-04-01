@@ -280,6 +280,9 @@ export function ClassroomGrading(props: {
           >
             <p>รายชื่อ PDF</p>
           </button>
+          <button className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2">
+            <p>รายชื่อ Excel</p>
+          </button>
           <button
             className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
