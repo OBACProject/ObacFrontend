@@ -1,16 +1,18 @@
 "use client";
-import { fetchGetGradPerTermByStudentId } from "@/api/grad/gradAPI";
+import { fetchGetStudentGradeByTermYear } from "@/api/grad/gradAPI";
 import {
   fetchGetAllStudentGroup,
   fetchGetStudentByStudentId,
 } from "@/api/student/studentApi";
 import GenTranscript from "@/app/components/PDF/genTranscript";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+import ChangeStudentGroup from "@/app/components/popup/changeStudentGroup";
+import ConfirmChangeStudentsStatus from "@/app/components/popup/confirmChangeStudentsStatus";
 import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 import { GetStudentByStudentId, StudentGroup } from "@/dto/studentDto";
+import { educationOptions } from "@/resource/academics/options/studentOption";
 import { CircleX, Pencil, Save, UserRound } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 type Props = {
   studentId: number;
 };
@@ -30,7 +32,7 @@ const fetchStudentGrad = async (
   year: number
 ) => {
   try {
-    const data = await fetchGetGradPerTermByStudentId(studentId, term, year);
+    const data = await fetchGetStudentGradeByTermYear(studentId, term, year);
     return data;
   } catch (err) {
     console.error("Failed to fetch data.");
@@ -51,12 +53,15 @@ export default function Form({ studentId }: Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto | null>();
   const [students, setStudent] = useState<GetStudentByStudentId>();
-  const [educateStatus, setEducateStatus] = useState<string>("");
+  const [educateStatus, setEducateStatus] = useState(students?.studentStatus || "");
   const [allGroup, setAllGroup] = useState<StudentGroup[]>([]);
-  const [term, setTerm] = useState<string>("2");
+  const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<number>(2567);
   const [groupID, setGroupID] = useState<number>(0);
   const [promoteTrigger, setPromoteTrigger] = useState<boolean>(false);
+  const [submitStudentStatus, setSubmitStudentStatus] =
+    useState<boolean>(false);
+  const [changeGroupPopUp, setChangeGroupPopUp] = useState<boolean>(false);
   useEffect(() => {
     fetchStudentGrad(studentId, term, year).then((d: any) => {
       setGrad(d);
@@ -81,27 +86,33 @@ export default function Form({ studentId }: Props) {
       setGrad(d);
     });
   }, [term, year]);
+  useEffect(() => {
+    if (students?.studentStatus) {
+      setEducateStatus(students.studentStatus);
+    }
+  }, [students]);
 
   const groupOptions = allGroup.map((item) => ({
     value: item.studentGroupId,
     label: `${item.class}.${item.studentGroupName}`,
   }));
 
-  const handleGroupChange = (
-    selectedOption: { value: number; label: string } | null
-  ) => {
-    if (selectedOption) {
-      const selectedGroup = allGroup.find(
-        (item) => item.studentGroupId === selectedOption.value
-      );
-      if (selectedGroup) {
-        setGroupID(selectedGroup.studentGroupId);
-        setPromoteTrigger(true);
-      }
-    } else {
-      setGroupID(0);
-    }
-  };
+  // const handleGroupChange = (
+  //   selectedOption: { value: number; label: string } | null
+  // ) => {
+  //   if (selectedOption) {
+  //     const selectedGroup = allGroup.find(
+  //       (item) => item.studentGroupId === selectedOption.value
+  //     );
+  //     if (selectedGroup) {
+  //       setGroupID(selectedGroup.studentGroupId);
+  //       setPromoteTrigger(true);
+  //     }
+  //   } else {
+  //     setGroupID(0);
+  //   }
+  // };
+
   return (
     <div className="px-10">
       <div className="flex justify-between my-5">
@@ -158,7 +169,7 @@ export default function Form({ studentId }: Props) {
           </div>
         ) : (
           <button
-            className="w-[120px] h-fit bg-blue-400 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
+            className="w-[120px] h-fit bg-blue-400 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white "
             onClick={handleEditChange}
           >
             {" "}
@@ -167,44 +178,8 @@ export default function Form({ studentId }: Props) {
           </button>
         )}
       </div>
-      <div className="w-full flex justify-start items-center">
-        <div className="w-full items-center  flex gap-3">
-          {/* <label className="w-[90px] ">ปรับเลื่อนชั้น</label> */}
-          <select
-            className="border border-gray-300 rounded-sm px-4 py-2"
-            onChange={(e) => setTerm(e.target.value)}
-            value={term}
-          >
-            <option value="">เทอม</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-          <select
-            className="border border-gray-300 rounded-sm px-4 py-2"
-            onChange={(e) => setYear(Number(e.target.value))}
-            value={year}
-          >
-            <option value="">ปีการศึกษา</option>
-            <option value={2567}>2567</option>
-            <option value={2568}>2568</option>
-          </select>
-          <Select
-            options={groupOptions}
-            value={groupOptions.find(
-              (option) => option.value === groupID || null
-            )}
-            onChange={handleGroupChange}
-            isSearchable
-            placeholder="-- เลือกกลุ่มนักเรียน --"
-          />
-          <button
-            className="px-5 text-white enabled:bg-green-500 enabled:hover:bg-green-600  bg-gray-300 rounded-md py-1 "
-            disabled={!promoteTrigger}
-          >
-            ย้ายห้องเรียน
-          </button>
-        </div>
-        <div className="gap-8 flex justify-start items-center  w-full">
+      <div className="w-full flex justify-start gap-5 items-center">
+        <div className="gap-8 flex justify-start items-center  w-fit">
           <div className="w-fit items-center flex gap-3">
             <div className="w-[100px]">สถานะนักเรียน</div>
             <select
@@ -212,69 +187,35 @@ export default function Form({ studentId }: Props) {
               onChange={(e) => setEducateStatus(e.target.value)}
               value={educateStatus}
             >
-              <option value="">เลือก</option>
-              <option value="กำลังศึกษา">กำลังศึกษา</option>
-              <option value="สำเร็จการศึกษา">สำเร็จการศึกษา</option>
-              <option value="พักการเรียน">พักการเรียน</option>
-              <option value="ลาออก">ลาออก</option>
-              <option value="คัดชื่อออก">คัดชื่อออก</option>
-              <option value="ทดลองเรียน">ทดลองเรียน</option>
-              <option value="นักศึกษาใหม่">นักศึกษาใหม่</option>
-              <option value="กำลังติดตาม">กำลังติดตาม</option>
-              <option value="เงินอุดหนุน">เงินอุดหนุน</option>
+              <option value={educateStatus}>{educateStatus}</option>
+              {educationOptions
+                .filter((option) => option !== educateStatus)
+                .map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
             </select>
             <button
-              className="px-5 text-white enabled:bg-green-500 enabled:hover:bg-green-600  bg-gray-300 rounded-md py-1 "
+              className="px-5 text-white enabled:bg-slate-500 enabled:hover:bg-slate-600  bg-gray-300 rounded-md py-1 "
               disabled={!educateStatus}
+              onClick={() => {
+                setSubmitStudentStatus(!submitStudentStatus);
+              }}
             >
               ปรับสถานะ
             </button>
           </div>
         </div>
+        <button
+          className="w-fit py-1 px-4 rounded-md bg-slate-500 text-white hover:bg-slate-600 "
+          onClick={() => setChangeGroupPopUp(!changeGroupPopUp)}
+        >
+          ย้ายห้องเรียน
+        </button>
       </div>
-
-      {/* <div className=" flex justify-between gap-2 rounded-md bg-slate-100 px-10 py-5">
-       
-        <div className="w-full">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
-              {students?.gender == "Male" ? (
-                <p>นาย</p>
-              ) : students?.gender == "FeMale" ? (
-                <p>นางสาว</p>
-              ) : (
-                <p>Laoding..</p>
-              )}
-              <input
-                type="text"
-                className="w-[150px] rounded-sm px-2 py-1"
-                defaultValue={students?.thaiName}
-              />
-              <input
-                type="text"
-                className="w-[150px] rounded-sm px-2 py-1"
-                defaultValue={students?.thaiLastName}
-              />
-              
-            </div>
-            <div className="flex items-center gap-3">
-              <div>รหัสนักเรียน</div>
-              <input type="text" className="px-2 py-1 w-[100px] text-center" defaultValue={students?.studentCode}/>
-                <div>ห้อง</div>
-                <div className="px-2 bg-white py-1 rounded-sm">
-                  {students?.class}.{students?.currentRoom}
-                </div>
-              </div>
-          </div>
-        </div>
-        <div className="w-fit">
-          <img width={100} className="rounded-sm" src="/asset/user.jpg" />
-        </div>
-      </div> */}
       <div className="pt-4 w-full">
         <div className="relative rounded-md border-t shadow-gray-300 w-fit shadow-md  bg-white ">
-       
-
           <div className="grid gap-4 px-10 py-10">
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-2">
@@ -312,6 +253,19 @@ export default function Form({ studentId }: Props) {
       <div className="py-5 ">
         <div className="grid w-full border px-4 py-4"></div>
       </div>
+      {submitStudentStatus && students?.studentId && (
+        <ConfirmChangeStudentsStatus
+          onClickPopUp={(value) => setSubmitStudentStatus(value)}
+          status={educateStatus}
+          studentId={students.studentId}
+        />
+      )}
+      {changeGroupPopUp && students?.studentId && (
+        <ChangeStudentGroup 
+        onClickPopUp={(value)=>setChangeGroupPopUp(value)}
+        studentId={students?.studentId}
+        />
+      )}
     </div>
   );
 }

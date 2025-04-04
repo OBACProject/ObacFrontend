@@ -184,7 +184,7 @@ export default function Form({ term, year, groupId }: Props) {
       </div>
       {deleteTrigger && (
         <div
-          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
           onClick={() => setDeleteTrigger(false)}
         >
           <div

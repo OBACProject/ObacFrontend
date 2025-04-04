@@ -218,3 +218,26 @@ export const fetchGetStudentGroupsByTermYear = async (
     return [];
   }
 };
+
+export const fetchUpdateStudentStatus = async (
+  studentId: number,
+  status: string
+) => {
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/UpdateStudentStatus?studentId=${studentId}&status=${status}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.ok;
+  } catch (err) {
+    console.error("Error updating student status:", err);
+    return false;
+  }
+};

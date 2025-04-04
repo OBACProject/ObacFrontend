@@ -247,6 +247,7 @@ export type GetStudentByStudentId = {
   facultyId: number;
   facultyName: string;
   birthDate: string;
+  studentStatus : string;
 };
 
 export type GetStudentGroupsByTermYearDto = {

@@ -334,7 +334,7 @@ const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
   };
   return (
     <div
-      className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+      className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
       onClick={() => onClosePopUp(false)}
     >
       <div
@@ -503,7 +503,7 @@ const EditSubjectPopUp = ({
   };
   return (
     <div
-      className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+      className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
       onClick={() => onClosePopUp(false)}
     >
       <div
@@ -580,7 +580,7 @@ const EditSubjectPopUp = ({
       </div>
       {deleteTrigger && (
         <div
-          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
           onClick={() => setDeleteTrigger(false)}
         >
           <div
