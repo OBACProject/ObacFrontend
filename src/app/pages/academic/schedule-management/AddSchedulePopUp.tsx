@@ -1,10 +1,10 @@
 import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
-import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
+import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
 import { fetchGetAllSubjectByTerm } from "@/api/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
-import { StudentGroup } from "@/dto/studentDto";
+import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import { GetAllTeacher } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
@@ -39,9 +39,9 @@ const getAllTeacher = async () => {
   }
 };
 
-const getAllStudentGroup = async () => {
+const GetStudentGroupsByTermYear = async (term: string, year: number) => {
   try {
-    const response = await fetchGetAllStudentGroup();
+    const response = await fetchGetStudentGroupsByTermYear(term, year);
     return response;
   } catch (err) {
     return [];
@@ -54,7 +54,9 @@ export default function AddSchedulePopUp({
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
   const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
-  const [studentGroup, setStudentGroup] = useState<StudentGroup[]>([]);
+  const [studentGroup, setStudentGroup] = useState<
+    GetStudentGroupsByTermYearDto[]
+  >([]);
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
   const yearsList = Array.from({ length: 3 }, (_, i) =>
@@ -68,14 +70,24 @@ export default function AddSchedulePopUp({
     getAllTeacher().then((item) => {
       setTeacher(item);
     });
-    getAllStudentGroup().then((item) => {
-      setStudentGroup(item);
-    });
+    GetStudentGroupsByTermYear(selectedTerm, Number(selectedYear)).then(
+      (item: any) => {
+        setStudentGroup(item);
+      }
+    );
   }, []);
 
   useEffect(() => {
+    GetStudentGroupsByTermYear(selectedTerm, Number(selectedYear)).then(
+      (item: any) => {
+        setStudentGroup(item);
+      }
+    );
+  }, [selectedTerm, selectedYear]);
+
+  useEffect(() => {
     const studentGroupById = studentGroup.find(
-      (item) => item.studentGroupId === studentGroupId
+      (item) => item.groupId === studentGroupId
     );
     getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
       setSubject(item);
@@ -111,15 +123,15 @@ export default function AddSchedulePopUp({
   }));
 
   const groupOptions = studentGroup.map((item) => ({
-    value: item.studentGroupId,
-    label: `${item.class}.${item.studentGroupName}`,
+    value: item.groupId,
+    label: `${item.class}.${item.groupName}`,
   }));
 
   const onSubmit = async () => {
     const studentGroupById = studentGroup.find(
-      (item) => item.studentGroupId === studentGroupId
+      (item) => item.groupId === studentGroupId
     );
-    const studentGroupName = studentGroupById?.studentGroupName;
+    const studentGroupName = studentGroupById?.groupName;
     const requestBody: CreateScheduleSubjectRequest = {
       day: day,
       period: period,
@@ -133,18 +145,17 @@ export default function AddSchedulePopUp({
 
     try {
       const response = await fetchCreateScheduleSubject(requestBody);
-            if (response.success) {
-              toast.success("สร้างสำเร็จ");
-              setTeacherID(0)
-              setSubjectID(0)
-              setStudentGroupId(0)
-              setDay("")
-              setRoom("")
-              onClosePopUp(false);
-              
-            } else {
-              toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
-            }
+      if (response.success) {
+        toast.success("สร้างสำเร็จ");
+        setTeacherID(0);
+        setSubjectID(0);
+        setStudentGroupId(0);
+        setDay("");
+        setRoom("");
+        onClosePopUp(false);
+      } else {
+        toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
+      }
       onClosePopUp(false);
     } catch (err) {
       console.error("Error creating schedule:", err);

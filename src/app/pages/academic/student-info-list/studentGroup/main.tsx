@@ -1,8 +1,13 @@
 "use client";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
-import { GetStudentListByGroupIDDto, StudentDto, StudentListByGroupIDDto } from "@/dto/studentDto";
-import { Loader2, UsersRound } from "lucide-react";
+import {
+  GetStudentListByGroupIDDto,
+  StudentDto,
+  StudentListByGroupIDDto,
+} from "@/dto/studentDto";
+import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { Download, Loader2, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -20,26 +25,56 @@ const getStudentDataList = async (groupId: number) => {
 };
 
 export default function Main({ groupId }: Props) {
-  const [studentInGroup, setStudentInGroup] = useState<GetStudentListByGroupIDDto | null>();
+  const [studentInGroup, setStudentInGroup] =
+    useState<GetStudentListByGroupIDDto | null>();
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   useEffect(() => {
-    setIsLoadingPage(false)
-    getStudentDataList(groupId).then((item: GetStudentListByGroupIDDto | never[] | null) => {
-      if (item && !Array.isArray(item)) {
-        setStudentInGroup(item);
-        setIsLoadingPage(true)
-      } else {
-        setStudentInGroup(null);
-        setIsLoadingPage(true)
+    setIsLoadingPage(false);
+    getStudentDataList(groupId).then(
+      (item: GetStudentListByGroupIDDto | never[] | null) => {
+        if (item && !Array.isArray(item)) {
+          setStudentInGroup(item);
+          setIsLoadingPage(true);
+        } else {
+          setStudentInGroup(null);
+          setIsLoadingPage(true);
+        }
       }
-    });
+    );
   }, [groupId]);
-  const onGetStudentNameListPDF =  ()=>{
-    if (studentInGroup){
-      const studentClass = studentInGroup?.class + "." + studentInGroup?.groupName
-      StudentNameListPDF({studentGroup: studentClass , student: studentInGroup.students })
+
+  const onGetStudentNameListPDF = () => {
+    if (studentInGroup) {
+      const studentClass =
+        studentInGroup?.class + "." + studentInGroup?.groupName;
+      StudentNameListPDF({
+        studentGroup: studentClass,
+        student: studentInGroup.students,
+      });
     }
-  }
+  };
+
+   const handleDownloadExcel = async () => {
+      try {
+        const item = await getStudentDataList(groupId);
+  
+        if (item && !Array.isArray(item)) {
+          setStudentInGroup(item);
+        } else {
+          setStudentInGroup(null);
+        }
+  
+        if (item && !Array.isArray(item)) {
+          const studentClass = item.class + "." + item.groupName;
+          ConvertClassroomToExcel(item.students, studentClass);
+        } else {
+          alert("No student data available for this group.");
+        }
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+        alert("Failed to fetch student data. Please try again.");
+      }
+    };
   return (
     <div className="py-2 w-full px-10">
       <div className="flex px-5 justify-start py-3 items-center">
@@ -51,67 +86,74 @@ export default function Main({ groupId }: Props) {
       <div className="flex justify-between items-center py-2 px-5">
         <div className=" flex gap-3 items-center text-lg">
           <div className="border border-gray-300 rounded-sm px-5 py-1">
-           ห้อง {studentInGroup?.class}.{studentInGroup?.groupName} 
+            ห้อง {studentInGroup?.class}.{studentInGroup?.groupName}
           </div>
           <div className="border border-gray-300 rounded-sm px-5 py-1">
             หลักสูตร {studentInGroup?.facultyName}
           </div>
-          
         </div>
-        <div className="flex gap-2">
-          <button className="px-4 bg-sky-100 hover:bg-gray-100 py-2 rounded-md text-gray-600"
-          onClick={onGetStudentNameListPDF}
+        <div className="flex gap-2 items-center">
+          <button
+            className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
+            onClick={onGetStudentNameListPDF}
           >
-            ใบรายชื่อนักเรียน.pdf
+            <Download className="w-4 h-4" />
+            ใบรายชื่อนักเรียน PDF
           </button>
-         
+          <button
+            className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
+            onClick={handleDownloadExcel}
+          >
+            <Download className="w-4 h-4" />
+            ใบรายชื่อนักเรียน Excel
+          </button>
         </div>
       </div>
       {isLoadingPage ? (
         <div className="w-full px-5 pb-10">
-        <div className="w-full shadow-lg grid grid-cols-[5%_10%_25%_60%] bg-white border-t-2 border-b-2 text-lg border-gray-400">
-          <div className="text-center py-2">
-            ลำดับ
+          <div className="w-full shadow-lg grid grid-cols-[5%_10%_25%_60%]  bg-white border-t-2 border-b-2 text-lg border-gray-400">
+            <div className="text-center py-2">ลำดับ</div>
+            <div className="text-center py-2">รหัสนักเรียน</div>
+            <div className="text-center py-2">ชื่อ - นามสกุล</div>
+            <div className="text-center py-2">สถานะ</div>
           </div>
-          <div className="text-center py-2">
-            รหัสนักเรียน
-          </div>
-          <div className="text-center py-2">
-            ชื่อ - นามสกุล
-          </div>
-        </div>{" "}
-        {studentInGroup ? (
-          <div className="w-full shadow-lg">
-            {studentInGroup.students?.map((item: StudentListByGroupIDDto, index) => (
-              <Link
-                href={`/pages/academic/student-details/${item.studentId}`}
-                key={index}
-                className={` ${
-                  index % 2 == 0 ? "bg-white" : ""
-                } grid grid-cols-[5%_10%_10%_15%]  border border-r-0 border-l-0 text-[16px] hover:bg-blue-100 border-gray-300 text-gray-700  border-t-0`}
-              >
-                <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-300">
-                  {index + 1}
-                </div>
-                <p className="text-start flex items-center px-4 border-r border-gray-300   py-1 line-clamp-1">
-                  {item.studentCode}
-                </p>
-                <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
-                  {item.firstName}
-                </p>
-                <p className="text-start flex items-center  px-4 border-r border-gray-300  py-1 line-clamp-1">
-                  {item.lastName}
-                </p>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="grid place-items-center border-2 border-dashed border-t-0 text-[24px] border-gray-400  text-gray-700 py-10 text-center">
-            ไม่พบข้อมูล
-          </div>
-        )}
-      </div>
-      ):(
+          {studentInGroup ? (
+            <div className="w-full shadow-lg">
+              {studentInGroup.students?.map(
+                (item: StudentListByGroupIDDto, index) => (
+                  <Link
+                    href={`/pages/academic/student-details/${item.studentId}`}
+                    key={index}
+                    className={` ${
+                      index % 2 == 0 ? "bg-white" : ""
+                    } grid grid-cols-[5%_10%_10%_15%_60%]  border border-r-0 border-l-0 text-[16px] hover:bg-blue-100 border-gray-300 text-gray-700  border-t-0`}
+                  >
+                    <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-300">
+                      {index + 1}
+                    </div>
+                    <p className="text-start flex items-center px-4 border-r border-gray-300   py-1 line-clamp-1">
+                      {item.studentCode}
+                    </p>
+                    <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
+                      {item.firstName}
+                    </p>
+                    <p className="text-start flex items-center  px-4 border-r border-gray-300  py-1 line-clamp-1">
+                      {item.lastName}
+                    </p>
+                    <p className={`${item.studentStatus == "กำลังศึกษา" ? "text-green-500": item.studentStatus == "พักการเรียน" ? "text-yellow-600 bg-yellow-50" : item.studentStatus == "ลาออก" ? "text-red-500 bg-red-50" :"text-blue-500"} text-center  px-4  border-gray-300  py-1 line-clamp-1`}>
+                      {item.studentStatus}
+                    </p>
+                  </Link>
+                )
+              )}
+            </div>
+          ) : (
+            <div className="grid place-items-center border-2 border-dashed border-t-0 text-[24px] border-gray-400  text-gray-700 py-10 text-center">
+              ไม่พบข้อมูล
+            </div>
+          )}
+        </div>
+      ) : (
         <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
           <p className="flex gap-2">
             <Loader2 className="h-10 w-10 animate-spin" />
@@ -119,7 +161,6 @@ export default function Main({ groupId }: Props) {
           </p>
         </div>
       )}
-      
     </div>
   );
 }

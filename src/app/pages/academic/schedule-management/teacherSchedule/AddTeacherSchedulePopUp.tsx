@@ -1,9 +1,9 @@
 import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
-import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
+import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
 import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
 
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
-import { StudentGroup } from "@/dto/studentDto";
+import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
@@ -31,9 +31,9 @@ const getAllSubject = async () => {
   }
 };
 
-const getAllStudentGroup = async () => {
+const GetStudentGroupsByTermYear = async (term:string , year:number) => {
   try {
-    const response = await fetchGetAllStudentGroup();
+    const response = await fetchGetStudentGroupsByTermYear(term , year);
     return response;
   } catch (err) {
     return [];
@@ -48,13 +48,13 @@ export default function AddTeacherSchedulePopUp({
   teacherName,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
-  const [studentGroup, setStudentGroup] = useState<StudentGroup[]>([]);
+  const [studentGroup, setStudentGroup] = useState<GetStudentGroupsByTermYearDto[]>([]);
 
   useEffect(() => {
     getAllSubject().then((item) => {
       setSubject(item);
     });
-    getAllStudentGroup().then((item) => {
+    GetStudentGroupsByTermYear(term,Number(year)).then((item:any) => {
       setStudentGroup(item);
     });
   }, []);
@@ -68,6 +68,7 @@ export default function AddTeacherSchedulePopUp({
     "วันศุกร์",
     "วันเสาร์",
   ];
+
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
   const [room, setRoom] = useState<string>("");
@@ -99,18 +100,18 @@ export default function AddTeacherSchedulePopUp({
   ) => {
     if (selectedOption) {
       const selectedGroup = studentGroup.find(
-        (sub) => sub.studentGroupId === selectedOption.value
+        (sub) => sub.groupId === selectedOption.value
       );
       if (selectedGroup) {
-        setStudentGroupId(selectedGroup.studentGroupId);
+        setStudentGroupId(selectedGroup.groupId);
       }
     } else {
       setStudentGroupId(0);
     }
   };
   const groupOptions = studentGroup.map((item) => ({
-    value: item.studentGroupId,
-    label: `${item.class}.${item.studentGroupName}`,
+    value: item.groupId,
+    label: `${item.class}.${item.groupName}`,
   }));
 
   const onSubmit = async () => {

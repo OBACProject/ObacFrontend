@@ -69,7 +69,7 @@ export interface StudentInfoByGroupId {
 
 export interface StudentGroup {
   studentGroupId: number;
-  studentGroupName: string;
+  groupName: string;
   class: string;
   program: string;
   studentCount: number;
@@ -206,6 +206,7 @@ export type StudentListByGroupIDDto = {
   studentId: number;
   firstName: string;
   lastName: string;
+  studentStatus:string;
 }
 export type GetStudentListByGroupIDDto = {
   groupId: number;

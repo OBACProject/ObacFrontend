@@ -1,29 +1,20 @@
 "use client";
-import { fetchGetStudentGradeByTermYear } from "@/api/grad/gradAPI";
 import {
-  fetchGetAllStudentGroup,
-  fetchGetStudentByStudentId,
-} from "@/api/student/studentApi";
-import GenTranscript from "@/app/components/PDF/genTranscript";
+  fetchGetStudentGradeByTermYear,
+  fetchGetStudentGradeDetail,
+} from "@/api/grad/gradAPI";
+import { fetchGetStudentByStudentId } from "@/api/student/studentApi";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
+import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
 import ChangeStudentGroup from "@/app/components/popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/app/components/popup/confirmChangeStudentsStatus";
-import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
-import { GetStudentByStudentId, StudentGroup } from "@/dto/studentDto";
+import { GetStudentByStudentId } from "@/dto/studentDto";
 import { educationOptions } from "@/resource/academics/options/studentOption";
-import { CircleX, Pencil, Save, UserRound } from "lucide-react";
+import { CircleX, Download, Pencil, Save, UserRound } from "lucide-react";
 import React, { useEffect, useState } from "react";
+
 type Props = {
   studentId: number;
-};
-
-const getStudentGroupData = async () => {
-  try {
-    const response = await fetchGetAllStudentGroup();
-    return response;
-  } catch (err) {
-    return [];
-  }
 };
 
 const fetchStudentGrad = async (
@@ -36,7 +27,7 @@ const fetchStudentGrad = async (
     return data;
   } catch (err) {
     console.error("Failed to fetch data.");
-    return [];
+    return null;
   }
 };
 
@@ -51,67 +42,30 @@ const fetchStudentData = async (studentId: number) => {
 
 export default function Form({ studentId }: Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
-  const [grads, setGrad] = useState<GetGradPerTermByStudentIdDto | null>();
   const [students, setStudent] = useState<GetStudentByStudentId>();
-  const [educateStatus, setEducateStatus] = useState(students?.studentStatus || "");
-  const [allGroup, setAllGroup] = useState<StudentGroup[]>([]);
-  const [term, setTerm] = useState<string>("1");
+  const [educateStatus, setEducateStatus] = useState(
+    students?.studentStatus || ""
+  );
+
+  const [term, setTerm] = useState<string>("2");
   const [year, setYear] = useState<number>(2567);
-  const [groupID, setGroupID] = useState<number>(0);
-  const [promoteTrigger, setPromoteTrigger] = useState<boolean>(false);
   const [submitStudentStatus, setSubmitStudentStatus] =
     useState<boolean>(false);
   const [changeGroupPopUp, setChangeGroupPopUp] = useState<boolean>(false);
   useEffect(() => {
-    fetchStudentGrad(studentId, term, year).then((d: any) => {
-      setGrad(d);
-    });
     fetchStudentData(studentId).then((d: any) => {
       setStudent(d);
-    });
-    getStudentGroupData().then((d: StudentGroup[]) => {
-      setAllGroup(d);
     });
   }, []);
 
   const handleEditChange = () => {
     setOnEdit((onEdit) => !onEdit);
   };
-
-  useEffect(() => {
-    getStudentGroupData().then((d: StudentGroup[]) => {
-      setAllGroup(d);
-    });
-    fetchStudentGrad(studentId, term, year).then((d: any) => {
-      setGrad(d);
-    });
-  }, [term, year]);
   useEffect(() => {
     if (students?.studentStatus) {
       setEducateStatus(students.studentStatus);
     }
   }, [students]);
-
-  const groupOptions = allGroup.map((item) => ({
-    value: item.studentGroupId,
-    label: `${item.class}.${item.studentGroupName}`,
-  }));
-
-  // const handleGroupChange = (
-  //   selectedOption: { value: number; label: string } | null
-  // ) => {
-  //   if (selectedOption) {
-  //     const selectedGroup = allGroup.find(
-  //       (item) => item.studentGroupId === selectedOption.value
-  //     );
-  //     if (selectedGroup) {
-  //       setGroupID(selectedGroup.studentGroupId);
-  //       setPromoteTrigger(true);
-  //     }
-  //   } else {
-  //     setGroupID(0);
-  //   }
-  // };
 
   return (
     <div className="px-10">
@@ -120,30 +74,35 @@ export default function Form({ studentId }: Props) {
           <UserRound className="w-8 h-8" />
           รายละเอียดนักเรียน
         </div>
-        <div className="flex gap-4">
-          {grads ? (
-            <button
-              className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 h-fit"
-              onClick={() => {
-                GradPerTerms(grads);
-              }}
-            >
-              ดาวโหลดน์ผลการเรียนล่าสุด
-            </button>
-          ) : (
-            <div className="text-md bg-[#e4f1f8] text-gray-700 rounded-md px-5 py-2 h-fit">
-              รอทราบผลเกรด
-            </div>
-          )}
+        <div className="flex gap-1">
+          <button
+            className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
+            onClick={async () => {
+              const data = await fetchStudentGrad(studentId, term, year);
+              if (data) {
+                GradPerTerms(data);
+              }
+            }}
+          >
+            <Download className="w-4 h-4" />
+            ผลการเรียนล่าสุด PDF
+          </button>
 
           <button
-            className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 shadow-sm shadow-slate-300 h-fit"
-            onClick={() => GenTranscript({ score: 10 })}
+            className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"
+            onClick={async () => {
+              const data2 = await fetchGetStudentGradeDetail(studentId);
+              if (data2) {
+                SummaryGradPDF(data2);
+              }
+            }}
           >
-            ดาวน์โหลดน์ Transcript.pdf
+            <Download className="w-4 h-4" />
+            ผลการเรียนรวม PDF
           </button>
-          <button className="text-md bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-md px-5 py-2 shadow-sm shadow-slate-300 h-fit cursor-not-allowed">
-            ประวัติส่วนตัว.pdf
+          <button className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit cursor-not-allowed">
+            <Download className="w-4 h-4" />
+            ประวัติส่วนตัว PDF
           </button>
         </div>
       </div>
@@ -261,9 +220,9 @@ export default function Form({ studentId }: Props) {
         />
       )}
       {changeGroupPopUp && students?.studentId && (
-        <ChangeStudentGroup 
-        onClickPopUp={(value)=>setChangeGroupPopUp(value)}
-        studentId={students?.studentId}
+        <ChangeStudentGroup
+          onClickPopUp={(value) => setChangeGroupPopUp(value)}
+          studentId={students?.studentId}
         />
       )}
     </div>
