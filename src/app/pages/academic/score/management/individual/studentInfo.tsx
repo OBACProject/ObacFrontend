@@ -10,7 +10,7 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StudentPopup, SubjectData } from "./component/studentPopup";
-import { Loader2 } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import { DataTableStudentInfo } from "@/app/components/bellTable/table_style_studentInfo";
 
 interface StudentDataProps {
@@ -102,25 +102,17 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
               <div className="flex items-center gap-2 py-3 ">
                 {scoreFileData ? (
                   <button
-                    className=" px-4 py-1 bg-sky-100 hover:bg-gray-300 rounded-md text-gray-700 text-center"
+                    className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit cursor-not-allowed"
                     onClick={() => {
                       SummaryGradPDF(scoreFileData);
                     }}
                   >
-                    <p>ดาวโหลดน์ผลการเรียน.pdf</p>
+                    <Download className="w-4 h-4" />
+                    <p>ดาวโหลดน์ผลการเรียน PDF</p>
                   </button>
                 ) : (
                   <div>ไม่มี</div>
                 )}
-
-                <button
-                  className=" px-4 py-1 bg-sky-100 cursor-not-allowed hover:bg-gray-300 rounded-md text-gray-700 text-center"
-                  // onClick={() => {
-                  //   GradPerTerms(scoreFileData);
-                  // }}
-                >
-                  ดาวโหลดน์ Transcript.pdf
-                </button>
               </div>
             </div>
           </div>

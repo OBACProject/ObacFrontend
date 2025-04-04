@@ -36,7 +36,7 @@ export default function Main() {
   const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
   const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
   const [groupID, setGroupID] = useState<number>(0);
-  const [grads, setGrad] = useState(2.0);
+  const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<number>(currentYear);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>();
@@ -87,13 +87,12 @@ export default function Main() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = parseFloat(e.target.value);
-
-    if (isNaN(newValue)) return;
-    if (newValue < 1) newValue = 1;
-    if (newValue > 4) newValue = 4;
-
-    setGrad(newValue);
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value)) {
+      setGrad(value);
+    } else {
+      setGrad(0.0); 
+    }
   };
 
   const onFilterGroup = async () => {
@@ -215,7 +214,7 @@ export default function Main() {
           <input
             type="number"
             className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
-            value={grads.toFixed(2)}
+            value={grads}
             onChange={handleChange}
             step={0.25}
             min={0.0}
@@ -235,7 +234,7 @@ export default function Main() {
           className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
           onClick={onFilterGroup}
           style={{ userSelect: "none" }}
-          disabled={!year || !term || !grads || !groupID}
+          disabled={!year || !term  || !groupID}
         >
           <Search className="w-5 h-5" />
           {searchTrigger ? <p>กำลังค้นหา...</p> : <p>ค้นหา</p>}

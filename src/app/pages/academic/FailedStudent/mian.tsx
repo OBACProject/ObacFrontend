@@ -1,33 +1,35 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/grad/gradAPI";
+import StudentFailList from "@/app/components/PDF/StudentFailList";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
-import { Loader2, Search, User } from "lucide-react";
+import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+
 interface IndividualStudentInfoData {
   studentId: number;
   studentName: string;
 }
 
 export default function Main() {
+  const currentYear = new Date().getFullYear() + 543;
   const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
   const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2.0);
   const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<string>("2567");
+  const [year, setYear] = useState<number>(currentYear);
   const [classSelect, setClassSelect] = useState<string>("");
   const [currentYearSelect, setCurrentYearSelect] = useState<number>(0);
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
-  const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
-    e
-  ) => {
-    let newValue = parseFloat(e.target.value);
-    if (isNaN(newValue)) return;
-    if (newValue < 1) newValue = 1;
-    if (newValue > 4) newValue = 4;
-    setGrad(newValue);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value)) {
+      setGrad(value);
+    } else {
+      setGrad(0.0);
+    }
   };
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -98,13 +100,14 @@ export default function Main() {
           <div className="text-gray-600">ปีการศึกษา</div>
           <select
             className="border border-gray-200 rounded-sm py-1 px-4"
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => setYear(Number(e.target.value))}
             value={year}
           >
-            <option value="2567">2567</option>
-            <option value="2566">2566</option>
-            <option value="2565">2565</option>
-            <option value="2564">2564</option>
+            <option value={currentYear}>{currentYear}</option>
+            <option value={currentYear - 1}>{currentYear - 1}</option>
+            <option value={currentYear - 2}>{currentYear - 2}</option>
+            <option value={currentYear - 3}>{currentYear - 3}</option>
+            <option value={currentYear - 4}>{currentYear - 4}</option>
           </select>
         </div>
         <div className="flex items-center gap-2" style={{ userSelect: "none" }}>
@@ -112,10 +115,10 @@ export default function Main() {
           <input
             type="number"
             className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
-            value={grads.toFixed(2)}
+            value={grads}
             onChange={handleChange}
             step={0.25}
-            min={1.0}
+            min={0.0}
             max={4.0}
           />
         </div>
@@ -161,11 +164,24 @@ export default function Main() {
           <div>
             {students.length > 0 ? (
               <div className="grid gap-4">
-                <div className="py-1 px-5 text-white bg-red-400 font-semibold w-fit border-2 border-red-400  rounded-md flex  gap-3">
-                  จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{students.length}</p>คน
+                <div className="flex justify-between items-center">
+                  <div className="py-1 px-5 text-white bg-red-400 font-semibold w-fit border-2 border-red-400  rounded-md flex  gap-3">
+                    จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{students.length}</p>คน
+                  </div>
+                  <div>
+                    <button className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit " 
+                    onClick={()=>{
+                      if (students)
+                      StudentFailList({student:students , classGroup:`${classSelect}.${currentYearSelect}` , currentYear:year} )
+                      }}>
+                    <Download className="w-4 h-4" />
+                    รายชื่อนักเรียนตก PDF
+                    </button>
+                  </div>
                 </div>
+
                 <div>
-                  <div className="border-2 border-gray-400 bg-blue-200 text-black grid h-fit grid-cols-[10%_20%_30%_40%] ">
+                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_40%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
@@ -185,7 +201,7 @@ export default function Main() {
                         );
                       }}
                       key={index}
-                      className="border border-t-0 hover:bg-blue-50 cursor-pointer border-gray-400 bg-white text-black grid h-fit grid-cols-[10%_20%_15%_15%_40%]"
+                      className="border border-t-0 border-gray-300 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_40%] shadow-md"
                     >
                       <div className="text-center py-1 border-r border-gray-400">
                         {index + 1}
