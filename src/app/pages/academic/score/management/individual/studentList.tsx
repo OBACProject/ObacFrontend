@@ -7,10 +7,7 @@ import { getAllStudentViewData } from "@/resource/academics/grading/viewData/ind
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-export function StudentListPage(props: {
-  handleTab: (tab: string) => void;
-  handleData: (data: { studentId: number; studentName: string }) => void;
-}) {
+export function StudentListPage() {
   const [individualStudentData, setIndividualStudentData] = useState<
     GetAllStudentTableDto[]
   >([]);
@@ -37,14 +34,6 @@ export function StudentListPage(props: {
 
     fetchData();
   }, []);
-
-  const handleRowClick = (rowData: GetAllStudentTableDto) => {
-    props.handleTab("individualStudentInfo");
-    props.handleData({
-      studentId: rowData.studentId,
-      studentName: rowData.thaiName,
-    });
-  };
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16" },
@@ -78,7 +67,7 @@ export function StudentListPage(props: {
   return (
     <>
       {isLoadingPage ? (
-        <header className="flex flex-col px-4 py-2 border-2 mt-4 rounded-lg">
+        <header className="flex flex-col px-4 py-2 border-2 mt-4 rounded-lg w-full">
           <div className="flex gap-12">
             <div className="flex mx-auto gap-6 w-full px-2 pt-2 rounded-lg">
               <div className="w-1/6">
@@ -108,12 +97,19 @@ export function StudentListPage(props: {
               ...item,
               index: index + 1,
             }))}
-            onRowClick={handleRowClick}
+            getRowLink={(item) => {
+              //find a student by studentCode
+              const student = individualStudentData.find(
+                (student) => student.studentCode === item.studentCode
+              );
+
+              return `/pages/academic/score/management/individual2/${student?.studentId}`;
+            }}
             pagination={10}
           />
         </header>
       ) : (
-        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+        <div className="mt-2 border-2 border-dashed rounded-md w-full border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
           <p className="flex gap-2">
             <Loader2 className="h-10 w-10 animate-spin" />
             Loading...

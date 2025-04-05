@@ -9,7 +9,7 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { StudentPopup, SubjectData } from "./component/studentPopup";
+import { StudentPopup, SubjectData } from "../component/studentPopup";
 import { Loader2 } from "lucide-react";
 import { DataTableStudentInfo } from "@/app/components/bellTable/table_style_studentInfo";
 
@@ -18,14 +18,12 @@ interface StudentDataProps {
   studentCode: string;
 }
 
-export function StudentInfoByIdPage(props: { studentId: number }) {
+const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
+  const studentId = params.params;
+  console.log(studentId);
   const [studentTranscriptDataById, setStudentTranscriptDataById] =
     useState<StudentTranscriptData | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
-
-  // const [term, setTerm] = useState<string>("1");
-  // const [year, setYear] = useState<number>(2567);
-  // const [loadingFile, setLoadingFile] = useState<boolean>(false);
 
   const [scoreFileData, setScoreFileData] =
     useState<GetStudentGradeDetailDto | null>();
@@ -35,10 +33,11 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getStudentDataById(props.studentId);
+        const data = await getStudentDataById(Number(studentId));
+        console.log(data);
         setStudentTranscriptDataById(data);
         setTermData(data.year);
-        const data2 = await fetchGetStudentGradeDetail(props.studentId);
+        const data2 = await fetchGetStudentGradeDetail(Number(studentId));
         setScoreFileData(data2);
         setIsLoadingPage(true);
       } catch (error) {
@@ -46,7 +45,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
       }
     };
     fetchData();
-  }, [props.studentId]);
+  }, [studentId]);
 
   const studentData: StudentDataProps = {
     name:
@@ -84,7 +83,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
                 />
                 <LabelText
                   topic={"รหัสนักเรียน"}
-                  data={`${studentTranscriptDataById?.studentCode}  (${props.studentId})`}
+                  data={`${studentTranscriptDataById?.studentCode}  (${studentId})`}
                 />
               </div>
               <div className="flex items-center">
@@ -136,7 +135,7 @@ export function StudentInfoByIdPage(props: { studentId: number }) {
       )}
     </div>
   );
-}
+};
 
 function StudentTermTable({
   termData,
@@ -270,3 +269,5 @@ function StudentTermTable({
     </div>
   );
 }
+
+export default StudentInfoByIdPage;

@@ -15,7 +15,7 @@ import {
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { GroupSummaryGradeResponse } from "./classroomByGroupId";
+import { GroupSummaryGradeResponse } from "./[...params]/page";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
@@ -40,15 +40,7 @@ const getStudentDataList = async (groupId: number) => {
   }
 };
 
-export function ClassroomGrading(props: {
-  handleTab: (tab: string) => void;
-  handleSelectedData: (data: {
-    groupId: number;
-    term: string;
-    year: string;
-    classroom: string;
-  }) => void;
-}) {
+export function ClassroomGrading() {
   const classLevels = ["ปวช", "ปวส"];
   // const levelGrade: Record<string, string[]> = {
   //   ปวช: ["1", "2", "3"],
@@ -121,24 +113,6 @@ export function ClassroomGrading(props: {
     setSelectedRoom("");
   };
 
-  const handleRowClick = (item: ClassroomTable) => {
-    if (!selectedTerm || !selectedYear) {
-      alert("กรุณาเลือกภาคเรียนและปีการศึกษา");
-      return;
-    } else {
-      if (item) {
-        // props.handleTab("classroomByGroupId");
-        props.handleSelectedData({
-          groupId: parseInt(item.groupId),
-          term: selectedTerm || "",
-          year: selectedYear || "",
-          classroom: `${item.class}`,
-        });
-      } else {
-        alert("ไม่พบข้อมูล");
-      }
-    }
-  };
   const [summaryData, setSummaryData] =
     useState<GroupSummaryGradeResponse | null>(null);
 
@@ -347,7 +321,7 @@ export function ClassroomGrading(props: {
   return (
     <>
       {isLoadingPage ? (
-        <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
+        <header className="flex flex-col p-4 border-2 mt-4 rounded-lg w-full">
           <div className="flex gap-12 mt-4">
             <div className="flex justify-center w-full">
               <div className="flex mx-auto justify-between items-center gap-6 w-full p-2 rounded-lg">
@@ -421,12 +395,14 @@ export function ClassroomGrading(props: {
               ...item,
               index: index + 1,
             }))}
-            onRowClick={handleRowClick}
+            getRowLink={(item) => {
+              return `/pages/academic/score/management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`;
+            }}
             pagination={10}
           />
         </header>
       ) : (
-        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+        <div className="w-full mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
           <p className="flex gap-2">
             <Loader2 className="h-10 w-10 animate-spin" />
             Loading...

@@ -1,7 +1,6 @@
 "use client";
 
 import { Combobox } from "@/app/components/combobox/combobox";
-import { ClassroomByGroupIdProps } from "./main";
 import { useEffect, useMemo, useState } from "react";
 import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewData/classroomByGroupIdViewData";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +10,7 @@ import { useRouter } from "next/navigation";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
-import { Loader2 } from "lucide-react";
+import { Boxes, Loader2 } from "lucide-react";
 import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
 import { toast } from "react-toastify";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
@@ -59,8 +58,13 @@ interface IndividualStudentInfoData {
   studentName: string;
 }
 
-export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
+const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
   const rounter = useRouter();
+  // data.groupId, data.term, data.year;
+  const groupId = params.params[0];
+  const term = params.params[1];
+  const year = params.params[2];
+
   const [summaryData, setSummaryData] =
     useState<GroupSummaryGradeResponse | null>(null);
 
@@ -69,6 +73,7 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const [gropDownLoadPDFTrigger, setGropDownLoadPDFTrigger] =
     useState<boolean>(false);
+
   // filter data
   const filteredData = useMemo(() => {
     if (!summaryData) return [];
@@ -86,7 +91,6 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       return matchGPA && matchGPAX;
     });
 
-    // Sort data by student ID or another relevant key
     return filtered.sort((a, b) => a.studentId - b.studentId);
   }, [summaryData, selectedGPA, selectedGPAX]);
 
@@ -94,9 +98,9 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   useEffect(() => {
     const fetchData = async () => {
       const result = await getGroupSummaryGradeViewData(
-        data.groupId,
-        data.term,
-        data.year
+        Number(groupId),
+        term,
+        year
       );
       setSummaryData(result);
       setIsLoadingPage(true);
@@ -109,11 +113,6 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
     { label: "รหัสนักศึกษา", key: "studentCode", className: "w-2/16" },
     { label: "ชื่อ-นามสกุล", key: "name", className: "w-2/16 text-start" },
   ];
-  // const subjectColumns = summaryData?.subjects.map((subject) => ({
-  //   label: subject,
-  //   key: subject,
-  //   className: "w-1/16 text-center",
-  // }));
 
   const subjectColumns = Array.from({ length: 10 }, (_, index) => {
     if (summaryData?.subjects && index < summaryData.subjects.length) {
@@ -151,22 +150,20 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       console.error("Summary data is not available");
     }
   };
-  const onRowClick = (studentCode: string) => {
-    const studentData: IndividualStudentInfoData = {
-      studentId:
-        summaryData?.students.find(
-          (student) => student.studentCode === studentCode
-        )?.studentId || 0,
-      studentName:
-        summaryData?.students.find(
-          (student) => student.studentCode === studentCode
-        )?.name || "",
-    };
+  // const onRowClick = (studentCode: string) => {
+  //   const studentData: IndividualStudentInfoData = {
+  //     studentId:
+  //       summaryData?.students.find(
+  //         (student) => student.studentCode === studentCode
+  //       )?.studentId || 0,
+  //     studentName:
+  //       summaryData?.students.find(
+  //         (student) => student.studentCode === studentCode
+  //       )?.name || "",
+  //   };
 
-    localStorage.setItem("activeTabStudent", "individualStudentInfo");
-    localStorage.setItem("selectedStudentData", JSON.stringify(studentData));
-    rounter.push(`/pages/academic/score/management/individual`);
-  };
+  //   rounter.push(`/pages/academic/score/management/individual`);
+  // };
 
   const convertTOPDFData: DataList = {
     generalData: summaryData?.generalData
@@ -244,13 +241,19 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
   return (
     <>
       {isLoadingPage ? (
-        <header className="flex flex-col  px-2 py-4 border-2 mt-4 rounded-lg">
+        <header className="flex flex-col mx-4 sm:mx-10 lg:mx-10 p-4  rounded-lg">
+          <div className="w-full flex justify-start ">
+            <div className="px-10 rounded-3xl flex gap-2 items-center  py-2 border border-gray-100 shadow-md   text-blue-700 text-xl w-fit">
+              <Boxes className="h-8 w-8" />
+              จัดการคะแนน (ห้องเรียน)
+            </div>
+          </div>
           {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
-          <div className="flex gap-10  justify-between">
+          <div className="flex gap-10 mt-4 justify-between">
             <Badge variant={"outline"}>
               <h1 className="text-xl">
-                สรุปการศึกษา ภาคเรียนที่ {data.term} ปีการศึกษา {data.year}{" "}
-                ห้องเรียน {summaryData?.generalData.class}.
+                สรุปการศึกษา ภาคเรียนที่ {term} ปีการศึกษา {year} ห้องเรียน{" "}
+                {summaryData?.generalData.class}.
                 {summaryData?.generalData.groupName}{" "}
               </h1>
             </Badge>
@@ -330,16 +333,13 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
                 })) || []
               }
               // isEdit={true}
-              onRowClick={(student) => onRowClick(student.studentCode)}
+              // onRowClick={(student) => onRowClick(student.studentCode)}
+              getRowLink={(student) => {
+                return `/pages/academic/score/management/individual/${student.studentCode}`;
+              }}
               pagination={summaryData?.students.length || 0}
             />
           </div>
-          {/* <StudentPopup
-          isOpen={isOpenPopUp}
-          onClose={() => setIsOpenPopUp(false)}
-          student={selectedStudent}
-          subjects={summaryData?.subjects || []}
-        /> */}
         </header>
       ) : (
         <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
@@ -351,4 +351,6 @@ export function ClassroomByGroupId(data: ClassroomByGroupIdProps) {
       )}
     </>
   );
-}
+};
+
+export default ClassroomByGroupId;
