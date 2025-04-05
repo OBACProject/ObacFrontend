@@ -10,7 +10,18 @@ import ChangeStudentGroup from "@/app/components/popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/app/components/popup/confirmChangeStudentsStatus";
 import { GetStudentByStudentId } from "@/dto/studentDto";
 import { educationOptions } from "@/resource/academics/options/studentOption";
-import { CircleX, Download, Pencil, Save, UserRound } from "lucide-react";
+import {
+  ArrowRightLeft,
+  CircleX,
+  Dock,
+  Download,
+  FileChartColumn,
+  Pencil,
+  Save,
+  Settings2,
+  UserRoundPen,
+} from "lucide-react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -70,8 +81,8 @@ export default function Form({ studentId }: Props) {
   return (
     <div className="px-10">
       <div className="flex justify-between my-5">
-        <div className="rounded-3xl t flex gap-2 items-center  border border-gray-100 shadow-md  py-2 text-blue-700 text-xl w-fit px-5  ">
-          <UserRound className="w-8 h-8" />
+        <div className="rounded-3xl t flex gap-2 items-center  border border-gray-100 shadow-md  py-2 text-blue-700 text-xl w-fit px-5  font-prompt_Light">
+          <UserRoundPen className="w-8 h-8" />
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-1">
@@ -107,110 +118,172 @@ export default function Form({ studentId }: Props) {
         </div>
       </div>
 
-      <div className="w-full flex justify-end my-2">
-        {onEdit ? (
-          <div className="flex gap-2">
+      <div className="w-full flex justify-between py-2 items-center ">
+        <div className="flex gap-5 items-center justify-start">
+          <div className="gap-8 flex justify-start items-center  w-fit">
+            <div className="w-fit items-center flex gap-2">
+              <div className="w-[100px]">สถานะนักเรียน</div>
+              <select
+                className="border border-gray-300 rounded-sm px-4 py-1"
+                onChange={(e) => setEducateStatus(e.target.value)}
+                value={educateStatus}
+              >
+                <option value={educateStatus}>{educateStatus}</option>
+                {educationOptions
+                  .filter((option) => option !== educateStatus)
+                  .map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+              </select>
+              <button
+                className="px-5 ml-1 text-white enabled:bg-blue-500 enabled:hover:bg-blue-600  bg-gray-300 rounded-md py-1 flex gap-2 items-center"
+                disabled={!educateStatus}
+                onClick={() => {
+                  setSubmitStudentStatus(!submitStudentStatus);
+                }}
+              >
+                <Settings2 className="h-5 w-5" />
+                ปรับสถานะ
+              </button>
+            </div>
+          </div>
+          <button
+            className="w-fit flex gap-2 items-center py-1 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600 "
+            onClick={() => setChangeGroupPopUp(!changeGroupPopUp)}
+          >
+            <ArrowRightLeft className="h-5 w-5" />
+            ย้ายห้องเรียน
+          </button>
+          <Link
+            href={"/pages/academic/score/management/individual"}
+            className="flex gap-2 items-center px-5 py-1 rounded-full bg-slate-200 hover:bg-slate-300"
+          >
+            <FileChartColumn className="h-5 w-5" />
+            ดูคะแนน
+          </Link>
+        </div>
+        <div className="flex items-center ">
+          {onEdit ? (
+            <div className="flex gap-2">
+              <button
+                className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
+                // onClick={handleEditChange}
+              >
+                {" "}
+                <Save className="w-5 h-5" />
+                บันทึก
+              </button>{" "}
+              <button
+                className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white "
+                onClick={handleEditChange}
+              >
+                <CircleX className="w-5 h-5" />
+                ยกเลิก
+              </button>
+            </div>
+          ) : (
             <button
-              className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
-              // onClick={handleEditChange}
-            >
-              {" "}
-              <Save className="w-5 h-5" />
-              บันทึก
-            </button>{" "}
-            <button
-              className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white "
+              className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white "
               onClick={handleEditChange}
             >
-              <CircleX className="w-5 h-5" />
-              ยกเลิก
-            </button>{" "}
-          </div>
-        ) : (
-          <button
-            className="w-[120px] h-fit bg-blue-400 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white "
-            onClick={handleEditChange}
-          >
-            {" "}
-            <Pencil className="w-5 h-5" />
-            แก้ไข
-          </button>
-        )}
-      </div>
-      <div className="w-full flex justify-start gap-5 items-center">
-        <div className="gap-8 flex justify-start items-center  w-fit">
-          <div className="w-fit items-center flex gap-3">
-            <div className="w-[100px]">สถานะนักเรียน</div>
-            <select
-              className="border border-gray-300 rounded-sm px-4 py-1"
-              onChange={(e) => setEducateStatus(e.target.value)}
-              value={educateStatus}
-            >
-              <option value={educateStatus}>{educateStatus}</option>
-              {educationOptions
-                .filter((option) => option !== educateStatus)
-                .map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-            </select>
-            <button
-              className="px-5 text-white enabled:bg-slate-500 enabled:hover:bg-slate-600  bg-gray-300 rounded-md py-1 "
-              disabled={!educateStatus}
-              onClick={() => {
-                setSubmitStudentStatus(!submitStudentStatus);
-              }}
-            >
-              ปรับสถานะ
+              <Pencil className="w-5 h-5" />
+              แก้ไข
             </button>
-          </div>
+          )}
         </div>
-        <button
-          className="w-fit py-1 px-4 rounded-md bg-slate-500 text-white hover:bg-slate-600 "
-          onClick={() => setChangeGroupPopUp(!changeGroupPopUp)}
-        >
-          ย้ายห้องเรียน
-        </button>
       </div>
-      <div className="pt-4 w-full">
+      <div className="pt-4 w-full flex gap-5">
         <div className="relative rounded-md border-t shadow-gray-300 w-fit shadow-md  bg-white ">
-          <div className="grid gap-4 px-10 py-10">
-            <div className="flex items-center gap-5">
-              <div className="flex items-center gap-2">
+          <div className="grid gap-4 px-10 py-5">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1">
                 <p className="w-[100px]">รหัสนักเรียน</p>
                 <input
                   type="text"
-                  className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
+                  className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
                   defaultValue={students?.studentCode}
+                  disabled={!onEdit}
                 />
               </div>
+              <p className="w-[100px]">ชื่อ - นามสกุล</p>
+              <input
+                type="text"
+                className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
+                defaultValue={students?.thaiName}
+                disabled={!onEdit}
+              />
+              <input
+                type="text"
+                className="px-4 focus:outline-blue-400 w-[150px]  py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
+                defaultValue={students?.thaiLastName}
+                disabled={!onEdit}
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              {" "}
               <div className="flex items-center gap-2">
                 <p className="">ชั้นปี</p>
                 <div className="px-4 border-gray-300 border bg-white py-1.5 rounded-sm">
                   {students?.class}.{students?.currentRoom}
                 </div>
               </div>
+              <div className="flex items-center gap-2">
+                <p className="">หลักสูตร</p>
+                <input
+                  type="text"
+                  className="px-4 w-fit text-gray-500 enabled:border-blue-400 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
+                  defaultValue={students?.facultyName}
+                  disabled={!onEdit}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="">สาขา</p>
+                <input
+                  type="text"
+                  className="px-4 w-fit text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
+                  defaultValue={students?.programName}
+                  disabled={!onEdit}
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <p className="w-[100px]">ชื่อ - นามสกุล</p>
+          </div>
+        </div>
+        <div className="border rounded-md relative overflow-hidden hover:scale-[102%] duration-500">
+          <img src="/asset/student-image.jpg" className="w-36 h-36" />
+        </div>
+      </div>
+
+      <div className="pt-8 w-full">
+        <div className="rounded-3xl t flex gap-2 items-center  border border-gray-100 shadow-md  py-2 text-blue-700 text-xl w-fit px-5 font-prompt_Light ">
+          <Dock className="w-8 h-8" />
+          ประวัติส่วนตัวนักเรียน
+        </div>
+      </div>
+      <div className="py-5 ">
+        <div className="grid w-full rounded-md border px-4 py-4">
+          <div className="flex gap-5 items-center">
+            <div className="flex gap-2 items-center">
+              <p>เบอร์ติดต่อ</p>
               <input
                 type="text"
-                className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
-                defaultValue={students?.thaiName}
+                className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
+                defaultValue={students?.phoneNumber || "ไม่ทราบเบอร์ติดต่อ"}
+                disabled={!onEdit}
               />
+            </div>
+            <div className="flex gap-2 items-center">
+              <p>อีเมลล์</p>
               <input
                 type="text"
-                className="px-4 focus:outline-blue-400 w-[150px]  py-1.5 rounded-sm border border-gray-300"
-                defaultValue={students?.thaiLastName}
+                className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
+                defaultValue={students?.email || "ไม่ทราบอีเมลล์"}
+                disabled={!onEdit}
               />
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="py-5 ">
-        <div className="grid w-full border px-4 py-4"></div>
       </div>
       {submitStudentStatus && students?.studentId && (
         <ConfirmChangeStudentsStatus

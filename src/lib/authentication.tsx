@@ -3,7 +3,6 @@ import api from "./apiCentralized";
 import { compactVerify } from "jose";
 import Cookies from "js-cookie";
 import axios from "axios";
-// const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY;
 export async function login(formData: FormData) {
   try {
     const secretKey =await axios.get("/api/secret").then((res) => res.data.secretKey);
@@ -30,21 +29,14 @@ export async function login(formData: FormData) {
     const name = decodedPayload.Name;
     const userId = decodedPayload.UserID;
 
-    // console.log(role);
-    // console.log(name);
-    // console.log(UserId);
     if (!role || !name) {
       throw new Error("Invalid token: Missing role or name.");
     }
-
-    // localStorage.setItem("token", token);
-    // localStorage.setItem("role", role);
-    // localStorage.setItem("name", name);
-
-    Cookies.set("role", role, { expires: 1 });
-    Cookies.set("name", name, { expires: 1 });
-    Cookies.set("userId", userId, { expires: 1 });
-    Cookies.set("token", token, { expires: 1 });
+    const eightHoursFromNow = new Date(new Date().getTime() + 8 * 60 * 60 * 1000)
+    Cookies.set("role", role, { expires: eightHoursFromNow });
+    Cookies.set("name", name, { expires: eightHoursFromNow });
+    Cookies.set("userId", userId, { expires: eightHoursFromNow });
+    Cookies.set("token", token, { expires: eightHoursFromNow });
 
     return { token, role };
   } catch (err) {
@@ -55,7 +47,6 @@ export async function login(formData: FormData) {
 
 export async function logout() {
   try {
-    // Clear token and role from cookies
     Cookies.remove("role");
     Cookies.remove("name");
     Cookies.remove("userId");
