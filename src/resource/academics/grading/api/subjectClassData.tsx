@@ -5,8 +5,7 @@ import { cookies } from "next/headers";
 
 export const getClassSubjectData = async (
   subjectId: number,
-  term: number,
-  year: number
+  term: number
 ): Promise<ClassSubjectData[]> => {
   try {
     const token = cookies().get("token")?.value;

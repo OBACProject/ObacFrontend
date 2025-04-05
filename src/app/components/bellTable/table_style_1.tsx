@@ -1,10 +1,11 @@
+import Link from "next/link";
 import React, { useMemo, useState } from "react";
 
 type Column<T> = {
   label: string;
   key?: string;
   className?: string;
-  render?: (row: T) => React.ReactNode; // Ensures render returns ReactNode
+  render?: (row: T) => React.ReactNode;
 };
 
 interface TableProps<T> {
@@ -12,6 +13,7 @@ interface TableProps<T> {
   data: T[];
   pagination: number;
   onRowClick?: (item: T) => void;
+  getRowLink?: (item: T) => string;
   isEdit?: boolean;
 }
 
@@ -20,6 +22,7 @@ export function DataTable<T extends Record<string, any>>({
   data,
   pagination,
   onRowClick,
+  getRowLink,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -36,6 +39,50 @@ export function DataTable<T extends Record<string, any>>({
     }
   };
 
+  const renderRow = (item: T, rowIndex: number) => {
+    const rowContent = columns.map((col, colIndex) => {
+      const cellValue = col.key ? item[col.key] : null;
+      const renderContent = col.render ? col.render(item) : cellValue;
+
+      return (
+        <div
+          key={`cell-${rowIndex}-${colIndex}`}
+          className={`text-center flex items-center px-4 py-1 border-r border-gray-300 ${col.className}`}
+        >
+          {/* Ensure renderContent is a valid ReactNode */}
+          {renderContent != null ? renderContent : "-"}
+        </div>
+      );
+    });
+
+    // If getRowLink is provided, wrap the row with a Link, otherwise use onRowClick
+    if (getRowLink) {
+      return (
+        <Link key={`row-${rowIndex}`} href={getRowLink(item)}>
+          <div
+            className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
+            }`}
+          >
+            {rowContent}
+          </div>
+        </Link>
+      );
+    } else {
+      return (
+        <div
+          key={`row-${rowIndex}`}
+          className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+            rowIndex % 2 === 0 ? "bg-white" : "bg-white"
+          }`}
+          onClick={() => onRowClick && onRowClick(item)}
+        >
+          {rowContent}
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
@@ -43,7 +90,7 @@ export function DataTable<T extends Record<string, any>>({
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}
-            className={`bg-white text-gray-800  border-t-2 border-b-2 border-gray-400  py-2 px-4 text-center  text-lg flex items-center justify-center ${col.className}`}
+            className={`bg-white text-gray-800 border-t-2 border-b-2 border-gray-400 py-2 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
           >
             {col.label || "-"}
           </div>
@@ -52,30 +99,7 @@ export function DataTable<T extends Record<string, any>>({
 
       {/* Table Body */}
       {paginatedData.length > 0 ? (
-        paginatedData.map((item, rowIndex) => (
-          <div
-            key={`row-${rowIndex}`}
-            className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
-            }`}
-            onClick={() => onRowClick && onRowClick(item)}
-          >
-            {columns.map((col, colIndex) => {
-              const cellValue = col.key ? item[col.key] : null;
-              const renderContent = col.render ? col.render(item) : cellValue;
-
-              return (
-                <div
-                  key={`cell-${rowIndex}-${colIndex}`}
-                  className={`text-center flex items-center px-4 py-1 border-r border-gray-300  ${col.className}`}
-                >
-                  {/* Ensure renderContent is a valid ReactNode */}
-                  {renderContent != null ? renderContent : "-"}
-                </div>
-              );
-            })}
-          </div>
-        ))
+        paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))
       ) : (
         <div className="text-center text-gray-600 py-4">No data available</div>
       )}

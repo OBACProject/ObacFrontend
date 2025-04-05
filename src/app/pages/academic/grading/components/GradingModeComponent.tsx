@@ -1,10 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { Subject } from "./subject/subject";
-import { ClassSubjectPage } from "./classSubject/classSubject";
 import { AlarmClock, ChevronRight } from "lucide-react";
-import { AcademicStudentInfo } from "./studentInfo/AcademicStudentClassInfo";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
 import { MethodDto } from "@/dto/methodDto";
 import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
@@ -17,7 +14,7 @@ export interface ClassSubject {
   subjectName: string | undefined;
 }
 
-export function Main() {
+export function GradingModeComponent() {
   const pathname = usePathname();
   const [classSubjectData, setClassSubjectData] = useState<ClassSubject | null>(
     null
@@ -83,22 +80,6 @@ export function Main() {
     localStorage.setItem("classInfoData", JSON.stringify(data));
   };
 
-  const handleTab = (tab: string) => {
-    if (activeTab === tab) return;
-    setActiveTab(tab);
-    localStorage.setItem("activeTab", tab);
-
-    if (tab === "subject") {
-      setClassSubjectData(null);
-      setClassInfoData(null);
-      localStorage.removeItem("classSubjectData");
-      localStorage.removeItem("classInfoData");
-    }
-    if (tab === "class") {
-      setClassInfoData(null);
-      localStorage.removeItem("classInfoData");
-    }
-  };
   const handleIsActive = () => {
     setIsActive(!isActive);
   };
@@ -151,7 +132,6 @@ export function Main() {
       endDate: gradingMode === "period" ? endTime : null,
       isActive: isActive,
     };
-    // console.log(isActive);
     try {
       await fetchPutMethodData(methodData);
       setIsPopupOpen(false);
@@ -159,7 +139,7 @@ export function Main() {
         title: "Success!",
         icon: "success",
       });
-      fetchData(); // Refresh data after update
+      fetchData();
     } catch (error) {
       console.error("Failed to update method data:", error);
       Swal.fire({
@@ -172,45 +152,7 @@ export function Main() {
 
   return (
     <div className="w-full">
-      {/* Breadcrumb and navigation */}
-      <div className="w-full flex gap-2 items-center justify-between">
-        <div className="mt-4 w-auto flex px-2 py-0 bg-slate-100 items-center rounded-tr-full rounded-br-full">
-          <button
-            className="min-w-32 max-w-72 w-auto mx-10 hover:bg-sky-100 p-1 rounded-md"
-            onClick={() => handleTab("subject")}
-          >
-            <span className="text-black text-sm font-bold truncate">
-              {classSubjectData?.subjectName ?? "รายวิชา"}
-            </span>
-          </button>
-          <ChevronRight />
-          {classSubjectData && (
-            <>
-              <button
-                className="min-w-32 max-w-72 w-auto mx-10 hover:bg-sky-100 p-1 rounded-md"
-                onClick={() => handleTab("class")}
-              >
-                <span className="text-black text-sm font-bold truncate">
-                  {classInfoData?.room ?? "ชั้นเรียน"}
-                </span>
-              </button>
-              <ChevronRight />
-            </>
-          )}
-          {classSubjectData && classInfoData && (
-            <>
-              <button
-                className="min-w-32 max-w-72 w-auto mx-10 hover:bg-slate-50 p-1 rounded-md"
-                onClick={() => handleTab("infoClass")}
-              >
-                <span className="text-black text-sm font-bold">
-                  รายละเอียดชั้นเรียน
-                </span>
-              </button>
-              <ChevronRight />
-            </>
-          )}
-        </div>
+      <div className="w-full flex gap-2 items-center justify-end">
         <div
           className="px-10 bg-blue-500 hover:bg-blue-600 rounded-sm h-fit py-1.5  text-white flex justify-center items-center gap-2"
           onClick={() => setIsPopupOpen(true)}
@@ -219,30 +161,6 @@ export function Main() {
           ระบบเปิด/ปิดการกรอกคะแนน
         </div>
       </div>
-
-      {activeTab === "subject" && (
-        <Subject
-          handleTab={handleTab}
-          handleSelectedData={handleSelectedSubjectData}
-        />
-      )}
-      {activeTab === "class" && classSubjectData && (
-        <ClassSubjectPage
-          classSubjecPassingData={classSubjectData}
-          handleTab={handleTab}
-          handleSelectedData={handleSelectedClassInfo}
-        />
-      )}
-      {activeTab === "infoClass" && classSubjectData && classInfoData && (
-        <AcademicStudentInfo
-          subjectId={classInfoData.subjectId}
-          term={classInfoData.term}
-          year={classSubjectData.year}
-          scheduleSubjectId={classInfoData.scheduleSubjectId}
-          room={classInfoData.room}
-          groupId={classInfoData.groupId}
-        />
-      )}
 
       {/* Grading Popup */}
       {isPopupOpen && (

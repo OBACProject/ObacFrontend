@@ -7,15 +7,7 @@ import { GradingDataColumn } from "@/dto/gradingDto";
 import { getGradingViewData } from "@/resource/academics/grading/viewData/gradingViewData";
 import { useEffect, useState } from "react";
 
-export function Subject(props: {
-  handleTab: (tab: string) => void;
-  handleSelectedData: (data: {
-    id: number;
-    year: number;
-    term: number;
-    subjectName: string;
-  }) => void;
-}) {
+export function Subject() {
   const [searchSubject, setSearchSubject] = useState<string>("");
 
   const [gradingData, setGradingData] = useState<GradingDataColumn[]>([]);
@@ -26,32 +18,29 @@ export function Subject(props: {
   // filter data
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
-  // const yearsList = Array.from({ length: 5 }, (_, i) =>
-  //   (currentYear - i).toString()
-  // );
-  const [selectedTerm, setSelectedTerm] = useState<string>("2");
-  const [selectedYear, setSelectedYear] = useState<string>(
-    currentYear.toString()
+  const yearsList = Array.from({ length: 5 }, (_, i) =>
+    (currentYear - i).toString()
   );
+  const [selectedTerm, setSelectedTerm] = useState<string>("2");
 
   const handleSelectedSubjectData = (id: number) => {
-    if (!selectedTerm || !selectedYear) {
-      alert("กรุณาเลือกภาคเรียนและปีการศึกษาก่อน");
-    } else {
-      props.handleTab("class");
-      const item = gradingDataFiltered.find((item) => item.id === id);
-      if (item) {
-        props.handleSelectedData({
-          id: id,
-          year: Number(selectedYear),
-          term: Number(selectedTerm),
-          subjectName: item.subjectName,
-        });
-      } else {
-        alert("ไม่พบข้อมูล");
-      }
-      // console.log("Selected data", id);
-    }
+    // if (!selectedTerm || !selectedYear) {
+    //   alert("กรุณาเลือกภาคเรียนและปีการศึกษาก่อน");
+    // } else {
+    //   props.handleTab("class");
+    //   const item = gradingDataFiltered.find((item) => item.id === id);
+    //   if (item) {
+    //     props.handleSelectedData({
+    //       id: id,
+    //       year: Number(selectedYear),
+    //       term: Number(selectedTerm),
+    //       subjectName: item.subjectName,
+    //     });
+    //   } else {
+    //     alert("ไม่พบข้อมูล");
+    //   }
+    //   // console.log("Selected data", id);
+    // }
   };
 
   // const columns = makeColumns<GradingDataColumn>(
@@ -114,13 +103,10 @@ export function Subject(props: {
 
     setGradingDataFiltered(filteredData);
   }, [searchSubject, gradingData]);
-  // console.log(gradingData);
   return (
     <>
       <header className="flex flex-col p-4 w-full border-2 mt-2 rounded-lg">
-        {/* filter Data */}
         <div className="flex gap-6  px-4 bg-slate-50 rounded-lg">
-          {/* filter */}
           <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ภาคเรียน</h1>
             <Combobox
@@ -133,6 +119,7 @@ export function Subject(props: {
               onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
             />
           </div>
+
           {/* <div className="w-1/4 flex flex-col gap-1 px-4 py-2 relative">
             <h1>ปีการศึกษา</h1>
             <Combobox
@@ -151,7 +138,7 @@ export function Subject(props: {
               <Input
                 type="text"
                 placeholder="Search..."
-                className="w-full pr-10" // Add padding to the right for the icon
+                className="w-full pr-10"
                 onChange={(event) => setSearchSubject(event.target.value)}
               />
             </div>
@@ -168,10 +155,11 @@ export function Subject(props: {
               subjectName: item.subjectName,
             }))}
             pagination={10}
-            onRowClick={(item) => handleSelectedSubjectData(item.id)}
+            getRowLink={(item) => {
+              return `/pages/academic/grading/classSubject/${item.id}/${selectedTerm}`;
+            }}
           />
         </div>
-        {/* breadcrumb zone */}
       </header>
     </>
   );

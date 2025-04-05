@@ -6,32 +6,28 @@ import { Input } from "@/components/ui/input";
 import { ClassSubjectColumn, ClassSubjectData } from "@/dto/gradingDto";
 import { getSubjectClassViewData } from "@/resource/academics/grading/viewData/subjectClassViewData";
 import { useEffect, useState } from "react";
-import { ClassSubject } from "../main";
 import {
   getClassSubjectData,
   putPublishGrade,
 } from "@/resource/academics/grading/api/subjectClassData";
 import { DataTable } from "@/app/components/bellTable/table_style_1";
 import Swal from "sweetalert2";
+import { ScrollText } from "lucide-react";
+import { GradingModeComponent } from "../../components/GradingModeComponent";
 
-export function ClassSubjectPage(props: {
-  handleTab: (tab: string) => void;
-  classSubjecPassingData: ClassSubject;
-  handleSelectedData: (data: {
-    subjectId: number;
-    scheduleSubjectId: number;
-    term: number;
-    room: string;
-    groupId: number;
-  }) => void;
-}) {
-
-  const { classSubjecPassingData } = props;
-  // raw data
+const ClassSubjectPage = ({ params }: { params: { params: string[] } }) => {
   const [rawClassSubjectData, setRawClassSubjectData] = useState<
     ClassSubjectData[]
   >([]);
+  console.log(params);
+  const subjectId = params.params[0];
+  const term = params.params[1];
 
+  console.log("subjectId:", subjectId);
+  console.log("term:", term);
+
+  const [subjectName, setSubjectName] = useState<string>("");
+  const [yearName, setYearName] = useState<Number>(0);
 
   // search
   const [searchClassSubject, setSearchClassSubject] = useState<string>("");
@@ -49,24 +45,29 @@ export function ClassSubjectPage(props: {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null);
+
   const handleSelectedInfoClassData = (id: number) => {
-    props.handleTab("infoClass");
-    const item = rawClassSubjectData.find(
-      (item) => item.scheduleSubjectId === id
-    );
-    if (item) {
-      props.handleSelectedData({
-        subjectId: item.subjectId,
-        scheduleSubjectId: item.scheduleSubjectId,
-        room: `${item.class}.${item.studentGroupName}`,
-        term: item.term,
-        groupId: item.studentGroupId,
-      });
-    } else {
-      alert("ไม่พบข้อมูล");
-    }
+    // props.handleTab("infoClass");
+    // const item = rawClassSubjectData.find(
+    //   (item) => item.scheduleSubjectId === id
+    // );
+    // if (item) {
+    //   props.handleSelectedData({
+    //     subjectId: item.subjectId,
+    //     scheduleSubjectId: item.scheduleSubjectId,
+    //     room: `${item.class}.${item.studentGroupName}`,
+    //     term: item.term,
+    //     groupId: item.studentGroupId,
+    //   });
+    // } else {
+    //   alert("ไม่พบข้อมูล");
+    // }
   };
-  // console.log(classSubjecPassingData.id, classSubjecPassingData.term);
+  // const subjectId = params.classSubject?.[0] ?? "";
+  // const term = params.classSubject?.[1] ?? "";
+  console.log("rawClassSubjectData", rawClassSubjectData);
+  console.log("classSubjectData", subjectId);
+  console.log("classSubjectData", term);
 
   const handlePusblishGrade = async () => {
     const result = await Swal.fire({
@@ -87,18 +88,23 @@ export function ClassSubjectPage(props: {
         for (const item of list_of_schudule_subject_id) {
           await putPublishGrade(item);
         }
+        if (!params) return;
 
+        // const subjectId = params.classSubject?.[0] ?? "";
+        // const term = params.classSubject?.[1] ?? "";
+        // props.handleTab("class");
         const rawData = await getClassSubjectData(
-          classSubjecPassingData.id,
-          classSubjecPassingData.term,
-          classSubjecPassingData.year
+          Number(subjectId),
+          Number(term)
         );
         setRawClassSubjectData(rawData);
 
+        setSubjectName(rawData[0].subjectName);
+        setYearName(rawData[0].year);
+
         const data = await getSubjectClassViewData(
-          classSubjecPassingData.id,
-          classSubjecPassingData.term,
-          classSubjecPassingData.year
+          Number(subjectId),
+          Number(term)
         );
         setClassSubjectData(data);
 
@@ -119,6 +125,7 @@ export function ClassSubjectPage(props: {
         setRoomNumbers(roomNumbers);
         setPeriodNumbers(periodNumbers);
         setTeacherNames(teacherNames);
+
         setSelectedRoom(null);
         setSelectedPeriod(null);
         setSelectedTeacher(null);
@@ -129,9 +136,7 @@ export function ClassSubjectPage(props: {
       console.log("Publishing grade canceled.");
     }
   };
-  console.log()
   const columns = [
-    // { label: "ลำดับ", key: "id", className: "w-1/12 justify-center" },
     { label: "คาบ", key: "period", className: "w-2/12 justify-center" },
     { label: "วัน", key: "day", className: "w-2/12" },
     { label: "ห้อง", key: "room", className: "w-2/12" },
@@ -155,17 +160,22 @@ export function ClassSubjectPage(props: {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!params) return;
+        // const subjectId = params.classSubject?.[0] ?? "";
+        // const term = params.classSubject?.[1] ?? "";
+        console.log("id ", subjectId);
+        console.log("term ", term);
         const rawData = await getClassSubjectData(
-          classSubjecPassingData.id,
-          classSubjecPassingData.term,
-          classSubjecPassingData.year
+          Number(subjectId),
+          Number(term)
         );
         setRawClassSubjectData(rawData);
+        setSubjectName(rawData[0].subjectName);
+        setYearName(rawData[0].year);
 
         const data = await getSubjectClassViewData(
-          classSubjecPassingData.id,
-          classSubjecPassingData.term,
-          classSubjecPassingData.year
+          Number(subjectId),
+          Number(term)
         );
         setClassSubjectData(data);
 
@@ -229,31 +239,39 @@ export function ClassSubjectPage(props: {
   return (
     <>
       <div>
-        <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
+        <div className="sm:px-5 lg:px-10 p-4">
+          <div>
+            <div className="w-full justify-start  flex">
+              <div
+                className="w-fit px-10 text-xl flex gap-2 items-center border border-gray-100 shadow-md  py-2 text-blue-700  rounded-3xl "
+                style={{ userSelect: "none" }}
+              >
+                <ScrollText className="w-8 h-8" />
+                ออกเกรดรายวิชา
+              </div>
+            </div>
+            <div className="flex justify-end items-end mt-2">
+              <GradingModeComponent />
+            </div>
+          </div>
+        </div>
+
+        <header className="flex flex-col mx-10 sm:px-5 lg:px-10 p-4 border-2 mt-4 rounded-lg ">
           {/* detail table */}
           <div className=" flex mb-4 justify-between">
             <div className="flex w-fit">
               <Badge variant={"outline"}>
-                <h1 className="text-base">
-                  รายวิชา : {classSubjecPassingData.subjectName}
-                </h1>
+                <h1 className="text-base">รายวิชา : {subjectName}</h1>
               </Badge>
             </div>
             <div className="flex w-fit gap-6 text-base">
               <div>
                 <Badge variant={"outline"}>
                   <h1 className="text-base">
-                    ชั้นปีการศึกษา : {classSubjecPassingData.year}
+                    ชั้นปีการศึกษา : {yearName.toString()}
                   </h1>
                 </Badge>
               </div>
-              {/* <div>
-                <Badge variant={"outline"}>
-                  <h1 className="text-base">
-                    ภาคเรียนที่ : {classSubjecPassingData.term}
-                  </h1>
-                </Badge>
-              </div> */}
             </div>
           </div>
           {/* filter Data */}
@@ -300,7 +318,7 @@ export function ClassSubjectPage(props: {
                 <Input
                   type="text"
                   placeholder="Search..."
-                  className="w-full pr-10" // Add padding to the right for the icon
+                  className="w-full pr-10"
                   onChange={(event) =>
                     setSearchClassSubject(event.target.value)
                   }
@@ -310,20 +328,6 @@ export function ClassSubjectPage(props: {
           </div>
           {/* data zone */}
           <div className="w-full px-4 py-2">
-            {/* <DataTable
-              columns={columns}
-              data={classSubjectDataFiltered}
-              selectedValue="id"
-              columnWidths={{
-                id: "w-1/12",
-                day: "w-1/12",
-                period: "w-1/12",
-                room: "w-1/12",
-                teacherName: "w-4/12",
-                isPublish: "w-1/12",
-              }}
-            /> */}
-
             <DataTable
               columns={columns}
               data={classSubjectDataFiltered.map((item, index) => ({
@@ -335,7 +339,14 @@ export function ClassSubjectPage(props: {
                 isPublish: item.isPublish,
               }))}
               pagination={classSubjectDataFiltered.length}
-              onRowClick={(item) => handleSelectedInfoClassData(item.id)}
+              // onRowClick={(item) => handleSelectedInfoClassData(item.id)}
+              getRowLink={(item) => {
+                const data = rawClassSubjectData.find(
+                  (chk) => chk.scheduleSubjectId === item.id
+                );
+
+                return `/pages/academic/grading2/studentInfo/${subjectId}/${data?.scheduleSubjectId}/${term}/${data?.studentGroupId}/${data?.year}`;
+              }}
             />
             <div className="flex justify-end px-10">
               <button
@@ -350,4 +361,5 @@ export function ClassSubjectPage(props: {
       </div>
     </>
   );
-}
+};
+export default ClassSubjectPage;

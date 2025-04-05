@@ -12,20 +12,20 @@ export interface GradingData {
 
 export interface ClassSubjectData {
   scheduleSubjectId: number;
-  scheduleId: number; // ไม่เอา
+  scheduleId: number;
   subjectId: number;
   studentGroupId: number;
   studentGroupName: string;
   class: string;
   room: string;
   isPublish: boolean;
-  subjectCode: string; // ไม่เอาคับ
-  subjectName: string; // ไม่เอาคับ
+  subjectCode: string;
+  subjectName: string;
   day: string;
   period: string;
   teacherName: string;
-  year: number; // ไม่เอา
-  term: number; // ไม่เอา
+  year: number;
+  term: number;
 }
 
 // data to show in columns
