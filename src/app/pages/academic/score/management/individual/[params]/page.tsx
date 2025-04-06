@@ -10,7 +10,7 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StudentPopup, SubjectData } from "../component/studentPopup";
-import { Loader2, Users } from "lucide-react";
+import { Download, Loader2, Users } from "lucide-react";
 import { DataTableStudentInfo } from "@/app/components/bellTable/table_style_studentInfo";
 
 interface StudentDataProps {
