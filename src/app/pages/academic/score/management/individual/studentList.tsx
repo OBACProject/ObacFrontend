@@ -103,7 +103,7 @@ export function StudentListPage() {
                 (student) => student.studentCode === item.studentCode
               );
 
-              return `/pages/academic/score/management/individual2/${student?.studentId}`;
+              return `/pages/academic/score/management/individual/${student?.studentId}`;
             }}
             pagination={10}
           />

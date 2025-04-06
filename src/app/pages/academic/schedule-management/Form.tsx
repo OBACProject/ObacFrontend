@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState, Suspense } from "react";
-import { useRouter } from "next/navigation";
 import { BookText, PlusCircle } from "lucide-react";
 import { GetStudentGroupsByTermYearDto, StudentGroup } from "@/dto/studentDto";
 import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
@@ -55,11 +54,16 @@ export default function Form() {
         searchTeacher.toLowerCase()
       )
   );
-  const filteredStudent = studentGroup?.filter((item) =>
-    (`${item.class}.${item.groupName}`.toLowerCase()).includes(searchStudent.toLowerCase()) ||
-    (item.facultyName?.toLowerCase() || "").includes(searchStudent.toLowerCase())
+  const filteredStudent = studentGroup?.filter(
+    (item) =>
+      `${item.class}.${item.groupName}`
+        .toLowerCase()
+        .includes(searchStudent.toLowerCase()) ||
+      (item.facultyName?.toLowerCase() || "").includes(
+        searchStudent.toLowerCase()
+      )
   );
-  
+
   useEffect(() => {
     getStudentGroup(term, Number(year)).then(
       (d: GetStudentGroupsByTermYearDto[]) => {
@@ -150,24 +154,14 @@ export default function Form() {
           {toggleMode ? (
             <div className="w-full rounded-sm py-2 px-10">
               <div className="w-full shadow-lg grid grid-cols-[5%_20%_20%_20%_15%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
-                <div className="text-center py-1 ">
-                  No.
-                </div>
+                <div className="text-center py-1 ">No.</div>
                 {/* <div className="text-center py-1 ">
                   รหัสอาจารย์
                 </div> */}
-                <div className="text-center py-1 ">
-                  ชื่อ
-                </div>
-                <div className="text-center py-1">
-                  นามสกุล
-                </div>
-                <div className="text-center py-1 ">
-                  หมวดวิชา
-                </div>
-                <div className="text-center py-1 ">
-                  เบอร์ติดต่อ
-                </div>
+                <div className="text-center py-1 ">ชื่อ</div>
+                <div className="text-center py-1">นามสกุล</div>
+                <div className="text-center py-1 ">หมวดวิชา</div>
+                <div className="text-center py-1 ">เบอร์ติดต่อ</div>
               </div>
               {filteredTeachers && filteredTeachers?.length > 0 ? (
                 <div className="shadow-md">
@@ -210,18 +204,10 @@ export default function Form() {
           ) : (
             <div className="w-full rounded-sm py-2 px-10">
               <div className="w-full shadow-lg grid grid-cols-[5%_15%_30%_40%_10%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg ">
-                <div className="text-center  py-1.5">
-                  No.
-                </div>
-                <div className="text-center py-1.5 ">
-                  ระดับชั้น
-                </div>
-                <div className="text-center py-1.5 ">
-                  หลักสูตร
-                </div>
-                <div className="text-center py-1.5 ">
-                  รหัสห้อง
-                </div>
+                <div className="text-center  py-1.5">No.</div>
+                <div className="text-center py-1.5 ">ระดับชั้น</div>
+                <div className="text-center py-1.5 ">หลักสูตร</div>
+                <div className="text-center py-1.5 ">รหัสห้อง</div>
                 <div className="text-center py-1.5">จำนวนนักเรียน</div>
               </div>
               {filteredStudent && filteredStudent.length > 0 ? (

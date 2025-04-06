@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { ClassroomGrading } from "./classroom";
 
 export function Main() {

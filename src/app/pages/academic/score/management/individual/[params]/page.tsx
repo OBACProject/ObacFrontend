@@ -10,7 +10,7 @@ import { getStudentDataById } from "@/resource/academics/grading/viewData/indivi
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StudentPopup, SubjectData } from "../component/studentPopup";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import { DataTableStudentInfo } from "@/app/components/bellTable/table_style_studentInfo";
 
 interface StudentDataProps {
@@ -55,10 +55,15 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
   };
 
   return (
-    <div className="">
-      {" "}
+    <div className=" mx-4 sm:mx-10 lg:mx-10 p-4">
+      <div className="w-full flex justify-start ">
+        <div className="px-10 rounded-3xl  flex gap-2 items-center  border border-gray-100 shadow-md  py-2 text-blue-700 text-xl w-fit">
+          <Users className="h-8 w-8" />
+          จัดการคะแนน (รายบุคคล)
+        </div>
+      </div>
       {isLoadingPage ? (
-        <div>
+        <div className="px-4 py-6 mx-4">
           <div className="flex justify-between w-full py-4">
             <Link
               href={
@@ -67,7 +72,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
               }
               className="grid align-middle lg:w-[800px] hover:bg-gray-50 duration-300   w-fit px-4 py-2 border  rounded-lg"
             >
-              <div className="flex gap-8 items-center">
+              <div className="flex gap-8 mx-4 sm:mx-10 lg:mx-10 p-4 items-center">
                 <div className="bg-gray-600 text-white px-5 py-0.5 text-xl rounded-md">
                   ข้อมูลนักเรียน
                 </div>

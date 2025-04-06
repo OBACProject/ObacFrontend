@@ -332,10 +332,14 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
                   ...student.subjects,
                 })) || []
               }
-              // isEdit={true}
-              // onRowClick={(student) => onRowClick(student.studentCode)}
               getRowLink={(student) => {
-                return `/pages/academic/score/management/individual/${student.studentCode}`;
+                //find a student by studentCode
+                const studentData = summaryData?.students.find(
+                  (studentData) =>
+                    studentData.studentCode === student.studentCode
+                );
+
+                return `/pages/academic/score/management/individual/${studentData?.studentId}`;
               }}
               pagination={summaryData?.students.length || 0}
             />
