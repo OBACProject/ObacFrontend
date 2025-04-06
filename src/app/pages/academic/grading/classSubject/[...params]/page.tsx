@@ -345,7 +345,7 @@ const ClassSubjectPage = ({ params }: { params: { params: string[] } }) => {
                   (chk) => chk.scheduleSubjectId === item.id
                 );
 
-                return `/pages/academic/grading2/studentInfo/${subjectId}/${data?.scheduleSubjectId}/${term}/${data?.studentGroupId}/${data?.year}`;
+                return `/pages/academic/grading/studentInfo/${subjectId}/${data?.scheduleSubjectId}/${term}/${data?.studentGroupId}/${data?.year}`;
               }}
             />
             <div className="flex justify-end px-10">
