@@ -1,18 +1,17 @@
 "use client";
 
 import { fetchPromoteStudent, GetGropGradeAbove } from "@/api/grad/gradAPI";
-import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
+import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
-import { StudentGroup } from "@/dto/studentDto";
+import { GetStudentGroupsByTermYearDto, StudentGroup } from "@/dto/studentDto";
 import { ArrowUpDown, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 
-const getStudentGroupData = async () => {
+const GetStudentGroupsByTermYear = async (term: string, year: number) => {
   try {
-    const response = await fetchGetAllStudentGroup();
-    return response;
+    return await fetchGetStudentGroupsByTermYear(term, year);
   } catch (err) {
     return [];
   }
@@ -33,12 +32,13 @@ const getGropGradeAbove = async (
 };
 
 export default function Main() {
-  const [groups, setGroups] = useState<StudentGroup[]>([]);
+  const currentYear = new Date().getFullYear() + 543;
+  const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
   const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
   const [groupID, setGroupID] = useState<number>(0);
-  const [grads, setGrad] = useState(2.0);
+  const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>("1");
-  const [year, setYear] = useState<number>(2567);
+  const [year, setYear] = useState<number>(currentYear);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>();
   const [nextGroupNameB, setNextGroupNameB] = useState<string>();
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);
@@ -46,17 +46,28 @@ export default function Main() {
     useState<boolean>(false);
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [resetPromote, setResetPromote] = useState<boolean>(false);
-  const [isSearch , setIsSeacrh] = useState<boolean>(false)
+  const [isSearch, setIsSeacrh] = useState<boolean>(false);
 
   useEffect(() => {
-    getStudentGroupData().then((d: StudentGroup[]) => {
-      setGroups(d);
-    });
+    if (term && year) {
+      GetStudentGroupsByTermYear("2", 2567)
+        .then((data: GetStudentGroupsByTermYearDto[] | undefined) => {
+          if (data) {
+            setGroups(data);
+          } else {
+            setGroups([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch student groups:", err);
+          setGroups([]);
+        });
+    }
   }, []);
 
   const groupOptions = groups.map((item) => ({
-    value: item.studentGroupId,
-    label: `${item.class}.${item.studentGroupName}`,
+    value: item.groupId,
+    label: `${item.class}.${item.groupName}`,
   }));
 
   const handleGroupChange = (
@@ -64,12 +75,11 @@ export default function Main() {
   ) => {
     if (selectedOption) {
       const selectedGroup = groups.find(
-        (item) => item.studentGroupId === selectedOption.value
+        (item) => item.groupId === selectedOption.value
       );
       if (selectedGroup) {
         setResetPromote(false);
-        setGroupID(selectedGroup.studentGroupId);
-
+        setGroupID(selectedGroup.groupId);
       }
     } else {
       setGroupID(0);
@@ -77,13 +87,12 @@ export default function Main() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = parseFloat(e.target.value);
-
-    if (isNaN(newValue)) return;
-    if (newValue < 1) newValue = 1;
-    if (newValue > 4) newValue = 4;
-
-    setGrad(newValue);
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value)) {
+      setGrad(value);
+    } else {
+      setGrad(0.0); 
+    }
   };
 
   const onFilterGroup = async () => {
@@ -95,7 +104,7 @@ export default function Main() {
         }
       );
       setSearchTrigger(false);
-      setIsSeacrh(true)
+      setIsSeacrh(true);
     } catch (err) {
       console.error("Error in onFilterGroup:", err);
       setSearchTrigger(false);
@@ -162,9 +171,9 @@ export default function Main() {
       <div className="flex justify-start px-10">
         <div
           style={{ userSelect: "none" }}
-          className="px-10 rounded-3xl text-xl shadow-md border border-gray-100 flex gap-2 items-center py-2 -500 text-blue-600 "
+          className="px-10 rounded-3xl text-xl shadow-md border border-gray-100 flex gap-2 items-center py-2 -500 text-blue-600 font-prompt_Light "
         >
-          <ArrowUpDown className="w-8 h-8"/>
+          <ArrowUpDown className="w-8 h-8" />
           ปรับเลื่อนชั้นเรียน
         </div>
       </div>
@@ -193,10 +202,11 @@ export default function Main() {
             onChange={(e) => setYear(Number(e.target.value))}
             value={year}
           >
-            <option value={2567}>2567</option>
-            <option value={2566}>2566</option>
-            <option value={2565}>2565</option>
-            <option value={2564}>2564</option>
+            <option value={currentYear}>{currentYear}</option>
+            <option value={currentYear - 1}>{currentYear - 1}</option>
+            <option value={currentYear - 2}>{currentYear - 2}</option>
+            <option value={currentYear - 3}>{currentYear - 3}</option>
+            <option value={currentYear - 4}>{currentYear - 4}</option>
           </select>
         </div>
         <div className="flex items-center gap-2" style={{ userSelect: "none" }}>
@@ -204,7 +214,7 @@ export default function Main() {
           <input
             type="number"
             className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
-            value={grads.toFixed(2)}
+            value={grads}
             onChange={handleChange}
             step={0.25}
             min={0.0}
@@ -224,7 +234,7 @@ export default function Main() {
           className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
           onClick={onFilterGroup}
           style={{ userSelect: "none" }}
-          disabled={!year || !term || !grads || !groupID}
+          disabled={!year || !term  || !groupID}
         >
           <Search className="w-5 h-5" />
           {searchTrigger ? <p>กำลังค้นหา...</p> : <p>ค้นหา</p>}
@@ -236,14 +246,17 @@ export default function Main() {
           <div>
             {newGroup ? (
               <div className="grid gap-4">
-                <div className="py-1 px-5 text-gray-600 font-semibold w-fit border-2 border-gray-400  rounded-md bg-white ">
-                  ชั้นเรียนปัจจุบัน {newGroup.class}.{newGroup.groupName}
+                <div className="py-1 px-5 text-gray-600 font-medium w-fit border border-gray-200  rounded-md bg-white  shadow-sm shadow-gray-100 flex item-center gap-2">
+                  <p>ชั้นเรียนปัจจุบัน</p>
+                  <p className="font-semibold text-blue-800">
+                    {newGroup.class}.{newGroup.groupName}
+                  </p>
                 </div>
                 <div className="flex gap-3 items-center">
                   <li className="text-[18px] text-gray-700 ">
                     ระบุชั้นเรียนต่อไป
                   </li>
-                  <p className="px-2 py-1 bg-gray-200 rounded-md">
+                  <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">
                     {newGroup.class}
                   </p>
                   :
@@ -281,7 +294,7 @@ export default function Main() {
                   </select>
                 </div>
                 <div>
-                  <div className="border-2 border-gray-400 bg-blue-200 text-black grid h-fit grid-cols-[10%_20%_30%_40%] ">
+                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_40%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
@@ -294,18 +307,18 @@ export default function Main() {
                   {newGroup.student.map((item, index) => (
                     <div
                       key={index}
-                      className="border border-t-0 border-gray-400 bg-white text-black grid h-fit grid-cols-[10%_20%_15%_15%_40%]"
+                      className="border border-t-0 border-gray-300 bg-white text-black grid h-fit grid-cols-[10%_20%_15%_15%_40%] shadow-md"
                     >
-                      <div className="text-center py-1 border-r border-gray-400">
+                      <div className="text-center py-1 border-r border-gray-300">
                         {index + 1}
                       </div>
-                      <div className="text-center py-1 border-r border-gray-400">
+                      <div className="text-center py-1 border-r border-gray-300">
                         {item.studentCode}
                       </div>
                       <div className="text-start py-1 pl-8">
                         {item.firstName}
                       </div>
-                      <div className="text-start py-1 border-r border-gray-400">
+                      <div className="text-start py-1 border-r border-gray-300">
                         {item.lastName}
                       </div>
                       <div className="text-center py-1">
@@ -319,7 +332,7 @@ export default function Main() {
                       disabled={!nextGroupNameA || !nextGroupNameB}
                       className={`${
                         resetPromote ? "hidden" : "block"
-                      } px-10 py-1 rounded-md text-white bg-gray-400 enabled:bg-green-400 enabled:hover:bg-green-600`}
+                      } px-10 py-1 rounded-md text-white bg-gray-400 enabled:bg-green-500 enabled:hover:bg-green-600`}
                       onClick={() => {
                         SetPromoteTrigger(true);
                       }}
@@ -349,7 +362,7 @@ export default function Main() {
       </div>
       {promoteTrigger && (
         <div
-          className="fixed duration-1000 animate-appearance-in inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
           onClick={() => SetPromoteTrigger(false)}
         >
           <div
@@ -394,6 +407,3 @@ export default function Main() {
     </div>
   );
 }
-
-
-

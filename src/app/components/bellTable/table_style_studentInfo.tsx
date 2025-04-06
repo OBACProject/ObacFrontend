@@ -39,11 +39,11 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="w-full flex border border-gray-400">
+      <div className="w-full flex border-2 border-l-0 border-r-0 border-gray-400">
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}
-            className={`bg-[#cfe4ff] text-gray-800 border border-gray-400 py-2 px-4 text-center font-semibold flex items-center justify-center ${col.className}`}
+            className={`bg-[#cfe4ff] text-gray-800  py-0 text-center font-semibold flex items-center justify-center ${col.className}`}
           >
             {col.label || "-"}
           </div>
@@ -55,8 +55,8 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
         paginatedData.map((item, rowIndex) => (
           <div
             key={`row-${rowIndex}`}
-            className={`w-full flex border border-gray-400 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-              rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"
+            className={`w-full flex border border-gray-300 h-fit  border-t-0 border-r-0 shadow-md hover:bg-blue-50 text-gray-600 cursor-pointer ${
+              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
             }`}
             onClick={() => onRowClick && onRowClick(item)}
           >
@@ -66,12 +66,12 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
               return (
                 <div
                   key={`cell-${rowIndex}-${colIndex}`}
-                  className={`text-center flex items-center px-4 py-2 border-r border-gray-400 ${
-                    col.className
-                  } ${item.isFailed ? "bg-red-200" : ""}
+                  className={`text-center flex items-center px-4   border-r font-light
+                     border-gray-300 ${col.className} ${
+                    item.isFailed ? "bg-red-200" : ""
+                  }
                 `}
                 >
-                  {/* Ensure renderContent is a valid ReactNode */}
                   {renderContent != null ? renderContent : "-"}
                 </div>
               );
@@ -88,7 +88,7 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
+            className="px-4 py-1 bg-gray-300 rounded-lg disabled:opacity-50"
           >
             Prev
           </button>
@@ -98,7 +98,7 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
+            className="px-4 py-1 bg-gray-300 rounded-lg disabled:opacity-50"
           >
             Next
           </button>

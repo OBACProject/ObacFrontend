@@ -6,7 +6,6 @@ import {
 } from "@/resource/academics/sidebarData";
 import { motion } from "framer-motion";
 import {
-  ChevronRight,
   CircleUserRound,
   DoorOpen,
   Menu,

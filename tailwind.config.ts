@@ -76,8 +76,8 @@ const config: Config = {
         playfair: ["Playfair Display", "serif"],
         inter: ["Inter", "sans-serif"],
         sarabun: ["Sarabun", "sans-serif"],
-        prompt: ['Prompt', 'sans-serif'],
-        prompt_Light: ['Prompt-Light', 'sans-serif'],
+        prompt: ["Prompt", "sans-serif"],
+        prompt_Light: ["Prompt-Light", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,6 +85,10 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        appearanceIn: {
+          "0%": { opacity: "0", transform: "scale(0.98)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
@@ -125,6 +129,7 @@ const config: Config = {
         fadeStep2: "fadeIn 4s ease-in-out",
         blob: "blob 7s infinite",
         blob2: "blob2 7s infinite",
+        // appearance: "appearanceIn 0.1s ease-out",
       },
       backgroundImage: {
         authBg: "/images/obac_view.jpg",

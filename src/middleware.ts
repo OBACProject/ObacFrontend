@@ -33,7 +33,7 @@ export function middleware(req: NextRequest) {
             );
           case "Academic":
             return NextResponse.redirect(new URL("/pages/academic", req.url));
-          case "admin":
+          case "Admin":
             return NextResponse.redirect(
               new URL("/pages/admin/academicManagement", req.url)
             );

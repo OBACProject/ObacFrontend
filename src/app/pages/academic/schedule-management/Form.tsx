@@ -27,10 +27,11 @@ const getAllTeacher = async () => {
 };
 
 export default function Form() {
+  const currentYear = new Date().getFullYear() + 543;
   const [toggleMode, setToggleMode] = useState<boolean>(false);
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const [term, setTerm] = useState<string>("2");
-  const [year, setYear] = useState<string>("2567");
+  const [year, setYear] = useState<number>(currentYear);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<
     GetStudentGroupsByTermYearDto[]
@@ -140,6 +141,34 @@ export default function Form() {
               </div>
             )}
           </div>
+          <div className="flex items-center gap-5 justify-center">
+             <div className="flex items-center gap-2">
+            <label>ภาคเรียน</label>
+            <select
+              className="py-1 px-2 rounded-sm  border focus:outline-blue-400 focus:outline-1"
+              onChange={(e) => setTerm(e.target.value)}
+              value={term}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <label>ปีการศึกษา</label>
+            <select
+              className="py-1 px-2 rounded-sm border focus:outline-blue-400 focus:outline-1"
+              onChange={(e) => setYear(Number(e.target.value))}
+              value={year}
+            >
+              <option value={currentYear}>{currentYear}</option>
+              <option value={currentYear - 1}>{currentYear - 1}</option>
+              <option value={currentYear - 2}>{currentYear - 2}</option>
+              <option value={currentYear - 3}>{currentYear - 3}</option>
+              <option value={currentYear - 4}>{currentYear - 4}</option>
+            </select>
+          </div>
+          </div>
+         
         </div>
         <button
           className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
@@ -155,9 +184,6 @@ export default function Form() {
             <div className="w-full rounded-sm py-2 px-10">
               <div className="w-full shadow-lg grid grid-cols-[5%_20%_20%_20%_15%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                 <div className="text-center py-1 ">No.</div>
-                {/* <div className="text-center py-1 ">
-                  รหัสอาจารย์
-                </div> */}
                 <div className="text-center py-1 ">ชื่อ</div>
                 <div className="text-center py-1">นามสกุล</div>
                 <div className="text-center py-1 ">หมวดวิชา</div>
@@ -168,7 +194,9 @@ export default function Form() {
                   {" "}
                   {filteredTeachers?.map((item: GetAllTeacher, index) => (
                     <Link
-                      href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year}&param3=${item.teacherId}`}
+                      href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year.toString()}&param3=${
+                        item.teacherId
+                      }`}
                       key={item.teacherId}
                       className={` ${
                         index % 2 == 0 ? "bg-white" : "bg-white"
@@ -177,9 +205,6 @@ export default function Form() {
                       <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1   border-gray-300">
                         {index + 1}
                       </div>
-                      {/* <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                        <p className="line-clamp-1">{item.teacherCode}</p>
-                      </div> */}
                       <div className="text-center flex items-center text-gray-700 py-1 px-4 border-r border-gray-300 ">
                         <p className="line-clamp-1">{item.thaiName}</p>
                       </div>
@@ -261,7 +286,10 @@ export default function Form() {
       )}
 
       {popUpAddSubject == true && (
-        <AddSchedulePopUp onClosePopUp={setpopUpAddSubject} year={year} />
+        <AddSchedulePopUp
+          onClosePopUp={setpopUpAddSubject}
+          year={year.toString()}
+        />
       )}
     </div>
   );

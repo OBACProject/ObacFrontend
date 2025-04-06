@@ -26,8 +26,9 @@ export async function login(formData: FormData) {
   const user = { username: formData.get("username") };
 
   const session = await encrypt({ user });
+  const eightHoursFromNow = new Date(new Date().getTime() + 8 * 60 * 60 * 1000)
   cookies().set("session", session, {
-    expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
+    expires: eightHoursFromNow,
     httpOnly: true,
   });
 }
@@ -36,10 +37,18 @@ export async function logout() {
   cookies().set("session", "", { expires: new Date(0) });
 }
 
-export async function getSession() {
+export async function getSession(): Promise<any | null> {
   const session = cookies().get("session")?.value;
   if (!session) return null;
-  return await decrypt(session);
+
+  try {
+    return await decrypt(session);
+  } catch (err) {
+    console.warn("Session is invalid or expired:", err);
+    cookies().set("session", "", { expires: new Date(0) });
+
+    return null;
+  }
 }
 
 export async function updateSession(request: NextRequest) {

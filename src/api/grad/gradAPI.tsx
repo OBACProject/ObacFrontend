@@ -38,7 +38,7 @@ export const fetchGetGradBySubjectId = async (
   }
 };
 
-export const fetchGetGradPerTermByStudentId = async (
+export const fetchGetStudentGradeByTermYear = async (
   studentId: number,
   term: string,
   year: number
