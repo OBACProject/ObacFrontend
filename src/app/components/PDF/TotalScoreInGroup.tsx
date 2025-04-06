@@ -6,11 +6,8 @@ import autoTable from "jspdf-autotable";
 import {
   GeneralData,
   StudentList,
-} from "@/app/pages/academic/score/management/classroom/classroomByGroupId";
+} from "@/app/pages/academic/score/management/classroom/[...params]/page";
 
-// max 280 y
-// max 205 x
-type Data = {};
 export interface DataList {
   generalData: GeneralData;
   studentList: StudentList[];

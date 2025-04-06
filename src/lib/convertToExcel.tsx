@@ -1,7 +1,7 @@
 import {
   GeneralData,
   StudentList,
-} from "@/app/pages/academic/score/management/classroom/classroomByGroupId";
+} from "@/app/pages/academic/score/management/classroom/[...params]/page";
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
