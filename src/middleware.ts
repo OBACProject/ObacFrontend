@@ -14,7 +14,7 @@ export function middleware(req: NextRequest) {
     "/pages/student": ["Student"],
     "/pages/teacher": ["Teacher"],
     "/pages/academic": ["Academic"],
-    "/pages/admin": ["admin"],
+    "/pages/admin": ["Admin"],
   };
 
   // Check if the requested path matches any restricted paths
@@ -35,7 +35,7 @@ export function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL("/pages/academic", req.url));
           case "Admin":
             return NextResponse.redirect(
-              new URL("/pages/admin/academicManagement", req.url)
+              new URL("/pages/admin/profile", req.url)
             );
           default:
             return NextResponse.redirect(new URL("/pages/login", req.url));

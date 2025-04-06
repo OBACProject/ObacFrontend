@@ -46,26 +46,6 @@ export function AcademicSidebar({
       console.error("Logout failed:", error);
     }
   };
-  const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
-  const [submenuTimeout, setSubmenuTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
-
-  const handleMouseEnter = (index: number) => {
-    if (submenuTimeout) clearTimeout(submenuTimeout);
-    const timeout = setTimeout(() => {
-      setOpenSubMenu(index);
-    }, 200);
-    setSubmenuTimeout(timeout);
-  };
-
-  const handleMouseLeave = () => {
-    if (submenuTimeout) clearTimeout(submenuTimeout);
-    const timeout = setTimeout(() => {
-      setOpenSubMenu(null);
-    }, 200);
-    setSubmenuTimeout(timeout);
-  };
 
   return (
     <div className="fixed flex flex-col z-20  w-full">
@@ -236,26 +216,7 @@ export function SidebarMenu({
           })}
         </div>
       </div>
-      {/* Sidebar Toggle Button */}
-      {/* <motion.div
-        animate={isVisible ? { x: 270 } : { x: 60 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="w-fit text-white"
-      >
-        <button
-          onClick={() => setIsVisible(!isVisible)}
-          className="absolute py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md text-white rounded-r-md"
-        >
-          <ChevronRight
-            style={{ width: "2.0rem", height: "2.0rem" }}
-            className={`${
-              isVisible ? "rotate-180" : ""
-            } text-white duration-700`}
-          />
-        </button>
-      </motion.div> */}
 
-      {/* Expanded Sidebar */}
       <motion.div
         initial={{ x: -232, opacity: 1 }}
         animate={isVisible ? { x: 50 } : { x: -160 }}

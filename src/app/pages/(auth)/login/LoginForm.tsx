@@ -60,7 +60,7 @@ export default function LoginForm({ session }: LoginFormProps) {
           router.push("/pages/academic/profile");
           break;
         case "Admin":
-          router.push("/pages/admin/academicManagement");
+          router.push("/pages/admin/profile");
           break;
         default:
           toast.error("Unknown role");

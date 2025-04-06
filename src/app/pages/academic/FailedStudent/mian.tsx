@@ -201,7 +201,7 @@ export default function Main() {
                         );
                       }}
                       key={index}
-                      className="border border-t-0 border-gray-300 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_40%] shadow-md"
+                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_40%] shadow-md"
                     >
                       <div className="text-center py-1 border-r border-gray-400">
                         {index + 1}

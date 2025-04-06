@@ -83,26 +83,20 @@ export function TeacherPage() {
 
   useEffect(() => {
     if (teacherDatas) {
-      const searchMatch = teacherDatas.filter(
-        (teacher) =>
-          teacher.firstName
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase()) ||
-          teacher.lastName
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase()) ||
-          teacher.teacherId.toString().includes(searchTeacher.toLowerCase()) ||
-          teacher.thaiName
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase()) ||
-          teacher.thaiLastName
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase()) ||
-          teacher.facultyName
-            .toLowerCase()
-            .includes(searchTeacher.toLowerCase()) ||
-          teacher.email.toLowerCase().includes(searchTeacher.toLowerCase())
-      );
+      const searchMatch = teacherDatas.filter((teacher) => {
+        const query = searchTeacher.toLowerCase();
+  
+        return (
+          teacher.firstName?.toLowerCase().includes(query) ||
+          teacher.lastName?.toLowerCase().includes(query) ||
+          teacher.teacherId?.toString().includes(query) ||
+          teacher.thaiName?.toLowerCase().includes(query) ||
+          teacher.thaiLastName?.toLowerCase().includes(query) ||
+          teacher.facultyName?.toLowerCase().includes(query) ||
+          teacher.email?.toLowerCase().includes(query)
+        );
+      });
+  
       setSearchTeacherFilter(searchMatch);
     }
   }, [searchTeacher, teacherDatas]);
