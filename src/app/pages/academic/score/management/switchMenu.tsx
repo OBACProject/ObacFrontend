@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ClassroomGrading } from "./classroom/classroom";
-import { StudentListPage } from "./individual/studentList";
+import { ClassroomGrading } from "./classroom";
+import { StudentListPage } from "./studentList";
 import { Boxes, Users } from "lucide-react";
 
 export default function SwitchMenu() {

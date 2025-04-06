@@ -15,7 +15,7 @@ import {
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { GroupSummaryGradeResponse } from "./[...params]/page";
+import { GroupSummaryGradeResponse } from "./classroom/[...params]/page";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
