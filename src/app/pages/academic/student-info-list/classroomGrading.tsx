@@ -199,10 +199,7 @@ export function ClassroomGrading(props: {
 
       // Extract year level from item.class (e.g., xxx. 1/x → yearLevel = 1)
       const yearLevel = parseInt(item.classLevel.substring(5, 6), 10);
-      console.log(selectedYear);
-      console.log(yearLevel);
       const matchYearLevel = currentYear - Number(selectedYear);
-      // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
 
       let isYearLevelValid = false;
 

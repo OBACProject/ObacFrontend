@@ -26,7 +26,7 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ชั้น ${studentGroup} ปีการศึกษา ${year}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน ชั้น ${studentGroup} ปีการศึกษา ${year}`, 38, 10, {
     align: "center",
   });
   doc.setFontSize(12);
@@ -57,8 +57,8 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
     columnStyles: {
       0: { cellWidth: 10 },
       1: { cellWidth: 30 },
-      2: { cellWidth: 60 },
-      3: { cellWidth: 70 },
+      2: { cellWidth: 70 },
+      3: { cellWidth: 60 },
       4: { cellWidth: 31 },
     },
     margin: { left: 4, right: 0 },
@@ -105,7 +105,7 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
           0: { cellWidth: 10 },
           1: { cellWidth: 30, halign: "center" },
           2: {
-            cellWidth: 30,
+            cellWidth: 40,
             halign: "left",
             lineWidth: { right: 0, top: 0.2, bottom: 0.2, left: 0.2 },
             cellPadding: { left: 5, right: 0, top: 1, bottom: 1 },
@@ -116,7 +116,7 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
             lineWidth: { right: 0.2, left: 0, top: 0.2, bottom: 0.2 },
             cellPadding: { left: 0, right: 0, top: 1, bottom: 1 },
           },
-          4: { cellWidth: 70 },
+          4: { cellWidth: 60 },
           5: { cellWidth: 31 },
         },
         margin: { left: 4, right: 0 },
