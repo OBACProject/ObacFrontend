@@ -118,7 +118,7 @@ export function ClassroomGrading() {
 
   useEffect(() => {
     const fetchFilterData = async () => {
-      const rawData = await getRawProgramViewData();
+      const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
 
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
@@ -133,7 +133,7 @@ export function ClassroomGrading() {
       setDataTable(formattedData);
 
       // set for filter data
-      const data = await filterProgramsViewData();
+      const data = await filterProgramsViewData(selectedTerm, selectedYear);
       const vocational = data.filter(
         (item: EducationData) => item.classLevel === "ปวช"
       );

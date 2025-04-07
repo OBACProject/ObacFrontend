@@ -1,9 +1,12 @@
 import { filterProgramsParamsData, EducationData } from "@/dto/studentDto";
 import { filterProgramsData } from "../api/filterProgramsApiParams";
 
-export async function filterProgramsViewData(): Promise<EducationData[]> {
+export async function filterProgramsViewData(
+  term: string,
+  year: string
+): Promise<EducationData[]> {
   try {
-    const data = await filterProgramsData();
+    const data = await filterProgramsData(term, year);
 
     const groupedData = data.reduce(
       (acc: Record<string, EducationData>, item: filterProgramsParamsData) => {
@@ -64,9 +67,10 @@ export async function filterProgramsViewData(): Promise<EducationData[]> {
   }
 }
 
-export async function getRawProgramViewData(): Promise<
-  filterProgramsParamsData[]
-> {
-  const data = await filterProgramsData();
+export async function getRawProgramViewData(
+  term: string,
+  year: string
+): Promise<filterProgramsParamsData[]> {
+  const data = await filterProgramsData(term, year);
   return data as filterProgramsParamsData[];
 }

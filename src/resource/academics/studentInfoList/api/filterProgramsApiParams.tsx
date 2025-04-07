@@ -3,9 +3,10 @@ import { filterProgramsParamsData } from "@/dto/studentDto";
 import api from "@/lib/apiCentralized";
 import { cookies } from "next/headers";
 
-export const filterProgramsData = async (): Promise<
-  filterProgramsParamsData[]
-> => {
+export const filterProgramsData = async (
+  term: string,
+  year: string
+): Promise<filterProgramsParamsData[]> => {
   try {
     const token = cookies().get("token")?.value;
 
@@ -13,12 +14,16 @@ export const filterProgramsData = async (): Promise<
       throw new Error("No auth token found in cookies.");
     }
 
-    const response = await api.get("Program/GetAllProgramAsync", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    // fix to use a api
+    const response = await api.get(
+      `Student/GetStudentGroupsByTermYear?term=${term}&year=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data.data;
   } catch (error) {
     console.error(error);

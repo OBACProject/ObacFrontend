@@ -49,11 +49,11 @@ export function ClassroomGrading(props: {
     ปวส: ["1", "2"],
   };
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1;
-  const yearsList = Array.from({ length: 5 }, (_, i) =>
-    (currentYear + 543 - i).toString()
+  const currentYear = new Date().getFullYear() - 1 + 543;
+  const yearsList = Array.from({ length: 3 }, (_, i) =>
+    (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string>("1");
+  const [selectedTerm, setSelectedTerm] = useState<string>("2");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
@@ -155,7 +155,7 @@ export function ClassroomGrading(props: {
     useState<GetStudentListByGroupIDDto | null>();
   useEffect(() => {
     const fetchFilterData = async () => {
-      const rawData = await getRawProgramViewData();
+      const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
           classLevel: `${item.class}. ${item.groupName}`,
@@ -167,7 +167,7 @@ export function ClassroomGrading(props: {
 
       setDataTable(formattedData);
 
-      const data = await filterProgramsViewData();
+      const data = await filterProgramsViewData(selectedTerm, selectedYear);
       const vocational = data.filter(
         (item: EducationData) => item.classLevel === "ปวช"
       );
@@ -197,7 +197,30 @@ export function ClassroomGrading(props: {
         ? item.classLevel === selectedClassLevel
         : true;
 
-      return matchClassLevel && matchFaculty && matchProgram && matchRoom;
+      // Extract year level from item.class (e.g., xxx. 1/x → yearLevel = 1)
+      const yearLevel = parseInt(item.classLevel.substring(5, 6), 10);
+      console.log(selectedYear);
+      console.log(yearLevel);
+      const matchYearLevel = currentYear - Number(selectedYear);
+      // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
+
+      let isYearLevelValid = false;
+
+      if (matchYearLevel === 0) {
+        isYearLevelValid = true;
+      } else if (matchYearLevel === 1) {
+        isYearLevelValid = yearLevel > 1;
+      } else if (matchYearLevel === 2) {
+        isYearLevelValid = yearLevel === 3;
+      }
+
+      return (
+        matchClassLevel &&
+        matchFaculty &&
+        matchProgram &&
+        matchRoom &&
+        isYearLevelValid
+      );
     });
     const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
 
@@ -209,7 +232,9 @@ export function ClassroomGrading(props: {
     selectedProgram,
     selectedGradeLevel,
     selectedRoom,
+    selectedYear,
   ]);
+
   const handleDownloadPDF = async (groupId: number) => {
     try {
       const item = await getStudentDataList(groupId);
@@ -337,7 +362,18 @@ export function ClassroomGrading(props: {
                   disabled={!selectedFaculty}
                 />
               </div>
-
+              <div className="w-1/4 flex items-center gap-2  p-2">
+                <h1 className="line-clamp-1">ภาคเรียน</h1>
+                <Combobox
+                  options={term.map((item) => ({
+                    value: item,
+                    label: item,
+                  }))}
+                  defaultValue="2"
+                  buttonLabel="เลือกภาคเรียน"
+                  onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+                />
+              </div>
               <div className="w-1/6 flex items-center gap-2  p-2 ">
                 <h1>ปี </h1>
                 <Combobox
