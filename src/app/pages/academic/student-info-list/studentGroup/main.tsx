@@ -3,7 +3,6 @@ import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
 import {
   GetStudentListByGroupIDDto,
-  StudentDto,
   StudentListByGroupIDDto,
 } from "@/dto/studentDto";
 import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
@@ -50,6 +49,7 @@ export default function Main({ groupId }: Props) {
       StudentNameListPDF({
         studentGroup: studentClass,
         student: studentInGroup.students,
+        year:2567
       });
     }
   };
