@@ -204,6 +204,7 @@ export type StudentDto = {
 export type StudentListByGroupIDDto = {
   studentCode: string;
   studentId: number;
+  gender:string;
   firstName: string;
   lastName: string;
   studentStatus:string;

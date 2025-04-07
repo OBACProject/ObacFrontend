@@ -8,12 +8,10 @@ import { StudentListByGroupIDDto } from "@/dto/studentDto";
 interface DataList {
   student?: StudentListByGroupIDDto[];
   studentGroup: string;
+  year: number;
 }
 
-const StudentNameListPDF = ({
-    student,
-  studentGroup
-}: DataList) => {
+const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -28,7 +26,7 @@ const StudentNameListPDF = ({
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ชั้น ${studentGroup}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน ชั้น ${studentGroup} ปีการศึกษา ${year}`, 36, 10, {
     align: "center",
   });
   doc.setFontSize(12);
@@ -66,17 +64,25 @@ const StudentNameListPDF = ({
     margin: { left: 4, right: 0 },
   });
   doc.setFont("THSarabun");
+
   let y2 = doc.lastAutoTable.finalY;
   let n = 0;
   if (student) {
     for (let i = 0; i < student.length; i++) {
+      let gender = "";
+      if (student[i].gender == "Male") {
+        gender = "นาย"
+      }
+      if (student[i].gender == "Female"){
+        gender = "นางสาว"
+      }
       autoTable(doc, {
         startY: y2,
         body: [
           [
             i + 1,
             student[i].studentCode,
-            `${student[i].firstName}`,
+            `${gender} ${student[i].firstName}`,
             `${student[i].lastName}`,
             "",
             "",

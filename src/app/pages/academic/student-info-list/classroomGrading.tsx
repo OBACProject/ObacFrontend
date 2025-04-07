@@ -225,6 +225,7 @@ export function ClassroomGrading(props: {
         StudentNameListPDF({
           studentGroup: studentClass,
           student: item.students,
+          year:Number(selectedYear)
         });
       } else {
         alert("No student data available for this group.");
@@ -266,7 +267,7 @@ export function ClassroomGrading(props: {
     { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-4/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
     {
-      label: "ใบออกเกรด",
+      label: "ใบรายชื่อ",
       key: "action",
       className: "w-3/12 justify-center",
       render: (row: ClassroomTable) => (
