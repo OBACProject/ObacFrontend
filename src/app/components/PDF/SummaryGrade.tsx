@@ -33,6 +33,18 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     unit: "mm",
     format: "a4",
   });
+  const img = new Image();
+  img.src = "/asset/footprintOBAC.png";
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const imgWidth = 180;
+  const imgHeight = 180; 
+  const x = (pageWidth - imgWidth) / 2;
+  const y = (pageHeight - imgHeight) / 2;
+  doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
+
+
   const thaiDate = getThaiDate();
   let gender = "";
   if (grads.gender == "Female") {
@@ -125,6 +137,8 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   let Xaxis = 30;
   let swift = false;
 
+  let AllOfGrad = 0;
+  let AllOfCredit = 0;
   for (let i = 0; i < grads.year.length; i++) {
     if (swift == false && startColumn >= 250) {
       startColumn = 64;
@@ -146,6 +160,7 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     let inStartColoume = startColumn + 4;
     let CreditCount = 0;
     let CountGrad = 0;
+
     for (let j = 0; j < grads.year[i].termQuery.length; j++) {
       if (swift == false && inStartColoume >= 250) {
         inStartColoume = 63;
@@ -163,6 +178,9 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
         Number(grads.year[i].termQuery[j].credit);
       CountGrad += GradResult;
       CreditCount += Number(grads.year[i].termQuery[j].credit);
+
+      AllOfGrad += GradResult;
+      AllOfCredit += Number(grads.year[i].termQuery[j].credit);
       doc.text(
         `${grads.year[i].termQuery[j].subject_code}`,
         Xaxis - 23,
@@ -203,6 +221,13 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
     doc.setFont("THSarabun", "normal");
     startColumn += 8;
   }
+  doc.setFont("THSarabunBold", "bold");
+  const result = (
+    Math.floor((AllOfGrad / parseFloat(AllOfCredit.toFixed(2)) || 0) * 100) /
+    100
+  ).toFixed(2);
+  doc.text(`เกรดเฉลี่ยสะสมทั้งหมด : ${result}`, Xaxis - 4, startColumn);
+  doc.setFont("THSarabun", "normal");
 
   //   doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
   //   doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);

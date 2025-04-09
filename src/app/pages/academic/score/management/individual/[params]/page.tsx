@@ -106,7 +106,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
               <div className="flex items-center gap-2 py-3 ">
                 {scoreFileData ? (
                   <button
-                    className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit cursor-not-allowed"
+                    className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit "
                     onClick={() => {
                       SummaryGradPDF(scoreFileData);
                     }}
@@ -117,6 +117,12 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
                 ) : (
                   <div>ไม่มี</div>
                 )}
+                 <button
+                    className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit cursor-not-allowed "
+                  >
+                    <Download className="w-4 h-4" />
+                    <p>ดาวโหลดน์Transcript</p>
+                  </button>
               </div>
             </div>
           </div>
