@@ -67,7 +67,7 @@ export default function Main() {
     localStorage.setItem("selectedStudentData", JSON.stringify(data));
     localStorage.setItem("activeTabStudent", "individualStudentInfo");
 
-    router.push("/pages/academic/score/management/individual");
+    router.push(`/pages/academic/score/management/individual/${id}`);
   };
 
   return (
