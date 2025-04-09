@@ -157,7 +157,7 @@ export default function Form({ studentId }: Props) {
             ย้ายห้องเรียน
           </button>
           <Link
-            href={"/pages/academic/score/management/individual"}
+            href={`/pages/academic/score/management/individual/${students?.studentId}`}
             className="flex gap-2 items-center px-5 py-1 rounded-full bg-slate-200 hover:bg-slate-300"
           >
             <FileChartColumn className="h-5 w-5" />
