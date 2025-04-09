@@ -39,11 +39,10 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const imgWidth = 180;
-  const imgHeight = 180; 
+  const imgHeight = 180;
   const x = (pageWidth - imgWidth) / 2;
   const y = (pageHeight - imgHeight) / 2;
   doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
-
 
   const thaiDate = getThaiDate();
   let gender = "";
@@ -229,13 +228,19 @@ const SummaryGradPDF = (grads: GetStudentGradeDetailDto) => {
   doc.text(`เกรดเฉลี่ยสะสมทั้งหมด : ${result}`, Xaxis - 4, startColumn);
   doc.setFont("THSarabun", "normal");
 
-  //   doc.text("(นางสาวพรทิพย์ จำปีพันธ์)", 100, 280);
-  //   doc.text("หัวหน้าฝ่ายทะเบียน", 104.5, 285);
-  //   doc.text(`${thaiDate}`, 105, 290);
+  doc.text(`ลงชื่อ .................................................. ( เจ้าหน้าที่งานทะเบียน )`, 25, 265);
+  doc.text("( นายพิเชษฐ รอดคุ้ม )",37, 270);
 
-  //   doc.text("(นายวิทวัต โยธินนรธรรม)", 160, 280);
-  //   doc.text("ผู้อำนวยการ", 168, 285);
-  //   doc.text(`${thaiDate}`, 165, 290);
+  doc.text(`ลงชื่อ .................................................. ( อาจารย์ที่ปรึกษา )`, 120, 265);
+  doc.text("( .................................................. )", 125, 270);
+
+  doc.text(`ลงชื่อ .................................................. ( รอง ผอ.ฝ่ายวิชาการ )`, 25, 280);
+  doc.text("( นายรัฐสยาม วงษ์ยี่ )", 37, 285);
+
+  doc.text(`ลงชื่อ .................................................. ( ผู้อำนวยการ )`, 120, 280);
+  doc.text("( นายวิทวัต โยธินนรธรรม )", 130, 285);
+
+
 
   doc.text(`${thaiDate}`, 180, 295);
 
