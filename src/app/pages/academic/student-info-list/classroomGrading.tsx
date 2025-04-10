@@ -244,9 +244,13 @@ export function ClassroomGrading(props: {
 
       if (item && !Array.isArray(item)) {
         const studentClass = item.class + "." + item.groupName;
+        const filteredStudents = item.students.filter(
+          (student) =>
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+        );
         StudentNameListPDF({
           studentGroup: studentClass,
-          student: item.students,
+          student: filteredStudents,
           year:Number(selectedYear)
         });
       } else {

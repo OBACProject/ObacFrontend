@@ -25,22 +25,33 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
   doc.addFont("THSarabunBold.ttf", "THSarabunBold", "normal");
 
   doc.setFont("THSarabunBold");
-  doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ชั้น ${studentGroup} ปีการศึกษา ${year}`, 38, 10, {
+  doc.setFontSize(20);
+  doc.text(`วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ`, 105, 10, {
     align: "center",
   });
+  doc.setFont("THSarabun");
+  doc.setFontSize(16);
+  doc.text(
+    `รายชื่อนักศึกษา ห้อง ${studentGroup}     ประจำปีการศึกษา ${year}    แผนก`,
+    105,
+    18,
+    {
+      align: "center",
+    }
+  );
+  doc.text(
+    `นักศึกษามาสอบ.........คน   ขาดสอบ.........คน    รหัส.......................ชื่อวิชา........................................`,
+    105,
+    24,
+    {
+      align: "center",
+    }
+  );
   doc.setFontSize(12);
 
-  doc.line(4, 4, 4, 291);
-  doc.line(205, 4, 205, 291);
-  doc.line(4, 4, 205, 4);
-  doc.line(205, 291, 4, 291);
-
-  doc.line(4, 12, 205, 12);
-
   autoTable(doc, {
-    startY: 12,
-    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "", "หมายเหตุ"]],
+    startY: 27,
+    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ลายเซ็น", "หมายเหตุ"]],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -71,10 +82,10 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
     for (let i = 0; i < student.length; i++) {
       let gender = "";
       if (student[i].gender == "Male") {
-        gender = "นาย"
+        gender = "นาย";
       }
-      if (student[i].gender == "Female"){
-        gender = "นางสาว"
+      if (student[i].gender == "Female") {
+        gender = "นางสาว";
       }
       autoTable(doc, {
         startY: y2,
@@ -122,11 +133,27 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
         margin: { left: 4, right: 0 },
       });
       y2 += 7;
-      if (y2 >= 280) {
+      if (y2 > 255) {
+        doc.addPage()
         y2 = 14;
       }
     }
   }
+  if (y2 >255 ){
+    doc.addPage()
+    y2 = 20
+  }else{
+    y2 +=15
+  }
+  doc.setFontSize(16)
+  doc.text("ลงชื่อ............................................." , 58 , y2 ,{align:"center"})
+  doc.text("(.............................................)" , 58+3 , y2+6 ,{align:"center"})
+  doc.text("กรรมการคุมสอบ" , 55+3 , y2+13 ,{align:"center"})
+
+  doc.text("ลงชื่อ............................................." , 147 , y2 ,{align:"center"})
+  doc.text("(.............................................)" , 147+3 , y2+6 ,{align:"center"})
+  doc.text("กรรมการคุมสอบ" , 147+3 , y2+13 ,{align:"center"})
+
   doc.save(`${studentGroup}.pdf`);
 };
 export default StudentNameListPDF;

@@ -208,6 +208,12 @@ export default function Form({ studentId }: Props) {
                 />
               </div>
               <p className="w-[100px]">ชื่อ - นามสกุล</p>
+              {students?.gender == "Male" ? (
+                <label>นาย</label>
+              ) : (
+                <label>นางสาว</label>
+              )}
+
               <input
                 type="text"
                 className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"

@@ -46,35 +46,39 @@ export default function Main({ groupId }: Props) {
     if (studentInGroup) {
       const studentClass =
         studentInGroup?.class + "." + studentInGroup?.groupName;
+        const filteredStudents = studentInGroup.students.filter(
+          (student) =>
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+        );
       StudentNameListPDF({
         studentGroup: studentClass,
-        student: studentInGroup.students,
-        year:2567
+        student: filteredStudents,
+        year: 2567,
       });
     }
   };
 
-   const handleDownloadExcel = async () => {
-      try {
-        const item = await getStudentDataList(groupId);
-  
-        if (item && !Array.isArray(item)) {
-          setStudentInGroup(item);
-        } else {
-          setStudentInGroup(null);
-        }
-  
-        if (item && !Array.isArray(item)) {
-          const studentClass = item.class + "." + item.groupName;
-          ConvertClassroomToExcel(item.students, studentClass);
-        } else {
-          alert("No student data available for this group.");
-        }
-      } catch (error) {
-        console.error("Error fetching student data:", error);
-        alert("Failed to fetch student data. Please try again.");
+  const handleDownloadExcel = async () => {
+    try {
+      const item = await getStudentDataList(groupId);
+
+      if (item && !Array.isArray(item)) {
+        setStudentInGroup(item);
+      } else {
+        setStudentInGroup(null);
       }
-    };
+
+      if (item && !Array.isArray(item)) {
+        const studentClass = item.class + "." + item.groupName;
+        ConvertClassroomToExcel(item.students, studentClass);
+      } else {
+        alert("No student data available for this group.");
+      }
+    } catch (error) {
+      console.error("Error fetching student data:", error);
+      alert("Failed to fetch student data. Please try again.");
+    }
+  };
   return (
     <div className="py-2 w-full px-10">
       <div className="flex px-5 justify-start py-3 items-center">
@@ -111,7 +115,7 @@ export default function Main({ groupId }: Props) {
       </div>
       {isLoadingPage ? (
         <div className="w-full px-5 pb-10">
-          <div className="w-full shadow-lg grid grid-cols-[5%_10%_25%_60%]  bg-white border-t-2 border-b-2 text-lg border-gray-400">
+          <div className="w-full shadow-lg grid grid-cols-[5%_10%_30%_55%]  bg-white border-t-2 border-b-2 text-lg border-gray-400">
             <div className="text-center py-2">ลำดับ</div>
             <div className="text-center py-2">รหัสนักเรียน</div>
             <div className="text-center py-2">ชื่อ - นามสกุล</div>
@@ -126,7 +130,7 @@ export default function Main({ groupId }: Props) {
                     key={index}
                     className={` ${
                       index % 2 == 0 ? "bg-white" : ""
-                    } grid grid-cols-[5%_10%_10%_15%_60%]  border border-r-0 border-l-0 text-[16px] hover:bg-blue-100 border-gray-300 text-gray-700  border-t-0`}
+                    } grid grid-cols-[5%_10%_15%_15%_55%]  border border-r-0 border-l-0 text-[16px] hover:bg-blue-100 border-gray-300 text-gray-700  border-t-0`}
                   >
                     <div className="text-center flex items-center w-full justify-center text-gray-700 border-r py-1  border-gray-300">
                       {index + 1}
@@ -134,13 +138,31 @@ export default function Main({ groupId }: Props) {
                     <p className="text-start flex items-center px-4 border-r border-gray-300   py-1 line-clamp-1">
                       {item.studentCode}
                     </p>
-                    <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
-                      {item.firstName}
-                    </p>
+                    {item.gender == "Male" ? (
+                      <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
+                        นาย&nbsp;&nbsp;
+                        {item.firstName}
+                      </p>
+                    ) : (
+                      <p className="text-start flex items-center  px-4  py-1 line-clamp-1">
+                        นางสาว&nbsp;&nbsp;{item.firstName}
+                      </p>
+                    )}
+
                     <p className="text-start flex items-center  px-4 border-r border-gray-300  py-1 line-clamp-1">
                       {item.lastName}
                     </p>
-                    <p className={`${item.studentStatus == "กำลังศึกษา" ? "text-green-500": item.studentStatus == "พักการเรียน" ? "text-yellow-600 bg-yellow-50" : item.studentStatus == "ลาออก" ? "text-red-500 bg-red-50" :"text-blue-500"} text-center  px-4  border-gray-300  py-1 line-clamp-1`}>
+                    <p
+                      className={`${
+                        item.studentStatus == "กำลังศึกษา"
+                          ? "text-green-500"
+                          : item.studentStatus == "พักการเรียน"
+                          ? "text-yellow-600 bg-yellow-50"
+                          : item.studentStatus == "ลาออก"
+                          ? "text-red-500 bg-red-50"
+                          : "text-blue-500"
+                      } text-center  px-4  border-gray-300  py-1 line-clamp-1`}
+                    >
                       {item.studentStatus}
                     </p>
                   </Link>
