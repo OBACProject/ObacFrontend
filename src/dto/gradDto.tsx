@@ -6,6 +6,7 @@ export interface GetGradBySubjectId {
   studentGroup: string;
   studentId: number;
   studentCode: string;
+  gender: string;
   firstName: string;
   lastName: string;
   subjectName: string;
@@ -18,6 +19,7 @@ export interface GetGradBySubjectId {
 }
 
 export interface convertGradBySubjectId {
+  // gender : string;
   studentCode: string;
   name: string; // firstName + lastName
   collectScore: number;

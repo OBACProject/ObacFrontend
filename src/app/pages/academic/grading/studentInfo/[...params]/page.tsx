@@ -102,19 +102,27 @@ const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
     setGradDataFilter(updatedStudents);
   };
 
-  const convertGrad = gradDataFilter.map((item) => ({
-    studentCode: item.studentCode,
-    name: `${item.firstName} ${item.lastName}`,
-    collectScore: item.collectScore,
-    testScore: item.testScore,
-    affectiveScore: item.affectiveScore,
-    totalScore: item.collectScore + item.testScore + item.affectiveScore,
-  }));
-
-  const covertStudentExcel = gradDataFilter.map((item) => ({
-    studentCode: item.studentCode,
-    name: `${item.firstName} ${item.lastName}`,
-  }));
+  const convertGrad = gradDataFilter.map((item) => {
+    const genderPrefix = item.gender === "Male" ? "นาย" : "นางสาว";
+  
+    return {
+      studentCode: item.studentCode,
+      name: `${genderPrefix} ${item.firstName} ${item.lastName}`,
+      collectScore: item.collectScore,
+      testScore: item.testScore,
+      affectiveScore: item.affectiveScore,
+      totalScore: item.collectScore + item.testScore + item.affectiveScore,
+    };
+  });
+  
+  const covertStudentExcel = gradDataFilter.map((item) => {
+    const genderPrefix = item.gender === "Male" ? "นาย" : "นางสาว";
+  
+    return {
+      studentCode: item.studentCode,
+      name: `${genderPrefix} ${item.firstName} ${item.lastName}`,
+    };
+  });
   const CompleteGrade = async () => {
     try {
       const result = await Swal.fire({
@@ -168,6 +176,7 @@ const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
           totalScore: item.affectiveScore + item.collectScore + item.testScore,
           remark: item.remark,
         }));
+
         for (let i = 0; i < payload.length; i++) {
           try {
             const response = await updateGradingStundetData(payload[i]);

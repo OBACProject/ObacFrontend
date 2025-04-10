@@ -147,10 +147,11 @@ export async function ConvertClassroomToExcel(
 
   // Populate data
   data.forEach((student, index) => {
+    let gender = student.gender === "Female" ? "นางสาว" : "นาย";
     const row = worksheet.addRow([
       index + 1,
       student.studentCode,
-      `${student.firstName} ${student.lastName}`,
+      `${gender} ${student.firstName} ${student.lastName}`,
       "",
       "",
     ]);
@@ -228,7 +229,7 @@ export async function ConvertClassroomToExcelWithSubject(
     const row = worksheet.addRow([
       index + 1,
       student.studentCode,
-      student.name,
+      `${student.name}`,
       "",
       "",
     ]);

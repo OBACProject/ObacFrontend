@@ -91,7 +91,7 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
       return matchGPA && matchGPAX;
     });
 
-    return filtered.sort((a, b) => a.studentId - b.studentId);
+    return filtered.sort((a, b) => Number(a.studentCode) - Number(b.studentCode));
   }, [summaryData, selectedGPA, selectedGPAX]);
 
   // get data from api
