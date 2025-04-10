@@ -45,14 +45,17 @@ export default function TotalScoreInGroup(data: DataList) {
 
   const day = dateTime.getDate().toString().padStart(2, "0");
   const month = thaiMonths[dateTime.getMonth()];
-  const year = dateTime.getFullYear() + 543;
+  const currentMonth = dateTime.getMonth(); 
+  const year = currentMonth > 4 
+  ? dateTime.getFullYear() + 543 
+  : dateTime.getFullYear() + 543 - 1;
 
   const formattedDate = `วันที่พิมพ์ ${day} ${month} ${year}`;
 
   doc.text(formattedDate, 10, 15);
 
   doc.setFont("THSarabunBold");
-  doc.text("วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ", 100, 15);
+  doc.text("วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ", 105, 15 , {align:"center"});
   doc.text(
     `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.generalData.term} ปีการศึกษา ${year} ห้อง ${data.generalData.class}.${data.generalData.groupName}`,
     10,

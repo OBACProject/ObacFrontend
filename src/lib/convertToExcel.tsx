@@ -156,8 +156,11 @@ export async function ConvertClassroomToExcel(
       "",
     ]);
 
-    row.eachCell((cell) => {
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = {
+        horizontal: colNumber === 3 ? "left" : "center",
+        vertical: "middle",
+      };
       cell.font = { size: 10 };
       cell.border = {
         top: { style: "thin" },

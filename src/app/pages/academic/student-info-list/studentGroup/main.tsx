@@ -27,6 +27,11 @@ export default function Main({ groupId }: Props) {
   const [studentInGroup, setStudentInGroup] =
     useState<GetStudentListByGroupIDDto | null>();
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
+  const dateTime = new Date();
+  const currentMonth = dateTime.getMonth(); 
+  const year = currentMonth > 4 
+  ? dateTime.getFullYear() + 543 
+  : dateTime.getFullYear() + 543 - 1;
   useEffect(() => {
     setIsLoadingPage(false);
     getStudentDataList(groupId).then(
@@ -53,7 +58,7 @@ export default function Main({ groupId }: Props) {
       StudentNameListPDF({
         studentGroup: studentClass,
         student: filteredStudents,
-        year: 2567,
+        year: year,
       });
     }
   };
