@@ -273,7 +273,11 @@ export function ClassroomGrading(props: {
 
       if (item && !Array.isArray(item)) {
         const studentClass = item.class + "." + item.groupName;
-        ConvertClassroomToExcel(item.students, studentClass);
+        const filteredStudents = item.students.filter(
+          (student) =>
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+        );
+        ConvertClassroomToExcel(filteredStudents, studentClass);
       } else {
         alert("No student data available for this group.");
       }

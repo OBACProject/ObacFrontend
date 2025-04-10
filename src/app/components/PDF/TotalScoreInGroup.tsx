@@ -45,17 +45,20 @@ export default function TotalScoreInGroup(data: DataList) {
 
   const day = dateTime.getDate().toString().padStart(2, "0");
   const month = thaiMonths[dateTime.getMonth()];
-  const currentMonth = dateTime.getMonth(); 
-  const year = currentMonth > 4 
-  ? dateTime.getFullYear() + 543 
-  : dateTime.getFullYear() + 543 - 1;
+  const currentMonth = dateTime.getMonth();
+  const year =
+    currentMonth > 4
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
 
   const formattedDate = `วันที่พิมพ์ ${day} ${month} ${year}`;
 
   doc.text(formattedDate, 10, 15);
 
   doc.setFont("THSarabunBold");
-  doc.text("วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ", 105, 15 , {align:"center"});
+  doc.text("วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ", 105, 15, {
+    align: "center",
+  });
   doc.text(
     `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.generalData.term} ปีการศึกษา ${year} ห้อง ${data.generalData.class}.${data.generalData.groupName}`,
     10,
@@ -196,6 +199,24 @@ export default function TotalScoreInGroup(data: DataList) {
       doc.addPage();
     }
   });
+  doc.setFont("THSarabun");
+  doc.setFontSize(14);
+  const student = data.studentList[4];
+  if (student) {
+    let y = y2 + 10;
+    
+    const { studentCode, name, gpa, gpax, subjects } = student;
+    const subjectNames = Object.keys(subjects || {});
+
+    for (let i = 0; i < subjectNames.length; i++) {
+      if (y >= 280) {
+        y = 14;
+        doc.addPage();
+      }
+      doc.text(`${i + 1} - วิชา${subjectNames[i]}`, 10, y);
+      y += 6;
+    }
+  }
 
   doc.setFont("THSarabun");
   doc.save(
