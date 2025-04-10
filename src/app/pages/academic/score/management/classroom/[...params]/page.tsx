@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
-import { Boxes, Loader2 } from "lucide-react";
+import { Boxes, Download, Loader2 } from "lucide-react";
 import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
 import { toast } from "react-toastify";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
@@ -249,38 +249,41 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
             </div>
           </div>
           {/* filter classroom have a name , gpa filter 0-4 , gpax filter */}
-          <div className="flex gap-10 mt-4 justify-between">
-            <Badge variant={"outline"}>
+          <div className="flex py-2  justify-between">
+           <div className="border h-fit w-fit border-gray-200 rounded-full px-10 py-1 ">
               <h1 className="text-xl">
                 สรุปการศึกษา ภาคเรียนที่ {term} ปีการศึกษา {year} ห้องเรียน{" "}
                 {summaryData?.generalData.class}.
                 {summaryData?.generalData.groupName}{" "}
               </h1>
-            </Badge>
-            <div className="grid gap-1">
+              </div>
+            <div className="grid gap-2">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => {
                     TotalScoreInGroup(convertTOPDFData);
                   }}
-                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                  className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
                 >
+                  <Download className="w-4 h-4" />
                   ใบตรวจเกรด {summaryData?.generalData.class}.
                   {summaryData?.generalData.groupName} .pdf
                 </button>
                 <button
                   onClick={handleExportToExcel}
-                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                  className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
                 >
+                <Download className="w-4 h-4" />
                   เกรดนักเรียนห้อง {summaryData?.generalData.class}.
                   {summaryData?.generalData.groupName} Excel
                 </button>
               </div>
               <div className="flex gap-2 items-center justify-end">
                 <button
-                  className="text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
+                 className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
                   onClick={handleDownLoadAllStudentGradDetailPDF}
                 >
+                  <Download className="w-4 h-4" />
                   {gropDownLoadPDFTrigger ? (
                     <p className="flex gap-2 itemc-center">
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -293,7 +296,7 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
               </div>
             </div>
           </div>
-          <div className="flex gap-10 mt-4">
+          <div className="flex gap-10">
             <div className="w-1/6 ">
               <Combobox
                 buttonLabel="GPA"
@@ -319,7 +322,7 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
               />
             </div>
           </div>
-          <div className="mt-4">
+          <div className="">
             <DataTable
               columns={finalColumns}
               data={
