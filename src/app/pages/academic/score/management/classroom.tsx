@@ -21,7 +21,7 @@ import TotalScoreInGroup, {
 } from "@/app/components/PDF/TotalScoreInGroup";
 import { toast } from "react-toastify";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
-import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { ConvertClassroomGradingToExcel, ConvertClassroomToExcel } from "@/lib/convertToExcel";
 import { useRouter } from "next/navigation";
 
 interface ClassroomTable {
@@ -261,10 +261,16 @@ export function ClassroomGrading() {
 
   const handleDownloadExcel = async (groupId: number) => {
     try {
-      const item = await getStudentDataList(groupId);
-      if (item && !Array.isArray(item)) {
-        const studentClass = item.class + "." + item.groupName;
-        ConvertClassroomToExcel(item.students, studentClass);
+      const summaryData = await getGroupSummaryGradeViewData(
+        groupId,
+        selectedTerm,
+        selectedYear
+      );
+      if (summaryData) {
+        ConvertClassroomGradingToExcel(
+                summaryData.generalData,
+                summaryData.students
+              );
       } else {
         alert("No student data available for this group.");
       }
