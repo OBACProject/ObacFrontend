@@ -145,7 +145,6 @@ export async function ConvertClassroomToExcel(
     { key: "note", width: 20 },
   ];
 
-  // Populate data
   data.forEach((student, index) => {
     let gender = student.gender === "Female" ? "นางสาว" : "นาย";
     const row = worksheet.addRow([
@@ -294,7 +293,7 @@ export async function ConvertClassroomGradingToExcel(
     "ลำดับ",
     "รหัสนักศึกษา",
     "ชื่อ - นามสกุล",
-    ...uniqueSubjects, // have like a subjects.length
+    ...uniqueSubjects, 
     "เฉลี่ย",
     "เฉลี่ยสะสม",
   ];
