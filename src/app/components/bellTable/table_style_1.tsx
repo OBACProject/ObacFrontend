@@ -49,13 +49,11 @@ export function DataTable<T extends Record<string, any>>({
           key={`cell-${rowIndex}-${colIndex}`}
           className={`text-center flex items-center px-4 py-1 border-r border-gray-300 ${col.className}`}
         >
-          {/* Ensure renderContent is a valid ReactNode */}
           {renderContent != null ? renderContent : "-"}
         </div>
       );
     });
 
-    // If getRowLink is provided, wrap the row with a Link, otherwise use onRowClick
     if (getRowLink) {
       return (
         <Link key={`row-${rowIndex}`} href={getRowLink(item)}>

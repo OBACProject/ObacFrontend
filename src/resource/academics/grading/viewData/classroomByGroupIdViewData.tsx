@@ -24,18 +24,18 @@ export async function getGroupSummaryGradeViewData(
       year: data.year,
     };
 
-    const students: StudentList[] = data.student.map(
+    const students : StudentList[] = data.student.map(
       (student: GetStudentByGroupId) => {
         const subjects: Record<string, string> = {};
         student.subject.forEach((item) => {
           subjects[item.subjectName] =
             item.remark === null ? item.grade : item.remark;
         });
-
+        let gender = student.gender == "Male" ? "นาย" : "นางสาว";
         return {
           studentId: student.studentId,
           studentCode: student.studentCode,
-          name: `${student.firstName} ${student.lastName}`,
+          name: `${gender} ${student.firstName} ${student.lastName}`,
           gpa: student.gpa,
           gpax: student.gpax,
           totalCredit: student.totalCredit,

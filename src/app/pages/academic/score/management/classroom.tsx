@@ -22,6 +22,7 @@ import TotalScoreInGroup, {
 import { toast } from "react-toastify";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { useRouter } from "next/navigation";
 
 interface ClassroomTable {
   class: string;
@@ -41,6 +42,7 @@ const getStudentDataList = async (groupId: number) => {
 };
 
 export function ClassroomGrading() {
+  const router = useRouter();
   const classLevels = ["ปวช", "ปวส"];
   // const levelGrade: Record<string, string[]> = {
   //   ปวช: ["1", "2", "3"],
@@ -260,7 +262,6 @@ export function ClassroomGrading() {
   const handleDownloadExcel = async (groupId: number) => {
     try {
       const item = await getStudentDataList(groupId);
-
       if (item && !Array.isArray(item)) {
         const studentClass = item.class + "." + item.groupName;
         ConvertClassroomToExcel(item.students, studentClass);
@@ -271,6 +272,12 @@ export function ClassroomGrading() {
       console.error("Error fetching student data:", error);
       alert("Failed to fetch student data. Please try again.");
     }
+  };
+
+  const onRowClick = (item: ClassroomTable) => {
+    router.push(
+      `/pages/academic/score/management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
+    );
   };
 
   const columns = [
@@ -291,8 +298,8 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
-              e.stopPropagation();
               handleDownloadPDF(Number(row.groupId), row.class);
+              e.stopPropagation();
             }}
           >
             {!triggerDownLoadPDF ? (
@@ -307,8 +314,8 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
-              e.stopPropagation();
               handleDownloadExcel(Number(row.groupId));
+              e.stopPropagation();
             }}
           >
             <p>ใบออกเกรดExcel</p>
@@ -395,8 +402,8 @@ export function ClassroomGrading() {
               ...item,
               index: index + 1,
             }))}
-            getRowLink={(item) => {
-              return `/pages/academic/score/management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`;
+            onRowClick={(item) => {
+              onRowClick(item);
             }}
             pagination={10}
           />

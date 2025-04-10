@@ -81,6 +81,7 @@ export interface GetStudentByGroupId {
   firstName: string;
   lastName: string;
   isActive: boolean;
+  gender : string;
   gpa: number;
   gpax: number;
   totalCredit: number;
