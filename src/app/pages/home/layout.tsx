@@ -7,10 +7,26 @@ import Credit from "../../components/credit";
 export const metadata: Metadata = {
   title: "OBAC.ac.th",
   description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC",
+  metadataBase: new URL("https://ekawit.ac.th"),
   icons: {
-    icon: '/favicon.icon',
+    icon: "/favicon.ico",
   },
-};
+  openGraph: {
+    title: "OBAC.ac.th",
+    description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC",
+    url: "https://ekawit.ac.th",
+    siteName: "ekawit",
+    images: [
+      {
+        url: "/banner/banner.jpg", 
+        width: 1200,
+        height: 630,
+        alt: "OBAC Open Graph Image",
+      },
+    ],
+    type: "website",
+  },
+}
 
 export default function RootLayout({
   children,
