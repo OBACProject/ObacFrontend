@@ -223,34 +223,34 @@ export type GetStudentListByGroupIDDto = {
 };
 export type GetStudentByStudentId = {
   studentId: number;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   thaiName: string;
   thaiLastName: string;
-  gender: string;
+  gender: "Male" | "Female" | string;
   groupName: string;
   studentGroupId: number;
   studentCode: string;
-  thaiId: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  nationality: string;
-  religion: string;
+  studentStatus: string;
+  thaiId: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  address: string | null;
+  nationality: string | null;
+  religion: string | null;
   role: string;
   userId: string;
   isActive: boolean;
   class: string;
-  enrollYear: number;
+  enrollYear: number | null;
   currentYear: number;
-  graduateYear: number;
+  graduateYear: number | null;
   currentRoom: string;
   programId: number;
   programName: string;
   facultyId: number;
   facultyName: string;
-  birthDate: string;
-  studentStatus : string;
+  birthDate: string | null;
 };
 
 export type GetStudentGroupsByTermYearDto = {
@@ -269,4 +269,30 @@ export type GetStudentGroupsByTermYearDto = {
   term: string;
   program: any | null;
   scheduleSubject: any[];
+};
+
+export type UpdateStudentRequestBody = {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  thaiName: string;
+  thaiLastName: string;
+  gender: string;
+  studentGroupId: number;
+  studentCode: string;
+  thaiId: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  nationality: string;
+  religion: string;
+  class: string;
+  enrollYear: number;
+  currentYear: number;
+  graduateYear: number;
+  programId: number;
+  facultyId: number;
+  birthDate: string | null;
+  isActive: boolean;
+  isAgree: boolean;
 };

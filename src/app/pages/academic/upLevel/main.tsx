@@ -32,12 +32,17 @@ const getGropGradeAbove = async (
 };
 
 export default function Main() {
-  const currentYear = new Date().getFullYear() + 543;
+  const dateTime = new Date();
+  const currentMonth = dateTime.getMonth(); 
+  const currentYear = currentMonth > 5
+  ? dateTime.getFullYear() + 543 
+  : dateTime.getFullYear() + 543 - 1;
+  const defaultTerm  =  currentMonth > 5 ? "1" : "2"
   const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
   const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
   const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2);
-  const [term, setTerm] = useState<string>("1");
+  const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>();
   const [nextGroupNameB, setNextGroupNameB] = useState<string>();

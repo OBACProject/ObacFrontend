@@ -3,12 +3,12 @@ import {
   fetchGetStudentGradeByTermYear,
   fetchGetStudentGradeDetail,
 } from "@/api/grad/gradAPI";
-import { fetchGetStudentByStudentId } from "@/api/student/studentApi";
+import { fetchGetStudentByStudentId, fetchUpdateStudent } from "@/api/student/studentApi";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
 import ChangeStudentGroup from "@/app/components/popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/app/components/popup/confirmChangeStudentsStatus";
-import { GetStudentByStudentId } from "@/dto/studentDto";
+import { GetStudentByStudentId, UpdateStudentRequestBody } from "@/dto/studentDto";
 import { educationOptions } from "@/resource/academics/options/studentOption";
 import {
   ArrowRightLeft,
@@ -23,36 +23,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type Props = {
   studentId: number;
 };
 
-type StudentFormData = {
-  studentId: number;
-  firstName: string;
-  lastName: string;
-  thaiName: string;
-  thaiLastName: string;
-  gender: string;
-  studentGroupId: number;
-  studentCode: string;
-  thaiId: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  nationality: string;
-  religion: string;
-  class: string;
-  enrollYear: number;
-  currentYear: number;
-  graduateYear: number;
-  programId: number;
-  facultyId: number;
-  birthDate: string;
-  isActive: boolean;
-  isAgree: boolean;
-};
+
 
 const fetchStudentGrad = async (
   studentId: number,
@@ -95,7 +72,7 @@ export default function Form({ studentId }: Props) {
     });
   }, []);
 
-  const [formData, setFormData] = useState<StudentFormData>({
+  const [formData, setFormData] = useState<UpdateStudentRequestBody>({
     studentId: 0,
     firstName: "",
     lastName: "",
@@ -150,19 +127,41 @@ export default function Form({ studentId }: Props) {
         graduateYear: students.graduateYear || 0,
         programId: students.programId || 0,
         facultyId: students.facultyId || 0,
-        birthDate: students.birthDate || "",
+        birthDate: students.birthDate && students.birthDate !== "" ? students.birthDate : null,
         isActive: students.isActive ?? true,
         isAgree: false,
       });
+      console.log(formData);
     }
   }, [students]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const onSaveChangeStudentData = async () => {
+    try {
+      if (students) {
+        console.log(formData);
+        const response = await fetchUpdateStudent(formData)
+        if (response){
+          setOnEdit(false)
+          toast.success("แก้ไขและบันทึกสำเร็จ");
+          setTimeout(()=>{
+            window.location.reload()
+          },1500)
+        }else{
+          toast.error("เกิดข้อผิดพลาด");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("เกิดข้อผิดพลาด");
+    }
   };
 
   return (
@@ -256,9 +255,8 @@ export default function Form({ studentId }: Props) {
             <div className="flex gap-2">
               <button
                 className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
-                // onClick={handleEditChange}
+                onClick={onSaveChangeStudentData}
               >
-                {" "}
                 <Save className="w-5 h-5" />
                 บันทึก
               </button>{" "}
@@ -297,12 +295,20 @@ export default function Form({ studentId }: Props) {
                 />
               </div>
               <p className="w-[100px]">ชื่อ - นามสกุล</p>
-              {students?.gender == "Male" ? (
-                <label>นาย</label>
+              {onEdit ? (
+                <select name="gender" onChange={handleChange} value={formData.gender}>
+                <option value="Male">นาย</option>
+                <option value="Female">นางสาว</option>
+              </select>
               ) : (
-                <label>นางสาว</label>
+                <div>
+                  {students?.gender == "Male" ? (
+                    <label>นาย</label>
+                  ) : (
+                    <label>นางสาว</label>
+                  )}
+                </div>
               )}
-
               <input
                 name="thaiName"
                 type="text"

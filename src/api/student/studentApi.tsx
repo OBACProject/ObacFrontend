@@ -7,6 +7,7 @@ import {
   GetStudentUser,
   StudentCreateData,
   StudentGroup,
+  UpdateStudentRequestBody,
 } from "@/dto/studentDto";
 import { cookies } from "next/headers";
 
@@ -265,30 +266,35 @@ export const fetchUpdateGroup = async (
   }
 };
 
-
-
-export const fetchUpdateStudent = async (studentData: any) => {
+export const fetchUpdateStudent = async (studentData: UpdateStudentRequestBody): Promise<boolean> => {
   try {
     const token = cookies().get("token")?.value;
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/Student/UpdateStudent`,
+      `${process.env.NEXT_PUBLIC_API_URL_V1}/Student/UpdateStudent`,
       {
-        method: 'POST', 
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(studentData),
       }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to update student');
+      const errorText = await response.text(); 
+      console.error("API error response:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
+      return false;
     }
 
-    return await response.json();
+    return true;
   } catch (error) {
     console.error('API error:', error);
-    return null;
+    return false;
   }
 };

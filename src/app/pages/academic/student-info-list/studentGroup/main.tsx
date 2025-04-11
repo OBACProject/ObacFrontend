@@ -29,7 +29,7 @@ export default function Main({ groupId }: Props) {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const dateTime = new Date();
   const currentMonth = dateTime.getMonth(); 
-  const year = currentMonth > 4 
+  const year = currentMonth > 5 
   ? dateTime.getFullYear() + 543 
   : dateTime.getFullYear() + 543 - 1;
   useEffect(() => {

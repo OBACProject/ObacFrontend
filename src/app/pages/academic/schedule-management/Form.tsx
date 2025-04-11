@@ -27,10 +27,15 @@ const getAllTeacher = async () => {
 };
 
 export default function Form() {
-  const currentYear = new Date().getFullYear() + 543;
+  const dateTime = new Date();
+  const currentMonth = dateTime.getMonth(); 
+  const currentYear = currentMonth > 5
+  ? dateTime.getFullYear() + 543 
+  : dateTime.getFullYear() + 543 - 1;
+  const defaultTerm  =  currentMonth > 5 ? "1" : "2"
   const [toggleMode, setToggleMode] = useState<boolean>(false);
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
-  const [term, setTerm] = useState<string>("2");
+  const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<
