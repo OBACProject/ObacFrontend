@@ -42,7 +42,7 @@ const StudentFailList = ({
 
   autoTable(doc, {
     startY: 12,
-    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "", "หมายเหตุ"]],
+    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "หมายเหตุ"]],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -78,7 +78,7 @@ const StudentFailList = ({
             student[i].studentCode,
             `${student[i].firstName}`,
             `${student[i].lastName}`,
-            "",
+            `${student[i].class}.${student[i].groupName}`,
             "",
           ],
         ],

@@ -28,6 +28,32 @@ type Props = {
   studentId: number;
 };
 
+type StudentFormData = {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  thaiName: string;
+  thaiLastName: string;
+  gender: string;
+  studentGroupId: number;
+  studentCode: string;
+  thaiId: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  nationality: string;
+  religion: string;
+  class: string;
+  enrollYear: number;
+  currentYear: number;
+  graduateYear: number;
+  programId: number;
+  facultyId: number;
+  birthDate: string;
+  isActive: boolean;
+  isAgree: boolean;
+};
+
 const fetchStudentGrad = async (
   studentId: number,
   term: string,
@@ -69,6 +95,32 @@ export default function Form({ studentId }: Props) {
     });
   }, []);
 
+  const [formData, setFormData] = useState<StudentFormData>({
+    studentId: 0,
+    firstName: "",
+    lastName: "",
+    thaiName: "",
+    thaiLastName: "",
+    gender: "",
+    studentGroupId: 0,
+    studentCode: "",
+    thaiId: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    nationality: "",
+    religion: "",
+    class: "",
+    enrollYear: 0,
+    currentYear: 0,
+    graduateYear: 0,
+    programId: 0,
+    facultyId: 0,
+    birthDate: "",
+    isActive: true,
+    isAgree: true,
+  });
+
   const handleEditChange = () => {
     setOnEdit((onEdit) => !onEdit);
   };
@@ -76,7 +128,42 @@ export default function Form({ studentId }: Props) {
     if (students?.studentStatus) {
       setEducateStatus(students.studentStatus);
     }
+    if (students) {
+      setFormData({
+        studentId: students.studentId || 0,
+        firstName: students.firstName || "ไม่ทราบ",
+        lastName: students.lastName || "ไม่ทราบ",
+        thaiName: students.thaiName || "ไม่ทราบ",
+        thaiLastName: students.thaiLastName || "ไม่ทราบ",
+        gender: students.gender || "ไม่ทราบ",
+        studentGroupId: students.studentGroupId || 0,
+        studentCode: students.studentCode || "ยังไม่มี",
+        thaiId: students.thaiId || "ยังไม่มี",
+        email: students.email || "ยังไม่มี",
+        phoneNumber: students.phoneNumber || "ยังไม่มี",
+        address: students.address || "ยังไม่มี",
+        nationality: students.nationality || "ยังไม่มี",
+        religion: students.religion || "ยังไม่มี",
+        class: students.class || "ยังไม่มี",
+        enrollYear: students.enrollYear || 0,
+        currentYear: students.currentYear || 0,
+        graduateYear: students.graduateYear || 0,
+        programId: students.programId || 0,
+        facultyId: students.facultyId || 0,
+        birthDate: students.birthDate || "",
+        isActive: students.isActive ?? true,
+        isAgree: false,
+      });
+    }
   }, [students]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="px-10">
@@ -201,9 +288,11 @@ export default function Form({ studentId }: Props) {
               <div className="flex items-center gap-1">
                 <p className="w-[100px]">รหัสนักเรียน</p>
                 <input
+                  name="studentCode"
                   type="text"
                   className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                  defaultValue={students?.studentCode}
+                  value={formData.studentCode}
+                  onChange={handleChange}
                   disabled={!onEdit}
                 />
               </div>
@@ -215,15 +304,19 @@ export default function Form({ studentId }: Props) {
               )}
 
               <input
+                name="thaiName"
                 type="text"
                 className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                defaultValue={students?.thaiName}
+                value={formData.thaiName}
+                onChange={handleChange}
                 disabled={!onEdit}
               />
               <input
+                name="thaiLastName"
                 type="text"
                 className="px-4 focus:outline-blue-400 w-[150px]  py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                defaultValue={students?.thaiLastName}
+                value={formData.thaiLastName}
+                onChange={handleChange}
                 disabled={!onEdit}
               />
             </div>
@@ -238,9 +331,11 @@ export default function Form({ studentId }: Props) {
               <div className="flex items-center gap-2">
                 <p className="">หลักสูตร</p>
                 <input
+                  name="facultyName"
                   type="text"
                   className="px-4 w-fit text-gray-500 enabled:border-blue-400 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
-                  defaultValue={students?.facultyName}
+                  value={students?.facultyName}
+                  onChange={handleChange}
                   disabled={!onEdit}
                 />
               </div>
@@ -248,8 +343,10 @@ export default function Form({ studentId }: Props) {
                 <p className="">สาขา</p>
                 <input
                   type="text"
+                  name="programName"
                   className="px-4 w-fit text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                  defaultValue={students?.programName}
+                  value={students?.programName}
+                  onChange={handleChange}
                   disabled={!onEdit}
                 />
               </div>
@@ -273,18 +370,22 @@ export default function Form({ studentId }: Props) {
             <div className="flex gap-2 items-center">
               <p>เบอร์ติดต่อ</p>
               <input
+                name="phoneNumber"
                 type="text"
                 className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                defaultValue={students?.phoneNumber || "ไม่ทราบเบอร์ติดต่อ"}
+                value={formData.phoneNumber}
+                onChange={handleChange}
                 disabled={!onEdit}
               />
             </div>
             <div className="flex gap-2 items-center">
               <p>อีเมลล์</p>
               <input
+                name="email"
                 type="text"
                 className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                defaultValue={students?.email || "ไม่ทราบอีเมลล์"}
+                value={formData.email}
+                onChange={handleChange}
                 disabled={!onEdit}
               />
             </div>

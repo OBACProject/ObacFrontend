@@ -264,3 +264,31 @@ export const fetchUpdateGroup = async (
     return false;
   }
 };
+
+
+
+export const fetchUpdateStudent = async (studentData: any) => {
+  try {
+    const token = cookies().get("token")?.value;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/Student/UpdateStudent`,
+      {
+        method: 'POST', 
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(studentData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update student');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API error:', error);
+    return null;
+  }
+};

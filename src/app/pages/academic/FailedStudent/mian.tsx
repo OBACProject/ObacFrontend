@@ -181,7 +181,7 @@ export default function Main() {
                 </div>
 
                 <div>
-                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_40%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
+                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_20%_20%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
@@ -201,7 +201,7 @@ export default function Main() {
                         );
                       }}
                       key={index}
-                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_40%] shadow-md"
+                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_20%_20%] shadow-md"
                     >
                       <div className="text-center py-1 border-r border-gray-400">
                         {index + 1}
@@ -214,6 +214,9 @@ export default function Main() {
                       </div>
                       <div className="text-start py-1 border-r border-gray-400">
                         {item.lastName}
+                      </div>
+                      <div className="text-center py-1">
+                        {item.class}.{item.groupName}
                       </div>
                       <div className="text-center py-1">
                         {item.gpa.toFixed(2)}
