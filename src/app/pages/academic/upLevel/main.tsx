@@ -1,6 +1,7 @@
 "use client";
 
-import { fetchPromoteStudent, GetGropGradeAbove } from "@/api/grad/gradAPI";
+import { GetGropGradeAbove } from "@/api/grad/gradAPI";
+import { fetchPromoteStudentGroup } from "@/api/student/studentApi";
 import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import { GetStudentGroupsByTermYearDto, StudentGroup } from "@/dto/studentDto";
@@ -56,7 +57,7 @@ export default function Main() {
 
   useEffect(() => {
     if (term && year) {
-      GetStudentGroupsByTermYear("2", 2567)
+      GetStudentGroupsByTermYear(term, year)
         .then((data: GetStudentGroupsByTermYearDto[] | undefined) => {
           if (data) {
             setGroups(data);
@@ -142,7 +143,16 @@ export default function Main() {
           65 + Math.floor(Math.random() * 26)
         )}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
         const randomNumber = Math.floor(100 + Math.random() * 900);
-        const response = await fetchPromoteStudent({
+        const bodyReq = {
+          studentIds: studentIds,
+          groupId: groupID,
+          newGroupName: nextGroupName,
+          newGroupCode: `${randomPrefix}-${randomNumber}`,
+          year: Number(year),
+          term: term,
+        }
+        console.log(bodyReq)
+        const response = await fetchPromoteStudentGroup({
           studentIds: studentIds,
           groupId: groupID,
           newGroupName: nextGroupName,
@@ -150,6 +160,7 @@ export default function Main() {
           year: Number(year),
           term: term,
         });
+        console.log(response)
         if (response && response.ok !== false) {
           SetPromoteTrigger(false);
           toast.success("เลื่อนชั้นเรียนสำเร็จ");

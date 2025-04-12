@@ -165,57 +165,6 @@ export const GetGropGradeBelow = async (
   }
 };
 
-export const fetchPromoteStudent = async (data: {
-  studentIds: number[];
-  groupId:number;
-  newGroupName: string;
-  newGroupCode: string;
-  year: number;
-  term: string;
-}) => {
-  try {
-    const token = cookies().get("token")?.value;
-    if (!token) {
-      throw new Error("No auth token found");
-    }
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_V1}/Promote/PromoteStudents`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (!response.ok) {
-      let errorMessage = `Error: ${response.status} - ${response.statusText}`;
-      const errorText = await response.text(); 
-      console.error("API error response:", {
-        status: response.status,
-        statusText: response.statusText,
-        body: errorText,
-      });
-      try {
-        const errorData = await response.json();
-        errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;
-      } catch {
-        console.warn("Response does not contain JSON.");
-      }
-
-      throw new Error(errorMessage);
-    }
-
-    const text = await response.text();
-    return text ? JSON.parse(text) : {};
-  } catch (err) {
-    console.error("Error in API Promote Student", err);
-    return null;
-  }
-};
 
 export const fetchUpdateCompleteScheduleSubject = async (
   scheduleSubjectId: number
