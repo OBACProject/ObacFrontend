@@ -167,13 +167,11 @@ export const GetGropGradeBelow = async (
 
 export const fetchPromoteStudent = async (data: {
   studentIds: number[];
+  groupId:number;
   newGroupName: string;
   newGroupCode: string;
-  class: string;
-  programId: number;
   year: number;
   term: string;
-  level: number;
 }) => {
   try {
     const token = cookies().get("token")?.value;
@@ -195,7 +193,12 @@ export const fetchPromoteStudent = async (data: {
 
     if (!response.ok) {
       let errorMessage = `Error: ${response.status} - ${response.statusText}`;
-
+      const errorText = await response.text(); 
+      console.error("API error response:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
       try {
         const errorData = await response.json();
         errorMessage += ` | ${errorData.message || JSON.stringify(errorData)}`;

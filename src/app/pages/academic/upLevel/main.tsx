@@ -33,11 +33,12 @@ const getGropGradeAbove = async (
 
 export default function Main() {
   const dateTime = new Date();
-  const currentMonth = dateTime.getMonth(); 
-  const currentYear = currentMonth > 5
-  ? dateTime.getFullYear() + 543 
-  : dateTime.getFullYear() + 543 - 1;
-  const defaultTerm  =  currentMonth > 5 ? "1" : "2"
+  const currentMonth = dateTime.getMonth();
+  const currentYear =
+    currentMonth > 5
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
+  const defaultTerm = currentMonth > 5 ? "1" : "2";
   const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
   const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
   const [groupID, setGroupID] = useState<number>(0);
@@ -96,7 +97,7 @@ export default function Main() {
     if (!isNaN(value)) {
       setGrad(value);
     } else {
-      setGrad(0.0); 
+      setGrad(0.0);
     }
   };
 
@@ -143,13 +144,11 @@ export default function Main() {
         const randomNumber = Math.floor(100 + Math.random() * 900);
         const response = await fetchPromoteStudent({
           studentIds: studentIds,
+          groupId: groupID,
           newGroupName: nextGroupName,
           newGroupCode: `${randomPrefix}-${randomNumber}`,
-          class: newGroup.class,
-          programId: newGroup?.programId,
           year: Number(year),
           term: term,
-          level: newGroup?.level,
         });
         if (response && response.ok !== false) {
           SetPromoteTrigger(false);
@@ -239,7 +238,7 @@ export default function Main() {
           className="px-5 text-white py-1.5 rounded-md  flex items-center justify-center gap-2 text-center w-fit bg-blue-500 hover:bg-blue-700"
           onClick={onFilterGroup}
           style={{ userSelect: "none" }}
-          disabled={!year || !term  || !groupID}
+          disabled={!year || !term || !groupID}
         >
           <Search className="w-5 h-5" />
           {searchTrigger ? <p>กำลังค้นหา...</p> : <p>ค้นหา</p>}
