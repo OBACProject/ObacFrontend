@@ -49,11 +49,17 @@ export function ClassroomGrading() {
   //   ปวส: ["1", "2"],
   // };
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1 + 543;
+  const dateTime = new Date();
+  const currentMonth = dateTime.getMonth();
+  const currentYear =
+    currentMonth > 5
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
+  const defaultTerm = currentMonth > 5 ? "1" : "2";
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string>("2");
+  const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );

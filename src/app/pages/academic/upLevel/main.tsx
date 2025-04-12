@@ -167,6 +167,9 @@ export default function Main() {
           setNextGroupNameA("");
           setNextGroupNameB("");
           setResetPromote(true);
+          setTimeout(()=>{
+            window.location.reload();
+          },1500)
         } else {
           toast.error("เกิดข้อผิดพลาดในการเลื่อนชั้นเรียน");
         }
