@@ -108,23 +108,23 @@ export default function Form({ studentId }: Props) {
     if (students) {
       setFormData({
         studentId: students.studentId || 0,
-        firstName: students.firstName || "ไม่ทราบ",
-        lastName: students.lastName || "ไม่ทราบ",
+        firstName: students.firstName || null,
+        lastName: students.lastName || null,
         thaiName: students.thaiName || "ไม่ทราบ",
         thaiLastName: students.thaiLastName || "ไม่ทราบ",
         gender: students.gender || "ไม่ทราบ",
         studentGroupId: students.studentGroupId || 0,
         studentCode: students.studentCode || "ยังไม่มี",
-        thaiId: students.thaiId || "ยังไม่มี",
-        email: students.email || "ยังไม่มี",
-        phoneNumber: students.phoneNumber || "ยังไม่มี",
-        address: students.address || "ยังไม่มี",
-        nationality: students.nationality || "ยังไม่มี",
-        religion: students.religion || "ยังไม่มี",
+        thaiId: students.thaiId || null,
+        email: students.email || null,
+        phoneNumber: students.phoneNumber || null,
+        address: students.address || null,
+        nationality: students.nationality || null,
+        religion: students.religion || null,
         class: students.class || "ยังไม่มี",
-        enrollYear: students.enrollYear || 0,
+        enrollYear: students.enrollYear || null,
         currentYear: students.currentYear || 0,
-        graduateYear: students.graduateYear || 0,
+        graduateYear: students.graduateYear || null,
         programId: students.programId || 0,
         facultyId: students.facultyId || 0,
         birthDate: students.birthDate && students.birthDate !== "" ? students.birthDate : null,
@@ -296,7 +296,7 @@ export default function Form({ studentId }: Props) {
               </div>
               <p className="w-[100px]">ชื่อ - นามสกุล</p>
               {onEdit ? (
-                <select name="gender" onChange={handleChange} value={formData.gender}>
+                <select name="gender" onChange={handleChange} value={formData.gender || "Male"}>
                 <option value="Male">นาย</option>
                 <option value="Female">นางสาว</option>
               </select>
@@ -313,7 +313,7 @@ export default function Form({ studentId }: Props) {
                 name="thaiName"
                 type="text"
                 className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                value={formData.thaiName}
+                value={formData.thaiName || "ไม่ทราบ"}
                 onChange={handleChange}
                 disabled={!onEdit}
               />
@@ -321,7 +321,7 @@ export default function Form({ studentId }: Props) {
                 name="thaiLastName"
                 type="text"
                 className="px-4 focus:outline-blue-400 w-[150px]  py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                value={formData.thaiLastName}
+                value={formData.thaiLastName|| "ไม่ทราบ"}
                 onChange={handleChange}
                 disabled={!onEdit}
               />
@@ -340,7 +340,7 @@ export default function Form({ studentId }: Props) {
                   name="facultyName"
                   type="text"
                   className="px-4 w-fit text-gray-500 enabled:border-blue-400 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
-                  value={students?.facultyName}
+                  value={students?.facultyName|| "ไม่ทราบ"}
                   onChange={handleChange}
                   disabled={!onEdit}
                 />
@@ -351,7 +351,7 @@ export default function Form({ studentId }: Props) {
                   type="text"
                   name="programName"
                   className="px-4 w-fit text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                  value={students?.programName}
+                  value={students?.programName|| "ไม่ทราบ"}
                   onChange={handleChange}
                   disabled={!onEdit}
                 />
@@ -379,7 +379,7 @@ export default function Form({ studentId }: Props) {
                 name="phoneNumber"
                 type="text"
                 className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                value={formData.phoneNumber}
+                value={formData.phoneNumber|| "ไม่ทราบ"}
                 onChange={handleChange}
                 disabled={!onEdit}
               />
@@ -390,7 +390,7 @@ export default function Form({ studentId }: Props) {
                 name="email"
                 type="text"
                 className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                value={formData.email}
+                value={formData.email|| "ไม่ทราบ"}
                 onChange={handleChange}
                 disabled={!onEdit}
               />

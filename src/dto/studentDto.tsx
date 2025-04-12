@@ -273,23 +273,23 @@ export type GetStudentGroupsByTermYearDto = {
 
 export type UpdateStudentRequestBody = {
   studentId: number;
-  firstName: string;
-  lastName: string;
+  firstName: string |null;
+  lastName: string| null;
   thaiName: string;
   thaiLastName: string;
   gender: string;
   studentGroupId: number;
   studentCode: string;
-  thaiId: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  nationality: string;
-  religion: string;
+  thaiId: string|null;
+  email: string|null;
+  phoneNumber: string|null;
+  address: string|null;
+  nationality: string|null;
+  religion: string|null;
   class: string;
-  enrollYear: number;
+  enrollYear: number|null;
   currentYear: number;
-  graduateYear: number;
+  graduateYear: number|null;
   programId: number;
   facultyId: number;
   birthDate: string | null;
