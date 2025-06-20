@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import React from "react";
 import "@app/styles/globals.css";
-import { Navbar } from "@/app/pages/home/navbar";
-import Credit from "../../components/credit";
+import { HomePageNavBar } from "@/components/common/NavBar/HomePageNavBar";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
   title: "OBAC.ac.th",
@@ -36,11 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        <HomePageNavBar />
         <div className="mt-28 mb-20">
          {children} 
         </div>
-        <Credit />
+        <HomeFooter />
       </body>
     </html>
   );

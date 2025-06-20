@@ -1,6 +1,6 @@
 import { School } from "lucide-react";
 
-export default function Credit() {
+export default function HomeFooter() {
   return (
     <div className="w-full bg-[#0C243C] px-5 py-10 lg:px-10">
       <div className="grid place-items-center  gap-5 lg:gap-10 lg:justify-center md:justify-center lg:flex md:flex ">

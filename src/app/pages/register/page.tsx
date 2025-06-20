@@ -14,7 +14,7 @@ export default function Home() {
   const router = useRouter();
   const handleSubmit = () => {
     alert("ส่งใบสมัครสำเร็จ รอตรวจสอบอีเมล");
-    router.push("/pages/home");
+    router.push("/");
   };
   return (
     <div className=" px-1">

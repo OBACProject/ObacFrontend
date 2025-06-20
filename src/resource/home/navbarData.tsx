@@ -40,7 +40,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "history",
-        href: "/pages/home/aboutObac/history",
+        href: "/about/history",
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
@@ -51,7 +51,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "vision",
-        href: "/pages/home/aboutObac/symbol",
+        href: "/about/symbol",
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
@@ -62,7 +62,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "symbol",
-        href: "/pages/home/aboutObac/vision",
+        href: "/about/vision",
       },
     ],
   },
@@ -79,7 +79,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "accounting",
-        href: "/pages/home",
+        href: "/",
       },
       {
         menuName: "การตลาด",
@@ -90,7 +90,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "marketing",
-        href: "/pages/home",
+        href: "/",
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
@@ -101,7 +101,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "digital",
-        href: "/pages/home",
+        href: "/",
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
@@ -112,7 +112,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "graphic",
-        href: "/pages/home",
+        href: "/",
       },
       {
         menuName: "การท่องเที่ยว",
@@ -123,13 +123,13 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "tourism",
-        href: "/pages/home",
+        href: "/",
       },
     ],
   },
   {
     menuTopic: "โครงสร้างการบริหารวิทยาลัย",
-    href: "/ManagementStructure",
+    href: "/structure",
     menuList: [
       {
         menuName: "โครงสร้างการบริหาร",
@@ -140,7 +140,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "management",
-        href: "/pages/home/managementStructure/executive",
+        href: "/structure/executive",
       },
       {
         menuName: "คณะผู้บริหารวิทยาลัย",
@@ -151,13 +151,13 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "executive",
-        href: "/pages/home/managementStructure/management",
+        href: "/structure/management",
       },
     ],
   },
   {
     menuTopic: "ข่าวสารและกิจกรรม",
-    href: "/pages/home",
+    href: "/",
     menuList: [
       {
         menuName: "กิจกรรม",
@@ -168,7 +168,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "activity",
-        href:"/pages/home/events"
+        href:"/events"
       },
       {
         menuName: "ข่าวสาร",
@@ -179,13 +179,13 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "news",
-        href: "/pages/home/news",
+        href: "/news",
       },
     ],
   },
   {
     menuTopic: "ติดต่อ",
-    href: "/pages/home/contact",
+    href: "/contact",
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
@@ -196,7 +196,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "contact",
-        href: "/pages/home/contact",
+        href: "/contact",
       },
     ],
   },

@@ -1,8 +1,9 @@
+import HomeFooter from "@/components/common/Footer/HomeFooter";
+import { HomePageNavBar } from "@/components/common/NavBar/HomePageNavBar";
 import "@app/styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navbar } from "../../home/navbar";
-import Credit from "@/app/components/credit";
+
 
 export const metadata = {
   title: "OBAC Authentication",
@@ -22,11 +23,11 @@ export default function RootLayout({
           hideProgressBar
           className="z-50"
         />
-        <Navbar />
+        <HomePageNavBar />
         <div className="mt-24">
         {children}
         </div>
-        <Credit/>
+        <HomeFooter/>
       </body>
     </html>
   );

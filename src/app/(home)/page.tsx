@@ -1,17 +1,48 @@
-"use client";
 import { cardData } from "@/resource/fetchData/cardContent";
-import CLShomepage from "@/app/components/cls/cls-homepage";
 import CardVertical from "@/app/components/card/card-vertical";
 import CardHorizontal from "@/app/components/card/card-horizontal";
-
+import Head from "next/head";
 import StickerFacebook from "@/app/components/Effect/StickerFacebook";
 import StickerYoutube from "@/app/components/Effect/StickerYoutube";
 import FadeInOnScroll from "@/app/components/Effect/FadInScroll";
 import OpeningScroll from "@/app/components/Effect/OpeningScroll";
 
 export default function Home() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "Ekawit Business Administration Vocational College",
+    alternateName: "OBAC",
+    url: "https://ekawit.ac.th",
+    logo: "https://ekawit.ac.th/favicon.ico",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Khet Lat Krabang",
+      addressLocality: "Bangkok",
+      postalCode: "10520",
+      addressCountry: "TH",
+    },
+    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
+  };
   return (
     <div className="bg-white">
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <meta name="robots" content="index, follow" />
+        <meta
+          name="keywords"
+          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, คอมพิวเตอร์ธุรกิจ, เทคโนโลยี"
+        />
+        <meta
+          name="author"
+          content="Ekawit Business Administration Vocational College"
+        />
+
+        <link rel="canonical" href="https://ekawit.ac.th" />
+      </Head>
       <StickerFacebook />
       <StickerYoutube />
       {/* <CLShomepage /> */}
@@ -22,6 +53,7 @@ export default function Home() {
           <img
             className="absolute lg:w-[100%] lg:h-[390px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
             src="/images/obac_view.jpg"
+            alt="OBAC Campus Banner"
           />
           <div className="relative w-full h-full bg-gradient-to-t from-white via-gray-800/0 to-gray-900/5"></div>
         </div>
@@ -44,7 +76,7 @@ export default function Home() {
           <h1 className="text-5xl text-blue-950 my-5  font-extrabold px-5 py-1">
             Welcome to OBAC
           </h1>
-          <i className="w-[60%] text-blue-950 text-lg">
+          <p className="w-[60%] text-blue-950 text-lg">
             "At the heart of our university lies a powerful vision — to shape
             the future by merging innovation with entrepreneurship. As a leading
             institution in technology and business, we equip students with
@@ -54,7 +86,7 @@ export default function Home() {
             to thrive in a rapidly changing world. Here, every idea matters, and
             every student is a catalyst for progress. Join us where technology
             meets opportunity — and futures are built."
-          </i>
+          </p>
         </div>
       </FadeInOnScroll>
       <FadeInOnScroll>
@@ -65,6 +97,7 @@ export default function Home() {
           <img
             className="absolute lg:w-[100%] lg:h-[620px] sm:w-[100%] sm:h-[300px] md:w-[100%] md:h-[400px] w-full h-[220px] object-cover duration-1000 group-hover:scale-[102%]"
             src="/banner/banner.jpg"
+            alt="OBAC Campus Banner"
           />
           <div className="relative w-full h-full bg-gradient-to-t from-gray-900/0 to-gray-900/0"></div>
         </div>
@@ -91,35 +124,6 @@ export default function Home() {
         <div className=" h-fit  w-fit">
           <CardHorizontal cardData={cardData} />
         </div>
-        {/* <FadeInOnScroll>
-          <div className="h-fit grid grid-cols-2 gap-3 overflow-hidden py-5 px-10 ">
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-
-            <div className="px-20 py-40 rounded-md  bg-gradient-to-tr from-emerald-200  to-blue-800">
-              For Post
-            </div>
-          </div>
-        </FadeInOnScroll> */}
       </div>
     </div>
   );
