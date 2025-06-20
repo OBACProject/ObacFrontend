@@ -1,6 +1,6 @@
 "use server";
 import { GetGradBySubjectId } from "@/dto/gradDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export const fetchGetSubjectBySubjectIdData = async (
@@ -11,7 +11,7 @@ export const fetchGetSubjectBySubjectIdData = async (
 ): Promise<GetGradBySubjectId[]> => {
   try {
     const token = cookies().get("token")?.value;
-    const response = await api.get(
+    const response = await apiClient.get(
       `Grade/GetStudentGroupGradeByGroupIdTermYear?groupId=${groupId}&term=${term}&year=${year}&subjectId=${subjectId}`,
       {
         headers: {

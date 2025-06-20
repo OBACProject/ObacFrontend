@@ -1,8 +1,8 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "../font/THSarabunFont";
-import THSarabunFontBold from "../font/THSarabunBold";
+import THSarabunFont from "../../app/components/font/THSarabunFont";
+import THSarabunFontBold from "../../app/components/font/THSarabunBold";
 import { StudentListByGroupIDDto } from "@/dto/studentDto";
 
 interface DataList {

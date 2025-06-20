@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1;
 
-const api: AxiosInstance = axios.create({
+const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000, // optional: request timeout
 });
@@ -34,4 +34,4 @@ const api: AxiosInstance = axios.create({
 //   }
 // );
 
-export default api;
+export default apiClient;

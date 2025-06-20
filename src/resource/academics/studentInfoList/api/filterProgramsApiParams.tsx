@@ -1,6 +1,6 @@
 "use server";
 import { filterProgramsParamsData } from "@/dto/studentDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export const filterProgramsData = async (
@@ -15,7 +15,7 @@ export const filterProgramsData = async (
     }
 
     // fix to use a api
-    const response = await api.get(
+    const response = await apiClient.get(
       `Student/GetStudentGroupsByTermYear?term=${term}&year=${year}`,
       {
         headers: {

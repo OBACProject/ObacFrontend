@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { GroupSummaryGradeResponse } from "./classroom/[...params]/page";
 import TotalScoreInGroup, {
   DataList,
-} from "@/app/components/PDF/TotalScoreInGroup";
+} from "@/lib/PDF/TotalScoreInGroup";
 import { toast } from "react-toastify";
 import { GetStudentListByGroupID } from "@/api/student/studentApi";
 import { ConvertClassroomGradingToExcel, ConvertClassroomToExcel } from "@/lib/convertToExcel";

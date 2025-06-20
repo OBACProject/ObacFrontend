@@ -4,16 +4,14 @@ import {
   GetTeacherByTeacherId,
   TeacherEnrollment,
 } from "@/dto/teacherDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
   try {
     const token = cookies().get("token")?.value;
-    const api = process.env.NEXT_PUBLIC_API_URL_V1;
-    // console.log(api);
     const response = await fetch(
-      `${api}/Teacher/GetAllTeacher`,
+      `${apiClient}/Teacher/GetAllTeacher`,
       {
         method: "GET",
         headers: {
@@ -39,7 +37,7 @@ export const fetchGetTeacherByTeacherIdAsync = async (
 ): Promise<GetTeacherByTeacherId> => {
   try {
     const token = cookies().get("token")?.value;
-    const response = await api.get(
+    const response = await apiClient.get(
       `/Teacher/GetTeacherByTeacherId?teacherId=${id}`,
       {
         headers: {

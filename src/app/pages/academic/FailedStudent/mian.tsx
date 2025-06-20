@@ -1,6 +1,6 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/grad/gradAPI";
-import StudentFailList from "@/app/components/PDF/StudentFailList";
+import StudentFailList from "@/lib/PDF/StudentFailList";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";

@@ -9,12 +9,12 @@ import { ConvertClassroomGradingToExcel } from "@/lib/convertToExcel";
 import { useRouter } from "next/navigation";
 import TotalScoreInGroup, {
   DataList,
-} from "@/app/components/PDF/TotalScoreInGroup";
+} from "@/lib/PDF/TotalScoreInGroup";
 import { Boxes, Download, Loader2 } from "lucide-react";
 import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
 import { toast } from "react-toastify";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
-import GroupSummaryGradPDF from "@/app/components/PDF/GroupSummaryGrade";
+import GroupSummaryGradPDF from "@/lib/PDF/GroupSummaryGrade";
 
 export interface GeneralData {
   groupId: number;
