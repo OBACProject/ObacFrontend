@@ -4,7 +4,9 @@ import StudentFailList from "@/app/components/PDF/StudentFailList";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import SelectTermAndYear from "@/components/common/Academic/SelectTermYear";
+import HeaderLabel from "@/components/common/HeaderLabel";
 
 interface IndividualStudentInfoData {
   studentId: number;
@@ -13,14 +15,16 @@ interface IndividualStudentInfoData {
 
 export default function Main() {
   const dateTime = new Date();
-  const currentMonth = dateTime.getMonth(); 
-  const currentYear = currentMonth > 5
-  ? dateTime.getFullYear() + 543 
-  : dateTime.getFullYear() + 543 - 1;
-  const defaultTerm  =  currentMonth > 5 ? "1" : "2"
-  
+  const currentMonth = dateTime.getMonth();
+  const currentYear =
+    currentMonth > 5
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
+  const defaultTerm = currentMonth > 5 ? "1" : "2";
+
   const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
-  const [groupID, setGroupID] = useState<number>(0);
+  const studentCount = useMemo(() => students.length, [students]);
+  // const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
@@ -31,11 +35,7 @@ export default function Main() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
-    if (!isNaN(value)) {
-      setGrad(value);
-    } else {
-      setGrad(0.0);
-    }
+    setGrad(!isNaN(value) ? value : 0.0);
   };
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -79,43 +79,16 @@ export default function Main() {
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
-        <div className="px-10 rounded-3xl flex gap-2 items-center text-xl  text-red-600 border border-gray-100 shadow-md py-2 text-center w-fit">
-          <User className="w-8 h-8" /> นักเรียนที่ไม่ผ่านเกณฑ์
-        </div>
+        <HeaderLabel Icon={<User className="h-8 w-8"/>} label="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
       </div>
-
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
-        <div
-          className="flex justify-center items-center gap-2 "
-          style={{ userSelect: "none" }}
-        >
-          <div className="text-gray-600">ภาคเรียน</div>
-          <select
-            className="border border-gray-200 rounded-sm py-1 px-4"
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-        </div>
-        <div
-          className="flex justify-center items-center gap-2 "
-          style={{ userSelect: "none" }}
-        >
-          <div className="text-gray-600">ปีการศึกษา</div>
-          <select
-            className="border border-gray-200 rounded-sm py-1 px-4"
-            onChange={(e) => setYear(Number(e.target.value))}
-            value={year}
-          >
-            <option value={currentYear}>{currentYear}</option>
-            <option value={currentYear - 1}>{currentYear - 1}</option>
-            <option value={currentYear - 2}>{currentYear - 2}</option>
-            <option value={currentYear - 3}>{currentYear - 3}</option>
-            <option value={currentYear - 4}>{currentYear - 4}</option>
-          </select>
-        </div>
+        <SelectTermAndYear
+          term={term}
+          year={year}
+          currentYear={currentYear}
+          onChangeTerm={setTerm}
+          onChangeYear={setYear}
+        />
         <div className="flex items-center gap-2" style={{ userSelect: "none" }}>
           <label className="text-black text-[16px]">เกรดขั้นต่ำ</label>
           <input
@@ -168,20 +141,26 @@ export default function Main() {
       <div className="px-10  py-0">
         {isSearch ? (
           <div>
-            {students.length > 0 ? (
+            {studentCount > 0 ? (
               <div className="grid gap-4">
                 <div className="flex justify-between items-center">
                   <div className="py-1 px-5 text-white bg-red-400 font-semibold w-fit border-2 border-red-400  rounded-md flex  gap-3">
-                    จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{students.length}</p>คน
+                    จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{studentCount}</p>คน
                   </div>
                   <div>
-                    <button className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit " 
-                    onClick={()=>{
-                      if (students)
-                      StudentFailList({student:students , classGroup:`${classSelect}.${currentYearSelect}` , currentYear:year} )
-                      }}>
-                    <Download className="w-4 h-4" />
-                    รายชื่อนักเรียนตก PDF
+                    <button
+                      className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
+                      onClick={() => {
+                        if (students)
+                          StudentFailList({
+                            student: students,
+                            classGroup: `${classSelect}.${currentYearSelect}`,
+                            currentYear: year,
+                          });
+                      }}
+                    >
+                      <Download className="w-4 h-4" />
+                      รายชื่อนักเรียนตก PDF
                     </button>
                   </div>
                 </div>
