@@ -24,3 +24,4 @@ export interface StudentList {
   totalCredit: number;
   subjects: Record<string, string>;
 }
+

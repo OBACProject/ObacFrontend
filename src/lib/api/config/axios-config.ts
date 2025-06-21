@@ -28,5 +28,4 @@ export function createAxiosInstance(config: Partial<ApiConfig> = {}): AxiosInsta
   return instance;
 }
 
-// Main API instance
 export const apiClient = createAxiosInstance();
