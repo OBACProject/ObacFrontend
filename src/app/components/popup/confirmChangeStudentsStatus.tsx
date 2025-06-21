@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchUpdateStudentStatus } from "@/api/student/studentApi";
+import { fetchUpdateStudentStatus } from "@/api/oldApi/student/studentApi";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 

@@ -20,7 +20,7 @@ import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
 import { toast } from "react-toastify";
-import { GetStudentListByGroupID } from "@/api/student/studentApi";
+import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
 import { ConvertClassroomGradingToExcel, ConvertClassroomToExcel } from "@/lib/convertToExcel";
 import { useRouter } from "next/navigation";
 

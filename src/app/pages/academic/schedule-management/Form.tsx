@@ -2,9 +2,9 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { BookText, PlusCircle } from "lucide-react";
 import { GetStudentGroupsByTermYearDto, StudentGroup } from "@/dto/studentDto";
-import { fetchGetStudentGroupsByTermYear } from "@/api/student/studentApi";
+import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
 import { GetAllTeacher } from "@/dto/teacherDto";
-import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import Link from "next/link";
 import AddSchedulePopUp from "./AddSchedulePopUp";
 

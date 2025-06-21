@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import Form from "./Form";
-import { fetchTeacherUser } from "@/api/teacher/teacherAPI";
+import { fetchTeacherUser } from "@/api/oldApi/teacher/teacherAPI";
 const getTeachData = async () => {
   try {
     const teacher = await fetchTeacherUser();

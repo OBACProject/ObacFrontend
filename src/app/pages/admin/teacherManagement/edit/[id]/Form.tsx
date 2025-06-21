@@ -4,7 +4,7 @@ import { Combobox } from "@/app/components/combobox/combobox";
 import { LabelInput } from "@/app/components/input/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { fetchGetTeacherByTeacherIdAsync } from "@/api/teacher/teacherAPI";
+import { fetchGetTeacherByTeacherIdAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { GetTeacherByTeacherId } from "@/dto/teacherDto";
 
 interface Props {

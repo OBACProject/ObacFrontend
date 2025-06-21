@@ -1,7 +1,7 @@
-import { fetchCreateScheduleSubject } from "@/api/schedule/scheduleAPI";
-import { fetchGetAllStudentGroup } from "@/api/student/studentApi";
-import { fetchGetAllActiveSubject } from "@/api/subject/subjectAPI";
-import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
+import { fetchGetAllStudentGroup } from "@/api/oldApi/student/studentApi";
+import { fetchGetAllActiveSubject } from "@/api/oldApi/subject/subjectAPI";
+import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";

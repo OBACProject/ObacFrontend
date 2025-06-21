@@ -11,7 +11,7 @@ const getStudentUser = async () => {
 };
 
 import Form from "./Form";
-import { fetchStudentUser } from "@/api/student/studentApi";
+import { fetchStudentUser } from "@/api/oldApi/student/studentApi";
 
 export default function Page() {
   const [isLoading, setLoading] = useState<boolean>(false);

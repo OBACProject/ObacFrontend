@@ -1,6 +1,6 @@
 "use client";
-import { fetchUpdateCompleteScheduleSubject } from "@/api/grad/gradAPI";
-import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
+import { fetchUpdateCompleteScheduleSubject } from "@/api/oldApi/grad/gradAPI";
+import { fetchGetSubjectBySubjectId } from "@/api/oldApi/subject/subjectAPI";
 import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
 import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
 import { Combobox } from "@/app/components/combobox/combobox";

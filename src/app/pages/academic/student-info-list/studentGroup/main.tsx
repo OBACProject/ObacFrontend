@@ -1,5 +1,5 @@
 "use client";
-import { GetStudentListByGroupID } from "@/api/student/studentApi";
+import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
 import StudentNameListPDF from "@/app/components/PDF/StudentNameList";
 import {
   GetStudentListByGroupIDDto,

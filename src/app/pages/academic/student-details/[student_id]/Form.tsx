@@ -1,15 +1,15 @@
 "use client";
 import {
-  fetchGetStudentGradeByTermYear,
   fetchGetStudentGradeDetail,
-} from "@/api/grad/gradAPI";
-import { fetchGetStudentByStudentId, fetchUpdateStudent } from "@/api/student/studentApi";
+} from "@/api/oldApi/grad/gradAPI";
+import { fetchGetStudentByStudentId, fetchUpdateStudent } from "@/api/oldApi/student/studentApi";
 import GradPerTerms from "@/app/components/PDF/GradPerTerm";
 import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
 import ChangeStudentGroup from "@/app/components/popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/app/components/popup/confirmChangeStudentsStatus";
 import { GetStudentByStudentId, UpdateStudentRequestBody } from "@/dto/studentDto";
 import { educationOptions } from "@/resource/academics/options/studentOption";
+import { gradeService } from "@/lib/api/services/grade.service";
 import {
   ArrowRightLeft,
   CircleX,
@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { GetStudentGradesByTermYearRequest } from "@/lib/api/models/grade/grade.request";
 
 type Props = {
   studentId: number;
@@ -37,7 +38,13 @@ const fetchStudentGrad = async (
   year: number
 ) => {
   try {
-    const data = await fetchGetStudentGradeByTermYear(studentId, term, year);
+    const requestData : GetStudentGradesByTermYearRequest = {
+      studentId: studentId,
+      term: term,
+      year: year,
+    }
+
+    const data = await gradeService.getStudentGrades(requestData);
     return data;
   } catch (err) {
     console.error("Failed to fetch data.");

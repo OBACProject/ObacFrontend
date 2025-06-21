@@ -6,7 +6,7 @@ import { TeacherEnrollment } from "@/dto/teacherDto";
 import {
   fetchGetTeacherEnrollmentsByTeacherId,
   fetchTeacherUser,
-} from "@/api/teacher/teacherAPI";
+} from "@/api/oldApi/teacher/teacherAPI";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 

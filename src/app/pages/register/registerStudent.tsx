@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { StudentCreateData } from "@/dto/studentDto";
 import { useState } from "react";
 import { Combobox } from "@/app/components/combobox/combobox";
-import { fetchCreateStudentAsync } from "@/api/student/studentApi";
+import { fetchCreateStudentAsync } from "@/api/oldApi/student/studentApi";
 import { useRouter } from "next/navigation";
 export function RegisterStudent() {
   const router = useRouter();

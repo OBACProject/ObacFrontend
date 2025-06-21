@@ -7,12 +7,12 @@ import {
 } from "@/dto/gradDto";
 import {
   fetchGetStudentGroupGradeByGroupIdTermYear,
-} from "@/api/grad/gradAPI";
+} from "@/api/oldApi/grad/gradAPI";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
-import { fetchGetSubjectBySubjectId } from "@/api/subject/subjectAPI";
+import { fetchGetSubjectBySubjectId } from "@/api/oldApi/subject/subjectAPI";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { MethodDto } from "@/dto/methodDto";
-import { fetchMethod } from "@/api/method/methodAPI";
+import { fetchMethod } from "@/api/oldApi/method/methodAPI";
 
 interface Props {
   subjectId: number;

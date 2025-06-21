@@ -2,7 +2,7 @@
 import {
   fetchDeleteScheduleSubject,
   fetchGetScheduleOfStudentGroupByGroupID,
-} from "@/api/schedule/scheduleAPI";
+} from "@/api/oldApi/schedule/scheduleAPI";
 import { ScheduleSubject, StudentGroupScheduleSubject } from "@/dto/schedule";
 import { Boxes, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { GetAllTeacher } from "@/dto/teacherDto";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { fetchGetAllTeacherAsync } from "@/api/teacher/teacherAPI";
+import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { TeacherColumn } from "@/resource/admin/teacherData";
 
 const getTeacherData = async () => {

@@ -3,10 +3,10 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../font/THSarabunFont";
 import THSarabunFontBold from "../font/THSarabunBold";
-import { GetGropGradeBelowModel } from "@/dto/gradDto";
+import { GetGradBelowResponse } from "@/lib/api/models/grade/grade.response";
 
 interface DataList {
-  student?: GetGropGradeBelowModel[];
+  student?: GetGradBelowResponse[];
   currentYear: number;
   classGroup: string;
 }

@@ -3,12 +3,12 @@ import {
   fetchDeleteSubject,
   fetchGetAllSubject,
   fetchUpdateSubject,
-} from "@/api/subject/subjectAPI";
+} from "@/api/oldApi/subject/subjectAPI";
 import { LibraryBig, Pencil, PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GetAllSubject } from "@/dto/subjectDto";
-import { fetchGetAllProgram } from "@/api/program/programAPI";
+import { fetchGetAllProgram } from "@/api/oldApi/program/programAPI";
 import { GetAllProgram } from "@/dto/programDto";
 import Select from "react-select";
 

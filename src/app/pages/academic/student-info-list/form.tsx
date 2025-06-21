@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ClassroomGrading } from "./classroomGrading";
-import { fetchGetAllStudent } from "@/api/student/studentApi";
+import { fetchGetAllStudent } from "@/api/oldApi/student/studentApi";
 import { GetAllStudent } from "@/dto/studentDto";
 import { useRouter } from "next/navigation";
 import Select from "react-select";

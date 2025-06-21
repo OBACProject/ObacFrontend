@@ -11,7 +11,7 @@ import TotalScoreInGroup, {
   DataList,
 } from "@/app/components/PDF/TotalScoreInGroup";
 import { Boxes, Download, Loader2 } from "lucide-react";
-import { fetchGetStudentGradeDetail } from "@/api/grad/gradAPI";
+import { fetchGetStudentGradeDetail } from "@/api/oldApi/grad/gradAPI";
 import { toast } from "react-toastify";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 import GroupSummaryGradPDF from "@/app/components/PDF/GroupSummaryGrade";

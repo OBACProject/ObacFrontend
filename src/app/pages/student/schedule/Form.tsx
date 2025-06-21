@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CardSchedule } from "@/app/components/card/card-schedule";
 import { Badge } from "@/components/ui/badge";
 import { StudentCardSubjectData } from "@/resource/students/studentCardSubjectData";
-import { fetchGetScheduleOfStudentByStudentID } from "@/api/schedule/scheduleAPI";
+import { fetchGetScheduleOfStudentByStudentID } from "@/api/oldApi/schedule/scheduleAPI";
 import { StudentGroupScheduleSubject } from "@/dto/schedule";
 
 type Props = {
