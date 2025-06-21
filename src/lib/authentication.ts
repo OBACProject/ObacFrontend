@@ -1,5 +1,5 @@
 
-import api from "./apiCentralized";
+import apiClient from "./apiClient";
 import { compactVerify } from "jose";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -8,7 +8,7 @@ export async function login(formData: FormData) {
     const secretKey =await axios.get("/api/secret").then((res) => res.data.secretKey);
     const userName = formData.get("userName") as string;
     const password = formData.get("password") as string;
-    const res = await api.post("/User/UserLogin", {
+    const res = await apiClient.post("/User/UserLogin", {
       userName,
       password,
     });

@@ -1,9 +1,10 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "../font/THSarabunFont";
-import THSarabunFontBold from "../font/THSarabunBold";
-import { GetGradBelowResponse } from "@/lib/api/models/grade/grade.response";
+import THSarabunFont from "../../app/components/font/THSarabunFont";
+import THSarabunFontBold from "../../app/components/font/THSarabunBold";
+import { GetGropGradeBelowModel } from "@/dto/gradDto";
+import { GetGradBelowResponse } from "../api/models/grade/grade.response";
 
 interface DataList {
   student?: GetGradBelowResponse[];
@@ -11,7 +12,7 @@ interface DataList {
   classGroup: string;
 }
 
-const StudentFailList = ({
+const StudentFailList = ({ //รายชื่อนักเรียนที่มีผลการเรียนต่ำกว่าเกณฑ์   StudentsNotPassedList (student-notpassed)
     student , currentYear ,classGroup
 }: DataList) => {
   const doc = new jsPDF({

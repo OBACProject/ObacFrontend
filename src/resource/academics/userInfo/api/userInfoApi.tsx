@@ -1,6 +1,6 @@
 "use server";
 import { GetUserInfoById } from "@/dto/userDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export const fetchGetUserInfoById = async (
@@ -8,7 +8,7 @@ export const fetchGetUserInfoById = async (
 ): Promise<GetUserInfoById> => {
   try {
     const token = cookies().get("token")?.value;
-    const response = await api.get(`/User/GetUserById?userId=${userId}`, {
+    const response = await apiClient.get(`/User/GetUserById?userId=${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

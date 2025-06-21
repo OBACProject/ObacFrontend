@@ -5,8 +5,8 @@ import {
   GetGradBySubjectId,
   GetStudentGroupGradeByGroupIdTermYearDto,
 } from "@/dto/gradDto";
-import THSarabunFont from "../font/THSarabunFont";
-import THSarabunFontBold from "../font/THSarabunBold";
+import THSarabunFont from "../../app/components/font/THSarabunFont";
+import THSarabunFontBold from "../../app/components/font/THSarabunBold";
 
 interface DataList {
   grads?: GetGradBySubjectId[];

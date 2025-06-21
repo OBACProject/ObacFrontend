@@ -1,11 +1,11 @@
 import { GradingData, UpdateStudentGrade } from "@/dto/gradingDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import Cookies from "js-cookie";
 
 export const getGradingData = async (term: number): Promise<GradingData[]> => {
   const token = Cookies.get("token");
   try {
-    const response = await api.get(`Subject/GetSubjectByTerm?term=${term}`, {
+    const response = await apiClient.get(`Subject/GetSubjectByTerm?term=${term}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -20,7 +20,7 @@ export const getGradingData = async (term: number): Promise<GradingData[]> => {
 export const updateGradingStundetData = async (payload: UpdateStudentGrade) => {
   const token = Cookies.get("token");
   try {
-    const response = await api.put("Grade/UpdateStudentGrade", payload, {
+    const response = await apiClient.put("Grade/UpdateStudentGrade", payload, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

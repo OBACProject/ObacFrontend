@@ -1,6 +1,6 @@
 "use server";
 import { ClassroomByGroupIdData } from "@/dto/gradingDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export async function getClassroomByGroupId(
@@ -10,7 +10,7 @@ export async function getClassroomByGroupId(
 ): Promise<ClassroomByGroupIdData> {
   try {
     const token = cookies().get("token")?.value;
-    const response = await api.get(
+    const response = await apiClient.get(
       `Grade/GetGroupSummaryGrade?groupId=${groupId}&term=${term}&year=${year}`,
       {
         headers: {

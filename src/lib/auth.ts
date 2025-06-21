@@ -2,8 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const secretKey =
-  "0812113f5392b4d13d98837152805f7b232f60cacefa0a45081ff9f1ac97d5b60812113f";
+const secretKey = process.env.SECRET_KEY
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {

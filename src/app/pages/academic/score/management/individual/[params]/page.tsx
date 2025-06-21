@@ -1,7 +1,7 @@
 "use client";
 import { fetchGetStudentGradeDetail } from "@/api/oldApi/grad/gradAPI";
 import { LabelText } from "@/app/components/labelText/labelText";
-import SummaryGradPDF from "@/app/components/PDF/SummaryGrade";
+import SummaryGradPDF from "@/lib/PDF/SummaryGrade";
 import { Badge } from "@/components/ui/badge";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 import { StudentTranscriptData, TermQuery, YearData } from "@/dto/studentDto";

@@ -1,6 +1,6 @@
 "use client";
-import GenStudentNameInSubject from "@/app/components/PDF/genStudentNameInSubject";
-import GenSubjectScore from "@/app/components/PDF/genSubjectScore";
+import GenStudentNameInSubject from "@/lib/PDF/genStudentNameInSubject";
+import GenSubjectScore from "@/lib/PDF/genSubjectScore";
 import {
   ConvertGradBySubjectId,
   GetGradBySubjectId,

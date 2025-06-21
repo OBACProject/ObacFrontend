@@ -1,11 +1,11 @@
 import { StudentInfoByGroupId } from "@/dto/studentDto";
-import api from "@/lib/apiCentralized";
+import apiClient from "@/lib/apiClient";
 
 export const getStudentByGroupId = async (
   groupId: number
 ): Promise<StudentInfoByGroupId[]> => {
   try {
-    const response = await api.get(
+    const response = await apiClient.get(
       `Student/GetStudentListByGroupID?groupid=${groupId}`
     );
     return response.data.data;
