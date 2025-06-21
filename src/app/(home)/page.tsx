@@ -40,7 +40,6 @@ export default function Home() {
           name="author"
           content="Ekawit Business Administration Vocational College"
         />
-
         <link rel="canonical" href="https://ekawit.ac.th" />
       </Head>
       <StickerFacebook />
