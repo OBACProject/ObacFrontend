@@ -17,7 +17,6 @@ export function middleware(req: NextRequest) {
     "/pages/admin": ["Admin"],
   };
 
-  // Check if the requested path matches any restricted paths
   for (const path in allowedRoles) {
     if (urlPath.startsWith(path)) {
       if (!allowedRoles[path].includes(role)) {
