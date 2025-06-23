@@ -288,7 +288,7 @@ export function ClassroomGrading() {
 
   const onRowClick = (item: ClassroomTable) => {
     router.push(
-      `/pages/academic/score/management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
+      `/academic/score-management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
     );
   };
 

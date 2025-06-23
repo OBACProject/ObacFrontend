@@ -32,7 +32,7 @@ export function StudentSidebar({
     try {
       await logout(); // Call the shared logout function
       setUserName(""); // Clear the username state
-      router.push("/pages/login");
+      router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }

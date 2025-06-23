@@ -148,7 +148,7 @@ export function ClassroomGrading(props: {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const handleRowClick = (item: ClassroomTable) => {
     router.push(
-      `/pages/academic/student-info-list/studentGroup?groupId=${item.groupId}`
+      `/academic/student-info-list/studentGroup?groupId=${item.groupId}`
     );
   };
   const [studentInGroup, setStudentInGroup] =

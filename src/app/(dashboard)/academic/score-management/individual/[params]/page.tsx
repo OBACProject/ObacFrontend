@@ -67,7 +67,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
           <div className="flex justify-between w-full py-4">
             <Link
               href={
-                "/pages/academic/student-details/" +
+                "/academic/student-details/" +
                 studentTranscriptDataById?.studentId
               }
               className="grid align-middle lg:w-[800px] hover:bg-gray-50 duration-300   w-fit px-4 py-2 border  rounded-lg"

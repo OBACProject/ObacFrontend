@@ -41,7 +41,7 @@ export function StudentListPage(props: {
 
   const router = useRouter();
   const handleRowClick = (item: GetAllStudentTableDto) => {
-    router.push(`/pages/academic/student-details/${item.studentId}`);
+    router.push(`/academic/student-details/${item.studentId}`);
   };
 
   const columns = [

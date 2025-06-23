@@ -101,7 +101,7 @@ export default function Form({ teacherId }: Props) {
                 return (
                   <Link
                     key={items.id}
-                    href={`/pages/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}&class=${items.studentClass}`}
+                    href={`/teacher/subject/subjectScore?subject=${items.subjectId}&group=${items.studentGroupId}&iscomplete=${items.isComplete}&term=${items.term}&year=${items.year}&class=${items.studentClass}`}
                   >
                     <CardSubject
                       cardSubjectData={items}

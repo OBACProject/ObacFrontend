@@ -38,7 +38,7 @@ export function AcademicPage() {
   }, []);
 
   const handleEdit = (id: any) => {
-    router.push(`/pages/admin/academicManagement/edit/${id}`);
+    router.push(`/admin/academic-management/edit/${id}`);
   };
 
   const handleDelete = (id: any) => {
@@ -46,7 +46,7 @@ export function AcademicPage() {
   };
 
   const handleRowClick = (id: any) => {
-    router.push(`/pages/admin/academicManagement/edit/${id}`);
+    router.push(`/admin/academic-management/edit/${id}`);
   };
 
   const columns = makeColumns<AcademicColumn>(
@@ -108,7 +108,7 @@ export function AcademicPage() {
             onChange={(event) => setSearchStaff(event.target.value)}
           />
           <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-1/3 hover:bg-blue-600">
-            <a href="/pages/admin/academicManagement/create">Add Staff </a>
+            <a href="/admin/academic-management/create">Add Staff </a>
           </button>
         </div>
       </div>

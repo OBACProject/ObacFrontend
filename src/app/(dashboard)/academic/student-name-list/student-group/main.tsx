@@ -135,7 +135,7 @@ export default function Main({ groupId }: Props) {
               {studentInGroup.students?.map(
                 (item: StudentListByGroupIDDto, index) => (
                   <Link
-                    href={`/pages/academic/student-details/${item.studentId}`}
+                    href={`/academic/student-details/${item.studentId}`}
                     key={index}
                     className={` ${
                       index % 2 == 0 ? "bg-white" : ""

@@ -61,7 +61,7 @@ export default function Form() {
 
   const onSearch = () => {
     setSearchTrigger(true);
-    router.push(`/pages/academic/student-details/${selectedStudent?.value}`);
+    router.push(`/academic/student-details/${selectedStudent?.value}`);
   };
 
   const studentNameOptions = studentListName.map((item) => ({
@@ -116,7 +116,7 @@ export default function Form() {
             <button
               className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600"
               onClick={() => {
-                router.push("/pages/academic/student-info-list/studentList");
+                router.push("/academic/student-info-list/studentList");
               }}
             >
               รายชื่อนักเรียนทั้งหมด

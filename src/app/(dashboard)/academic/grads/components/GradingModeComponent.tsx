@@ -57,7 +57,7 @@ export function GradingModeComponent() {
   }, []);
 
   useEffect(() => {
-    if (pathname !== "/pages/academic/grading") {
+    if (pathname !== "/academic/grads") {
       localStorage.removeItem("activeTab");
       localStorage.removeItem("classSubjectData");
       localStorage.removeItem("classInfoData");

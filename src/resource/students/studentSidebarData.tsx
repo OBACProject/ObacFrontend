@@ -23,7 +23,7 @@ export interface ProfileData {
 export const ProfileData: ProfileData = {
   name: "ถิรวัฒน์ พงศ์ปฏิสนธิพงศ์ปฏิสนธิ",
   id: "6410450958",
-  href: "/pages/student/profile",
+  href: "/student/profile",
 };
 
 export const StudentSidebarData: StudentSidebarProps = {
@@ -31,7 +31,7 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "ตารางเรียน",
       tooltip: "schedule",
-      href: "/pages/student/schedule",
+      href: "/student/schedule",
       icon: (
         <CalendarDays
           style={{ width: "2.5rem", height: "2.5rem" }}
@@ -42,7 +42,7 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "ตรวจสอบผลการเรียน",
       tooltip: "grade",
-      href: "/pages/student/grade",
+      href: "/student/grade",
       icon: (
         <GraduationCap
           style={{ width: "2.5rem", height: "2.5rem" }}
@@ -53,7 +53,7 @@ export const StudentSidebarData: StudentSidebarProps = {
     {
       title: "สถานะการชำระเงิน",
       tooltip: "payment",
-      href: "/pages/student/payment",
+      href: "/student/payment",
       icon: (
         <CreditCard
           style={{ width: "2.5rem", height: "2.5rem" }}

@@ -162,7 +162,7 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
   //       )?.name || "",
   //   };
 
-  //   rounter.push(`/pages/academic/score/management/individual`);
+  //   rounter.push(`/academic/score/management/individual`);
   // };
 
   const convertTOPDFData: DataList = {
@@ -342,7 +342,7 @@ const ClassroomByGroupId = ({ params }: { params: { params: string[] } }) => {
                     studentData.studentCode === student.studentCode
                 );
 
-                return `/pages/academic/score/management/individual/${studentData?.studentId}`;
+                return `/academic/score-management/individual/${studentData?.studentId}`;
               }}
               pagination={summaryData?.students.length || 0}
             />

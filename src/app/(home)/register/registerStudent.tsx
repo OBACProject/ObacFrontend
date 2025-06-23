@@ -40,7 +40,7 @@ export function RegisterStudent() {
   // fetchCreate Student
   const handelSubmit = async () => {
     await fetchCreateStudentAsync(createStudentData);
-    // router.push("/pages/home/");
+    // router.push("/home/");
   };
 
   const [booleanThaiId, setBooleanThaiId] = useState<boolean | null>(null);

@@ -115,7 +115,7 @@ export default function CreateAcademicPage() {
 
       <div className="flex justify-end mt-10">
         <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-1/6 hover:bg-blue-600">
-          <a href="/pages/admin/academicManagement/create">Add New Staff</a>
+          <a href="/admin/academic-management/create">Add New Staff</a>
         </button>
       </div>
     </header>

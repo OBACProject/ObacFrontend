@@ -156,7 +156,7 @@ export function Subject() {
             }))}
             pagination={10}
             getRowLink={(item) => {
-              return `/pages/academic/grading/classSubject/${item.id}/${selectedTerm}`;
+              return `/academic/grads/classSubject/${item.id}/${selectedTerm}`;
             }}
           />
         </div>

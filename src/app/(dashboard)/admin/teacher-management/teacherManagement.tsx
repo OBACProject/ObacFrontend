@@ -38,13 +38,13 @@ export function TeacherPage() {
   }, []);
 
   const handleEdit = (id: number) => {
-    router.push(`/pages/admin/teacherManagement/edit/${id}`);
+    router.push(`/admin/teacher-management/edit/${id}`);
   };
 
   const handleDelete = (id: number) => {};
 
   const handleRowClick = (id: number) => {
-    router.push(`/pages/admin/teacherManagement/edit/${id}`);
+    router.push(`/admin/teacher-management/edit/${id}`);
   };
 
   const columns = makeColumns<TeacherColumn>(
@@ -118,7 +118,7 @@ export function TeacherPage() {
             onChange={(event) => setSearchTeacher(event.target.value)}
           />
           <button className="bg-blue-500 text-white px-4 py-2 rounded-md w-1/3 hover:bg-blue-600">
-            <a href="/pages/admin/teacherManagement/create">Add Teacher</a>
+            <a href="/admin/teacherManagement/create">Add Teacher</a>
           </button>
         </div>
       </div>

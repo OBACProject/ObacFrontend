@@ -41,7 +41,7 @@ export function AcademicSidebar({
       setUserName("");
       Cookies.remove("token");
       Cookies.remove("token");
-      router.push("/pages/login");
+      router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }

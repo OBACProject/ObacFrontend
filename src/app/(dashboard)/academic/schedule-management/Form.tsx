@@ -199,7 +199,7 @@ export default function Form() {
                   {" "}
                   {filteredTeachers?.map((item: GetAllTeacher, index) => (
                     <Link
-                      href={`/pages/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year.toString()}&param3=${
+                      href={`/academic/schedule-management/teacherSchedule?param1=${term}&param2=${year.toString()}&param3=${
                         item.teacherId
                       }`}
                       key={item.teacherId}
@@ -245,7 +245,7 @@ export default function Form() {
                   {filteredStudent?.map(
                     (item: GetStudentGroupsByTermYearDto, index) => (
                       <Link
-                        href={`/pages/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.groupId}`}
+                        href={`/academic/schedule-management/groupSchedule?param1=${term}&param2=${year}&param3=${item.groupId}`}
                         key={item.groupId}
                         className={` ${
                           index % 2 == 0 ? "bg-white" : "bg-white"

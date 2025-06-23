@@ -95,7 +95,7 @@ export function EventManagement() {
           </div>
 
           <div className="w-4/5">
-            <a href="/pages/admin/eventManagement/create">
+            <a href="/admin/event-management/create">
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                 Add Event
               </button>

@@ -32,57 +32,57 @@ export interface ProfileData {
 
 export const ProfileData: ProfileData = {
   name: "username",
-  href: "/pages/academic",
+  href: "/academic",
 };
 
 export const AcademicSideBarData: AcademicSidebarProps = {
   menuItems: [
     {
       title: "ข้อมูลผู้ใช้",
-      href: "/pages/academic/profile",
-      headLink: "/pages/academic/profile",
+      href: "/academic/profile",
+      headLink: "/academic/profile",
       icon: <UserRound style={{ width: "2.0rem", height: "2.5rem" }} />,
     },
     {
       title: "ออกเกรดรายวิชา",
-      href: "/pages/academic/grading",
-      headLink: "/pages/academic/grading",
+      href: "/academic/grads",
+      headLink: "/academic/grads",
       icon: <ScrollText style={{ width: "2.2rem", height: "2.5rem" }} />,
     },
     {
       title: "ระบบจัดการคะแนน",
-      href: "/pages/academic/score/management",
-      headLink: "/pages/academic/score/management",
+      href: "/academic/score-management",
+      headLink: "/academic/score-management",
       icon: <FileSpreadsheet style={{ width: "2.1rem", height: "2.5rem" }} />,
     },
     {
       title: "ข้อมูลนักเรียน",
-      href: "/pages/academic/student-info-list",
-      headLink: "/pages/academic/student-info-list",
+      href: "/academic/student-name-list",
+      headLink: "/academic/student-name-list",
       icon: <BookUser style={{ width: "2.2rem", height: "2.5rem" }} />,
     },
     {
       title: "จัดตารางเรียนตารางสอน",
-      href: "/pages/academic/schedule-management",
-      headLink: "/pages/academic/schedule-management",
+      href: "/academic/schedule-management",
+      headLink: "/academic/schedule-management",
       icon: <TableProperties style={{ width: "2.0rem", height: "2.2rem" }} />,
     },
     {
       title: "จัดการรายวิชา",
-      href: "/pages/academic/subject-management",
-      headLink: "/pages/academic/subject-management",
+      href: "/academic/subject-management",
+      headLink: "/academic/subject-management",
       icon: <Grid2X2Plus style={{ width: "2.0rem", height: "2.2rem" }} />,
     },
     {
       title: "ระบบเลื่อนชั้นเรียน",
-      href: "/pages/academic/upLevel",
-      headLink: "/pages/academic/upLevel",
+      href: "/academic/upLevel",
+      headLink: "/academic/promote-student",
       icon: <ArrowUpDown className=" h-8 w-8" />,
     },
     {
       title: "นักเรียนไม่ผ่านเกณฑ์",
-      href: "/pages/academic/FailedStudent",
-      headLink: "/pages/academic/FailedStudent",
+      href: "/academic/student-not-pass",
+      headLink: "/academic/student-not-passt",
       icon: <OctagonMinus className=" h-8 w-8" />,
     },
   ],
