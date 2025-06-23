@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { NavbarData } from "@/resource/home/navbarData";
-import DropMenu from "@/app/components/dropdown/dropdown-menu-1";
+import DropMenu from "@/components/common/dropdown/dropdown-menu-1";
 import { CircleCheck, Menu, X } from "lucide-react";
-import DropDownMobile from "@/app/components/dropdown/dropdown-mobile";
+import DropDownMobile from "@/components/common/dropdown/dropdown-mobile";
 import Link from "next/link";
 
 export function HomePageNavBar() {

@@ -1,9 +1,9 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "../../app/components/font/THSarabunFont";
+import THSarabunFont from "../Font/THSarabunFont";
 import { GetGradBySubjectId } from "@/dto/gradDto";
-import THSarabunFontBold from "../../app/components/font/THSarabunBold";
+import THSarabunFontBold from "../Font/THSarabunBold";
 
 interface DataList {
   grads?: GetGradBySubjectId[];

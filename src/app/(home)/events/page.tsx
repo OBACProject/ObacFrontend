@@ -1,5 +1,5 @@
 "use client";
-import CLSEvents from "@/app/components/cls/cls-event";
+import CLSEvents from "@/components/common/CLS/cls-event";
 import React, { useState } from "react";
 
 type EventsProps = {

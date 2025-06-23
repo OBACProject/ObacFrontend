@@ -1,12 +1,12 @@
 "use client";
 import jsPDF from "jspdf";
-import THSarabunFont from "../../app/components/font/THSarabunFont";
-import THSarabunFontBold from "../../app/components/font/THSarabunBold";
+import THSarabunFont from "../Font/THSarabunFont";
+import THSarabunFontBold from "../Font/THSarabunBold";
 import autoTable from "jspdf-autotable";
 import {
   GeneralData,
   StudentList,
-} from "@/app/pages/academic/score/management/classroom/[...params]/page";
+} from "@/app/(dashboard)/academic/score-management/classroom/[...params]/page";
 
 export interface DataList {
   generalData: GeneralData;
