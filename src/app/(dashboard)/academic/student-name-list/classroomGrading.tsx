@@ -1,7 +1,5 @@
 "use client";
-// Update the import path if the file is located elsewhere, for example:
 import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
-// Or, if the file does not exist, create it at src/api/student/studentApi.ts and export GetStudentListByGroupID from there.
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import StudentNameListPDF from "@/lib/PDF/StudentNameList";
