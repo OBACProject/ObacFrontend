@@ -1,8 +1,8 @@
 "use client";
 
 import jsPDF from "jspdf";
-import THSarabunFont from "../../app/components/font/THSarabunFont";
-import THSarabunFontBold from "../../app/components/font/THSarabunBold";
+import THSarabunFont from "../Font/THSarabunFont";
+import THSarabunFontBold from "../Font/THSarabunBold";
 import { GetGradPerTermByStudentIdDto } from "@/dto/gradDto";
 
 const GradPerTerms = (grads: GetGradPerTermByStudentIdDto) => {

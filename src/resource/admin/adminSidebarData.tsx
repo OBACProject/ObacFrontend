@@ -29,7 +29,7 @@ export interface AdminSidebarProps {
 
 export const ProfileData: ProfileData = {
   name: "Admin",
-  href: "/pages/admin/eventManagement",
+  href: "/admin/eventManagement",
 };
 
 export const AdminSidebarData: AdminSidebarProps = {
@@ -37,8 +37,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "หน้าหลัก",
       tooltip: "หน้าหลักผู้ใช้",
-      href: "/pages/admin/profile",
-      headLink:"/pages/admin/profile",
+      href: "/admin/profile",
+      headLink:"/admin/profile",
       icon: (
         <House
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -48,8 +48,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการนักเรียน",
       tooltip: "จัดการนักเรียน",
-      href: "/pages/admin/studentManagement",
-      headLink:"/pages/admin/studentManagement",
+      href: "/admin/studentManagement",
+      headLink:"/admin/studentManagement",
       icon: (
         <GraduationCap
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -59,8 +59,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการอาจารย์",
       tooltip: "จัดการอาจารย์",
-      href: "/pages/admin/teacherManagement",
-      headLink:"/pages/admin/teacherManagement",
+      href: "/admin/teacherManagement",
+      headLink:"/admin/teacherManagement",
       icon: (
         <UserRoundPen
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -71,8 +71,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการบุคลากรภายใน",
       tooltip: "จัดการบุคลากรภายใน",
-      href: "/pages/admin/academicManagement",
-      headLink:"/pages/admin/academicManagement",
+      href: "/admin/academicManagement",
+      headLink:"/admin/academicManagement",
       icon: (
         <BookMarked
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -82,8 +82,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "กิจกรรม",
       tooltip: "กิจกรรม",
-      href: "/pages/admin/eventManagement",
-      headLink: "/pages/admin/eventManagement",
+      href: "/admin/eventManagement",
+      headLink: "/admin/eventManagement",
       icon: (
         <CalendarClock
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -93,8 +93,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "ข่าวสาร",
       tooltip: "ข่าวสาร",
-      href: "/pages/admin/newsManagement",
-      headLink: "/pages/admin/newsManagement",
+      href: "/admin/newsManagement",
+      headLink: "/admin/newsManagement",
       icon: <Newspaper style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
   ],

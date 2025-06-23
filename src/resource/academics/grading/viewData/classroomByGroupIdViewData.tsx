@@ -4,7 +4,7 @@ import {
   GeneralData,
   GroupSummaryGradeResponse,
   StudentList,
-} from "@/app/pages/academic/score/management/classroom/[...params]/page";
+} from "@/app/(dashboard)/academic/score-management/classroom/[...params]/page";
 
 export async function getGroupSummaryGradeViewData(
   groupId: number,

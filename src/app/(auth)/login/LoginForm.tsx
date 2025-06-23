@@ -51,16 +51,16 @@ export default function LoginForm({ session }: LoginFormProps) {
 
       switch (newRole) {
         case "Student":
-          router.push("/pages/student/schedule");
+          router.push("/student/schedule");
           break;
         case "Teacher":
-          router.push("/pages/teacher/profile");
+          router.push("/teacher/profile");
           break;
         case "Academic":
-          router.push("/pages/academic/profile");
+          router.push("/academic/profile");
           break;
         case "Admin":
-          router.push("/pages/admin/profile");
+          router.push("/admin/profile");
           break;
         default:
           toast.error("Unknown role");
@@ -83,16 +83,16 @@ export default function LoginForm({ session }: LoginFormProps) {
     const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
-        router.push("/pages/student/schedule");
+        router.push("/student/schedule");
         break;
       case "Teacher":
-        router.push("/pages/teacher/profile");
+        router.push("/teacher/profile");
         break;
       case "Academic":
-        router.push("/pages/academic/profile");
+        router.push("/academic/profile");
         break;
       case "Admin":
-        router.push("/pages/admin/academicManagement");
+        router.push("/admin/academicManagement");
         break;
       default:
         toast.error("สิทธิการเข้าถึงผิดพลาด");

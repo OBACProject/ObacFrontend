@@ -16,7 +16,7 @@ export interface ProfileData {
 
 export const ProfileData: ProfileData = {
   name: "Patarajarin Napakarn",
-  href: "/pages/teacher/profile",
+  href: "/teacher/profile",
 };
 
 export const TeacherSideBarData: TeacherSidebarProps = {
@@ -24,7 +24,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
     {
       title: "ข้อมูลอาจารย์",
       tooltip: "schedule",
-      href: "/pages/teacher/profile",
+      href: "/teacher/profile",
       icon: (
         <UserRound
           style={{ width: "2.0rem", height: "2.5rem" }}
@@ -35,7 +35,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
     {
       title: "รายวิชา",
       tooltip: "grade",
-      href: "/pages/teacher/subject",
+      href: "/teacher/subject",
       icon: (
         <GraduationCap
           style={{ width: "2.3rem", height: "2.5rem" }}
@@ -46,7 +46,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
     {
       title: "ตารางสอน",
       tooltip: "schedule",
-      href: "/pages/teacher/schedule",
+      href: "/teacher/schedule",
       icon: (
         <CreditCard
           style={{ width: "2.2rem", height: "2.5rem" }}

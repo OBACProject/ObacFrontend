@@ -1,11 +1,11 @@
 import { cardData } from "@/resource/fetchData/cardContent";
-import CardVertical from "@/app/components/card/card-vertical";
-import CardHorizontal from "@/app/components/card/card-horizontal";
+import CardVertical from "@/components/common/Card/card-vertical";
+import CardHorizontal from "@/components/common/Card/card-horizontal";
 import Head from "next/head";
-import StickerFacebook from "@/app/components/Effect/StickerFacebook";
-import StickerYoutube from "@/app/components/Effect/StickerYoutube";
-import FadeInOnScroll from "@/app/components/Effect/FadInScroll";
-import OpeningScroll from "@/app/components/Effect/OpeningScroll";
+import StickerFacebook from "@/components/Effect/StickerFacebook";
+import StickerYoutube from "@/components/Effect/StickerYoutube";
+import FadeInOnScroll from "@/components/Effect/FadInScroll";
+import OpeningScroll from "@/components/Effect/OpeningScroll";
 
 export default function Home() {
   const structuredData = {
