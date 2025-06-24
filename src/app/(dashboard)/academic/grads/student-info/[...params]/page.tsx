@@ -7,7 +7,7 @@ import { Combobox } from "@/components/common/Combobox/combobox";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GetGradBySubjectId } from "@/dto/gradDto";
-import { GetSubjectBySubjectId } from "@/dto/subjectDto";
+import { GetSubjectBySubjectId } from "@/DTO/subjectDto";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,

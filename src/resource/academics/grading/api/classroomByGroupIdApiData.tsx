@@ -1,5 +1,5 @@
 "use server";
-import { ClassroomByGroupIdData } from "@/dto/gradingDto";
+import { ClassroomByGroupIdData } from "@/DTO/gradingDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
