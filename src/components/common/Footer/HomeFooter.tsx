@@ -1,4 +1,4 @@
-import { School } from "lucide-react";
+
 
 export default function HomeFooter() {
   return (

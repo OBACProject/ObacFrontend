@@ -75,7 +75,7 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "ระบบเลื่อนชั้นเรียน",
-      href: "/academic/upLevel",
+      href: "/academic/promote-student",
       headLink: "/academic/promote-student",
       icon: <ArrowUpDown className=" h-8 w-8" />,
     },
