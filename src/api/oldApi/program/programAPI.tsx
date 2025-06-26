@@ -1,5 +1,5 @@
 "use server";
-import { GetAllProgram } from "@/dto/programDto";
+import { GetAllProgram } from "@/DTO/programDto";
 import { cookies } from "next/headers";
 
 export const fetchGetAllProgram = async (): Promise<GetAllProgram[]> => {

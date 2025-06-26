@@ -4,7 +4,7 @@ import {
   StudentGroupScheduleSubject,
   TeacherScheduleSubject,
   CreateScheduleSubjectRequest,
-} from "@/dto/schedule";
+} from "@/DTO/schedule";
 import { cookies } from "next/headers";
 
 export const fetchGetScheduleBysubjectId = async (

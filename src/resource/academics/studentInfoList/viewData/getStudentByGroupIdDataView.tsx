@@ -1,4 +1,4 @@
-import { StudentColumns } from "@/dto/studentDto";
+import { StudentColumns } from "@/DTO/studentDto";
 import { getStudentByGroupId } from "../api/getStudentByGroupId";
 
 export const getStudentByGroupIdDataView = async (

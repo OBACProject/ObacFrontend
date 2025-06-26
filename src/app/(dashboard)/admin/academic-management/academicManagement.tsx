@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { AcademicColumn } from "@/resource/admin/academicData";
 import { fetchGetAllAcademicUser } from "@/api/user/userAPI";
-import { GetAllAcademicUser } from "@/dto/userDto";
+import { GetAllAcademicUser } from "@/DTO/userDto";
 
 const getAcademicData = async () => {
   try {

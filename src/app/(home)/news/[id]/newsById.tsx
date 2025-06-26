@@ -1,6 +1,6 @@
 "use client";
 
-import { GetEventManagementById } from "@/dto/eventDto";
+import { GetEventManagementById } from "@/DTO/eventDto";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 

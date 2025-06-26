@@ -3,7 +3,7 @@ import {
   GetAllTeacher,
   GetTeacherByTeacherId,
   TeacherEnrollment,
-} from "@/dto/teacherDto";
+} from "@/DTO/teacherDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 

@@ -2,7 +2,7 @@
 
 import CardSubject from "@/components/common/Card/card-subject";
 import React, { useEffect, useState } from "react";
-import { TeacherEnrollment } from "@/dto/teacherDto";
+import { TeacherEnrollment } from "@/DTO/teacherDto";
 import {
   fetchGetTeacherEnrollmentsByTeacherId,
   fetchTeacherUser,

@@ -1,5 +1,5 @@
 "use server";
-import { GetAllAcademicUser } from "@/dto/userDto";
+import { GetAllAcademicUser } from "@/DTO/userDto";
 import { cookies } from "next/headers";
 
 export const fetchGetAllAcademicUser = async (): Promise<

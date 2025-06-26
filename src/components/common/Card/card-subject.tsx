@@ -1,6 +1,6 @@
 "use client";
-import { TeacherEnrollment } from "@/dto/teacherDto";
-import Link from "next/link";
+import { TeacherEnrollment } from "@/DTO/teacherDto";
+// import Link from "next/link";
 import React from "react";
 
 interface CardSubjectProps {

@@ -1,4 +1,4 @@
-import { ClassSubjectColumn, ClassSubjectData } from "@/dto/gradingDto";
+import { ClassSubjectColumn, ClassSubjectData } from "@/DTO/gradingDto";
 import { getClassSubjectData } from "../api/subjectClassData";
 
 export const getSubjectClassViewData = async (
