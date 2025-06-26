@@ -2,7 +2,6 @@
 
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
-import { color } from "framer-motion";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
@@ -46,7 +45,7 @@ export default function DonutChart({
           font: {
             size: 16,
             weight: 400,
-            family: "Arial",
+            family: "Prompt-Light",
           },
           generateLabels: (chart: any) => {
             const data = chart.data;
@@ -74,7 +73,7 @@ export default function DonutChart({
         font: {
           size: 20,
           weight: 500,
-          family: "Arial",
+          family: "Prompt",
         },
         padding: {
           top: 10,
@@ -86,7 +85,7 @@ export default function DonutChart({
   };
 
   return (
-    <div className="px-0 py-4 shadow-lg rounded-md text-blue-600 bg-white">
+    <div className="px-0 py-4 h-fit shadow-lg rounded-md text-blue-600 bg-white">
       <Doughnut data={data} options={options} />
     </div>
   );
