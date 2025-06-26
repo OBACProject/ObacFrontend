@@ -1,13 +1,13 @@
 import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
-import { fetchGetAllStudentGroup } from "@/api/oldApi/student/studentApi";
+// import { fetchGetAllStudentGroup } from "@/api/oldApi/student/studentApi";
 import { fetchGetAllActiveSubject } from "@/api/oldApi/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
-import { CreateScheduleSubjectRequest } from "@/dto/schedule";
-import { StudentGroup } from "@/dto/studentDto";
-import { GetAllSubject } from "@/dto/subjectDto";
-import { GetAllTeacher } from "@/dto/teacherDto";
+import { CreateScheduleSubjectRequest } from "@/DTO/schedule";
+// import { StudentGroup } from "@/dto/studentDto";
+import { GetAllSubject } from "@/DTO/subjectDto";
+import { GetAllTeacher } from "@/DTO/teacherDto";
 import React, { useEffect, useState } from "react";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {

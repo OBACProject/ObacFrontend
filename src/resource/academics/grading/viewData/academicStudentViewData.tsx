@@ -1,4 +1,4 @@
-import { GetGradBySubjectId } from "@/dto/gradDto";
+import { GetGradBySubjectId } from "@/DTO/gradDto";
 import { get } from "http";
 import { fetchGetSubjectBySubjectIdData } from "../api/academicStudentApiData";
 

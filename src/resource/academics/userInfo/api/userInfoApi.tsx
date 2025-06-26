@@ -1,5 +1,5 @@
 "use server";
-import { GetUserInfoById } from "@/dto/userDto";
+import { GetUserInfoById } from "@/DTO/userDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 

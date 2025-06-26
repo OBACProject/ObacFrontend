@@ -53,9 +53,9 @@ export default function TeacherSidebar({
         <div className="flex h-[80px]  items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="ml-4 text-gray-500 hover:text-gray-700 flex items-center"
+            className="ml-0 text-gray-500 hover:text-blue-700 flex items-center"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-8 h-8" />
           </button>
         </div>
         <div className=" flex justify-start ml-8 items-center w-full gap-6 h-full">
@@ -73,6 +73,13 @@ export default function TeacherSidebar({
             style={{ userSelect: "none" }}
           >
             วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
+          </span>
+          |
+           <span
+            className="text-center text-gray-600 text-lg py-2"
+            style={{ userSelect: "none" }}
+          >
+            ระบบสำหรับครูผู้สอน
           </span>
         </div>
         <button
@@ -163,8 +170,8 @@ export function SidebarMenu({
                     hoveredIndex === index ? "bg-gray-200 " : ""
                   }  ${
                     isActive
-                      ? "bg-gradient-to-tr from-pink-300 to-orange-200 text-white"
-                      : "bg-white"
+                      ? "text-blue-600 "
+                      : "bg-white text-gray-500"
                   }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
@@ -181,23 +188,7 @@ export function SidebarMenu({
         </div>
       </div>
 
-      <motion.div
-        animate={isVisible ? { x: 242 } : { x: 60 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="w-fit text-white"
-      >
-        <button
-          onClick={() => setIsVisible(!isVisible)}
-          className="absolute  py-5 px-0 translate-y-1 bg-gradient-to-b from-sky-600/30 to-gray-800/30 backdrop-blur-md z-40 text-white rounded-r-md"
-        >
-          <ChevronRight
-            style={{ width: "2.0rem", height: "2.0rem" }}
-            className={`${
-              isVisible ? "rotate-180" : ""
-            } text-white duration-700`}
-          />
-        </button>
-      </motion.div>
+
 
       <motion.div
         initial={{ x: -232, opacity: 1 }}
@@ -218,7 +209,7 @@ export function SidebarMenu({
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <div className="flex items-center gap-4 w-full">
-                  <span className=" text-[#0C2943] text-[16px] overflow-hidden h-fit duration-300">
+                  <span className=" text-gray-500 text-[16px] overflow-hidden h-fit duration-300">
                     <p className="line-clamp-1 h-fit">{item.title}</p>
                   </span>
                 </div>

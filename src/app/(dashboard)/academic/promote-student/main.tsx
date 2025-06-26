@@ -10,8 +10,9 @@ import { ArrowUpDown } from "lucide-react";
 import { toast } from "react-toastify";
 import { GetGropGradeAbove } from "@/api/oldApi/grad/gradAPI";
 import { fetchPromoteStudentGroup, fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
-import { GetGropGradeAboveModel } from "@/dto/gradDto";
+import { GetStudentGroupsByTermYearDto } from "@/DTO/studentDto";
+import { GetGropGradeAboveModel } from "@/DTO/gradDto";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 // import { GetStudentGroupsByTermYearDto, GetGropGradeAboveModel } from "@/dto/gradDto";
 
 export default function Main() {
@@ -100,10 +101,7 @@ export default function Main() {
   return (
     <div className="pl-16 py-5">
       <div className="flex justify-start px-10 mb-6">
-        <div className="px-10 rounded-3xl text-xl shadow-md border border-gray-100 flex gap-2 items-center py-2 text-blue-600 font-prompt_Light select-none">
-          <ArrowUpDown className="w-8 h-8" />
-          ปรับเลื่อนชั้นเรียน
-        </div>
+       <HeaderLabel title="เลื่อนชั้นนักเรียน" Icon={<ArrowUpDown className="h-8 w-8 "/>}/>
       </div>
 
       <div className="flex flex-wrap items-center gap-4 px-10 py-5">

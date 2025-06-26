@@ -1,4 +1,4 @@
-import {  CreditCard, GraduationCap, UserRound } from "lucide-react";
+import {  ArchiveRestore, CreditCard, GraduationCap, UserRound } from "lucide-react";
 
 export interface TeacherSidebarProps {
   menuItems: {
@@ -28,7 +28,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
       icon: (
         <UserRound
           style={{ width: "2.0rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          className=""
         />
       ),
     },
@@ -39,7 +39,7 @@ export const TeacherSideBarData: TeacherSidebarProps = {
       icon: (
         <GraduationCap
           style={{ width: "2.3rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          className=""
         />
       ),
     },
@@ -50,7 +50,18 @@ export const TeacherSideBarData: TeacherSidebarProps = {
       icon: (
         <CreditCard
           style={{ width: "2.2rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
+          className=""
+        />
+      ),
+    },
+     {
+      title: "Import Score",
+      tooltip: "นำเข้าคะแนน",
+      href: "/teacher/import-score",
+      icon: (
+        <ArchiveRestore
+          style={{ width: "2.0rem", height: "2.0rem" }}
+          className=""
         />
       ),
     },

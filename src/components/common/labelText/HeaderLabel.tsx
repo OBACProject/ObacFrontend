@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 
 interface HeaderLabelProps {
-  label: string;
+  title: string;
   Icon: ReactNode;
   className?: string;
 }
 
-export default function HeaderLabel({ label, Icon, className }: HeaderLabelProps) {
+export default function HeaderLabel({ title, Icon, className }: HeaderLabelProps) {
   return (
     <div
       className={clsx(
@@ -16,7 +16,7 @@ export default function HeaderLabel({ label, Icon, className }: HeaderLabelProps
       )}
     >
       {Icon}
-      {label}
+      {title}
     </div>
   );
 }

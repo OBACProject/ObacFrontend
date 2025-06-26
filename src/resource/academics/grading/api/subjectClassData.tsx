@@ -1,5 +1,5 @@
 "use server";
-import { ClassSubjectData } from "@/dto/gradingDto";
+import { ClassSubjectData } from "@/DTO/gradingDto";
 import axios from "axios";
 import { cookies } from "next/headers";
 

@@ -1,7 +1,7 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/oldApi/grad/gradAPI";
-import StudentFailList from "@/app/components/PDF/StudentFailList";
-import { GetGropGradeBelowModel } from "@/dto/gradDto";
+import StudentFailList from "@/lib/PDF/StudentFailList";
+import { GetGropGradeBelowModel } from "@/DTO/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
@@ -79,7 +79,7 @@ export default function Main() {
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
-        <HeaderLabel Icon={<User className="h-8 w-8"/>} label="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
+        <HeaderLabel Icon={<User className="h-8 w-8"/>} title="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
       </div>
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
         <SelectTermAndYear

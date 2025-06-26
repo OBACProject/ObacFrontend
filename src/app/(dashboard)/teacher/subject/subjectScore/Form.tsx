@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import {
   GetGradBySubjectId,
-  GetStudentGroupGradeByGroupIdTermYearDto,
-} from "@/dto/gradDto";
+} from "@/DTO/gradDto";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";

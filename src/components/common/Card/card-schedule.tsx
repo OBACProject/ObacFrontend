@@ -1,5 +1,5 @@
-import { ScheduleSubject } from "@/dto/schedule";
-import { studentCardSubjectProps } from "@/resource/students/studentCardSubjectData";
+import { ScheduleSubject } from "@/DTO/schedule";
+// import { studentCardSubjectProps } from "@/resource/students/studentCardSubjectData";
 
 type Props = {
   schedule: ScheduleSubject;

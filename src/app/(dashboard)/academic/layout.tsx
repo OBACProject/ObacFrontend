@@ -6,6 +6,7 @@ import {
 } from "@/resource/academics/sidebarData";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata = {
   title: "OBAC-วิชาการ.ac.th",
@@ -30,6 +31,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className="pt-20 lg:pl-10">{children}</div>
+        <HomeFooter/>
       </body>
     </html>
   );

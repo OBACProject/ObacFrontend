@@ -1,5 +1,5 @@
 "use server";
-import { MethodDto } from "@/dto/methodDto";
+import { MethodDto } from "@/DTO/methodDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 

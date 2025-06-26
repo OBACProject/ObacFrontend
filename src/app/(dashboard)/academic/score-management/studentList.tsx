@@ -2,7 +2,7 @@
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { Input } from "@/components/ui/input";
-import { GetAllStudentTableDto } from "@/dto/studentDto";
+import { GetAllStudentTableDto } from "@/DTO/studentDto";
 import { getAllStudentViewData } from "@/resource/academics/grading/viewData/individualGradeViewData";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -109,7 +109,7 @@ export function StudentListPage() {
           />
         </header>
       ) : (
-        <div className="mt-2 border-2 border-dashed rounded-md w-full border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+        <div className="mt-2 h-screen border-2 border-dashed rounded-md w-full border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
           <p className="flex gap-2">
             <Loader2 className="h-10 w-10 animate-spin" />
             Loading...

@@ -4,7 +4,7 @@ import autoTable from "jspdf-autotable";
 import {
   GetGradBySubjectId,
   GetStudentGroupGradeByGroupIdTermYearDto,
-} from "@/dto/gradDto";
+} from "@/DTO/gradDto";
 import THSarabunFont from "../Font/THSarabunFont";
 import THSarabunFontBold from "../Font/THSarabunBold";
 

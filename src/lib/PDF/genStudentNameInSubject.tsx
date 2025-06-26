@@ -2,7 +2,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../Font/THSarabunFont";
-import { GetGradBySubjectId } from "@/dto/gradDto";
+import { GetGradBySubjectId } from "@/DTO/gradDto";
 import THSarabunFontBold from "../Font/THSarabunBold";
 
 interface DataList {

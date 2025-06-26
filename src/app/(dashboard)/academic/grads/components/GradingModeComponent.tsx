@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { AlarmClock, ChevronRight } from "lucide-react";
+import { AlarmClock } from "lucide-react";
 import { fetchPutMethodData } from "@/resource/academics/grading/api/methodPeriodApiData";
-import { MethodDto } from "@/dto/methodDto";
+import { MethodDto } from "@/DTO/methodDto";
 import { getMethodViewData } from "@/resource/academics/grading/viewData/methodPeriodViewData";
 import { usePathname } from "next/navigation";
 
