@@ -6,7 +6,7 @@ import {
   GetGropGradeBelowModel,
   GetStudentGradeDetailDto,
   GetStudentGroupGradeByGroupIdTermYearDto,
-} from "@/DTO/gradDto";
+} from "@/dto/gradDto";
 import { cookies } from "next/headers";
 
 export const fetchGetGradBySubjectId = async (

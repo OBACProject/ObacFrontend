@@ -8,6 +8,14 @@ export interface ApiResponse<T = any> {
     message: string;
   };
 }
+
+export interface ApiErrorResponse {
+  message: string;
+  responseCode?: string;
+  responseMessage?: string;
+  statusCode?: number;
+  errors?: Array<{ field?: string; message: string }>;
+}
 export interface BaseEntity {
   id: number;
   createdAt: string;

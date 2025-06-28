@@ -38,7 +38,6 @@ export function setupInterceptors(client: AxiosInstance): void {
     },
     (error: AxiosError<ApiErrorResponse>) => {
       const errorResponse: ApiErrorResponse = {
-        success: false,
         message: 'An error occurred',
         errors: [],
         statusCode: error.response?.status || 500,
