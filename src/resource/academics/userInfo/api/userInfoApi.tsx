@@ -8,7 +8,7 @@ export const fetchGetUserInfoById = async (
 ): Promise<GetUserInfoById> => {
   try {
     const token = cookies().get("token")?.value;
-    const response = await apiClient.get(`/User/GetUserById?userId=${userId}`, {
+    const response = await apiClient.get(`api/User/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

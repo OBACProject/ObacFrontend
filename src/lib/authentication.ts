@@ -1,46 +1,72 @@
-
 import apiClient from "./apiClient";
-import { compactVerify } from "jose";
 import Cookies from "js-cookie";
-import axios from "axios";
+
+function parseJwt(token: string) {
+  try {
+    if (typeof token !== "string") throw new Error("Token is not a string");
+
+    const parts = token.split('.');
+    if (parts.length !== 3) throw new Error("Invalid JWT format");
+
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join('')
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('Failed to parse JWT:', e);
+    return null;
+  }
+}
+
 export async function login(formData: FormData) {
   try {
-    const secretKey =await axios.get("/api/secret").then((res) => res.data.secretKey);
     const userName = formData.get("userName") as string;
     const password = formData.get("password") as string;
-    const res = await apiClient.post("/User/UserLogin", {
+
+    const res = await apiClient.post("api/Auth/Login", {
       userName,
       password,
     });
 
-    if (res.status < 200 || res.status >= 300) {
+    if (res.status < 200 || res.status >= 300 || !res.data) {
       throw new Error("Login failed. Please check your credentials.");
     }
-    const token = res.data.data.token;
-    if (!token) {
-      throw new Error("No token returned from server.");
-    }
-    const { payload } = await compactVerify(
-      token,
-      new TextEncoder().encode(secretKey)
-    );
-    const decodedPayload = JSON.parse(new TextDecoder().decode(payload));
-    const role = decodedPayload.Role;
-    const name = decodedPayload.Name;
-    const userId = decodedPayload.UserID;
 
-    if (!role || !name) {
-      throw new Error("Invalid token: Missing role or name.");
+    const token = res.data?.data?.token;
+
+    console.log("Raw token from response:", token);
+
+    if (typeof token !== "string") {
+      throw new Error(`Expected token to be a string but got ${typeof token}`);
     }
-    const eightHoursFromNow = new Date(new Date().getTime() + 8 * 60 * 60 * 1000)
-    Cookies.set("role", role, { expires: eightHoursFromNow });
-    Cookies.set("name", name, { expires: eightHoursFromNow });
-    Cookies.set("userId", userId, { expires: eightHoursFromNow });
-    Cookies.set("token", token, { expires: eightHoursFromNow });
+
+    const decodedPayload = parseJwt(token);
+    if (!decodedPayload) {
+      throw new Error("Invalid token format.");
+    }
+
+    const { Role: role, Name: name, UserID: userId } = decodedPayload;
+
+    if (!role || !name || !userId) {
+      throw new Error("Token missing required fields.");
+    }
+
+    const expires = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
+
+    Cookies.set("role", role, { expires });
+    Cookies.set("name", name, { expires });
+    Cookies.set("userId", userId, { expires });
+    Cookies.set("token", token, { expires });
 
     return { token, role };
   } catch (err) {
-    console.log(err);
+    console.error("Login error:", err);
     throw new Error("Failed to login");
   }
 }
@@ -51,11 +77,12 @@ export async function logout() {
     Cookies.remove("name");
     Cookies.remove("userId");
     Cookies.remove("token");
+
     localStorage.removeItem("activeTab");
     localStorage.removeItem("classSubjectData");
     localStorage.removeItem("classInfoData");
   } catch (err) {
-    console.log(err);
+    console.error("Logout error:", err);
     throw new Error("Failed to logout");
   }
 }

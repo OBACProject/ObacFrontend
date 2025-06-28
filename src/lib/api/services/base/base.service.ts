@@ -60,12 +60,12 @@ export abstract class BaseService {
 
   private handleResponse<T>(response: AxiosResponse<ApiResponse<T>>): T {
     const { data } = response;
-    
-    if (!data.success && data.success !== undefined) {
-      throw new Error(data.message || 'API request failed');
+
+    if (data.responseCode !== '200') {
+      throw new Error(data.responseMessage || 'API request failed');
     }
-    
-    return data.data as T;
+
+    return data.data;
   }
 
 }

@@ -1,27 +1,13 @@
 // Base API Response structure
 export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  errors?: string[];
-  statusCode?: number;
-}
-
-export interface ApiErrorResponse {
-  success: false;
-  message: string;
-  errors: string[];
-  statusCode: number;
-  details?: Record<string, any>;
-}
-
-export interface ApiSuccessResponse<T> {
-  success: true;
+  responseCode: string;
+  responseMessage: string;
   data: T;
-  message?: string;
-  statusCode?: number;
+  error?: {
+    code: string;
+    message: string;
+  };
 }
-
 export interface BaseEntity {
   id: number;
   createdAt: string;
