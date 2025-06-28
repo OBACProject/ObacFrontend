@@ -11,7 +11,7 @@ export default function HeaderLabel({ title, Icon, className }: HeaderLabelProps
   return (
     <div
       className={clsx(
-        "px-10 rounded-3xl flex gap-2 items-center text-xl border border-gray-100 shadow-md py-2 text-center w-fit",
+        "px-10 rounded-3xl flex gap-2 items-center text-xl border border-gray-100 bg-white shadow-md py-2 text-center w-fit",
         className ?? "text-blue-600" 
       )}
     >
