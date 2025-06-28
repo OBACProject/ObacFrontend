@@ -48,8 +48,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการนักเรียน",
       tooltip: "จัดการนักเรียน",
-      href: "/admin/studentManagement",
-      headLink:"/admin/studentManagement",
+      href: "/admin/student-management",
+      headLink:"/admin/student-management",
       icon: (
         <GraduationCap
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -59,8 +59,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการอาจารย์",
       tooltip: "จัดการอาจารย์",
-      href: "/admin/teacherManagement",
-      headLink:"/admin/teacherManagement",
+      href: "/admin/teacher-management",
+      headLink:"/admin/teacher-management",
       icon: (
         <UserRoundPen
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -71,8 +71,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "จัดการบุคลากรภายใน",
       tooltip: "จัดการบุคลากรภายใน",
-      href: "/admin/academicManagement",
-      headLink:"/admin/academicManagement",
+      href: "/admin/academic-management",
+      headLink:"/admin/academic-management",
       icon: (
         <BookMarked
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -82,8 +82,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "กิจกรรม",
       tooltip: "กิจกรรม",
-      href: "/admin/eventManagement",
-      headLink: "/admin/eventManagement",
+      href: "/admin/event-management",
+      headLink: "/admin/event-management",
       icon: (
         <CalendarClock
           style={{ width: "2.0rem", height: "2.0rem" }}
@@ -93,8 +93,8 @@ export const AdminSidebarData: AdminSidebarProps = {
     {
       title: "ข่าวสาร",
       tooltip: "ข่าวสาร",
-      href: "/admin/newsManagement",
-      headLink: "/admin/newsManagement",
+      href: "/admin/news-management",
+      headLink: "/admin/news-management",
       icon: <Newspaper style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
   ],

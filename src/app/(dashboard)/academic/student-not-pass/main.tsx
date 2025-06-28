@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import { getCurrentThaiTermYear } from "@/lib/utils";
 
 interface IndividualStudentInfoData {
   studentId: number;
@@ -14,13 +15,7 @@ interface IndividualStudentInfoData {
 }
 
 export default function Main() {
-  const dateTime = new Date();
-  const currentMonth = dateTime.getMonth();
-  const currentYear =
-    currentMonth > 5
-      ? dateTime.getFullYear() + 543
-      : dateTime.getFullYear() + 543 - 1;
-  const defaultTerm = currentMonth > 5 ? "1" : "2";
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
 
   const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
   const studentCount = useMemo(() => students.length, [students]);

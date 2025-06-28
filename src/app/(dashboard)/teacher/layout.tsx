@@ -5,6 +5,7 @@ import { ProfileData } from "@/resource/teachers/sidebarData";
 import NewTeacherSidebar from "../../../components/common/SideBar/TeacherSidebar";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata = {
   title: "OBAC-teacher.ac.th",
@@ -29,6 +30,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className="pt-20 lg:pl-10">{children}</div>
+        <HomeFooter/>
       </body>
     </html>
   );
