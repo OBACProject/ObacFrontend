@@ -92,7 +92,7 @@ export default function LoginForm({ session }: LoginFormProps) {
         router.push("/academic/profile");
         break;
       case "Admin":
-        router.push("/admin/academicManagement");
+        router.push("/admin/academic-management");
         break;
       default:
         toast.error("สิทธิการเข้าถึงผิดพลาด");
