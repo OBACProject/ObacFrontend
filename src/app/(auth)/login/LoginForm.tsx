@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { Loader2, UserRound } from "lucide-react";
+import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface LoginFormProps {
   session?: { role?: string; name?: string };
@@ -13,6 +17,7 @@ interface LoginFormProps {
 
 export default function LoginForm({ session }: LoginFormProps) {
   const router = useRouter();
+  const login = loginMutation.useMutation();
 
   const [role, setRole] = useState<string | null>(session?.role || null);
   const [name, setName] = useState<string | null>(session?.name || null);
@@ -32,16 +37,21 @@ export default function LoginForm({ session }: LoginFormProps) {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setTrigger(true);
     try {
       const formData = new FormData(event.currentTarget);
-      await login(formData);
+
+      const userName = formData.get("userName")?.toString().trim();
+      const password = formData.get("password")?.toString().trim();
+
+      if (!userName || !password) throw new Error("Missing fields");
+
+      await login.mutateAsync({ userName, password });
 
       const newRole = Cookies.get("role");
       const newName = Cookies.get("name");
 
       if (!newRole || !newName) {
-        throw new Error("Invalid token: Missing role or name.");
+        throw new Error("Missing role or name in cookie");
       }
       setTrigger(false);
       setRole(newRole || null);
@@ -66,7 +76,7 @@ export default function LoginForm({ session }: LoginFormProps) {
           toast.error("Unknown role");
       }
     } catch (error) {
-      setTrigger(false);
+      console.error(error);
       toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง");
     }
   };
@@ -75,11 +85,12 @@ export default function LoginForm({ session }: LoginFormProps) {
     await logout();
 
     toast.info("ออกจากระบบสำเร็จ");
-    setTrigger(false);
+    setRole(null);
+    setName(null);
     window.location.reload();
   };
 
-  const handleLoginButton = async () => {
+  const handleLoginButton = () => {
     const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
@@ -108,11 +119,9 @@ export default function LoginForm({ session }: LoginFormProps) {
       />
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
       {role && name ? (
-        <div className="my-10 absolute lelf-1/2 bg-white rounded-lg px-10 py-12">
-          <div className="space-y-4">
-            <div className="flex justify-center ">
-              <UserRound className="h-12 w-12 rounded-full" />
-            </div>
+        <div className="absolute my-10 bg-white rounded-lg px-10 py-12">
+          <div className="space-y-4 text-center">
+            <UserRound className="mx-auto h-12 w-12" />
             <div className="text-2xl">{name}</div>
             {/* <div className="text-lg">Role: {role}</div> */}
             <div className="grid place-items-center mt-5">
@@ -121,20 +130,20 @@ export default function LoginForm({ session }: LoginFormProps) {
                 className="bg-blue-500 z-10 px-10 text-white my-3 rounded-md py-1 hover:bg-blue-700 hover:scale-105 duration-500"
               >
                 กลับเข้าสู่ระบบ
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleLogout}
                 className="bg-gradient-to-tr from-red-500/70 to-pink-400 z-10 px-10 text-white my-3 rounded-md py-1  hover:from-red-500 hover:to-red-500 hover:scale-105 duration-500"
               >
                 ออกจากระบบ
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       ) : (
         <form
           onSubmit={handleLogin}
-          className="z-10 absolute lelf-1/2 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
+          className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
           <img src="/images/obac_navbar_logo.png" alt="obac-logo" className="h-28" />
         <div className="grid gap-3 w-full place-items-center">
