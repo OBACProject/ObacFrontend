@@ -15,7 +15,7 @@ export function setupInterceptors(client: AxiosInstance): void {
       config.headers['X-Correlation-ID'] = crypto.randomUUID();
       
       if (process.env.NODE_ENV === 'development') {
-        console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`, {
+        console.log(`${config.method?.toUpperCase()} ${config.url}`, {
           params: config.params,
           data: config.data,
         });
