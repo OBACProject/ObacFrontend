@@ -1,3 +1,4 @@
+import { setAuthCookie } from "@/lib/utils/auth-cookies";
 import { AUTH_ENDPOINTS } from "../endpoints/auth.endpoints";
 import { UserLoginRequest } from "../models/auth/auth.request";
 import { UserLoginResponse } from "../models/auth/auth.response";
@@ -10,7 +11,14 @@ import { BaseService } from "./base/base.service";
 
 export class AuthService extends BaseService {
   async login(request: UserLoginRequest): Promise<UserLoginResponse> {
-    return this.post<UserLoginResponse>(AUTH_ENDPOINTS.LOGIN, request);
+
+    const response = await this.post<UserLoginResponse>(AUTH_ENDPOINTS.LOGIN, request); 
+
+    // set token in cookies with secure and httpOnly flags
+    const token = response.token;
+    setAuthCookie(token);
+
+    return response;
 }
 }
 
