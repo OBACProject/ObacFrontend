@@ -32,7 +32,7 @@ export default function ScoreInputForm({
     field: keyof ScoreImportProps,
     value: any
   ) => {
-    const updated = [...scores];
+    
     updated[index] = {
       ...updated[index],
       [field]:
@@ -62,7 +62,11 @@ export default function ScoreInputForm({
     };
     onChange([...scores, newRow]);
   };
-
+const removeRow = (index: number) => {
+      const updated = scores.filter((_, i) => i !== index);
+      onChange(updated);
+    };
+    const updated = [...scores];
   return (
     <div className="p-4 border border-gray-300 rounded-md mb-4">
       <table className="w-full border border-gray-300 text-sm">
@@ -76,6 +80,7 @@ export default function ScoreInputForm({
             <th className="border px-2 py-1">เกรด</th>
             <th className="border px-2 py-1">ผลคูณ</th>
             <th className="border px-2 py-1 w-[100px]">หมายเหตุ</th>
+            <th className="border px-2 py-1 w-[60px]"></th>
           </tr>
         </thead>
         <tbody>
@@ -175,6 +180,16 @@ export default function ScoreInputForm({
                     />
                   ) : (
                     row.remark || "-"
+                  )}
+                </td>
+                <td className="border text-center px-2 py-1">
+                  {edit && (
+                    <button
+                      onClick={() => removeRow(index)}
+                      className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
+                    >
+                      ลบ
+                    </button>
                   )}
                 </td>
               </tr>

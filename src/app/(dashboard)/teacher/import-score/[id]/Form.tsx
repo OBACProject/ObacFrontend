@@ -140,8 +140,10 @@ export default function Form({ id }: FormProps) {
   const [edit, setEdit] = useState<boolean>(false);
   const [scoreImports, setScoreImport] =
     useState<ScoreImportProps[][]>(scoreImportData);
+  
   const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
   const student = studentNameList.find((s) => s.studentCode === id);
+  
   return (
     <div>
       <div className="py-6"></div>
