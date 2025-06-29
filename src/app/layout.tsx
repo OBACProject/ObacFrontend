@@ -2,6 +2,7 @@
 import React from "react";
 import "@app/styles/globals.css";
 import { Metadata } from "next";
+import ClientProviders from "./clientproviders";
 
 export const metadata: Metadata = {
   title: "OBAC",
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-         {children} 
+        <ClientProviders>
+          {children}
+        </ClientProviders>
       </body>
     </html>
   );
