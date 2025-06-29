@@ -47,7 +47,6 @@ export class BaseUpdateMutation<TResponse, TRequest, TError = Error> extends Bas
 
 export class BaseDeleteMutation<TResponse, TRequest, TError = Error> extends BaseMutation<TResponse, TRequest, TError> {
   constructor(
-    key: (params?: TRequest) => MutationKey,
     deleteFn: (params: TRequest) => Promise<TResponse>,
     defaultOptions?: Partial<UseMutationOptions<TResponse, TError, TRequest>>
   ) {

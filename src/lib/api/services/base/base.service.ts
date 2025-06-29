@@ -52,9 +52,13 @@ export abstract class BaseService {
 
   protected async delete<T>(
     url: string, 
+    data?: any,
     config?: AxiosRequestConfig
   ): Promise<T> {
-    const response = await this.client.delete<ApiResponse<T>>(url, config);
+    const response = await this.client.delete<ApiResponse<T>>(url, {
+      ...config,
+      data,
+    });
     return this.handleResponse(response);
   }
 
