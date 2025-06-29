@@ -2,12 +2,10 @@
 import { UserLoginRequest } from '@/lib/api/models/auth/auth.request';
 import { UserLoginResponse } from '@/lib/api/models/auth/auth.response';
 import { authService } from '@/lib/api/services/auth.service';
-import { BaseQuery } from '@/lib/hooks/queries/base/base.queries';
+import { BaseCreateMutation  } from './base/base.mutation';
 
 
 
-export const loginQuery = new BaseQuery<UserLoginResponse, UserLoginRequest>(
-  (params) => ['group-summary', params],
+export const loginMutation = new BaseCreateMutation<UserLoginResponse, UserLoginRequest>(
   (params) => authService.login(params)
 );
-
