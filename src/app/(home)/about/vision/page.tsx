@@ -1,5 +1,25 @@
 import React from "react";
 
+export const metadata = {
+  title: "วิสัยทัศน์ของเอกวิทย์ | OBAC",
+  description: "สร้างคนดี มีความรู้ สู่มาตรฐานสากล",
+  keywords: [
+    "OBAC",
+    "วิทยาลัยอาชีวศึกษา",
+    "Ekawit",
+    "เอกวิทย์บริหารธุรกิจ",
+    "ปวช",
+    "ปวส",
+    "คอมพิวเตอร์ธุรกิจ",
+    "เทคโนโลยี",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+
 export default function page() {
   return (
     <div className="w-full py-5">
