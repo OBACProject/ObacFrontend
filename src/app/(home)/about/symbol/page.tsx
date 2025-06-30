@@ -1,5 +1,24 @@
 import React from "react";
 
+export const metadata = {
+  title: "อัตลักษณ์ประจำวิทยาลัย | OBAC",
+  description: "อัตลักษณ์เอกวิทย์บริหารธุรกิจ",
+  keywords: [
+    "OBAC",
+    "วิทยาลัยอาชีวศึกษา",
+    "Ekawit",
+    "เอกวิทย์บริหารธุรกิจ",
+    "ปวช",
+    "ปวส",
+    "คอมพิวเตอร์ธุรกิจ",
+    "เทคโนโลยี",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 export default function page() {
   return (
     <div className="w-full py-5">

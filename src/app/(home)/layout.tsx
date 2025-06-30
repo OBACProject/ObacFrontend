@@ -5,14 +5,14 @@ import { HomePageNavBar } from "@/components/common/NavBar/HomePageNavBar";
 import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
-  title: "OBAC.ac.th",
+  title: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
   description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC",
   metadataBase: new URL("https://ekawit.ac.th"),
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "OBAC.ac.th",
+    title: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ OBAC",
     description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC",
     url: "https://ekawit.ac.th",
     siteName: "ekawit",

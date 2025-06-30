@@ -10,7 +10,7 @@ type EventsProps = {
   date: string;
 };
 
-export default function page() {
+export default function Page() {
   const [events, setEvent] = useState<EventsProps[]>([
     {
       id: "1",
