@@ -9,7 +9,7 @@ export default function Form() {
       
         <h1 className="mb-4 animate-fadeIn text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-blue-500 font-prompt z-10">
-            ช่องทางการติดต่อ
+            ช่องทางการติดต่อ OBAC
           </span>
         </h1>
         <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-500 w-full"></div>
