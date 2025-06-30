@@ -1,12 +1,13 @@
+'use client';
 import { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { ApiErrorResponse } from '../models/common/base.types';
+import Cookies from 'js-cookie';
 
 export function setupInterceptors(client: AxiosInstance): void {
   client.interceptors.request.use(
     (config) => {
-      const token = typeof window !== 'undefined' 
-        ? localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
-        : null;
+      
+      const token = Cookies.get('token');
       
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
