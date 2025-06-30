@@ -15,9 +15,9 @@ export default function Page() {
     {
       id: "1",
       topic: "Topic1",
-      header: "Header1",
+      header: "OBAC กิจกรรม",
       detail:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae ea illo libero, consequuntur similique expedita sapiente eaque neque sint, id aliquam quia adipisci inventore porro nesciunt a voluptas nobis minus.",
+        "OBAC",
       date: "10/12/30",
     },
     {

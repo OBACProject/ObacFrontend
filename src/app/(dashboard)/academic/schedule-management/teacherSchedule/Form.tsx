@@ -93,6 +93,7 @@ export default function Form({ term, year, teacherID }: Props) {
         <div className=" rounded-md flex border group shadow-md shadow-gray-200 border-gray-200 w-fit px-5">
           <div className="overflow-hidden w-[100px] h-auto">
             <img
+            alt="obac"
               src={teacherData?.teacherProfilePicture || "/asset/user.jpg"}
               className="w-[100px] h-auto group-hover:scale-[110%] duration-500  object-cover"
             />

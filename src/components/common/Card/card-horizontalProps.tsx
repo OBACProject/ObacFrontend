@@ -22,7 +22,7 @@ interface CardHorizontalProp {
           <div className="h-full relative w-52  lg:w-60 overflow-hidden">
             <img
               src={img}
-              alt={topic}
+              alt={"obac"}
               className="absolute lg:w-60 w-52 h-full object-cover transition  group-hover:opacity-80  duration-700"
             />
             <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>

@@ -367,7 +367,7 @@ export default function Form({ studentId }: Props) {
           </div>
         </div>
         <div className="border rounded-md relative overflow-hidden hover:scale-[102%] duration-500">
-          <img src="/asset/student-image.jpg" className="w-36 h-36" />
+          <img alt="obac-student" src="/asset/student-image.jpg" className="w-36 h-36" />
         </div>
       </div>
 

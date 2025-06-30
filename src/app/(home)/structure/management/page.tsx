@@ -8,7 +8,7 @@ export default function page() {
       </div>
       <div className="grid place-items-center pb-20">
         <div className="">
-          <img src="/static/management-01.jpg" width={800} height={1000} />
+          <img alt="obac" src="/static/management-01.jpg" width={800} height={1000} />
         </div>
       </div>
     </div>
