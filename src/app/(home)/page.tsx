@@ -11,14 +11,14 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    name: "Ekawit Business Administration Vocational College",
-    alternateName: "OBAC",
+    name: "OBAC",
+    alternateName: "Ekawit Business Administration Vocational College",
     url: "https://ekawit.ac.th",
     logo: "https://ekawit.ac.th/favicon.ico",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Khet Lat Krabang",
-      addressLocality: "Bangkok",
+      streetAddress: "ถนนลาดกระบัง",
+      addressLocality: "กรุงเทพ",
       postalCode: "10520",
       addressCountry: "TH",
     },
@@ -30,6 +30,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
+      
         <link rel="canonical" href="https://ekawit.ac.th" />
       <StickerFacebook />
       <StickerYoutube />
@@ -75,6 +76,10 @@ export default function Home() {
             every student is a catalyst for progress. Join us where technology
             meets opportunity — and futures are built."
           </p>
+
+          <h2 className="mt-10 text-blue-950 text-lg lg:text-4xl lg:font-extrabold">ทำไมต้อง OBAC</h2>
+
+          <h1 className="mt-5 text-blue-950 text-lg">เรียนกับ OBAC สร้างอนาคตด้านธุรกิจและเทคโนโลยี</h1>
         </div>
       </FadeInOnScroll>
       <FadeInOnScroll>

@@ -1,5 +1,5 @@
 import Form from "./Form";
-
+import Head from "next/head";
 export const metadata = {
   title: "ข้อมูลการติดต่อ | OBAC",
   description: "โทร. 091-864-9154",
@@ -38,17 +38,19 @@ export default function ContactPage() {
   };
   return (
     <div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <meta name="robots" content="index, follow" />
-      <meta
-        name="keywords"
-        content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, คอมพิวเตอร์ธุรกิจ, เทคโนโลยี"
-      />
-      <meta name="author" content="Ekawit Business College | OBAC" />
-      <link rel="canonical" href="https://ekawit.ac.th/contact" />
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <meta name="robots" content="index, follow" />
+        <meta
+          name="keywords"
+          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, คอมพิวเตอร์ธุรกิจ, เทคโนโลยี"
+        />
+        <meta name="author" content="Ekawit Business College | OBAC" />
+        <link rel="canonical" href="https://ekawit.ac.th/contact" />
+      </Head>
       <Form />
     </div>
   );

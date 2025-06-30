@@ -40,7 +40,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "history",
-        href: "/about/history",
+        href: "/about/history-obac",
       },
       {
         menuName: "วิสัยทัศน์ / ปรัชญา",
@@ -51,7 +51,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "vision",
-        href: "/about/symbol",
+        href: "/about/symbol-obac",
       },
       {
         menuName: "อัตลักษณ์ / เอกลักษณ์",
@@ -62,7 +62,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "symbol",
-        href: "/about/vision",
+        href: "/about/vision-obac",
       },
     ],
   },
@@ -185,7 +185,7 @@ export const NavbarData: DropMenuProps[] = [
   },
   {
     menuTopic: "ติดต่อ",
-    href: "/contact",
+    href: "/contact-obac",
     menuList: [
       {
         menuName: "ติดต่อวิทยาลัย",
@@ -196,7 +196,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "contact",
-        href: "/contact",
+        href: "/contact-obac",
       },
     ],
   },

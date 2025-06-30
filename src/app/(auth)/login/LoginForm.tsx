@@ -103,6 +103,7 @@ export default function LoginForm({ session }: LoginFormProps) {
     <div className="relative  bg-repeat bg-cover bg-opacity-10 w-full h-screen bg-bottom grid place-items-center pb-40 ">
       <img
         src="/images/obac_view.jpg"
+        alt="obac"
         className="absolute object-cover h-screen w-full"
       />
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45  w-full bg-cover bg-bottom h-screen"></div>
@@ -135,7 +136,7 @@ export default function LoginForm({ session }: LoginFormProps) {
           onSubmit={handleLogin}
           className="z-10 absolute lelf-1/2 grid place-items-center bg-white border-[1px] lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
-          <img src="/images/obac_navbar_logo.png" className="h-28" />
+          <img src="/images/obac_navbar_logo.png" alt="obac-logo" className="h-28" />
         <div className="grid gap-3 w-full place-items-center">
           <input
             className="px-5 py-2 w-3/5  bg-gray-100 rounded-lg"
