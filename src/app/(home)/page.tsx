@@ -26,22 +26,11 @@ export default function Home() {
   };
   return (
     <div className="bg-white">
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-        <meta name="robots" content="index, follow" />
-        <meta
-          name="keywords"
-          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, คอมพิวเตอร์ธุรกิจ, เทคโนโลยี"
-        />
-        <meta
-          name="author"
-          content="Ekawit Business Administration Vocational College"
-        />
+         <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
         <link rel="canonical" href="https://ekawit.ac.th" />
-      </Head>
       <StickerFacebook />
       <StickerYoutube />
       {/* <CLShomepage /> */}
