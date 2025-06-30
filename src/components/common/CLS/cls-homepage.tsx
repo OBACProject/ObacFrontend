@@ -32,7 +32,7 @@ export default function CLShomepage() {
         <div className="overflow-hidden relative ">
           <img
             src="/cls/hp2.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full h-40 md:h-72 sm:h-56 lg:h-80 object-cover transition duration-700"
           />
           <p className="legend">Our Service</p>
@@ -40,7 +40,7 @@ export default function CLShomepage() {
         <div className="overflow-hidden relative ">
           <img
             src="/cls/hp3.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
           />
           <p className="legend">Our Service</p>
@@ -48,7 +48,7 @@ export default function CLShomepage() {
         <div className="overflow-hidden relative ">
           <img
             src="/cls/hp1.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
           />
           <p className="legend">Our Service</p>

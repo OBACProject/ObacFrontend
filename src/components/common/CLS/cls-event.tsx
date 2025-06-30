@@ -33,7 +33,7 @@ export default function CLSEvents() {
 
           <img
             src="/images/event.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full rounded-xl h-40 md:h-72 sm:h-56 lg:h-80 object-cover transition duration-700 "
           />
           <p className="legend">Our Service</p>
@@ -41,7 +41,7 @@ export default function CLSEvents() {
         <div className="overflow-hidden relative ">
           <img
             src="/images/event.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full rounded-xl lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
           />
           <p className="legend">Our Service</p>
@@ -49,7 +49,7 @@ export default function CLSEvents() {
         <div className="overflow-hidden relative ">
           <img
             src="/images/event.jpg"
-            alt="slide2"
+            alt="obac"
             className=" w-full rounded-xl lg:h-80 h-40 sm:h-56  md:h-72 object-cover transition duration-700"
           />
           <p className="legend">Our Service</p>
