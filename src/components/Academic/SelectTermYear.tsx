@@ -24,6 +24,7 @@ export default function SelectTermAndYear({
           value={term}
           onChange={(e) => onChangeTerm(e.target.value)}
         >
+          <option value="">ทั้งหมด</option>
           <option value="1">1</option>
           <option value="2">2</option>
         </select>
@@ -33,15 +34,24 @@ export default function SelectTermAndYear({
         <div>ปีการศึกษา</div>
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
-          value={year}
-          onChange={(e) => onChangeYear(Number(e.target.value))}
+          value={year === 0 ? '' : year}
+          onChange={(e) => {
+            const selected = e.target.value;
+            if (selected === '') {
+              onChangeYear(0);
+            } else {
+              onChangeYear(Number(selected));
+            }
+          }}
         >
+          <option value="">ทั้งหมด</option>
           {[0, 1, 2, 3, 4].map((offset) => (
             <option key={offset} value={currentYear - offset}>
               {currentYear - offset}
             </option>
           ))}
         </select>
+
       </div>
     </>
   );
