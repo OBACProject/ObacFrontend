@@ -316,6 +316,17 @@ export default function studentClassroomContent() {
             ...item,
             index: index + 1,
           }))}
+          getRowLink={(classroom) => {
+            const studentClassroomData = data.find(
+              (item) =>
+                item.level === classroom.level &&
+                item.years === classroom.years &&
+                item.semester === classroom.semester &&
+                item.room === classroom.room
+            );
+
+            return `/academic/grading/student-classroom/1`;
+          }}
           pagination={10}
         />
       )}
