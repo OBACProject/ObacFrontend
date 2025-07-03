@@ -33,7 +33,7 @@ export default function StudentInformationCard({
     setStudentLastName(StudentLastName)
   }, []);
   return (
-    <div className="w-full py-5 px-10 border-gray-200 border rounded-lg shadow-sm">
+    <div className="w-fit py-5 px-14 border-gray-200 border rounded-lg shadow-sm">
       <div className="flex items-center gap-8 mb-4">
         <InputBox
           label="รหัสนักเรียน :"

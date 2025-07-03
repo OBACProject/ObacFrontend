@@ -1,15 +1,17 @@
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { ArchiveRestore } from "lucide-react";
+import { ScrollText } from "lucide-react";
 import React from "react";
 import Form from "./Form";
 
-export default function ImportScorePage() {
+export default function StudentScore() {
   return (
     <div className="py-4 px-10">
-      <HeaderLabel
-        Icon={<ArchiveRestore className="w-7 h-7" />}
-        title="นำเข้าคะแนนนักเรียน"
-      />
+      <div className="fixed ">
+        <HeaderLabel
+          Icon={<ScrollText className="w-7 h-7" />}
+          title={"Import Score (Student)"}
+        />
+      </div>
       <Form />
     </div>
   );

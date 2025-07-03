@@ -1,8 +1,71 @@
 "use client";
+import ScoreInputForm from "@/components/Teacher/TableImportScore";
+import StudentInformationCard from "@/components/Teacher/StudentInformationCard";
+import React, { useEffect, useState } from "react";
+import { PlusCircle } from "lucide-react";
+import CreateScoreTablePopup from "@/components/Teacher/CreateScoreTablePopup";
+import SearchInput from "@/components/Teacher/SearchInput";
+import LineCenter from "@/components/Teacher/LineCenter";
+import { color } from "framer-motion";
 
-import DynamicTable from "@/components/common/table/DynamicTable";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+
+interface ScoreImportProps {
+  term: string;
+  year: number;
+  subjectName: string;
+  subjectCode: string;
+  unit: number;
+  credite: number;
+  summaryCredit: number;
+  remark: string;
+}
+
+const scoreImportData: ScoreImportProps[][] = [
+  [
+    {
+      term: "2",
+      year: 2567,
+      subjectName: "ภาษาไทยเพื่ออาชีพ",
+      subjectCode: "20000-1102",
+      unit: 1,
+      credite: 1,
+      summaryCredit: 1,
+      remark: "",
+    },
+    {
+      term: "2",
+      year: 2567,
+      subjectName: "การฟังและการพูดภาษาอังกฤษ",
+      subjectCode: "20000-1203",
+      unit: 1,
+      credite: 1,
+      summaryCredit: 1,
+      remark: "",
+    },
+  ],
+  [
+    {
+      term: "2",
+      year: 2567,
+      subjectName: "ทักษะการดำรงชีวิตเพื่อพัฒนาสุขภาวะ",
+      subjectCode: "20000-1601",
+      unit: 2,
+      credite: 2,
+      summaryCredit: 4,
+      remark: "",
+    },
+    {
+      term: "2",
+      year: 2567,
+      subjectName: "สุขภาพความปลอดภัยและสิ่งแวดล้อม",
+      subjectCode: "20001-1001",
+      unit: 2,
+      credite: 1.5,
+      summaryCredit: 3,
+      remark: "",
+    },
+  ],
+];
 
 interface StudentNameList {
   studentCode: string;
@@ -75,82 +138,112 @@ const studentNameList: StudentNameList[] = [
 ];
 
 export default function Form() {
-  const router = useRouter();
-  const [studentData] = useState<StudentNameList[]>(studentNameList);
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<StudentNameList[]>([]);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [scoreImports, setScoreImport] =
+    useState<ScoreImportProps[][]>(scoreImportData);
 
-  const handleSearch = () => {
-    if (query != "") {
-      const trimmed = query.trim().toLowerCase();
-      const filtered = studentData.filter(
-        (s) =>
-          s.studentCode.includes(trimmed) ||
-          s.studentFirstName.toLowerCase().includes(trimmed) ||
-          s.studentLastName.toLowerCase().includes(trimmed)
-      );
-      setResults(filtered);
+  const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
+
+  const [student, setStudent] = useState<StudentNameList | undefined>();
+
+  const onSearch = (keyword: string) => {
+    if (keyword.trim() !== "") {
+      const found = studentNameList.find((s) => s.studentCode === keyword);
+      setStudent(found);
     }
   };
-
   return (
-    <div className="w-full">
-      <div className="my-5 border shadow-sm border-gray-200 w-full px-5 py-5 rounded-lg">
-        <div className="flex gap-5 -translate-x-20 items-center justify-center">
-          <i className="text-gray-600">
-            กรอกรหัส / ชื่อนักเรียนเพื่อทำการค้นหา
-          </i>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-            className="border-gray-200 rounded-sm border px-4 py-1"
-            placeholder="Search..."
-          />
-          <button
-            className="bg-blue-500 py-1 text-white px-10 rounded-sm"
-            onClick={handleSearch}
-          >
-            ค้นหา
-          </button>
-        </div>
+    <div>
+      <div className="py-6"></div>
+      <div className="flex justify-center items-center mt-5 gap-5 py-5">
+        <i className="text-gray-600">กรอกรหัส / ชื่อนักเรียนเพื่อทำการค้นหา</i>
+        <SearchInput onSearchKeyword={onSearch} />
       </div>
+      <LineCenter color="text-back" />
+      {student != undefined ? (
+        <div>
+          <div className="py-4 flex justify-between ">
+            <StudentInformationCard
+              StudentCode={student?.studentCode}
+              StudentFirstName={student?.studentFirstName || "-"}
+              StudentLastName={student?.studentLastName || "-"}
+              Class={student?.className || "-"}
+              Faculty="บริการและการจัดการ"
+              edit={edit}
+            />
+            <div className="flex items-start gap-5">
+              <button
+                className={`px-10 py-1.5 text-white rounded-sm ${
+                  edit ? "bg-red-500" : "bg-blue-500"
+                }`}
+                onClick={() => setEdit(!edit)}
+              >
+                {edit ? <p>ยกเลิก</p> : <p>แก้ไข</p>}
+              </button>
 
-      {results.length > 0 ? (
-        <div className="py-4">
-          <DynamicTable
-            data={results}
-            columns={[
-              { header: "รหัสนักเรียน", field: "studentCode", width: "30%" },
-              {
-                header: "ชื่อจริง",
-                field: "studentFirstName",
-                width: "20%",
-                align: "left",
-                padding: "pl-10",
-              },
-              {
-                header: "นามสกุล",
-                field: "studentLastName",
-                width: "20%",
-                align: "left",
-                padding: "pl-10",
-              },
-              { header: "ห้อง", field: "className", width: "30%" },
-            ]}
-            onRowClick={(row) => {
-              router.push("/teacher/import-score/" + row.studentCode);
-            }}
-          />
-          <div className="py-20"></div>
+              <button className="px-10 py-1.5 bg-green-400 text-white rounded-sm">
+                บันทึก
+              </button>
+            </div>
+          </div>
+          <div className="w-full flex gap-10 items-center pt-4">
+            <button
+              className="enabled:bg-blue-500 bg-blue-400 px-10 py-1.5 rounded-md flex items-center gap-2 text-center text-white disabled:cursor-not-allowed enabled:hover:bg-blue-700"
+              disabled={!edit}
+              onClick={() => setCreateTableButton(true)}
+            >
+              <PlusCircle className="w-6 h-6" />
+              สร้างตารางคะแนน
+            </button>
+            <p className="pl-20 text-red-500">
+              *** โปรดตรวจสอบข้อมูลให้ถูกต้องทุกครั้งเมื่อทำการเพิ่มหรือแก้ไข
+              ***
+            </p>
+          </div>
+          <div>
+            {scoreImports.map((group, index) => (
+              <div className="my-6">
+                <ScoreInputForm
+                  key={index}
+                  scores={group}
+                  edit={edit}
+                  onChange={(updated) => {
+                    const updatedAll = [...scoreImports];
+                    updatedAll[index] = updated;
+                    setScoreImport(updatedAll);
+                  }}
+                  term={group[0]?.term || "1"}
+                  year={group[0]?.year || 2567}
+                />
+              </div>
+            ))}
+          </div>
+
+          {creatTableButton && (
+            <CreateScoreTablePopup
+              onClickPopUp={setCreateTableButton}
+              onConfirm={(year, term) => {
+                const newScoreGroup: ScoreImportProps[] = [
+                  {
+                    term,
+                    year,
+                    subjectName: "",
+                    subjectCode: "",
+                    unit: 0,
+                    credite: 0,
+                    summaryCredit: 0,
+                    remark: "",
+                  },
+                ];
+
+                setScoreImport((prev) => [...prev, newScoreGroup]);
+                setCreateTableButton(false);
+              }}
+            />
+          )}
         </div>
       ) : (
-        <div className="py-10 grid place-items-center">
+         <div className="py-10 grid place-items-center">
           <div className="text-center border-[2px] rounded-md py-10 w-fit px-20">
             <div className="text-lg mb-3">
               ใส่ผลลัพธ์เพื่อค้นหารายชื่อนักเรียนที่ต้องการแก้ไขคะแนน
