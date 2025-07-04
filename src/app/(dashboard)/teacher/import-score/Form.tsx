@@ -8,7 +8,6 @@ import SearchInput from "@/components/Teacher/SearchInput";
 import LineCenter from "@/components/Teacher/LineCenter";
 import { color } from "framer-motion";
 
-
 interface ScoreImportProps {
   term: string;
   year: number;
@@ -147,23 +146,30 @@ export default function Form() {
   const [student, setStudent] = useState<StudentNameList | undefined>();
 
   const onSearch = (keyword: string) => {
-    if (keyword.trim() !== "") {
-      const found = studentNameList.find((s) => s.studentCode === keyword);
-      setStudent(found);
+    setStudent(undefined);
+    const trimmed = keyword.trim();
+    if (trimmed === "") {
+      setStudent(undefined);
+      return;
     }
+
+    const found = studentNameList.find((s) => s.studentCode === trimmed);
+
+    setStudent(found);
   };
   return (
     <div>
       <div className="py-6"></div>
       <div className="flex justify-center items-center mt-5 gap-5 py-5">
-        <i className="text-gray-600">กรอกรหัส / ชื่อนักเรียนเพื่อทำการค้นหา</i>
-        <SearchInput onSearchKeyword={onSearch} />
+        <i className="text-gray-600">กรอกรหัสนักเรียนเพื่อทำการค้นหา</i>
+        <SearchInput onSearchKeyword={onSearch} edit={edit} />
       </div>
       <LineCenter color="text-back" />
       {student != undefined ? (
-        <div>
+        <div key={student.studentCode}>
           <div className="py-4 flex justify-between ">
             <StudentInformationCard
+            key={student.studentCode}
               StudentCode={student?.studentCode}
               StudentFirstName={student?.studentFirstName || "-"}
               StudentLastName={student?.studentLastName || "-"}
@@ -243,7 +249,7 @@ export default function Form() {
           )}
         </div>
       ) : (
-         <div className="py-10 grid place-items-center">
+        <div className="py-10 grid place-items-center">
           <div className="text-center border-[2px] rounded-md py-10 w-fit px-20">
             <div className="text-lg mb-3">
               ใส่ผลลัพธ์เพื่อค้นหารายชื่อนักเรียนที่ต้องการแก้ไขคะแนน
