@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 
-type Column<T> = {
+export type Column<T> = {
   label: string;
   key?: string;
   className?: string;

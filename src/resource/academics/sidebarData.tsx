@@ -45,8 +45,8 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "ออกเกรดรายวิชา",
-      href: "/academic/grads",
-      headLink: "/academic/grads",
+      href: "/academic/grading/student-classroom",
+      headLink: "/academic/grading/student-classroom",
       icon: <ScrollText style={{ width: "2.2rem", height: "2.5rem" }} />,
     },
     {
