@@ -40,24 +40,24 @@ export default function Main() {
   };
   const router = useRouter();
   const onFilterGroup = async () => {
-    try {
-      setSearchTrigger(true);
-      await GetGropGradeBelow(
-        classSelect,
-        currentYearSelect,
-        grads,
-        term,
-        Number(year)
-      ).then((item: GetGropGradeBelowModel[]) => {
-        setStudent(item);
-      });
-      setIsSearch(true);
-      setSearchTrigger(false);
-    } catch (err) {
-      console.error("Error in onFilterGroup:", err);
-      setSearchTrigger(false);
-      setIsSearch(true);
-    }
+    // try {
+    //   setSearchTrigger(true);
+    //   await GetGropGradeBelow(
+    //     classSelect,
+    //     currentYearSelect,
+    //     grads,
+    //     term,
+    //     Number(year)
+    //   ).then((item: GetGropGradeBelowModel[]) => {
+    //     setStudent(item);
+    //   });
+    //   setIsSearch(true);
+    //   setSearchTrigger(false);
+    // } catch (err) {
+    //   console.error("Error in onFilterGroup:", err);
+    //   setSearchTrigger(false);
+    //   setIsSearch(true);
+    // }
   };
 
   const handleStudentName = (id: number, fname: string, lname: string) => {
