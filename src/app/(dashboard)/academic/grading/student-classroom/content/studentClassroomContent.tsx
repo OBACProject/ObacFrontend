@@ -24,22 +24,31 @@ const columns = [
       </div>
     )
   },
-  { label: "เผยแพร่เกรด", key: "show", className: "w-1/4 flex justify-center",
-  render: (row : dataTable) => (
+ {
+  label: "เผยแพร่เกรด",
+  key: "show",
+  className: "w-1/4 flex justify-center",
+  render: (row: dataTable) => {
+    const isDisabled = row.status !== "ตรวจสอบเสร็จสิ้น";
+    return (
     <div className="flex justify-center" onClick={(e) => e.stopPropagation()}>
       <GradeToggleButton
         isOn={row.show}
+        disabled={isDisabled}
         onToggle={(newValue) => {
-          setTableData((prev) =>
-            prev.map((item: any, i: number) =>
-              i === row.index - 1 ? { ...item, show: newValue } : item
-            )
-          );
+          if (!isDisabled) {
+            setTableData((prev) =>
+              prev.map((item: any, i: number) =>
+                i === row.index - 1 ? { ...item, show: newValue } : item
+              )
+            );
+          }
         }}
       />
     </div>
-  ),
-},
+  );
+  },
+}
 ];
 interface dataTable {
   level: string;
@@ -129,7 +138,7 @@ const rawData = [
     semester: "2",
     room: "3/2",
     status: "ยังไม่มีตรวจสอบ",
-    show: true,
+    show: false,
   },
   {
     level: "ปวช.",
@@ -161,7 +170,7 @@ const rawData = [
     semester: "2",
     room: "4/2",
     status: "ตรวจสอบเสร็จสิ้น",
-    show: false,
+    show: true,
   },
   {
     level: "ปวช.",
@@ -209,12 +218,12 @@ const rawData = [
     semester: "1",
     room: "5/4",
     status: "ยังไม่มีตรวจสอบ",
-    show: true,
+    show: false,
   },
 ];
 
 const transformedData: dataTable[] = rawData.map((item , idx) => ({
-  level: `${item.level} ${item.room}`, // Combine level + room
+  level: `${item.level} ${item.room}`, 
   years: item.years,
   semester: item.semester,
   status: item.status,

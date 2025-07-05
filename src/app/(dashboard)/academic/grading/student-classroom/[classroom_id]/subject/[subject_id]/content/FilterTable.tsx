@@ -175,12 +175,12 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   };
 
   const handleEdit = () => {
-    setOriginalData(JSON.parse(JSON.stringify(tableData))); // deep copy before editing
+    setOriginalData(JSON.parse(JSON.stringify(tableData))); 
     setOnEdit(true);
   };
 
   const handleNotEdit = () => {
-    setTableData(originalData); // revert changes on cancel
+    setTableData(originalData); 
     setOnEdit(false);
   };
 
