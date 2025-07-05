@@ -155,7 +155,7 @@ export const createColumns = ({
             defaultValue={row.remark || "หมายเหตุ"}
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1">
+          <div className="text-center w-full border h-6 px-2">
             {row.remark}
           </div>
         ),
