@@ -4,16 +4,110 @@ import React, { useEffect, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import GroupSelector, { GroupOption } from "@/components/Academic/GroupSelector";
 import GradeFilter from "@/components/Academic/GradeFilter";
-import StudentListTable from "@/components/Academic/StudentListTable";
 import ConfirmPromoteModal from "@/components/Academic/ConfirmPromoteModal";
 import { ArrowUpDown } from "lucide-react";
-import { toast } from "react-toastify";
-import { GetGropGradeAbove } from "@/api/oldApi/grad/gradAPI";
-import { fetchPromoteStudentGroup, fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
+import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
 import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import StudentSelectListTable from "@/components/Academic/StudentSelectListTable";
 // import { GetStudentGroupsByTermYearDto, GetGropGradeAboveModel } from "@/dto/gradDto";
+
+const mockGroup: GetGropGradeAboveModel = {
+  groupId: 1,
+  groupName: "1/4",
+  groupCode: "V10104",
+  class: "ปวช",
+  facultyName: "บริหารธุรกิจ",
+  programName: "คอมพิวเตอร์ธุรกิจ",
+  programId: 101,
+  term: "1",
+  year: 2567,
+  level: 1,
+  student: [
+    {
+    studentId: 1,
+    studentCode: "6401123",
+    firstName: "สมชาย",
+    lastName: "พาเพลิน",
+    isActive: true,
+    gpa: 3.25,
+  },
+  {
+    studentId: 2,
+    studentCode: "6401124",
+    firstName: "สมหญิง",
+    lastName: "สดใส",
+    isActive: true,
+    gpa: 3.55,
+  },
+  {
+    studentId: 3,
+    studentCode: "6401125",
+    firstName: "อนันต์",
+    lastName: "ใจดี",
+    isActive: false,
+    gpa: 2.75,
+  },
+  {
+    studentId: 4,
+    studentCode: "6401126",
+    firstName: "วิภา",
+    lastName: "ว่องไว",
+    isActive: true,
+    gpa: 3.80,
+  },
+  {
+    studentId: 5,
+    studentCode: "6401127",
+    firstName: "เอกชัย",
+    lastName: "เร็วแรง",
+    isActive: true,
+    gpa: 2.90,
+  },
+  {
+    studentId: 6,
+    studentCode: "6401128",
+    firstName: "พรพิมล",
+    lastName: "ใจดี",
+    isActive: false,
+    gpa: 3.10,
+  },
+  {
+    studentId: 7,
+    studentCode: "6401129",
+    firstName: "ณัฐวุฒิ",
+    lastName: "ขยันเรียน",
+    isActive: true,
+    gpa: 3.65,
+  },
+  {
+    studentId: 8,
+    studentCode: "6401130",
+    firstName: "เกษม",
+    lastName: "ตั้งใจดี",
+    isActive: true,
+    gpa: 2.45,
+  },
+  {
+    studentId: 9,
+    studentCode: "6401131",
+    firstName: "วราภรณ์",
+    lastName: "สายบุญ",
+    isActive: false,
+    gpa: 3.95,
+  },
+  {
+    studentId: 10,
+    studentCode: "6401132",
+    firstName: "กิตติ",
+    lastName: "จริงจัง",
+    isActive: true,
+    gpa: 2.80,
+  },
+  ],
+};
+
 
 export default function Main() {
   const dateTime = new Date();
@@ -26,12 +120,13 @@ export default function Main() {
   const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
-  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
+  // const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
+  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(mockGroup);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>("");
   const [nextGroupNameB, setNextGroupNameB] = useState<string>("");
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);
   const [confirmPromoteTrigger, setConfirmPromoteTrigger] = useState<boolean>(false);
-  const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [isSearch, setIsSearch] = useState<boolean>(false); 
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -52,55 +147,56 @@ export default function Main() {
   }));
 
   const onFilterGroup = async () => {
-    try {
-      const result = await GetGropGradeAbove(grads, term, year, groupID);
-      setNewGroup(result);
-      setIsSearch(true);
-    } catch (err) {
-      console.error("Failed to filter group", err);
-      setIsSearch(false);
-    }
+    setIsSearch(true)
+    // try {
+    //   const result = await GetGropGradeAbove(grads, term, year, groupID);
+    //   setNewGroup(result);
+    //   setIsSearch(true);
+    // } catch (err) {
+    //   console.error("Failed to filter group", err);
+    //   setIsSearch(false);
+    // }
   };
 
   const onPromoteStudentGroup = async () => {
-    if (!newGroup) return;
-    setConfirmPromoteTrigger(true);
+    // if (!newGroup) return;
+    // setConfirmPromoteTrigger(true);
 
-    const nextGroupName = `${nextGroupNameA}/${nextGroupNameB}`;
-    const studentIds = newGroup.student.map((s) => Number(s.studentId));
+    // const nextGroupName = `${nextGroupNameA}/${nextGroupNameB}`;
+    // const studentIds = newGroup.student.map((s) => Number(s.studentId));
 
-    const randomPrefix = `${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
-    const randomNumber = Math.floor(100 + Math.random() * 900);
+    // const randomPrefix = `${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
+    // const randomNumber = Math.floor(100 + Math.random() * 900);
 
-    try {
-      const res = await fetchPromoteStudentGroup({
-        studentIds,
-        groupId: groupID,
-        newGroupName: nextGroupName,
-        newGroupCode: `${randomPrefix}-${randomNumber}`,
-        year,
-        term,
-      });
-      if (res?.ok !== false) {
-        toast.success("เลื่อนชั้นเรียนสำเร็จ");
-        SetPromoteTrigger(false);
-        setNextGroupNameA("");
-        setNextGroupNameB("");
-        setTimeout(() => window.location.reload(), 1500);
-      } else {
-        toast.error("เกิดข้อผิดพลาดในการเลื่อนชั้นเรียน");
-      }
-    } catch (err) {
-      console.error("Promote error", err);
-      toast.error("ไม่สามารถเลื่อนชั้นได้");
-    } finally {
-      setConfirmPromoteTrigger(false);
-    }
+    // try {
+    //   const res = await fetchPromoteStudentGroup({
+    //     studentIds,
+    //     groupId: groupID,
+    //     newGroupName: nextGroupName,
+    //     newGroupCode: `${randomPrefix}-${randomNumber}`,
+    //     year,
+    //     term,
+    //   });
+    //   if (res?.ok !== false) {
+    //     toast.success("เลื่อนชั้นเรียนสำเร็จ");
+    //     SetPromoteTrigger(false);
+    //     setNextGroupNameA("");
+    //     setNextGroupNameB("");
+    //     setTimeout(() => window.location.reload(), 1500);
+    //   } else {
+    //     toast.error("เกิดข้อผิดพลาดในการเลื่อนชั้นเรียน");
+    //   }
+    // } catch (err) {
+    //   console.error("Promote error", err);
+    //   toast.error("ไม่สามารถเลื่อนชั้นได้");
+    // } finally {
+    //   setConfirmPromoteTrigger(false);
+    // }
   };
 
   return (
     <div className="pl-16 py-5">
-      <div className="flex justify-start px-10 mb-6">
+      <div className="flex justify-start px-10 ">
        <HeaderLabel title="เลื่อนชั้นนักเรียน" Icon={<ArrowUpDown className="h-8 w-8 "/>}/>
       </div>
 
@@ -120,7 +216,7 @@ export default function Main() {
         />
         <button
           onClick={onFilterGroup}
-          disabled={!term || !year || !groupID}
+          // disabled={!term || !year || !groupID}
           className="px-5 py-1.5 bg-blue-500 hover:bg-blue-700 text-white rounded-md"
         >
           ค้นหา
@@ -146,7 +242,7 @@ export default function Main() {
                 {[...Array(10)].map((_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}
               </select>
             </div>
-            <StudentListTable students={newGroup.student} />
+            <StudentSelectListTable students={newGroup.student} />
             <div className="flex justify-end mt-4">
               <button
                 onClick={() => SetPromoteTrigger(true)}
