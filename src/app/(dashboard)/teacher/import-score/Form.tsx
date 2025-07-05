@@ -249,7 +249,7 @@ export default function Form() {
           )}
         </div>
       ) : (
-        <div className="py-10 grid place-items-center">
+         <div className="py-10 grid place-items-center">
           <div className="text-center border-[2px] rounded-md py-10 w-fit px-20">
             <div className="text-lg mb-3">
               ใส่ผลลัพธ์เพื่อค้นหารายชื่อนักเรียนที่ต้องการแก้ไขคะแนน

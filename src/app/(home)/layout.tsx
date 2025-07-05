@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <HomePageNavBar />
-        <div className="mt-28 mb-20">
+        <div className="mt-16 mb-20">
          {children} 
         </div>
         <HomeFooter />
