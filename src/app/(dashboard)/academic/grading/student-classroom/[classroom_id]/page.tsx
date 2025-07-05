@@ -18,6 +18,7 @@ export default function Page({ params }: { params: { classroom_id: string } }) {
         </div>
       </header>
       <main className="mx-4 sm:mx-10 lg:mx-10 p-4">
+
         <Suspense fallback={<div>Loading table...</div>}>
           <FilterableTable classroomId={params.classroom_id} />
         </Suspense>
