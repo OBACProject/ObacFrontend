@@ -234,7 +234,7 @@ export default function Main() {
               <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">{newGroup.class}</p>
               <select className="border px-3 py-1 rounded-md" value={nextGroupNameA} onChange={(e) => setNextGroupNameA(e.target.value)}>
                 <option value="">เลือกปี</option>
-                {[1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
+                {[ 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
               <span className="text-xl">/</span>
               <select className="border px-3 py-1 rounded-md" value={nextGroupNameB} onChange={(e) => setNextGroupNameB(e.target.value)}>

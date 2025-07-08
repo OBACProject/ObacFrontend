@@ -1,10 +1,10 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import THSarabunFont from "../Font/THSarabunFont";
-import THSarabunFontBold from "../Font/THSarabunBold";
+import THSarabunFont from "../../Font/THSarabunFont";
+import THSarabunFontBold from "../../Font/THSarabunBold";
 // import { GetGropGradeBelowModel } from "@/dto/gradDto";
-import { GetGradBelowResponse } from "../api/models/grade/grade.response";
+import { GetGradBelowResponse } from "../../api/models/grade/grade.response";
 
 interface DataList {
   student?: GetGradBelowResponse[];
