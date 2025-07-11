@@ -72,6 +72,7 @@ export interface GetGradPerTermYearByStudentIdResponse {
 export interface GetGradBelowResponse {
   studentId: number;
   studentCode: string;
+  prefix?:string;
   firstName: string;
   lastName: string;
   facultyName: string;

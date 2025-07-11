@@ -1,8 +1,8 @@
 "use client";
 
 import jsPDF from "jspdf";
-import THSarabunFont from "../Font/THSarabunFont";
-import THSarabunFontBold from "../Font/THSarabunBold";
+import THSarabunFont from "../../Font/THSarabunFont";
+import THSarabunFontBold from "../../Font/THSarabunBold";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 
 const SummaryGradeForStudent = (grads: GetStudentGradeDetailDto) => {

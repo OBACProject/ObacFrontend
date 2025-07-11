@@ -3,8 +3,20 @@ import PDFButtonTemplate from "@/components/PDF/PDFButtonTemplate";
 import {
   genGradSummaryForStudent,
   genGroupSummaryGrad,
+  genStudentNameInSubject,
+  genStudentNamelistInGroup,
+  genStudentNotPassList,
+  genStudentScoreInSubject,
 } from "@/lib/PDFGenarate/generateFile";
-import { BookCheck, FileText, GraduationCap } from "lucide-react";
+import {
+  Bolt,
+  BookCheck,
+  BookOpenCheck,
+  FileText,
+  GraduationCap,
+  Users,
+  X,
+} from "lucide-react";
 import React from "react";
 
 export default function page() {
@@ -22,7 +34,7 @@ export default function page() {
             title={"ใบสรุปผลการเรียน"}
             description="สรุปผลการเรียนทุกเทอมของนักเรียน (ต่อคน)"
             icon={<GraduationCap className="w-5 h-5 text-white" />}
-            icon_bg="bg-blue-500"
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
             doc_type="pdf"
             onClick={genGradSummaryForStudent}
           />
@@ -30,10 +42,64 @@ export default function page() {
             title={"ใบตรวจเกรด"}
             description="เอกสารตรวจเกรดนักเรียนทั้งห้อง"
             icon={<BookCheck className="w-5 h-5 text-white" />}
-            icon_bg="bg-blue-500"
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
             doc_type="pdf"
             onClick={genGroupSummaryGrad}
+          />{" "}
+          <PDFButtonTemplate
+            title={"ใบตรวจเกรด"}
+            description="เอกสารตรวจเกรดนักเรียนทั้งห้อง"
+            icon={<BookCheck className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            doc_type="excel"
+            onClick={genGroupSummaryGrad}
           />
+          <PDFButtonTemplate
+            title={"ใบรายชื่อนักเรียนในห้อง"}
+            description="รายชื่อนักเรียนในหนึ่งห้องเรียน"
+            icon={<Users className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
+            doc_type="pdf"
+            onClick={genStudentNamelistInGroup}
+          />
+          <PDFButtonTemplate
+            title={"ใบรายชื่อนักเรียนในวิชา"}
+            description="รายชื่อนักเรียนในวิชานั้นๆ"
+            icon={<Users className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
+            doc_type="pdf"
+            onClick={genStudentNameInSubject}
+          />
+          <PDFButtonTemplate
+            title={"ใบคะแนนนักเรียนในวิชา"}
+            description="รายชื่อนักเรียนและคะแนนในวิชานั้นๆ"
+            icon={<Bolt className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
+            doc_type="pdf"
+            onClick={genStudentScoreInSubject}
+          />
+          <PDFButtonTemplate
+            title={"ใบรายชื่อนักเรียนที่ไม่ผ่านเกณฑ์"}
+            description="ชื่อนักเรียนที่ไม่ผ่านเกณ์ในสายชั้น"
+            icon={<X className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
+            doc_type="pdf"
+            onClick={genStudentNotPassList}
+          />
+        </div>
+        <div className="border-t border-gray-300">
+          <div className="py-5 w-full">
+            <HeaderLabel
+              title="เอกสาร รวบ3ป. "
+              Icon={<BookOpenCheck className="text-white h-7 w-7 " />}
+            />
+          </div>
+          <div className="px-10">
+            <p className="w-full border-dashed border-2 border-gray-500 text-2xl text-gray-700 font-prompt py-10  text-center rounded-lg">
+            กำลังพัฒนา...
+          </p>
+          </div>
+          
         </div>
       </div>
     </div>

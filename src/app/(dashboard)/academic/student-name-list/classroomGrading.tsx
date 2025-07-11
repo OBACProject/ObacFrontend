@@ -2,7 +2,7 @@
 import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameList";
+import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameListInGroup";
 import {
   FacultyInfo,
   EducationData,

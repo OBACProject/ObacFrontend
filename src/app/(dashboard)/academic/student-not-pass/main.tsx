@@ -1,6 +1,6 @@
 "use client";
 import { GetGropGradeBelow } from "@/api/oldApi/grad/gradAPI";
-import StudentFailList from "@/lib/PDF/name-list/StudentFailList";
+import StudentFailListPDF from "@/lib/PDF/name-list/StudentFailList";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -147,7 +147,7 @@ export default function Main() {
                       className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
                       onClick={() => {
                         if (students)
-                          StudentFailList({
+                          StudentFailListPDF({
                             student: students,
                             classGroup: `${classSelect}.${currentYearSelect}`,
                             currentYear: year,

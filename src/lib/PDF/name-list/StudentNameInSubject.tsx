@@ -1,25 +1,15 @@
 "use client";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import {
-  GetGradBySubjectId,
-} from "@/dto/gradDto";
-import THSarabunFont from "../Font/THSarabunFont";
-import THSarabunFontBold from "../Font/THSarabunBold";
+import THSarabunFont from "../../Font/THSarabunFont";
+import THSarabunFontBold from "../../Font/THSarabunBold";
+import { StudentNameListInSubject } from "@/dto/pdfDto";
 
 interface DataList {
-  grads?: GetGradBySubjectId[];
-  studentGroup: string;
-  subjectName: string | undefined;
-  subjectId: string | undefined;
+  data: StudentNameListInSubject;
 }
 
-const GenSubjectScore = ({
-  grads,
-  studentGroup,
-  subjectId,
-  subjectName,
-}: DataList) => {
+const StudentNameInSubject = ({ data }: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -34,14 +24,12 @@ const GenSubjectScore = ({
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ${studentGroup}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน กลุ่มเรียน ${data.groupName}`, 36, 10, {
     align: "center",
   });
-  doc.setFontSize(14);
-  doc.text(`รหัสวิชา ${subjectId} วิชา ${subjectName}`, 120, 10, {
+  doc.text(`รหัสวิชา ${data.subjectID} วิชา ${data.subjectName}`, 120, 10, {
     align: "center",
   });
-
   doc.setFontSize(12);
 
   doc.line(4, 4, 4, 291);
@@ -53,18 +41,7 @@ const GenSubjectScore = ({
 
   autoTable(doc, {
     startY: 12,
-    body: [
-      [
-        "ลำดับ",
-        "รหัสนักศึกษา",
-        `   ชื่อ - นามสกุล   `,
-        "คะแนนเก็บ",
-        "จิตพิสัย",
-        "คะแนนสอบ",
-        "รวม",
-        "หมายเหตุ",
-      ],
-    ],
+    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "", "หมายเหตุ"]],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -82,32 +59,27 @@ const GenSubjectScore = ({
       0: { cellWidth: 10 },
       1: { cellWidth: 30 },
       2: { cellWidth: 60 },
-      3: { cellWidth: 18 },
-      4: { cellWidth: 18 },
-      5: { cellWidth: 18 },
-      6: { cellWidth: 16 },
-      7: { cellWidth: 31 },
+      3: { cellWidth: 70 },
+      4: { cellWidth: 31 },
     },
     margin: { left: 4, right: 0 },
   });
-
   doc.setFont("THSarabun");
   let y2 = doc.lastAutoTable.finalY;
-  if (grads) {
-    for (let i = 0; i < grads.length; i++) {
+  let n = 0;
+  const students = data.students;
+  if (students) {
+    for (let i = 0; i < students.length; i++) {
       autoTable(doc, {
         startY: y2,
         body: [
           [
             i + 1,
-            grads[i].studentCode,
-            `${grads[i].firstName}`,
-            `${grads[i].lastName}`,
-            `${grads[i].collectScore}`,
-            `${grads[i].affectiveScore}`,
-            `${grads[i].testScore}`,
-            `${grads[i].totalScore}`,
-            `${grads[i].remark !== null ? grads[i].remark : ""}`,
+            students[i].studentCode,
+            `${students[i].prefix} ${students[i].studentFirstName}`,
+            `${students[i].studentLastName}`,
+            "",
+            "",
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -125,7 +97,7 @@ const GenSubjectScore = ({
         },
         columnStyles: {
           0: { cellWidth: 10 },
-          1: { cellWidth: 30 },
+          1: { cellWidth: 30, halign: "center" },
           2: {
             cellWidth: 30,
             halign: "left",
@@ -138,11 +110,8 @@ const GenSubjectScore = ({
             lineWidth: { right: 0.2, left: 0, top: 0.2, bottom: 0.2 },
             cellPadding: { left: 0, right: 0, top: 1, bottom: 1 },
           },
-          4: { cellWidth: 18 },
-          5: { cellWidth: 18 },
-          6: { cellWidth: 18 },
-          7: { cellWidth: 16 },
-          8: { cellWidth: 31 },
+          4: { cellWidth: 70 },
+          5: { cellWidth: 31 },
         },
         margin: { left: 4, right: 0 },
       });
@@ -152,7 +121,6 @@ const GenSubjectScore = ({
       }
     }
   }
-
-  doc.save(`ใบคะแนนวิชา${subjectName} กลุ่มเรียน ${studentGroup}.pdf`);
+  doc.save(`ใบรายชื่อวิชา ${data.subjectName} ${data.groupName}.pdf`);
 };
-export default GenSubjectScore;
+export default StudentNameInSubject;

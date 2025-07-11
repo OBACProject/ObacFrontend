@@ -1,7 +1,7 @@
 "use client";
 import jsPDF from "jspdf";
-import THSarabunFont from "../Font/THSarabunFont";
-import THSarabunFontBold from "../Font/THSarabunBold";
+import THSarabunFont from "../../Font/THSarabunFont";
+import THSarabunFontBold from "../../Font/THSarabunBold";
 import autoTable from "jspdf-autotable";
 import { GroupSummaryGradeResponse } from "@/dto/gradingDto";
 
@@ -114,7 +114,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
   let y2 = doc.lastAutoTable.finalY;
 
   data.student.forEach((student, index) => {
-    const { studentCode, studentFirstName, studentLastName, gpa, gpax, grads } =
+    const { prefix, studentCode, studentFirstName, studentLastName, gpa, gpax, grads } =
       student;
     const subjectGrades = Object.values(grads || {});
 
@@ -139,7 +139,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
         [
           `${index + 1}`,
           studentCode,
-          studentFirstName + "  " + studentLastName,
+          prefix +" "+ studentFirstName + "  " + studentLastName,
           ...subjectsWithGrades.slice(0, 10),
           gpa.toFixed(2),
           gpax.toFixed(2),

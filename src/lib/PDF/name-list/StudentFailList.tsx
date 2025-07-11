@@ -12,7 +12,7 @@ interface DataList {
   classGroup: string;
 }
 
-const StudentFailList = ({ //รายชื่อนักเรียนที่มีผลการเรียนต่ำกว่าเกณฑ์   StudentsNotPassedList (student-notpassed)
+const StudentFailListPDF = ({ //รายชื่อนักเรียนที่มีผลการเรียนต่ำกว่าเกณฑ์   StudentsNotPassedList (student-notpassed)
     student , currentYear ,classGroup
 }: DataList) => {
   const doc = new jsPDF({
@@ -43,7 +43,7 @@ const StudentFailList = ({ //รายชื่อนักเรียนที
 
   autoTable(doc, {
     startY: 12,
-    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "หมายเหตุ"]],
+    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "หมายเหตุ","เลขที่ใบเสร็จ"]],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -61,8 +61,9 @@ const StudentFailList = ({ //รายชื่อนักเรียนที
       0: { cellWidth: 10 },
       1: { cellWidth: 30 },
       2: { cellWidth: 60 },
-      3: { cellWidth: 70 },
+      3: { cellWidth: 35 },
       4: { cellWidth: 31 },
+      5: { cellWidth: 35 },
     },
     margin: { left: 4, right: 0 },
   });
@@ -77,10 +78,10 @@ const StudentFailList = ({ //รายชื่อนักเรียนที
           [
             i + 1,
             student[i].studentCode,
-            `${student[i].firstName}`,
+            `${student[i].prefix} ${student[i].firstName}`,
             `${student[i].lastName}`,
             `${student[i].class}.${student[i].groupName}`,
-            `${student[i].gpa.toFixed(2)}`,
+            `${student[i].gpa.toFixed(2)}`,"000-000"
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -111,8 +112,9 @@ const StudentFailList = ({ //รายชื่อนักเรียนที
             lineWidth: { right: 0.2, left: 0, top: 0.2, bottom: 0.2 },
             cellPadding: { left: 0, right: 0, top: 1, bottom: 1 },
           },
-          4: { cellWidth: 70 },
+          4: { cellWidth: 35 },
           5: { cellWidth: 31 },
+          6: { cellWidth: 35 },
         },
         margin: { left: 4, right: 0 },
       });
@@ -124,4 +126,4 @@ const StudentFailList = ({ //รายชื่อนักเรียนที
   }
   doc.save(`รายชื่อนักเรียนไม่ผ่านเกณฑ์ ${classGroup} ${currentYear}.pdf`);
 };
-export default StudentFailList;
+export default StudentFailListPDF;

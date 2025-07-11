@@ -11,7 +11,7 @@ interface DataList {
   year: number;
 }
 
-const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
+const StudentNameListInGroupPDF = ({ student, studentGroup, year }: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -81,10 +81,10 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
   if (student) {
     for (let i = 0; i < student.length; i++) {
       let gender = "";
-      if (student[i].gender == "Male") {
+      if (student[i].gender == "ชาย") {
         gender = "นาย";
       }
-      if (student[i].gender == "Female") {
+      if (student[i].gender == "หญิง") {
         gender = "นางสาว";
       }
       autoTable(doc, {
@@ -156,4 +156,4 @@ const StudentNameListPDF = ({ student, studentGroup, year }: DataList) => {
 
   doc.save(`${studentGroup}.pdf`);
 };
-export default StudentNameListPDF;
+export default StudentNameListInGroupPDF;

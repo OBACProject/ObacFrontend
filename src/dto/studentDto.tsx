@@ -203,6 +203,7 @@ export type StudentDto = {
   studentSurname: string;
 };
 export type StudentListByGroupIDDto = {
+  prefix:string;
   studentCode: string;
   studentId: number;
   gender:string;

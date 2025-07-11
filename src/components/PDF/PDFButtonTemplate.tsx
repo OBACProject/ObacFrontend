@@ -23,7 +23,7 @@ export default function PDFButtonTemplate({
   return (
     <div className="rounded-lg border border-gray-300 p-4">
       <div className="flex justify-between">
-        <div className={`p-2 rounded-lg ${icon_bg} `}>{icon}</div>
+        <div className={`p-2 rounded-lg ${icon_bg} shadow-md`}>{icon}</div>
         <p className="text-black text-[12px] rounded-full px-2 py-0.5 border font-semibold font-prompt border-gray-300 h-fit">
           {doc_type === "pdf" ? "PDF" : "EXCEL"}
         </p>
