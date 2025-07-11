@@ -8,6 +8,7 @@ import React, { useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { getCurrentThaiTermYear } from "@/lib/utils";
+import { mockGetGradBelowResponse } from "@/resource/PDF/mockData";
 
 interface IndividualStudentInfoData {
   studentId: number;
@@ -58,6 +59,10 @@ export default function Main() {
     //   setSearchTrigger(false);
     //   setIsSearch(true);
     // }
+    setSearchTrigger(true);
+    setStudent(mockGetGradBelowResponse)
+    setIsSearch(true);
+    setSearchTrigger(false);
   };
 
   const handleStudentName = (id: number, fname: string, lname: string) => {
@@ -148,7 +153,7 @@ export default function Main() {
                       onClick={() => {
                         if (students)
                           StudentFailListPDF({
-                            student: students,
+                            student: mockGetGradBelowResponse,
                             classGroup: `${classSelect}.${currentYearSelect}`,
                             currentYear: year,
                           });
@@ -161,15 +166,21 @@ export default function Main() {
                 </div>
 
                 <div>
-                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_20%_20%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
+                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_10%_15%_15%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
                       ชื่อ - นามสกุล
                     </div>
                     <div className="py-1 text-lg text-center">
+                      ห้องเรียน
+                    </div>  
+                    <div className="py-1 text-lg text-center">
                       เกรดเทอมล่าสุด
-                    </div>
+                    </div>    
+                    <div className="py-1 text-lg text-center">
+                      เลขที่ใบเสร็จ
+                    </div>  
                   </div>
                   {students.map((item, index) => (
                     <div
@@ -181,7 +192,7 @@ export default function Main() {
                         );
                       }}
                       key={index}
-                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_20%_20%] shadow-md"
+                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_10%_15%_15%] shadow-md"
                     >
                       <div className="text-center py-1 border-r border-gray-400">
                         {index + 1}
@@ -195,11 +206,14 @@ export default function Main() {
                       <div className="text-start py-1 border-r border-gray-400">
                         {item.lastName}
                       </div>
-                      <div className="text-center py-1">
+                      <div className="text-center border-r border-gray-400 py-1">
                         {item.class}.{item.groupName}
                       </div>
-                      <div className="text-center py-1">
+                      <div className="text-center border-r border-gray-400 py-1">
                         {item.gpa.toFixed(2)}
+                      </div>
+                      <div className="text-center  py-1">
+                        -
                       </div>
                     </div>
                   ))}
