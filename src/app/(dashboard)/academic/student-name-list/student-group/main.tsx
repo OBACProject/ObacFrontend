@@ -1,11 +1,11 @@
 "use client";
 import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
-import StudentNameListPDF from "@/lib/PDF/StudentNameList";
+import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameListInGroup";
 import {
   GetStudentListByGroupIDDto,
   StudentListByGroupIDDto,
 } from "@/dto/studentDto";
-import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { ConvertClassroomToExcel } from "@/lib/Excel/convertToExcel";
 import { Download, Loader2, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

@@ -10,17 +10,18 @@ interface GradeToggleButtonProps {
 
 const GradeToggleButton: React.FC<GradeToggleButtonProps> = ({
   isOn,
-  disabled,
+  disabled = false,
   className,
   onToggle,
 }) => {
   const [checked, setChecked] = useState(isOn);
 
   useEffect(() => {
-    setChecked(isOn); // sync external state change
+    setChecked(isOn); 
   }, [isOn]);
 
   const handleToggle = () => {
+    if (disabled) return; 
     const newChecked = !checked;
     setChecked(newChecked);
     onToggle?.(newChecked);
@@ -29,7 +30,7 @@ const GradeToggleButton: React.FC<GradeToggleButtonProps> = ({
   return (
     <label
       className={`inline-flex items-center ${
-        disabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'
+        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
       } ${className}`}
       onClick={(e) => e.stopPropagation()} // กัน bubbling อีกชั้น
     >

@@ -1,17 +1,18 @@
 "use client";
-import GenStudentNameInSubject from "@/lib/PDF/genStudentNameInSubject";
-import GenSubjectScore from "@/lib/PDF/genSubjectScore";
+import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
+import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
 import {
   ConvertGradBySubjectId,
   GetGradBySubjectId,
 } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
-import { ConvertScoreToExcel } from "@/lib/convertToExcel";
+import { ConvertScoreToExcel } from "@/lib/Excel/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { MethodDto } from "@/dto/methodDto";
+import { mockStudentNameListInSubject, mockStudentScorenSubject } from "@/resource/PDF/mockData";
 
 interface Props {
   grads?: GetGradBySubjectId[];
@@ -104,11 +105,8 @@ export default function MenuBar({
               disabled={!student_group}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GenSubjectScore({
-                  grads: grads,
-                  studentGroup: `${className}.${student_group}`,
-                  subjectId: subjectData?.subjectCode,
-                  subjectName: subjectData?.subjectName,
+                StudentScoreInSubjectPDF({
+                 data: mockStudentScorenSubject
                 });
               }}
             >
@@ -117,11 +115,8 @@ export default function MenuBar({
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={() => {
-                GenStudentNameInSubject({
-                  grads: grads,
-                  studentGroup: `${className}.${student_group}`,
-                  subjectId: subjectData?.subjectCode,
-                  subjectName: subjectData?.subjectName,
+                StudentNameInSubject({
+                 data:mockStudentNameListInSubject
                 });
               }}
             >

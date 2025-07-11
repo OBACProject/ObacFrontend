@@ -175,12 +175,12 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   };
 
   const handleEdit = () => {
-    setOriginalData(JSON.parse(JSON.stringify(tableData))); // deep copy before editing
+    setOriginalData(JSON.parse(JSON.stringify(tableData))); 
     setOnEdit(true);
   };
 
   const handleNotEdit = () => {
-    setTableData(originalData); // revert changes on cancel
+    setTableData(originalData); 
     setOnEdit(false);
   };
 
@@ -195,7 +195,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     <>
       <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
-          Icon={<ScrollText className="w-8 h-8" />}
+          Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ปวส.${props.classroom}/2 (รหัสวิชา: ${props.subjectId})`}
           className="text-blue"
         />

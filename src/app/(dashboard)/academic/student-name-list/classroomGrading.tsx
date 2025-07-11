@@ -2,14 +2,14 @@
 import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import StudentNameListPDF from "@/lib/PDF/StudentNameList";
+import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameListInGroup";
 import {
   FacultyInfo,
   EducationData,
   filterProgramsParamsData,
   GetStudentListByGroupIDDto,
 } from "@/dto/studentDto";
-import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { ConvertClassroomToExcel } from "@/lib/Excel/convertToExcel";
 import {
   filterProgramsViewData,
   getRawProgramViewData,

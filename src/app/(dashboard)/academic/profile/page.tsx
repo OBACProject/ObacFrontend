@@ -14,7 +14,7 @@ export default function Academic() {
       <div className="w-full px-5">
         <HeaderLabel
           title="ภาพรวมโรงเรียน"
-          Icon={<ChartPie className="w-8 h-8 " />}
+          Icon={<ChartPie className="h-7 w-7 text-white" />}
         />
       </div>
       <div className="lg:flex lg:justify-between ">

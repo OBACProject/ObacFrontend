@@ -1,8 +1,8 @@
 "use client";
 import { fetchUpdateCompleteScheduleSubject } from "@/api/oldApi/grad/gradAPI";
 import { fetchGetSubjectBySubjectId } from "@/api/oldApi/subject/subjectAPI";
-import GenStudentNameInSubject from "@/lib/PDF/genStudentNameInSubject";
-import GenSubjectScore from "@/lib/PDF/genSubjectScore";
+import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
+import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
-} from "@/lib/convertToExcel";
+} from "@/lib/Excel/convertToExcel";
 import { updateGradingStundetData } from "@/resource/academics/grading/api/gradingApiData";
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
 import { CircleX, ClipboardCheck, Pencil, ScrollText } from "lucide-react";
@@ -19,7 +19,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { GradingModeComponent } from "../../../../../(dashboard)/academic/grads/components/GradingModeComponent";
-
+import { mockStudentNameListInSubject, mockStudentScorenSubject } from "@/resource/PDF/mockData";
+   
 const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
   const subjectId = params.params[0];
   const scheduleSubjectId = params.params[1];
@@ -276,11 +277,8 @@ const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
               disabled={!roomName}
               className="text-md bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-5 py-2"
               onClick={() => {
-                GenSubjectScore({
-                  grads: gradDataFilter,
-                  studentGroup: roomName,
-                  subjectId: subjectByGroupId?.subjectCode,
-                  subjectName: subjectByGroupId?.subjectName,
+                StudentScoreInSubjectPDF({
+                data: mockStudentScorenSubject
                 });
               }}
             >
@@ -289,11 +287,8 @@ const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
             <button
               className=" text-md text-gray-600 hover:bg-gray-200 bg-[#e4f1f8] rounded-md px-5 py-2"
               onClick={() => {
-                GenStudentNameInSubject({
-                  grads: gradDataFilter,
-                  studentGroup: roomName,
-                  subjectId: subjectByGroupId?.subjectCode,
-                  subjectName: subjectByGroupId?.subjectName,
+                StudentNameInSubject({
+                 data:mockStudentNameListInSubject
                 });
               }}
             >

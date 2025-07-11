@@ -3,8 +3,8 @@ import {
   fetchGetStudentGradeDetail,
 } from "@/api/oldApi/grad/gradAPI";
 import { fetchGetStudentByStudentId, fetchUpdateStudent } from "@/api/oldApi/student/studentApi";
-import GradPerTerms from "@/lib/PDF/GradPerTerm";
-import SummaryGradPDF from "@/lib/PDF/SummaryGrade";
+import GradPerTerms from "@/lib/PDF/score/GradPerTerm";
+import SummaryGradPDF from "@/lib/PDF/score/SummaryGradeForStudent";
 import ChangeStudentGroup from "@/components/common/Popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/components/common/Popup/confirmChangeStudentsStatus";
 import { GetStudentByStudentId, UpdateStudentRequestBody } from "@/dto/studentDto";

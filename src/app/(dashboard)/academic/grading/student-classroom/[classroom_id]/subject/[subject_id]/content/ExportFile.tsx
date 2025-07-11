@@ -2,15 +2,16 @@
 "use client";
 import React from "react";
 // import { GetGradBySubjectId, GetSubjectBySubjectId } from "@/dto";
-import GenSubjectScore from "@/lib/PDF/genSubjectScore";
-import GenStudentNameInSubject from "@/lib/PDF/genStudentNameInSubject";
+import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
+import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
-} from "@/lib/convertToExcel";
+} from "@/lib/Excel/convertToExcel";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
+import { mockStudentNameListInSubject, mockStudentScorenSubject } from "@/resource/PDF/mockData";
 
 interface ExportFileProps {
   grads: GetGradBySubjectId[];
@@ -52,11 +53,8 @@ export default function ExportFile({
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
-          GenSubjectScore({
-            grads,
-            studentGroup: roomName,
-            subjectId: subject?.subjectCode,
-            subjectName: subject?.subjectName,
+          StudentScoreInSubjectPDF({
+           data: mockStudentScorenSubject
           })
         }
       >
@@ -65,11 +63,8 @@ export default function ExportFile({
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
-          GenStudentNameInSubject({
-            grads,
-            studentGroup: roomName,
-            subjectId: subject?.subjectCode,
-            subjectName: subject?.subjectName,
+          StudentNameInSubject({
+            data:mockStudentNameListInSubject
           })
         }
       >
