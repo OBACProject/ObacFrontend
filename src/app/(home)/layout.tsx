@@ -36,10 +36,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen flex flex-col">
         <ClientParallaxWrapper>
           <HomePageNavBar />
-          <div className="mt-16 mb-20">{children}</div>
+          <div className="pb-10">{children}</div>
           <HomeFooter />
         </ClientParallaxWrapper>
       </body>
