@@ -50,14 +50,17 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
       key: "finalGrade",
       className: "w-3/12 px-4 py-3 text-center font-medium",
       render: (row: any) => (
-        <Badge
-          variant={row.isFailed ? "destructive" : "default"}
-          className={`px-3 py-1 font-semibold ${
-            row.isFailed ? " text-red-800 border-red-200" : " text-green-800 border-green-200"
-          }`}
-        >
+        <span className={`px-2 py-1 rounded text-xs font-medium ${row.isFailed ? "text-red-800" : "text-green-800"}`}>
           {row.finalGrade}
-        </Badge>
+        </span>
+        // <Badge
+        //   variant={row.isFailed ? "destructive" : "default"}
+        //   className={`px-3 py-1 font-semibold ${
+        //     row.isFailed ? " text-red-800 border-red-200" : " text-green-800 border-green-200"
+        //   }`}
+        // >
+        //   {row.finalGrade}
+        // </Badge>
       ),
     },
   ]
