@@ -1,30 +1,13 @@
 "use client";
+
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
-// import { Input } from "@/components/ui/input";
-// import { }
-import {
-  FacultyInfo,
-  EducationData,
-  filterProgramsParamsData,
-} from "@/dto/studentDto";
-import { getGroupSummaryGradeViewData } from "@/resource/academics/grading/viewData/classroomByGroupIdViewData";
-import {
-  filterProgramsViewData,
-  getRawProgramViewData,
-} from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
-import { Loader2 } from "lucide-react";
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { GroupSummaryGradeResponse } from "./classroom/[...params]/page";
-import TotalScoreInGroup, { DataList } from "@/lib/PDF/TotalScoreInGroup";
-import { toast } from "react-toastify";
-import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
-import {
-  ConvertClassroomGradingToExcel,
-  ConvertClassroomToExcel,
-} from "@/lib/convertToExcel";
+import type { FacultyInfo, EducationData } from "@/dto/studentDto";
+import { Loader2, Search } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TableSkeleton } from "./component/skeletons/TableSkeleton";
+import { Input } from "@/components/ui/input";
 
 interface ClassroomTable {
   class: string;
@@ -34,102 +17,171 @@ interface ClassroomTable {
   groupCode: string;
 }
 
-function FilterSection({
-  classLevels,
-  term,
-  yearsList,
-  selectedClassLevel,
-  selectedFaculty,
-  selectedProgram,
-  selectedTerm,
-  selectedYear,
-  currentYear,
-  vocationalFaculties,
-  diplomaFaculties,
-  program,
-  handleClassLevelChange,
-  handleFacultyChange,
-  handleProgramChange,
-  setSelectedTerm,
-  setSelectedYear,
-}: any) {
-  return (
-    <div className="flex flex-col mt-4 gap-4 w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-4 w-full">
-        <div className="flex flex-col gap-2 pt-8">
-          <Combobox
-            options={classLevels.map((classData: string) => ({
-              value: classData,
-              label: classData,
-            }))}
-            buttonLabel="ระดับการศึกษา"
-            onSelect={(selectedClass) => handleClassLevelChange(selectedClass)}
-          />
-        </div>
-        <div className="flex flex-col gap-2 pt-8">
-          <Combobox
-            buttonLabel="กรุณาเลือกหลักสูตร"
-            options={(selectedClassLevel === "ปวช"
-              ? vocationalFaculties
-              : diplomaFaculties
-            ).map((item: any) => ({
-              value: item.facultyName,
-              label: item.facultyName,
-            }))}
-            onSelect={(selected) => handleFacultyChange(selected)}
-            disabled={!selectedClassLevel}
-          />
-        </div>
-        <div className="flex flex-col gap-2 pt-8">
-          <Combobox
-            buttonLabel="กรุณาเลือกสาขา"
-            options={program.map((program: string) => ({
-              value: program,
-              label: program,
-            }))}
-            onSelect={(selected) => handleProgramChange(selected)}
-            disabled={!selectedFaculty}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label>ภาคเรียน</label>
-          <Combobox
-            options={term.map((item: string) => ({
-              value: item,
-              label: item,
-            }))}
-            defaultValue="2"
-            buttonLabel="เลือกภาคเรียน"
-            onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label>ปีการศึกษา</label>
-          <Combobox
-            options={yearsList.map((item: string) => ({
-              value: item,
-              label: item,
-            }))}
-            defaultValue={currentYear.toString()}
-            buttonLabel="เลือกปีการศึกษา"
-            onSelect={(selectedYear) => setSelectedYear(selectedYear)}
-          />
-        </div>
-      </div>
-      <hr className="border-t border-gray-300 mt-2" />
-    </div>
-  );
-}
+const classRoomTable: ClassroomTable[] = [
+  {
+    class: "ปวช 1/1",
+    facultyName: "บริการและการจัดการ",
+    programName: "การตลาด",
+    groupId: "G1001",
+    groupCode: "MK13A",
+  },
+  {
+    class: "ปวส 1/2",
+    facultyName: "พานิชยกรรม",
+    programName: "การบัญชี",
+    groupId: "G1002",
+    groupCode: "AC12B",
+  },
+  {
+    class: "ปวช 1/3",
+    facultyName: "พานิชยกรรม",
+    programName: "การตลาด",
+    groupId: "G1003",
+    groupCode: "MK13B",
+  },
+  {
+    class: "ปวส 1/1",
+    facultyName: "บริการและการจัดการ",
+    programName: "การบัญชี",
+    groupId: "G1004",
+    groupCode: "AC12A",
+  },
+  {
+    class: "ปวช 1/4",
+    facultyName: "พานิชยกรรม",
+    programName: "การบัญชี",
+    groupId: "G1005",
+    groupCode: "AC13C",
+  },
+  {
+    class: "ปวส 1/2",
+    facultyName: "บริการและการจัดการ",
+    programName: "การตลาด",
+    groupId: "G1006",
+    groupCode: "MK12D",
+  },
+  {
+    class: "ปวช 1/5",
+    facultyName: "บริการและการจัดการ",
+    programName: "การตลาด",
+    groupId: "G1007",
+    groupCode: "MK13F",
+  },
+  {
+    class: "ปวส 1/3",
+    facultyName: "พานิชยกรรม",
+    programName: "การตลาด",
+    groupId: "G1008",
+    groupCode: "MK12B",
+  },
+  {
+    class: "ปวช 1/6",
+    facultyName: "พานิชยกรรม",
+    programName: "การบัญชี",
+    groupId: "G1009",
+    groupCode: "AC13A",
+  },
+  {
+    class: "ปวส 1/4",
+    facultyName: "บริการและการจัดการ",
+    programName: "การบัญชี",
+    groupId: "G1010",
+    groupCode: "AC12F",
+  },
+  {
+    class: "ปวช 1/7",
+    facultyName: "บริการและการจัดการ",
+    programName: "การตลาด",
+    groupId: "G1011",
+    groupCode: "MK13D",
+  },
+  {
+    class: "ปวส 1/5",
+    facultyName: "พานิชยกรรม",
+    programName: "การบัญชี",
+    groupId: "G1012",
+    groupCode: "AC12D",
+  },
+  {
+    class: "ปวช 1/8",
+    facultyName: "พานิชยกรรม",
+    programName: "การตลาด",
+    groupId: "G1013",
+    groupCode: "MK13E",
+  },
+  {
+    class: "ปวส 1/6",
+    facultyName: "บริการและการจัดการ",
+    programName: "การบัญชี",
+    groupId: "G1014",
+    groupCode: "AC12G",
+  },
+  {
+    class: "ปวช 1/9",
+    facultyName: "บริการและการจัดการ",
+    programName: "การตลาด",
+    groupId: "G1015",
+    groupCode: "MK13G",
+  },
+  {
+    class: "ปวส 1/7",
+    facultyName: "พานิชยกรรม",
+    programName: "การบัญชี",
+    groupId: "G1016",
+    groupCode: "AC12C",
+  },
+  {
+    class: "ปวช 1/10",
+    facultyName: "พานิชยกรรม",
+    programName: "การตลาด",
+    groupId: "G1017",
+    groupCode: "MK13C",
+  },
+  {
+    class: "ปวส 1/8",
+    facultyName: "บริการและการจัดการ",
+    programName: "การบัญชี",
+    groupId: "G1018",
+    groupCode: "AC12E",
+  },
+  {
+    class: "ปวช 1/11",
+    facultyName: "บริการและการจัดการ",
+    programName: "การบัญชี",
+    groupId: "G1019",
+    groupCode: "AC13B",
+  },
+  {
+    class: "ปวส 1/9",
+    facultyName: "พานิชยกรรม",
+    programName: "การตลาด",
+    groupId: "G1020",
+    groupCode: "MK12A",
+  },
+];
 
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 export function ClassroomGrading() {
   const router = useRouter();
   const classLevels = ["ปวช", "ปวส"];
-  // const levelGrade: Record<string, string[]> = {
-  //   ปวช: ["1", "2", "3"],
-  //   ปวส: ["1", "2"],
-  // };
   const term = ["1", "2"];
+
+  // Calculate current academic year and term
   const dateTime = new Date();
   const currentMonth = dateTime.getMonth();
   const currentYear =
@@ -137,126 +189,82 @@ export function ClassroomGrading() {
       ? dateTime.getFullYear() + 543
       : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
+
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
+
+  // State management
+  const [dataTable, setDataTable] = useState<ClassroomTable[]>(classRoomTable);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
+
+  // Filter states
   const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
-  // data in table
-  const [dataTable, setDataTable] = useState<ClassroomTable[]>([]);
-
-  // use for selected filter
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [selectedGradeLevel, setSelectedGradeLevel] = useState<string>("");
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
 
-  const [vocationalFaculties, setVocationalFaculties] = useState<FacultyInfo[]>(
-    []
-  );
-  const [diplomaFaculties, setDiplomaFaculties] = useState<FacultyInfo[]>([]);
-  const [program, setProgram] = useState<string[]>([]);
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
-  // get faculties from selected course
-  const getFaculties = (courseData: EducationData[]): FacultyInfo[] => {
-    return courseData.flatMap((faculty) =>
-      faculty.groupsCourse.map((group) => ({
-        facultyName: group.facultyName,
-        groupProgram: group.groupProgram,
-      }))
-    );
-  };
-  // get program from selected faculty
-  const getPrograms = (selectedFaculty: string) => {
-    const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
-      (item) => item.facultyName === selectedFaculty
-    );
-    return faculties[0]?.groupProgram.map((item) => item.programName) || [];
-  };
+  // Faculty and program data
 
-  //   console.log(studentColumnsData);
-  // Function to handle selection change
+  const [searchInput, setSearchInput] = useState<string>("");
+  const debouncedSearchInput = useDebounce(searchInput, 300);
 
-  const handleClassLevelChange = (selected: string) => {
-    setSelectedClassLevel(selected);
-    setSelectedFaculty("");
-    setSelectedProgram("");
-    setSelectedGradeLevel("");
-    setSelectedRoom("");
-  };
-
-  const handleFacultyChange = (selected: string) => {
-    setSelectedFaculty(selected);
-    setSelectedProgram("");
-    setSelectedGradeLevel("");
-    setSelectedRoom("");
-    const getProgramsBySelected = getPrograms(selected);
-    setProgram(getProgramsBySelected);
-  };
-  const handleProgramChange = (selected: string) => {
-    setSelectedProgram(selected);
-    setSelectedGradeLevel("");
-    setSelectedRoom("");
-  };
-
-  const [summaryData, setSummaryData] =
-    useState<GroupSummaryGradeResponse | null>(null);
-
-    const [isInitialLoading, setIsInitialLoading] = useState(true);
-  const [isDataLoading, setIsDataLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchFilterData = async () => {
-      setIsDataLoading(true);
-      const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
-      try{
-        const formattedData: ClassroomTable[] = rawData.map(
-          (item: filterProgramsParamsData) => ({
-            class: `${item.class}. ${item.groupName}`,
-            facultyName: item.facultyName,
-            groupId: item.groupId,
-            programName: item.programName,
-            groupCode: item.groupCode,
-          })
-        );
-  
-        setDataTable(formattedData);
-  
-        // set for filter data
-        const data = await filterProgramsViewData(selectedTerm, selectedYear);
-        const vocational = data.filter(
-          (item: EducationData) => item.classLevel === "ปวช"
-        );
-        const diploma = data.filter(
-          (item: EducationData) => item.classLevel === "ปวส"
-        );
-  
-        setVocationalFaculties(getFaculties(vocational));
-        setDiplomaFaculties(getFaculties(diploma));
-        setIsLoadingPage(true);
-        setIsInitialLoading(false);
-      }
-      catch (error) {
-        console.error("Error fetching filter data:", error);
-        toast.error("ไม่สามารถโหลดข้อมูลได้");
-      }finally {
-        setIsDataLoading(false);
-      }
-    };
-
-    fetchFilterData();
+  const uniqueFaculties = useMemo(() => {
+    return Array.from(
+      new Set(classRoomTable.map((item) => item.facultyName))
+    ).sort();
   }, []);
 
-  // if (isInitialLoading) {
-  //   return <TableSkeleton rows={8} columns={5} />;
-  // }
+  const filteredPrograms = useMemo(() => {
+    return Array.from(
+      new Set(
+        classRoomTable
+          .filter((item) =>
+            selectedFaculty ? item.facultyName === selectedFaculty : true
+          )
+          .map((item) => item.programName)
+      )
+    ).sort();
+  }, [selectedFaculty]);
 
-  const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
+  // Get faculties from selected course
+  const getFaculties = useCallback(
+    (courseData: EducationData[]): FacultyInfo[] => {
+      return courseData.flatMap((faculty) =>
+        faculty.groupsCourse.map((group) => ({
+          facultyName: group.facultyName,
+          groupProgram: group.groupProgram,
+        }))
+      );
+    },
+    []
+  );
 
+  // Clear all filters
+  const clearFilters = useCallback(() => {
+    setSelectedClassLevel("");
+    setSelectedFaculty("");
+    setSelectedProgram("");
+    setSearchInput("");
+  }, []);
+
+  // Optimized filtering logic
   const filteredData = useMemo(() => {
+    if (
+      !selectedClassLevel &&
+      !selectedFaculty &&
+      !selectedProgram &&
+      !debouncedSearchInput
+    ) {
+      return dataTable.sort(
+        (a, b) => +a.groupId.slice(1) - +b.groupId.slice(1)
+      );
+    }
+
     const filtered = dataTable.filter((item) => {
       const matchClassLevel = selectedClassLevel
         ? item.class.substring(0, 3) === selectedClassLevel
@@ -265,18 +273,29 @@ export function ClassroomGrading() {
       const matchFaculty = selectedFaculty
         ? item.facultyName === selectedFaculty
         : true;
+
       const matchProgram = selectedProgram
         ? item.programName === selectedProgram
         : true;
-      const matchRoom = selectedRoom ? item.class === selectedClassLevel : true;
 
-      // Extract year level from item.class (e.g., xxx. 1/x → yearLevel = 1)
-      const yearLevel = parseInt(item.class.substring(5, 6), 10);
-
+      const yearLevel = Number.parseInt(item.class.substring(5, 6), 10);
       const matchYearLevel = currentYear - Number(selectedYear);
-      // console.log(currentYear, selectedYear, yearLevel, matchYearLevel);
-
       let isYearLevelValid = false;
+
+      const matchSearch = debouncedSearchInput
+        ? item.groupCode
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase()) ||
+          item.class
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase()) ||
+          item.facultyName
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase()) ||
+          item.programName
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase())
+        : true;
 
       if (matchYearLevel === 0) {
         isYearLevelValid = true;
@@ -290,100 +309,77 @@ export function ClassroomGrading() {
         matchClassLevel &&
         matchFaculty &&
         matchProgram &&
-        matchRoom &&
-        isYearLevelValid
+        isYearLevelValid &&
+        matchSearch
       );
     });
 
-    const sortedData = filtered.sort((a, b) => +a.groupId - +b.groupId);
-    return sortedData;
+    return filtered.sort((a, b) => +a.groupId.slice(1) - +b.groupId.slice(1));
   }, [
     dataTable,
     selectedClassLevel,
     selectedFaculty,
     selectedProgram,
-    selectedRoom,
     selectedYear,
     currentYear,
+    debouncedSearchInput,
   ]);
 
-  const handleDownloadPDF = async (
-    groupId: number,
-    findAClassLevel: string
-  ) => {
-    const result = await getGroupSummaryGradeViewData(
-      groupId,
-      selectedTerm,
-      selectedYear
-    );
+  const tableData = useMemo(() => {
+    return filteredData.map((item, index) => ({
+      ...item,
+      index: index + 1,
+    }));
+  }, [filteredData]);
 
-    if (!result) {
-      toast.error("ไม่พบข้อมูลสำหรับดาวน์โหลด PDF");
-      return;
-    }
-    setSummaryData(result);
-
-    const convertTOPDFData: DataList = {
-      generalData: result.generalData
-        ? {
-            groupId: result.generalData.groupId,
-            groupName: result.generalData.groupName,
-            groupCode: result.generalData.groupCode,
-            class: result.generalData.class,
-            facultyName: result.generalData.facultyName,
-            programName: result.generalData.programName,
-            term: result.generalData.term,
-            year: result.generalData.year,
-          }
-        : {
-            groupId: 0,
-            groupName: "",
-            groupCode: "",
-            class: "",
-            facultyName: "",
-            programName: "",
-            term: "",
-            year: 0,
-          },
-      studentList: result.students || [],
-    };
-
-    if (!convertTOPDFData.generalData.groupId) {
-      toast.error("ข้อมูลไม่ครบถ้วน");
-      return;
-    }
-    TotalScoreInGroup(convertTOPDFData);
-  };
-
-  const handleDownloadExcel = async (groupId: number) => {
-    try {
-      const summaryData = await getGroupSummaryGradeViewData(
-        groupId,
-        selectedTerm,
-        selectedYear
+  const onRowClick = useCallback(
+    (item: ClassroomTable) => {
+      router.push(
+        `/academic/score-management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
       );
-      if (summaryData) {
-        ConvertClassroomGradingToExcel(
-          summaryData.generalData,
-          summaryData.students
-        );
-      } else {
-        alert("No student data available for this group.");
-      }
-    } catch (error) {
-      console.error("Error fetching student data:", error);
-      alert("Failed to fetch student data. Please try again.");
-    }
-  };
+    },
+    [router, selectedTerm, selectedYear]
+  );
 
-  const onRowClick = (item: ClassroomTable) => {
-    router.push(
-      `/academic/score-management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
-    );
-  };
+  // Uncomment when ready to use real data
+  // useEffect(() => {
+  //   const fetchFilterData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
+  //       const formattedData: ClassroomTable[] = rawData.map(
+  //         (item: filterProgramsParamsData) => ({
+  //           class: `${item.class}. ${item.groupName}`,
+  //           facultyName: item.facultyName,
+  //           groupId: item.groupId,
+  //           programName: item.programName,
+  //           groupCode: item.groupCode,
+  //         })
+  //       );
+  //       setDataTable(formattedData);
+
+  //       const data = await filterProgramsViewData(selectedTerm, selectedYear);
+  //       const vocational = data.filter(
+  //         (item: EducationData) => item.classLevel === "ปวช"
+  //       );
+  //       const diploma = data.filter(
+  //         (item: EducationData) => item.classLevel === "ปวส"
+  //       );
+
+  //       setVocationalFaculties(getFaculties(vocational));
+  //       setDiplomaFaculties(getFaculties(diploma));
+  //     } catch (error) {
+  //       console.error("Error fetching filter data:", error);
+  //       toast.error("ไม่สามารถโหลดข้อมูลได้");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchFilterData();
+  // }, [selectedTerm, selectedYear, getFaculties]);
 
   const columns = [
-    { label: "ลำดับ", key: "groupId", className: "w-1/12 justify-center" },
+    { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-2/12" },
     { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
     {
@@ -400,7 +396,7 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
-              handleDownloadPDF(Number(row.groupId), row.class);
+              // handleDownloadPDF(Number(row.groupId), row.class);
               e.stopPropagation();
             }}
           >
@@ -414,9 +410,9 @@ export function ClassroomGrading() {
             )}
           </button>
           <button
-            className="px-3 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+            className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
-              handleDownloadExcel(Number(row.groupId));
+              // handleDownloadExcel(Number(row.groupId));
               e.stopPropagation();
             }}
           >
@@ -427,51 +423,202 @@ export function ClassroomGrading() {
     },
   ];
 
-  return (
-    <>
-      <header className="flex flex-col p-4 border-2 mt-4 rounded-lg w-full">
-        <Suspense fallback={<div>Loading filters...</div>}>
-          <FilterSection
-            classLevels={classLevels}
-            term={term}
-            yearsList={yearsList}
-            selectedClassLevel={selectedClassLevel}
-            selectedFaculty={selectedFaculty}
-            selectedProgram={selectedProgram}
-            selectedTerm={selectedTerm}
-            selectedYear={selectedYear}
-            currentYear={currentYear}
-            vocationalFaculties={vocationalFaculties}
-            diplomaFaculties={diplomaFaculties}
-            program={program}
-            handleClassLevelChange={handleClassLevelChange}
-            handleFacultyChange={handleFacultyChange}
-            handleProgramChange={handleProgramChange}
-            setSelectedTerm={setSelectedTerm}
-            setSelectedYear={setSelectedYear}
-          />
-        </Suspense>
+  if (isLoading) {
+    return <TableSkeleton rows={8} columns={5} />;
+  }
 
-        <Suspense fallback={<TableSkeleton />}>
-        {isDataLoading ? (
-           <TableSkeleton rows={8} columns={5} />
-          // <div className="flex items-center justify-center py-12 space-x-2">
-          //   <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
-          //   <span className="text-blue-600">กำลังโหลดข้อมูล...</span>
-          // </div>
-        ) : (
-          <DataTable
-            columns={columns}
-            data={filteredData.map((item, index) => ({
-              ...item,
-              index: index + 1,
-            }))}
-            onRowClick={onRowClick}
-            pagination={10}
-          />
-        )}
-      </Suspense>
-      </header>
-    </>
+  return (
+    <div className="bg-white p-6 rounded-lg shadow-sm border space-y-6">
+      {/* Filter Section - Above Table */}
+      <div className="bg-gray-50 p-4 rounded-lg border">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-gray-900">ตัวกรองข้อมูล</h3>
+            {(selectedClassLevel ||
+              selectedFaculty ||
+              // selectedProgram ||
+              searchInput) && (
+              <button
+                onClick={clearFilters}
+                className="text-blue-600 hover:text-blue-800 underline text-sm"
+              >
+                ล้างตัวกรอง
+              </button>
+            )}
+          </div>
+          <div></div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                ระดับการศึกษา
+              </label>
+              <Combobox
+                options={[
+                  { value: "", label: "ทั้งหมด" },
+                  ...classLevels.map((value) => ({ value, label: value })),
+                ]}
+                buttonLabel={selectedClassLevel || "เลือกระดับการศึกษา"}
+                onSelect={(value) => {
+                  setSelectedClassLevel(value);
+                  setSelectedFaculty("");
+                  setSelectedProgram("");
+                }}
+              />
+            </div>
+
+            {/* Faculty Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                หลักสูตรการศึกษา
+              </label>
+              <Combobox
+                options={[
+                  { value: "", label: "ทั้งหมด" },
+                  ...uniqueFaculties.map((value) => ({ value, label: value })),
+                ]}
+                buttonLabel={selectedFaculty || "เลือกหลักสูตรการศึกษา"}
+                onSelect={(value) => {
+                  setSelectedFaculty(value);
+                  setSelectedProgram("");
+                }}
+              />
+            </div>
+
+            {/* Program Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                สาขาวิชา
+              </label>
+              <Combobox
+                options={[
+                  { value: "", label: "ทั้งหมด" },
+                  ...filteredPrograms.map((value) => ({ value, label: value })),
+                ]}
+                buttonLabel={selectedProgram || "เลือกสาขาวิชา"}
+                onSelect={(value) => setSelectedProgram(value)}
+              />
+            </div>
+
+            {/* Term Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                ภาคเรียน
+              </label>
+              <Combobox
+                options={term.map((item) => ({
+                  value: item,
+                  label: `ภาคเรียนที่ ${item}`,
+                }))}
+                buttonLabel={`ภาคเรียนที่ ${selectedTerm}`}
+                onSelect={setSelectedTerm}
+              />
+            </div>
+
+            {/* Year Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                ปีการศึกษา
+              </label>
+              <Combobox
+                options={yearsList.map((item) => ({
+                  value: item,
+                  label: item,
+                }))}
+                buttonLabel={selectedYear}
+                onSelect={setSelectedYear}
+              />
+            </div>
+          </div>
+          {/* Search Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              ค้นหา
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="ค้นหาชั้นการเรียน..."
+                className="pl-10 w-full"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {(selectedClassLevel ||
+            selectedFaculty ||
+            selectedProgram ||
+            debouncedSearchInput) && (
+            <div className="flex flex-wrap gap-2 pt-2 border-t">
+              <span className="text-sm text-gray-600">ตัวกรองที่ใช้:</span>
+              {selectedClassLevel && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  ระดับ: {selectedClassLevel}
+                  <button
+                    onClick={() => setSelectedClassLevel("")}
+                    className="ml-1 text-blue-600 hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {selectedFaculty && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  หลักสูตร: {selectedFaculty}
+                  <button
+                    onClick={() => setSelectedFaculty("")}
+                    className="ml-1 text-green-600 hover:text-green-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {selectedProgram && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  สาขา: {selectedProgram}
+                  <button
+                    onClick={() => setSelectedProgram("")}
+                    className="ml-1 text-purple-600 hover:text-purple-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {debouncedSearchInput && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  ค้นหา: "{debouncedSearchInput}"
+                  <button
+                    onClick={() => setSearchInput("")}
+                    className="ml-1 text-purple-600 hover:text-purple-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Results Summary */}
+      <div className="flex items-center justify-between text-sm text-gray-600">
+        <span>
+          แสดง {tableData.length} จาก {dataTable.length} รายการ
+        </span>
+        <span className="text-xs text-gray-500">
+          ภาคเรียนที่ {selectedTerm} ปีการศึกษา {selectedYear}
+        </span>
+      </div>
+
+      {/* Data Table */}
+      <DataTable
+        columns={columns}
+        data={tableData}
+        onRowClick={onRowClick}
+        pagination={10}
+      />
+    </div>
   );
 }
