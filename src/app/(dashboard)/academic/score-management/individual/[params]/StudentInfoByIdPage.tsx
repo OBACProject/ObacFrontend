@@ -109,7 +109,6 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
           </div>
         </div>
 
-        {/* Student Info Card */}
         <StudentInfoCard
           student={studentTranscriptDataById}
           scoreFileData={scoreFileData}
@@ -118,7 +117,6 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
           }}
         />
 
-        {/* Terms Table */}
         <StudentTermTable
           termData={termData}
           studentData={{

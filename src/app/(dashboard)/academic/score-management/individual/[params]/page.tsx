@@ -39,12 +39,10 @@ const LoadingSkeleton = () => {
         </CardContent>
       </Card>
 
-      {/* Student Term Table Skeleton */}
       <Card className="shadow-sm">
         < TableSkeleton />
       </Card>
 
-      {/* Loading Animation */}
       <div className="flex items-center justify-center py-8">
         <div className="flex items-center gap-3 text-blue-600">
           <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>

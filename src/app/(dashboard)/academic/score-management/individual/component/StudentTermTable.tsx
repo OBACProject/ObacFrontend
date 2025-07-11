@@ -53,7 +53,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
         <Badge
           variant={row.isFailed ? "destructive" : "default"}
           className={`px-3 py-1 font-semibold ${
-            row.isFailed ? "bg-red-100 text-red-800 border-red-200" : "bg-green-100 text-green-800 border-green-200"
+            row.isFailed ? " text-red-800 border-red-200" : " text-green-800 border-green-200"
           }`}
         >
           {row.finalGrade}
