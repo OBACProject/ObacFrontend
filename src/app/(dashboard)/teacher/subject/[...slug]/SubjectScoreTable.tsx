@@ -1,21 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  GetGradBySubjectId,
-} from "@/dto/gradDto";
+import { GradStudentInSubject } from "@/dto/gradDto";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
 interface Props {
-  grads?: GetGradBySubjectId[];
+  grads?: GradStudentInSubject[];
   onEdit: boolean | null | undefined;
 }
 
 export default function SubjectTableForm({ grads, onEdit }: Props) {
   const [remark, setRemark] = useState<string>("");
-  const [gradDatas, setGradData] = useState<GetGradBySubjectId[]>([]);
+  const [gradDatas, setGradData] = useState<GradStudentInSubject[]>([]);
   useEffect(() => {
     const sortedData = [...(grads ?? [])].sort(
       (a, b) => a.studentId - b.studentId
@@ -24,7 +22,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   }, [grads]);
   const handleInputChange = (
     index: number,
-    field: keyof GetGradBySubjectId,
+    field: keyof GradStudentInSubject,
     value: string
   ) => {
     const updatedStudents = [...gradDatas];
@@ -122,43 +120,43 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   };
 
   return (
-    <div className="w-full px-5 ">
-      <div className="  bg-[#cfe4ff] grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border-2 border-gray-400">
-        <span className="grid place-items-center text-xl py-2">No.</span>
-        <span className="grid place-items-center text-xl  py-2">
+    <div className="w-full mb-10 ">
+      <div className="  bg-gray-100 grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] border border-gray-300">
+        <span className="grid place-items-center text-lg py-1">No.</span>
+        <span className="grid place-items-center text-lg  py-1">
           รหัสนักเรียน
         </span>
-        <span className="grid place-items-center text-xl  py-2">
+        <span className="grid place-items-center text-lg  py-1">
           ชื่อ - นามสกุล
         </span>
-        <span className="text-center   pt-2 pb-1">
-          <div className="text-xl">คะแนนเก็บ</div>
-          <div className="text-md text-gray-600">50 คะแนน</div>
+        <span className="text-center py-1 ">
+          <div className="text-lg">คะแนนเก็บ</div>
+          <div className="text-sm text-gray-500">50 คะแนน</div>
         </span>
-        <span className="text-center  pt-2 pb-1">
-          <div className="text-xl">คะแนนจิตพิสัย</div>
-          <div className="text-md text-gray-600">20 คะแนน</div>
+        <span className="text-center py-1 ">
+          <div className="text-lg">คะแนนจิตพิสัย</div>
+          <div className="text-sm text-gray-500">20 คะแนน</div>
         </span>
-        <span className="text-center  pt-2 pb-1">
-          <div className="text-xl">คะแนนสอบ</div>
-          <div className="text-md text-gray-600">30 คะแนน</div>
+        <span className="text-center py-1 ">
+          <div className="text-lg">คะแนนสอบ</div>
+          <div className="text-sm text-gray-500">30 คะแนน</div>
         </span>
-        <span className="grid place-items-center text-xl  py-2">คะแนนรวม</span>
-        <span className="grid place-items-center  text-xl py-2">เกรด</span>
-        <span className="grid place-items-center text-xl  py-2">หมายเหตุ</span>
+        <span className="grid place-items-center text-lg  py-1 ">คะแนนรวม</span>
+        <span className="grid place-items-center  text-lg py-1">เกรด</span>
+        <span className="grid place-items-center text-lg  py-1">หมายเหตุ</span>
       </div>
       {gradDatas?.map((item, index) => (
         <div
-          className=" text-lg border-b-2  grid group hover:bg-[#e8f3ff]   grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%]"
+          className=" text-sm border-b-[1px]  grid group hover:bg-[#e8f3ff]   grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%]"
           key={item.studentId}
         >
-          <span className="text-center font-semibold border-l-2 border-r-2 py-2">
+          <span className="text-center flex items-center justify-center font-semibold border-l-[1px] border-r-[1px] py-1">
             {index + 1}.
           </span>
-          <span className="text-center border-r-2 py-2">
+          <span className="text-center border-r-[1px] py-1 flex items-center justify-center ">
             {item.studentCode}
           </span>
-          <span className="text-start pl-5 border-r-2 py-2">
+          <span className="text-start pl-5 border-r-[1px] flex py-1 items-center justify-start">
             {item.firstName} {item.lastName}
           </span>
           <input
@@ -167,10 +165,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.collectScore ?? 0}
             min={0}
             max={50}
-            className={` text-center enabled:bg-blue-50   bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+            className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
               (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
-                ? "outline-red-500 border-red-500 rounded-md border-[3px]"
-                : "border-gray-300 border-r-2"
+                ? "outline-red-500 border-red-500 rounded-md border-1"
+                : "border-gray-300 border-r-[1px]"
             }`}
             onChange={(e) =>
               handleInputChange(index, "collectScore", e.target.value)
@@ -182,10 +180,10 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.affectiveScore ?? 0}
             min={0}
             max={20}
-            className={`text-center enabled:bg-blue-50   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
+            className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
               (item.affectiveScore ?? 0) > 20 || (item.affectiveScore ?? 0) < 0
-                ? "border-red-500 outline-red-500 rounded-md border-[3px]"
-                : "border-gray-300 border-r-2"
+                ? "border-red-500 outline-red-500 rounded-md border-[1px]"
+                : "border-gray-300 border-r-[1px]"
             }`}
             onChange={(e) =>
               handleInputChange(index, "affectiveScore", e.target.value)
@@ -197,21 +195,21 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
             value={item.testScore ?? 0}
             min={0}
             max={30}
-            className={`text-center enabled:bg-blue-50   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+            className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
               (item.testScore ?? 0) > 30 || (item.testScore ?? 0) < 0
                 ? "rounded-md outline-red-500 border-red-500  border-[3px]"
-                : "border-gray-300 border-r-2"
+                : "border-gray-300 border-r-[1px]"
             }`}
             onChange={(e) =>
               handleInputChange(index, "testScore", e.target.value)
             }
           />
-          <span className="text-center flex justify-center items-center border-r-2 py-2">
+          <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-2">
             {(item.collectScore ?? 0) +
               (item.testScore ?? 0) +
               (item.affectiveScore ?? 0)}
           </span>
-          <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-2 ">
+          <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-lg border-r-[1px]">
             <div className="flex justify-center px-2 py-1">
               <Combobox
                 buttonLabel="เกรด"
@@ -233,7 +231,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
               />
             </div>
           </span>
-          <div className="flex justify-center px-2 py-1">
+          <div className="flex justify-center px-2 py-1 border-r-[1px]">
             <Combobox
               buttonLabel="หมายเหตุ"
               disabled={!onEdit}
@@ -249,7 +247,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           </div>
         </div>
       ))}
-      <div className="my-5 w-full grid place-items-end  ">
+      {/* <div className="my-5 w-full grid place-items-end  ">
         <button
           onClick={saveChanges}
           disabled={!onEdit}
@@ -257,7 +255,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
         >
           บันทึกคะแนน
         </button>
-      </div>
+      </div> */}
       <hr />
     </div>
   );

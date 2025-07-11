@@ -1,4 +1,4 @@
-export interface GetGradBySubjectId {
+export interface GradStudentInSubject {
   [key: string]: number | string;
   gradeId: number;
   subjectId: number;

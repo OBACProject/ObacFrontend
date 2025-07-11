@@ -22,7 +22,19 @@ export default function Form() {
         {subjects.length > 0 ? (
           <div className="px-10 w-[70%] grid gap-4 ">
             {subjects.map((items) => (
-              <Link key={items.subjectId} href="/">
+              <Link
+                key={items.subjectId}
+                href={
+                  "/teacher/subject/" +
+                  items.scheduleSubjectId +
+                  "/" +
+                  items.subjectName +
+                  "/" +
+                  items.subjectCode
+                  +"/"
+                  +items.class+"."+items.studentGroupName
+                }
+              >
                 <CardSubject
                   data={items}
                   term={currentTime.defaultTerm}
