@@ -64,7 +64,7 @@ export default function FilterableTable({ classroomId }: Props) {
     <>
       <div className='flex px-10 w-full justify-between items-center'>
         <HeaderLabel
-          Icon={<ScrollText className="w-8 h-8" />}
+          Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ปวส.${classroomId}/2`}
           className='text-blue'
         />

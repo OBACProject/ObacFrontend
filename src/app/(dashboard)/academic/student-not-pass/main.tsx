@@ -74,7 +74,7 @@ export default function Main() {
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
-        <HeaderLabel Icon={<User className="h-8 w-8"/>} title="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
+        <HeaderLabel Icon={<User className="h-7 w-7 text-white"/>} bg_icon="bg-red-500" title="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
       </div>
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
         <SelectTermAndYear

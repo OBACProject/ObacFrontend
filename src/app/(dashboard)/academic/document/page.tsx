@@ -1,43 +1,39 @@
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { CircleArrowDown, Paperclip } from "lucide-react";
+import PDFButtonTemplate from "@/components/PDF/PDFButtonTemplate";
+import {
+  genGradSummaryForStudent,
+  genGroupSummaryGrad,
+} from "@/lib/PDFGenarate/generateFile";
+import { BookCheck, FileText, GraduationCap } from "lucide-react";
 import React from "react";
 
 export default function page() {
   return (
-    <div className="pl-10 py-5">
+    <div className="pl-10 py-5 h-full">
       <div className="w-full px-5">
         <div className="py-5 w-full">
           <HeaderLabel
             title="ตัวอย่างเอกสาร"
-            Icon={<Paperclip className="text-blue-600 w-5 h-5" />}
+            Icon={<FileText className="text-white h-7 w-7 " />}
           />
         </div>
-        <div className="border border-gray-200 rounded-md w-full py-5 grid grid-cols-4 gap-5 px-5">
-          <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบตรวจเกรด
-          </button>
-           <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบสรุปผลการเรียน
-          </button>
-           <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบรายชื่อ
-          </button>
-           <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบคะแนนประจำวิชา
-          </button>
-           <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบ รวบ 3 ป
-          </button>
-           <button className="px-5 py-1 text-gray-700 font-prompt text-lg  bg-slate-200 rounded-md hover:bg-blue-100 flex justify-center gap-2 items-center">
-            <CircleArrowDown className="text-black w-5 h-5" />
-            ใบตรวจเกรด
-          </button>
-
+        <div className=" rounded-md w-full py-5 grid grid-cols-4 gap-5 px-5">
+          <PDFButtonTemplate
+            title={"ใบสรุปผลการเรียน"}
+            description="สรุปผลการเรียนทุกเทอมของนักเรียน (ต่อคน)"
+            icon={<GraduationCap className="w-5 h-5 text-white" />}
+            icon_bg="bg-blue-500"
+            doc_type="pdf"
+            onClick={genGradSummaryForStudent}
+          />
+          <PDFButtonTemplate
+            title={"ใบตรวจเกรด"}
+            description="เอกสารตรวจเกรดนักเรียนทั้งห้อง"
+            icon={<BookCheck className="w-5 h-5 text-white" />}
+            icon_bg="bg-blue-500"
+            doc_type="pdf"
+            onClick={genGroupSummaryGrad}
+          />
         </div>
       </div>
     </div>

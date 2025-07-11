@@ -197,7 +197,7 @@ export default function Main() {
   return (
     <div className="pl-16 py-5">
       <div className="flex justify-start px-10 ">
-       <HeaderLabel title="เลื่อนชั้นนักเรียน" Icon={<ArrowUpDown className="h-8 w-8 "/>}/>
+       <HeaderLabel title="เลื่อนชั้นนักเรียน" Icon={<ArrowUpDown className="h-7 w-7  text-white"/>}/>
       </div>
 
       <div className="flex flex-wrap items-center gap-4 px-10 py-5">

@@ -1,13 +1,32 @@
-import {
-  GeneralData,
-  StudentList,
-} from "@/app/(dashboard)/academic/score-management/classroom/[...params]/page";
+
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
+  Subject,
 } from "@/dto/gradDto";
 import { StudentListByGroupIDDto } from "@/dto/studentDto";
 import ExcelJS from "exceljs";
+
+export interface GeneralData {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  facultyName: string;
+  programName: string;
+  term: string;
+  year: number;
+}
+
+export interface StudentList {
+  studentId: number;
+  studentCode: string;
+  name: string;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  subjects: Record<string, string>;
+}
 
 export async function ConvertScoreToExcel(
   data: convertGradBySubjectId[],

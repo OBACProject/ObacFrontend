@@ -7,7 +7,7 @@ import {
 } from "@/dto/gradDto";
 import { GetScheduleBysubjectId } from "@/dto/schedule";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
-import { ConvertScoreToExcel } from "@/lib/convertToExcel";
+import { ConvertScoreToExcel } from "@/lib/Excel/convertToExcel";
 import { CircleX, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 

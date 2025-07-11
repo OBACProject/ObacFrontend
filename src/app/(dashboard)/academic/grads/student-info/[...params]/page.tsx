@@ -11,7 +11,7 @@ import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
-} from "@/lib/convertToExcel";
+} from "@/lib/Excel/convertToExcel";
 import { updateGradingStundetData } from "@/resource/academics/grading/api/gradingApiData";
 import { getSubjectBySubjectIdViewData } from "@/resource/academics/grading/viewData/academicStudentViewData";
 import { CircleX, ClipboardCheck, Pencil, ScrollText } from "lucide-react";
@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { GradingModeComponent } from "../../../../../(dashboard)/academic/grads/components/GradingModeComponent";
-
+   
 const AcademicStudentInfo = ({ params }: { params: { params: string[] } }) => {
   const subjectId = params.params[0];
   const scheduleSubjectId = params.params[1];

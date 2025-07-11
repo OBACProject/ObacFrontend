@@ -5,7 +5,7 @@ import {
   GetStudentListByGroupIDDto,
   StudentListByGroupIDDto,
 } from "@/dto/studentDto";
-import { ConvertClassroomToExcel } from "@/lib/convertToExcel";
+import { ConvertClassroomToExcel } from "@/lib/Excel/convertToExcel";
 import { Download, Loader2, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

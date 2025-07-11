@@ -304,7 +304,7 @@ export default function StudentClassroomContent() {
       {/* Header */}
       <HeaderLabel
         title="ออกเกรดแต่ละรายวิชา"
-        Icon={<ScrollText className="w-8 h-8" />}
+        Icon={<ScrollText className="h-7 w-7 text-white" />}
       />
 
       {/* FilterBar */}
