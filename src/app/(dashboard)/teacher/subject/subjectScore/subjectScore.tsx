@@ -6,18 +6,11 @@ export default function OtherPage() {
   const searchParams = useSearchParams();
   const subjectId = searchParams.get("subject");
   const groupId = searchParams.get("group");
-  const isComplete = searchParams.get("iscomplete");
-  const term = searchParams.get("term")
-  const year = searchParams.get("year")
-  const className = searchParams.get("class")
+  const isComplete = ""
+  const term = "1"
+  const year = 2440
+  const className = "00000"
 
-  if (!subjectId || !groupId || !isComplete || !term || !year || !className) {
-    return (
-      <div className="border-2 px-5 grid place-items-center border-gray-200 text-gray-500 text-3xl font-semibold py-20 border-dashed">
-        Loading...
-      </div>
-    );
-  }
 
   return (
     <div>
