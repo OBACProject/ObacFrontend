@@ -1,18 +1,18 @@
 "use server";
 import {
-  GetGradBySubjectId,
   GetGradPerTermByStudentIdDto,
   GetGropGradeAboveModel,
   GetGropGradeBelowModel,
   GetStudentGradeDetailDto,
   GetStudentGroupGradeByGroupIdTermYearDto,
 } from "@/dto/gradDto";
+import { CardSubjectResponse } from "@/dto/teacherDto";
 import { cookies } from "next/headers";
 
 export const fetchGetGradBySubjectId = async (
   subjectId: number,
   scheduleId: number
-): Promise<GetGradBySubjectId[]> => {
+): Promise<CardSubjectResponse[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
@@ -30,7 +30,7 @@ export const fetchGetGradBySubjectId = async (
     }
     const text = await response.text();
     const json = JSON.parse(text);
-    const data: GetGradBySubjectId[] = json.data;
+    const data: CardSubjectResponse[] = json.data;
     return data;
   } catch (err) {
     console.log(err);
