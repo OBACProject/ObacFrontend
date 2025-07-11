@@ -3,12 +3,13 @@ import React from "react";
 import "@app/styles/globals.css";
 import { HomePageNavBar } from "@/components/common/NavBar/HomePageNavBar";
 import HomeFooter from "@/components/common/Footer/HomeFooter";
+import ClientParallaxWrapper from "@/components/Wrapper/ClientParallaxWrapper";
 
 export const metadata: Metadata = {
   title: "เอกวิทย์บริหารธุรกิจ",
   description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ | OBAC",
   metadataBase: new URL("https://ekawit.ac.th"),
-  icons: { 
+  icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "ekawit",
     images: [
       {
-        url: "/banner/banner.jpg", 
+        url: "/banner/banner.jpg",
         width: 1200,
         height: 630,
         alt: "OBAC Open Graph Image",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     ],
     type: "website",
   },
-}
+};
 
 export default function RootLayout({
   children,
@@ -36,11 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <HomePageNavBar />
-        <div className="mt-16 mb-20">
-         {children} 
-        </div>
-        <HomeFooter />
+        <ClientParallaxWrapper>
+          <HomePageNavBar />
+          <div className="mt-16 mb-20">{children}</div>
+          <HomeFooter />
+        </ClientParallaxWrapper>
       </body>
     </html>
   );
