@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import { GraduationCap, AlertCircle, RefreshCw } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import SummaryGradPDF from "@/lib/PDF/SummaryGrade"
 import type { GetStudentGradeDetailDto } from "@/dto/gradDto"
 import type { StudentTranscriptData, YearData } from "@/dto/studentDto"
 import { StudentInfoCard } from "./../component/StudentInfoCard"
@@ -91,6 +90,10 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
         </Alert>
       </div>
     )
+  }
+
+  function SummaryGradPDF(scoreFileData: GetStudentGradeDetailDto) {
+    throw new Error("Function not implemented.")
   }
 
   return (

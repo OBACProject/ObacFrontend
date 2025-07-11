@@ -6,8 +6,8 @@ import type { FacultyInfo, EducationData } from "@/dto/studentDto";
 import { Loader2, Search } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TableSkeleton } from "./component/skeletons/TableSkeleton";
 import { Input } from "@/components/ui/input";
+import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 
 interface ClassroomTable {
   class: string;
@@ -436,7 +436,7 @@ export function ClassroomGrading() {
             <h3 className="font-semibold text-gray-900">ตัวกรองข้อมูล</h3>
             {(selectedClassLevel ||
               selectedFaculty ||
-              // selectedProgram ||
+              selectedProgram ||
               searchInput) && (
               <button
                 onClick={clearFilters}
