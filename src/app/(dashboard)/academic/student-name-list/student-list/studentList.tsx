@@ -3,10 +3,11 @@ import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { Input } from "@/components/ui/input";
 import { GetAllStudentTableDto } from "@/dto/studentDto";
-import { getAllStudentViewData } from "@/resource/academics/grading/viewData/individualGradeViewData";
-import { Loader2 } from "lucide-react";
+import { Loader2, Table } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { mockStudentTableData } from "@/resource/academics/mockData";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 export function StudentListPage(props: {
   handleTab: (tab: string) => void;
@@ -15,7 +16,7 @@ export function StudentListPage(props: {
   const [individualStudentData, setIndividualStudentData] = useState<
     GetAllStudentTableDto[]
   >([]);
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
   // Class levels from API
   const classLevels = Array.from(
     new Set(individualStudentData.map((student) => student.class))
@@ -31,9 +32,9 @@ export function StudentListPage(props: {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getAllStudentViewData();
+      const data = mockStudentTableData;
       setIndividualStudentData(data);
-      setIsLoadingPage(true)
+      setIsLoadingPage(true);
     };
 
     fetchData();
@@ -46,13 +47,17 @@ export function StudentListPage(props: {
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16 justify-center" },
-    { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
+    {
+      label: "รหัสนักเรียน",
+      key: "studentCode",
+      className: "w-2/16    text-blue-500 justify-center",
+    },
     { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-5/16" },
-    { label: "ระดับชั้น", key: "class", className: "w-2/16" },
+    { label: "ระดับชั้น", key: "class", className: "w-2/16 justify-center" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-5/16 text-start line-clamp-1",
+      className: "w-5/16 text-start line-clamp-1 justify-center",
     },
   ];
 
@@ -75,60 +80,61 @@ export function StudentListPage(props: {
 
   return (
     <>
-    {isLoadingPage ? (
+      {isLoadingPage ? (
         <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
-        <div className="flex gap-12 mt-4">
-          <div className="flex mx-auto gap-6 w-full p-2 rounded-lg">
-            <div className="w-1/6">
-              <Combobox
-                options={classLevels.map((classData) => ({
-                  value: classData,
-                  label: classData,
-                }))}
-                buttonLabel="ระดับการศึกษา"
-                onSelect={setSelectedClassLevel}
-              />
-            </div>
-            <div className="w-1/6 ">
-              <Combobox
-                options={uniqueFaculties.map((faculty) => ({
-                  value: faculty,
-                  label: faculty,
-                }))}
-                buttonLabel="หลักสูตรการศึกษา"
-                onSelect={setSelectedFaculty}
-              />
-            </div>
-            <div className="w-1/3">
-              <Input
-                type="text"
-                placeholder="Search..."
-                className="w-full pr-10"
-                onChange={(event) => setSearchInput(event.target.value)}
-              />
+          <div className="flex gap-12 mt-4">
+            <div className="flex mx-auto gap-6 w-full p-2 rounded-lg">
+              <div className="w-1/6">
+                <Combobox
+                  options={classLevels.map((classData) => ({
+                    value: classData,
+                    label: classData,
+                  }))}
+                  buttonLabel="ระดับการศึกษา"
+                  onSelect={setSelectedClassLevel}
+                />
+              </div>
+              <div className="w-1/6 ">
+                <Combobox
+                  options={uniqueFaculties.map((faculty) => ({
+                    value: faculty,
+                    label: faculty,
+                  }))}
+                  buttonLabel="หลักสูตรการศึกษา"
+                  onSelect={setSelectedFaculty}
+                />
+              </div>
+              <div className="w-1/3">
+                <Input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full pr-10"
+                  onChange={(event) => setSearchInput(event.target.value)}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <DataTable
-          columns={columns}
-          data={filteredData.map((item, index) => ({
-            ...item,
-            index: index + 1,
-          }))}
-          onRowClick={handleRowClick}
-          pagination={10}
-        />
-      </header>
-    ):(
-      <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
-      <p className="flex gap-2">
-        <Loader2 className="h-10 w-10 animate-spin" />
-        Loading...
-      </p>
-    </div>
-    )}
-    
+          <StylesTable
+            icon={<Table className="h-5 w-5 text-white" />}
+            title="รายชื่อนักเรียนทั้งหมด"
+            columns={columns}
+            data={filteredData.map((item, index) => ({
+              ...item,
+              index: index + 1,
+            }))}
+            onRowClick={handleRowClick}
+            pagination={10}
+          />
+        </header>
+      ) : (
+        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
+          <p className="flex gap-2">
+            <Loader2 className="h-10 w-10 animate-spin" />
+            Loading...
+          </p>
+        </div>
+      )}
     </>
   );
 }

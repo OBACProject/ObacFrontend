@@ -16,14 +16,18 @@ interface TableProps<T> {
   onRowClick?: (item: T) => void;
   getRowLink?: (item: T) => string;
   isEdit?: boolean;
+  title?: string;
+  icon?: React.ReactNode;
 }
 
-export function DataTable<T extends Record<string, any>>({
+export function StylesTable<T extends Record<string, any>>({
   columns,
   data,
   pagination,
   onRowClick,
   getRowLink,
+  title,
+  icon,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -85,9 +89,9 @@ export function DataTable<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="py-4 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-500">
-        <Table className="h-5 w-5 text-white"/>
-        <h1 className="text-lg text-white font-prompt ">รายการข้อมูลนักศึกษา</h1>
+      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+        {icon}
+        <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>
       <div className="w-full flex shadow-lg ">
         {columns.map((col, index) => (
@@ -100,14 +104,12 @@ export function DataTable<T extends Record<string, any>>({
         ))}
       </div>
 
-      {/* Table Body */}
       {paginatedData.length > 0 ? (
         paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))
       ) : (
         <div className="text-center text-gray-600 py-4">No data available</div>
       )}
 
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-end items-center space-x-2 py-4">
           <button

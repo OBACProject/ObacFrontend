@@ -1,6 +1,5 @@
 "use client";
 import { GetStudentListByGroupID } from "@/api/oldApi/student/studentApi";
-import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameListInGroup";
 import {
@@ -14,9 +13,11 @@ import {
   filterProgramsViewData,
   getRawProgramViewData,
 } from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
-import { Loader2 } from "lucide-react";
+import { Download, FileText, Loader2, Table } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { mockGroupdata } from "@/resource/academics/mockData";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 interface ClassroomTable {
   classLevel: string;
@@ -155,7 +156,7 @@ export function ClassroomGrading(props: {
     useState<GetStudentListByGroupIDDto | null>();
   useEffect(() => {
     const fetchFilterData = async () => {
-      const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
+      const rawData = mockGroupdata
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
           classLevel: `${item.class}. ${item.groupName}`,
@@ -167,16 +168,16 @@ export function ClassroomGrading(props: {
 
       setDataTable(formattedData);
 
-      const data = await filterProgramsViewData(selectedTerm, selectedYear);
-      const vocational = data.filter(
-        (item: EducationData) => item.classLevel === "ปวช"
-      );
-      const diploma = data.filter(
-        (item: EducationData) => item.classLevel === "ปวส"
-      );
+      // const data = await filterProgramsViewData(selectedTerm, selectedYear);
+      // const vocational = data.filter(
+      //   (item: EducationData) => item.classLevel === "ปวช"
+      // );
+      // const diploma = data.filter(
+      //   (item: EducationData) => item.classLevel === "ปวส"
+      // );
 
-      setVocationalFaculties(getFaculties(vocational));
-      setDiplomaFaculties(getFaculties(diploma));
+      // setVocationalFaculties(getFaculties(vocational));
+      // setDiplomaFaculties(getFaculties(diploma));
       setIsLoadingPage(true);
     };
     fetchFilterData();
@@ -293,7 +294,7 @@ export function ClassroomGrading(props: {
       key: "groupId",
       className: "w-1/12 flex justify-center ",
     },
-    { label: "ระดับชั้น", key: "classLevel", className: "w-1/12" },
+    { label: "ระดับชั้น", key: "classLevel", className: "w-1/12 " },
     { label: "หลักสูตรการศึกษา", key: "faculty", className: "w-4/12" },
     { label: "สาขาวิชา", key: "program", className: "w-3/12" },
     {
@@ -303,22 +304,24 @@ export function ClassroomGrading(props: {
       render: (row: ClassroomTable) => (
         <div className="flex gap-2">
           <button
-            className="px-4 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
+            className="px-4 bg-white border hover:bg-blue-600 rounded-lg h-fit py-1 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
               e.stopPropagation();
               handleDownloadPDF(Number(row.groupId));
             }}
           >
+            <FileText className="h-4 w-4"/>
             <p>รายชื่อ PDF</p>
           </button>
 
           <button
-            className="px-4 bg-white text-sm   hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+            className="px-4 bg-white text-sm   hover:bg-green-500 rounded-lg  h-fit py-1  text-green-500 border border-green-300 flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
               e.stopPropagation();
               handleDownloadExcel(Number(row.groupId));
             }}
           >
+            <Download className=" h-4 w-4 "/>
             <p>รายชื่อ Excel</p>
           </button>
         </div>
@@ -395,7 +398,9 @@ export function ClassroomGrading(props: {
             </div>
           </div>
 
-          <DataTable
+          <StylesTable
+          icon={<Table className="h-5 w-5 text-white" />}
+          title="รายชื่อห้องเรียนทั้งหมด"
             columns={columns}
             data={filteredData.map((item, index) => ({
               ...item,
