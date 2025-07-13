@@ -43,37 +43,37 @@ export default function Home() {
       <StickerYoutube />
 
       {/* Hero Section */}
-
-      <div className="relative w-full min-h-[600px] overflow-hidden">
-
-
+      <div className="relative w-full h-[250px] sm:h-[500px] md:h-[700px] sm:pt-16 lg:h-full overflow-hidden">
+        {/* Background image */}
         <Parallax speed={-10}>
-          <div className=" inset-0">
+          <div className="inset-0">
             <img
               src="/images/obac_view.jpg"
               alt="OBAC Campus Banner"
-              className="w-full h-full object-cover object-center filter blur-sm brightness-35"
+              className="w-full h-full object-cover object-center blur-sm brightness-50"
             />
           </div>
         </Parallax>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
-        <div className="absolute inset-0 z-10 flex justify-center items-center text-center px-6">
+
+        {/* Text content */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-36 sm:pt-0">
           <Parallax speed={20}>
-            <div className="text-white">
-              <h1 className="text-4xl text-prompt sm:text-5xl md:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
+            <div className="text-white space-y-4 sm:space-y-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
                 Welcome to OBAC
               </h1>
-              <p className="mt-6 max-w-2xl mx-auto text-lg text-prompt_lite sm:text-xl md:text-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-prompt_lite">
                 Ekawit Business Administration Vocational College
               </p>
             </div>
           </Parallax>
         </div>
 
-
       </div>
+
+
       {/* Intro Text */}
-      <div className="container mx-auto px-4 text-center py-14">
+      <div className="container mx-auto px-4 text-center py-8 sm:py-14">
         <OpeningScroll>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
             Ekawit Business Administration Vocational College (OBAC)
@@ -81,7 +81,6 @@ export default function Home() {
         </OpeningScroll>
 
         <OpeningScroll>
-          {/* ✅ Parallax ให้ข้อความแนะนำ */}
           <Parallax speed={5}>
             <p className="max-w-4xl mx-auto text-base sm:text-lg leading-relaxed indent-8 text-left">
               "At the heart of our university lies a powerful vision — to shape the future
@@ -95,13 +94,10 @@ export default function Home() {
           </Parallax>
         </OpeningScroll>
 
-        {/* OBAC Two-Column Content Section */}
         <OpeningScroll>
-          <section className="container mx-auto px-4 py-16 space-y-20">
-
-            {/* รอบแรก: ข้อความซ้าย + รูปขวา */}
-            <div className="grid grid-cols-1 py-10 md:grid-cols-2 gap-10 items-center">
-              {/* ✅ Parallax ให้ข้อความซ้าย */}
+          <section className="container mx-auto px-4 py-6 sm:py-8 space-y-14 sm:space-y-20">
+            {/* Section 1 */}
+            <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-10 items-center">
               <Parallax speed={5}>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-950">
@@ -114,8 +110,6 @@ export default function Home() {
                   </p>
                 </div>
               </Parallax>
-
-              {/* ✅ Parallax ให้รูปขวา */}
               <Parallax speed={5}>
                 <div>
                   <img
@@ -127,9 +121,8 @@ export default function Home() {
               </Parallax>
             </div>
 
-            {/* รอบสอง: รูปซ้าย + ข้อความขวา */}
-            <div className="grid grid-cols-1 py-10 md:grid-cols-2 gap-10 items-center">
-              {/* ✅ Parallax ให้รูปซ้าย */}
+            {/* Section 2 */}
+            <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-10 items-center">
               <Parallax speed={5}>
                 <div>
                   <img
@@ -139,8 +132,6 @@ export default function Home() {
                   />
                 </div>
               </Parallax>
-
-              {/* ✅ Parallax ให้ข้อความขวา */}
               <Parallax speed={5}>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-950">
@@ -153,14 +144,13 @@ export default function Home() {
                 </div>
               </Parallax>
             </div>
-
           </section>
         </OpeningScroll>
       </div>
 
       {/* Secondary Banner */}
       <FadeInOnScroll>
-        <div className="relative w-full h-[220px] sm:h-[300px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden">
+        <div className="relative w-full h-[180px] sm:h-[300px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden">
           <img
             src="/banner/banner.jpg"
             alt="OBAC Secondary Banner"
@@ -170,10 +160,9 @@ export default function Home() {
         </div>
       </FadeInOnScroll>
 
-
       {/* Courses Section */}
       <OpeningScroll>
-        <section className="container mx-auto px-4 py-16">
+        <section className="container mx-auto px-4 py-10 sm:py-16">
           <h2 className="text-3xl md:text-4xl text-center font-bold mb-10">หลักสูตรที่เปิดสอน</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             <CardCourse iconName="BookOpen" title="สาขาการบัญชี" />
@@ -187,14 +176,14 @@ export default function Home() {
 
       {/* Activity Carousel */}
       <OpeningScroll>
-        <div>
+        <div className="py-8 sm:py-10">
           <ActivityCarousel />
         </div>
       </OpeningScroll>
 
       {/* Motto Section */}
       <OpeningScroll>
-        <div className="w-full py-16 bg-[url('/images/bg_whitegray.jpg')] bg-cover bg-center text-center">
+        <div className="w-full py-10 sm:py-16 bg-[url('/images/bg_whitegray.jpg')] bg-cover bg-center text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 drop-shadow-md px-4">
             สร้างคนดี มีความรู้ สู่มาตรฐานสากล
           </h2>
@@ -203,7 +192,7 @@ export default function Home() {
 
       {/* News Section */}
       <FadeInOnScroll>
-        <section className="container mx-auto px-4 pt-20">
+        <section className="container mx-auto px-4 pt-10 sm:pt-20">
           <div className="flex flex-col items-center text-center mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold mb-2">ข่าวสารและกิจกรรม</h2>
             <div className="w-full text-right pr-2">
@@ -230,7 +219,7 @@ export default function Home() {
 
       {/* Call to Action */}
       <FadeInOnScroll>
-        <section className="bg-blue-900 text-white py-16 text-center mt-20">
+        <section className="bg-blue-900 text-white py-10 sm:py-16 text-center mt-16 sm:mt-20">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             พร้อมจะเริ่มต้นอนาคตของคุณแล้วหรือยัง?
           </h2>

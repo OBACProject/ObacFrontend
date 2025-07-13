@@ -18,7 +18,7 @@ export default function ActivityCarousel() {
   return (
     <div className="relative w-full max-w-7xl mx-auto overflow-hidden py-8 px-4 ">
       {/* ✅ กำหนดความสูงแบบตายตัว เพื่อให้เห็นภาพเต็ม */}
-      <div className="relative h-[500px] sm:h-[600px] md:h-[650px] lg:h-[700px]  overflow-hidden">
+      <div className="relative h-[200px] sm:h-[600px] md:h-[650px] lg:h-[700px]  overflow-hidden">
         <div
           className="flex h-full w-full transition-transform duration-1000 ease-in-out "
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -29,7 +29,7 @@ export default function ActivityCarousel() {
               className="relative w-full h-full flex-shrink-0"
             >
               <Image
-                src={`/images/activity_${idx + 1}.jpg`}
+                src={`/cls/activity_${idx + 1}.jpg`}
                 alt={`กิจกรรมที่ ${idx + 1}`}
                 fill
                 className="object-contain rounded-3xl "
