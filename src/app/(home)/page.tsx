@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white text-blue-950 font-prompt">
+    <div className="bg-white h-full text-blue-950 font-prompt">
       <Head>
         <script
           type="application/ld+json"

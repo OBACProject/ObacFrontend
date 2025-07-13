@@ -51,7 +51,7 @@ export default function Page() {
   if (!mounted) return null;
 
   return (
-    <div className="bg-white text-blue-950 font-prompt mt-16 md:mt-36">
+    <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-36">
       <Head>
         <script
           type="application/ld+json"

@@ -60,7 +60,7 @@ export default function NewsSection() {
   };
 
   return (
-    <div className="pt-[7px] sm:pt-[8px] md:pt-[80px]">
+    <div className="mt-16 sm:mt-[8px] md:pt-[80px] lg:mt-16">
       <div className="bg-white text-blue-950 font-prompt">
         {/* Header */}
         <div className="grid place-items-center py-10 text-white text-2xl bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500">
