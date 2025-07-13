@@ -9,6 +9,7 @@ import {
   ArrowUpDown,
   OctagonMinus,
   ScrollText,
+  Paperclip,
 } from "lucide-react";
 
 export interface AcademicSidebarProps {
@@ -45,8 +46,8 @@ export const AcademicSideBarData: AcademicSidebarProps = {
     },
     {
       title: "ออกเกรดรายวิชา",
-      href: "/academic/grads",
-      headLink: "/academic/grads",
+      href: "/academic/grading/student-classroom",
+      headLink: "/academic/grading/student-classroom",
       icon: <ScrollText style={{ width: "2.2rem", height: "2.5rem" }} />,
     },
     {
@@ -84,6 +85,12 @@ export const AcademicSideBarData: AcademicSidebarProps = {
       href: "/academic/student-not-pass",
       headLink: "/academic/student-not-passt",
       icon: <OctagonMinus className=" h-8 w-8" />,
+    },
+    {
+      title: "ตัวอย่างเอกสาร",
+      href: "/academic/document",
+      headLink: "/academic/document",
+      icon: <Paperclip className=" h-8 w-8" />,
     },
   ],
 };

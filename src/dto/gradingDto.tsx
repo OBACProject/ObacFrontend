@@ -28,7 +28,6 @@ export interface ClassSubjectData {
   term: number;
 }
 
-// data to show in columns
 export interface GradingDataColumn {
   id: number;
   subjectCode: string;
@@ -68,4 +67,40 @@ export interface UpdateStudentGrade {
   finalGrade: string;
   totalScore: number;
   remark?: string;
+}
+
+
+export interface Grad {
+  grad : number;
+  remark :string;
+}
+
+export interface StudentList {
+  studentId: number;
+  prefix: string;
+  studentCode: string;
+  studentFirstName: string;
+  studentLastName: string;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  grads: Grad[];
+}
+
+export interface SubjectNameList {
+  subjectID: number;
+  subjectCode: string;
+  subjectName: string;
+}
+export interface GroupSummaryGradeResponse {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  facultyName: string;
+  programName: string;
+  term: string;
+  year: number;
+  student: StudentList[];
+  subjects:SubjectNameList[];
 }

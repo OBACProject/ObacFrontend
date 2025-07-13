@@ -8,7 +8,7 @@ export default function StudentScore() {
     <div className="py-4 px-10">
       <div className="fixed ">
         <HeaderLabel
-          Icon={<ScrollText className="w-7 h-7" />}
+          Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={"Import Score (Student)"}
         />
       </div>

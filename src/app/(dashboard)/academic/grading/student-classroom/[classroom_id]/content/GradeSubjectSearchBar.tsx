@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useDeferredValue } from 'react';
 
 interface Props {
   onChange: (value: string) => void;
@@ -8,10 +8,11 @@ interface Props {
 
 const GradeSubjectSearchBar: React.FC<Props> = ({ onChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const deferredSearch = useDeferredValue(searchTerm);
 
   useEffect(() => {
-    onChange(searchTerm);
-  }, [searchTerm, onChange]);
+    onChange(deferredSearch);
+  }, [deferredSearch, onChange]);
 
   return (
     <div className="flex justify-end mt-4 px-4">

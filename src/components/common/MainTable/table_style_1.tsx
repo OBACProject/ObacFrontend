@@ -1,7 +1,8 @@
+import { Table } from "lucide-react";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 
-type Column<T> = {
+export type Column<T> = {
   label: string;
   key?: string;
   className?: string;
@@ -47,7 +48,7 @@ export function DataTable<T extends Record<string, any>>({
       return (
         <div
           key={`cell-${rowIndex}-${colIndex}`}
-          className={`text-center flex items-center px-4 py-1 border-r border-gray-300 ${col.className}`}
+          className={`text-center flex items-center px-4 py-1   border-1 ${col.className}`}
         >
           {renderContent != null ? renderContent : "-"}
         </div>
@@ -58,7 +59,7 @@ export function DataTable<T extends Record<string, any>>({
       return (
         <Link key={`row-${rowIndex}`} href={getRowLink(item)}>
           <div
-            className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+            className={`w-full shadow-md flex border border-r-0 border-gray-100 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
               rowIndex % 2 === 0 ? "bg-white" : "bg-white"
             }`}
           >
@@ -70,7 +71,7 @@ export function DataTable<T extends Record<string, any>>({
       return (
         <div
           key={`row-${rowIndex}`}
-          className={`w-full shadow-md flex border border-r-0 border-gray-300 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+          className={`w-full shadow-md flex border border-r-0 border-gray-200 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
             rowIndex % 2 === 0 ? "bg-white" : "bg-white"
           }`}
           onClick={() => onRowClick && onRowClick(item)}
@@ -84,11 +85,15 @@ export function DataTable<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="w-full flex shadow-lg">
+      <div className="py-4 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-500">
+        <Table className="h-5 w-5 text-white"/>
+        <h1 className="text-lg text-white font-prompt ">รายการข้อมูลนักศึกษา</h1>
+      </div>
+      <div className="w-full flex shadow-lg ">
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}
-            className={`bg-white text-gray-800 border-t-2 border-b-2 border-gray-400 py-2 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
+            className={`bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
           >
             {col.label || "-"}
           </div>
