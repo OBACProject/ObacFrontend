@@ -6,4 +6,7 @@ export const GRADE_ENDPOINTS = {
   GET_GROUP_SUMMARY_GRADE: '/Grade/GetGroupSummaryGrade',
   GET_GROUP_SUMMARY_GRADE_AVAILABLE_STATUS: '/Grade/GetGroupSummaryGradeAvailableStatus',
   GET_STUDENT_GROUP_GRADE_BY_GROUP_ID_TERM_YEAR: '/Grade/GetStudentGroupGradeByGroupIdTermYear',
+  GET_STUDENT_DETAIL_AND_SUMMARY_SCORE_BY_STUDENT_CODE:"/Grade/GetStudentDetailAndSummaryScoreByStudentCode",
+  UPSERT_STUDENT_GRADES: "/Grade/UpsertStudentGrades",
+  
 } as const;

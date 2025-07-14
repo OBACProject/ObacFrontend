@@ -1,21 +1,11 @@
 "use client";
+import { SubjectGrade } from "@/lib/api/models/grade/grade.response";
 import React from "react";
 
-interface ScoreImportProps {
-  term: string;
-  year: number;
-  subjectName: string;
-  subjectCode: string;
-  unit: number;
-  credite: number;
-  summaryCredit: number;
-  remark: string;
-}
-
 interface ScoreInputFormProps {
-  scores: ScoreImportProps[];
+  scores: SubjectGrade[];
   edit: boolean;
-  onChange: (updated: ScoreImportProps[]) => void;
+  onChange: (updated: SubjectGrade[]) => void;
   term: string;
   year: number;
 }
@@ -29,44 +19,43 @@ export default function ScoreInputForm({
 }: ScoreInputFormProps) {
   const handleChange = (
     index: number,
-    field: keyof ScoreImportProps,
+    field: keyof SubjectGrade,
     value: any
   ) => {
-    
     updated[index] = {
       ...updated[index],
       [field]:
-        field === "unit" || field === "credite" || field === "summaryCredit"
+        field === "gradePoint" || field === "credit" || field === "finalGrade"
           ? parseFloat(value) || 0
           : value,
     };
 
-    if (field === "unit" || field === "credite") {
-      updated[index].summaryCredit =
-        updated[index].unit * updated[index].credite;
+    if (field === "credit" || field === "finalGrade") {
+      updated[index].credit = updated[index].credit * updated[index].finalGrade;
     }
 
     onChange(updated);
   };
 
   const addRow = () => {
-    const newRow: ScoreImportProps = {
+    const newRow: SubjectGrade = {
+      gradeId: 0,
       term,
       year,
       subjectName: "",
       subjectCode: "",
-      unit: 0,
-      credite: 0,
-      summaryCredit: 0,
+      credit: 0,
+      gradePoint: 0,
+      finalGrade: 0,
       remark: "",
     };
     onChange([...scores, newRow]);
   };
-const removeRow = (index: number) => {
-      const updated = scores.filter((_, i) => i !== index);
-      onChange(updated);
-    };
-    const updated = [...scores];
+  const removeRow = (index: number) => {
+    const updated = scores.filter((_, i) => i !== index);
+    onChange(updated);
+  };
+  const updated = [...scores];
   return (
     <div className="p-4 border border-gray-300 rounded-md mb-4">
       <table className="w-full border border-gray-300 text-sm">
@@ -141,32 +130,32 @@ const removeRow = (index: number) => {
                   {edit ? (
                     <input
                       type="number"
-                      value={row.unit}
+                      value={row.credit}
                       onChange={(e) =>
-                        handleChange(index, "unit", e.target.value)
+                        handleChange(index, "credit", e.target.value)
                       }
                       className="w-[80px] text-center py-1 px-2 border  border-gray-200"
                     />
                   ) : (
-                    row.unit
+                    row.credit
                   )}
                 </td>
                 <td className="border text-center px-2 py-1">
                   {edit ? (
                     <input
                       type="number"
-                      value={row.credite}
+                      value={row.gradePoint}
                       onChange={(e) =>
-                        handleChange(index, "credite", e.target.value)
+                        handleChange(index, "gradePoint", e.target.value)
                       }
                       className="w-[80px] text-center py-1 px-2 border  border-gray-200"
                     />
                   ) : (
-                    row.credite
+                    row.gradePoint
                   )}
                 </td>
                 <td className="border text-center px-2 py-1">
-                  {row.summaryCredit}
+                  {row.finalGrade}
                 </td>
                 <td className="border text-center px-2 py-1">
                   {edit ? (
