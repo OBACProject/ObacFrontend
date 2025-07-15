@@ -607,7 +607,7 @@ export function ClassroomGrading() {
         <span>
           แสดง {tableData.length} จาก {dataTable.length} รายการ
         </span>
-        <span className="text-xs text-gray-500">
+        <span className="text-sm text-gray-700">
           ภาคเรียนที่ {selectedTerm} ปีการศึกษา {selectedYear}
         </span>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ClassroomGrading } from "./classroomGrading";
-import { fetchGetAllStudent } from "@/api/oldApi/student/studentApi";
+// import { fetchGetAllStudent } from "@/api/oldApi/student/studentApi";
 import { GetAllStudent } from "@/dto/studentDto";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
@@ -99,13 +99,13 @@ export default function Form() {
               }}
             />{" "}
             {searchTrigger ? (
-              <button className=" py-1.5 bg-blue-400 flex gap-2  items-center text-white rounded-md px-4">
+              <button className=" py-1.5 bg-blue-500 flex gap-2  items-center text-white rounded-md px-4">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 ค้นหา
               </button>
             ) : (
               <button
-                className="bg-blue-300  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
+                className="bg-blue-500  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
                 onClick={() => {
                   onSearch();
                 }}

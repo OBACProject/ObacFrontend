@@ -1,4 +1,4 @@
-import { filterProgramsParamsData, GetAllStudent, GetAllStudentTableDto } from "@/dto/studentDto";
+import { filterProgramsParamsData, GetAllStudent, GetAllStudentTableDto, GetStudentListByGroupIDDto } from "@/dto/studentDto";
 
 export const mockStudents: GetAllStudent[] = [
   {
@@ -488,3 +488,106 @@ export const mockStudentTableData: GetAllStudentTableDto[] = [
     programName: "พยาบาลศาสตร์",
   }
 ];
+
+export const mockStudentListByGroupID: GetStudentListByGroupIDDto = {
+  groupId: 101,
+  groupName: "2/1",
+  groupCode: "G201",
+  programName: "การบัญชี",
+  programId: 10,
+  facultyName: "บริหารธุรกิจ",
+  subProgramName: "บัญชีขั้นสูง",
+  class: "ปวช.",
+  students: [
+    {
+      prefix: "นาย",
+      studentCode: "65110001",
+      studentId: 1,
+      gender: "ชาย",
+      firstName: "กิตติ",
+      lastName: "ใจดี",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นางสาว",
+      studentCode: "65110002",
+      studentId: 2,
+      gender: "หญิง",
+      firstName: "สุภาวดี",
+      lastName: "ทองสุข",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นาย",
+      studentCode: "65110003",
+      studentId: 3,
+      gender: "ชาย",
+      firstName: "ณัฐวุฒิ",
+      lastName: "ดำรงค์",
+      studentStatus: "พักการเรียน",
+    },
+    {
+      prefix: "นางสาว",
+      studentCode: "65110004",
+      studentId: 4,
+      gender: "หญิง",
+      firstName: "พิมพ์ใจ",
+      lastName: "บุญมา",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นาย",
+      studentCode: "65110005",
+      studentId: 5,
+      gender: "ชาย",
+      firstName: "ธีรภัทร",
+      lastName: "เก่งกล้า",
+      studentStatus: "ลาออก",
+    },
+    {
+      prefix: "นางสาว",
+      studentCode: "65110006",
+      studentId: 6,
+      gender: "หญิง",
+      firstName: "จิราพร",
+      lastName: "แสงทอง",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นาย",
+      studentCode: "65110007",
+      studentId: 7,
+      gender: "ชาย",
+      firstName: "วีรภัทร",
+      lastName: "จันทรา",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นางสาว",
+      studentCode: "65110008",
+      studentId: 8,
+      gender: "หญิง",
+      firstName: "อริสรา",
+      lastName: "รุ่งเรือง",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นาย",
+      studentCode: "65110009",
+      studentId: 9,
+      gender: "ชาย",
+      firstName: "พงศกร",
+      lastName: "มีสุข",
+      studentStatus: "ปกติ",
+    },
+    {
+      prefix: "นางสาว",
+      studentCode: "65110010",
+      studentId: 10,
+      gender: "หญิง",
+      firstName: "ศิริพร",
+      lastName: "สดใส",
+      studentStatus: "ปกติ",
+    },
+  ],
+};

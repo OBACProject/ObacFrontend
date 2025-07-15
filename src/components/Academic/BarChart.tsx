@@ -37,12 +37,12 @@ export default function BarChart({
       {
         label: "ผู้หญิง",
         data: femaleData,
-        backgroundColor: "#f29edc", // สีชมพู
+        backgroundColor: "#FF8DC7", // ชมพูนีออนพาสเทล
       },
       {
         label: "ผู้ชาย",
         data: maleData,
-        backgroundColor: "#1457ff", // สีน้ำเงิน
+        backgroundColor: "#5DA0F2", // ฟ้านีออนพาสเทล
       },
     ],
   };
@@ -72,5 +72,5 @@ export default function BarChart({
     },
   };
 
-  return <Bar options={options} data={data} />;
+  return <Bar className="" options={options} data={data} />;
 }

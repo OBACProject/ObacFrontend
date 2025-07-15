@@ -85,11 +85,8 @@ export function DataTable<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="py-4 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-500">
-        <Table className="h-5 w-5 text-white"/>
-        <h1 className="text-lg text-white font-prompt ">รายการข้อมูลนักศึกษา</h1>
-      </div>
-      <div className="w-full flex shadow-lg ">
+
+      <div className="w-full flex border border-gray-300 shadow-lg ">
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}
