@@ -114,8 +114,15 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
   let y2 = doc.lastAutoTable.finalY;
 
   data.student.forEach((student, index) => {
-    const { prefix, studentCode, studentFirstName, studentLastName, gpa, gpax, grads } =
-      student;
+    const {
+      prefix,
+      studentCode,
+      studentFirstName,
+      studentLastName,
+      gpa,
+      gpax,
+      grads,
+    } = student;
     const subjectGrades = Object.values(grads || {});
 
     const subjectCount = data.subjects.length;
@@ -139,7 +146,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
         [
           `${index + 1}`,
           studentCode,
-          prefix +" "+ studentFirstName + "  " + studentLastName,
+          prefix + " " + studentFirstName + "  " + studentLastName,
           ...subjectsWithGrades.slice(0, 10),
           gpa.toFixed(2),
           gpax.toFixed(2),
@@ -196,16 +203,39 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
   doc.setFontSize(14);
 
   const subjects = data.subjects;
-  if (subjects) {
+  if (subjects && subjects.length > 0) {
     let y = y2 + 10;
-    for (let i = 0; i < subjects.length; i++) {
-      if (y >= 280) {
-        y = 14;
-        doc.addPage();
-      }
-      doc.text(`${i + 1} - วิชา${subjects[i].subjectName}`, 10, y);
-      y += 6;
+    if (y >= 270) {
+      doc.addPage();
+      y = 14;
     }
+    autoTable(doc, {
+      startY: y,
+      body: subjects.map((subj, index) => [
+        `${index + 1}`,
+        subj.subjectName,
+        subj.subjectCode,
+      ]),
+      alternateRowStyles: { fillColor: [255, 255, 255] },
+      styles: {
+        font: "THSarabunBold",
+        fontSize: 12,
+        cellPadding: 1,
+        halign: "center",
+        valign: "middle",
+        lineColor: [0, 0, 0],
+        lineWidth: 0.2,
+      },
+      bodyStyles: {
+        textColor: [0, 0, 0],
+      },
+      columnStyles: {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 60 },
+        2: { cellWidth: 60 },
+      },
+      margin: { left: 10 },
+    });
   }
 
   doc.setFont("THSarabun");
