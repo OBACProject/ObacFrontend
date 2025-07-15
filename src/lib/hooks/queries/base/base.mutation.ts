@@ -1,58 +1,51 @@
-import { useMutation, UseMutationOptions, MutationKey } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from "@tanstack/react-query"
 
-export class BaseMutation<TResponse, TRequest, TError = Error> {
-  constructor(
-    private readonly _mutate: (params: TRequest) => Promise<TResponse>,
-    private readonly defaultOptions: Partial<UseMutationOptions<TResponse, TError, TRequest>> = {
-      retry: 0,
-    }
-  ) {}
-
-  useMutation(options?: UseMutationOptions<TResponse, TError, TRequest>) {
+export function useBaseMutation<TResponse, TRequest, TError = Error>(
+  mutateFn: (params: TRequest) => Promise<TResponse>,
+  options?: UseMutationOptions<TResponse, TError, TRequest>,
+) {
   return useMutation<TResponse, TError, TRequest>({
-    mutationFn: this._mutate,
-    ...this.defaultOptions,
+    mutationFn: mutateFn,
     ...options,
-  });
+  })
 }
 
-  get mutationFn() {
-    return this._mutate;
-  }
+export function useBaseCreateMutation<TResponse, TRequest, TError = Error>(
+  createFn: (params: TRequest) => Promise<TResponse>,
+  options?: Partial<UseMutationOptions<TResponse, TError, TRequest>>,
+) {
+  return useBaseMutation(createFn, {
+    ...options,
+    retry: 0,
+  })
 }
 
-export class BaseCreateMutation<TResponse, TRequest, TError = Error> extends BaseMutation<TResponse, TRequest, TError> {
-  constructor(
-    createFn: (params: TRequest) => Promise<TResponse>,
-    defaultOptions?: Partial<UseMutationOptions<TResponse, TError, TRequest>>
-  ) {
-    super( createFn, {
-      ...defaultOptions,
-      retry: 0,
-    });
-  }
+export function useBaseUpdateMutation<TResponse, TRequest, TError = Error>(
+  updateFn: (params: TRequest) => Promise<TResponse>,
+  options?: Partial<UseMutationOptions<TResponse, TError, TRequest>>,
+) {
+  return useBaseMutation(updateFn, {
+    ...options,
+    retry: 0,
+  })
 }
 
-export class BaseUpdateMutation<TResponse, TRequest, TError = Error> extends BaseMutation<TResponse, TRequest, TError> {
-  constructor(
-    updateFn: (params: TRequest) => Promise<TResponse>,
-    defaultOptions?: Partial<UseMutationOptions<TResponse, TError, TRequest>>
-  ) {
-    super( updateFn, {
-      ...defaultOptions,
-      retry: 0,
-    });
-  }
+export function useBasePatchMutation<TResponse, TRequest, TError = Error>(
+  patchFn: (params: TRequest) => Promise<TResponse>,
+  options?: Partial<UseMutationOptions<TResponse, TError, TRequest>>,
+) {
+  return useBaseMutation(patchFn, {
+    ...options,
+    retry: 0,
+  })
 }
 
-export class BaseDeleteMutation<TResponse, TRequest, TError = Error> extends BaseMutation<TResponse, TRequest, TError> {
-  constructor(
-    deleteFn: (params: TRequest) => Promise<TResponse>,
-    defaultOptions?: Partial<UseMutationOptions<TResponse, TError, TRequest>>
-  ) {
-    super(deleteFn, {
-      ...defaultOptions,
-      retry: 0, 
-    });
-  }
+export function useBaseDeleteMutation<TResponse, TRequest, TError = Error>(
+  deleteFn: (params: TRequest) => Promise<TResponse>,
+  options?: Partial<UseMutationOptions<TResponse, TError, TRequest>>,
+) {
+  return useBaseMutation(deleteFn, {
+    ...options,
+    retry: 0,
+  })
 }
