@@ -1,7 +1,7 @@
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { ScrollText } from "lucide-react";
 import React from "react";
-import Form from "./Form";
+// import Form from "./Form";
 
 interface StudentScoreProps {
   params: {
@@ -18,7 +18,7 @@ export default function StudentScore({ params }: StudentScoreProps) {
           title={"ฟอร์มกรอกคะแนน รหัสนักเรียน : " + params.id}
         />
       </div>
-      <Form id={params.id}/>
+      {/* <Form id={params.id}/> */}
     </div>
   );
 }
