@@ -23,7 +23,7 @@ export default function DropDownMobile({
         <Accordion type="single" collapsible className="w-full grid gap-3">
           {menuData.map((menu, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className=" py-1 no-underline hover:no-underline focus:no-underline px-2 active:bg-gray-100 rounded-xl duration-300 text-md w-full ">
+              <AccordionTrigger className=" py-1 no-underline hover:no-underline focus:no-underline px-2  rounded-xl duration-300 text-md w-full ">
                 <div className="flex  items-center gap-4 justify-start">
                   <div>{DropDownIconPhone[index]}</div>
                   <p className="line-clamp-1">{menu.menuTopic}</p>
