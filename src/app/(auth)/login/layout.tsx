@@ -24,7 +24,7 @@ export default function RootLayout({
           className="z-50"
         />
         <HomePageNavBar />
-        <div className="mt-24">
+        <div className="mt-5 lg:mt-24">
         {children}
         </div>
         <HomeFooter/>

@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         <ClientParallaxWrapper>
           <HomePageNavBar />
-          <div className="pb-10">{children}</div>
+          <div className="">{children}</div>
           <HomeFooter />
         </ClientParallaxWrapper>
       </body>

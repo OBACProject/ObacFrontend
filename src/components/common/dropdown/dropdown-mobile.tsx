@@ -1,4 +1,4 @@
-import { DropMenuProps } from "@/resource/home/navbarData";
+import { DropDownIconPhone, DropMenuProps } from "@/resource/home/navbarData";
 import {
   Accordion,
   AccordionContent,
@@ -19,15 +19,18 @@ export default function DropDownMobile({
 }) {
   return (
     <div className="w-full">
-      <NavigationMenu className="w-full max-w-none">
-        <Accordion type="single" collapsible className="w-full">
+      <NavigationMenu className="w-full py-4 max-w-none">
+        <Accordion type="single" collapsible className="w-full grid gap-3">
           {menuData.map((menu, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="hover:bg-blue-900 py-1 px-4 rounded-xl duration-300 text-md w-full">
-                {menu.menuTopic}
+              <AccordionTrigger className=" py-1 no-underline hover:no-underline focus:no-underline px-2 active:bg-gray-100 rounded-xl duration-300 text-md w-full ">
+                <div className="flex  items-center gap-4 justify-start">
+                  <div>{DropDownIconPhone[index]}</div>
+                  <p className="line-clamp-1">{menu.menuTopic}</p>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-                <ul className="flex flex-col gap-2 py-1 px-2 w-full text-white">
+                <ul className="flex flex-col gap-0 py-0 px-2 w-full text-white">
                   {menu.menuList.map((item, subIndex) => (
                     <ListItem
                       href={item.href}
@@ -38,7 +41,6 @@ export default function DropDownMobile({
                   ))}
                 </ul>
               </AccordionContent>
-
             </AccordionItem>
           ))}
         </Accordion>
@@ -60,13 +62,15 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none rounded-md px-5 py-2 leading-none no-underline outline-none transition-colors group hover:bg-zinc-500 duration-300 focus:bg-accent focus:text-accent-foreground w-full",
+            "block select-none gap-0  rounded-md px-5 py-2 leading-none no-underline outline-none  transition-colors group hover:bg-zinc-500 duration-300 focus:bg-accent focus:text-accent-foreground w-full",
             className
           )}
           {...props}
         >
-          <div className="w-8 h-8 text-white mr-4">{children}</div>
-          <div className="text-sm font-medium mt-0.5 leading-none">{title}</div>
+          <div className="flex items-center gap-4 h-fit">
+            <div className=" text-white">{children}</div>
+            <div className="text-sm font-medium leading-none">{title}</div>
+          </div>
         </a>
       </NavigationMenuLink>
     </li>
