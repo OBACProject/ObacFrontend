@@ -29,21 +29,21 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียนไม่ผ่านเกณฑ์ ${classGroup} ปีการศึกษา ${currentYear}`, 46, 10, {
+  doc.text(`รายชื่อนักเรียนไม่ผ่านเกณฑ์ ${classGroup} ปีการศึกษา ${currentYear}  เกรดเฉลี่ยไม่ถึง 1.75`, 56, 10, {
     align: "center",
   });
   doc.setFontSize(12);
 
-  doc.line(4, 4, 4, 291);
-  doc.line(205, 4, 205, 291);
-  doc.line(4, 4, 205, 4);
-  doc.line(205, 291, 4, 291);
+  // doc.line(4, 4, 4, 291);
+  // doc.line(205, 4, 205, 291);
+  // doc.line(4, 4, 205, 4);
+  // doc.line(205, 291, 4, 291);
 
   doc.line(4, 12, 205, 12);
 
   autoTable(doc, {
     startY: 12,
-    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "หมายเหตุ","เลขที่ใบเสร็จ"]],
+    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "เกรดเฉลี่ยสะสม","หมายเหตุ"]],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -119,7 +119,8 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
         margin: { left: 4, right: 0 },
       });
       y2 += 7;
-      if (y2 >= 280) {
+      if (y2 >= 260) {
+         doc.addPage()
         y2 = 14;
       }
     }

@@ -90,7 +90,7 @@ export default function page() {
         <div className="border-t border-gray-300">
           <div className="py-5 w-full">
             <HeaderLabel
-              title="เอกสาร รวบ3ป. "
+              title="เอกสาร รบ.3ป. "
               Icon={<BookOpenCheck className="text-white h-7 w-7 " />}
             />
           </div>
