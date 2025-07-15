@@ -16,7 +16,7 @@ export class AuthService extends BaseService {
 
     // set token in cookies with secure and httpOnly flags
     const token = response.token;
-    setAuthCookie(token);
+    await setAuthCookie(token);
 
     return response;
 }
