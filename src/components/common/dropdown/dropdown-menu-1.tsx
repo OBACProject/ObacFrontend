@@ -52,7 +52,7 @@ const ListItem = React.forwardRef<
     <li>
       <NavigationMenuLink
         asChild
-        className="flex gap-0 my-0 lg:my-1 md:my-1   text-start items-center"
+        className="flex gap-0 my-0 lg:my-1 md:my-1   text-start items-center text-white"
       >
         <a
           ref={ref}

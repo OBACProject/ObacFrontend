@@ -120,7 +120,57 @@ const config: Config = {
           "100%": {
             transform: "translate(20px,0px) scale(1)",
           },
+
         },
+        "fade-in-down": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(-10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "fade-out-up": {
+          "0%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(-10px)",
+          },
+        },
+        "accordion-down": {
+          "0%": { opacity: "0", transform: "translateY(-8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "accordion-up": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(-8px)" },
+        },
+        "fade-slide-down": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(-16px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "fade-slide-up": {
+          "0%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(-16px)",
+          },
+        },
+
       },
       animation: {
         fadeIn: "fadeIn 2s ease-in-out",
@@ -130,12 +180,18 @@ const config: Config = {
         blob: "blob 7s infinite",
         blob2: "blob2 7s infinite",
         // appearance: "appearanceIn 0.1s ease-out",
+        "fade-in-down": "fade-in-down 300ms ease-out forwards",
+        "fade-out-up": "fade-out-up 200ms ease-in forwards",
+        "accordion-down": "accordion-down 300ms ease-out forwards",
+        "accordion-up": "accordion-up 200ms ease-in forwards",
+        "fade-slide-down": "fade-slide-down 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+        "fade-slide-up": "fade-slide-up 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
       },
       backgroundImage: {
         authBg: "/images/obac_view.jpg",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate")]
 };
 export default config;

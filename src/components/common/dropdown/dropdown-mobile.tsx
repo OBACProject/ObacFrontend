@@ -26,7 +26,7 @@ export default function DropDownMobile({
               <AccordionTrigger className="hover:bg-blue-900 py-1 px-4 rounded-xl duration-300 text-md w-full">
                 {menu.menuTopic}
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
                 <ul className="flex flex-col gap-2 py-1 px-2 w-full text-white">
                   {menu.menuList.map((item, subIndex) => (
                     <ListItem
@@ -38,6 +38,7 @@ export default function DropDownMobile({
                   ))}
                 </ul>
               </AccordionContent>
+
             </AccordionItem>
           ))}
         </Accordion>

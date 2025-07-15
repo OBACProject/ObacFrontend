@@ -1,3 +1,22 @@
+export interface GradStudentInSubject {
+  [key: string]: number | string;
+  gradeId: number;
+  subjectId: number;
+  scheduleSubjectId: number;
+  studentGroup: string;
+  studentId: number;
+  studentCode: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  subjectName: string;
+  collectScore: number;
+  testScore: number;
+  affectiveScore: number;
+  totalScore: number;
+  grade: string;
+  remark: string;
+}
 export interface GetGradBySubjectId {
   [key: string]: number | string;
   gradeId: number;

@@ -18,38 +18,34 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
   return (
     <>
       {Array.isArray(cardData) &&
-        cardData.slice(0,3).map((data:any, index:any) => (
+        cardData.slice(0, 3).map((data, index) => (
           <div
             key={index}
-            className="rounded-md border-[1px] w-full border-[#CFD0D4] bg-card  shadow-md group overflow-hidden hover:bg-gray-100  my-3 bg-white"
+            className="rounded-lg border border-gray-300 bg-white shadow-md group overflow-hidden hover:shadow-lg transition-shadow duration-300 w-full max-w-sm mx-auto my-4"
           >
-            <div className="grid items-start ">
-              <div className="relative  items-center justify-center flex w-full h-60 overflow-hidden">
-                <Image
-                  src={data.img}
-                  alt={data.topic}
-                  fill
-                   
-                  className="absolute h-36 lg:h-44 object-cover transition-transform rounded-t-md duration-700 group-hover:rounded-t-md group-hover:scale-125 group-hover:opacity-80"
-                />
-                <div className="relative w-full h-full bg-gradient-to-t from-gray-900/40 to-gray-900/5"></div>
-              </div>
-              <div className="grid w-full px-10">
-                <span className="text-blue-800 font-prompt_Light text-[18px] mt-4">
-                  {data.category}
-                </span>
-                <div className="flex justify-between mt-1">
-                  <span className="font-prompt text-blue-800 text-xl">
-                    {data.topic}
-                  </span>
-                </div>
-                <div className="mt-2 font-prompt text-black">
-                  {data.date}
-                </div>
-                <div className="mt-1 font-prompt_Light mb-4 line-clamp-3 text-gray-600">
-                  {data.description}
-                </div>
-              </div>
+      
+            <div className="relative w-full h-48 md:h-56 overflow-hidden">
+              <Image
+                src={data.img}
+                alt={data.topic}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent" />
+            </div>
+
+         
+            <div className="px-5 py-4">
+              <span className="text-blue-700 font-light text-sm">
+                {data.category}
+              </span>
+              <h3 className="text-lg font-semibold text-blue-900 mt-1 line-clamp-2">
+                {data.topic}
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">{data.date}</p>
+              <p className="text-gray-700 text-sm mt-2 line-clamp-3">
+                {data.description}
+              </p>
             </div>
           </div>
         ))}

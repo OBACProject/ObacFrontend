@@ -1,153 +1,166 @@
 "use client";
-
-import DynamicTable from "@/components/common/table/DynamicTable";
-import { useRouter } from "next/navigation";
+import ScoreInputForm from "@/components/Teacher/TableImportScore";
+import StudentInformationCard from "@/components/Teacher/StudentInformationCard";
 import React, { useState } from "react";
-
-interface StudentNameList {
-  studentCode: string;
-  studentFirstName: string;
-  studentLastName: string;
-  className: string;
-}
-
-const studentNameList: StudentNameList[] = [
-  {
-    studentCode: "6401123",
-    studentFirstName: "สมชาย",
-    studentLastName: "พาเพลิน",
-    className: "1/2",
-  },
-  {
-    studentCode: "6401124",
-    studentFirstName: "สมหญิง",
-    studentLastName: "สดใส",
-    className: "1/4",
-  },
-  {
-    studentCode: "6401125",
-    studentFirstName: "อนันต์",
-    studentLastName: "ใจดี",
-    className: "2/2",
-  },
-  {
-    studentCode: "6401126",
-    studentFirstName: "วิภา",
-    studentLastName: "ว่องไว",
-    className: "3/2",
-  },
-  {
-    studentCode: "6401127",
-    studentFirstName: "มานพ",
-    studentLastName: "ขยันขันแข็ง",
-    className: "2/2",
-  },
-  {
-    studentCode: "6401128",
-    studentFirstName: "ปวีณา",
-    studentLastName: "สวยงาม",
-    className: "1/2",
-  },
-  {
-    studentCode: "6401129",
-    studentFirstName: "ธนา",
-    studentLastName: "สุขสบาย",
-    className: "3/2",
-  },
-  {
-    studentCode: "6401130",
-    studentFirstName: "อรวี",
-    studentLastName: "สดชื่น",
-    className: "1/3",
-  },
-  {
-    studentCode: "6401131",
-    studentFirstName: "ภาคิน",
-    studentLastName: "ใจเย็น",
-    className: "1/8",
-  },
-  {
-    studentCode: "6401132",
-    studentFirstName: "ชลธิชา",
-    studentLastName: "ร่าเริง",
-    className: "1/5",
-  },
-];
+import { PlusCircle } from "lucide-react";
+import CreateScoreTablePopup from "@/components/Teacher/CreateScoreTablePopup";
+import SearchInput from "@/components/Teacher/SearchInput";
+import LineCenter from "@/components/Teacher/LineCenter";
+import { gradeService } from "@/lib/api/services/grade.service";
+import {
+  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  SubjectGrade,
+} from "@/lib/api/models/grade/grade.response";
 
 export default function Form() {
-  const router = useRouter();
-  const [studentData] = useState<StudentNameList[]>(studentNameList);
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<StudentNameList[]>([]);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
+  const [student, setStudent] = useState<
+    GetStudentDetailAndSummaryScoreByStudentCodeResponse | undefined
+  >();
 
-  const handleSearch = () => {
-    if (query != "") {
-      const trimmed = query.trim().toLowerCase();
-      const filtered = studentData.filter(
-        (s) =>
-          s.studentCode.includes(trimmed) ||
-          s.studentFirstName.toLowerCase().includes(trimmed) ||
-          s.studentLastName.toLowerCase().includes(trimmed)
-      );
-      setResults(filtered);
+  const onSearch = async (keyword: string) => {
+    setStudent(undefined);
+    const trimmed = keyword.trim();
+
+    if (trimmed === "") {
+      setStudent(undefined);
+      return;
+    }
+
+    try {
+      const result =
+        await gradeService.GetStudentDetailAndSummaryScoreByStudentCode(
+          trimmed
+        );
+      setStudent(result);
+    } catch (error) {
+      console.error("ไม่พบข้อมูลนักเรียนหรือเกิดข้อผิดพลาด", error);
+      setStudent(undefined);
     }
   };
-
   return (
-    <div className="w-full">
-      <div className="my-5 border shadow-sm border-gray-200 w-full px-5 py-5 rounded-lg">
-        <div className="flex gap-5 -translate-x-20 items-center justify-center">
-          <i className="text-gray-600">
-            กรอกรหัส / ชื่อนักเรียนเพื่อทำการค้นหา
-          </i>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-            className="border-gray-200 rounded-sm border px-4 py-1"
-            placeholder="Search..."
-          />
-          <button
-            className="bg-blue-500 py-1 text-white px-10 rounded-sm"
-            onClick={handleSearch}
-          >
-            ค้นหา
-          </button>
-        </div>
+    <div>
+      <div className="py-6"></div>
+      <div className="flex justify-center items-center mt-5 gap-5 py-5">
+        <i className="text-gray-600">กรอกรหัสนักเรียนเพื่อทำการค้นหา</i>
+        <SearchInput onSearchKeyword={onSearch} edit={edit} />
       </div>
+      <LineCenter color="text-back" />
+      {student != undefined ? (
+        <div key={student.student.studentCode}>
+          <div className="py-4 flex justify-between ">
+            <StudentInformationCard
+              key={student.student.studentCode}
+              StudentCode={student?.student.studentCode}
+              StudentFirstName={student?.student.name || "-"}
+              StudentLastName={student?.student.lastName || "-"}
+              Class={student?.student.class + student?.student.groupName || "-"}
+              Faculty="บริการและการจัดการ"
+              edit={edit}
+            />
+            <div className="flex items-start gap-5">
+              <button
+                className={`px-10 py-1.5 text-white rounded-sm ${
+                  edit ? "bg-red-500" : "bg-blue-500"
+                }`}
+                onClick={() => setEdit(!edit)}
+              >
+                {edit ? <p>ยกเลิก</p> : <p>แก้ไข</p>}
+              </button>
+              <button className="px-10 py-1.5 bg-green-400 text-white rounded-sm">
+                บันทึก
+              </button>
+            </div>
+          </div>
+          <div className="w-full flex gap-10 items-center pt-4">
+            <button
+              className="enabled:bg-blue-500 bg-blue-400 px-10 py-1.5 rounded-md flex items-center gap-2 text-center text-white disabled:cursor-not-allowed enabled:hover:bg-blue-700"
+              disabled={!edit}
+              onClick={() => setCreateTableButton(true)}
+            >
+              <PlusCircle className="w-6 h-6" />
+              สร้างตารางคะแนน
+            </button>
+            <p className="pl-20 text-red-500">
+              *** โปรดตรวจสอบข้อมูลให้ถูกต้องทุกครั้งเมื่อทำการเพิ่มหรือแก้ไข
+              ***
+            </p>
+          </div>
+          <div>
+            {student.termYearGradeGroups.map((group, index) => (
+              <div className="my-6">
+                <ScoreInputForm
+                  key={index}
+                  scores={student.termYearGradeGroups[index].grades}
+                  edit={edit}
+                  onChange={(updatedGrades: SubjectGrade[]) => {
+                    setStudent((prev) => {
+                      if (!prev) return prev;
 
-      {results.length > 0 ? (
-        <div className="py-4">
-          <DynamicTable
-            data={results}
-            columns={[
-              { header: "รหัสนักเรียน", field: "studentCode", width: "30%" },
-              {
-                header: "ชื่อจริง",
-                field: "studentFirstName",
-                width: "20%",
-                align: "left",
-                padding: "pl-10",
-              },
-              {
-                header: "นามสกุล",
-                field: "studentLastName",
-                width: "20%",
-                align: "left",
-                padding: "pl-10",
-              },
-              { header: "ห้อง", field: "className", width: "30%" },
-            ]}
-            onRowClick={(row) => {
-              router.push("/teacher/import-score/" + row.studentCode);
-            }}
-          />
-          <div className="py-20"></div>
+                      const updatedGroups = [...prev.termYearGradeGroups];
+                      updatedGroups[index] = {
+                        ...updatedGroups[index],
+                        grades: updatedGrades,
+                      };
+
+                      return {
+                        ...prev,
+                        termYearGradeGroups: updatedGroups,
+                      };
+                    });
+                  }}
+                  term={
+                    student.termYearGradeGroups[index].grades[0]?.term || "1"
+                  }
+                  year={
+                    student.termYearGradeGroups[index].grades[0]?.year || 2567
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {creatTableButton && (
+            <CreateScoreTablePopup
+              onClickPopUp={setCreateTableButton}
+              onConfirm={(year, term) => {
+                const newScoreGroup: SubjectGrade[] = [
+                  {
+                    gradeId: 0,
+                    term,
+                    year,
+                    subjectName: "",
+                    subjectCode: "",
+                    gradePoint: 0,
+                    credit: 0,
+                    finalGrade: 0,
+                    remark: "",
+                  },
+                ];
+
+                setStudent((prev) => {
+                  if (!prev) return prev;
+
+                  return {
+                    ...prev,
+                    termYearGradeGroups: [
+                      ...prev.termYearGradeGroups,
+                      {
+                        term,
+                        year,
+                        totalGPA: 0,
+                        totalCredit: 0,
+                        grades: newScoreGroup,
+                      },
+                    ],
+                  };
+                });
+
+                setCreateTableButton(false);
+              }}
+            />
+          )}
         </div>
       ) : (
         <div className="py-10 grid place-items-center">

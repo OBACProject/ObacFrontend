@@ -20,8 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ToastContainer
+      <body className="min-h-screen flex flex-col">
+        <ToastContainer             
           position="bottom-right"
           hideProgressBar
           className="z-50"
@@ -30,7 +30,7 @@ export default function RootLayout({
           menuItems={AcademicSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20 lg:pl-10">{children}</div>
+        <div className=" flex-1  pt-20 lg:pl-10">{children}</div>
         <HomeFooter/>
       </body>
     </html>

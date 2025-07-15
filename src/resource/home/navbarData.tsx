@@ -79,7 +79,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "accounting",
-        href: "/",
+        href: "/program/accounting",
       },
       {
         menuName: "การตลาด",
@@ -90,7 +90,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "marketing",
-        href: "/",
+        href: "/program/marketing",
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
@@ -100,8 +100,8 @@ export const NavbarData: DropMenuProps[] = [
             className="text-white  transition-colors"
           />
         ),
-        tab: "digital",
-        href: "/",
+        tab: "computer-business",
+        href: "/program/computer-business",
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
@@ -111,8 +111,8 @@ export const NavbarData: DropMenuProps[] = [
             className="text-white  transition-colors"
           />
         ),
-        tab: "graphic",
-        href: "/",
+        tab: "computer-graphic",
+        href: "/program/computer-graphic",
       },
       {
         menuName: "การท่องเที่ยว",
@@ -123,7 +123,7 @@ export const NavbarData: DropMenuProps[] = [
           />
         ),
         tab: "tourism",
-        href: "/",
+        href: "/program/tourism-management",
       },
     ],
   },
