@@ -33,22 +33,22 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
     {
       label: "รายวิชา",
       key: "subject_name",
-      className: "w-5/12 px-4 py-3 text-left font-medium",
+      className: "w-5/12 px-4 py-1 text-left font-medium",
     },
     {
       label: "รหัสวิชา",
       key: "subject_code",
-      className: "w-2/12 px-4 py-3 text-center font-medium",
+      className: "w-2/12 px-4 py-1 text-center font-medium",
     },
     {
       label: "หน่วยกิต",
       key: "credit",
-      className: "w-2/12 px-4 py-3 text-center font-medium",
+      className: "w-2/12 px-4 py-1 text-center font-medium",
     },
     {
       label: "เกรด",
       key: "finalGrade",
-      className: "w-3/12 px-4 py-3 text-center font-medium",
+      className: "w-3/12 px-4 py-1 text-center font-medium",
       render: (row: any) => (
         <span className={`px-2 py-1 rounded text-xs font-medium ${row.isFailed ? "text-red-800" : "text-green-800"}`}>
           {row.finalGrade}
