@@ -9,6 +9,13 @@ interface StudentInformationCardProps {
   Class: string;
   Faculty: string;
   edit: boolean;
+  onChangeStudentData?: (updated: {
+    studentCode: string;
+    studentFirstName: string;
+    studentLastName: string;
+    className: string;
+    faculty: string;
+  }) => void;
 }
 
 export default function StudentInformationCard({
@@ -17,7 +24,8 @@ export default function StudentInformationCard({
   StudentLastName,
   Class,
   Faculty,
-  edit
+  edit,
+  onChangeStudentData,
 }: StudentInformationCardProps) {
   const [studentCode, setStudentCode] = useState<string>("");
   const [studentFirstName, setStudentFirstName] = useState<string>("");
@@ -29,16 +37,30 @@ export default function StudentInformationCard({
     setStudentCode(StudentCode);
     setClassName(Class);
     setFaculty(Faculty);
-    setStudentFirstName(StudentFirstName)
-    setStudentLastName(StudentLastName)
+    setStudentFirstName(StudentFirstName);
+    setStudentLastName(StudentLastName);
   }, []);
+
+  useEffect(() => {
+    if (onChangeStudentData) {
+      onChangeStudentData({
+        studentCode,
+        studentFirstName,
+        studentLastName,
+        className,
+        faculty,
+      });
+    }
+    console.log("std code : ",studentCode)
+  }, [studentCode, studentFirstName, studentLastName, className, faculty]);
+
   return (
     <div className="w-fit py-5 px-14 border-gray-200 border rounded-lg shadow-sm">
       <div className="flex items-center gap-5 mb-4">
         <InputBox
           label="รหัสนักเรียน"
           name="studentCode"
-          value={studentCode || "00000000"}
+          value={studentCode}
           onChange={(e) => setStudentCode(e.target.value)}
           placeholder="รหัสนักเรียน"
           inputWidth="w-[150px]"
@@ -53,7 +75,7 @@ export default function StudentInformationCard({
         <InputBox
           label="ชื่อจริง"
           name="studentFirstName"
-          value={studentFirstName || "00000000"}
+          value={studentFirstName}
           onChange={(e) => setStudentFirstName(e.target.value)}
           placeholder="ชื่อจริง"
           inputWidth="w-[180px]"
@@ -64,7 +86,7 @@ export default function StudentInformationCard({
         <InputBox
           label="นามสกุล"
           name="studentLastName"
-          value={studentLastName || "00000000"}
+          value={studentLastName}
           onChange={(e) => setStudentLastName(e.target.value)}
           placeholder="นามสกุล"
           inputWidth="w-[180px]"
@@ -77,7 +99,7 @@ export default function StudentInformationCard({
         <InputBox
           label="ชั้นเรียน"
           name="studentLastName"
-          value={className || "00000000"}
+          value={className}
           onChange={(e) => setClassName(e.target.value)}
           placeholder="ชั้นเรียน"
           inputWidth="w-[100px]"
@@ -88,7 +110,7 @@ export default function StudentInformationCard({
         <InputBox
           label="สาขาวิชา"
           name="studentLastName"
-          value={faculty || "00000000"}
+          value={faculty}
           onChange={(e) => setFaculty(e.target.value)}
           placeholder="สาขาวิชา"
           inputWidth="w-[230px]"

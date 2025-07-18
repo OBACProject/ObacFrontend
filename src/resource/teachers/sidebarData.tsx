@@ -43,17 +43,17 @@ export const TeacherSideBarData: TeacherSidebarProps = {
         />
       ),
     },
-    {
-      title: "ตารางสอน",
-      tooltip: "schedule",
-      href: "/teacher/schedule",
-      icon: (
-        <CreditCard
-          style={{ width: "2.2rem", height: "2.5rem" }}
-          className=""
-        />
-      ),
-    },
+    // {
+    //   title: "ตารางสอน",
+    //   tooltip: "schedule",
+    //   href: "/teacher/schedule",
+    //   icon: (
+    //     <CreditCard
+    //       style={{ width: "2.2rem", height: "2.5rem" }}
+    //       className=""
+    //     />
+    //   ),
+    // },
      {
       title: "Import Score",
       tooltip: "นำเข้าคะแนน",

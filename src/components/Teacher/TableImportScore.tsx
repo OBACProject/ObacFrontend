@@ -1,11 +1,13 @@
 "use client";
-import { SubjectGrade } from "@/lib/api/models/grade/grade.response";
+import { SubjectGrade } from "@/dto/gradingDto";
+import { Trash2 } from "lucide-react";
 import React from "react";
 
 interface ScoreInputFormProps {
   scores: SubjectGrade[];
   edit: boolean;
   onChange: (updated: SubjectGrade[]) => void;
+  onRemoveGroup?: () => void;
   term: string;
   year: number;
 }
@@ -14,6 +16,7 @@ export default function ScoreInputForm({
   scores,
   edit,
   onChange,
+  onRemoveGroup,
   term,
   year,
 }: ScoreInputFormProps) {
@@ -69,7 +72,20 @@ export default function ScoreInputForm({
             <th className="border px-2 py-1">เกรด</th>
             <th className="border px-2 py-1">ผลคูณ</th>
             <th className="border px-2 py-1 w-[100px]">หมายเหตุ</th>
-            <th className="border px-2 py-1 w-[60px]"></th>
+            <th className="border px-2 py-1 w-[60px]">
+              {edit && (
+                <div className="flex  items-center">
+                  {onRemoveGroup && (
+                    <button
+                      onClick={onRemoveGroup}
+                      className="bg-red-700 hover:bg-red-800 text-white px-2 py-1.5 rounded"
+                    >
+                      <Trash2 className="w-5 h-5 text-white" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -175,7 +191,7 @@ export default function ScoreInputForm({
                   {edit && (
                     <button
                       onClick={() => removeRow(index)}
-                      className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
+                      className="bg-red-400 hover:bg-red-600 text-white px-2 py-1 rounded"
                     >
                       ลบ
                     </button>

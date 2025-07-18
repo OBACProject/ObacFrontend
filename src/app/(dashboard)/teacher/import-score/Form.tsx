@@ -6,19 +6,59 @@ import { PlusCircle } from "lucide-react";
 import CreateScoreTablePopup from "@/components/Teacher/CreateScoreTablePopup";
 import SearchInput from "@/components/Teacher/SearchInput";
 import LineCenter from "@/components/Teacher/LineCenter";
-import { gradeService } from "@/lib/api/services/grade.service";
 import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
   SubjectGrade,
-} from "@/lib/api/models/grade/grade.response";
-import { mockStudentDetailAndSummary } from "@/resource/teachers/mockData";
+} from "@/dto/gradingDto";
+import {
+  GetStudentDetailAndSummaryScoreByStudentCode,
+  upsertStudentGrades,
+} from "@/api/grad/route";
 
 export default function Form() {
   const [edit, setEdit] = useState<boolean>(false);
   const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
-  const [student, setStudent] = useState<
-    GetStudentDetailAndSummaryScoreByStudentCodeResponse | undefined
-  >(mockStudentDetailAndSummary);
+  const [student, setStudent] =
+    useState<GetStudentDetailAndSummaryScoreByStudentCodeResponse | null>();
+
+  const [editedStudentInfo, setEditedStudentInfo] = useState<{
+    studentCode: string;
+    studentFirstName: string;
+    studentLastName: string;
+    className: string;
+    faculty: string;
+  }>();
+
+  const onSaveStudentScore = async () => {
+    if (!student || !editedStudentInfo) return;
+
+    const payload = {
+      student: {
+        ...student.student,
+        studentCode: editedStudentInfo.studentCode,
+        name: editedStudentInfo.studentFirstName,
+        lastName: editedStudentInfo.studentLastName,
+        class: editedStudentInfo.className,
+        facultyName: editedStudentInfo.faculty,
+      },
+      termYearGradeGroups: student.termYearGradeGroups,
+    };
+    console.log("payload FE : ",payload);
+    const success = await upsertStudentGrades(payload);
+    if (success) {
+      alert("บันทึกข้อมูลสำเร็จ");
+      // setTimeout(
+      //   () => {
+      //     window.location.reload()
+      //   },
+      //   2000
+      // );
+      setEdit(false);
+    } else {
+
+      alert("เกิดข้อผิดพลาด");
+    }
+  };
 
   const onSearch = async (keyword: string) => {
     setStudent(undefined);
@@ -29,16 +69,20 @@ export default function Form() {
       return;
     }
     try {
-      const result =
-        await gradeService.GetStudentDetailAndSummaryScoreByStudentCode(
-          trimmed
-        );
-      setStudent(result);
+      const result = await GetStudentDetailAndSummaryScoreByStudentCode(
+        keyword
+      );
+      if (result) {
+        setStudent(result);
+      } else {
+        setStudent(null);
+      }
     } catch (error) {
       console.error("ไม่พบข้อมูลนักเรียนหรือเกิดข้อผิดพลาด", error);
       setStudent(undefined);
     }
   };
+
   return (
     <div>
       <div className="py-6"></div>
@@ -47,17 +91,18 @@ export default function Form() {
         <SearchInput onSearchKeyword={onSearch} edit={edit} />
       </div>
       <LineCenter color="text-back" />
-      {student != undefined ? (
+      {student != null ? (
         <div key={student.student.studentCode}>
           <div className="py-4 flex justify-between ">
             <StudentInformationCard
-              key={student.student.studentCode}
+              key={student?.student.id}
               StudentCode={student?.student.studentCode}
               StudentFirstName={student?.student.name || "-"}
               StudentLastName={student?.student.lastName || "-"}
               Class={student?.student.class + student?.student.groupName || "-"}
-              Faculty="บริการและการจัดการ"
+              Faculty={student?.student.facultyName || "-"}
               edit={edit}
+              onChangeStudentData={(updated) => setEditedStudentInfo(updated)}
             />
             <div className="flex items-start gap-5">
               <button
@@ -68,7 +113,12 @@ export default function Form() {
               >
                 {edit ? <p>ยกเลิก</p> : <p>แก้ไข</p>}
               </button>
-              <button className="px-10 py-1.5 bg-green-400 text-white rounded-sm">
+              <button
+                className="px-10 py-1.5 bg-green-400 text-white rounded-sm"
+                onClick={() => {
+                  onSaveStudentScore();
+                }}
+              >
                 บันทึก
               </button>
             </div>
@@ -88,6 +138,7 @@ export default function Form() {
             </p>
           </div>
           <div>
+            {/* Table Score ตารางคะแนนทุกเทอมของเด็ก */}
             {student.termYearGradeGroups.map((group, index) => (
               <div className="my-6">
                 <ScoreInputForm
@@ -103,7 +154,6 @@ export default function Form() {
                         ...updatedGroups[index],
                         grades: updatedGrades,
                       };
-
                       return {
                         ...prev,
                         termYearGradeGroups: updatedGroups,
@@ -116,6 +166,20 @@ export default function Form() {
                   year={
                     student.termYearGradeGroups[index].grades[0]?.year || 2567
                   }
+                  onRemoveGroup={() => {
+                    setStudent((prev) => {
+                      if (!prev) return prev;
+
+                      const updatedGroups = prev.termYearGradeGroups.filter(
+                        (_, i) => i !== index
+                      );
+
+                      return {
+                        ...prev,
+                        termYearGradeGroups: updatedGroups,
+                      };
+                    });
+                  }}
                 />
               </div>
             ))}
@@ -127,7 +191,7 @@ export default function Form() {
               onConfirm={(year, term) => {
                 const newScoreGroup: SubjectGrade[] = [
                   {
-                    gradeId: 0,
+                    gradeId: 1,
                     term,
                     year,
                     subjectName: "",
