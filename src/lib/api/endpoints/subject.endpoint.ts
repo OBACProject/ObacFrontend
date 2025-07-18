@@ -7,4 +7,5 @@ export const SUBJECT_ENDPOINTS = {
     POST_CREATE_SUBJECT : "/Subject/CreateSubject",
     PUT_UPDATE_SUBJECT : "/Subject/UpdateSubject",
     DELETE_SUBJECT : "/Subject/DeleteSubject",
+    GET_SUBJECTS_BY_STUDENT_GROUP_ID_TERM_YEAR: "/Subject/GetSubjectsByStudentGroupIdTermYear",
 }

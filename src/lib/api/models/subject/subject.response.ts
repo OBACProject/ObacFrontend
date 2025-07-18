@@ -35,5 +35,18 @@ export interface UpdateSubjectResponse {
 export interface DeleteSubjectResponse {
     data : subject;
 }
+export interface GetSubjectByTermResponse {
+    data : subject[];
+}
 
-
+export interface GetSubjectsByStudentGroupIdTermYearResponse {
+    scheduleSubjectId : number;
+    SubjectId : number;
+    SubjectName : string;
+    SubjectCode : string;
+    TeacherName : string;
+    Term: string;
+    Year: number;
+    IsPublish : boolean;
+    IsComplete: boolean;
+}
