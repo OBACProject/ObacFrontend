@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import GradeSubjectSearchBar from './GradeSubjectSearchBar';
-import { DataTable } from '@/components/common/MainTable/table_style_1';
-import HeaderLabel from '@/components/common/labelText/HeaderLabel';
-import { ScrollText } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Combobox } from '@/components/common/Combobox/combobox';
+import React, { useState, useMemo, useDeferredValue, useEffect } from "react";
+import GradeSubjectSearchBar from "./GradeSubjectSearchBar";
+import { DataTable } from "@/components/common/MainTable/table_style_1";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import { Calendar, ScrollText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { Combobox } from "@/components/common/Combobox/combobox";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 export const columns = [
   { label: "ลำดับ", key: "index", className: "w-1/12 flex px-10" },
@@ -18,11 +19,36 @@ export const columns = [
 ];
 
 const mockData = [
-  { id: '000101', name: 'ภาษาไทยพื้นฐาน', teacher: 'อาจารย์ กนกพร ชัยภูมิ', status: 'ตรวจสอบเสร็จสิ้น' },
-  { id: '000102', name: 'คณิตศาสตร์พื้นฐาน', teacher: 'อาจารย์ สุชาติ แสงเพชร',  status: 'ยังไม่ตรวจสอบ' },
-  { id: '000103', name: 'วิทยาศาสตร์ทั่วไป', teacher: 'อาจารย์ อรอุมา หาญกล้า',  status: 'ยังไม่ตรวจสอบ' },
-  { id: '000104', name: 'ภาษาอังกฤษ', teacher: 'อาจารย์ รุจิรา นามทอง',  status: 'ตรวจสอบเสร็จสิ้น' },
-  { id: '000105', name: 'ประวัติศาสตร์', teacher: 'อาจารย์ ธงชัย สมจิต',  status: 'ยังไม่ตรวจสอบ' },
+  {
+    id: "000101",
+    name: "ภาษาไทยพื้นฐาน",
+    teacher: "อาจารย์ กนกพร ชัยภูมิ",
+    status: "ตรวจสอบเสร็จสิ้น",
+  },
+  {
+    id: "000102",
+    name: "คณิตศาสตร์พื้นฐาน",
+    teacher: "อาจารย์ สุชาติ แสงเพชร",
+    status: "ยังไม่ตรวจสอบ",
+  },
+  {
+    id: "000103",
+    name: "วิทยาศาสตร์ทั่วไป",
+    teacher: "อาจารย์ อรอุมา หาญกล้า",
+    status: "ยังไม่ตรวจสอบ",
+  },
+  {
+    id: "000104",
+    name: "ภาษาอังกฤษ",
+    teacher: "อาจารย์ รุจิรา นามทอง",
+    status: "ตรวจสอบเสร็จสิ้น",
+  },
+  {
+    id: "000105",
+    name: "ประวัติศาสตร์",
+    teacher: "อาจารย์ ธงชัย สมจิต",
+    status: "ยังไม่ตรวจสอบ",
+  },
 ];
 
 interface Props {
@@ -30,15 +56,21 @@ interface Props {
 }
 
 export default function FilterableTable({ classroomId }: Props) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterLevel, setFilterLevel] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterLevel, setFilterLevel] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const deferredSearch = useDeferredValue(searchTerm);
 
-  const allLevels = useMemo(() => Array.from(new Set(mockData.map((d) => d.teacher))), []);
-  const allStatuses = useMemo(() => Array.from(new Set(mockData.map((d) => d.status))), []);
+  const allLevels = useMemo(
+    () => Array.from(new Set(mockData.map((d) => d.teacher))),
+    []
+  );
+  const allStatuses = useMemo(
+    () => Array.from(new Set(mockData.map((d) => d.status))),
+    []
+  );
 
   const filteredData = useMemo(() => {
     return mockData
@@ -47,26 +79,27 @@ export default function FilterableTable({ classroomId }: Props) {
           String(val).toLowerCase().includes(deferredSearch.toLowerCase())
         )
       )
-      .filter((item) =>
-        (filterLevel ? item.teacher === filterLevel : true) &&
-        (filterStatus ? item.status === filterStatus : true)
+      .filter(
+        (item) =>
+          (filterLevel ? item.teacher === filterLevel : true) &&
+          (filterStatus ? item.status === filterStatus : true)
       );
   }, [deferredSearch, filterLevel, filterStatus]);
 
   useEffect(() => {
-  if (!showAdvanced) {
-    setFilterLevel('');
-    setFilterStatus('');
-  }
-}, [showAdvanced]);
+    if (!showAdvanced) {
+      setFilterLevel("");
+      setFilterStatus("");
+    }
+  }, [showAdvanced]);
 
   return (
     <>
-      <div className='flex px-10 w-full justify-between items-center'>
+      <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ปวส.${classroomId}/2`}
-          className='text-blue'
+          className="text-blue"
         />
         <GradeSubjectSearchBar onChange={setSearchTerm} />
       </div>
@@ -107,14 +140,18 @@ export default function FilterableTable({ classroomId }: Props) {
         </Button>
       </div>
 
-      <div className="mt-6">
-        <DataTable
+      <div className="mt-2">
+        <StylesTable
+          icon={<Calendar className="w-5 h-5 text-white" />}
+          title={`รายชื่อวิชาทั้งหมด ปวส.${classroomId}/2`}
           columns={columns}
           data={filteredData.map((item, index) => ({
             ...item,
             index: index + 1,
           }))}
-          getRowLink={(row) => `/academic/grading/student-classroom/${classroomId}/subject/${row.id}`}
+          getRowLink={(row) =>
+            `/academic/grading/student-classroom/${classroomId}/subject/${row.id}`
+          }
           pagination={10}
         />
       </div>

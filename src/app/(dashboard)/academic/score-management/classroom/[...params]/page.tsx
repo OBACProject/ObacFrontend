@@ -10,6 +10,7 @@ import { ClassroomByGroupIdData } from "@/dto/gradingDto"
 import { Download, FileText, Search, Users } from "lucide-react"
 import { useState, useMemo, useCallback, useEffect } from "react"
 import { mockClassroomData, TransformedStudentData } from "./mockData"
+import HeaderLabel from "@/components/common/labelText/HeaderLabel"
 
 
 function useDebounce<T>(value: T, delay: number): T {
@@ -230,10 +231,7 @@ export default function ClassroomGradeManagementPage() {
   return (
     <div className="mx-4 sm:mx-10 lg:mx-10 p-4 space-y-6">
       <div className="w-full flex justify-start">
-        <div className="px-10 rounded-3xl flex gap-2 items-center border border-gray-100 shadow-md py-2 text-blue-700 text-xl w-fit">
-          <Users className="h-8 w-8" />
-          จัดการคะแนน (รายห้อง)
-        </div>
+        <HeaderLabel Icon={<Users className="h-7 w-7" />} title={"จัดการคะแนน ห้องเรียน"}/>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">

@@ -1,14 +1,15 @@
 "use client";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { ScrollText } from "lucide-react";
+import {  School, ScrollText } from "lucide-react";
 import React, {  useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
 import FilterBar from "../../component/FilterBar";
-import { DataTable } from "@/components/common/MainTable/table_style_1";
+// import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { AnimatePresence, motion } from "framer-motion";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import GradeToggleButton from "../../component/pushlishToggle";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 const columns = [
   { label: "ภาคการศึกษา", key: "semester", className: "w-1/4 flex justify-center" },
@@ -359,7 +360,9 @@ export default function StudentClassroomContent() {
       {isDataTableLoading || isPending ? (
         <TableSkeleton rows={10} columns={5} />
       ) : (
-        <DataTable
+        <StylesTable
+        icon={<School className="w-5 h-5 text-white"/>}
+        title="ห้องเรียนทั้งหมด"
           columns={columns}
           data={filteredData.map((item, index) => ({
             ...item,

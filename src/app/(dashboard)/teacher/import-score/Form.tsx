@@ -11,13 +11,14 @@ import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
   SubjectGrade,
 } from "@/lib/api/models/grade/grade.response";
+import { mockStudentDetailAndSummary } from "@/resource/teachers/mockData";
 
 export default function Form() {
   const [edit, setEdit] = useState<boolean>(false);
   const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
   const [student, setStudent] = useState<
     GetStudentDetailAndSummaryScoreByStudentCodeResponse | undefined
-  >();
+  >(mockStudentDetailAndSummary);
 
   const onSearch = async (keyword: string) => {
     setStudent(undefined);
@@ -27,7 +28,6 @@ export default function Form() {
       setStudent(undefined);
       return;
     }
-
     try {
       const result =
         await gradeService.GetStudentDetailAndSummaryScoreByStudentCode(

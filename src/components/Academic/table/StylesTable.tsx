@@ -89,7 +89,7 @@ export function StylesTable<T extends Record<string, any>>({
   return (
     <div className="w-full rounded-sm py-5 px-10">
       {/* Table Header */}
-      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600"> 
         {icon}
         <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>

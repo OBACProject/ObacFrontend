@@ -34,9 +34,9 @@ export default function StudentInformationCard({
   }, []);
   return (
     <div className="w-fit py-5 px-14 border-gray-200 border rounded-lg shadow-sm">
-      <div className="flex items-center gap-8 mb-4">
+      <div className="flex items-center gap-5 mb-4">
         <InputBox
-          label="รหัสนักเรียน :"
+          label="รหัสนักเรียน"
           name="studentCode"
           value={studentCode || "00000000"}
           onChange={(e) => setStudentCode(e.target.value)}
@@ -46,8 +46,12 @@ export default function StudentInformationCard({
           labelSize="text-xl"
           disable={!edit}
         />
+        <select className="border border-gray-300 rounded-md py-1.5 px-2">
+          <option>นาย</option>
+          <option>นาง</option>
+        </select>
         <InputBox
-          label="ชื่อจริง :"
+          label="ชื่อจริง"
           name="studentFirstName"
           value={studentFirstName || "00000000"}
           onChange={(e) => setStudentFirstName(e.target.value)}
@@ -58,7 +62,7 @@ export default function StudentInformationCard({
           disable={!edit}
         />
         <InputBox
-          label="นามสกุล :"
+          label="นามสกุล"
           name="studentLastName"
           value={studentLastName || "00000000"}
           onChange={(e) => setStudentLastName(e.target.value)}
@@ -71,7 +75,7 @@ export default function StudentInformationCard({
       </div>
       <div className="flex items-center gap-8">
         <InputBox
-          label="ชั้นเรียน :"
+          label="ชั้นเรียน"
           name="studentLastName"
           value={className || "00000000"}
           onChange={(e) => setClassName(e.target.value)}
@@ -82,7 +86,7 @@ export default function StudentInformationCard({
           disable={!edit}
         />
         <InputBox
-          label="สาขาวิชา :"
+          label="สาขาวิชา"
           name="studentLastName"
           value={faculty || "00000000"}
           onChange={(e) => setFaculty(e.target.value)}

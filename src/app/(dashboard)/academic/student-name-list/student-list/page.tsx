@@ -5,7 +5,7 @@ import Main from "./main";
 
 export default function page() {
   return (
-    <div className="pl-16">
+    <div className="pl-16 bg-gray-50">
       <div className="w-full px-10">
         <Main/>
       </div>

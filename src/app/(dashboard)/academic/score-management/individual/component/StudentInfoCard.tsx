@@ -15,7 +15,7 @@ interface Props {
 
 export const StudentInfoCard = ({ student, scoreFileData, onDownloadPDF }: Props) => {
   return (
-    <Card className="shadow-lg border-0 bg-gradient-to-r from-white to-blue-50 hover:shadow-xl transition-all duration-300">
+    <Card className="shadow-lg border-0 px-10 bg-gradient-to-r from-white to-blue-50 hover:shadow-xl transition-all duration-300">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row justify-between items-start">
           <Link

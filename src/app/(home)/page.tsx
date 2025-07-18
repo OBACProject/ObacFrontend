@@ -56,7 +56,7 @@ export default function Home() {
         </Parallax>
 
         {/* Text content */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-36 sm:pt-0">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-44 sm:pt-0">
           <Parallax speed={20}>
             <div className="text-white space-y-4 sm:space-y-6">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
@@ -95,7 +95,7 @@ export default function Home() {
         </OpeningScroll>
 
         <OpeningScroll>
-          <section className="container mx-auto px-4 py-6 sm:py-8 space-y-14 sm:space-y-20">
+          <section className="container mx-auto px-4 py-6 sm:py-8 space-y-10 sm:space-y-20">
             {/* Section 1 */}
             <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-10 items-center">
               <Parallax speed={5}>
@@ -122,7 +122,7 @@ export default function Home() {
             </div>
 
             {/* Section 2 */}
-            <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-10 items-center">
+            <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-5 items-center">
               <Parallax speed={5}>
                 <div>
                   <img
@@ -176,7 +176,7 @@ export default function Home() {
 
       {/* Activity Carousel */}
       <OpeningScroll>
-        <div className="py-8 sm:py-10">
+        <div className="py-4 sm:py-10">
           <ActivityCarousel />
         </div>
       </OpeningScroll>
@@ -219,7 +219,7 @@ export default function Home() {
 
       {/* Call to Action */}
       <FadeInOnScroll>
-        <section className="bg-blue-900 text-white py-10 sm:py-16 text-center mt-16 sm:mt-20">
+        <section className="bg-blue-900 text-white py-10 sm:py-16 text-center mt-5 mb-0 sm:mt-20">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             พร้อมจะเริ่มต้นอนาคตของคุณแล้วหรือยัง?
           </h2>

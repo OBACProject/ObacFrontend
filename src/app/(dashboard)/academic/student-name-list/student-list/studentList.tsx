@@ -81,7 +81,7 @@ export function StudentListPage(props: {
   return (
     <>
       {isLoadingPage ? (
-        <header className="flex flex-col p-4 border-2 mt-4 rounded-lg">
+        <header className="flex bg-white flex-col p-4 border mt-4 rounded-lg">
           <div className="flex gap-12 mt-4">
             <div className="flex mx-auto gap-6 w-full p-2 rounded-lg">
               <div className="w-1/6">

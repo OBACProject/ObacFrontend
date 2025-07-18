@@ -97,7 +97,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
   }
 
   return (
-    <section className="min-h-screen  bg-gradient-to-br from-slate-50 to-blue-50">
+    <section className="min-h-screen px-10 bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container max-w-9xl mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center gap-4 pb-6 border-b border-slate-200">
           <div className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white shadow-lg">

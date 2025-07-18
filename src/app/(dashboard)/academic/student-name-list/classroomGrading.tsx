@@ -149,7 +149,7 @@ export function ClassroomGrading(props: {
   const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const handleRowClick = (item: ClassroomTable) => {
     router.push(
-      `/academic/student-info-list/studentGroup?groupId=${item.groupId}`
+      `/academic/student-name-list/student-group?groupId=${item.groupId}`
     );
   };
   const [studentInGroup, setStudentInGroup] =
@@ -332,7 +332,7 @@ export function ClassroomGrading(props: {
   return (
     <div className="px-5 py-2">
       {isLoadingPage ? (
-        <header className="grid px-4 py-0 border  rounded-lg">
+        <header className="grid px-4 bg-white py-0 border  rounded-lg">
           <div className="flex justify-center w-full">
             <div className="flex  justify-start items-center gap-6 w-full p-2 rounded-lg">
               <div className="w-1/6 flex flex-col gap-4">

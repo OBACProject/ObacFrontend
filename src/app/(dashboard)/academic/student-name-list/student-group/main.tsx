@@ -6,9 +6,10 @@ import {
   StudentListByGroupIDDto,
 } from "@/dto/studentDto";
 import { ConvertClassroomToExcel } from "@/lib/Excel/convertToExcel";
-import { Download, Loader2, UsersRound } from "lucide-react";
+import { Download, Loader2, Users, UsersRound } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { mockStudentListByGroupID } from "@/resource/academics/mockData";
 
 type Props = {
   groupId: number;
@@ -25,36 +26,39 @@ const getStudentDataList = async (groupId: number) => {
 
 export default function Main({ groupId }: Props) {
   const [studentInGroup, setStudentInGroup] =
-    useState<GetStudentListByGroupIDDto | null>();
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
+    useState<GetStudentListByGroupIDDto | null>(mockStudentListByGroupID);
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true); // adjust
   const dateTime = new Date();
-  const currentMonth = dateTime.getMonth(); 
-  const year = currentMonth > 5 
-  ? dateTime.getFullYear() + 543 
-  : dateTime.getFullYear() + 543 - 1;
-  useEffect(() => {
-    setIsLoadingPage(false);
-    getStudentDataList(groupId).then(
-      (item: GetStudentListByGroupIDDto | never[] | null) => {
-        if (item && !Array.isArray(item)) {
-          setStudentInGroup(item);
-          setIsLoadingPage(true);
-        } else {
-          setStudentInGroup(null);
-          setIsLoadingPage(true);
-        }
-      }
-    );
-  }, [groupId]);
+  const currentMonth = dateTime.getMonth();
+  const year =
+    currentMonth > 5
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
+  // useEffect(() => {
+  //   setIsLoadingPage(false);
+  //   getStudentDataList(groupId).then(
+  //     (item: GetStudentListByGroupIDDto | never[] | null) => {
+  //       if (item && !Array.isArray(item)) {
+  //         setStudentInGroup(item);
+  //         setIsLoadingPage(true);
+  //       } else {
+  //         setStudentInGroup(null);
+  //         setIsLoadingPage(true);
+  //       }
+  //     }
+  //   );
+  // }, [groupId]);
 
   const onGetStudentNameListPDF = () => {
     if (studentInGroup) {
       const studentClass =
         studentInGroup?.class + "." + studentInGroup?.groupName;
-        const filteredStudents = studentInGroup.students.filter(
-          (student) =>
-            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
-        );
+      const filteredStudents = studentInGroup.students.filter(
+        (student) =>
+          !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(
+            student.studentStatus
+          )
+      );
       StudentNameListPDF({
         studentGroup: studentClass,
         student: filteredStudents,
@@ -77,7 +81,9 @@ export default function Main({ groupId }: Props) {
         const studentClass = item.class + "." + item.groupName;
         const filteredStudents = item.students.filter(
           (student) =>
-            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(
+              student.studentStatus
+            )
         );
         ConvertClassroomToExcel(filteredStudents, studentClass);
       } else {
@@ -96,15 +102,7 @@ export default function Main({ groupId }: Props) {
           รายชื่อนักเรียนในห้องเรียน
         </h1>
       </div>
-      <div className="flex justify-between items-center py-2 px-5">
-        <div className=" flex gap-3 items-center text-lg">
-          <div className="border border-gray-300 rounded-sm px-5 py-1">
-            ห้อง {studentInGroup?.class}.{studentInGroup?.groupName}
-          </div>
-          <div className="border border-gray-300 rounded-sm px-5 py-1">
-            หลักสูตร {studentInGroup?.facultyName}
-          </div>
-        </div>
+      <div className="flex justify-end items-center py-2 px-5">
         <div className="flex gap-2 items-center">
           <button
             className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
@@ -124,7 +122,14 @@ export default function Main({ groupId }: Props) {
       </div>
       {isLoadingPage ? (
         <div className="w-full px-5 pb-10">
-          <div className="w-full shadow-lg grid grid-cols-[5%_10%_30%_55%]  bg-white border-t-2 border-b-2 text-lg border-gray-400">
+          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+            <Users className="w-5 h-5 text-white" />
+            <h1 className="text-lg text-white font-prompt ">
+              รายชื่อนักเรียนในห้อง {studentInGroup?.class || "กำลังโหลด..."}.{studentInGroup?.groupName || ""}
+            </h1>
+            <p className="text-lg text-white font-prompt">หลักสูตร {studentInGroup?.facultyName || "กำลังโหลด..."}</p>
+          </div>
+          <div className="w-full shadow-lg grid grid-cols-[5%_10%_30%_55%]    bg-gray-100 text-base ">
             <div className="text-center py-2">ลำดับ</div>
             <div className="text-center py-2">รหัสนักเรียน</div>
             <div className="text-center py-2">ชื่อ - นามสกุล</div>
