@@ -1,38 +1,23 @@
 import { BaseService } from "./base/base.service";
 import { GRADE_ENDPOINTS } from "../endpoints/grade.endpoints";
 import {
+  GetGroupSummaryGradeRequest,
   GetStudentGradesByTermYearRequest,
   GetStudentIfGradeBelowRequest,
-  GetStudentGradeAboveRequest,
-  GetStudentTranscriptRequest,
-  GetGroupSummaryGradeRequest,
   UpsertStudentGradesRequest,
-  // GetGroupSummaryGradeAvailableStatusRequest,
-  // GetStudentGroupGradeByGroupIdTermYearRequest,
-  // UpdateStudentGradeRequest,
-  // PublishGradeRequest,
+
 } from "../models/grade/grade.request";
 
 import {
-  GetGradBelowResponse,
-  GetGradPerTermYearByStudentIdResponse,
   GetGroupSummaryGradeResponse,
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
-  GetStudentGroupGradeAboveResponse,
-  StudentTranscriptResponse,
+  GetStudentIfGradeBelowResponse,
 } from "../models/grade/grade.response";
 
 export class GradeService extends BaseService {
-  async getStudentGrades(
-    params: GetStudentGradesByTermYearRequest
-  ): Promise<GetGradPerTermYearByStudentIdResponse> {
-    return this.get<GetGradPerTermYearByStudentIdResponse>(
-      GRADE_ENDPOINTS.GET_GRADE_STUDENT_GRADES_BY_TERM_YEAR,
-      params
-    );
-  }
 
-   async getGradeSummary(
+
+   async getGroupSummaryGrade(
     params: GetGroupSummaryGradeRequest
   ): Promise<GetGroupSummaryGradeResponse> {
     return this.get<GetGroupSummaryGradeResponse>(
@@ -40,16 +25,14 @@ export class GradeService extends BaseService {
       params
     );
   }
-
   async getStudentGradesByTermYear(
-    params: GetStudentGradesByTermYearRequest
-  ): Promise<GetGradPerTermYearByStudentIdResponse> {
-    return this.get<GetGradPerTermYearByStudentIdResponse>(
+    params : GetStudentGradesByTermYearRequest
+  ) : Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
+    return this.get<GetStudentDetailAndSummaryScoreByStudentCodeResponse>(
       GRADE_ENDPOINTS.GET_GRADE_STUDENT_GRADES_BY_TERM_YEAR,
       params
     );
   }
-
   async GetStudentDetailAndSummaryScoreByStudentCode(
     studentCode: string
   ): Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
@@ -57,8 +40,24 @@ export class GradeService extends BaseService {
       `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_DETAIL_AND_SUMMARY_SCORE_BY_STUDENT_CODE}?studentCode=${studentCode}`
     );
   }
-  
-  async upsertStudentGrades(
+  async getStudentGroupGradeByScheduleSubjectId(
+    scheduleSubjectId: number
+  ): Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
+    return this.get<GetStudentDetailAndSummaryScoreByStudentCodeResponse>(
+      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}/${scheduleSubjectId}`
+    );
+  }
+
+  async getStudentIfGradeBelow(
+    params : GetStudentIfGradeBelowRequest
+  ) : Promise<GetStudentIfGradeBelowResponse> {
+    return this.get<GetStudentIfGradeBelowResponse>(
+      GRADE_ENDPOINTS.GET_GRADE_STUDENT_IF_GRADE_BELOW,
+      params
+    );
+  }
+
+    async upsertStudentGrades(
     params: UpsertStudentGradesRequest
   ): Promise<void> {
     return this.put<void>(
