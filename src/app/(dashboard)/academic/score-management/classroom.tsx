@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
-import { GetAllStudentGroupByTermYearQuery } from "@/lib/hooks/queries/studentGroup.queries";
+import { GetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import type { GetAllStudentGroupByTermYearRequest } from "@/lib/api/models/studentGroup/studentGroup.request";
 
 interface ClassroomTable {

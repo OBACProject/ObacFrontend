@@ -8,7 +8,7 @@ import { Loader2, UserRound } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useLoginMutation } from "@/lib/hooks/queries/auth.queries"
+import { useLoginMutation } from "@/lib/api/hooks/queries/auth.queries"
 
 interface LoginFormProps {
   session?: { role?: string; name?: string }

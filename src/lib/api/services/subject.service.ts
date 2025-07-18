@@ -20,11 +20,11 @@ export class SubjectService extends BaseService {
     }
 
     async createSubject(params: any): Promise<CreateSubjectResponse[]> {
-        return this.post<CreateSubjectResponse[]>(SUBJECT_ENDPOINTS.CREATE_SUBJECT, params);
+        return this.post<CreateSubjectResponse[]>(SUBJECT_ENDPOINTS.POST_CREATE_SUBJECT, params);
     }
 
     async updateSubject(params: any): Promise<UpdateSubjectResponse[]> {
-        return this.put<CreateSubjectResponse[]>(SUBJECT_ENDPOINTS.UPDATE_SUBJECT, params);
+        return this.put<CreateSubjectResponse[]>(SUBJECT_ENDPOINTS.PUT_UPDATE_SUBJECT, params);
     }
 
     async deleteSubject(params: GetSubjectByIdRequest): Promise<DeleteSubjectResponse[]> {
