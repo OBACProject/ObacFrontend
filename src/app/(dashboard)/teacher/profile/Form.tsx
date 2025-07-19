@@ -1,5 +1,6 @@
 "use client";
 
+import { GetTeacherDetails } from "@/api/teacher/route";
 import { TeacherDetails } from "@/dto/teacherDto";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -7,7 +8,13 @@ import { useState, useEffect } from "react";
 export default function ProfileForm() {
   const [teachers, setTeacher] = useState<TeacherDetails>();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    GetTeacherDetails().then((d) => {
+      if (d) {
+        setTeacher(d);
+      }
+    });
+  }, []);
 
   return (
     <div className="text-xl py-10 w-full font-sans">
@@ -31,9 +38,7 @@ export default function ProfileForm() {
               <div className="w-full flex gap-4 items-center ">
                 <div className="flex gap-4 items-center">
                   อีเมลล์{" "}
-                  <p className="text-gray-600">
-                    {teachers?.gender || "-"}
-                  </p>
+                  <p className="text-gray-600">{teachers?.gender || "-"}</p>
                 </div>
                 <div className="flex gap-4 items-center">
                   เบอร์ติดต่อ{" "}

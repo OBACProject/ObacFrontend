@@ -95,24 +95,27 @@ export default function LoginForm({ session }: LoginFormProps) {
       </div>
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45 w-full h-screen" />
       {role && name ? (
-        <div className="absolute my-10 bg-white rounded-lg px-10 py-12">
-          <div className="space-y-4 text-center">
-            <UserRound className="mx-auto h-12 w-12" />
-            <div className="text-2xl">{name}</div>
+        <div className="absolute my-10 bg-white lg:w-[500px] w-fit rounded-lg px-10 py-12">
+          <div className="space-y-4 text-center grid place-items-center">
+            <p className="p-2 rounded-full bg-blue-500 w-fit">
+             <UserRound className="text-white h-12 w-12" /> 
+            </p>
+            <h1 className=" text-lg lg:text-3xl font-prompt">Welcome to OBAC</h1>
+            <div className="text-lg">{name}</div>
             <div className="mt-5 grid place-items-center gap-4">
-              <Button
+              <button
                 onClick={handleLoginButton}
-                className="bg-blue-500 hover:bg-blue-700 transform hover:scale-105 transition duration-500"
+                className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg text-white transform hover:scale-105 transition duration-500"
               >
                 กลับเข้าสู่ระบบ
-              </Button>
-              <Button
+              </button>
+              {/* <Button
                 onClick={handleLogout}
                 variant="destructive"
                 className="bg-gradient-to-tr from-red-500/70 to-pink-400 hover:from-red-600 hover:to-pink-500 transform hover:scale-105 transition duration-500"
               >
                 ออกจากระบบ
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

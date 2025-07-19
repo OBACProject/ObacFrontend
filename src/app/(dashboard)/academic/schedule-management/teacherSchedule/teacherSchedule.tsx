@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import Form from "./Form";
+// import Form from "./Form";
 export const dynamic = "force-dynamic";
 
 export default function OtherPage() {
@@ -25,11 +25,11 @@ export default function OtherPage() {
   return (
     <div className="px-10">
       <div className="lg:flex justify-center pb-20">
-        <Form
+        {/* <Form
           term={params.param1}
           year={params.param2}
           teacherID={params.param3}
-        />
+        /> */}
       </div>
     </div>
   );
