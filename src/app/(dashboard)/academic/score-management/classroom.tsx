@@ -8,6 +8,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
+import { GetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import type { GetAllStudentGroupByTermYearRequest } from "@/lib/api/models/studentGroup/studentGroup.request";
 
 interface ClassroomTable {
   class: string;
@@ -196,7 +198,6 @@ export function ClassroomGrading() {
 
   // State management
   const [dataTable, setDataTable] = useState<ClassroomTable[]>(classRoomTable);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
 
   // Filter states
@@ -208,6 +209,44 @@ export function ClassroomGrading() {
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
 
+  const {
+    data: apiClassroomData,
+    isLoading,
+    isError,
+    refetch,
+  } = GetAllStudentGroupByTermYearQuery({
+    year: Number(selectedYear),
+    term: selectedTerm,
+  });
+  if (isLoading) {
+    return <TableSkeleton rows={8} columns={5} />;
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-600">
+        เกิดข้อผิดพลาดในการโหลดข้อมูล
+        <button
+          onClick={() => refetch()}
+          className="underline ml-2 text-blue-500"
+        >
+          ลองอีกครั้ง
+        </button>
+      </div>
+    );
+  }
+
+  const transformedData: ClassroomTable[] = useMemo(() => {
+    if (!apiClassroomData) return [];
+
+    return apiClassroomData.map((item) => ({
+      class: item.class + " " + item.groupName,
+      facultyName: item.program?.name || "ไม่ระบุ",
+      programName: item.program?.name || "ไม่ระบุ",
+      groupId: item.groupCode,
+      groupCode: item.groupCode,
+    }));
+  }, [apiClassroomData]);
   // Faculty and program data
 
   const [searchInput, setSearchInput] = useState<string>("");
@@ -244,7 +283,6 @@ export function ClassroomGrading() {
     []
   );
 
-  // Clear all filters
   const clearFilters = useCallback(() => {
     setSelectedClassLevel("");
     setSelectedFaculty("");
@@ -252,7 +290,6 @@ export function ClassroomGrading() {
     setSearchInput("");
   }, []);
 
-  // Optimized filtering logic
   const filteredData = useMemo(() => {
     if (
       !selectedClassLevel &&
@@ -260,12 +297,12 @@ export function ClassroomGrading() {
       !selectedProgram &&
       !debouncedSearchInput
     ) {
-      return dataTable.sort(
+      return transformedData.sort(
         (a, b) => +a.groupId.slice(1) - +b.groupId.slice(1)
       );
     }
 
-    const filtered = dataTable.filter((item) => {
+    const filtered = transformedData.filter((item) => {
       const matchClassLevel = selectedClassLevel
         ? item.class.substring(0, 3) === selectedClassLevel
         : true;
@@ -316,7 +353,7 @@ export function ClassroomGrading() {
 
     return filtered.sort((a, b) => +a.groupId.slice(1) - +b.groupId.slice(1));
   }, [
-    dataTable,
+    transformedData,
     selectedClassLevel,
     selectedFaculty,
     selectedProgram,
@@ -605,7 +642,7 @@ export function ClassroomGrading() {
       {/* Results Summary */}
       <div className="flex items-center justify-between text-sm text-gray-600">
         <span>
-          แสดง {tableData.length} จาก {dataTable.length} รายการ
+          แสดง {transformedData.length} จาก {dataTable.length} รายการ
         </span>
         <span className="text-sm text-gray-700">
           ภาคเรียนที่ {selectedTerm} ปีการศึกษา {selectedYear}
