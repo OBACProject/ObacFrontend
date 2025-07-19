@@ -38,15 +38,14 @@ export interface GetGradBySubjectId {
 }
 
 export interface convertGradBySubjectId {
-  // gender : string;
   studentCode: string;
-  name: string; // firstName + lastName
+  name: string; 
+  assignmentscore: number;
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
-  totalScore: number;
+  midtermScore: number;
+  finaltermScore: number;
 }
-
 export interface ConvertClassroomToExcelDto {
   studentCode: string;
   name: string; // firstName + lastName
