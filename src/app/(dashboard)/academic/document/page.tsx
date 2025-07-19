@@ -1,5 +1,7 @@
+"use client"
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import PDFButtonTemplate from "@/components/PDF/PDFButtonTemplate";
+import ExcelButtonTemplate from "@/components/Excel/ExcelButtonTemplate";
 import {
   genGradSummaryForStudent,
   genGroupSummaryGrad,
@@ -8,6 +10,7 @@ import {
   genStudentNotPassList,
   genStudentScoreInSubject,
 } from "@/lib/PDFGenarate/generateFile";
+
 import {
   Bolt,
   BookCheck,
@@ -18,8 +21,39 @@ import {
   X,
 } from "lucide-react";
 import React from "react";
+import { ConvertScoreToExcel, ConvertClassroomToExcel, ConvertClassroomToExcelWithSubject, ConvertClassroomGradingToExcel } from "@/lib/Excel/generateExcelFile";
+import { mockConvertGradBySubjectId, mockConvertClassroomToExcelDto, mockGeneralData, mockStudentList } from "@/lib/Excel/mockData";
+import { mockStudentListByGroupID } from "@/resource/PDF/mockData";
 
 export default function page() {
+  const handleGenerateGradeExcel = () => {
+    ConvertScoreToExcel(
+      mockConvertGradBySubjectId,
+      "1",
+      "2567",
+      "CS101",
+      "หลักการเขียนโปรแกรม",
+      "ปวช.3/1"
+    );
+  };
+
+  const handleGenerateStudentListExcel = () => {
+    ConvertClassroomToExcel(mockStudentListByGroupID, "ปวช.3/1");
+  };
+
+  const handleGenerateStudentSubjectListExcel = () => {
+    ConvertClassroomToExcelWithSubject(
+      mockConvertClassroomToExcelDto,
+      "CS101",
+      "หลักการเขียนโปรแกรม",
+      "ปวช.3/1"
+    );
+  };
+
+  const handleGenerateClassroomGradingExcel = () => {
+    ConvertClassroomGradingToExcel(mockGeneralData, mockStudentList);
+  };
+
   return (
     <div className="pl-10 py-5 h-full">
       <div className="w-full px-5">
@@ -45,14 +79,13 @@ export default function page() {
             icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
             doc_type="pdf"
             onClick={genGroupSummaryGrad}
-          />{" "}
-          <PDFButtonTemplate
+          />
+          <ExcelButtonTemplate
             title={"ใบตรวจเกรด"}
-            description="เอกสารตรวจเกรดนักเรียนทั้งห้อง"
+            description="เอกสารตรวจเกรดนักเรียนทั้งห้อง (Excel)"
             icon={<BookCheck className="w-5 h-5 text-white" />}
             icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
-            doc_type="excel"
-            onClick={genGroupSummaryGrad}
+            onClick={handleGenerateClassroomGradingExcel}
           />
           <PDFButtonTemplate
             title={"ใบรายชื่อนักเรียนในห้อง"}
@@ -62,6 +95,13 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentNamelistInGroup}
           />
+          <ExcelButtonTemplate
+            title={"ใบรายชื่อนักเรียนในห้อง"}
+            description="รายชื่อนักเรียนในหนึ่งห้องเรียน (Excel)"
+            icon={<Users className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            onClick={handleGenerateStudentListExcel}
+          />
           <PDFButtonTemplate
             title={"ใบรายชื่อนักเรียนในวิชา"}
             description="รายชื่อนักเรียนในวิชานั้นๆ"
@@ -70,6 +110,13 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentNameInSubject}
           />
+          <ExcelButtonTemplate
+            title={"ใบรายชื่อนักเรียนในวิชา"}
+            description="รายชื่อนักเรียนในวิชานั้นๆ (Excel)"
+            icon={<Users className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            onClick={handleGenerateStudentSubjectListExcel}
+          />
           <PDFButtonTemplate
             title={"ใบคะแนนนักเรียนในวิชา"}
             description="รายชื่อนักเรียนและคะแนนในวิชานั้นๆ"
@@ -77,6 +124,13 @@ export default function page() {
             icon_bg="bg-gradient-to-r from-red-600 to-orange-400"
             doc_type="pdf"
             onClick={genStudentScoreInSubject}
+          />
+          <ExcelButtonTemplate
+            title={"ใบคะแนนนักเรียนในวิชา"}
+            description="รายชื่อนักเรียนและคะแนนในวิชานั้นๆ (Excel)"
+            icon={<Bolt className="w-5 h-5 text-white" />}
+            icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            onClick={handleGenerateGradeExcel}
           />
           <PDFButtonTemplate
             title={"ใบรายชื่อนักเรียนที่ไม่ผ่านเกณฑ์"}
@@ -87,7 +141,7 @@ export default function page() {
             onClick={genStudentNotPassList}
           />
         </div>
-        <div className="border-t border-gray-300">
+        <div className="border-t border-gray-300 mt-8">
           <div className="py-5 w-full">
             <HeaderLabel
               title="เอกสาร รบ.3ป. "
@@ -96,10 +150,9 @@ export default function page() {
           </div>
           <div className="px-10">
             <p className="w-full border-dashed border-2 border-gray-500 text-2xl text-gray-700 font-prompt py-10  text-center rounded-lg">
-            กำลังพัฒนา...
-          </p>
+              กำลังพัฒนา...
+            </p>
           </div>
-          
         </div>
       </div>
     </div>
