@@ -70,7 +70,7 @@ export default function ExportFile({
       >
         ดาวน์โหลดรายชื่อ PDF
       </Button>
-      <Button
+      {/* <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
           ConvertScoreToExcel(
@@ -84,7 +84,7 @@ export default function ExportFile({
         }
       >
         ดาวน์โหลดใบคะแนน Excel
-      </Button>
+      </Button> */}
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
