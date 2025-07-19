@@ -7,9 +7,11 @@ interface StudentInformationCardProps {
   StudentFirstName: string;
   StudentLastName: string;
   Class: string;
+  Prefix:string;
   Faculty: string;
   edit: boolean;
   onChangeStudentData?: (updated: {
+    prefix:string
     studentCode: string;
     studentFirstName: string;
     studentLastName: string;
@@ -24,6 +26,7 @@ export default function StudentInformationCard({
   StudentLastName,
   Class,
   Faculty,
+  Prefix,
   edit,
   onChangeStudentData,
 }: StudentInformationCardProps) {
@@ -32,6 +35,7 @@ export default function StudentInformationCard({
   const [studentLastName, setStudentLastName] = useState<string>("");
   const [className, setClassName] = useState<string>("");
   const [faculty, setFaculty] = useState<string>("");
+  const [prefix, setPrefix] = useState<string>("");
 
   useEffect(() => {
     setStudentCode(StudentCode);
@@ -39,11 +43,13 @@ export default function StudentInformationCard({
     setFaculty(Faculty);
     setStudentFirstName(StudentFirstName);
     setStudentLastName(StudentLastName);
+    setPrefix(Prefix)
   }, []);
 
   useEffect(() => {
     if (onChangeStudentData) {
       onChangeStudentData({
+        prefix,
         studentCode,
         studentFirstName,
         studentLastName,
@@ -51,8 +57,7 @@ export default function StudentInformationCard({
         faculty,
       });
     }
-    console.log("std code : ",studentCode)
-  }, [studentCode, studentFirstName, studentLastName, className, faculty]);
+  }, [studentCode, studentFirstName, studentLastName, className, faculty,prefix]);
 
   return (
     <div className="w-fit py-5 px-14 border-gray-200 border rounded-lg shadow-sm">
@@ -68,9 +73,15 @@ export default function StudentInformationCard({
           labelSize="text-xl"
           disable={!edit}
         />
-        <select className="border border-gray-300 rounded-md py-1.5 px-2">
-          <option>นาย</option>
-          <option>นาง</option>
+        <select
+          className="border border-gray-300 rounded-md py-1.5 px-2"
+          onChange={(e) => setPrefix(e.target.value)}
+          value={prefix}
+          disabled={!edit}
+        >
+          <option value="นาย">นาย</option>
+          <option value="นางสาว">นางสาว</option>
+          <option value="นาง">นาง</option>
         </select>
         <InputBox
           label="ชื่อจริง"
@@ -105,7 +116,7 @@ export default function StudentInformationCard({
           inputWidth="w-[100px]"
           inputSize="text-lg"
           labelSize="text-xl"
-          disable={!edit}
+          disable={true}
         />
         <InputBox
           label="สาขาวิชา"

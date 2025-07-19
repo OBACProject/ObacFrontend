@@ -1,7 +1,10 @@
 "use client";
+import { GetSubjectsByTermAndClass } from "@/api/subject/route";
 import { SubjectGrade } from "@/dto/gradingDto";
+import { SubjectItem } from "@/dto/subjectDto";
 import { Trash2 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import BasicSubjectCombobox from "./๋SubjectCombobox";
 
 interface ScoreInputFormProps {
   scores: SubjectGrade[];
@@ -10,6 +13,7 @@ interface ScoreInputFormProps {
   onRemoveGroup?: () => void;
   term: string;
   year: number;
+  classLevel: string;
 }
 
 export default function ScoreInputForm({
@@ -19,7 +23,17 @@ export default function ScoreInputForm({
   onRemoveGroup,
   term,
   year,
+  classLevel,
 }: ScoreInputFormProps) {
+  const [subjects, setSubject] = useState<SubjectItem[]>();
+  useEffect(() => {
+    GetSubjectsByTermAndClass(String(term), String(classLevel)).then((d) => {
+      if (d) {
+        setSubject(d);
+      }
+    });
+  }, []);
+
   const handleChange = (
     index: number,
     field: keyof SubjectGrade,
@@ -50,6 +64,7 @@ export default function ScoreInputForm({
       gradeId: 0,
       term,
       year,
+      subjectId: 0,
       subjectName: "",
       subjectCode: "",
       credit: 0,
@@ -71,8 +86,8 @@ export default function ScoreInputForm({
           <tr>
             <th className="border px-2 py-1 w-[100px]">เทอม</th>
             <th className="border px-2 py-1">ปีการศึกษา</th>
-            <th className="border px-2 py-1">ชื่อวิชา</th>
-            <th className="border px-2 py-1">รหัสวิชา</th>
+            <th className="border px-2 py-1">ชื่อวิชา - รหัสวิชา</th>
+            {/* <th className="border px-2 py-1">รหัสวิชา</th> */}
             <th className="border px-2 py-1">หน่วยกิต</th>
             <th className="border px-2 py-1">เกรด</th>
             <th className="border px-2 py-1">ผลคูณ</th>
@@ -121,32 +136,21 @@ export default function ScoreInputForm({
                 <td className="border text-center px-2 py-1">{row.year}</td>
                 <td className="border px-2 py-1">
                   {edit ? (
-                    <input
-                      type="text"
-                      value={row.subjectName}
-                      onChange={(e) =>
-                        handleChange(index, "subjectName", e.target.value)
-                      }
-                      className="w-full py-1 px-2 text-start border border-gray-200"
+                    <BasicSubjectCombobox
+                      subjects={subjects || []}
+                      selectedId={row.subjectId}
+                      onSelect={(subject) => {
+                        handleChange(index, "subjectId", subject.id); 
+                        handleChange(index, "subjectCode", subject.code);
+                        handleChange(index, "subjectName", subject.name);
+                        handleChange(index, "credit", subject.credits);
+                      }}
                     />
                   ) : (
-                    row.subjectName || "-"
+                    `${row.subjectName} (${row.subjectCode})`
                   )}
                 </td>
-                <td className="border text-center px-2 py-1">
-                  {edit ? (
-                    <input
-                      type="text"
-                      value={row.subjectCode}
-                      onChange={(e) =>
-                        handleChange(index, "subjectCode", e.target.value)
-                      }
-                      className="w-full py-1 text-center px-2 border border-gray-200"
-                    />
-                  ) : (
-                    row.subjectCode || "-"
-                  )}
-                </td>
+
                 <td className="border text-center px-2 py-1">
                   {edit ? (
                     <input
