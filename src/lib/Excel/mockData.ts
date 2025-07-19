@@ -78,7 +78,6 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
   },
 ];
 
-// Mock data for ConvertClassroomToExcel function (unchanged)
 export const mockStudentListByGroupID: StudentListByGroupIDDto[] = [
   {
     prefix: "นาย",
@@ -154,7 +153,6 @@ export const mockStudentListByGroupID: StudentListByGroupIDDto[] = [
   },
 ];
 
-// Mock data for ConvertClassroomToExcelWithSubject function
 export const mockConvertClassroomToExcelDto: ConvertClassroomToExcelDto[] = [
   {
     studentCode: "65010001",
@@ -190,7 +188,6 @@ export const mockConvertClassroomToExcelDto: ConvertClassroomToExcelDto[] = [
   },
 ];
 
-// Mock data for ConvertClassroomGradingToExcel function (unchanged)
 export const mockGeneralData: GeneralData = {
   groupId: 101,
   groupName: "A",
@@ -202,7 +199,6 @@ export const mockGeneralData: GeneralData = {
   year: 2567,
 };
 
-// Updated StudentList with 1-4 grading scale instead of letter grades
 export const mockStudentList: StudentList[] = [
   {
     studentId: 1001,
