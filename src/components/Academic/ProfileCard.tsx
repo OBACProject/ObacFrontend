@@ -16,7 +16,7 @@ export default function ProfileCard({ username, rolename }: ProfileCardProps) {
     });
   }, []);
   return (
-    <div className="rounded-lg px-10 h-full grid  py-5  shadow-lg">
+    <div className="rounded-lg bg-white px-10 h-full grid  py-5  shadow-lg">
       <div className="grid gap-2 h-fit">
         <h1 className="text-lg font-semibold py-1 w-full rounded-md px-5 shadow-md text-blue-600">
           {rolename}

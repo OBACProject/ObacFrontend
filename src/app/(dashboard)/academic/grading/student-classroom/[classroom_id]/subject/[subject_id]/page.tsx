@@ -16,17 +16,15 @@ export default function Page({
   console.log("Subject ID:", params.subject_id);
   return (
     <div className="h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
+      {/* <header className="bg-white shadow-sm border-b">
         <div className="mx-4 sm:mx-10 lg:mx-10 p-4">
           <h1 className="text-2xl font-bold text-gray-900">
             ระบบจัดการคะแนนรายวิชา
           </h1>
           <p className="text-gray-600 mt-1">Grading System</p>
         </div>
-      </header>
+      </header> */}
       <main className="mx-4 sm:mx-10 lg:mx-10 p-4">
-
-
         <Suspense fallback={<div>Loading table...</div>}>
           <EditableGradePage
             subjectId={params.subject_id}

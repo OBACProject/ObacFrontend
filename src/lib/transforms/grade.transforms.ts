@@ -8,7 +8,7 @@ export async function getGroupSummaryGradeTransform(
   params: GetGroupSummaryGradeRequest
 ): Promise<GroupSummaryGradeResponse> {
   try {
-    const raw = await gradeService.getGradeSummary(params);
+    const raw = await gradeService.getGroupSummaryGrade(params);
 
     const generalData: GeneralData = {
       groupId: raw.groupId,

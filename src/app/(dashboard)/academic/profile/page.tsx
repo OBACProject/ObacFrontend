@@ -10,11 +10,11 @@ export default function Academic() {
   const femaleData = [70, 52, 28, 39, 22, 78, 50, 48, 26];
   const maleData = [92, 41, 33, 45, 27, 66, 75, 38, 32];
   return (
-    <div className="lg:px-10 py-5 px-5 ">
+    <div className="lg:px-10 py-5 px-5 bg-gray-100 ">
       <div className="w-full px-5">
         <HeaderLabel
           title="ภาพรวมโรงเรียน"
-          Icon={<ChartPie className="w-8 h-8 " />}
+          Icon={<ChartPie className="h-7 w-7 text-white" />}
         />
       </div>
       <div className="lg:flex lg:justify-between ">
@@ -23,18 +23,19 @@ export default function Academic() {
             title="จำนวนนักเรียน ชาย-หญิง"
             value={[1200, 1500]}
             label={["ชาย", "หญิง"]}
+            backgroundColor={["#8AB6F9", "#FF8DC7"]}
           />
           <DonutChart
             title="สัดส่วน ปวช-ปวส"
             value={[1900, 500]}
             label={["ปวช", "ปวส"]}
-            backgroundColor={["#3a01eb", "#5d5d5d"]}
+            backgroundColor={["#B388EB", "#7D7D7D"]}
           />
           <DonutChart
             title="นักเรียน ผ่านเกณ์-ไม่ผ่านเกณฑ์"
             value={[1900, 200]}
             label={["ผ่าน", "ไม่ผ่าน"]}
-            backgroundColor={["#11e400", "#ff0000"]}
+            backgroundColor={["#A0E7E5", "#FFB5A7"]}
           />
         </div>
         <div className="px-4 py-4">
@@ -42,7 +43,7 @@ export default function Academic() {
         </div>
       </div>
 
-      <div className="my-5 mx-5 px-5 shadow-xl grid place-items-center rounded-lg ">
+      <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg ">
         <h1 className="text-xl font-prompt text-blue-600">
           แผนภูมิแสดงจำนวนนักเรียน ชาย-หญิง ปวช - ปวส
         </h1>

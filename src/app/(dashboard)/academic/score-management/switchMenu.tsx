@@ -12,7 +12,7 @@ function StaticHeader({ isToggle, setIsToggle }: {
 }) {
   return (
     <div className="w-full flex items-center justify-between">
-      <div className="px-10 rounded-3xl flex gap-2 items-center border border-gray-100 shadow-md py-2 text-blue-700 text-xl w-fit">
+      <div className="px-10 rounded-3xl flex gap-2 items-center border border-gray-100 shadow-md bg-white py-2 text-blue-700 text-xl w-fit">
         {isToggle ? (
           <Users className="h-8 w-8" />
         ) : (

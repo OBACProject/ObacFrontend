@@ -1,3 +1,24 @@
+export interface GradStudentInSubject {
+  [key: string]: number | string;
+  gradeId: number;
+  subjectId: number;
+  scheduleSubjectId: number;
+  studentGroup: string;
+  studentId: number;
+  studentCode: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  subjectName: string;
+  assignmentscore :number
+  collectScore: number;
+  affectiveScore: number;
+  midtermscore: number;
+  finaltermscore: number;
+  totalScore: number;
+  grade: string;
+  remark: string;
+}
 export interface GetGradBySubjectId {
   [key: string]: number | string;
   gradeId: number;
@@ -19,15 +40,14 @@ export interface GetGradBySubjectId {
 }
 
 export interface convertGradBySubjectId {
-  // gender : string;
   studentCode: string;
-  name: string; // firstName + lastName
+  name: string; 
+  assignmentscore: number;
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
-  totalScore: number;
+  midtermScore: number;
+  finaltermScore: number;
 }
-
 export interface ConvertClassroomToExcelDto {
   studentCode: string;
   name: string; // firstName + lastName
@@ -162,3 +182,33 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
   grade: number;
   remark: string | null;
 };
+
+export interface SubjectGradeItem {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  assignmentScore:number;
+  collectScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+}
+
+export interface StudentGroupGradeResponse {
+  subjectName: string;
+  subjectCode: string;
+  subjectId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  term: string;
+  year: number;
+  subjectGrades: SubjectGradeItem[];
+}

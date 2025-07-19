@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { StudentListPage } from "./studentList";
 import { UserRound } from "lucide-react";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 
 interface individualStudentInfoData {
   studentId: number;
@@ -26,12 +27,9 @@ export default function Main() {
     setActiveTab("individualStudentInfo");
   };
   return (
-    <div className="py-2 w-full">
-      <div className="flex justify-start pt-3 items-center">
-        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
-          <UserRound className="h-8 w-8"/>
-          รายชื่อนักเรียนทั้งหมด
-        </h1>
+    <div className="py-2 bg-gray-50 w-full">
+       <div className="w-full justify-start flex">
+        <HeaderLabel Icon={<UserRound className="h-7 w-7 text-white"/>} bg_icon="bg-blue-500" title="รายชื่อนักเรียนทั้งหมด" className="text-blue-600"/>
       </div>
       {activeTab === "individual" && (
         <StudentListPage

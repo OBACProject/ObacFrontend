@@ -1,7 +1,8 @@
 'use client';
 
+import { iconMap } from "@/resource/home/sidebarData";
 import React from "react";
-import { iconMap } from "@/lib/iconMap";
+
 
 interface CourseCardProps {
   iconName: string;

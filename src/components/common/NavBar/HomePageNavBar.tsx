@@ -5,7 +5,6 @@ import DropMenu from "@/components/common/dropdown/dropdown-menu-1";
 import DropDownMobile from "@/components/common/dropdown/dropdown-mobile";
 import { CircleCheck, Menu, X } from "lucide-react";
 import Link from "next/link";
-import FadeInOnScroll from "@/components/Effect/FadInScroll";
 import { cn } from "@/lib/utils";
 
 export function HomePageNavBar() {
@@ -43,17 +42,10 @@ export function HomePageNavBar() {
         </a>
 
        
-        <div className="hidden md:flex gap-3">
-          <Link
-            href="/register"
-            className="flex items-center gap-2 px-6 py-1 bg-[#143d66] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 duration-500 font-prompt"
-          >
-            สมัครออนไลน์
-            <CircleCheck className="w-5 h-5" />
-          </Link>
+        <div className="hidden   md:flex gap-3">
           <Link
             href="/login"
-            className="flex items-center gap-2 px-6 py-1 border border-white rounded-full text-white text-base hover:bg-white hover:text-black duration-500 font-prompt_Light"
+            className="flex items-center gap-2 px-8  py-1 border-2 border-white rounded-full text-white text-base hover:bg-white hover:text-black duration-500 font-prompt_Light"
           >
             เข้าสู่ระบบ
           </Link>

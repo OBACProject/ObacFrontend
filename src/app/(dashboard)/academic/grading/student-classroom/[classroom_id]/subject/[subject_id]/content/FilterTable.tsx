@@ -192,16 +192,19 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   });
 
   return (
-    <>
-      <div className="flex px-10 w-full justify-between items-center">
+    < div className="">
+      <div className=" flex px-10 w-full justify-between items-center">
         <HeaderLabel
-          Icon={<ScrollText className="w-8 h-8" />}
+          Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ปวส.${props.classroom}/2 (รหัสวิชา: ${props.subjectId})`}
           className="text-blue"
         />
       </div>
 
-      <div className="flex items-center justify-between px-10 mt-4">
+    <div className="bg-white h-fit py-2 my-2 rounded-lg border border-gray-200">
+
+    
+      <div className="bg-white flex items-center justify-between px-10 mt-4">
         <div className="flex justify-start items-center gap-2 relative ">
           <div className="relative inline-block">
             <button
@@ -277,13 +280,13 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         )}
       </div>
 
-      <div className="min-h-screen">
+      <div className="mb-4">
         <DataTable
           data={filteredData}
           columns={columnDefs}
           pagination={filteredData.length}
         />
-      </div>
-    </>
+      </div></div>
+    </ div >
   );
 }

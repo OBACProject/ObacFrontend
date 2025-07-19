@@ -1,13 +1,17 @@
 "use client";
+import { fetchGetStudentGradeDetail } from "@/api/oldApi/grad/gradAPI";
 import {
-  fetchGetStudentGradeDetail,
-} from "@/api/oldApi/grad/gradAPI";
-import { fetchGetStudentByStudentId, fetchUpdateStudent } from "@/api/oldApi/student/studentApi";
-import GradPerTerms from "@/lib/PDF/GradPerTerm";
-import SummaryGradPDF from "@/lib/PDF/SummaryGrade";
+  fetchGetStudentByStudentId,
+  fetchUpdateStudent,
+} from "@/api/oldApi/student/studentApi";
+import GradPerTerms from "@/lib/PDF/score/GradPerTerm";
+import SummaryGradPDF from "@/lib/PDF/score/SummaryGradeForStudent";
 import ChangeStudentGroup from "@/components/common/Popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/components/common/Popup/confirmChangeStudentsStatus";
-import { GetStudentByStudentId, UpdateStudentRequestBody } from "@/dto/studentDto";
+import {
+  GetStudentByStudentId,
+  UpdateStudentRequestBody,
+} from "@/dto/studentDto";
 import { educationOptions } from "@/resource/academics/options/studentOption";
 import { gradeService } from "@/lib/api/services/grade.service";
 import {
@@ -25,12 +29,11 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GetStudentGradesByTermYearRequest } from "@/lib/api/models/grade/grade.request";
+import InputBox from "@/components/Teacher/InputBox";
 
 type Props = {
   studentId: number;
 };
-
-
 
 const fetchStudentGrad = async (
   studentId: number,
@@ -38,13 +41,13 @@ const fetchStudentGrad = async (
   year: number
 ) => {
   try {
-    const requestData : GetStudentGradesByTermYearRequest = {
+    const requestData: GetStudentGradesByTermYearRequest = {
       studentId: studentId,
       term: term,
       year: year,
-    }
+    };
 
-    const data = await gradeService.getStudentGrades(requestData);
+    const data = await gradeService.getStudentGradesByTermYear(requestData);
     return data;
   } catch (err) {
     console.error("Failed to fetch data.");
@@ -134,7 +137,10 @@ export default function Form({ studentId }: Props) {
         graduateYear: students.graduateYear || null,
         programId: students.programId || 0,
         facultyId: students.facultyId || 0,
-        birthDate: students.birthDate && students.birthDate !== "" ? students.birthDate : null,
+        birthDate:
+          students.birthDate && students.birthDate !== ""
+            ? students.birthDate
+            : null,
         isActive: students.isActive ?? true,
         isAgree: false,
       });
@@ -142,7 +148,9 @@ export default function Form({ studentId }: Props) {
     }
   }, [students]);
 
-  const handleChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -154,14 +162,14 @@ export default function Form({ studentId }: Props) {
     try {
       if (students) {
         console.log(formData);
-        const response = await fetchUpdateStudent(formData)
-        if (response){
-          setOnEdit(false)
+        const response = await fetchUpdateStudent(formData);
+        if (response) {
+          setOnEdit(false);
           toast.success("แก้ไขและบันทึกสำเร็จ");
-          setTimeout(()=>{
-            window.location.reload()
-          },1500)
-        }else{
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
           toast.error("เกิดข้อผิดพลาด");
         }
       }
@@ -179,7 +187,7 @@ export default function Form({ studentId }: Props) {
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-1">
-          <button
+          {/* <button
             className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
             onClick={async () => {
               const data = await fetchStudentGrad(studentId, term, year);
@@ -190,7 +198,7 @@ export default function Form({ studentId }: Props) {
           >
             <Download className="w-4 h-4" />
             ผลการเรียนล่าสุด PDF
-          </button>
+          </button> */}
 
           <button
             className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"
@@ -290,7 +298,7 @@ export default function Form({ studentId }: Props) {
         <div className="relative rounded-md border-t shadow-gray-300 w-fit shadow-md  bg-white ">
           <div className="grid gap-4 px-10 py-5">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1">
+              {/* <div className="flex items-center gap-1">
                 <p className="w-[100px]">รหัสนักเรียน</p>
                 <input
                   name="studentCode"
@@ -300,13 +308,28 @@ export default function Form({ studentId }: Props) {
                   onChange={handleChange}
                   disabled={!onEdit}
                 />
-              </div>
-              <p className="w-[100px]">ชื่อ - นามสกุล</p>
+              </div> */}
+              <InputBox
+                label="รหัสนักเรียน"
+                name="studentCode"
+                value={formData.studentCode || "ไม่มีข้อมูล"}
+                onChange={handleChange}
+                placeholder="รหัสนักเรียน"
+                inputWidth="w-[150px]"
+                inputSize="text-base"
+                labelSize="text-base"
+                disable={!onEdit}
+              />
               {onEdit ? (
-                <select name="gender" onChange={handleChange} value={formData.gender || "Male"}>
-                <option value="Male">นาย</option>
-                <option value="Female">นางสาว</option>
-              </select>
+                <select
+                  name="gender"
+                  className="border border-gray-300 rounded-md px-2 py-1.5"
+                  onChange={handleChange}
+                  value={formData.gender || "Male"}
+                >
+                  <option value="Male">นาย</option>
+                  <option value="Female">นางสาว</option>
+                </select>
               ) : (
                 <div>
                   {students?.gender == "Male" ? (
@@ -316,21 +339,27 @@ export default function Form({ studentId }: Props) {
                   )}
                 </div>
               )}
-              <input
+              <InputBox
+                label="ชื่อ"
                 name="thaiName"
-                type="text"
-                className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                value={formData.thaiName || "ไม่ทราบ"}
+                value={formData.thaiName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
-                disabled={!onEdit}
+                placeholder="ชื่อจริง"
+                inputWidth="w-[200px]"
+                inputSize="text-base"
+                labelSize="text-base"
+                disable={!onEdit}
               />
-              <input
+              <InputBox
+                label="นามสกุล"
                 name="thaiLastName"
-                type="text"
-                className="px-4 focus:outline-blue-400 w-[150px]  py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                value={formData.thaiLastName|| "ไม่ทราบ"}
+                value={formData.thaiLastName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
-                disabled={!onEdit}
+                placeholder="นามสกุล"
+                inputWidth="w-[200px]"
+                inputSize="text-base"
+                labelSize="text-base"
+                disable={!onEdit}
               />
             </div>
             <div className="flex items-center gap-4">
@@ -338,36 +367,41 @@ export default function Form({ studentId }: Props) {
               <div className="flex items-center gap-2">
                 <p className="">ชั้นปี</p>
                 <div className="px-4 border-gray-300 border bg-white py-1.5 rounded-sm">
-                  {students?.class}.{students?.currentRoom}
+                  {students?.class || "โหลด.."}.
+                  {students?.currentRoom || "โหลด.."}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <p className="">หลักสูตร</p>
-                <input
-                  name="facultyName"
-                  type="text"
-                  className="px-4 w-fit text-gray-500 enabled:border-blue-400 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300"
-                  value={students?.facultyName|| "ไม่ทราบ"}
-                  onChange={handleChange}
-                  disabled={!onEdit}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="">สาขา</p>
-                <input
-                  type="text"
-                  name="programName"
-                  className="px-4 w-fit text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                  value={students?.programName|| "ไม่ทราบ"}
-                  onChange={handleChange}
-                  disabled={!onEdit}
-                />
-              </div>
+              <InputBox
+                label="หลักสูตร"
+                name="facultyName"
+                value={students?.facultyName || "ไม่มีข้อมูล"}
+                onChange={handleChange}
+                placeholder="หลักสูตร"
+                inputWidth="w-[180px]"
+                inputSize="text-base"
+                labelSize="text-base"
+                disable={!onEdit}
+              />
+              <InputBox
+                label="สาขา"
+                name="programName"
+                value={students?.programName || "ไม่มีข้อมูล"}
+                onChange={handleChange}
+                placeholder="สาขา"
+                inputWidth="w-[180px]"
+                inputSize="text-base"
+                labelSize="text-base"
+                disable={!onEdit}
+              />
             </div>
           </div>
         </div>
         <div className="border rounded-md relative overflow-hidden hover:scale-[102%] duration-500">
-          <img alt="obac-student" src="/asset/student-image.jpg" className="w-36 h-36" />
+          <img
+            alt="obac-student"
+            src="/asset/student-image.jpg"
+            className="w-36 h-36"
+          />
         </div>
       </div>
 
@@ -378,30 +412,139 @@ export default function Form({ studentId }: Props) {
         </div>
       </div>
       <div className="py-5 ">
-        <div className="grid w-full rounded-md border px-4 py-4">
+        <div className="grid gap-8 w-full rounded-md border px-8 py-6">
           <div className="flex gap-5 items-center">
-            <div className="flex gap-2 items-center">
-              <p>เบอร์ติดต่อ</p>
-              <input
-                name="phoneNumber"
-                type="text"
-                className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                value={formData.phoneNumber|| "ไม่ทราบ"}
-                onChange={handleChange}
-                disabled={!onEdit}
-              />
-            </div>
-            <div className="flex gap-2 items-center">
-              <p>อีเมลล์</p>
-              <input
-                name="email"
-                type="text"
-                className="px-4 w-[150px] text-gray-500 focus:text-black focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 enabled:border-blue-400"
-                value={formData.email|| "ไม่ทราบ"}
-                onChange={handleChange}
-                disabled={!onEdit}
-              />
-            </div>
+            <InputBox
+              label="เลขบัตรประชาชน"
+              name="thaiId"
+              value={formData.thaiId || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="เลขบัตรประชาชน"
+              inputWidth="w-[200px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="สัญชาติ"
+              name="nationality"
+              value={formData.nationality || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="เชื้อชาติ"
+              inputWidth="w-[120px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="ศาสนา"
+              name="religion"
+              value={formData.religion || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ศาสนา"
+              inputWidth="w-[150px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+          </div>
+          <div className="flex gap-5 items-center">
+            <InputBox
+              label="เบอร์ติดต่อ"
+              name="studentCode"
+              value={formData.phoneNumber || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="เบอร์ติดต่อ"
+              inputWidth="w-[150px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="อีเมลล์"
+              name="studentCode"
+              value={formData.email || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="อีเมลล์"
+              inputWidth="w-[150px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="วันเกิด"
+              name="birthDate"
+              value={formData.birthDate || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="วันเกิด"
+              inputWidth="w-[150px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+          </div>
+          <div className="flex gap-5 items-center">
+            <InputBox
+              label="ที่อยู่ปัจจุบัน"
+              name="address"
+              value={formData.address || "ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ที่อยู่ปัจจุบัน"
+              inputWidth="w-[150px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+          </div>
+          <div className="flex gap-5 items-center">
+            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">มารดา</p>
+            <InputBox
+              label="ชื่อจริง"
+              name="name"
+              value={"ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ที่อยู่ปัจจุบัน"
+              inputWidth="w-[180px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="นามสกุล"
+              name="name"
+              value={"ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ที่อยู่ปัจจุบัน"
+              inputWidth="w-[180px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+          </div>
+           <div className="flex gap-5 items-center">
+            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">บิดา</p>
+            <InputBox
+              label="ชื่อจริง"
+              name="name"
+              value={"ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ที่อยู่ปัจจุบัน"
+              inputWidth="w-[200px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
+            <InputBox
+              label="นามสกุล"
+              name="name"
+              value={"ไม่มีข้อมูล"}
+              onChange={handleChange}
+              placeholder="ที่อยู่ปัจจุบัน"
+              inputWidth="w-[200px]"
+              inputSize="text-base"
+              labelSize="text-base"
+              disable={!onEdit}
+            />
           </div>
         </div>
       </div>

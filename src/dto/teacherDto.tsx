@@ -95,3 +95,24 @@ export interface TeacherColumns {
   email: string;
   phoneNumber: string;
 }
+
+export interface CardSubjectResponse {
+  scheduleSubjectId: number;
+  day: string;                  // eg. "วันจันทร์"
+  period: number;              // คาบเรียนที่
+  room: string;                // ห้องเรียน
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  term: string;
+  year: number;
+  studentGroupId: number;
+  studentGroupName: string;    // eg. "ห้อง 1"
+  studentGroupCode: string;    // eg. "A1"
+  class: string;               // eg. "ปวช"
+  level: number;               // ชั้นปี
+  studentAmount: number;      
+  isComplete: boolean;       
+  isPublish: boolean;
+  timing : number;
+}

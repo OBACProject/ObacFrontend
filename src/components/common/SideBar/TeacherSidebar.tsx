@@ -177,7 +177,7 @@ export function SidebarMenu({
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   <div className="flex items-center gap-4 w-full">
-                    <div className="w-10 h-10 flex items-center justify-center">
+                    <div className="w-10 text-gray-700 h-10 flex items-center justify-center">
                       {item.icon}
                     </div>
                   </div>
