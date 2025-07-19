@@ -111,7 +111,8 @@ export interface CardSubjectResponse {
   studentGroupCode: string;    // eg. "A1"
   class: string;               // eg. "ปวช"
   level: number;               // ชั้นปี
-  studentAmount: number;       // จำนวน นร.
-  isComplete: boolean;         // เสร็จสิ้นหรือไม่
-  isPublish: boolean;          // เผยแพร่แล้วหรือไม่
+  studentAmount: number;      
+  isComplete: boolean;       
+  isPublish: boolean;
+  timing : number;
 }

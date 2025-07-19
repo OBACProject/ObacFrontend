@@ -17,10 +17,11 @@ import {
   GetGradBelowResponse,
   GetGradPerTermYearByStudentIdResponse,
   GetGroupSummaryGradeResponse,
-  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  
   GetStudentGroupGradeAboveResponse,
   StudentTranscriptResponse,
 } from "../models/grade/grade.response";
+import { GetStudentDetailAndSummaryScoreByStudentCodeResponse } from "@/dto/gradingDto";
 
 export class GradeService extends BaseService {
   async getStudentGrades(

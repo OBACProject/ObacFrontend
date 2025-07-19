@@ -12,7 +12,7 @@ import {
 } from "@/dto/gradingDto";
 import {
   GetStudentDetailAndSummaryScoreByStudentCode,
-  upsertStudentGrades,
+  UpsertStudentGrades,
 } from "@/api/grad/route";
 
 export default function Form() {
@@ -28,7 +28,7 @@ export default function Form() {
     className: string;
     faculty: string;
   }>();
-
+  const [searchNotFound, setSearchNotFound] = useState<boolean>(false);
   const onSaveStudentScore = async () => {
     if (!student || !editedStudentInfo) return;
 
@@ -43,8 +43,8 @@ export default function Form() {
       },
       termYearGradeGroups: student.termYearGradeGroups,
     };
-    console.log("payload FE : ",payload);
-    const success = await upsertStudentGrades(payload);
+    console.log("payload FE : ", payload);
+    const success = await UpsertStudentGrades(payload);
     if (success) {
       alert("บันทึกข้อมูลสำเร็จ");
       // setTimeout(
@@ -55,17 +55,17 @@ export default function Form() {
       // );
       setEdit(false);
     } else {
-
       alert("เกิดข้อผิดพลาด");
     }
   };
 
   const onSearch = async (keyword: string) => {
-    setStudent(undefined);
+    setSearchNotFound(false);
+    setStudent(null);
     const trimmed = keyword.trim();
 
     if (trimmed === "") {
-      setStudent(undefined);
+      setStudent(null);
       return;
     }
     try {
@@ -75,6 +75,7 @@ export default function Form() {
       if (result) {
         setStudent(result);
       } else {
+        setSearchNotFound(true);
         setStudent(null);
       }
     } catch (error) {
@@ -89,6 +90,15 @@ export default function Form() {
       <div className="flex justify-center items-center mt-5 gap-5 py-5">
         <i className="text-gray-600">กรอกรหัสนักเรียนเพื่อทำการค้นหา</i>
         <SearchInput onSearchKeyword={onSearch} edit={edit} />
+        <div className="relative h-6 px-4 text-base">
+          <p
+            className={`text-red-500 transition-opacity duration-300 ${
+              searchNotFound ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
+          >
+            ไม่พบรหัสนักเรียนนี้
+          </p>
+        </div>
       </div>
       <LineCenter color="text-back" />
       {student != null ? (
