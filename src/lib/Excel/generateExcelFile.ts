@@ -1,4 +1,3 @@
-
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
@@ -58,9 +57,11 @@ export async function ConvertScoreToExcel(
     "รหัสนักเรียน",
     "ชื่อ-นามสกุล",
     "ห้องเรียน",
-    "คะแนนจิตพิสัย (20)",
-    "คะแนนเก็บ (50)",
-    "คะแนนสอบ (30)",
+    "คะแนนภารระงาน (20)",
+    "คะแนนเก็บ (10)",
+    "คะแนนประพฤติ (20)",
+    "คะแนนสอบกลางภาค (20)",
+    "คะแนนสอบปลายภาค (30)",
     "คะแนนรวม",
   ]);
 
@@ -94,10 +95,11 @@ export async function ConvertScoreToExcel(
       item.studentCode, // รหัสนักเรียน
       item.name, // ชื่อ-นามสกุล
       classroom, // ห้องเรียน
+      item.assignmentscore, // คะแนนภาระงาน (20)
       item.affectiveScore, // คะแนนจิตพิสัย (20)
-      item.collectScore, // คะแนนเก็บ (50)
-      item.testScore, // คะแนนสอบ (30)
-      item.totalScore, // คะแนนรวม
+      item.collectScore, // คะแนนเก็บ (10)
+      item.midtermScore, // คะแนนสอบ (30)
+      item.finaltermScore, // คะแนนรวม (20)
     ]);
     row.eachCell((cell) => {
       cell.font = { size: 10 };
@@ -115,11 +117,10 @@ export async function ConvertScoreToExcel(
   // Save the Excel file
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  const filename = `ห้องเรียน ${classroom} Grade.xlsx`;
 
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
-  link.download = filename;
+  link.download = `ใบคะแนนห้องเรียน ${classroom} .xlsx`;
   link.click();
 }
 
@@ -193,11 +194,13 @@ export async function ConvertClassroomToExcel(
   // Save the Excel file
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
+
   const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom}.xlsx`;
+  const encodedFilename = encodeURIComponent(filename);
 
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
-  link.download = filename;
+  link.download = decodeURIComponent(encodedFilename);
   link.click();
 }
 
@@ -271,11 +274,13 @@ export async function ConvertClassroomToExcelWithSubject(
   // Save the Excel file
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom}.xlsx`;
+
+  const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom} วิชา ${subjectName}.xlsx`;
+  const encodedFilename = encodeURIComponent(filename);
 
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
-  link.download = filename;
+  link.download = decodeURIComponent(encodedFilename);
   link.click();
 }
 
@@ -315,7 +320,7 @@ export async function ConvertClassroomGradingToExcel(
     "ลำดับ",
     "รหัสนักศึกษา",
     "ชื่อ - นามสกุล",
-    ...uniqueSubjects, 
+    ...uniqueSubjects,
     "เฉลี่ย",
     "เฉลี่ยสะสม",
   ];
@@ -336,7 +341,7 @@ export async function ConvertClassroomGradingToExcel(
     { key: "index", width: 8 },
     { key: "studentCode", width: 15 },
     { key: "name", width: 25 },
-    ...uniqueSubjects.map(() => ({ width: 20 })), // Set all subject columns to same width
+    ...uniqueSubjects.map(() => ({ width: 20 })),
     { key: "gpa", width: 12 },
     { key: "gpax", width: 12 },
   ];
@@ -346,7 +351,7 @@ export async function ConvertClassroomGradingToExcel(
       index + 1,
       student.studentCode,
       student.name,
-      ...uniqueSubjects.map((subject) => student.subjects[subject] || "-"), // Show "-" if subject doesn't exist
+      ...uniqueSubjects.map((subject) => student.subjects[subject] || "-"),
       student.gpa.toFixed(2),
       student.gpax.toFixed(2),
     ];
@@ -368,9 +373,7 @@ export async function ConvertClassroomGradingToExcel(
   });
 
   const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = `ออกคะแนนห้อง ${generalData.class}${generalData.groupName}.xlsx`;

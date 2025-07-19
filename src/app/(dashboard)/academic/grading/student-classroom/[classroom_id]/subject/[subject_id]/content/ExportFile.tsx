@@ -7,7 +7,7 @@ import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
-} from "@/lib/Excel/convertToExcel";
+} from "@/lib/Excel/generateExcelFile";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
