@@ -1,4 +1,4 @@
-import { CardSubjectResponse } from "@/dto/teacherDto";
+import { CardSubjectResponse, TeacherDetails } from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
 import axios from "axios";
 
@@ -24,5 +24,31 @@ export const GetTeacherSchedule = async (
       console.log("Unexpected Error:", err);
     }
     return [];
+  }
+};
+
+export const GetTeacherDetails = async (): Promise<TeacherDetails | null> => {
+  try {
+
+    const token = localStorage.getItem("authToken"); 
+    if (!token) {
+      console.warn("No auth token found.");
+      return null;
+    }
+
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: TeacherDetails;
+    }>("Teacher/GetTeacherDetails", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (err) {
+    console.error("Error fetching teacher details:", err);
+    return null;
   }
 };

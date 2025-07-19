@@ -47,7 +47,7 @@ const fetchStudentGrad = async (
       year: year,
     };
 
-    const data = await gradeService.getStudentGrades(requestData);
+    const data = await gradeService.getStudentGradesByTermYear(requestData);
     return data;
   } catch (err) {
     console.error("Failed to fetch data.");
@@ -187,7 +187,7 @@ export default function Form({ studentId }: Props) {
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-1">
-          <button
+          {/* <button
             className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
             onClick={async () => {
               const data = await fetchStudentGrad(studentId, term, year);
@@ -198,7 +198,7 @@ export default function Form({ studentId }: Props) {
           >
             <Download className="w-4 h-4" />
             ผลการเรียนล่าสุด PDF
-          </button>
+          </button> */}
 
           <button
             className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"

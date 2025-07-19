@@ -35,3 +35,9 @@ export interface GetSubjectByTermRequest {
     level: number;
     className: string;
 }
+
+export interface GetSubjectsByStudentGroupIdTermYearRequest {
+    studentGroupId :number;
+    term : string;
+    year : number;
+}

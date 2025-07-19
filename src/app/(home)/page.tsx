@@ -10,6 +10,7 @@ import FadeInOnScroll from "@/components/Effect/FadInScroll";
 import OpeningScroll from "@/components/Effect/OpeningScroll";
 import ActivityCarousel from "@/components/common/Carousel/ActivityCarousel";
 import { Parallax } from "react-scroll-parallax";
+import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 
 export default function Home() {
   const structuredData = {
@@ -28,6 +29,12 @@ export default function Home() {
     },
     sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
   };
+  
+  const { data } = useGetAllStudentGroupByTermYearQuery({
+    term: "1",
+    year: 2568,
+  });
+  console.log("Student Groups:", data);
 
   return (
     <div className="bg-white h-full text-blue-950 font-prompt">

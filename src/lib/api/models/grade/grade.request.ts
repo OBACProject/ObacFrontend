@@ -1,69 +1,42 @@
 
 
-export interface GetStudentGradesByTermYearRequest {
-    studentId: number;
-    term: string;
-    year: number;
-}
-
-
-export interface GetStudentIfGradeBelowRequest {
-    class : string;
-    currentYear : number;
-    grade : number;
-    term : string;
-    year : number;
-}
-
-export interface GetStudentGradeAboveRequest {
-    grade :  number;
-    term : string;
-    year : number;
-    groupId : number;
-}
-
-export interface GetStudentTranscriptRequest {
-    studentId: number;
-    year: number;
-    term: string;
-}
-
 export interface GetGroupSummaryGradeRequest {
     groupId: number;
     term: string;
     year: number;
 }
 
-export interface GetGroupSummaryGradeAvailableStatusRequest {
-    groupId: number;
-    term: string;
-    year: number;
-}
-
-export interface GetStudentGroupGradeByGroupIdTermYearRequest {
-    groupId: number;
-    term: string;
-    year: number;
+export interface GetStudentGradesByTermYearRequest {
     studentId: number;
+    term: string;
+    year: number;
 }
 
-export interface UpdateStudentGradeRequest {
+export interface GetStudentDetailAndSummaryScoreByStudentCodeRequest {
+    studentCode: string;
+}
+
+export interface UpsertStudentGradesRequest {
+    student : Student;
+    grades: SubjectGrade[];
+}
+
+export interface DeleteGradeRequest {
     gradeId: number;
-    collectScore: number;
-    testScore: number;
-    affectiveScore: number;
-    midtermScore: number;
-    finalScore: number;
-    totalScore: number;
-    finalGrade: number;
-    remark?: string; 
 }
 
-export interface PublishGradeRequest {
-    scheduleSubject_id : number;
-    isPublished : boolean;
+export interface GetStudentGroupGradeByScheduleSubjectIdRequest {
+    scheduleSubjectId: number;
 }
 
+
+export interface GetStudentIfGradeBelowRequest {
+    className : string;
+    currentLevel : number;
+    grade : number;
+    term : string;
+    year : number;
+}
 export interface Student {
   id: number;
   prefix: string;
@@ -105,9 +78,4 @@ export interface TermYearGradeGroup {
   totalGPA: number;
   totalCredit: number;
   grades: SubjectGrade[];
-}
-
-export interface UpsertStudentGradesRequest {
-  student: Student;
-  termYearGradeGroups: TermYearGradeGroup[];
 }

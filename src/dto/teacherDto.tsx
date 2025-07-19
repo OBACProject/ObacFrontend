@@ -35,26 +35,19 @@ export interface GetAllTeacher {
   facultyName: string;
 }
 
-export type GetTeacherByTeacherId = {
+export interface TeacherDetails {
   teacherId: number;
   teacherCode: string;
-  teacherEngFirstName: string;
-  teacherEngLastName: string;
-  teacherRank: string;
-  thaiName: string;
-  thaiLastName: string;
-  teacherEmail: string;
-  teacherPhone: string;
-  teacherGender: string;
-  teacherNationality: string;
-  teacherReligion: string;
-  teacherQualification: string;
-  teacherFaculty: string;
-  teacherProgram: string;
-  teacherDateOfJoining: string;
-  teacherProfilePicture: string | null;
-  nameTitle: string;
-};
+  name: string;
+  lastName: string;
+  phoneNumber: string;
+  gender: string;
+  nationality: string;
+  faculty: string;
+  program: string;
+  hiredDate: string; 
+}
+
 export interface TeacherEnrollment {
     id: number;
     teacherId: number;

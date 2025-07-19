@@ -8,7 +8,7 @@ import {
   filterProgramsParamsData,
   GetStudentListByGroupIDDto,
 } from "@/dto/studentDto";
-import { ConvertClassroomToExcel } from "@/lib/Excel/convertToExcel";
+import { ConvertClassroomToExcel } from "@/lib/Excel/generateExcelFile";
 import {
   filterProgramsViewData,
   getRawProgramViewData,
