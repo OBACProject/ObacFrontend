@@ -7,159 +7,8 @@ import type { GetAllStudentTableDto } from "@/dto/studentDto"
 import { Search } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { TableSkeleton } from "./component/skeletons/TableSkeleton"
-
-export const mockStudentData: GetAllStudentTableDto[] = [
-  {
-    studentId: 1,
-    studentCode: "65010001",
-    thaiName: "ธีรวัฒน์ พงศ์ปฏิสนธิ",
-    class: "ปวช 1/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การบัญชี",
-    programName: "พาณิชยศาสตร์",
-  },
-  {
-    studentId: 2,
-    studentCode: "65010002",
-    thaiName: "ณัฐวุฒิ ใจดี",
-    class: "ปวช 1/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การตลาด",
-    programName: "พาณิชยศาสตร์",
-  },
-  {
-    studentId: 3,
-    studentCode: "65010003",
-    thaiName: "ชลธิชา วงศ์สกุล",
-    class: "ปวช 1/2",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การโรงแรม",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 4,
-    studentCode: "65010004",
-    thaiName: "พีระพงษ์ ศรีสุข",
-    class: "ปวช 1/2",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การท่องเที่ยว",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 5,
-    studentCode: "65010005",
-    thaiName: "ศศิธร จิตมั่น",
-    class: "ปวช 2/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "โลจิสติกส์",
-    programName: "บริหารธุรกิจ",
-  },
-  {
-    studentId: 6,
-    studentCode: "65010006",
-    thaiName: "อภิวัฒน์ คำดี",
-    class: "ปวช 2/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การบัญชี",
-    programName: "พาณิชยศาสตร์",
-  },
-  {
-    studentId: 7,
-    studentCode: "65010007",
-    thaiName: "ชนัญญา แก้วใส",
-    class: "ปวช 2/2",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การโรงแรม",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 8,
-    studentCode: "65010008",
-    thaiName: "ภาณุพงศ์ ตั้งจิต",
-    class: "ปวส 1/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การตลาด",
-    programName: "บริหารธุรกิจ",
-  },
-  {
-    studentId: 9,
-    studentCode: "65010009",
-    thaiName: "ลลิตา วงศ์สุข",
-    class: "ปวส 1/2",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การโรงแรม",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 10,
-    studentCode: "65010010",
-    thaiName: "ศุภกร ทองแท้",
-    class: "ปวช 3/1",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การบัญชี",
-    programName: "พาณิชยศาสตร์",
-  },
-  {
-    studentId: 11,
-    studentCode: "65010011",
-    thaiName: "กานต์พิชชา พงษ์ไพบูลย์",
-    class: "ปวช 3/2",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "โลจิสติกส์",
-    programName: "บริหารธุรกิจ",
-  },
-  {
-    studentId: 12,
-    studentCode: "65010012",
-    thaiName: "ภัทรวดี อินทร",
-    class: "ปวส 2/1",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การจัดการทั่วไป",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 13,
-    studentCode: "65010013",
-    thaiName: "ธนกร สายสมร",
-    class: "ปวส 2/2",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การตลาด",
-    programName: "พาณิชยศาสตร์",
-  },
-  {
-    studentId: 14,
-    studentCode: "65010014",
-    thaiName: "ณัฐชา มั่นกิจ",
-    class: "ปวช 1/3",
-    currentYear: 2025,
-    facultyName: "บริการและการจัดการ",
-    subProgramName: "การโรงแรม",
-    programName: "การจัดการ",
-  },
-  {
-    studentId: 15,
-    studentCode: "65010015",
-    thaiName: "วรินทร อุดมสุข",
-    class: "ปวส 1/3",
-    currentYear: 2025,
-    facultyName: "พานิชยกรรม",
-    subProgramName: "การบัญชี",
-    programName: "พาณิชยศาสตร์",
-  },
-]
+import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries"
+import { ServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable"
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
@@ -178,46 +27,58 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 export function StudentListPage() {
-  const [individualStudentData, setIndividualStudentData] = useState<GetAllStudentTableDto[]>(mockStudentData)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  // Filter states
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize] = useState<number>(20)
   const [searchInput, setSearchInput] = useState<string>("")
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("")
   const [selectedFaculty, setSelectedFaculty] = useState<string>("")
+  const [sortBy, setSortBy] = useState<string>("")
+  const [ascending, setAscending] = useState<boolean>(true)
 
-  // Debounced search to improve performance
   const debouncedSearchInput = useDebounce(searchInput, 300)
 
-  // Memoized filter options to prevent unnecessary recalculations
-  const filterOptions = useMemo(() => {
-    const classLevels = Array.from(new Set(individualStudentData.map((student) => student.class))).sort()
+  const searchText = useMemo(() => {
+    const filters = []
+    if (debouncedSearchInput) filters.push(debouncedSearchInput)
+    if (selectedClassLevel) filters.push(`class:${selectedClassLevel}`)
+    if (selectedFaculty) filters.push(`faculty:${selectedFaculty}`)
+    return filters.join(' ')
+  }, [debouncedSearchInput, selectedClassLevel, selectedFaculty])
 
-    const uniqueFaculties = Array.from(new Set(individualStudentData.map((student) => student.facultyName))).sort()
+  const { data, isLoading, isError } = useGetAllStudentsQuery({
+    pageNumber: currentPage,
+    pageSize: pageSize,
+    searchText: searchText || undefined,
+    sortBy: sortBy || undefined,
+    Ascending: ascending,
+  })
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchText])
+
+  const filterOptions = useMemo(() => {
+
+    const classLevels = data?.items 
+      ? Array.from(new Set(data.items.map((student) => student.class))).sort()
+      : []
+    
+    const uniqueFaculties = data?.items
+      ? Array.from(new Set(data.items.map((student) => student.facultyName))).sort()
+      : []
 
     return { classLevels, uniqueFaculties }
-  }, [individualStudentData])
-
-  // Uncomment when ready to use real data
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const data = await getAllStudentViewData();
-  //       setIndividualStudentData(data);
-  //     } catch (error) {
-  //       console.error('Failed to fetch student data:', error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  }, [data?.items])
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16" },
     { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
-    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-6/16" },
+    { 
+      label: "ชื่อ - นามสกุล", 
+      key: "fullName", 
+      className: "w-6/16",
+      render: (item: any) => `${item.prefix}${item.name} ${item.lastName}`
+    },
     { label: "ระดับชั้น", key: "class", className: "w-2/16" },
     {
       label: "หลักสูตรการศึกษา",
@@ -226,48 +87,46 @@ export function StudentListPage() {
     },
   ]
 
-  const filteredData = useMemo(() => {
-    if (!debouncedSearchInput && !selectedClassLevel && !selectedFaculty) {
-      return individualStudentData
-    }
-
-    return individualStudentData.filter((student) => {
-      const matchClassLevel = selectedClassLevel ? student.class === selectedClassLevel : true
-
-      const matchFaculty = selectedFaculty ? student.facultyName === selectedFaculty : true
-
-      const matchSearch = debouncedSearchInput
-        ? student.studentCode.toLowerCase().includes(debouncedSearchInput.toLowerCase()) ||
-          student.thaiName.toLowerCase().includes(debouncedSearchInput.toLowerCase())
-        : true
-
-      return matchClassLevel && matchFaculty && matchSearch
-    })
-  }, [individualStudentData, selectedClassLevel, selectedFaculty, debouncedSearchInput])
-
   const tableData = useMemo(() => {
-    return filteredData.map((item, index) => ({
+    if (!data?.items) return []
+    
+    return data.items.map((item, index) => ({
       ...item,
-      index: index + 1,
+      index: (currentPage - 1) * pageSize + index + 1, 
+      fullName: `${item.prefix}${item.name} ${item.lastName}`
     }))
-  }, [filteredData])
+  }, [data?.items, currentPage, pageSize])
 
   const getRowLink = useCallback(
     (item: any) => {
-      const student = individualStudentData.find((student) => student.studentCode === item.studentCode)
-      return `/academic/score-management/individual/${student?.studentId}`
+      return `/academic/score-management/individual/${item.id}`
     },
-    [individualStudentData],
+    [],
   )
 
   const clearFilters = () => {
     setSearchInput("")
     setSelectedClassLevel("")
     setSelectedFaculty("")
+    setCurrentPage(1)
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
   }
 
   if (isLoading) {
     return <TableSkeleton rows={8} columns={5}/>
+  }
+
+  if (isError) {
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <div className="text-center text-red-600 py-8">
+          เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -363,11 +222,23 @@ export function StudentListPage() {
 
       <div className="flex items-center justify-between text-sm text-gray-600">
         <span>
-          แสดง {tableData.length} จาก {individualStudentData.length} รายการ
+          แสดง {data?.items?.length || 0} จาก {data?.totalCount || 0} รายการ
+          {data && ` (หน้า ${data.pageNumber} จาก ${data.totalPages})`}
         </span>
       </div>
 
-      <DataTable columns={columns} data={tableData} getRowLink={getRowLink} pagination={10} />
+      <ServerPaginatedDataTable 
+        columns={columns} 
+        data={tableData} 
+        getRowLink={getRowLink}
+        currentPage={currentPage}
+        totalPages={data?.totalPages || 1}
+        totalCount={data?.totalCount || 0}
+        pageSize={pageSize}
+        onPageChange={handlePageChange}
+        hasNextPage={data?.hasNextPage || false}
+        hasPreviousPage={data?.hasPreviousPage || false}
+      />
     </div>
   )
 }
