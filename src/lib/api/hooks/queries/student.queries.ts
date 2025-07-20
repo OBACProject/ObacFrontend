@@ -1,11 +1,16 @@
 import { UseMutationOptions } from "@tanstack/react-query";
-import { GetStudentByStudentIdRequest, GetStudentGradeDetailRequest, UpdateStudentStatusRequest, UpdateStudentRequest, GetStudentListInStudentGroupRequest, GetStudentListByClassRequest, GetStudentDetailAndGradeByStudentCodeRequest, GetStudentsByProgramIdRequest } from "../../models/student/student.request";
-import { GetStudentByStudentIdResponse, GetStudentGradeDetailResponse, GetStudentDetailAndGradeByStudentCodeResponse, GetStudentsByProgramIdResponse } from "../../models/student/student.response";
+import { GetStudentByStudentIdRequest, GetStudentGradeDetailRequest, UpdateStudentStatusRequest, UpdateStudentRequest, GetStudentListInStudentGroupRequest, GetStudentListByClassRequest, GetStudentDetailAndGradeByStudentCodeRequest, GetStudentsByProgramIdRequest, GetAllStudentsRequest } from "../../models/student/student.request";
+import { GetStudentByStudentIdResponse, GetStudentGradeDetailResponse, GetStudentDetailAndGradeByStudentCodeResponse, GetStudentsByProgramIdResponse, GetAllStudentsResponse } from "../../models/student/student.response";
 import { useBaseUpdateMutation } from "./base/base.mutation";
 import { createBaseQuery } from "./base/base.queries";
 import { studentService } from "../../services/student.service";
+import { GetAllStudent } from "@/dto/studentDto";
 
-
+export const useGetAllStudentsQuery = createBaseQuery<
+    GetAllStudentsResponse,GetAllStudentsRequest>(
+    (params) => ['allStudents', params],
+    (params) => studentService.getAllStudents(params)
+    );
 
 export const useGetStudentByStudentIdQuery = createBaseQuery<
     GetStudentByStudentIdResponse,

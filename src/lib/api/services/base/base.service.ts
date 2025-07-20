@@ -8,6 +8,12 @@ export abstract class BaseService {
 
   constructor(customClient?: AxiosInstance) {
     this.client = customClient || apiClient;
+    
+    if (typeof setupInterceptors !== 'function') {
+      console.error('setupInterceptors is not a function:', typeof setupInterceptors);
+      throw new Error('setupInterceptors must be a function');
+    }
+    
     setupInterceptors(this.client);
   }
 

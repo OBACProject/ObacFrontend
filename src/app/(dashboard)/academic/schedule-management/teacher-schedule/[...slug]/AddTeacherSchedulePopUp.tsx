@@ -3,7 +3,7 @@ import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi
 import { fetchGetAllActiveSubject } from "@/api/oldApi/subject/subjectAPI";
 
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetAllSubject } from "@/dto/subjectDto";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
@@ -48,7 +48,7 @@ export default function AddTeacherSchedulePopUp({
   teacherName,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
-  const [studentGroup, setStudentGroup] = useState<GetStudentGroupsByTermYearDto[]>([]);
+  const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
 
   useEffect(() => {
     getAllSubject().then((item) => {

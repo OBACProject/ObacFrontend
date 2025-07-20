@@ -1,32 +1,16 @@
 "use client";
-import {
-  fetchDeleteScheduleSubject,
-  fetchGetScheduleOfStudentGroupByGroupID,
-} from "@/api/oldApi/schedule/scheduleAPI";
+import { fetchDeleteScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
 import { ScheduleSubject, StudentGroupScheduleSubject } from "@/dto/schedule";
-import { Boxes, PlusCircle } from "lucide-react";
+import { PlusCircle, Table } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import AddGroupSchedulePopUp from "./AddGroupSchedulePopUp";
 import { toast } from "react-toastify";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 
 type Props = {
   term: string;
   year: string;
   groupId: number;
-};
-
-const getSchedule = async (term: string, year: string, groupId: number) => {
-  try {
-    const response = await fetchGetScheduleOfStudentGroupByGroupID(
-      groupId,
-      term,
-      Number(year)
-    );
-    return response;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
 };
 
 export default function Form({ term, year, groupId }: Props) {
@@ -38,14 +22,7 @@ export default function Form({ term, year, groupId }: Props) {
   const [deleteID, setDeleteID] = useState<number>(0);
   const [deleteName, setDeleteName] = useState<string>("");
 
-  useEffect(() => {
-    getSchedule(term, year, groupId).then((item: any) => {
-      if (item) {
-        setSchedules(item);
-        setGroupName(`${item.class}.${item.groupName}`);
-      }
-    });
-  }, []);
+  useEffect(() => {}, []);
   const onDeleteSchedule = async (id: number, subjectName: string) => {
     const response = await fetchDeleteScheduleSubject(id);
     if (response.success) {
@@ -53,7 +30,7 @@ export default function Form({ term, year, groupId }: Props) {
       setDeleteTrigger(false);
       setTimeout(() => {
         window.location.reload();
-      }, 1500);
+      }, 1000);
     } else {
       toast.error("ไม่สำเร็จ");
     }
@@ -65,20 +42,20 @@ export default function Form({ term, year, groupId }: Props) {
     "วันพุธ",
     "วันพฤหัสบดี",
     "วันศุกร์",
-    "วันเสาร์"
+    "วันเสาร์",
   ];
   const sortedScheduleSubjects = schedules?.scheduleSubjects
-  ? [...schedules.scheduleSubjects].sort((a, b) => {
-      return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
-    })
-  : [];
+    ? [...schedules.scheduleSubjects].sort((a, b) => {
+        return thaiDaysOrder.indexOf(a.day) - thaiDaysOrder.indexOf(b.day);
+      })
+    : [];
   return (
     <div className="w-full px-10">
-      <div className="py-5 flex justify-center">
-        <h1 className="px-10 text-xl py-2 bg-pink-500 text-white flex gap-2 items-center rounded-3xl">
-          <Boxes className="h-8 w-8" />
-          ตารางเรียนของห้องเรียน
-        </h1>
+      <div className="py-5 flex justify-start">
+        <HeaderLabel
+          Icon={<Table className="h-5 w-5 text-white" />}
+          title={"ตารางเรียนห้องเรียน"}
+        />
       </div>
       <div className="w-full py-2 flex justify-between items-center">
         <div className="flex gap-2">
@@ -109,78 +86,66 @@ export default function Form({ term, year, groupId }: Props) {
 
       <div className="w-full">
         <div className="w-full grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] bg-white border-t-2 border-b-2 shadow-lg text-lg border-gray-400">
-          <div className="text-center py-2 ">
-            รหัสวิชา
-          </div>
-          <div className="text-center py-2 ">
-            ชื่อวิชา
-          </div>
-          <div className="text-center py-2 ">
-            อาจารย์ผู้สอน
-          </div>
-          <div className="text-center py-2 ">
-            ห้องเรียน
-          </div>
-          <div className="text-center py-2 ">
-            หน่วยกิต
-          </div>
-          <div className="text-center py-2 ">
-            คาบเรียน
-          </div>
-          <div className="text-center py-2 ">
-            วันสอน
-          </div>
+          <div className="text-center py-2 ">รหัสวิชา</div>
+          <div className="text-center py-2 ">ชื่อวิชา</div>
+          <div className="text-center py-2 ">อาจารย์ผู้สอน</div>
+          <div className="text-center py-2 ">ห้องเรียน</div>
+          <div className="text-center py-2 ">หน่วยกิต</div>
+          <div className="text-center py-2 ">คาบเรียน</div>
+          <div className="text-center py-2 ">วันสอน</div>
           <div className="text-center py-2 "></div>
         </div>
         <div className="shadow-md">
-        {sortedScheduleSubjects?.length > 0 ? (
-           sortedScheduleSubjects.map((item: ScheduleSubject, index) => (
-            <div
-              key={index}
-              className={`${
-                index % 2 === 0 ? "bg-white" : ""
-              } grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] border text-[16px] border-gray-300 text-gray-700 border-t-0`}
-            >
-              <p className="text-start flex items-center px-4 border-r border-gray-300 py-1 line-clamp-1">
-                {item.subjectCode}
-              </p>
-              <p className="text-start flex items-center  px-4 border-r border-gray-300 py-1 line-clamp-1">
-                {item.subjectName}
-              </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-300">
-                {item.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;{item.teacherLastName}
-              </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-300">
-                {item.room}
-              </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-300">
-                {item.credit}
-              </p>
-              <p className="text-center flex items-center justify-center border-r border-gray-300">
-                {item.period}
-              </p>
-              <p className="text-center py-1 flex items-center justify-center border-r border-gray-300">
-                {item.day}
-              </p>
-              <div className="text-center flex items-center w-full justify-center text-gray-700  py-1 ">
-                <p
-                  className="px-4 py-1 bg-red-400 hover:bg-red-700 text-white rounded-sm"
-                  onClick={() => {
-                    setDeleteTrigger(true);
-                    setDeleteID(item.id);
-                    setDeleteName(item.subjectName);
-                  }}
-                >
-                  ลบ
+          {sortedScheduleSubjects?.length > 0 ? (
+            sortedScheduleSubjects.map((item: ScheduleSubject, index) => (
+              <div
+                key={index}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : ""
+                } grid grid-cols-[10%_27%_20%_8%_10%_10%_10%_5%] border text-[16px] border-gray-300 text-gray-700 border-t-0`}
+              >
+                <p className="text-start flex items-center px-4 border-r border-gray-300 py-1 line-clamp-1">
+                  {item.subjectCode}
                 </p>
+                <p className="text-start flex items-center  px-4 border-r border-gray-300 py-1 line-clamp-1">
+                  {item.subjectName}
+                </p>
+                <p className="text-center flex items-center justify-center border-r border-gray-300">
+                  {item.teacherName}&nbsp;&nbsp;&nbsp;&nbsp;
+                  {item.teacherLastName}
+                </p>
+                <p className="text-center flex items-center justify-center border-r border-gray-300">
+                  {item.room}
+                </p>
+                <p className="text-center flex items-center justify-center border-r border-gray-300">
+                  {item.credit}
+                </p>
+                <p className="text-center flex items-center justify-center border-r border-gray-300">
+                  {item.period}
+                </p>
+                <p className="text-center py-1 flex items-center justify-center border-r border-gray-300">
+                  {item.day}
+                </p>
+                <div className="text-center flex items-center w-full justify-center text-gray-700  py-1 ">
+                  <p
+                    className="px-4 py-1 bg-red-400 hover:bg-red-700 text-white rounded-sm"
+                    onClick={() => {
+                      setDeleteTrigger(true);
+                      setDeleteID(item.id);
+                      setDeleteName(item.subjectName);
+                    }}
+                  >
+                    ลบ
+                  </p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="grid place-items-center border-2 border-dashed border-t-0 text-[24px] border-gray-400 text-gray-700 py-10 text-center">
+              ไม่มีตารางเรียน
             </div>
-          ))
-        ) : (
-          <div className="grid place-items-center border-2 border-dashed border-t-0 text-[24px] border-gray-400 text-gray-700 py-10 text-center">
-            ไม่มีตารางเรียน
-          </div>
-        )}</div>
+          )}
+        </div>
       </div>
       {deleteTrigger && (
         <div

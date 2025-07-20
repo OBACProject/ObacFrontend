@@ -12,7 +12,7 @@ export const useGetGroupSummaryGradeQuery = createBaseQuery<
   GetGroupSummaryGradeRequest
 >(
   (params) => ['groupSummaryGrade', params],
-  (params) => gradeService.getGroupSummaryGrade(params),
+  (params) => gradeService.getSummaryGrade(params),
 );
 
 export const useGetStudentGradesByTermYearQuery = createBaseQuery<

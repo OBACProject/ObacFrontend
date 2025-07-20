@@ -23,16 +23,15 @@
 //   birthDate: Date;
 // }
 
-export interface GetAllTeacher {
+export interface GetAllTeacherResponse {
   teacherId: number;
   firstName: string;
   lastName: string;
-  thaiName: string;
-  thaiLastName: string;
-  email: string;
   teacherCode: string;
   facultyId: number;
   facultyName: string;
+  program: string;
+  phoneNumber: string | null;
 }
 
 export interface TeacherDetails {
