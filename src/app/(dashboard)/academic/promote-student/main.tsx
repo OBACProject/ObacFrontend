@@ -9,7 +9,7 @@ import GradeFilter from "@/components/Academic/GradeFilter";
 import ConfirmPromoteModal from "@/components/Academic/ConfirmPromoteModal";
 import { ArrowUpDown } from "lucide-react";
 import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import StudentSelectListTable from "@/components/Academic/StudentSelectListTable";
@@ -119,7 +119,7 @@ export default function Main() {
       : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
 
-  const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
+  const [groups, setGroups] = useState<StudentGroupItem[]>([]);
   const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>(defaultTerm);

@@ -1,13 +1,13 @@
 "use server";
 import {
-  GetAllTeacher,
+  GetAllTeacherResponse,
   // GetTeacherByTeacherId,
   TeacherEnrollment,
 } from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
-export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
+export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacherResponse[]> => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
@@ -25,7 +25,7 @@ export const fetchGetAllTeacherAsync = async (): Promise<GetAllTeacher[]> => {
     }
     const text = await response.text();
     const json = JSON.parse(text);
-    const data: GetAllTeacher[] = json.data;
+    const data: GetAllTeacherResponse[] = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching teacher data:", err);

@@ -3,7 +3,7 @@ import {
   fetchGetStudentGroupsByTermYear,
   fetchUpdateGroup,
 } from "@/api/oldApi/student/studentApi";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ const GetStudentGroupsByTermYear = async (term: string, year: number) => {
   try {
     return await fetchGetStudentGroupsByTermYear(term, year);
   } catch (err) {
-    return []
+    return [];
   }
 };
 
@@ -27,14 +27,12 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
   const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<number>(currentYear);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
-  const [studentGroup, setStudentGroup] = useState<
-    GetStudentGroupsByTermYearDto[]
-  >([]);
+  const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
   console.log(studentId);
   useEffect(() => {
     if (term && year) {
       GetStudentGroupsByTermYear(term, year)
-        .then((data: GetStudentGroupsByTermYearDto[] | undefined) => {
+        .then((data: StudentGroupItem[] | undefined) => {
           if (data) {
             setStudentGroup(data);
           } else {

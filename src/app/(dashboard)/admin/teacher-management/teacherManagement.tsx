@@ -3,7 +3,7 @@ import { makeColumns } from "@/components/common/table/makeColumns";
 import { DataTable } from "@/components/common/table/tableComponent";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { GetAllTeacher } from "@/dto/teacherDto";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
@@ -21,9 +21,9 @@ const getTeacherData = async () => {
 export function TeacherPage() {
   const router = useRouter();
   const [searchTeacher, setSearchTeacher] = useState<string>("");
-  const [teacherDatas, setTeacherDatas] = useState<GetAllTeacher[]>([]);
+  const [teacherDatas, setTeacherDatas] = useState<GetAllTeacherResponse[]>([]);
   const [searchTeacherFilter, setSearchTeacherFilter] = useState<
-    GetAllTeacher[]
+    GetAllTeacherResponse[]
   >([]);
 
   useEffect(() => {
@@ -90,10 +90,9 @@ export function TeacherPage() {
           teacher.firstName?.toLowerCase().includes(query) ||
           teacher.lastName?.toLowerCase().includes(query) ||
           teacher.teacherId?.toString().includes(query) ||
-          teacher.thaiName?.toLowerCase().includes(query) ||
-          teacher.thaiLastName?.toLowerCase().includes(query) ||
-          teacher.facultyName?.toLowerCase().includes(query) ||
-          teacher.email?.toLowerCase().includes(query)
+          teacher.firstName?.toLowerCase().includes(query) ||
+          teacher.lastName?.toLowerCase().includes(query) ||
+          teacher.facultyName?.toLowerCase().includes(query) 
         );
       });
   
@@ -122,12 +121,12 @@ export function TeacherPage() {
           </button>
         </div>
       </div>
-      <DataTable
+      {/* <DataTable
         columns={columns}
         data={searchTeacherFilter}
         onRowClick={handleRowClick}
         selectedValue="teacherId"
-      />
+      /> */}
     </header>
   );
 }
