@@ -152,7 +152,7 @@ export function ClassroomGrading(props: {
     useState<GetStudentListByGroupIDDto | null>();
   useEffect(() => {
     const fetchFilterData = async () => {
-      const rawData = mockGroupdata
+      const rawData = mockGroupdata;
       const formattedData: ClassroomTable[] = rawData.map(
         (item: filterProgramsParamsData) => ({
           classLevel: `${item.class}. ${item.groupName}`,
@@ -243,12 +243,14 @@ export function ClassroomGrading(props: {
         const studentClass = item.class + "." + item.groupName;
         const filteredStudents = item.students.filter(
           (student) =>
-            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(
+              student.studentStatus
+            )
         );
         StudentNameListPDF({
           studentGroup: studentClass,
           student: filteredStudents,
-          year:Number(selectedYear)
+          year: Number(selectedYear),
         });
       } else {
         alert("No student data available for this group.");
@@ -272,7 +274,9 @@ export function ClassroomGrading(props: {
         const studentClass = item.class + "." + item.groupName;
         const filteredStudents = item.students.filter(
           (student) =>
-            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(student.studentStatus)
+            !["คัดชื่อออก", "พักการเรียน", "ลาออก"].includes(
+              student.studentStatus
+            )
         );
         ConvertClassroomToExcel(filteredStudents, studentClass);
       } else {
@@ -306,7 +310,7 @@ export function ClassroomGrading(props: {
               handleDownloadPDF(Number(row.groupId));
             }}
           >
-            <FileText className="h-4 w-4"/>
+            <FileText className="h-4 w-4" />
             <p>รายชื่อ PDF</p>
           </button>
 
@@ -317,7 +321,7 @@ export function ClassroomGrading(props: {
               handleDownloadExcel(Number(row.groupId));
             }}
           >
-            <Download className=" h-4 w-4 "/>
+            <Download className=" h-4 w-4 " />
             <p>รายชื่อ Excel</p>
           </button>
         </div>
@@ -329,9 +333,9 @@ export function ClassroomGrading(props: {
     <div className="px-5 py-2">
       {isLoadingPage ? (
         <header className="grid px-4 bg-white py-0 border  rounded-lg">
-          <div className="flex justify-center w-full">
-            <div className="flex  justify-start items-center gap-6 w-full p-2 rounded-lg">
-              <div className="w-1/6 flex flex-col gap-4">
+          <div className="flex justify-center w-full ">
+            <div className="flex  justify-start items-center gap-3 w-full p-2 rounded-lg">
+              <div className="w-1/6 flex flex-col gap-4 px-2">
                 <Combobox
                   options={classLevels.map((classData) => ({
                     value: classData,
@@ -343,7 +347,7 @@ export function ClassroomGrading(props: {
                   }
                 />
               </div>
-              <div className="w-1/6 flex flex-col gap-4">
+              <div className="w-1/6 flex flex-col gap-4 px-2">
                 <Combobox
                   buttonLabel="กรุณาเลือกหลักสูตร"
                   options={(selectedClassLevel === "ปวช"
@@ -357,7 +361,7 @@ export function ClassroomGrading(props: {
                   disabled={!selectedClassLevel}
                 />
               </div>
-              <div className="w-1/6 flex flex-col gap-">
+              <div className="w-1/6 flex flex-col gap-4 px-2">
                 <Combobox
                   buttonLabel="กรุณาเลือกสาขา"
                   options={program.map((program) => {
@@ -367,7 +371,7 @@ export function ClassroomGrading(props: {
                   disabled={!selectedFaculty}
                 />
               </div>
-              <div className="w-1/4 flex items-center gap-2  p-2">
+              <div className="w-1/4 flex items-center gap-2  px-2">
                 <h1 className="line-clamp-1">ภาคเรียน</h1>
                 <Combobox
                   options={term.map((item) => ({
@@ -379,7 +383,7 @@ export function ClassroomGrading(props: {
                   onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
                 />
               </div>
-              <div className="w-1/6 flex items-center gap-2  p-2 ">
+              <div className="w-1/6 flex items-center gap-2  px-2 ">
                 <h1>ปี </h1>
                 <Combobox
                   options={yearsList.map((item) => ({
@@ -395,8 +399,8 @@ export function ClassroomGrading(props: {
           </div>
 
           <StylesTable
-          icon={<Table className="h-5 w-5 text-white" />}
-          title="รายชื่อห้องเรียนทั้งหมด"
+            icon={<Table className="h-5 w-5 text-white" />}
+            title="รายชื่อห้องเรียนทั้งหมด"
             columns={columns}
             data={filteredData.map((item, index) => ({
               ...item,

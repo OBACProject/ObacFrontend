@@ -1,5 +1,5 @@
 "use client";
-import { fetchGetAllProgram } from "@/api/oldApi/program/programAPI";
+// import { fetchGetAllProgram } from "@/api/oldApi/program/programAPI";
 import { GetAllProgram } from "@/dto/programDto";
 import { useEffect, useState } from "react";
 import Select from "react-select";
@@ -25,12 +25,12 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
   const [isActive, setActive] = useState<boolean>(false);
   const [programs, setPrograms] = useState<GetAllProgram[]>([]);
   const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    fetchGetAllProgram().then((item: GetAllProgram[]) => {
-      setPrograms(item);
-    });
-  }, []);
+  const [curriumYear, setCurriumYear] = useState<string>("");
+  // useEffect(() => {
+  //   fetchGetAllProgram().then((item: GetAllProgram[]) => {
+  //     setPrograms(item);
+  //   });
+  // }, []);
   const Save = () => {
     if (subjectName && subjectCode && programID) {
       onSave(subjectName, subjectCode, term, programID, credits, isActive);
@@ -125,7 +125,7 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             </button>
           </div>
         </div>
-        <div className="w-full px-10 py-2 flex justify-start items-center gap-8">
+        {/* <div className="w-full px-10 py-2 flex justify-start items-center gap-8">
           <Select
             options={programOptions}
             value={
@@ -150,6 +150,16 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             />
             <label>ทุกหลักสูตร</label>
           </div>
+        </div> */}
+        <div className="w-full px-10 flex gap-3 items-center">
+          <p>ปีหลักสูตร</p>
+          <input
+            className="border-[1px] lg:w-[120px]  pl-2 py-0.5"
+            type="text"
+            placeholder="พ.ศ."
+            onChange={(e) => setCurriumYear(e.target.value)}
+            value={curriumYear}
+          />
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
           <button

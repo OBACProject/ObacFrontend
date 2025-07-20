@@ -111,7 +111,6 @@ export function ClassroomGrading() {
     ).sort();
   }, [selectedFaculty, transformedData]);
 
-
   const clearFilters = useCallback(() => {
     setSelectedClassLevel("");
     setSelectedFaculty("");
@@ -126,9 +125,7 @@ export function ClassroomGrading() {
       !selectedProgram &&
       !debouncedSearchInput
     ) {
-      return transformedData.sort(
-        (a, b) => +a.groupId - +b.groupId
-      );
+      return transformedData.sort((a, b) => +a.groupId - +b.groupId);
     }
 
     const filtered = transformedData.filter((item) => {
@@ -200,8 +197,6 @@ export function ClassroomGrading() {
 
   const onRowClick = useCallback(
     (item: ClassroomTable) => {
-      
-
       router.push(
         `/academic/score-management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
       );
@@ -211,8 +206,8 @@ export function ClassroomGrading() {
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
-    { label: "ระดับชั้น", key: "class", className: "w-2/12 justify-center" },
-    { label: "รหัสห้อง", key: "groupCode", className: "w-2/12 justify-center" },
+    { label: "ระดับชั้น", key: "class", className: "w-1/12 justify-center" },
+    { label: "รหัสห้อง", key: "groupCode", className: "w-1/12 justify-center" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
@@ -221,7 +216,7 @@ export function ClassroomGrading() {
     {
       label: "สาขาวิชา",
       key: "programName",
-      className: "w-2/12 xl:justify-start justify-center",
+      className: "w-4/12 xl:justify-start justify-center",
     },
     {
       label: "ใบออกเกรด",

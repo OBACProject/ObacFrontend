@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 
 type EditPopUpProps = {
@@ -105,11 +105,12 @@ export const EditSubjectPopUp = ({
           </div>
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
+          {" "}
           <button
-            className="px-5 w-[80px] bg-blue-400 text-white py-1 rounded-sm  hover:bg-blue-600"
-            onClick={() => Save()}
+            className="px-5 w-[80px] bg-gray-300 text-black py-1 rounded-sm hover:bg-gray-500"
+            onClick={() => onClosePopUp(false)}
           >
-            บันทึก
+            ยกเลิก
           </button>
           <button
             className="px-5 w-[80px] bg-red-400 text-white py-1 rounded-sm  hover:bg-red-600"
@@ -118,10 +119,10 @@ export const EditSubjectPopUp = ({
             ลบ
           </button>
           <button
-            className="px-5 w-[80px] bg-gray-500 text-white py-1 rounded-sm  hover:bg-gray-700"
-            onClick={() => onClosePopUp(false)}
+            className="px-5 w-[80px] bg-blue-400 text-white py-1 rounded-sm  hover:bg-blue-600"
+            onClick={() => Save()}
           >
-            ยกเลิก
+            บันทึก
           </button>
         </div>
       </div>
