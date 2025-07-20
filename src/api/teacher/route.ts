@@ -1,4 +1,8 @@
-import { CardSubjectResponse, TeacherDetails } from "@/dto/teacherDto";
+import {
+  CardSubjectResponse,
+  GetAllTeacherResponse,
+  TeacherDetails,
+} from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -55,5 +59,20 @@ export const GetTeacherDetails = async (): Promise<TeacherDetails | null> => {
   } catch (err) {
     console.error("Error fetching teacher details:", err);
     return null;
+  }
+};
+
+export const GetAllTeachers = async (): Promise<GetAllTeacherResponse[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetAllTeacherResponse[];
+    }>("Teacher/GetAllTeachers");
+
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log("Error in GetAllTeachers : ", err);
+    return [];
   }
 };

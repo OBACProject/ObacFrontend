@@ -4,9 +4,9 @@ import { fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetAllSubject } from "@/dto/subjectDto";
-import { GetAllTeacher } from "@/dto/teacherDto";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ interface SubjectOption {
   value: number;
   label: string;
 }
+
 const getAllSubjectByTerm = async (term: number) => {
   try {
     const response = await fetchGetAllSubjectByTerm(term);
@@ -53,9 +54,9 @@ export default function AddSchedulePopUp({
   year,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
-  const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
+  const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
   const [studentGroup, setStudentGroup] = useState<
-    GetStudentGroupsByTermYearDto[]
+    StudentGroupItem[]
   >([]);
   const term = ["1", "2"];
   const currentYear = new Date().getFullYear() - 1 + 543;
@@ -117,8 +118,8 @@ export default function AddSchedulePopUp({
 
   const teacherOptions = teachers.map((teacher, index) => ({
     value: teacher.teacherId,
-    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.thaiName} ${
-      teacher.thaiLastName
+    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.firstName} ${
+      teacher.lastName
     }`,
   }));
 
