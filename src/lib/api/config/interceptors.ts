@@ -6,13 +6,11 @@ import Cookies from 'js-cookie';
 export function setupInterceptors(client: AxiosInstance): void {
   client.interceptors.request.use(
     (config) => {
-      
       const token = Cookies.get('token');
       
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-
       config.headers['X-Correlation-ID'] = crypto.randomUUID();
       
       if (process.env.NODE_ENV === 'development') {
@@ -21,7 +19,6 @@ export function setupInterceptors(client: AxiosInstance): void {
           data: config.data,
         });
       }
-
       return config;
     },
     (error) => {
@@ -33,7 +30,7 @@ export function setupInterceptors(client: AxiosInstance): void {
   client.interceptors.response.use(
     (response: AxiosResponse) => {
       if (process.env.NODE_ENV === 'development') {
-        console.log(` ${response.status} ${response.config.url}`, response.data);
+        console.log(`${response.status} ${response.config.url}`, response.data);
       }
       return response;
     },

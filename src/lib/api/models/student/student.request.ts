@@ -8,6 +8,15 @@ export interface GetStudentGradeDetailRequest {
     studentId: number;
 }
 
+
+export interface GetAllStudentsRequest {
+    pageNumber: number;
+    pageSize: number;
+    searchText?: string;
+    sortBy?: string;
+    Ascending? : boolean; 
+}
+
 export interface UpdateStudentStatusRequest {
     studentId: number;
     status: string;

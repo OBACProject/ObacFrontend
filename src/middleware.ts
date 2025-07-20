@@ -2,13 +2,33 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-
   const role = req.cookies.get("role")?.value || "";
-  // console.log("User role from cookie:", role);
   const urlPath = req.nextUrl.pathname;
 
+  if (role && (urlPath === "/" || urlPath === "/login")) {
+    switch (role) {
+      case "Student":
+        return NextResponse.redirect(new URL("/student/schedule", req.url));
+      case "Teacher":
+        return NextResponse.redirect(new URL("/teacher/profile", req.url));
+      case "Academic":
+        return NextResponse.redirect(new URL("/academic/profile", req.url));
+      case "Admin":
+        return NextResponse.redirect(new URL("/admin/academic-management", req.url));
+      default:
+        return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
+
   if (!role) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    if (
+      urlPath.startsWith("/student") ||
+      urlPath.startsWith("/teacher") ||
+      urlPath.startsWith("/academic") ||
+      urlPath.startsWith("/admin")
+    ) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
   }
 
   const allowedRoles: Record<string, string[]> = {
@@ -18,7 +38,6 @@ export function middleware(req: NextRequest) {
     "/admin": ["Admin"],
   };
 
-  // Check if the requested path matches any restricted paths
   for (const [pathPrefix, roles] of Object.entries(allowedRoles)) {
     if (urlPath.startsWith(pathPrefix) && !roles.includes(role)) {
       switch (role) {
@@ -27,9 +46,9 @@ export function middleware(req: NextRequest) {
         case "Teacher":
           return NextResponse.redirect(new URL("/teacher/profile", req.url));
         case "Academic":
-          return NextResponse.redirect(new URL("/academic", req.url));
+          return NextResponse.redirect(new URL("/academic/profile", req.url));
         case "Admin":
-          return NextResponse.redirect(new URL("/admin/profile", req.url));
+          return NextResponse.redirect(new URL("/admin/academic-management", req.url));
         default:
           return NextResponse.redirect(new URL("/login", req.url));
       }
@@ -41,6 +60,8 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
+    "/login",
     "/student/:path*",
     "/teacher/:path*",
     "/academic/:path*",

@@ -56,7 +56,7 @@ export interface GetGroupSummaryGradeResponse {
   programName: string;
   term: string;
   year: number;
-  student: GetStudentByGroupId[];
+  students: GetStudentByGroupId[];
 }
 
 

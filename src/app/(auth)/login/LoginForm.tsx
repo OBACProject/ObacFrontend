@@ -20,7 +20,6 @@ export default function LoginForm({ session }: LoginFormProps) {
   const [role, setRole] = useState<string | null>(session?.role || null)
   const [name, setName] = useState<string | null>(session?.name || null)
 
-  // ✅ Restore login session from cookies on refresh
   useEffect(() => {
     const cookieRole = Cookies.get("role")
     const cookieName = Cookies.get("name")
@@ -52,6 +51,7 @@ export default function LoginForm({ session }: LoginFormProps) {
       setRole(newRole)
       setName(newName)
       toast.success("เข้าสู่ระบบสำเร็จ")
+      handleLoginButton()
     } catch (error) {
       console.error(error)
       toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง")
@@ -109,13 +109,13 @@ export default function LoginForm({ session }: LoginFormProps) {
               >
                 กลับเข้าสู่ระบบ
               </button>
-              {/* <Button
+              <Button
                 onClick={handleLogout}
                 variant="destructive"
                 className="bg-gradient-to-tr from-red-500/70 to-pink-400 hover:from-red-600 hover:to-pink-500 transform hover:scale-105 transition duration-500"
               >
                 ออกจากระบบ
-              </Button> */}
+              </Button>
             </div>
           </div>
         </div>
@@ -138,6 +138,7 @@ export default function LoginForm({ session }: LoginFormProps) {
             {login.isPending && <Loader2 className="w-5 h-5 animate-spin" />}
             {login.isPending ? "เข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
           </Button>
+          
         </form>
       )}
     </div>
