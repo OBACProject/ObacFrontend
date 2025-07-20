@@ -106,9 +106,10 @@ export interface GroupSummaryGradeResponse {
 }
 
 export interface SubjectGrade {
-  gradeId: number;
+  gradeId?: number;
   finalGrade: number;
   remark: string;
+  subjectId:number;
   subjectName: string;
   subjectCode: string;
   credit: number;
@@ -131,9 +132,10 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
 }
 
 export interface SubjectGrade {
-  gradeId: number;
+  gradeId?: number;
   finalGrade: number;
   remark: string;
+  subjectId : number;
   subjectName: string;
   subjectCode: string;
   credit: number;

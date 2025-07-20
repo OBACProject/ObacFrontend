@@ -1,11 +1,18 @@
 import { STUDENT_ENDPOINTS } from "../endpoints/student.endpoints";
-import { GetStudentByStudentIdRequest, GetStudentGradeDetailRequest, UpdateStudentStatusRequest, UpdateStudentRequest, GetStudentListInStudentGroupRequest, GetStudentListByClassRequest, GetStudentDetailAndGradeByStudentCodeRequest, GetStudentsByProgramIdRequest } from "../models/student/student.request";
-import { GetStudentByStudentIdResponse, GetStudentDetailAndGradeByStudentCodeResponse, GetStudentGradeDetailResponse, GetStudentsByProgramIdResponse } from "../models/student/student.response";
+import { GetStudentByStudentIdRequest, GetStudentGradeDetailRequest, UpdateStudentStatusRequest, UpdateStudentRequest, GetStudentListInStudentGroupRequest, GetStudentListByClassRequest, GetStudentDetailAndGradeByStudentCodeRequest, GetStudentsByProgramIdRequest, GetAllStudentsRequest } from "../models/student/student.request";
+import { GetAllStudentsResponse, GetStudentByStudentIdResponse, GetStudentDetailAndGradeByStudentCodeResponse, GetStudentGradeDetailResponse, GetStudentsByProgramIdResponse } from "../models/student/student.response";
 import { BaseService } from "./base/base.service";
 
 
 export class StudentService extends BaseService {
-
+    async getAllStudents(
+        params: GetAllStudentsRequest
+    ): Promise<GetAllStudentsResponse> {
+        return this.get<GetAllStudentsResponse>(
+            STUDENT_ENDPOINTS.GET_ALL_STUDENTS,
+            params
+        );
+    }
     async getStudentByStudentId (
         params: GetStudentByStudentIdRequest
     ): Promise<GetStudentByStudentIdResponse> {

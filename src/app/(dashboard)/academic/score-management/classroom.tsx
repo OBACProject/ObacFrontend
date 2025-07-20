@@ -8,158 +8,27 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
-import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { useGetAllProgramsQuery } from "@/lib/api/hooks/queries/program.queries";
 
 interface ClassroomTable {
   class: string;
   facultyName: string;
   programName: string;
-  groupId: string;
+  groupId: number;
   groupCode: string;
 }
 
-const classRoomTable: ClassroomTable[] = [
-  {
-    class: "ปวช 1/1",
-    facultyName: "บริการและการจัดการ",
-    programName: "การตลาด",
-    groupId: "G1001",
-    groupCode: "MK13A",
-  },
-  {
-    class: "ปวส 1/2",
-    facultyName: "พานิชยกรรม",
-    programName: "การบัญชี",
-    groupId: "G1002",
-    groupCode: "AC12B",
-  },
-  {
-    class: "ปวช 1/3",
-    facultyName: "พานิชยกรรม",
-    programName: "การตลาด",
-    groupId: "G1003",
-    groupCode: "MK13B",
-  },
-  {
-    class: "ปวส 1/1",
-    facultyName: "บริการและการจัดการ",
-    programName: "การบัญชี",
-    groupId: "G1004",
-    groupCode: "AC12A",
-  },
-  {
-    class: "ปวช 1/4",
-    facultyName: "พานิชยกรรม",
-    programName: "การบัญชี",
-    groupId: "G1005",
-    groupCode: "AC13C",
-  },
-  {
-    class: "ปวส 1/2",
-    facultyName: "บริการและการจัดการ",
-    programName: "การตลาด",
-    groupId: "G1006",
-    groupCode: "MK12D",
-  },
-  {
-    class: "ปวช 1/5",
-    facultyName: "บริการและการจัดการ",
-    programName: "การตลาด",
-    groupId: "G1007",
-    groupCode: "MK13F",
-  },
-  {
-    class: "ปวส 1/3",
-    facultyName: "พานิชยกรรม",
-    programName: "การตลาด",
-    groupId: "G1008",
-    groupCode: "MK12B",
-  },
-  {
-    class: "ปวช 1/6",
-    facultyName: "พานิชยกรรม",
-    programName: "การบัญชี",
-    groupId: "G1009",
-    groupCode: "AC13A",
-  },
-  {
-    class: "ปวส 1/4",
-    facultyName: "บริการและการจัดการ",
-    programName: "การบัญชี",
-    groupId: "G1010",
-    groupCode: "AC12F",
-  },
-  {
-    class: "ปวช 1/7",
-    facultyName: "บริการและการจัดการ",
-    programName: "การตลาด",
-    groupId: "G1011",
-    groupCode: "MK13D",
-  },
-  {
-    class: "ปวส 1/5",
-    facultyName: "พานิชยกรรม",
-    programName: "การบัญชี",
-    groupId: "G1012",
-    groupCode: "AC12D",
-  },
-  {
-    class: "ปวช 1/8",
-    facultyName: "พานิชยกรรม",
-    programName: "การตลาด",
-    groupId: "G1013",
-    groupCode: "MK13E",
-  },
-  {
-    class: "ปวส 1/6",
-    facultyName: "บริการและการจัดการ",
-    programName: "การบัญชี",
-    groupId: "G1014",
-    groupCode: "AC12G",
-  },
-  {
-    class: "ปวช 1/9",
-    facultyName: "บริการและการจัดการ",
-    programName: "การตลาด",
-    groupId: "G1015",
-    groupCode: "MK13G",
-  },
-  {
-    class: "ปวส 1/7",
-    facultyName: "พานิชยกรรม",
-    programName: "การบัญชี",
-    groupId: "G1016",
-    groupCode: "AC12C",
-  },
-  {
-    class: "ปวช 1/10",
-    facultyName: "พานิชยกรรม",
-    programName: "การตลาด",
-    groupId: "G1017",
-    groupCode: "MK13C",
-  },
-  {
-    class: "ปวส 1/8",
-    facultyName: "บริการและการจัดการ",
-    programName: "การบัญชี",
-    groupId: "G1018",
-    groupCode: "AC12E",
-  },
-  {
-    class: "ปวช 1/11",
-    facultyName: "บริการและการจัดการ",
-    programName: "การบัญชี",
-    groupId: "G1019",
-    groupCode: "AC13B",
-  },
-  {
-    class: "ปวส 1/9",
-    facultyName: "พานิชยกรรม",
-    programName: "การตลาด",
-    groupId: "G1020",
-    groupCode: "MK12A",
-  },
-];
+export interface GetAllProgramsWithStudentGroupResponse {
+  programId: number;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  class: string;
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  level: number;
+}
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -179,10 +48,9 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export function ClassroomGrading() {
   const router = useRouter();
+
   const classLevels = ["ปวช", "ปวส"];
   const term = ["1", "2"];
-
-  // Calculate current academic year and term
   const dateTime = new Date();
   const currentMonth = dateTime.getMonth();
   const currentYear =
@@ -190,16 +58,11 @@ export function ClassroomGrading() {
       ? dateTime.getFullYear() + 543
       : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
-
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
 
-  // State management
-  const [dataTable, setDataTable] = useState<ClassroomTable[]>(classRoomTable);
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
-
-  // Filter states
   const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
@@ -207,80 +70,47 @@ export function ClassroomGrading() {
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const {
-    data: apiClassroomData,
+    data: apiData,
     isLoading,
     isError,
     refetch,
-  } = useGetAllStudentGroupByTermYearQuery({
-    year: Number(selectedYear),
-    term: selectedTerm,
-  });
-  if (isLoading) {
-    return <TableSkeleton rows={8} columns={5} />;
-  }
+  } = useGetAllProgramsQuery();
 
-  if (isError) {
-    return (
-      <div className="text-center text-red-600">
-        เกิดข้อผิดพลาดในการโหลดข้อมูล
-        <button
-          onClick={() => refetch()}
-          className="underline ml-2 text-blue-500"
-        >
-          ลองอีกครั้ง
-        </button>
-      </div>
-    );
-  }
+  const debouncedSearchInput = useDebounce(searchInput, 300);
 
   const transformedData: ClassroomTable[] = useMemo(() => {
-    if (!apiClassroomData) return [];
+    if (!apiData) return [];
 
-    return apiClassroomData.map((item) => ({
-      class: item.class + " " + item.groupName,
-      facultyName: item.program?.name || "ไม่ระบุ",
-      programName: item.program?.name || "ไม่ระบุ",
-      groupId: item.groupCode,
+    return apiData.map((item: GetAllProgramsWithStudentGroupResponse) => ({
+      class: `${item.class} ${item.groupName}`,
+      facultyName: item.facultyName ?? "ไม่ระบุ",
+      programName: item.programName ?? "ไม่ระบุ",
+      groupId: item.groupId,
       groupCode: item.groupCode,
     }));
-  }, [apiClassroomData]);
-  // Faculty and program data
-
-  const [searchInput, setSearchInput] = useState<string>("");
-  const debouncedSearchInput = useDebounce(searchInput, 300);
+  }, [apiData]);
 
   const uniqueFaculties = useMemo(() => {
     return Array.from(
-      new Set(classRoomTable.map((item) => item.facultyName))
+      new Set(transformedData.map((item) => item.facultyName))
     ).sort();
-  }, []);
+  }, [transformedData]);
 
   const filteredPrograms = useMemo(() => {
     return Array.from(
       new Set(
-        classRoomTable
+        transformedData
           .filter((item) =>
             selectedFaculty ? item.facultyName === selectedFaculty : true
           )
           .map((item) => item.programName)
       )
     ).sort();
-  }, [selectedFaculty]);
+  }, [selectedFaculty, transformedData]);
 
-  // Get faculties from selected course
-  const getFaculties = useCallback(
-    (courseData: EducationData[]): FacultyInfo[] => {
-      return courseData.flatMap((faculty) =>
-        faculty.groupsCourse.map((group) => ({
-          facultyName: group.facultyName,
-          groupProgram: group.groupProgram,
-        }))
-      );
-    },
-    []
-  );
 
   const clearFilters = useCallback(() => {
     setSelectedClassLevel("");
@@ -297,7 +127,7 @@ export function ClassroomGrading() {
       !debouncedSearchInput
     ) {
       return transformedData.sort(
-        (a, b) => +a.groupId.slice(1) - +b.groupId.slice(1)
+        (a, b) => +a.groupId - +b.groupId
       );
     }
 
@@ -350,7 +180,7 @@ export function ClassroomGrading() {
       );
     });
 
-    return filtered.sort((a, b) => +a.groupId.slice(1) - +b.groupId.slice(1));
+    return filtered.sort((a, b) => +a.groupId - +b.groupId);
   }, [
     transformedData,
     selectedClassLevel,
@@ -370,6 +200,8 @@ export function ClassroomGrading() {
 
   const onRowClick = useCallback(
     (item: ClassroomTable) => {
+      
+
       router.push(
         `/academic/score-management/classroom/${item.groupId}/${selectedTerm}/${selectedYear}`
       );
@@ -377,51 +209,19 @@ export function ClassroomGrading() {
     [router, selectedTerm, selectedYear]
   );
 
-  // Uncomment when ready to use real data
-  // useEffect(() => {
-  //   const fetchFilterData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const rawData = await getRawProgramViewData(selectedTerm, selectedYear);
-  //       const formattedData: ClassroomTable[] = rawData.map(
-  //         (item: filterProgramsParamsData) => ({
-  //           class: `${item.class}. ${item.groupName}`,
-  //           facultyName: item.facultyName,
-  //           groupId: item.groupId,
-  //           programName: item.programName,
-  //           groupCode: item.groupCode,
-  //         })
-  //       );
-  //       setDataTable(formattedData);
-
-  //       const data = await filterProgramsViewData(selectedTerm, selectedYear);
-  //       const vocational = data.filter(
-  //         (item: EducationData) => item.classLevel === "ปวช"
-  //       );
-  //       const diploma = data.filter(
-  //         (item: EducationData) => item.classLevel === "ปวส"
-  //       );
-
-  //       setVocationalFaculties(getFaculties(vocational));
-  //       setDiplomaFaculties(getFaculties(diploma));
-  //     } catch (error) {
-  //       console.error("Error fetching filter data:", error);
-  //       toast.error("ไม่สามารถโหลดข้อมูลได้");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   fetchFilterData();
-  // }, [selectedTerm, selectedYear, getFaculties]);
-
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
-    { label: "ระดับชั้น", key: "class", className: "w-2/12" },
-    { label: "รหัสห้อง", key: "groupCode", className: "w-2/12" },
+    { label: "ระดับชั้น", key: "class", className: "w-2/12 justify-center" },
+    { label: "รหัสห้อง", key: "groupCode", className: "w-2/12 justify-center" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
       className: "w-4/12 xl:justify-start justify-center",
+    },
+    {
+      label: "สาขาวิชา",
+      key: "programName",
+      className: "w-2/12 xl:justify-start justify-center",
     },
     {
       label: "ใบออกเกรด",
@@ -448,7 +248,6 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
-              // handleDownloadExcel(Number(row.groupId));
               e.stopPropagation();
             }}
           >
@@ -461,6 +260,20 @@ export function ClassroomGrading() {
 
   if (isLoading) {
     return <TableSkeleton rows={8} columns={5} />;
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-600">
+        เกิดข้อผิดพลาดในการโหลดข้อมูล
+        <button
+          onClick={() => refetch()}
+          className="underline ml-2 text-blue-500"
+        >
+          ลองอีกครั้ง
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -641,7 +454,7 @@ export function ClassroomGrading() {
       {/* Results Summary */}
       <div className="flex items-center justify-between text-sm text-gray-600">
         <span>
-          แสดง {transformedData.length} จาก {dataTable.length} รายการ
+          แสดง {filteredData.length} จาก {transformedData.length} รายการ
         </span>
         <span className="text-sm text-gray-700">
           ภาคเรียนที่ {selectedTerm} ปีการศึกษา {selectedYear}

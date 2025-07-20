@@ -20,7 +20,6 @@ export default function LoginForm({ session }: LoginFormProps) {
   const [role, setRole] = useState<string | null>(session?.role || null)
   const [name, setName] = useState<string | null>(session?.name || null)
 
-  // ✅ Restore login session from cookies on refresh
   useEffect(() => {
     const cookieRole = Cookies.get("role")
     const cookieName = Cookies.get("name")
@@ -52,6 +51,7 @@ export default function LoginForm({ session }: LoginFormProps) {
       setRole(newRole)
       setName(newName)
       toast.success("เข้าสู่ระบบสำเร็จ")
+      handleLoginButton()
     } catch (error) {
       console.error(error)
       toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง")
@@ -95,17 +95,20 @@ export default function LoginForm({ session }: LoginFormProps) {
       </div>
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45 w-full h-screen" />
       {role && name ? (
-        <div className="absolute my-10 bg-white rounded-lg px-10 py-12">
-          <div className="space-y-4 text-center">
-            <UserRound className="mx-auto h-12 w-12" />
-            <div className="text-2xl">{name}</div>
+        <div className="absolute my-10 bg-white lg:w-[500px] w-fit rounded-lg px-10 py-12">
+          <div className="space-y-4 text-center grid place-items-center">
+            <p className="p-2 rounded-full bg-blue-500 w-fit">
+             <UserRound className="text-white h-12 w-12" /> 
+            </p>
+            <h1 className=" text-lg lg:text-3xl font-prompt">Welcome to OBAC</h1>
+            <div className="text-lg">{name}</div>
             <div className="mt-5 grid place-items-center gap-4">
-              <Button
+              <button
                 onClick={handleLoginButton}
-                className="bg-blue-500 hover:bg-blue-700 transform hover:scale-105 transition duration-500"
+                className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg text-white transform hover:scale-105 transition duration-500"
               >
                 กลับเข้าสู่ระบบ
-              </Button>
+              </button>
               <Button
                 onClick={handleLogout}
                 variant="destructive"
@@ -135,6 +138,7 @@ export default function LoginForm({ session }: LoginFormProps) {
             {login.isPending && <Loader2 className="w-5 h-5 animate-spin" />}
             {login.isPending ? "เข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
           </Button>
+          
         </form>
       )}
     </div>

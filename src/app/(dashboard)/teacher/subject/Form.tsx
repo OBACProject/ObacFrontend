@@ -3,7 +3,6 @@ import { GetTeacherSchedule } from "@/api/teacher/route";
 import CardSubject from "@/components/common/Card/card-subject";
 import { CardSubjectResponse } from "@/dto/teacherDto";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-import { mockCardSubjectResponse } from "@/resource/teachers/mockData";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -12,7 +11,7 @@ export default function Form() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
 
   useEffect(() => {
-    GetTeacherSchedule(1, defaultTerm, currentYear).then((d) => {
+    GetTeacherSchedule(defaultTerm, currentYear).then((d) => {
       if (d) {
         setSubject(d);
       } else {

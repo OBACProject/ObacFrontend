@@ -1,6 +1,7 @@
 
 
 export const STUDENT_ENDPOINTS = {
+    GET_ALL_STUDENTS : 'Student/GetAllStudents',
     GET_STUDENT_BY_STUDENT_ID : 'Student/GetStudentByStudentId/',
     GET_STUDENT_GRADE_DETAIL : 'Student/GetStudentGradeDetail',
     PUT_STUDENT_UPDATE_STUDENT_STATUS : 'Student/UpdateStudentStatus',

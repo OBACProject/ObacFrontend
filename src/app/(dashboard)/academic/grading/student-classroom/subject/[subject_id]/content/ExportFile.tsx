@@ -72,16 +72,16 @@ export default function ExportFile({
       </Button>
       {/* <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
-        onClick={() =>
-          ConvertScoreToExcel(
-            convertGrad,
-            term,
-            year,
-            subject?.subjectCode ?? "",
-            subject?.subjectName ?? "",
-            roomName ?? ""
-          )
-        }
+        // onClick={() =>
+        //   ConvertScoreToExcel(
+        //     convertGrad,
+        //     term,
+        //     year,
+        //     subject?.subjectCode ?? "",
+        //     subject?.subjectName ?? "",
+        //     roomName ?? ""
+        //   )
+        // }
       >
         ดาวน์โหลดใบคะแนน Excel
       </Button> */}

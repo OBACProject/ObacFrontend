@@ -1,7 +1,7 @@
 "use client";
 import ScoreInputForm from "@/components/Teacher/TableImportScore";
 import StudentInformationCard from "@/components/Teacher/StudentInformationCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusCircle } from "lucide-react";
 import CreateScoreTablePopup from "@/components/Teacher/CreateScoreTablePopup";
 import SearchInput from "@/components/Teacher/SearchInput";
@@ -16,12 +16,14 @@ import {
 } from "@/api/grad/route";
 
 export default function Form() {
+
   const [edit, setEdit] = useState<boolean>(false);
   const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
   const [student, setStudent] =
     useState<GetStudentDetailAndSummaryScoreByStudentCodeResponse | null>();
 
   const [editedStudentInfo, setEditedStudentInfo] = useState<{
+    prefix: string;
     studentCode: string;
     studentFirstName: string;
     studentLastName: string;
@@ -36,6 +38,7 @@ export default function Form() {
       student: {
         ...student.student,
         studentCode: editedStudentInfo.studentCode,
+        prefix: editedStudentInfo.prefix,
         name: editedStudentInfo.studentFirstName,
         lastName: editedStudentInfo.studentLastName,
         class: editedStudentInfo.className,
@@ -45,14 +48,15 @@ export default function Form() {
     };
     console.log("payload FE : ", payload);
     const success = await UpsertStudentGrades(payload);
+
     if (success) {
       alert("บันทึกข้อมูลสำเร็จ");
-      // setTimeout(
-      //   () => {
-      //     window.location.reload()
-      //   },
-      //   2000
-      // );
+      setTimeout(
+        () => {
+          window.location.reload()
+        },
+        500
+      );
       setEdit(false);
     } else {
       alert("เกิดข้อผิดพลาด");
@@ -106,10 +110,13 @@ export default function Form() {
           <div className="py-4 flex justify-between ">
             <StudentInformationCard
               key={student?.student.id}
+              Prefix={student?.student.prefix}
               StudentCode={student?.student.studentCode}
               StudentFirstName={student?.student.name || "-"}
               StudentLastName={student?.student.lastName || "-"}
-              Class={student?.student.class + student?.student.groupName || "-"}
+              Class={
+                student?.student.class + "." + student?.student.groupName || "-"
+              }
               Faculty={student?.student.facultyName || "-"}
               edit={edit}
               onChangeStudentData={(updated) => setEditedStudentInfo(updated)}
@@ -155,6 +162,7 @@ export default function Form() {
                   key={index}
                   scores={student.termYearGradeGroups[index].grades}
                   edit={edit}
+                  
                   onChange={(updatedGrades: SubjectGrade[]) => {
                     setStudent((prev) => {
                       if (!prev) return prev;
@@ -176,6 +184,7 @@ export default function Form() {
                   year={
                     student.termYearGradeGroups[index].grades[0]?.year || 2567
                   }
+                  classLevel={student.student.class}
                   onRemoveGroup={() => {
                     setStudent((prev) => {
                       if (!prev) return prev;
@@ -201,9 +210,9 @@ export default function Form() {
               onConfirm={(year, term) => {
                 const newScoreGroup: SubjectGrade[] = [
                   {
-                    gradeId: 1,
                     term,
                     year,
+                    subjectId:0,
                     subjectName: "",
                     subjectCode: "",
                     gradePoint: 0,

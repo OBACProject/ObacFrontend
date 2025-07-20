@@ -9,10 +9,6 @@ import {
   GetStudentListByGroupIDDto,
 } from "@/dto/studentDto";
 import { ConvertClassroomToExcel } from "@/lib/Excel/generateExcelFile";
-import {
-  filterProgramsViewData,
-  getRawProgramViewData,
-} from "@/resource/academics/studentInfoList/viewData/filterProgramsParamsViewData";
 import { Download, FileText, Loader2, Table } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
