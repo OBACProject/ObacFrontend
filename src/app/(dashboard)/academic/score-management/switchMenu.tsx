@@ -1,9 +1,9 @@
 "use client";
 import { useState, Suspense } from "react";
 import { ClassroomGrading } from "./classroom";
-import { StudentListPage } from "./studentList";
 import { Boxes, Users } from "lucide-react";
 import { ClassroomGradingFallback } from "./classroom-grading-falling";
+import StudentListPage from "./studentList";
 
 
 function StaticHeader({ isToggle, setIsToggle }: { 

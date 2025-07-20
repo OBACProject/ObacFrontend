@@ -29,14 +29,20 @@ export interface GetGradBySubjectId {
   firstName: string;
   lastName: string;
   subjectName: string;
+  assignmentscore: number;
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
   totalScore: number;
   grade: string;
   remark: string;
 }
-
+// assignmentscore คะแนนภารระงาน : 20
+// collectscore คะแนนเก็บ (ทดสอบ) : 10
+// affectivescore คะแนนประพฤติ : 20
+// midtermscore กลางภาค : 20
+// finaltermscore ปลายภาค : 30
 export interface convertGradBySubjectId {
   studentCode: string;
   name: string; 
