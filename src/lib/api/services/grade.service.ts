@@ -11,6 +11,8 @@ import {
 import {
   GetGroupSummaryGradeResponse,
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  GetStudentGradesByTermYearResponse,
+  GetStudentGroupGradeByScheduleSubjectIdResponse,
   GetStudentIfGradeBelowResponse,
 } from "../models/grade/grade.response";
 
@@ -27,8 +29,8 @@ export class GradeService extends BaseService {
   
   async getStudentGradesByTermYear(
     params : GetStudentGradesByTermYearRequest
-  ) : Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
-    return this.get<GetStudentDetailAndSummaryScoreByStudentCodeResponse>(
+  ) : Promise<GetStudentGradesByTermYearResponse> {
+    return this.get<GetStudentGradesByTermYearResponse>(
       GRADE_ENDPOINTS.GET_GRADE_STUDENT_GRADES_BY_TERM_YEAR,
       params
     );
@@ -42,8 +44,8 @@ export class GradeService extends BaseService {
   }
   async getStudentGroupGradeByScheduleSubjectId(
     scheduleSubjectId: number
-  ): Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
-    return this.get<GetStudentDetailAndSummaryScoreByStudentCodeResponse>(
+  ): Promise<GetStudentGroupGradeByScheduleSubjectIdResponse> {
+    return this.get<GetStudentGroupGradeByScheduleSubjectIdResponse>(
       `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}/${scheduleSubjectId}`
     );
   }

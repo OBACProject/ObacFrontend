@@ -33,10 +33,12 @@ export default function ExportFile({
     return {
       studentCode: item.studentCode,
       name: `${prefix} ${item.firstName} ${item.lastName}`,
+      assignmentscore: item.assignmentscore,
       collectScore: item.collectScore,
-      testScore: item.testScore,
       affectiveScore: item.affectiveScore,
-      totalScore: item.collectScore + item.testScore + item.affectiveScore,
+      midtermScore: item.midtermScore,
+      finaltermScore: item.finaltermScore,
+      totalScore:  item.affectiveScore + item.assignmentscore + item.collectScore + item.midtermScore + item.finaltermScore,
     };
   });
 
