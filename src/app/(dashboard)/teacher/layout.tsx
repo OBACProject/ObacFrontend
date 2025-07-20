@@ -30,7 +30,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className="pt-20 lg:pl-[65px] flex-grow">{children}</div>
-        <HomeFooter/>
+        <HomeFooter />
       </body>
     </html>
   );

@@ -23,3 +23,33 @@ export const GetSubjectsByTermAndClass = async (
     return null;
   }
 };
+
+export const GetAllSubjectAsync = async (): Promise<SubjectItem[] | []> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: SubjectItem[];
+    }>("Subject/GetAllSubjectAsync");
+
+    return response.data.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+export const GetAllActiveSubjectAsync = async (): Promise<SubjectItem[] | []> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: SubjectItem[];
+    }>("Subject/GetAllActiveSubjects");
+
+    return response.data.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
