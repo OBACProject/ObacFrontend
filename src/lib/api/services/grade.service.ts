@@ -16,8 +16,7 @@ import {
 
 export class GradeService extends BaseService {
 
-
-   async getGroupSummaryGrade(
+  async getSummaryGrade(
     params: GetGroupSummaryGradeRequest
   ): Promise<GetGroupSummaryGradeResponse> {
     return this.get<GetGroupSummaryGradeResponse>(
@@ -25,6 +24,7 @@ export class GradeService extends BaseService {
       params
     );
   }
+  
   async getStudentGradesByTermYear(
     params : GetStudentGradesByTermYearRequest
   ) : Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
