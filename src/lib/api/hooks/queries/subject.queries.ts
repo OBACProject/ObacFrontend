@@ -7,12 +7,12 @@ import { useBaseUpdateMutation } from "./base/base.mutation";
 
 export const useGetAllSubjectsQuery = createBaseQuery<GetAllSubjectAsyncResponse[], void>(
     (params) => ['Subjects', params],
-    (params) => subjectService.getAllSubjects(),
+    () => subjectService.getAllSubjects(),
 );
 
 export const usegetAllActiveSubjectsQuery = createBaseQuery<GetAllActiveSubjectsResponse[], void>(
     (params) => ['Subjects', params],
-    (params) => subjectService.getAllActiveSubjects(),
+    () => subjectService.getAllActiveSubjects(),
 );
 
 export const usegetSubjectByIdQuery = createBaseQuery<GetSubjectByIdResponse[], GetSubjectByIdRequest>(
@@ -20,8 +20,10 @@ export const usegetSubjectByIdQuery = createBaseQuery<GetSubjectByIdResponse[], 
     (params) => subjectService.getSubjectById(params),
 );
 
-
-
+export const useGetSubjectsByStudentGroupIdTermYearQuery = createBaseQuery<GetSubjectsByStudentGroupIdTermYearResponse[], GetSubjectsByStudentGroupIdTermYearRequest>(
+    (params) => ['Subjects_StudentGroup_Term_Year', params],
+    (params) => subjectService.getSubjectsByStudentGroupIdTermYear(params),
+);
 
 export const useCreateSubjectMutation = (options? : Partial<UseMutationOptions<CreateSubjectResponse[] , Error , CreateSubjectRequest  >>) => {
   return useBaseUpdateMutation<CreateSubjectResponse[] , CreateSubjectRequest, Error>(
@@ -44,16 +46,4 @@ export const useDeleteSubjectMutation = (options? : Partial<UseMutationOptions<D
   );
 }
 
-export const useGetSubjectByTermMutation = (options? : Partial<UseMutationOptions<GetSubjectByTermResponse[] , Error , GetSubjectByTermRequest  >>) => {
-  return useBaseUpdateMutation<GetSubjectByTermResponse[] , GetSubjectByTermRequest, Error>(
-    subjectService.getSubjectByTerm.bind(subjectService),
-    options
-  );
-}
 
-export const getSubjectsByStudentGroupIdTermYearMutation = (options? : Partial<UseMutationOptions<GetSubjectsByStudentGroupIdTermYearResponse, Error , GetSubjectsByStudentGroupIdTermYearRequest  >>) => {
-  return useBaseUpdateMutation<GetSubjectsByStudentGroupIdTermYearResponse , GetSubjectsByStudentGroupIdTermYearRequest, Error>(
-    subjectService.getSubjectsByStudentGroupIdTermYear.bind(subjectService),
-    options
-  );
-}

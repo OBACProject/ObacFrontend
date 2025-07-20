@@ -18,6 +18,38 @@ export interface GetStudentByStudentIdResponse {
     status: string | null;
 }
 
+export interface GetAllStudentsResponse {
+    pageNumber: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    items: {
+        id: number;
+        prefix: string;
+        name: string;
+        lastName: string;
+        gender: string;
+        nationality: string | null;
+        birthDate: string | null;
+        citizenId: string | null;
+        studentCode: string;
+        phoneNumber: string | null;
+        studentGroupId: number;
+        groupName: string;
+        groupCode: string;
+        class: string;
+        level: number;
+        programName: string | null;
+        subProgramName: string | null;
+        facultyName: string;
+        gpax: number | null;
+        status: string | null;
+        programId: number;
+    }[];
+}
+    
 export interface GetStudentGradeDetailResponse {
     studentId: number;
     studentCode: string;
