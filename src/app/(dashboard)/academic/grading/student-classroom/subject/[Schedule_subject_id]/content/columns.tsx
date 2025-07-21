@@ -13,7 +13,7 @@ export const createColumns = ({
     index: number,
     field: keyof Pick<
       GetGradBySubjectId,
-      "collectScore" | "affectiveScore" | "testScore"
+      "assignmentscore" | "collectScore" | "affectiveScore" | "midtermScore" | "finaltermScore"
     >,
     value: string
   ) => void;
@@ -26,28 +26,53 @@ export const createColumns = ({
   return [
     {
       label: "ลำดับ",
-      className: "w-1/12 ",
+      className: "w-1/12",
       render: (row) => `${row.index}`,
     },
     {
       label: "รหัสนักเรียน",
       key: "studentCode",
-      className: "w-1/6  ",
+      className: "w-1/12",
     },
     {
       label: "ชื่อ - นามสกุล",
-      className: "w-1/6 ",
+      className: "w-2/12",
       render: (row) => `${row.firstName} ${row.lastName}`,
     },
     {
-      label: "คะแนนเก็บ",
-      className: "w-1/6",
+      label: "คะแนนภารระงาน (20)",
+      className: "w-1/12",
       render: (row) =>
         onEdit && !row.remark ? (
           <input
             type="number"
             min={0}
-            max={50}
+            max={20}
+            value={row.assignmentscore}
+            className="text-center w-full border px-2 py-1"
+            onChange={(e) =>
+              handleInputChange(
+                row.index !== undefined ? Number(row.index) - 1 : 0,
+                "assignmentscore",
+                e.target.value
+              )
+            }
+          />
+        ) : (
+          <div className="text-center w-full border px-2 py-1">
+            {row.assignmentscore}
+          </div>
+        ),
+    },
+    {
+      label: "คะแนนเก็บ (10)",
+      className: "w-1/12",
+      render: (row) =>
+        onEdit && !row.remark ? (
+          <input
+            type="number"
+            min={0}
+            max={10}
             value={row.collectScore}
             className="text-center w-full border px-2 py-1"
             onChange={(e) =>
@@ -65,8 +90,8 @@ export const createColumns = ({
         ),
     },
     {
-      label: "จิตพิสัย",
-      className: "w-1/6",
+      label: "คะแนนประพฤติ (20)",
+      className: "w-1/12",
       render: (row) =>
         onEdit && !row.remark ? (
           <input
@@ -90,42 +115,67 @@ export const createColumns = ({
         ),
     },
     {
-      label: "สอบ",
-      className: "w-1/6",
+      label: "กลางภาค (20)",
+      className: "w-1/12",
       render: (row) =>
         onEdit && !row.remark ? (
           <input
             type="number"
             min={0}
-            max={30}
-            value={row.testScore}
+            max={20}
+            value={row.midtermScore}
             className="text-center w-full border px-2 py-1"
             onChange={(e) =>
               handleInputChange(
                 row.index !== undefined ? Number(row.index) - 1 : 0,
-                "testScore",
+                "midtermScore",
                 e.target.value
               )
             }
           />
         ) : (
           <div className="text-center w-full border px-2 py-1">
-            {row.testScore}
+            {row.midtermScore}
           </div>
         ),
     },
     {
-      label: "รวม",
-      className: "w-1/6",
+      label: "ปลายภาค (30)",
+      className: "w-1/12",
+      render: (row) =>
+        onEdit && !row.remark ? (
+          <input
+            type="number"
+            min={0}
+            max={30}
+            value={row.finaltermScore}
+            className="text-center w-full border px-2 py-1"
+            onChange={(e) =>
+              handleInputChange(
+                row.index !== undefined ? Number(row.index) - 1 : 0,
+                "finaltermScore",
+                e.target.value
+              )
+            }
+          />
+        ) : (
+          <div className="text-center w-full border px-2 py-1">
+            {row.finaltermScore}
+          </div>
+        ),
+    },
+    {
+      label: "รวม (100)",
+      className: "w-1/12",
       render: (row) => (
-        <div className="text-center w-full border px-2 py-1">
-          {row.collectScore + row.affectiveScore + row.testScore}
+        <div className="text-center w-full border px-2 py-1 font-semibold">
+          {row.totalScore}
         </div>
       ),
     },
     {
       label: "เกรด",
-      className: "w-1/6 flex justify-center",
+      className: "w-1/12 flex justify-center",
       render: (row) => {
         const hasRemark = row.remark !== null && row.remark.trim() !== "";
 
@@ -144,7 +194,7 @@ export const createColumns = ({
     },
     {
       label: "หมายเหตุ",
-      className: "w-1/6",
+      className: "w-1/12",
       render: (row) =>
         onEdit ? (
           <Combobox

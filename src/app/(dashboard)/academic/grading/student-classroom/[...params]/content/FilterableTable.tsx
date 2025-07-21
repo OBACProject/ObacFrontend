@@ -11,8 +11,8 @@ import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/queries/subject.queries";
 
 export const columns = [
-  { label: "ลำดับ", key: "index", className: "w-1/12 flex px-10" },
-  { label: "รหัสวิชา", key: "id", className: "w-1/4 flex px-10" },
+  { label: "ลำดับ", key: "index", className: "w-1/12 flex justify-center px-10" },
+  { label: "รหัสวิชา", key: "id", className: "w-1/4 flex justify-center px-10" },
   { label: "ชื่อวิชา", key: "name", className: "w-1/4 flex px-10" },
   { label: "อาจารย์", key: "teacher", className: "w-1/4 flex px-10" },
   { label: "สถานะ", key: "status", className: "w-1/4 flex px-10" },
@@ -185,7 +185,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
             index: index + 1,
           }))}
           getRowLink={(row) =>
-            `/academic/grading/student-classroom/${classroomId}/subject/${row.id}`
+            `/academic/grading/student-classroom/subject/${row.id}`
           }
           pagination={10}
         />

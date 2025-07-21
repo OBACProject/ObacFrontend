@@ -1,5 +1,5 @@
 import { GetGroupSummaryGradeRequest, GetStudentGradesByTermYearRequest, GetStudentIfGradeBelowRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
-import {  GetGroupSummaryGradeResponse, GetStudentDetailAndSummaryScoreByStudentCodeResponse, GetStudentIfGradeBelowResponse } from "@/lib/api/models/grade/grade.response";
+import {  GetGroupSummaryGradeResponse, GetStudentDetailAndSummaryScoreByStudentCodeResponse, GetStudentGradesByTermYearResponse, GetStudentGroupGradeByScheduleSubjectIdResponse, GetStudentIfGradeBelowResponse } from "@/lib/api/models/grade/grade.response";
 import { gradeService } from "@/lib/api/services/grade.service";
 import { createBaseQuery } from "./base/base.queries";
 import { UseMutationOptions } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ export const useGetGroupSummaryGradeQuery = createBaseQuery<
 );
 
 export const useGetStudentGradesByTermYearQuery = createBaseQuery<
-  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  GetStudentGradesByTermYearResponse,
   GetStudentGradesByTermYearRequest
 >(
   (params) => ['studentGradesByTermYear', params],
@@ -30,12 +30,10 @@ export const useGetStudentDetailAndSummaryScoreByStudentCodeQuery = (studentCode
   )
 };
 
-export const useGetStudentGroupGradeByScheduleSubjectIdQuery = (scheduleSubjectId: number) => {
-  return createBaseQuery<GetStudentDetailAndSummaryScoreByStudentCodeResponse, number>(
-    () => ['studentGroupGrade', scheduleSubjectId],
-    () => gradeService.getStudentGroupGradeByScheduleSubjectId(scheduleSubjectId),
+export const useGetStudentGroupGradeByScheduleSubjectIdQuery  = createBaseQuery<GetStudentGroupGradeByScheduleSubjectIdResponse, number>(
+    (params) => ['studentGroupGrade', params],
+    (params) => gradeService.getStudentGroupGradeByScheduleSubjectId(params),
   )
-};
 
 export const useGetStudentIfGradeBelowQuery = createBaseQuery<
   GetStudentIfGradeBelowResponse,
