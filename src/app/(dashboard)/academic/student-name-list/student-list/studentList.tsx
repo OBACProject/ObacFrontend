@@ -1,140 +1,138 @@
 "use client";
-import { DataTable } from "@/components/common/MainTable/table_style_1";
-import { Combobox } from "@/components/common/Combobox/combobox";
-import { Input } from "@/components/ui/input";
-import { GetAllStudentTableDto } from "@/dto/studentDto";
-import { Loader2, Table } from "lucide-react";
+
+import React, { useMemo, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { mockStudentTableData } from "@/resource/academics/mockData";
-import { StylesTable } from "@/components/Academic/table/StylesTable";
+import { Search } from "lucide-react";
 
-export function StudentListPage(props: {
-  handleTab: (tab: string) => void;
-  handleData: (data: { studentId: number; studentName: string }) => void;
-}) {
-  const [individualStudentData, setIndividualStudentData] = useState<
-    GetAllStudentTableDto[]
-  >([]);
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
-  // Class levels from API
-  const classLevels = Array.from(
-    new Set(individualStudentData.map((student) => student.class))
-  );
-  // Faculty data from API
-  const uniqueFaculties = Array.from(
-    new Set(individualStudentData.map((student) => student.facultyName))
-  );
+import { Input } from "@/components/ui/input";
+import { Combobox } from "@/components/common/Combobox/combobox";
+import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries";
+import { GetAllStudentsResponse } from "@/lib/api/models/student/student.response";
+import { Column } from "exceljs";
+import { StyledServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable";
 
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = mockStudentTableData;
-      setIndividualStudentData(data);
-      setIsLoadingPage(true);
-    };
-
-    fetchData();
-  }, []);
-
+export function StudentListPage() {
   const router = useRouter();
-  const handleRowClick = (item: GetAllStudentTableDto) => {
-    router.push(`/academic/student-details/${item.studentId}`);
+
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebounce(searchInput, 500);
+
+  const [selectedClassLevel, setSelectedClassLevel] = useState("");
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+
+  const { data: lastSuccessfulData, isLoading } = useGetAllStudentsQuery({
+    pageNumber: currentPage,
+    pageSize,
+    searchText: debouncedSearch || undefined,
+    sortBy: undefined,
+    Ascending: true,
+  });
+
+  const students = useMemo(() => lastSuccessfulData?.items || [], [lastSuccessfulData]);
+
+  const filteredStudents = useMemo(() => {
+    return students.filter((student) => {
+      const matchClass = selectedClassLevel ? student.class === selectedClassLevel : true;
+      const matchFaculty = selectedFaculty ? student.facultyName === selectedFaculty : true;
+      return matchClass && matchFaculty;
+    });
+  }, [students, selectedClassLevel, selectedFaculty]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
+  const getRowLink = (item: GetAllStudentsResponse["items"][0]) =>
+    `/academic/student-details/${item.id}`;
+
+  
+
+  const classLevelOptions = useMemo(() => {
+    const levels = Array.from(new Set(students.map((s) => s.class))).sort();
+    return [{ value: "", label: "ทั้งหมด" }, ...levels.map((c) => ({ value: c, label: c }))];
+  }, [students]);
+
+  const facultyOptions = useMemo(() => {
+    const faculties = Array.from(new Set(students.map((s) => s.facultyName))).sort();
+    return [{ value: "", label: "ทั้งหมด" }, ...faculties.map((f) => ({ value: f, label: f }))];
+  }, [students]);
   const columns = [
-    { label: "ลำดับ", key: "index", className: "w-2/16 justify-center" },
+    { label: "รหัสนักเรียน", key: "studentCode", className: "w-3/16 flex justify-center" },
     {
-      label: "รหัสนักเรียน",
-      key: "studentCode",
-      className: "w-2/16    text-blue-500 justify-center",
+      label: "ชื่อ - นามสกุล",
+      key: "fullName",
+      className: "w-7/16 flex items-center justify-start md:justify-center text-start jus",
+      render: (item: any) => `${item.prefix}${item.name} ${item.lastName}`,
     },
-    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-5/16" },
-    { label: "ระดับชั้น", key: "class", className: "w-2/16 justify-center" },
+    { label: "ระดับชั้น", key: "class", className: "w-2/16 flex justify-center" },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
-      className: "w-5/16 text-start line-clamp-1 justify-center",
+      className: "w-4/16 text-start line-clamp-1 flex justify-center",
     },
-  ];
-
-  const filteredData = useMemo(() => {
-    return individualStudentData.filter((student) => {
-      const matchClassLevel = selectedClassLevel
-        ? student.class === selectedClassLevel
-        : true;
-      const matchFaculty = selectedFaculty
-        ? student.facultyName === selectedFaculty
-        : true;
-      const matchSearch = searchInput.toLocaleLowerCase()
-        ? student.studentCode.toLocaleLowerCase().includes(searchInput) ||
-          student.thaiName.toLocaleLowerCase().includes(searchInput)
-        : true;
-
-      return matchClassLevel && matchFaculty && matchSearch;
-    });
-  }, [individualStudentData, selectedClassLevel, selectedFaculty, searchInput]);
-
+  ]
   return (
-    <>
-      {isLoadingPage ? (
-        <header className="flex bg-white flex-col p-4 border mt-4 rounded-lg">
-          <div className="flex gap-12 mt-4">
-            <div className="flex mx-auto gap-6 w-full p-2 rounded-lg">
-              <div className="w-1/6">
-                <Combobox
-                  options={classLevels.map((classData) => ({
-                    value: classData,
-                    label: classData,
-                  }))}
-                  buttonLabel="ระดับการศึกษา"
-                  onSelect={setSelectedClassLevel}
-                />
-              </div>
-              <div className="w-1/6 ">
-                <Combobox
-                  options={uniqueFaculties.map((faculty) => ({
-                    value: faculty,
-                    label: faculty,
-                  }))}
-                  buttonLabel="หลักสูตรการศึกษา"
-                  onSelect={setSelectedFaculty}
-                />
-              </div>
-              <div className="w-1/3">
-                <Input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full pr-10"
-                  onChange={(event) => setSearchInput(event.target.value)}
-                />
-              </div>
+    <div className="bg-white p-6 rounded-lg shadow-sm border space-y-6 mt-4">
+      <div className="bg-gray-50 p-4 rounded-lg border space-y-4">
+        <h3 className="font-semibold text-gray-900">ตัวกรองข้อมูล</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              ระดับการศึกษา
+            </label>
+            <Combobox
+              options={classLevelOptions}
+              buttonLabel={selectedClassLevel || "เลือกระดับการศึกษา"}
+              onSelect={setSelectedClassLevel}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              หลักสูตรการศึกษา
+            </label>
+            <Combobox
+              options={facultyOptions}
+              buttonLabel={selectedFaculty || "เลือกหลักสูตรการศึกษา"}
+              onSelect={setSelectedFaculty}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              ค้นหา
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="ค้นหารหัสนักเรียนหรือชื่อ..."
+                className="pl-10 w-full"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
             </div>
           </div>
-
-          <StylesTable
-            icon={<Table className="h-5 w-5 text-white" />}
-            title="รายชื่อนักเรียนทั้งหมด"
-            columns={columns}
-            data={filteredData.map((item, index) => ({
-              ...item,
-              index: index + 1,
-            }))}
-            onRowClick={handleRowClick}
-            pagination={10}
-          />
-        </header>
-      ) : (
-        <div className="mt-2 border-2 border-dashed rounded-md border-gray-400 grid place-items-center py-20 text-3xl text-blue-400 font-semibold items-center">
-          <p className="flex gap-2">
-            <Loader2 className="h-10 w-10 animate-spin" />
-            Loading...
-          </p>
         </div>
-      )}
-    </>
+      </div>
+
+      <StyledServerPaginatedDataTable
+      title="รายชื่อนักเรียน"
+      icon={<Search className="h-5 w-5 text-gray-500" />}
+        columns={columns}
+        data={filteredStudents}
+        getRowLink={getRowLink}
+        currentPage={currentPage}
+        totalPages={lastSuccessfulData?.totalPages || 1}
+        totalCount={lastSuccessfulData?.totalCount || 0}
+        pageSize={pageSize}
+        onPageChange={handlePageChange}
+        hasNextPage={lastSuccessfulData?.hasNextPage || false}
+        hasPreviousPage={lastSuccessfulData?.hasPreviousPage || false}
+      />
+    </div>
   );
 }

@@ -1,14 +1,13 @@
 "use client";
 
-import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import type { FacultyInfo, EducationData } from "@/dto/studentDto";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, Table } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { useGetAllProgramsQuery } from "@/lib/api/hooks/queries/program.queries";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 interface ClassroomTable {
   class: string;
@@ -457,7 +456,9 @@ export function ClassroomGrading() {
       </div>
 
       {/* Data Table */}
-      <DataTable
+      <StylesTable
+        title="ตารางห้องเรียน"
+        icon={<Table className="h-5 w-5" />}
         columns={columns}
         data={tableData}
         onRowClick={onRowClick}

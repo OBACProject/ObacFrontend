@@ -8,7 +8,7 @@ import { Search } from "lucide-react"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { TableSkeleton } from "./component/skeletons/TableSkeleton"
 import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries"
-import { ServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable"
+import { StyledServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable"
 
 // Helper hook for debouncing values
 function useDebounce<T>(value: T, delay: number): T {
@@ -264,7 +264,9 @@ export default function StudentListPage() {
         </span>
         {isLoadingTable && <span className="text-blue-600 text-sm">กำลังโหลด...</span>}
       </div>
-      <ServerPaginatedDataTable
+      <StyledServerPaginatedDataTable
+      title="รายชื่อนักเรียน"
+      icon={<Search className="h-5 w-5 text-gray-500" />}
         columns={columns}
         data={tableData}
         getRowLink={getRowLink}
