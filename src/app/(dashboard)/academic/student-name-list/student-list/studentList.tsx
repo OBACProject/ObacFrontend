@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries";
 import { GetAllStudentsResponse } from "@/lib/api/models/student/student.response";
-import { Column } from "exceljs";
 import { StyledServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable";
 
 
