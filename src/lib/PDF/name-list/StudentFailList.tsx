@@ -87,8 +87,8 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
         alternateRowStyles: { fillColor: [255, 255, 255] },
         styles: {
           font: "THSarabun",
-          fontSize: 14,
-          cellPadding: 1,
+          fontSize: 12,
+          cellPadding: 0.5,
           halign: "center",
           valign: "middle",
           lineColor: [0, 0, 0],
@@ -104,13 +104,13 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
             cellWidth: 30,
             halign: "left",
             lineWidth: { right: 0, top: 0.2, bottom: 0.2, left: 0.2 },
-            cellPadding: { left: 5, right: 0, top: 1, bottom: 1 },
+            cellPadding: { left: 5, right: 0, top: 0.5, bottom: 0.5 },
           },
           3: {
             cellWidth: 30,
             halign: "left",
             lineWidth: { right: 0.2, left: 0, top: 0.2, bottom: 0.2 },
-            cellPadding: { left: 0, right: 0, top: 1, bottom: 1 },
+            cellPadding: { left: 0, right: 0, top: 0.5, bottom: 0.5 },
           },
           4: { cellWidth: 35 },
           5: { cellWidth: 31 },
@@ -118,8 +118,8 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
         },
         margin: { left: 4, right: 0 },
       });
-      y2 += 7;
-      if (y2 >= 260) {
+      y2 += 6;
+      if (y2 >= 255) {
          doc.addPage()
         y2 = 14;
       }

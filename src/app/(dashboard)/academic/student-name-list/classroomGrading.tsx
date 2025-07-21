@@ -109,8 +109,7 @@ export function ClassroomGrading(props: {
     setSearchInput("");
   }, []);
 
-  // Filter data based on all selected filters
-  const filteredData = useMemo(() => {
+    const filteredData = useMemo(() => {
     if (
       !selectedClassLevel &&
       !selectedFaculty &&

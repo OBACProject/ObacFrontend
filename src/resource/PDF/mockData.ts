@@ -262,7 +262,7 @@ export const mockGroupSummaryGradeResponse: GroupSummaryGradeResponse = {
     { subjectID: 104, subjectCode: "EN104", subjectName: "ภาษาอังกฤษธุรกิจ" },
     { subjectID: 105, subjectCode: "MK105", subjectName: "การตลาดเบื้องต้น" },
   ],
-  student: Array.from({ length: 10 }, (_, i) => {
+  student: Array.from({ length: 28 }, (_, i) => {
     const gpa = 1 + Math.random() * 3;
     const gpax = 1 + Math.random() * 3;
 
@@ -424,6 +424,186 @@ export const mockStudentListByGroupID: StudentListByGroupIDDto[] = [
     lastName: "อรุณรุ่ง",
     studentStatus: "กำลังศึกษา",
   },
+  {
+    prefix: "นาย",
+    studentCode: "65110001",
+    studentId: 1,
+    gender: "ชาย",
+    firstName: "กิตติ",
+    lastName: "ใจดี",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110002",
+    studentId: 2,
+    gender: "หญิง",
+    firstName: "อริสรา",
+    lastName: "แสงทอง",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110003",
+    studentId: 3,
+    gender: "ชาย",
+    firstName: "ธีรภัทร",
+    lastName: "มีสุข",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110004",
+    studentId: 4,
+    gender: "หญิง",
+    firstName: "พรนภา",
+    lastName: "วัฒนะ",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110005",
+    studentId: 5,
+    gender: "ชาย",
+    firstName: "นพดล",
+    lastName: "รุ่งเรือง",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110006",
+    studentId: 6,
+    gender: "หญิง",
+    firstName: "ชุติมา",
+    lastName: "ทวีทรัพย์",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110007",
+    studentId: 7,
+    gender: "ชาย",
+    firstName: "ปวริศ",
+    lastName: "ทองแท้",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110008",
+    studentId: 8,
+    gender: "หญิง",
+    firstName: "ธนภรณ์",
+    lastName: "สายใจ",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110009",
+    studentId: 9,
+    gender: "ชาย",
+    firstName: "พีระ",
+    lastName: "แสงจันทร์",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110010",
+    studentId: 10,
+    gender: "หญิง",
+    firstName: "มยุรี",
+    lastName: "แก้วใส",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110011",
+    studentId: 11,
+    gender: "ชาย",
+    firstName: "กฤษณ์",
+    lastName: "เจริญผล",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110012",
+    studentId: 12,
+    gender: "หญิง",
+    firstName: "ณัฐชา",
+    lastName: "วรชาติ",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110013",
+    studentId: 13,
+    gender: "ชาย",
+    firstName: "วีระพงษ์",
+    lastName: "ตั้งมั่น",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110014",
+    studentId: 14,
+    gender: "หญิง",
+    firstName: "อัจฉรา",
+    lastName: "ใจดี",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110015",
+    studentId: 15,
+    gender: "ชาย",
+    firstName: "พชร",
+    lastName: "อรุณรุ่ง",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110011",
+    studentId: 11,
+    gender: "ชาย",
+    firstName: "กฤษณ์",
+    lastName: "เจริญผล",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110012",
+    studentId: 12,
+    gender: "หญิง",
+    firstName: "ณัฐชา",
+    lastName: "วรชาติ",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110013",
+    studentId: 13,
+    gender: "ชาย",
+    firstName: "วีระพงษ์",
+    lastName: "ตั้งมั่น",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นางสาว",
+    studentCode: "65110014",
+    studentId: 14,
+    gender: "หญิง",
+    firstName: "อัจฉรา",
+    lastName: "ใจดี",
+    studentStatus: "กำลังศึกษา",
+  },
+  {
+    prefix: "นาย",
+    studentCode: "65110015",
+    studentId: 15,
+    gender: "ชาย",
+    firstName: "พชร",
+    lastName: "อรุณรุ่ง",
+    studentStatus: "กำลังศึกษา",
+  },
 ];
 
 export const mockStudentNameListInSubject: StudentNameListInSubject = {
@@ -502,6 +682,286 @@ export const mockStudentNameListInSubject: StudentNameListInSubject = {
       studentFirstName: "มยุรี",
       studentLastName: "แก้วใส",
     },
+    {
+      studentID: 1,
+      studentCode: "65110001",
+      prefix: "นาย",
+      studentFirstName: "กิตติ",
+      studentLastName: "ใจดี",
+    },
+    {
+      studentID: 2,
+      studentCode: "65110002",
+      prefix: "นางสาว",
+      studentFirstName: "อริสรา",
+      studentLastName: "แสงทอง",
+    },
+    {
+      studentID: 3,
+      studentCode: "65110003",
+      prefix: "นาย",
+      studentFirstName: "ธีรภัทร",
+      studentLastName: "มีสุข",
+    },
+    {
+      studentID: 4,
+      studentCode: "65110004",
+      prefix: "นางสาว",
+      studentFirstName: "พรนภา",
+      studentLastName: "วัฒนะ",
+    },
+    {
+      studentID: 5,
+      studentCode: "65110005",
+      prefix: "นาย",
+      studentFirstName: "นพดล",
+      studentLastName: "รุ่งเรือง",
+    },
+    {
+      studentID: 6,
+      studentCode: "65110006",
+      prefix: "นางสาว",
+      studentFirstName: "ชุติมา",
+      studentLastName: "ทวีทรัพย์",
+    },
+    {
+      studentID: 7,
+      studentCode: "65110007",
+      prefix: "นาย",
+      studentFirstName: "ปวริศ",
+      studentLastName: "ทองแท้",
+    },
+    {
+      studentID: 8,
+      studentCode: "65110008",
+      prefix: "นางสาว",
+      studentFirstName: "ธนภรณ์",
+      studentLastName: "สายใจ",
+    },
+    {
+      studentID: 9,
+      studentCode: "65110009",
+      prefix: "นาย",
+      studentFirstName: "พีระ",
+      studentLastName: "แสงจันทร์",
+    },
+    {
+      studentID: 10,
+      studentCode: "65110010",
+      prefix: "นางสาว",
+      studentFirstName: "มยุรี",
+      studentLastName: "แก้วใส",
+    },
+    {
+      studentID: 1,
+      studentCode: "65110001",
+      prefix: "นาย",
+      studentFirstName: "กิตติ",
+      studentLastName: "ใจดี",
+    },
+    {
+      studentID: 2,
+      studentCode: "65110002",
+      prefix: "นางสาว",
+      studentFirstName: "อริสรา",
+      studentLastName: "แสงทอง",
+    },
+    {
+      studentID: 3,
+      studentCode: "65110003",
+      prefix: "นาย",
+      studentFirstName: "ธีรภัทร",
+      studentLastName: "มีสุข",
+    },
+    {
+      studentID: 4,
+      studentCode: "65110004",
+      prefix: "นางสาว",
+      studentFirstName: "พรนภา",
+      studentLastName: "วัฒนะ",
+    },
+    {
+      studentID: 5,
+      studentCode: "65110005",
+      prefix: "นาย",
+      studentFirstName: "นพดล",
+      studentLastName: "รุ่งเรือง",
+    },
+    {
+      studentID: 6,
+      studentCode: "65110006",
+      prefix: "นางสาว",
+      studentFirstName: "ชุติมา",
+      studentLastName: "ทวีทรัพย์",
+    },
+    {
+      studentID: 7,
+      studentCode: "65110007",
+      prefix: "นาย",
+      studentFirstName: "ปวริศ",
+      studentLastName: "ทองแท้",
+    },
+    {
+      studentID: 8,
+      studentCode: "65110008",
+      prefix: "นางสาว",
+      studentFirstName: "ธนภรณ์",
+      studentLastName: "สายใจ",
+    },
+    {
+      studentID: 9,
+      studentCode: "65110009",
+      prefix: "นาย",
+      studentFirstName: "พีระ",
+      studentLastName: "แสงจันทร์",
+    },
+    {
+      studentID: 10,
+      studentCode: "65110010",
+      prefix: "นางสาว",
+      studentFirstName: "มยุรี",
+      studentLastName: "แก้วใส",
+    },
+    {
+      studentID: 1,
+      studentCode: "65110001",
+      prefix: "นาย",
+      studentFirstName: "กิตติ",
+      studentLastName: "ใจดี",
+    },
+    {
+      studentID: 2,
+      studentCode: "65110002",
+      prefix: "นางสาว",
+      studentFirstName: "อริสรา",
+      studentLastName: "แสงทอง",
+    },
+    {
+      studentID: 3,
+      studentCode: "65110003",
+      prefix: "นาย",
+      studentFirstName: "ธีรภัทร",
+      studentLastName: "มีสุข",
+    },
+    {
+      studentID: 4,
+      studentCode: "65110004",
+      prefix: "นางสาว",
+      studentFirstName: "พรนภา",
+      studentLastName: "วัฒนะ",
+    },
+    {
+      studentID: 5,
+      studentCode: "65110005",
+      prefix: "นาย",
+      studentFirstName: "นพดล",
+      studentLastName: "รุ่งเรือง",
+    },
+    {
+      studentID: 6,
+      studentCode: "65110006",
+      prefix: "นางสาว",
+      studentFirstName: "ชุติมา",
+      studentLastName: "ทวีทรัพย์",
+    },
+    {
+      studentID: 7,
+      studentCode: "65110007",
+      prefix: "นาย",
+      studentFirstName: "ปวริศ",
+      studentLastName: "ทองแท้",
+    },
+    {
+      studentID: 8,
+      studentCode: "65110008",
+      prefix: "นางสาว",
+      studentFirstName: "ธนภรณ์",
+      studentLastName: "สายใจ",
+    },
+    {
+      studentID: 9,
+      studentCode: "65110009",
+      prefix: "นาย",
+      studentFirstName: "พีระ",
+      studentLastName: "แสงจันทร์",
+    },
+    {
+      studentID: 10,
+      studentCode: "65110010",
+      prefix: "นางสาว",
+      studentFirstName: "มยุรี",
+      studentLastName: "แก้วใส",
+    },
+    {
+      studentID: 1,
+      studentCode: "65110001",
+      prefix: "นาย",
+      studentFirstName: "กิตติ",
+      studentLastName: "ใจดี",
+    },
+    {
+      studentID: 2,
+      studentCode: "65110002",
+      prefix: "นางสาว",
+      studentFirstName: "อริสรา",
+      studentLastName: "แสงทอง",
+    },
+    {
+      studentID: 3,
+      studentCode: "65110003",
+      prefix: "นาย",
+      studentFirstName: "ธีรภัทร",
+      studentLastName: "มีสุข",
+    },
+    {
+      studentID: 4,
+      studentCode: "65110004",
+      prefix: "นางสาว",
+      studentFirstName: "พรนภา",
+      studentLastName: "วัฒนะ",
+    },
+    {
+      studentID: 5,
+      studentCode: "65110005",
+      prefix: "นาย",
+      studentFirstName: "นพดล",
+      studentLastName: "รุ่งเรือง",
+    },
+    {
+      studentID: 6,
+      studentCode: "65110006",
+      prefix: "นางสาว",
+      studentFirstName: "ชุติมา",
+      studentLastName: "ทวีทรัพย์",
+    },
+    {
+      studentID: 7,
+      studentCode: "65110007",
+      prefix: "นาย",
+      studentFirstName: "ปวริศ",
+      studentLastName: "ทองแท้",
+    },
+    {
+      studentID: 8,
+      studentCode: "65110008",
+      prefix: "นางสาว",
+      studentFirstName: "ธนภรณ์",
+      studentLastName: "สายใจ",
+    },
+    {
+      studentID: 9,
+      studentCode: "65110009",
+      prefix: "นาย",
+      studentFirstName: "พีระ",
+      studentLastName: "แสงจันทร์",
+    },
+    {
+      studentID: 10,
+      studentCode: "65110010",
+      prefix: "นางสาว",
+      studentFirstName: "มยุรี",
+      studentLastName: "แก้วใส",
+    },
   ],
 };
 
@@ -510,11 +970,16 @@ export const mockStudentScorenSubject: StudentScorenSubject = {
   subjectCode: "AC101",
   subjectName: "บัญชีขั้นต้น",
   groupName: "ปวช.2/1",
-  students: Array.from({ length: 20 }, (_, i) => {
+  hour: 1,
+  subjectTeacher: "0",
+  credits: 1,
+  students: Array.from({ length: 45 }, (_, i) => {
     const collect = Math.floor(Math.random() * 10) + 10;
-    const test = Math.floor(Math.random() * 20) + 20;
+    const midterm = Math.floor(Math.random() * 20) + 20;
+    const final = Math.floor(Math.random() * 20) + 20;
     const affective = Math.floor(Math.random() * 10) + 5;
-    const total = collect + test + affective;
+    const assignment = Math.floor(Math.random() * 10) + 5;
+    const total = collect + final + affective + midterm + assignment;
 
     const gradeMap = (score: number): string => {
       if (score >= 80) return "4";
@@ -537,7 +1002,9 @@ export const mockStudentScorenSubject: StudentScorenSubject = {
       studentFirstName: i % 2 === 0 ? `สมชาย${i + 1}` : `สมหญิง${i + 1}`,
       studentLastName: "ใจดี",
       collectScore: collect,
-      testScore: test,
+      midtermScore: midterm,
+      finaltermScore: final,
+      assignmentScore: assignment,
       affectiveScore: affective,
       totalScore: total,
       grade: grade,
@@ -549,12 +1016,34 @@ export const mockStudentScorenSubject: StudentScorenSubject = {
 export const mockGetGradBelowResponse: GetGradBelowResponse[] = [];
 
 const prefixes = ["นาย", "นางสาว"];
-const firstNames = ["กิตติ", "ณัฐวุฒิ", "อริสรา", "พรนภา", "สมชาย", "ชุติมา", "ธนภรณ์", "พีระ", "นพดล", "มยุรี"];
-const lastNames = ["ใจดี", "ทองคำ", "มีสุข", "รุ่งเรือง", "สีนวล", "ศรีสุข", "สายใจ", "ทองแท้", "วิเศษดี", "แก้วใส"];
+const firstNames = [
+  "กิตติ",
+  "ณัฐวุฒิ",
+  "อริสรา",
+  "พรนภา",
+  "สมชาย",
+  "ชุติมา",
+  "ธนภรณ์",
+  "พีระ",
+  "นพดล",
+  "มยุรี",
+];
+const lastNames = [
+  "ใจดี",
+  "ทองคำ",
+  "มีสุข",
+  "รุ่งเรือง",
+  "สีนวล",
+  "ศรีสุข",
+  "สายใจ",
+  "ทองแท้",
+  "วิเศษดี",
+  "แก้วใส",
+];
 const groupNames = ["1/1", "1/2", "1/3", "2/1", "2/4", "2/10", "3/1"];
 
 for (let i = 1; i <= 45; i++) {
-  const index = (i - 1) % 10; 
+  const index = (i - 1) % 10;
   const group = groupNames[i % groupNames.length];
 
   mockGetGradBelowResponse.push({
@@ -572,4 +1061,3 @@ for (let i = 1; i <= 45; i++) {
     gpa: parseFloat((1.4 + Math.random() * 0.6).toFixed(2)), // 1.40 - 2.00
   });
 }
-

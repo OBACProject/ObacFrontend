@@ -205,7 +205,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
   const subjects = data.subjects;
   if (subjects && subjects.length > 0) {
     let y = y2 + 10;
-    if (y >= 270) {
+    if (y >= 275) {
       doc.addPage();
       y = 14;
     }
