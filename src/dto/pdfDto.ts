@@ -18,6 +18,9 @@ export interface StudentScorenSubject {
   subjectID: number;
   subjectCode: string;
   subjectName: string;
+  subjectTeacher:string;
+  hour:number;
+  credits : number;
   groupName: string;
   students: StudentScore[];
 }
@@ -28,8 +31,10 @@ export interface StudentScore {
   prefix: string;
   studentFirstName: string;
   studentLastName: string;
+  assignmentScore: number;
   collectScore: number;
-  testScore: number;
+  midtermScore: number;
+  finaltermScore: number;
   affectiveScore: number;
   totalScore: number;
   grade: string;

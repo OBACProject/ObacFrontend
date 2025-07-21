@@ -9,7 +9,7 @@ export default function StudentScore() {
       <div className="fixed ">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={"Import Score (Student)"}
+          title={"นำเข้าเกรดนักเรียน ไอพวกหัวโปก"}
         />
       </div>
       <Form />
