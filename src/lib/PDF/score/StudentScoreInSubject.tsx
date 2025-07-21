@@ -46,6 +46,8 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     align: "center",
   });
 
+  doc.text("รบ. 3 ป", 180, 51);
+
   doc.text("สมุดประเมินผลรายวิชา", pageWidth / 2, 61, {
     align: "center",
   });
@@ -62,14 +64,22 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     77
   );
 
-  doc.text(`รายวิชา ${data.subjectName}`, 15, 83);
-  doc.text(`รหัสวิชา ${data.subjectCode}`, 105, 83);
+  doc.text(`รายวิชา ${data.subjectName || "ยังไม่ทราบรายวิชา"}`, 15, 83);
+  doc.text(`รหัสวิชา ${data.subjectCode || "00000-0000"}`, 105, 83);
   doc.text(`หน่วยกิต ${data.credits || "-"}`, 150, 83);
 
   doc.text(`เวลาเรียน ${data.hour}`, 15, 89);
 
-  doc.text(`อาจารย์ผู้สอน ${data.subjectTeacher} `, 80, 98);
-  doc.text(`อาจารย์ที่ปรึกษา `, 80, 104);
+  doc.text(
+    `อาจารย์ผู้สอน ${data.subjectTeacher || "ทดสอบชื่อ ทดสอบนามสกุล"} `,
+    80,
+    98
+  );
+  doc.text(
+    `อาจารย์ที่ปรึกษา...........................................................................`,
+    80,
+    104
+  );
 
   // table header
   doc.line(15, 115, 195, 115); // horizantol
@@ -83,6 +93,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.line(33, 115, 33, 163); // vertical
   doc.line(177, 115, 177, 163); // vertical
   doc.line(105, 122, 105, 163); // vertical
+
   doc.line(42, 136, 42, 163); // vertical
   doc.line(51, 136, 51, 163); // vertical
   doc.line(60, 136, 60, 163); // vertical
@@ -90,13 +101,11 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.line(78, 136, 78, 163); // vertical
   doc.line(87, 136, 87, 163); // vertical
   doc.line(96, 136, 96, 163); // vertical
-  doc.line(114, 136, 114, 163); // vertical
-  doc.line(123, 136, 123, 163); // vertical
-  doc.line(131, 136, 131, 163); // vertical
-  doc.line(140, 136, 140, 163); // vertical
-  doc.line(149, 136, 149, 163); // vertical
-  doc.line(158, 136, 158, 163); // vertical
-  doc.line(167, 136, 167, 163); // vertical
+
+  doc.line(119, 136, 119, 163); // vertical
+  doc.line(133, 136, 133, 163); // vertical
+  doc.line(147, 136, 147, 163); // vertical
+  doc.line(161, 136, 161, 163); // vertical
 
   //table 2
   doc.line(15, 170, 195, 170); // horizantol
@@ -111,11 +120,30 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("นักศีกษา", 17.5, 126.5);
   doc.text("ทั้งหมด", 18, 133.5);
 
-  doc.text("จำนวนนักศึกษา", 57, 126.5);
-  doc.text("ที่ได้ผลการเรียน", 57, 133);
+  doc.text("จำนวนนักศึกษา", 60, 126.5);
+  doc.text("ที่ได้ผลการเรียน", 60, 133);
 
-  doc.text("จำนวนนักศึกษา", 137, 126.5);
-  doc.text("ที่ได้ผลการเรียน", 137, 133);
+  doc.text("จำนวนนักศึกษา", 133, 126.5);
+  doc.text("ที่ได้ผลการเรียน", 133, 133);
+
+  doc.text("หมายเหตุ", 179, 126.5);
+
+  doc.text(`${data.students.length}`, 22.5, 153.5);
+
+  doc.text("4", 37, 140);
+  doc.text("3.5", 44, 140);
+  doc.text("3", 55.5, 140);
+  doc.text("2.5", 62, 140);
+  doc.text("2", 73, 140);
+  doc.text("1.5", 80, 140);
+  doc.text("1", 91, 140);
+  doc.text("0", 100, 140);
+  //////////////////////
+  doc.text("ผ.", 111, 140);
+  doc.text("มผ.", 124, 140);
+  doc.text("ร.", 139, 140);
+  doc.text("ข.ร.", 150, 140);
+  doc.text("ข.ส.", 167, 140);
 
   doc.setFontSize(20);
   doc.text("การอนุมัติการเรียน", pageWidth / 2, 177, {
@@ -162,28 +190,38 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text(
     "ลงชื่อ..................................................................................................................",
     pageWidth / 2,
-    237,
+    239,
     {
       align: "center",
     }
   );
-  doc.text("รองผู้อำนวยการฝ่ายวิชาการ", pageWidth / 2, 244, {
+  doc.text("รองผู้อำนวยการฝ่ายวิชาการ", pageWidth / 2, 246, {
     align: "center",
   });
-  doc.text("อนุมัติ", 90, 251);
-  doc.text("ไม่อนุมัติ", 120, 251);
+
+  doc.line(81, 250, 81, 254);
+  doc.line(85, 250, 85, 254);
+  doc.line(81, 250, 85, 250);
+  doc.line(81, 254, 85, 254);
+  doc.text("อนุมัติ", 90, 253);
+
+  doc.line(111, 250, 111, 254);
+  doc.line(115, 250, 115, 254);
+  doc.line(111, 250, 115, 250);
+  doc.line(111, 254, 115, 254);
+  doc.text("ไม่อนุมัติ", 119, 253);
   doc.text(
     "ลงชื่อ..................................................................................................................",
     pageWidth / 2,
-    258,
+    262,
     {
       align: "center",
     }
   );
-  doc.text("ผู้อำนวยการ", pageWidth / 2, 265, {
+  doc.text("ผู้อำนวยการ", pageWidth / 2, 269, {
     align: "center",
   });
-  doc.text("......../......../........", pageWidth / 2, 272, {
+  doc.text("......../......../........", pageWidth / 2, 277, {
     align: "center",
   });
 
