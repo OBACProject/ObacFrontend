@@ -173,7 +173,7 @@ export function ClassroomGrading(props: {
       const formattedData: ClassroomTable[] = studentGroupsData.map(
         (item) => ({
           classLevel: `${item.class}. ${item.level}`,
-          faculty: item.groupName,
+          faculty: item.facultyName,
           groupId: item.groupId.toString(),
           program: item.programName,
         })
