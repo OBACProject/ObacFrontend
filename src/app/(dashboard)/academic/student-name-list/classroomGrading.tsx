@@ -5,15 +5,17 @@ import StudentNameListPDF from "@/lib/PDF/name-list/StudentNameListInGroup";
 import {
   FacultyInfo,
   EducationData,
-  filterProgramsParamsData,
   GetStudentListByGroupIDDto,
 } from "@/dto/studentDto";
 import { ConvertClassroomToExcel } from "@/lib/Excel/generateExcelFile";
 import { Download, FileText, Loader2, Table } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { mockGroupdata } from "@/resource/academics/mockData";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
+import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { GetAllStudentGroupByTermYearRequest } from "@/lib/api/models/studentGroup/studentGroup.request";
+import { useGetAllProgramsQuery } from "@/lib/api/hooks/queries/program.queries";
+
 
 interface ClassroomTable {
   classLevel: string;
@@ -46,14 +48,24 @@ export function ClassroomGrading(props: {
     ปวส: ["1", "2"],
   };
   const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1 + 543;
+  const currentYear = new Date().getFullYear()  + 543;
   const yearsList = Array.from({ length: 3 }, (_, i) =>
     (currentYear - i).toString()
   );
-  const [selectedTerm, setSelectedTerm] = useState<string>("2");
+  
+  const [selectedTerm, setSelectedTerm] = useState<string>("1");
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
+
+  const {
+    data: studentGroupsData,
+    isLoading: isLoadingData,
+    error: dataError,
+    refetch,
+  } = useGetAllProgramsQuery();
+  console.log("studentGroupsData", studentGroupsData);
+
   // data in table
   const [dataTable, setDataTable] = useState<ClassroomTable[]>([]);
 
@@ -81,6 +93,7 @@ export function ClassroomGrading(props: {
       }))
     );
   };
+  
   // get program from selected faculty
   const getPrograms = (selectedFaculty: string) => {
     const faculties = [...vocationalFaculties, ...diplomaFaculties].filter(
@@ -88,6 +101,7 @@ export function ClassroomGrading(props: {
     );
     return faculties[0]?.groupProgram.map((item) => item.programName) || [];
   };
+  
   // get grade level from selected Program
   const getGradeLevels = () => {
     return levelGrade[selectedClassLevel];
@@ -122,6 +136,7 @@ export function ClassroomGrading(props: {
     const getProgramsBySelected = getPrograms(selected);
     setProgram(getProgramsBySelected);
   };
+  
   const handleProgramChange = (selected: string) => {
     setSelectedProgram(selected);
     setSelectedGradeLevel("");
@@ -142,42 +157,47 @@ export function ClassroomGrading(props: {
   };
 
   const router = useRouter();
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const handleRowClick = (item: ClassroomTable) => {
     router.push(
       `/academic/student-name-list/student-group?groupId=${item.groupId}`
     );
   };
+  
   const [studentInGroup, setStudentInGroup] =
     useState<GetStudentListByGroupIDDto | null>();
+
+  // Effect to process fetched data
   useEffect(() => {
-    const fetchFilterData = async () => {
-      const rawData = mockGroupdata;
-      const formattedData: ClassroomTable[] = rawData.map(
-        (item: filterProgramsParamsData) => ({
-          classLevel: `${item.class}. ${item.groupName}`,
-          faculty: item.facultyName,
-          groupId: item.groupId,
+    if (studentGroupsData) {
+      // Transform the API response to match ClassroomTable interface
+      const formattedData: ClassroomTable[] = studentGroupsData.map(
+        (item) => ({
+          classLevel: `${item.class}. ${item.level}`,
+          faculty: item.groupName,
+          groupId: item.groupId.toString(),
           program: item.programName,
         })
       );
 
       setDataTable(formattedData);
 
-      // const data = await filterProgramsViewData(selectedTerm, selectedYear);
-      // const vocational = data.filter(
+      // Process faculties data if needed
+      // You might need to adapt this based on your actual API response structure
+      // const vocational = studentGroupsData.filter(
       //   (item: EducationData) => item.classLevel === "ปวช"
       // );
-      // const diploma = data.filter(
+      // const diploma = studentGroupsData.filter(
       //   (item: EducationData) => item.classLevel === "ปวส"
       // );
-
       // setVocationalFaculties(getFaculties(vocational));
       // setDiplomaFaculties(getFaculties(diploma));
-      setIsLoadingPage(true);
-    };
-    fetchFilterData();
-  }, []);
+    }
+  }, [studentGroupsData]);
+
+  // Effect to refetch data when term or year changes
+  useEffect(() => {
+    refetch();
+  }, [selectedTerm, selectedYear, refetch]);
 
   const filteredData = useMemo(() => {
     const filtered = dataTable.filter((item) => {
@@ -260,6 +280,7 @@ export function ClassroomGrading(props: {
       alert("Failed to fetch student data. Please try again.");
     }
   };
+  
   const handleDownloadExcel = async (groupId: number) => {
     try {
       const item = await getStudentDataList(groupId);
@@ -286,6 +307,14 @@ export function ClassroomGrading(props: {
       console.error("Error fetching student data:", error);
       alert("Failed to fetch student data. Please try again.");
     }
+  };
+
+  const handleTermChange = (newTerm: string) => {
+    setSelectedTerm(newTerm);
+  };
+
+  const handleYearChange = (newYear: string) => {
+    setSelectedYear(newYear);
   };
 
   const columns = [
@@ -329,9 +358,19 @@ export function ClassroomGrading(props: {
     },
   ];
 
+  if (dataError) {
+    return (
+      <div className="px-5 py-2">
+        <div className="mt-2 border-2 border-dashed rounded-md border-red-400 grid place-items-center py-20 text-3xl text-red-400 font-semibold items-center">
+          <p>Error loading data. Please try again.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="px-5 py-2">
-      {isLoadingPage ? (
+      {!isLoadingData ? (
         <header className="grid px-4 bg-white py-0 border  rounded-lg">
           <div className="flex justify-center w-full ">
             <div className="flex  justify-start items-center gap-3 w-full p-2 rounded-lg">
@@ -380,7 +419,7 @@ export function ClassroomGrading(props: {
                   }))}
                   defaultValue="2"
                   buttonLabel="เลือกภาคเรียน"
-                  onSelect={(selectedTerm) => setSelectedTerm(selectedTerm)}
+                  onSelect={(selectedTerm) => handleTermChange(selectedTerm)}
                 />
               </div>
               <div className="w-1/6 flex items-center gap-2  px-2 ">
@@ -392,7 +431,7 @@ export function ClassroomGrading(props: {
                   }))}
                   defaultValue={currentYear.toString()}
                   buttonLabel="เลือกปีการศึกษา"
-                  onSelect={(selectedYear) => setSelectedYear(selectedYear)}
+                  onSelect={(selectedYear) => handleYearChange(selectedYear)}
                 />
               </div>
             </div>
