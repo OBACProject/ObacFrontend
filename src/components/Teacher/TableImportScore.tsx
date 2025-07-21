@@ -140,7 +140,7 @@ export default function ScoreInputForm({
                       subjects={subjects || []}
                       selectedId={row.subjectId}
                       onSelect={(subject) => {
-                        handleChange(index, "subjectId", subject.id); 
+                        handleChange(index, "subjectId", subject.id);
                         handleChange(index, "subjectCode", subject.code);
                         handleChange(index, "subjectName", subject.name);
                         handleChange(index, "credit", subject.credits);
@@ -151,22 +151,7 @@ export default function ScoreInputForm({
                   )}
                 </td>
 
-                <td className="border text-center px-2 py-1">
-                  {edit ? (
-                    <input
-                      type="number"
-                      value={row.credit}
-                      max={3}
-                      min={0}
-                      onChange={(e) =>
-                        handleChange(index, "credit", e.target.value)
-                      }
-                      className="w-[80px] text-center py-1 px-2 border  border-gray-200"
-                    />
-                  ) : (
-                    row.credit
-                  )}
-                </td>
+                <td className="border text-center px-2 py-1">{row.credit}</td>
                 <td className="border text-center px-2 py-1">
                   {edit ? (
                     <input
