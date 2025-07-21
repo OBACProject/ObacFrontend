@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <ToastContainer             
+        <ToastContainer
           position="bottom-right"
           hideProgressBar
           className="z-50"
@@ -31,7 +31,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className=" flex-1  pt-20 lg:pl-10">{children}</div>
-        <HomeFooter/>
+        <HomeFooter />
       </body>
     </html>
   );

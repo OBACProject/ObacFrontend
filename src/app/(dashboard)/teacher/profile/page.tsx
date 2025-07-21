@@ -1,6 +1,6 @@
 import React from "react";
 import ProfileForm from "./Form";
-import Notice from "./Notice";
+// import Notice from "./Notice";
 
 export default function page() {
   return (

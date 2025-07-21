@@ -104,3 +104,80 @@ export interface GroupSummaryGradeResponse {
   student: StudentList[];
   subjects:SubjectNameList[];
 }
+
+export interface SubjectGrade {
+  gradeId?: number;
+  finalGrade: number;
+  remark: string;
+  subjectId:number;
+  subjectName: string;
+  subjectCode: string;
+  credit: number;
+  gradePoint: number;
+  term: string;
+  year: number;
+}
+
+ interface TermYearGradeGroup {
+  term: string;
+  year: number;
+  totalGPA: number;
+  totalCredit: number;
+  grades: SubjectGrade[];
+}
+
+export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
+  student: StudentDetail;
+  termYearGradeGroups: TermYearGradeGroup[];
+}
+
+export interface SubjectGrade {
+  gradeId?: number;
+  finalGrade: number;
+  remark: string;
+  subjectId : number;
+  subjectName: string;
+  subjectCode: string;
+  credit: number;
+  gradePoint: number;
+  term: string;
+  year: number;
+}
+
+export interface UpsertTermYearGradeGroup {
+  term: string;
+  year: number;
+  totalGPA: number;
+  totalCredit: number;
+  grades: SubjectGrade[];
+}
+
+export interface StudentDetail {
+  id: number;
+  prefix: string;
+  name: string;
+  lastName: string;
+  gender: string;
+  nationality: string;
+  birthDate: string;
+  citizenId: string;
+  studentCode: string;
+  phoneNumber: string;
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  programName: string;
+  subProgramName: string;
+  facultyName: string;
+  gpax: number;
+  status: string;
+}
+
+
+
+export interface UpsertStudentGradesRequest {
+  student: StudentDetail;
+  termYearGradeGroups: UpsertTermYearGradeGroup[];
+}

@@ -2,13 +2,13 @@
 import {
   GetAllStudent,
   GetStudentByStudentId,
-  GetStudentGroupsByTermYearDto,
   GetStudentListByGroupIDDto,
   GetStudentUser,
   StudentCreateData,
   StudentGroup,
   UpdateStudentRequestBody,
 } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { cookies } from "next/headers";
 
 export const fetchCreateStudentAsync = async (
@@ -187,7 +187,7 @@ export const fetchGetStudentByStudentId = async (
 export const fetchGetStudentGroupsByTermYear = async (
   term: string,
   year: number
-): Promise<GetStudentGroupsByTermYearDto[]> => {
+): Promise<StudentGroupItem[]> => {
   try {
     const token = cookies().get("token")?.value;
     if (!token) throw new Error("Missing authentication token");
@@ -211,7 +211,7 @@ export const fetchGetStudentGroupsByTermYear = async (
     if (!text) throw new Error("Empty response from API");
 
     const json = JSON.parse(text);
-    const data: GetStudentGroupsByTermYearDto[] = json.data;
+    const data: StudentGroupItem[] = json.data;
 
     return data;
   } catch (err) {
@@ -243,10 +243,7 @@ export const fetchUpdateStudentStatus = async (
   }
 };
 
-export const fetchUpdateGroup = async (
-  studentId: number,
-  groupId: number
-) => {
+export const fetchUpdateGroup = async (studentId: number, groupId: number) => {
   try {
     const token = cookies().get("token")?.value;
     const response = await fetch(
@@ -266,7 +263,9 @@ export const fetchUpdateGroup = async (
   }
 };
 
-export const fetchUpdateStudent = async (studentData: UpdateStudentRequestBody): Promise<boolean> => {
+export const fetchUpdateStudent = async (
+  studentData: UpdateStudentRequestBody
+): Promise<boolean> => {
   try {
     const token = cookies().get("token")?.value;
 
@@ -283,7 +282,7 @@ export const fetchUpdateStudent = async (studentData: UpdateStudentRequestBody):
     );
 
     if (!response.ok) {
-      const errorText = await response.text(); 
+      const errorText = await response.text();
       console.error("API error response:", {
         status: response.status,
         statusText: response.statusText,
@@ -294,14 +293,14 @@ export const fetchUpdateStudent = async (studentData: UpdateStudentRequestBody):
 
     return true;
   } catch (error) {
-    console.error('API error:', error);
+    console.error("API error:", error);
     return false;
   }
 };
 
 export const fetchPromoteStudentGroup = async (data: {
   studentIds: number[];
-  groupId:number;
+  groupId: number;
   newGroupName: string;
   newGroupCode: string;
   year: number;
@@ -327,7 +326,7 @@ export const fetchPromoteStudentGroup = async (data: {
 
     if (!response.ok) {
       let errorMessage = `Error: ${response.status} - ${response.statusText}`;
-      const errorText = await response.text(); 
+      const errorText = await response.text();
       console.error("API error response:", {
         status: response.status,
         statusText: response.statusText,

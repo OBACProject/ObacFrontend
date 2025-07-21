@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
-import GroupSelector, { GroupOption } from "@/components/Academic/GroupSelector";
+import GroupSelector, {
+  GroupOption,
+} from "@/components/Academic/GroupSelector";
 import GradeFilter from "@/components/Academic/GradeFilter";
 import ConfirmPromoteModal from "@/components/Academic/ConfirmPromoteModal";
 import { ArrowUpDown } from "lucide-react";
 import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { GetStudentGroupsByTermYearDto } from "@/dto/studentDto";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import StudentSelectListTable from "@/components/Academic/StudentSelectListTable";
@@ -26,107 +28,112 @@ const mockGroup: GetGropGradeAboveModel = {
   level: 1,
   student: [
     {
-    studentId: 1,
-    studentCode: "6401123",
-    firstName: "สมชาย",
-    lastName: "พาเพลิน",
-    isActive: true,
-    gpa: 3.25,
-  },
-  {
-    studentId: 2,
-    studentCode: "6401124",
-    firstName: "สมหญิง",
-    lastName: "สดใส",
-    isActive: true,
-    gpa: 3.55,
-  },
-  {
-    studentId: 3,
-    studentCode: "6401125",
-    firstName: "อนันต์",
-    lastName: "ใจดี",
-    isActive: false,
-    gpa: 2.75,
-  },
-  {
-    studentId: 4,
-    studentCode: "6401126",
-    firstName: "วิภา",
-    lastName: "ว่องไว",
-    isActive: true,
-    gpa: 3.80,
-  },
-  {
-    studentId: 5,
-    studentCode: "6401127",
-    firstName: "เอกชัย",
-    lastName: "เร็วแรง",
-    isActive: true,
-    gpa: 2.90,
-  },
-  {
-    studentId: 6,
-    studentCode: "6401128",
-    firstName: "พรพิมล",
-    lastName: "ใจดี",
-    isActive: false,
-    gpa: 3.10,
-  },
-  {
-    studentId: 7,
-    studentCode: "6401129",
-    firstName: "ณัฐวุฒิ",
-    lastName: "ขยันเรียน",
-    isActive: true,
-    gpa: 3.65,
-  },
-  {
-    studentId: 8,
-    studentCode: "6401130",
-    firstName: "เกษม",
-    lastName: "ตั้งใจดี",
-    isActive: true,
-    gpa: 2.45,
-  },
-  {
-    studentId: 9,
-    studentCode: "6401131",
-    firstName: "วราภรณ์",
-    lastName: "สายบุญ",
-    isActive: false,
-    gpa: 3.95,
-  },
-  {
-    studentId: 10,
-    studentCode: "6401132",
-    firstName: "กิตติ",
-    lastName: "จริงจัง",
-    isActive: true,
-    gpa: 2.80,
-  },
+      studentId: 1,
+      studentCode: "6401123",
+      firstName: "สมชาย",
+      lastName: "พาเพลิน",
+      isActive: true,
+      gpa: 3.25,
+    },
+    {
+      studentId: 2,
+      studentCode: "6401124",
+      firstName: "สมหญิง",
+      lastName: "สดใส",
+      isActive: true,
+      gpa: 3.55,
+    },
+    {
+      studentId: 3,
+      studentCode: "6401125",
+      firstName: "อนันต์",
+      lastName: "ใจดี",
+      isActive: false,
+      gpa: 2.75,
+    },
+    {
+      studentId: 4,
+      studentCode: "6401126",
+      firstName: "วิภา",
+      lastName: "ว่องไว",
+      isActive: true,
+      gpa: 3.8,
+    },
+    {
+      studentId: 5,
+      studentCode: "6401127",
+      firstName: "เอกชัย",
+      lastName: "เร็วแรง",
+      isActive: true,
+      gpa: 2.9,
+    },
+    {
+      studentId: 6,
+      studentCode: "6401128",
+      firstName: "พรพิมล",
+      lastName: "ใจดี",
+      isActive: false,
+      gpa: 3.1,
+    },
+    {
+      studentId: 7,
+      studentCode: "6401129",
+      firstName: "ณัฐวุฒิ",
+      lastName: "ขยันเรียน",
+      isActive: true,
+      gpa: 3.65,
+    },
+    {
+      studentId: 8,
+      studentCode: "6401130",
+      firstName: "เกษม",
+      lastName: "ตั้งใจดี",
+      isActive: true,
+      gpa: 2.45,
+    },
+    {
+      studentId: 9,
+      studentCode: "6401131",
+      firstName: "วราภรณ์",
+      lastName: "สายบุญ",
+      isActive: false,
+      gpa: 3.95,
+    },
+    {
+      studentId: 10,
+      studentCode: "6401132",
+      firstName: "กิตติ",
+      lastName: "จริงจัง",
+      isActive: true,
+      gpa: 2.8,
+    },
   ],
 };
-
 
 export default function Main() {
   const dateTime = new Date();
   const currentMonth = dateTime.getMonth();
-  const currentYear = currentMonth > 5 ? dateTime.getFullYear() + 543 : dateTime.getFullYear() + 543 - 1;
+  const currentYear =
+    currentMonth > 5
+      ? dateTime.getFullYear() + 543
+      : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
 
-  const [groups, setGroups] = useState<GetStudentGroupsByTermYearDto[]>([]);
+  const [groups, setGroups] = useState<StudentGroupItem[]>([]);
   const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   // const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
-  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(mockGroup);
+  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(
+    mockGroup
+  );
   const [nextGroupNameA, setNextGroupNameA] = useState<string>("");
   const [nextGroupNameB, setNextGroupNameB] = useState<string>("");
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);
-  const [confirmPromoteTrigger, setConfirmPromoteTrigger] = useState<boolean>(false);
-  const [isSearch, setIsSearch] = useState<boolean>(false); 
+  const [confirmPromoteTrigger, setConfirmPromoteTrigger] =
+    useState<boolean>(false);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -147,7 +154,7 @@ export default function Main() {
   }));
 
   const onFilterGroup = async () => {
-    setIsSearch(true)
+    setIsSearch(true);
     // try {
     //   const result = await GetGropGradeAbove(grads, term, year, groupID);
     //   setNewGroup(result);
@@ -161,13 +168,10 @@ export default function Main() {
   const onPromoteStudentGroup = async () => {
     // if (!newGroup) return;
     // setConfirmPromoteTrigger(true);
-
     // const nextGroupName = `${nextGroupNameA}/${nextGroupNameB}`;
     // const studentIds = newGroup.student.map((s) => Number(s.studentId));
-
     // const randomPrefix = `${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
     // const randomNumber = Math.floor(100 + Math.random() * 900);
-
     // try {
     //   const res = await fetchPromoteStudentGroup({
     //     studentIds,
@@ -197,7 +201,10 @@ export default function Main() {
   return (
     <div className="pl-16 py-5">
       <div className="flex justify-start px-10 ">
-       <HeaderLabel title="เลื่อนชั้นนักเรียน" Icon={<ArrowUpDown className="h-7 w-7  text-white"/>}/>
+        <HeaderLabel
+          title="เลื่อนชั้นนักเรียน"
+          Icon={<ArrowUpDown className="h-7 w-7  text-white" />}
+        />
       </div>
 
       <div className="flex flex-wrap items-center gap-4 px-10 py-5">
@@ -227,19 +234,40 @@ export default function Main() {
         {isSearch && newGroup ? (
           <>
             <p className="mb-3 text-gray-600 font-medium">
-              ชั้นเรียนปัจจุบัน: <span className="text-blue-800 font-semibold">{newGroup.class}.{newGroup.groupName}</span>
+              ชั้นเรียนปัจจุบัน:{" "}
+              <span className="text-blue-800 font-semibold">
+                {newGroup.class}.{newGroup.groupName}
+              </span>
             </p>
             <div className="flex gap-3 items-center mb-4">
               <p className="text-[18px] text-gray-700">ระบุชั้นเรียนต่อไป:</p>
-              <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">{newGroup.class}</p>
-              <select className="border px-3 py-1 rounded-md" value={nextGroupNameA} onChange={(e) => setNextGroupNameA(e.target.value)}>
+              <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">
+                {newGroup.class}
+              </p>
+              <select
+                className="border px-3 py-1 rounded-md"
+                value={nextGroupNameA}
+                onChange={(e) => setNextGroupNameA(e.target.value)}
+              >
                 <option value="">เลือกปี</option>
-                {[ 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
+                {[2, 3].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
               </select>
               <span className="text-xl">/</span>
-              <select className="border px-3 py-1 rounded-md" value={nextGroupNameB} onChange={(e) => setNextGroupNameB(e.target.value)}>
+              <select
+                className="border px-3 py-1 rounded-md"
+                value={nextGroupNameB}
+                onChange={(e) => setNextGroupNameB(e.target.value)}
+              >
                 <option value="">เลือกห้อง</option>
-                {[...Array(10)].map((_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}
+                {[...Array(15)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
               </select>
             </div>
             <StudentSelectListTable students={newGroup.student} />

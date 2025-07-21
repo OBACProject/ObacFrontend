@@ -1,61 +1,27 @@
 "use client";
-import {
-  fetchDeleteScheduleSubject,
-  fetchGetScheduleOfTeacherByTeacherID,
-} from "@/api/oldApi/schedule/scheduleAPI";
-import { fetchGetTeacherByTeacherIdAsync } from "@/api/oldApi/teacher/teacherAPI";
+import { fetchDeleteScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
 import { TeacherScheduleSubject } from "@/dto/schedule";
-import { GetTeacherByTeacherId } from "@/dto/teacherDto";
-import { GraduationCap, PlusCircle } from "lucide-react";
+import {  PlusCircle, Table } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import AddTeacherSchedulePopUp from "./AddTeacherSchedulePopUp";
 import { toast } from "react-toastify";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
 type Props = {
   term: string;
   year: string;
   teacherID: string;
 };
 
-const getTeacherData = async (teacherId: string) => {
-  try {
-    const response = await fetchGetTeacherByTeacherIdAsync(Number(teacherId));
-    return response;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-};
-
-const getSchedule = async (teacherID: string, term: string, year: string) => {
-  try {
-    const data = await fetchGetScheduleOfTeacherByTeacherID(
-      teacherID,
-      Number(term),
-      Number(year)
-    );
-    return data;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-};
-
 export default function Form({ term, year, teacherID }: Props) {
   const [schedules, setSchedules] = useState<TeacherScheduleSubject[]>([]);
-  const [teacherData, setTeacherData] = useState<GetTeacherByTeacherId>();
+  const [teacherData, setTeacherData] = useState<GetAllTeacherResponse>();
   const [scheduleBtn, setschduleBtn] = useState<boolean>(false);
   const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
   const [deleteID, setDeleteID] = useState<number>(0);
   const [deleteName, setDeleteName] = useState<string>("");
-  useEffect(() => {
-    getSchedule(teacherID, term, year).then((d: any) => {
-      setSchedules(d);
-    });
-    getTeacherData(teacherID).then((data: any) => {
-      setTeacherData(data);
-    });
-  }, []);
+  useEffect(() => {}, []);
   const thaiDaysOrder = [
     "วันอาทิตย์",
     "วันจันทร์",
@@ -84,31 +50,31 @@ export default function Form({ term, year, teacherID }: Props) {
   return (
     <div className="w-full  px-10 ">
       <div className="pt-5 flex justify-start ">
-        <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
-          <GraduationCap className="h-8 w-8" />
-          ตารางสอนอาจารย์
-        </h1>
+        <HeaderLabel
+          Icon={<Table className="h-5 w-5 text-white" />}
+          title={"ตารางสอนของอาจารย์"}
+        />
       </div>
       <div className="w-full py-5 flex justify-between items-start ">
         <div className=" rounded-md flex border group shadow-md shadow-gray-200 border-gray-200 w-fit px-5">
           <div className="overflow-hidden w-[100px] h-auto">
             <img
-            alt="obac"
-              src={teacherData?.teacherProfilePicture || "/asset/user.jpg"}
+              alt="obac"
+              src={"/asset/user.jpg"}
               className="w-[100px] h-auto group-hover:scale-[110%] duration-500  object-cover"
             />
           </div>
           <div className="grid h-fit px-4  py-2 gap-1 ">
             <div className="flex gap-2 text-[20px]">
-              <p>{teacherData?.nameTitle}</p>
-              <p>{teacherData?.thaiName}</p>
-              <p>{teacherData?.thaiLastName}</p>
+              <p>Titlename</p>
+              <p>Patarjarin</p>
+              <p>Napakarn</p>
             </div>
             <div className="flex text-gray-700 gap-2 text-[16px]">
-              เบอร์ติดต่อ :<p>{teacherData?.teacherPhone}</p>
+              เบอร์ติดต่อ :<p>000000</p>
             </div>
             <div className="flex text-gray-700 gap-2 text-[16px]">
-              Email :<p>{teacherData?.teacherEmail}</p>
+              Email :<p>patara1919@gmail.com</p>
             </div>
           </div>
         </div>
@@ -136,7 +102,7 @@ export default function Form({ term, year, teacherID }: Props) {
           <div className="text-center  py-2 "></div>
         </div>
       </div>
-      {sortedSchedules.length > 0 ? (
+      {sortedSchedules.length >= 0 ? (
         <div>
           {sortedSchedules?.map((item: TeacherScheduleSubject, index) => (
             <div key={index} className="shadow-md">
@@ -229,7 +195,7 @@ export default function Form({ term, year, teacherID }: Props) {
           </div>
         </div>
       )}
-      {scheduleBtn && (
+      {/* {scheduleBtn && (
         <AddTeacherSchedulePopUp
           term={term}
           year={year}
@@ -237,7 +203,7 @@ export default function Form({ term, year, teacherID }: Props) {
           teacherName={`${teacherData?.thaiName} ${teacherData?.thaiLastName}`}
           onClosePopUp={setschduleBtn}
         />
-      )}
+      )} */}
     </div>
   );
 }

@@ -10,9 +10,11 @@ export interface GradStudentInSubject {
   firstName: string;
   lastName: string;
   subjectName: string;
+  assignmentscore :number
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
+  midtermscore: number;
+  finaltermscore: number;
   totalScore: number;
   grade: string;
   remark: string;
@@ -186,3 +188,33 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
   grade: number;
   remark: string | null;
 };
+
+export interface SubjectGradeItem {
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  assignmentScore:number;
+  collectScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+}
+
+export interface StudentGroupGradeResponse {
+  subjectName: string;
+  subjectCode: string;
+  subjectId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  term: string;
+  year: number;
+  subjectGrades: SubjectGradeItem[];
+}

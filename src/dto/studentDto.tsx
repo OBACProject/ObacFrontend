@@ -254,23 +254,7 @@ export type GetStudentByStudentId = {
   birthDate: string | null;
 };
 
-export type GetStudentGroupsByTermYearDto = {
-  groupId: number;
-  groupName: string;
-  class: string;
-  groupCode: string;
-  level: number;
-  programId: number;
-  facultyName: string;
-  programName: string;
-  subProgramName: string;
-  teacherId: number | null;
-  limit: number;
-  year: number;
-  term: string;
-  program: any | null;
-  scheduleSubject: any[];
-};
+
 
 export type UpdateStudentRequestBody = {
   studentId: number;

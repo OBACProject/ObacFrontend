@@ -1,7 +1,6 @@
-"use client"
+"use client";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import PDFButtonTemplate from "@/components/PDF/PDFButtonTemplate";
-import ExcelButtonTemplate from "@/components/Excel/ExcelButtonTemplate";
 import {
   genGradSummaryForStudent,
   genGroupSummaryGrad,
@@ -21,8 +20,18 @@ import {
   X,
 } from "lucide-react";
 import React from "react";
-import { ConvertScoreToExcel, ConvertClassroomToExcel, ConvertClassroomToExcelWithSubject, ConvertClassroomGradingToExcel } from "@/lib/Excel/generateExcelFile";
-import { mockConvertGradBySubjectId, mockConvertClassroomToExcelDto, mockGeneralData, mockStudentList } from "@/lib/Excel/mockData";
+import {
+  ConvertScoreToExcel,
+  ConvertClassroomToExcel,
+  ConvertClassroomToExcelWithSubject,
+  ConvertClassroomGradingToExcel,
+} from "@/lib/Excel/generateExcelFile";
+import {
+  mockConvertGradBySubjectId,
+  mockConvertClassroomToExcelDto,
+  mockGeneralData,
+  mockStudentList,
+} from "@/lib/Excel/mockData";
 import { mockStudentListByGroupID } from "@/resource/PDF/mockData";
 
 export default function page() {
@@ -80,11 +89,12 @@ export default function page() {
             doc_type="pdf"
             onClick={genGroupSummaryGrad}
           />
-          <ExcelButtonTemplate
+          <PDFButtonTemplate
             title={"ใบตรวจเกรด"}
             description="เอกสารตรวจเกรดนักเรียนทั้งห้อง (Excel)"
             icon={<BookCheck className="w-5 h-5 text-white" />}
             icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            doc_type="excel"
             onClick={handleGenerateClassroomGradingExcel}
           />
           <PDFButtonTemplate
@@ -95,11 +105,12 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentNamelistInGroup}
           />
-          <ExcelButtonTemplate
+          <PDFButtonTemplate
             title={"ใบรายชื่อนักเรียนในห้อง"}
             description="รายชื่อนักเรียนในหนึ่งห้องเรียน (Excel)"
             icon={<Users className="w-5 h-5 text-white" />}
             icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
+            doc_type="excel"
             onClick={handleGenerateStudentListExcel}
           />
           <PDFButtonTemplate
@@ -110,8 +121,9 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentNameInSubject}
           />
-          <ExcelButtonTemplate
+          <PDFButtonTemplate
             title={"ใบรายชื่อนักเรียนในวิชา"}
+            doc_type="excel"
             description="รายชื่อนักเรียนในวิชานั้นๆ (Excel)"
             icon={<Users className="w-5 h-5 text-white" />}
             icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
@@ -125,10 +137,11 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentScoreInSubject}
           />
-          <ExcelButtonTemplate
+          <PDFButtonTemplate
             title={"ใบคะแนนนักเรียนในวิชา"}
             description="รายชื่อนักเรียนและคะแนนในวิชานั้นๆ (Excel)"
             icon={<Bolt className="w-5 h-5 text-white" />}
+            doc_type="excel"
             icon_bg="bg-gradient-to-r from-teal-500 to-blue-500"
             onClick={handleGenerateGradeExcel}
           />

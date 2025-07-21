@@ -1,6 +1,7 @@
-import { ChevronRight, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import React from "react";
 import Form from "./Form";
+import DocumentSection from "./DocumentSection";
 
 type PageParams = Promise<{ slug: string[] }>;
 
@@ -11,7 +12,7 @@ export default async function page({ params }: { params: PageParams }) {
   const subjectCode = decodeURIComponent(ecsubjectCode || "");
   const groupName = decodeURIComponent(engroupName || "");
   return (
-    <div className="w-full px-5 ">
+    <div className="w-full px-4 ">
       <div className="w-full flex justify-between mt-4 rounded-lg bg-blue-500">
         <div className="grid gap-2 px-5 py-4">
           <div className="flex gap-2 items-center">
@@ -38,12 +39,7 @@ export default async function page({ params }: { params: PageParams }) {
             {subjectName}
           </h1>
         </div>
-        <div className="px-5 py-5 grid ">
-          <button className="px-5 rounded-md flex items-center gap-2 justify-center h-fit py-1.5 bg-white text-blue-600 group">
-            ดาวโหลดน์เอกสาร
-            <ChevronRight className="text-blue-600 h-6 w-6 group-hover:rotate-90 duration-300" />
-          </button>
-        </div>
+        <DocumentSection />
       </div>
       <div>
         <Form scheduleID={scheduleID} />

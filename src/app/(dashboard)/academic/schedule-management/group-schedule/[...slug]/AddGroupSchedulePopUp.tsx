@@ -5,7 +5,7 @@ import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 // import { StudentGroup } from "@/dto/studentDto";
 import { GetAllSubject } from "@/dto/subjectDto";
-import { GetAllTeacher } from "@/dto/teacherDto";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -49,7 +49,7 @@ export default function AddGroupSchedulePopUp({
   groupName,
 }: AddSchedulePopUp) {
   const [subjects, setSubject] = useState<GetAllSubject[]>([]);
-  const [teachers, setTeacher] = useState<GetAllTeacher[]>([]);
+  const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
 
   useEffect(() => {
     getAllSubject().then((item) => {
@@ -112,7 +112,7 @@ export default function AddGroupSchedulePopUp({
 
   const teacherOptions = teachers.map((teacher) => ({
     value: teacher.teacherId,
-    label: `${teacher.teacherCode} : ${teacher.thaiName} ${teacher.thaiLastName}`,
+    label: `${teacher.teacherCode} : ${teacher.firstName} ${teacher.lastName}`,
   }));
 
   const onSubmit = async () => {

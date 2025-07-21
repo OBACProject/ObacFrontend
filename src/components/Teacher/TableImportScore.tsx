@@ -1,38 +1,60 @@
 "use client";
-import { SubjectGrade } from "@/lib/api/models/grade/grade.response";
-import React from "react";
+import { GetSubjectsByTermAndClass } from "@/api/subject/route";
+import { SubjectGrade } from "@/dto/gradingDto";
+import { SubjectItem } from "@/dto/subjectDto";
+import { Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import BasicSubjectCombobox from "./๋SubjectCombobox";
 
 interface ScoreInputFormProps {
   scores: SubjectGrade[];
   edit: boolean;
   onChange: (updated: SubjectGrade[]) => void;
+  onRemoveGroup?: () => void;
   term: string;
   year: number;
+  classLevel: string;
 }
 
 export default function ScoreInputForm({
   scores,
   edit,
   onChange,
+  onRemoveGroup,
   term,
   year,
+  classLevel,
 }: ScoreInputFormProps) {
+  const [subjects, setSubject] = useState<SubjectItem[]>();
+  useEffect(() => {
+    GetSubjectsByTermAndClass(String(term), String(classLevel)).then((d) => {
+      if (d) {
+        setSubject(d);
+      }
+    });
+  }, []);
+
   const handleChange = (
     index: number,
     field: keyof SubjectGrade,
     value: any
   ) => {
+    let newValue =
+      field === "gradePoint" || field === "credit" || field === "finalGrade"
+        ? parseFloat(value) || 0
+        : value;
+
+    if (field === "credit") {
+      newValue = Math.max(0, Math.min(newValue, 3));
+    }
+    if (field === "finalGrade") {
+      newValue = Math.max(0, Math.min(newValue, 4));
+    }
+
     updated[index] = {
       ...updated[index],
-      [field]:
-        field === "gradePoint" || field === "credit" || field === "finalGrade"
-          ? parseFloat(value) || 0
-          : value,
+      [field]: newValue,
     };
-
-    if (field === "credit" || field === "finalGrade") {
-      updated[index].credit = updated[index].credit * updated[index].finalGrade;
-    }
 
     onChange(updated);
   };
@@ -42,6 +64,7 @@ export default function ScoreInputForm({
       gradeId: 0,
       term,
       year,
+      subjectId: 0,
       subjectName: "",
       subjectCode: "",
       credit: 0,
@@ -63,13 +86,26 @@ export default function ScoreInputForm({
           <tr>
             <th className="border px-2 py-1 w-[100px]">เทอม</th>
             <th className="border px-2 py-1">ปีการศึกษา</th>
-            <th className="border px-2 py-1">ชื่อวิชา</th>
-            <th className="border px-2 py-1">รหัสวิชา</th>
+            <th className="border px-2 py-1">ชื่อวิชา - รหัสวิชา</th>
+            {/* <th className="border px-2 py-1">รหัสวิชา</th> */}
             <th className="border px-2 py-1">หน่วยกิต</th>
             <th className="border px-2 py-1">เกรด</th>
             <th className="border px-2 py-1">ผลคูณ</th>
             <th className="border px-2 py-1 w-[100px]">หมายเหตุ</th>
-            <th className="border px-2 py-1 w-[60px]"></th>
+            <th className="border px-2 py-1 w-[60px]">
+              {edit && (
+                <div className="flex  items-center">
+                  {onRemoveGroup && (
+                    <button
+                      onClick={onRemoveGroup}
+                      className="bg-red-700 hover:bg-red-800 text-white px-2 py-1.5 rounded"
+                    >
+                      <Trash2 className="w-5 h-5 text-white" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -100,37 +136,28 @@ export default function ScoreInputForm({
                 <td className="border text-center px-2 py-1">{row.year}</td>
                 <td className="border px-2 py-1">
                   {edit ? (
-                    <input
-                      type="text"
-                      value={row.subjectName}
-                      onChange={(e) =>
-                        handleChange(index, "subjectName", e.target.value)
-                      }
-                      className="w-full py-1 px-2 text-start border border-gray-200"
+                    <BasicSubjectCombobox
+                      subjects={subjects || []}
+                      selectedId={row.subjectId}
+                      onSelect={(subject) => {
+                        handleChange(index, "subjectId", subject.id); 
+                        handleChange(index, "subjectCode", subject.code);
+                        handleChange(index, "subjectName", subject.name);
+                        handleChange(index, "credit", subject.credits);
+                      }}
                     />
                   ) : (
-                    row.subjectName || "-"
+                    `${row.subjectName} (${row.subjectCode})`
                   )}
                 </td>
-                <td className="border text-center px-2 py-1">
-                  {edit ? (
-                    <input
-                      type="text"
-                      value={row.subjectCode}
-                      onChange={(e) =>
-                        handleChange(index, "subjectCode", e.target.value)
-                      }
-                      className="w-full py-1 text-center px-2 border border-gray-200"
-                    />
-                  ) : (
-                    row.subjectCode || "-"
-                  )}
-                </td>
+
                 <td className="border text-center px-2 py-1">
                   {edit ? (
                     <input
                       type="number"
                       value={row.credit}
+                      max={3}
+                      min={0}
                       onChange={(e) =>
                         handleChange(index, "credit", e.target.value)
                       }
@@ -144,29 +171,43 @@ export default function ScoreInputForm({
                   {edit ? (
                     <input
                       type="number"
-                      value={row.gradePoint}
+                      value={row.finalGrade}
+                      max={4}
+                      min={0}
                       onChange={(e) =>
-                        handleChange(index, "gradePoint", e.target.value)
+                        handleChange(index, "finalGrade", e.target.value)
                       }
                       className="w-[80px] text-center py-1 px-2 border  border-gray-200"
                     />
                   ) : (
-                    row.gradePoint
+                    row.finalGrade
                   )}
                 </td>
                 <td className="border text-center px-2 py-1">
-                  {row.finalGrade}
+                  {row.finalGrade * row.credit}
                 </td>
                 <td className="border text-center px-2 py-1">
                   {edit ? (
-                    <input
-                      type="text"
-                      value={row.remark}
+                    <select
+                      value={row.remark ?? ""}
                       onChange={(e) =>
-                        handleChange(index, "remark", e.target.value)
+                        handleChange(index, "remark", e.target.value || null)
                       }
-                      className="w-full py-1  px-2 border border-gray-200"
-                    />
+                      className="w-full py-1 px-2 border border-gray-200"
+                    >
+                      <option value="">-</option>
+                      <option value="น.ร.">น.ร.</option>
+                      <option value="ข.ป.">ข.ป.</option>
+                      <option value="ถ.ล.">ถ.ล.</option>
+                      <option value="ถ.น.">ถ.น.</option>
+                      <option value="ถ.พ.">ถ.พ.</option>
+                      <option value="ท.">ท.</option>
+                      <option value="ม.ส.">ม.ส.</option>
+                      <option value="ม.ท.">ม.ท.</option>
+                      <option value="ผ.">ผ.</option>
+                      <option value="ม.ผ.">ม.ผ.</option>
+                      <option value="ม.ก.">ม.ก.</option>
+                    </select>
                   ) : (
                     row.remark || "-"
                   )}
@@ -175,7 +216,7 @@ export default function ScoreInputForm({
                   {edit && (
                     <button
                       onClick={() => removeRow(index)}
-                      className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
+                      className="bg-red-400 hover:bg-red-600 text-white px-2 py-1 rounded"
                     >
                       ลบ
                     </button>

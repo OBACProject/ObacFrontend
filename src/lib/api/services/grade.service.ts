@@ -10,10 +10,17 @@ import {
 
 import {
   GetGroupSummaryGradeResponse,
+<<<<<<< HEAD
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
   GetStudentGradesByTermYearResponse,
   GetStudentGroupGradeByScheduleSubjectIdResponse,
+=======
+  
+  GetStudentGroupGradeAboveResponse,
+  StudentTranscriptResponse,
+>>>>>>> dev
   GetStudentIfGradeBelowResponse,
+  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
 } from "../models/grade/grade.response";
 
 export class GradeService extends BaseService {

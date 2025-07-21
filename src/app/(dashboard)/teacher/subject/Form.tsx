@@ -1,18 +1,23 @@
 "use client";
+import { GetTeacherSchedule } from "@/api/teacher/route";
 import CardSubject from "@/components/common/Card/card-subject";
 import { CardSubjectResponse } from "@/dto/teacherDto";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-import { mockCardSubjectResponse } from "@/resource/teachers/mockData";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export default function Form() {
-  const [subjects, setSubject] = useState<CardSubjectResponse[]>(
-    mockCardSubjectResponse
-  );
+  const [subjects, setSubject] = useState<CardSubjectResponse[]>([]);
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
 
   useEffect(() => {
-    // fetch Data
+    GetTeacherSchedule(defaultTerm, currentYear).then((d) => {
+      if (d) {
+        setSubject(d);
+      } else {
+        console.log("ไม่พบข้อมูลหลังการดึง api ");
+      }
+    });
   }, []);
   const currentTime = getCurrentThaiTermYear();
 
@@ -30,9 +35,11 @@ export default function Form() {
                   "/" +
                   items.subjectName +
                   "/" +
-                  items.subjectCode
-                  +"/"
-                  +items.class+"."+items.studentGroupName
+                  items.subjectCode +
+                  "/" +
+                  items.class +
+                  "." +
+                  items.studentGroupName
                 }
               >
                 <CardSubject
@@ -44,7 +51,7 @@ export default function Form() {
             ))}
           </div>
         ) : (
-          <div className="border-2 grid place-items-center border-dashed border-gray-400 py-10 rounded-lg">
+          <div className="border-2 grid lg:w-[600px] px-10 place-items-center border-dashed border-gray-400 py-8 rounded-lg">
             <h1 className="text-3xl font-prompt text-gray-500">
               ไม่มีวิชาที่สอน
             </h1>
