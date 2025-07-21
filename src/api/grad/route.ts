@@ -26,7 +26,7 @@ export const UpsertStudentGrades = async (
 ): Promise<boolean> => {
   try {
     console.log("payload : ",payload)
-    const response = await apiClient.post(
+    const response = await apiClient.put(
       "Grade/UpsertStudentGrades",
       payload
     );

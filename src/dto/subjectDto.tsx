@@ -13,7 +13,6 @@ export interface GetAllSubject {
   credits: number;
   isActive: boolean;
 }
-
 export interface GetSubjectByGroupId {
   subjectName: string;
   subjectCode: string;
@@ -21,7 +20,6 @@ export interface GetSubjectByGroupId {
   credit: number;
   remark: string;
 }
-
 
 export interface SubjectItem {
   id: number;
@@ -33,5 +31,29 @@ export interface SubjectItem {
   class: string;
   curriculumYear:number;
   description: string | null;
+  isActive: boolean;
+}
+
+export interface CreateSubjectRequest {
+  name: string;
+  code: string;
+  credits: number;
+  term: string;
+  level: number;
+  class: string;
+  curriculumYear:number;
+  description: string | null;
+}
+
+export interface UpdateSubjectRequest  {
+  id: number;
+  name: string;
+  code: string;
+  credits: number;
+  term: string;
+  level: number;
+  class: string;
+  curriculumYear: number;
+  description: string;
   isActive: boolean;
 }

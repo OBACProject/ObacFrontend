@@ -14,6 +14,7 @@ import {
   GetStudentDetailAndSummaryScoreByStudentCode,
   UpsertStudentGrades,
 } from "@/api/grad/route";
+import { toast } from "react-toastify";
 
 export default function Form() {
 
@@ -50,13 +51,7 @@ export default function Form() {
     const success = await UpsertStudentGrades(payload);
 
     if (success) {
-      alert("บันทึกข้อมูลสำเร็จ");
-      setTimeout(
-        () => {
-          window.location.reload()
-        },
-        500
-      );
+      toast.success("บันทึกข้อมูลสำเร็จ")
       setEdit(false);
     } else {
       alert("เกิดข้อผิดพลาด");

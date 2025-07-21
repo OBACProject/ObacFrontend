@@ -1,60 +1,62 @@
 "use client";
-// import { fetchGetAllProgram } from "@/api/oldApi/program/programAPI";
-import { GetAllProgram } from "@/dto/programDto";
+import { CreateSubject } from "@/api/subject/route";
 import { useEffect, useState } from "react";
-import Select from "react-select";
+import { toast } from "react-toastify";
 
 type AddPopUpProps = {
   onClosePopUp: (value: boolean) => void;
-  onSave: (
-    name: string,
-    id: string,
-    term: string,
-    programID: number,
-    credits: number,
-    isActive: boolean
-  ) => void;
 };
 
-export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
+export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
+  const [classType, setClassType] = useState("ปวช");
+  const [classLevel, setClassLevel] = useState("1");
+  const levelOptions = classType === "ปวช" ? ["1", "2", "3"] : ["1", "2"];
   const [subjectName, setSubjectName] = useState<string>("");
   const [subjectCode, setSubjectCode] = useState<string>("");
   const [term, setTerm] = useState<string>("");
-  const [programID, setProgramID] = useState<number | null>(null);
-  const [credits, setCredits] = useState<number>(0);
-  const [isActive, setActive] = useState<boolean>(false);
-  const [programs, setPrograms] = useState<GetAllProgram[]>([]);
-  const [checked, setChecked] = useState(false);
-  const [curriumYear, setCurriumYear] = useState<string>("");
-  // useEffect(() => {
-  //   fetchGetAllProgram().then((item: GetAllProgram[]) => {
-  //     setPrograms(item);
-  //   });
-  // }, []);
-  const Save = () => {
-    if (subjectName && subjectCode && programID) {
-      onSave(subjectName, subjectCode, term, programID, credits, isActive);
-      onClosePopUp(false);
+  const [credit, setCredit] = useState<number>();
+  const [curriculumYear, setCurriumYear] = useState<number>();
+  const [description, setDescription] = useState<string>("");
+
+  const onSave = async () => {
+    if (!subjectName || !subjectCode || !term || !credit || !curriculumYear) {
+      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+
+    const payload = {
+      name: subjectName,
+      code: subjectCode,
+      credits: credit,
+      term,
+      level: Number(classLevel),
+      class: classType,
+      curriculumYear: Number(curriculumYear),
+      description,
+    };
+
+    try {
+      console.log("paylode... : ",payload)
+      // const success = await CreateSubject(payload);
+      // if (success) {
+        toast.success("เพิ่มวิชาสำเร็จ");
+        onClosePopUp(false);
+      // } else {
+      //   toast.error("เกิดข้อผิดพลาดในการเพิ่มวิชา");
+      // }
+    } catch (err) {
+      console.error("Error saving subject:", err);
+      toast.error("บันทึกวิชาไม่สำเร็จ");
     }
   };
 
-  const programOptions = programs.map((item) => ({
-    value: item.programId,
-    label: `${item.facultyName}`,
-  }));
-  const handleProgramChange = (
-    selectedOption: { value: number; label: string } | null
-  ) => {
-    setProgramID(selectedOption ? selectedOption.value : null);
-    setChecked(false);
-  };
   return (
     <div
       className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
       onClick={() => onClosePopUp(false)}
     >
       <div
-        className="bg-white rounded-md   lg:w-[500px]  z-100 shadow-lg shadow-gray-500 "
+        className="bg-white rounded-md    z-100 shadow-lg shadow-gray-500 "
         onClick={(e) => e.stopPropagation()}
       >
         <div className="w-full flex justify-center rounded-t-md text-center text-xl  bg-white">
@@ -62,9 +64,9 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             เพิ่มวิชาเรียน
           </p>
         </div>
-        <div className="w-full px-10 py-5 grid place-items-start gap-4">
+        <div className=" px-2 lg:px-16 w-full grid gap-4">
           <div className="flex items-center gap-2">
-            <label>รหัสวิชา : </label>
+            <label>รหัสวิชา </label>
             <input
               placeholder="กรอกรหัสวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
@@ -73,7 +75,7 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
             />
           </div>
           <div className="flex items-center gap-2">
-            <label>ชื่อวิชา : </label>
+            <label>ชื่อวิชา </label>
             <input
               placeholder="กรอกชื่อวิชา"
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
@@ -81,85 +83,78 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
               value={subjectName}
             />
           </div>
-        </div>
-        <div className="flex items-center justify-start px-10 gap-3">
-          <div className="flex items-center gap-2 ">
-            <label>หน่วยกิต :</label>
+          <div className="flex items-center justify-start gap-3">
+            <div className="flex items-center gap-2 ">
+              <label>หน่วยกิต</label>
+              <input
+                type="number"
+                placeholder="?"
+                className="w-[50px] border rounded-sm px-2"
+                onChange={(e) => setCredit(Number(e.target.value))}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <label>ภาคเรียน </label>
+              <select
+                className=" px-2 py-1 border border-gray-300 rounded-sm"
+                onChange={(e) => setTerm(e.target.value)}
+                value={term}
+              >
+                <option value="">เลือก</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="s1">ฤดูร้อน1</option>
+                <option value="s2">ฤดูร้อน2</option>
+              </select>
+            </div>
+          </div>
+          <div className=" flex gap-3 items-center">
+            <p>ปีหลักสูตร</p>
             <input
-              type="number"
-              className="w-[50px] border rounded-sm px-2"
-              onChange={(e) => setCredits(Number(e.target.value))}
+              className="border-[1px] lg:w-[120px]  pl-2 py-0.5"
+              type="text"
+              placeholder="พ.ศ."
+              onChange={(e) => setCurriumYear(Number(e.target.value))}
+              value={curriculumYear}
             />
           </div>
-          <div className="flex items-center gap-2">
-            <label>ภาคเรียน :</label>
+          <div className="flex gap-3 items-center">
+            <p>สายชั้น</p>
             <select
-              className=" px-2 py-1 border border-gray-300 rounded-sm"
-              onChange={(e) => setTerm(e.target.value)}
-              value={term}
+              className="border-[1px] border-gray-300 px-4 py-0.5 rounded-md"
+              value={classType}
+              onChange={(e) => {
+                const selected = e.target.value;
+                setClassType(selected);
+                if (selected === "ปวช" && classLevel === "3") return;
+                setClassLevel("1");
+              }}
             >
-              <option value="">เลือก</option>
-              <option value="1">ปี 1 เทอม 1</option>
-              <option value="2">ปี 1 เทอม 2</option>
-              <option value="3">ปี 2 เทอม 1</option>
-              <option value="4">ปี 2 เทอม 2</option>
-              <option value="5">ปี 3 เทอม 1</option>
-              <option value="6">ปี 3 เทอม 2</option>
+              <option value="ปวช">ปวช.</option>
+              <option value="ปวส">ปวส.</option>
+            </select>
+
+            <p className="ml-3">ปี</p>
+            <select
+              className="border-[1px] border-gray-300 px-4 py-0.5 rounded-md"
+              value={classLevel}
+              onChange={(e) => setClassLevel(e.target.value)}
+            >
+              {levelOptions.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
             </select>
           </div>
-        </div>
-        <div className="w-full px-10 py-5 grid place-items-start gap-8">
-          <div className="flex items-center gap-2">
-            <label>สถานะใช้งาน :</label>
-            <button
-              onClick={() => setActive(!isActive)}
-              className={`relative w-[46px] h-6 flex items-center rounded-full py-1 px-1transition-all duration-300 ${
-                isActive ? "bg-green-500" : "bg-gray-300"
-              }`}
-            >
-              <div
-                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300 ${
-                  isActive ? "translate-x-6" : "translate-x-0.5"
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-        {/* <div className="w-full px-10 py-2 flex justify-start items-center gap-8">
-          <Select
-            options={programOptions}
-            value={
-              programOptions.find((option) => option.value === programID) ||
-              null
-            }
-            onChange={handleProgramChange}
-            isSearchable
-            className="w-full"
-            placeholder="หลักสูตร"
-          />
-          <div className="flex items-center w-full gap-2">
-            <input
-              type="checkbox"
-              id="checkbox"
-              checked={checked}
-              onChange={() => {
-                setProgramID(99);
-                setChecked(!checked);
-              }}
-              className="w-5 h-5 accent-blue-500"
+          <div className="">
+            <p>คำอธิบาย</p>
+            <textarea
+              rows={2}
+              className="w-full border-[1px] border-gray-300"
+              onChange={(e) => setDescription(e.target.value)}
             />
-            <label>ทุกหลักสูตร</label>
           </div>
-        </div> */}
-        <div className="w-full px-10 flex gap-3 items-center">
-          <p>ปีหลักสูตร</p>
-          <input
-            className="border-[1px] lg:w-[120px]  pl-2 py-0.5"
-            type="text"
-            placeholder="พ.ศ."
-            onChange={(e) => setCurriumYear(e.target.value)}
-            value={curriumYear}
-          />
         </div>
         <div className="py-5 w-full flex gap-5 justify-center">
           <button
@@ -170,7 +165,7 @@ export const AddSubjectPopUp = ({ onClosePopUp, onSave }: AddPopUpProps) => {
           </button>{" "}
           <button
             className="px-5 w-[90px] bg-blue-500 text-white py-1 rounded-sm  hover:bg-blue-700"
-            onClick={() => Save()}
+            onClick={() => onSave()}
           >
             เพิ่ม
           </button>

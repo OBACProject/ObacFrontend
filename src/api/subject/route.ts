@@ -1,4 +1,8 @@
-import { SubjectItem } from "@/dto/subjectDto";
+import {
+  SubjectItem,
+  CreateSubjectRequest,
+  UpdateSubjectRequest,
+} from "@/dto/subjectDto";
 import apiClient from "@/lib/apiClient";
 
 export const GetSubjectsByTermAndClass = async (
@@ -38,7 +42,9 @@ export const GetAllSubjectAsync = async (): Promise<SubjectItem[] | []> => {
     return [];
   }
 };
-export const GetAllActiveSubjectAsync = async (): Promise<SubjectItem[] | []> => {
+export const GetAllActiveSubjectAsync = async (): Promise<
+  SubjectItem[] | []
+> => {
   try {
     const response = await apiClient.get<{
       responseCode: string;
@@ -53,3 +59,25 @@ export const GetAllActiveSubjectAsync = async (): Promise<SubjectItem[] | []> =>
   }
 };
 
+export const CreateSubject = async (
+  payload: CreateSubjectRequest
+): Promise<boolean> => {
+  try {
+    const response = await apiClient.post("Subject/CreateSubject", payload);
+    return response.status === 200;
+  } catch (err) {
+    console.error("Error creating subject:", err);
+    return false;
+  }
+};
+
+export const UpdateSubject = async (payload: UpdateSubjectRequest) => {
+  try {
+    console.log("api : ",payload)
+    const res = await apiClient.put("Subject/UpdateSubject", payload);
+    return res.data;
+  } catch (error) {
+    console.error("UpdateSubject Error:", error);
+    return null;
+  }
+};

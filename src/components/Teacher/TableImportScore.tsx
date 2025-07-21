@@ -136,16 +136,18 @@ export default function ScoreInputForm({
                 <td className="border text-center px-2 py-1">{row.year}</td>
                 <td className="border px-2 py-1">
                   {edit ? (
-                    <BasicSubjectCombobox
-                      subjects={subjects || []}
-                      selectedId={row.subjectId}
-                      onSelect={(subject) => {
-                        handleChange(index, "subjectId", subject.id);
-                        handleChange(index, "subjectCode", subject.code);
-                        handleChange(index, "subjectName", subject.name);
-                        handleChange(index, "credit", subject.credits);
-                      }}
-                    />
+                    <div>
+                      <BasicSubjectCombobox
+                        subjects={subjects || []}
+                        selectedId={row.subjectId}
+                        onSelect={(subject) => {
+                          handleChange(index, "subjectId", subject.id);
+                          handleChange(index, "subjectCode", subject.code);
+                          handleChange(index, "subjectName", subject.name);
+                          handleChange(index, "credit", subject.credits);
+                        }}
+                      />{" "}
+                    </div>
                   ) : (
                     `${row.subjectName} (${row.subjectCode})`
                   )}

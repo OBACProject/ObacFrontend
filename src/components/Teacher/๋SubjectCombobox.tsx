@@ -20,9 +20,9 @@ export default function BasicSubjectCombobox({
     fullSubject: subject,
   }));
 
-  const selectedOption = selectedId
-    ? options.find((opt) => opt.value === selectedId) || null
-    : null;
+const selectedOption = options.find(
+  (opt) => Number(opt.value) === Number(selectedId)
+) || null;
 
   const handleChange = (
     selected: { value: number; label: string; fullSubject: SubjectItem } | null
