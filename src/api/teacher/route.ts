@@ -1,6 +1,7 @@
 import {
   CardSubjectResponse,
   GetAllTeacherResponse,
+  TeacherDetailAndScheduleResponse,
   TeacherDetails,
 } from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
@@ -74,5 +75,22 @@ export const GetAllTeachers = async (): Promise<GetAllTeacherResponse[]> => {
   } catch (err) {
     console.log("Error in GetAllTeachers : ", err);
     return [];
+  }
+};
+
+export const GetTeacherDetailAndSchedule = async (
+  teacherId: number,
+  term: string,
+  year: number
+): Promise<TeacherDetailAndScheduleResponse | null> => {
+  try {
+    const response = await apiClient.get<TeacherDetailAndScheduleResponse>(
+      `Teacher/GetTeacherDetailAndSchedule/${teacherId}/${term}/${year}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching teacher detail and schedule:", error);
+    return null;
   }
 };

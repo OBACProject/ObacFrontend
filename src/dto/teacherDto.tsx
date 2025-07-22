@@ -25,6 +25,7 @@
 
 export interface GetAllTeacherResponse {
   teacherId: number;
+  prefix:string;
   firstName: string;
   lastName: string;
   teacherCode: string;
@@ -107,4 +108,43 @@ export interface CardSubjectResponse {
   isComplete: boolean;       
   isPublish: boolean;
   timing : number;
+}
+
+export interface TeacherDetail {
+  teacherId: number;
+  firstName: string;
+  lastName: string;
+  prefix: string;
+  gender: string;
+  teacherCode: string;
+  facultyId: number;
+  facultyName: string;
+  program: string;
+  phoneNumber: string;
+}
+
+export interface TeacherScheduleItem {
+  scheduleSubjectId: number;
+  day: string;
+  period: number;
+  room: string;
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  term: string;
+  year: number;
+  studentGroupId: number;
+  studentGroupName: string;
+  studentGroupCode: string;
+  studentCount: number;
+  class: string;
+  level: number;
+  isComplete: boolean;
+  isPublish: boolean;
+  curriculumYear: number;
+}
+
+export interface TeacherDetailAndScheduleResponse {
+  teacher: TeacherDetail;
+  schedule: TeacherScheduleItem[];
 }

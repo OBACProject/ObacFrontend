@@ -7,6 +7,7 @@ export interface ColumnConfig<T> {
   label: string;
   width: string;
   render: (item: T, index: number) => React.ReactNode;
+  className?: string;
 }
 
 interface NameListScheduleTableProps<T> {
@@ -14,8 +15,8 @@ interface NameListScheduleTableProps<T> {
   columns: ColumnConfig<T>[];
   rowHref?: (item: T) => string;
   emptyText?: string;
-   title?: string;
-    icon?: React.ReactNode;
+  title?: string;
+  icon?: React.ReactNode;
 }
 
 export default function NameListScheduleTable<T>({
@@ -24,12 +25,12 @@ export default function NameListScheduleTable<T>({
   rowHref,
   emptyText = "ไม่มีข้อมูล",
   icon,
-  title
+  title,
 }: NameListScheduleTableProps<T>) {
   return (
     <div className="w-full rounded-sm py-2 px-10">
       {/* Header */}
-      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600"> 
+      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
         {icon}
         <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>
@@ -54,13 +55,17 @@ export default function NameListScheduleTable<T>({
               <div
                 className={`grid hover:bg-blue-50 border border-gray-300 border-t-0 text-gray-700`}
                 style={{
-                  gridTemplateColumns: columns.map((col) => col.width).join(" "),
+                  gridTemplateColumns: columns
+                    .map((col) => col.width)
+                    .join(" "),
                 }}
               >
                 {columns.map((col, colIndex) => (
                   <div
                     key={colIndex}
-                    className="flex items-center py-1 px-2 border-r border-gray-300 justify-center"
+                    className={`flex items-center py-1 px-2 border-r border-gray-300 ${
+                      col.className ?? "justify-center"
+                    }`}
                   >
                     {col.render(item, index)}
                   </div>

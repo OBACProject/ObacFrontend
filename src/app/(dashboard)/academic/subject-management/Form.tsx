@@ -87,10 +87,10 @@ export default function Form() {
             <div
               key={item.id}
               className={` 
-                grid grid-cols-[5%_15%_40%_10%_10%_10%_10%]   hover:bg-blue-100 border border-gray-300  border-t-0`}
+                grid grid-cols-[5%_15%_40%_10%_10%_10%_10%] bg-white   hover:bg-blue-100 border border-gray-300  border-t-0`}
             >
               <div className="text-center flex items-center w-full justify-center text-black border-r py-1  border-gray-300">
-                {index+1}.
+                {index + 1}.
               </div>
               <div className="text-start flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
                 <p className="">{item.code}</p>

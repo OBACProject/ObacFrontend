@@ -13,7 +13,6 @@ import {
 import {
   Bolt,
   BookCheck,
-  BookOpenCheck,
   FileText,
   GraduationCap,
   Users,
@@ -153,19 +152,6 @@ export default function page() {
             doc_type="pdf"
             onClick={genStudentNotPassList}
           />
-        </div>
-        <div className="border-t border-gray-300 mt-8">
-          <div className="py-5 w-full">
-            <HeaderLabel
-              title="เอกสาร รบ.3ป. "
-              Icon={<BookOpenCheck className="text-white h-7 w-7 " />}
-            />
-          </div>
-          <div className="px-10">
-            <p className="w-full border-dashed border-2 border-gray-500 text-2xl text-gray-700 font-prompt py-10  text-center rounded-lg">
-              กำลังพัฒนา...
-            </p>
-          </div>
         </div>
       </div>
     </div>

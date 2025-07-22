@@ -88,7 +88,7 @@ export default function AddSchedulePopUp({
 
   useEffect(() => {
     const studentGroupById = studentGroup.find(
-      (item) => item.groupId === studentGroupId
+      (item) => item.id === studentGroupId
     );
     getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
       setSubject(item);
@@ -124,13 +124,13 @@ export default function AddSchedulePopUp({
   }));
 
   const groupOptions = studentGroup.map((item) => ({
-    value: item.groupId,
+    value: item.id,
     label: `${item.class}.${item.groupName}`,
   }));
 
   const onSubmit = async () => {
     const studentGroupById = studentGroup.find(
-      (item) => item.groupId === studentGroupId
+      (item) => item.id === studentGroupId
     );
     const studentGroupName = studentGroupById?.groupName;
     const requestBody: CreateScheduleSubjectRequest = {

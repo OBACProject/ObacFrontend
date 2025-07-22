@@ -1,14 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  BookText,
-  GraduationCap,
-  PlusCircle,
-  University,
-  User2,
-} from "lucide-react";
+import { BookText, GraduationCap, PlusCircle, University } from "lucide-react";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import Link from "next/link";
 import AddSchedulePopUp from "./AddSchedulePopUp";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
@@ -43,7 +36,6 @@ export default function Form() {
     setLoading(true);
   }, []);
 
-  // fetch when term or year has changes.
   useEffect(() => {
     setStudentGroup([]);
     setLoading(false);
@@ -82,8 +74,18 @@ export default function Form() {
 
   const teacherColumns: ColumnConfig<GetAllTeacherResponse>[] = [
     { label: "No.", width: "5%", render: (_, i) => i + 1 },
-    { label: "ชื่อ", width: "20%", render: (item) => item.firstName },
-    { label: "นามสกุล", width: "20%", render: (item) => item.lastName },
+    {
+      label: "ชื่อ",
+      width: "20%",
+      render: (item) => `${item.prefix} ${item.firstName} `,
+      className: "text-start lg:pl-6",
+    },
+    {
+      label: "นามสกุล",
+      width: "20%",
+      render: (item) => `${item.lastName} `,
+      className: "text-start lg:pl-6",
+    },
     { label: "หมวดวิชา", width: "20%", render: (item) => item.facultyName },
     {
       label: "เบอร์ติดต่อ",
@@ -197,7 +199,7 @@ export default function Form() {
             title={`รายชื่อห้องเรียนของ เทอม ${term} ปีการศึกษา ${year}`}
             columns={studentColumns}
             rowHref={(item) =>
-              `/academic/schedule-management/group-schedule/${term}/${year}/${item.groupId}`
+              `/academic/schedule-management/group-schedule/${term}/${year}/${item.id}`
             }
             emptyText="ไม่มีข้อมูลชั้นเรียน"
           />

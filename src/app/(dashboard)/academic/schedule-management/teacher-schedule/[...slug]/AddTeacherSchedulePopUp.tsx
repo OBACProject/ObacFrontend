@@ -100,17 +100,17 @@ export default function AddTeacherSchedulePopUp({
   ) => {
     if (selectedOption) {
       const selectedGroup = studentGroup.find(
-        (sub) => sub.groupId === selectedOption.value
+        (sub) => sub.id === selectedOption.value
       );
       if (selectedGroup) {
-        setStudentGroupId(selectedGroup.groupId);
+        setStudentGroupId(selectedGroup.id);
       }
     } else {
       setStudentGroupId(0);
     }
   };
   const groupOptions = studentGroup.map((item) => ({
-    value: item.groupId,
+    value: item.id,
     label: `${item.class}.${item.groupName}`,
   }));
 
