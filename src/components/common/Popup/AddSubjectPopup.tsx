@@ -36,14 +36,10 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
     };
 
     try {
-      console.log("paylode... : ",payload)
-      // const success = await CreateSubject(payload);
-      // if (success) {
-        toast.success("เพิ่มวิชาสำเร็จ");
-        onClosePopUp(false);
-      // } else {
-      //   toast.error("เกิดข้อผิดพลาดในการเพิ่มวิชา");
-      // }
+      console.log("paylode... : ", payload);
+      await CreateSubject(payload);
+      toast.success("เพิ่มวิชาสำเร็จ");
+      onClosePopUp(false);
     } catch (err) {
       console.error("Error saving subject:", err);
       toast.error("บันทึกวิชาไม่สำเร็จ");

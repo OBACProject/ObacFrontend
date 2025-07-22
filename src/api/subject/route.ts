@@ -64,7 +64,7 @@ export const CreateSubject = async (
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("Subject/CreateSubject", payload);
-    return response.status === 200;
+    return response.status === 201;
   } catch (err) {
     console.error("Error creating subject:", err);
     return false;
@@ -73,7 +73,7 @@ export const CreateSubject = async (
 
 export const UpdateSubject = async (payload: UpdateSubjectRequest) => {
   try {
-    console.log("api : ",payload)
+    console.log("api : ", payload);
     const res = await apiClient.put("Subject/UpdateSubject", payload);
     return res.data;
   } catch (error) {
