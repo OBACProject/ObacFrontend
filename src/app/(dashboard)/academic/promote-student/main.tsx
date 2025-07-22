@@ -149,7 +149,7 @@ export default function Main() {
   }, [term, year]);
 
   const groupOptions: GroupOption[] = groups.map((item) => ({
-    value: item.groupId,
+    value: item.id,
     label: `${item.class}.${item.groupName}`,
   }));
 

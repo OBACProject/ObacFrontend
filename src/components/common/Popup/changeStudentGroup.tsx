@@ -46,7 +46,7 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
     }
   }, [term, year]);
   const groupOptions = studentGroup.map((item) => ({
-    value: item.groupId,
+    value: item.id,
     label: `${item.class}.${item.groupName}`,
   }));
 
