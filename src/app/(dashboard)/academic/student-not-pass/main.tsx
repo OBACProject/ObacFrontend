@@ -20,7 +20,6 @@ export default function Main() {
 
   const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
   const studentCount = useMemo(() => students.length, [students]);
-  // const [groupID, setGroupID] = useState<number>(0);
   const [grads, setGrad] = useState(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
@@ -60,15 +59,23 @@ export default function Main() {
     //   setIsSearch(true);
     // }
     setSearchTrigger(true);
-    setStudent(mockGetGradBelowResponse)
+    setStudent(
+      mockGetGradBelowResponse.map(item => ({
+        ...item,
+        prefix: item.prefix ?? "",
+      }))
+    )
+    console.log("Mock data set:", mockGetGradBelowResponse);
     setIsSearch(true);
     setSearchTrigger(false);
   };
 
-  const handleStudentName = (id: number, fname: string, lname: string) => {
+  const handleStudentName = (id: number,prefix : string, fname: string, lname: string) => {
+    console.log("Selected student ID:", id);
+    console.log("Selected student name:", `${prefix}${fname} ${lname}`);
     const data: IndividualStudentInfoData = {
       studentId: id,
-      studentName: fname + " " + lname,
+      studentName: prefix+fname + " " + lname,
     };
     localStorage.setItem("selectedStudentData", JSON.stringify(data));
     localStorage.setItem("activeTabStudent", "individualStudentInfo");
@@ -187,6 +194,7 @@ export default function Main() {
                       onClick={() => {
                         handleStudentName(
                           item.studentId,
+                          item.prefix,
                           item.firstName,
                           item.lastName
                         );
@@ -201,7 +209,7 @@ export default function Main() {
                         {item.studentCode}
                       </div>
                       <div className="text-start py-1 pl-8">
-                        {item.firstName}
+                        {item.prefix}{item.firstName}
                       </div>
                       <div className="text-start py-1 border-r border-gray-400">
                         {item.lastName}

@@ -55,7 +55,7 @@ export const preProcessClassroomData = (
     (student) => ({
       studentId: student.studentId,
       studentCode: student.studentCode,
-      name: `${student.firstName} ${student.lastName}`,
+      name: `${student.prefix}${student.firstName} ${student.lastName}`,
       gpa: parseFloat(student.gpa.toFixed(2)),
       gpax: parseFloat(student.gpax.toFixed(2)),
       totalCredit: student.totalCredit,

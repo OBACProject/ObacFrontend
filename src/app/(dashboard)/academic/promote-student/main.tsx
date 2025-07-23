@@ -30,6 +30,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 1,
       studentCode: "6401123",
+      prefix: "นาย",
       firstName: "สมชาย",
       lastName: "พาเพลิน",
       isActive: true,
@@ -38,6 +39,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 2,
       studentCode: "6401124",
+      prefix: "นางสาว",
       firstName: "สมหญิง",
       lastName: "สดใส",
       isActive: true,
@@ -46,6 +48,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 3,
       studentCode: "6401125",
+      prefix: "นาย",
       firstName: "อนันต์",
       lastName: "ใจดี",
       isActive: false,
@@ -54,6 +57,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 4,
       studentCode: "6401126",
+      prefix: "นางสาว",
       firstName: "วิภา",
       lastName: "ว่องไว",
       isActive: true,
@@ -62,6 +66,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 5,
       studentCode: "6401127",
+      prefix: "นาย",
       firstName: "เอกชัย",
       lastName: "เร็วแรง",
       isActive: true,
@@ -70,6 +75,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 6,
       studentCode: "6401128",
+      prefix: "นางสาว",
       firstName: "พรพิมล",
       lastName: "ใจดี",
       isActive: false,
@@ -78,6 +84,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 7,
       studentCode: "6401129",
+      prefix: "นาย",
       firstName: "ณัฐวุฒิ",
       lastName: "ขยันเรียน",
       isActive: true,
@@ -86,6 +93,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 8,
       studentCode: "6401130",
+      prefix: "นางสาว",
       firstName: "เกษม",
       lastName: "ตั้งใจดี",
       isActive: true,
@@ -94,6 +102,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 9,
       studentCode: "6401131",
+      prefix: "นางสาว",
       firstName: "วราภรณ์",
       lastName: "สายบุญ",
       isActive: false,
@@ -102,6 +111,7 @@ const mockGroup: GetGropGradeAboveModel = {
     {
       studentId: 10,
       studentCode: "6401132",
+      prefix: "นาย",
       firstName: "กิตติ",
       lastName: "จริงจัง",
       isActive: true,

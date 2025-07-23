@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 interface Student {
   studentCode: string;
+  prefix: string;
   firstName: string;
   lastName: string;
   gpa: number;
@@ -64,7 +65,7 @@ export default function StudentSelectListTable({
             <div className="text-center py-1">{index + 1}</div>
             <div className="text-center py-1">{student.studentCode}</div>
             <div className="text-start py-1 pl-4">
-              {student.firstName} {student.lastName}
+              {student.prefix}{student.firstName} {student.lastName}
             </div>
             <div className="text-center py-1">{student.gpa.toFixed(2)}</div>
           </div>
