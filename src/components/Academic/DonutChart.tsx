@@ -85,7 +85,7 @@ export default function DonutChart({
   };
 
   return (
-    <div className="px-0 py-4 h-fit shadow-lg rounded-md text-blue-600 bg-white">
+    <div className="px-2 py-4 h-fit shadow-lg rounded-md text-blue-600 bg-white">
       <Doughnut data={data} options={options} />
     </div>
   );
