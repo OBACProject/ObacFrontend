@@ -64,7 +64,7 @@ export default function NameListScheduleTable<T>({
                   <div
                     key={colIndex}
                     className={`flex items-center py-1 px-2 border-r border-gray-300 ${
-                      col.className ?? "justify-center"
+                      col.className ?? "justify-center line-clamp-1"
                     }`}
                   >
                     {col.render(item, index)}
