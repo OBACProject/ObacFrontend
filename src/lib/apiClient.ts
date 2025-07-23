@@ -7,31 +7,4 @@ const apiClient: AxiosInstance = axios.create({
   timeout: 10000, 
 });
 
-// Add request interceptor (e.g., for adding headers)
-// api.interceptors.request.use(
-//   (config: AxiosRequestConfig) => {
-//     const token = localStorage.getItem("accessToken"); // or retrieve token from cookies
-//     if (token) {
-//       config.headers = {
-//         ...config.headers,
-//         Authorization: `Bearer ${token}`,
-//       };
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
-// // Add response interceptor (e.g., for handling errors globally)
-// api.interceptors.response.use(
-//   (response: AxiosResponse) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       // Handle unauthorized error (optional)
-//       console.log("Unauthorized! Redirecting to login...");
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
 export default apiClient;
