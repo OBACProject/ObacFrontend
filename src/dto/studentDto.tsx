@@ -78,6 +78,7 @@ export interface StudentGroup {
 export interface GetStudentByGroupId {
   studentId: number;
   studentCode: string;
+  prefix : string | null; 
   firstName: string;
   lastName: string;
   isActive: boolean;

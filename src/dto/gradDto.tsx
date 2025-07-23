@@ -27,6 +27,7 @@ export interface GetGradBySubjectId {
   studentGroup: string;
   studentId: number;
   studentCode: string;
+  prefix : string;
   gender: string;
   firstName: string;
   lastName: string;
@@ -96,6 +97,7 @@ export interface ConvertGradBySubjectId {
 export type Student = {
   studentId: number;
   studentCode: string;
+  prefix: string;
   firstName: string;
   lastName: string;
   isActive: boolean;
@@ -118,6 +120,7 @@ export interface GetGropGradeAboveModel {
 export interface GetGropGradeBelowModel {
   studentId: number;
   studentCode: string;
+  prefix : string;
   firstName: string;
   lastName: string;
   facultyName: string;
