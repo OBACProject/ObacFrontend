@@ -10,7 +10,6 @@ export interface TransformedStudentData {
   gpax: number;
   totalCredit: number;
   subjects: { [k: string]: string };
-
 }
 
 export const mockClassroomData: ClassroomByGroupIdData = {
@@ -26,6 +25,7 @@ export const mockClassroomData: ClassroomByGroupIdData = {
     {
       studentId: 1,
       studentCode: "65000001",
+      prefix: "นางสาว",
       firstName: "อรทัย",
       lastName: "ตั้งใจ",
       isActive: true,
@@ -44,6 +44,7 @@ export const mockClassroomData: ClassroomByGroupIdData = {
     {
       studentId: 2,
       studentCode: "65000002",
+      prefix: "นาย",
       firstName: "วิชัย",
       lastName: "ใจดี",
       isActive: true,
@@ -62,6 +63,7 @@ export const mockClassroomData: ClassroomByGroupIdData = {
     {
       studentId: 3,
       studentCode: "65000003",
+      prefix: "นางสาว",
       firstName: "วิชัยเอ",
       lastName: "ใจสิงค์",
       isActive: true,
@@ -80,6 +82,7 @@ export const mockClassroomData: ClassroomByGroupIdData = {
     {
       studentId: 4,
       studentCode: "65000004",
+      prefix: "นางสาว",
       firstName: "นพมล",
       lastName: "แซ่ลิ้ม",
       isActive: true,
@@ -109,7 +112,7 @@ export const transformToSummaryData = (
   const students = data.student.map((s) => ({
     studentId: s.studentId,
     studentCode: s.studentCode,
-    name: `${s.firstName} ${s.lastName}`,
+    name: s.prefix == "" ? `${s.prefix}${s.firstName} ${s.lastName}` : `undefined ${s.firstName} ${s.lastName}`,
     gpa: s.gpa,
     gpax: s.gpax,
     totalCredit: s.totalCredit,
