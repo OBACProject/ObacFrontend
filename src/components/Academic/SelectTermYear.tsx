@@ -27,6 +27,8 @@ export default function SelectTermAndYear({
           <option value="">ทั้งหมด</option>
           <option value="1">1</option>
           <option value="2">2</option>
+          <option value="s1">ฤดูร้อน1</option>
+          <option value="s2">ถดูร้อน2</option>
         </select>
       </div>
 

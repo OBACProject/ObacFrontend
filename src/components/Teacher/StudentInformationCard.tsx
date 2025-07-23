@@ -9,6 +9,7 @@ interface StudentInformationCardProps {
   Class: string;
   Prefix:string;
   Faculty: string;
+  Program:string;
   edit: boolean;
   onChangeStudentData?: (updated: {
     prefix:string
@@ -17,6 +18,7 @@ interface StudentInformationCardProps {
     studentLastName: string;
     className: string;
     faculty: string;
+    program:string
   }) => void;
 }
 
@@ -28,6 +30,7 @@ export default function StudentInformationCard({
   Faculty,
   Prefix,
   edit,
+  Program,
   onChangeStudentData,
 }: StudentInformationCardProps) {
   const [studentCode, setStudentCode] = useState<string>("");
@@ -36,6 +39,7 @@ export default function StudentInformationCard({
   const [className, setClassName] = useState<string>("");
   const [faculty, setFaculty] = useState<string>("");
   const [prefix, setPrefix] = useState<string>("");
+  const [program , setProgram] = useState<string>("")
 
   useEffect(() => {
     setStudentCode(StudentCode);
@@ -44,6 +48,7 @@ export default function StudentInformationCard({
     setStudentFirstName(StudentFirstName);
     setStudentLastName(StudentLastName);
     setPrefix(Prefix)
+    setProgram(Program)
   }, []);
 
   useEffect(() => {
@@ -55,6 +60,7 @@ export default function StudentInformationCard({
         studentLastName,
         className,
         faculty,
+        program
       });
     }
   }, [studentCode, studentFirstName, studentLastName, className, faculty,prefix]);
@@ -119,10 +125,21 @@ export default function StudentInformationCard({
           disable={true}
         />
         <InputBox
-          label="สาขาวิชา"
+          label="หลักสูตร"
           name="studentLastName"
           value={faculty}
           onChange={(e) => setFaculty(e.target.value)}
+          placeholder="หลักสูตร"
+          inputWidth="w-[230px]"
+          inputSize="text-lg"
+          labelSize="text-xl"
+          disable={!edit}
+        />
+        <InputBox
+          label="สาขาวิชา"
+          name="studentLastName"
+          value={program}
+          onChange={(e) => setProgram(e.target.value)}
           placeholder="สาขาวิชา"
           inputWidth="w-[230px]"
           inputSize="text-lg"

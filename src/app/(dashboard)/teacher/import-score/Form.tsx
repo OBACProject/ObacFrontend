@@ -109,6 +109,7 @@ export default function Form() {
               StudentCode={student?.student.studentCode}
               StudentFirstName={student?.student.name || "-"}
               StudentLastName={student?.student.lastName || "-"}
+              Program={student?.student.programName || "-"}
               Class={
                 student?.student.class + "." + student?.student.groupName || "-"
               }

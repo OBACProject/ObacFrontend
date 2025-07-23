@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BookText, GraduationCap, PlusCircle, University } from "lucide-react";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import AddSchedulePopUp from "./AddSchedulePopUp";
+// import AddSchedulePopUp from "./AddSchedulePopUp";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
@@ -215,10 +215,11 @@ export default function Form() {
       )}
 
       {popUpAddSubject == true && (
-        <AddSchedulePopUp
-          onClosePopUp={setpopUpAddSubject}
-          year={year.toString()}
-        />
+        // <AddSchedulePopUp
+        //   onClosePopUp={setpopUpAddSubject}
+        //   year={year.toString()}
+        // />
+        <div></div>
       )}
     </div>
   );

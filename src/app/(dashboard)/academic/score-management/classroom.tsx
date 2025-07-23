@@ -457,8 +457,8 @@ export function ClassroomGrading() {
 
       {/* Data Table */}
       <StylesTable
-        title="ตารางห้องเรียน"
-        icon={<Table className="h-5 w-5" />}
+        title="ห้องเรียนทั้งหมด"
+        icon={<Table className=" h-5 text-white w-5" />}
         columns={columns}
         data={tableData}
         onRowClick={onRowClick}

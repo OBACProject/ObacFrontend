@@ -2,6 +2,7 @@ import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
 import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
 import { fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
+import { GetAllTeachers } from "@/api/teacher/route";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
@@ -16,29 +17,6 @@ type AddSchedulePopUp = {
   year: string;
 };
 
-interface SubjectOption {
-  value: number;
-  label: string;
-}
-
-const getAllSubjectByTerm = async (term: number) => {
-  try {
-    const response = await fetchGetAllSubjectByTerm(term);
-    return response;
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-};
-
-const getAllTeacher = async () => {
-  try {
-    const response = await fetchGetAllTeacherAsync();
-    return response;
-  } catch (err) {
-    return [];
-  }
-};
 
 const GetStudentGroupsByTermYear = async (term: string, year: number) => {
   try {
@@ -68,7 +46,7 @@ export default function AddSchedulePopUp({
     currentYear.toString()
   );
   useEffect(() => {
-    getAllTeacher().then((item) => {
+    GetAllTeachers().then((item) => {
       setTeacher(item);
     });
     GetStudentGroupsByTermYear(selectedTerm, Number(selectedYear)).then(
@@ -86,14 +64,14 @@ export default function AddSchedulePopUp({
     );
   }, [selectedTerm, selectedYear]);
 
-  useEffect(() => {
-    const studentGroupById = studentGroup.find(
-      (item) => item.id === studentGroupId
-    );
-    getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
-      setSubject(item);
-    });
-  }, [selectedTerm]);
+//   useEffect(() => {
+//     const studentGroupById = studentGroup.find(
+//       (item) => item.id === studentGroupId
+//     );
+//     getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
+//       setSubject(item);
+//     });
+//   }, [selectedTerm]);
 
   const days = [
     "วันอาทิตย์",
@@ -111,10 +89,10 @@ export default function AddSchedulePopUp({
   const [subjectID, setSubjectID] = useState<number>(0);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
 
-  const subjectOptions: SubjectOption[] = subjects.map((item) => ({
-    value: item.id,
-    label: `${item.subjectCode} : ${item.subjectName}`,
-  }));
+//   const subjectOptions: SubjectOption[] = subjects.map((item) => ({
+//     value: item.id,
+//     label: `${item.subjectCode} : ${item.subjectName}`,
+//   }));
 
   const teacherOptions = teachers.map((teacher, index) => ({
     value: teacher.teacherId,
@@ -247,7 +225,7 @@ export default function AddSchedulePopUp({
           <div className="flex px-4 py-2">
             <div className="w-full px-2">
               <h1>วิชาเรียน</h1>
-              <Select
+              {/* <Select
                 options={subjectOptions.map((item) => ({
                   value: item.value,
                   label: `${item.label}`,
@@ -263,7 +241,7 @@ export default function AddSchedulePopUp({
                   setSubjectID(Number(selectedOption?.value || 0))
                 }
                 placeholder="-- เลือกวิชา --"
-              />
+              /> */}
             </div>
           </div>
           <div className="flex  px-4 py-2">

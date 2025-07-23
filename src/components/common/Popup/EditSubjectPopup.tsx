@@ -137,10 +137,10 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
             </select>
           </div>
           <div className="flex w-full items-center gap-2">
-            <label>ปี่หลักสูตร </label>
+            <label>ปีหลักสูตร </label>
             <input
               onChange={(e) => setCurriculumYear(Number(e.target.value))}
-              value={subjectName}
+              value={curriculumYear}
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
             />
           </div>
