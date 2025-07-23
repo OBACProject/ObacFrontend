@@ -84,11 +84,13 @@ export const GetTeacherDetailAndSchedule = async (
   year: number
 ): Promise<TeacherDetailAndScheduleResponse | null> => {
   try {
-    const response = await apiClient.get<TeacherDetailAndScheduleResponse>(
-      `Teacher/GetTeacherDetailAndSchedule/${teacherId}/${term}/${year}`
-    );
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: TeacherDetailAndScheduleResponse;
+    }>(`Teacher/GetTeacherDetailAndSchedule/${teacherId}/${term}/${year}`);
 
-    return response.data;
+    return response.data.data ?? null;
   } catch (error) {
     console.error("Error fetching teacher detail and schedule:", error);
     return null;
