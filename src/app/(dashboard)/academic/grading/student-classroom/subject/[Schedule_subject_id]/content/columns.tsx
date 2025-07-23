@@ -36,8 +36,8 @@ export const createColumns = ({
     },
     {
       label: "ชื่อ - นามสกุล",
-      className: "w-2/12",
-      render: (row) => `${row.firstName} ${row.lastName}`,
+      className: "w-3/12",
+      render: (row) => `${row.prefix} ${row.firstName} ${row.lastName}`,
     },
     {
       label: "คะแนนภารระงาน (20)",

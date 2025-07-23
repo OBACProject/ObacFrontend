@@ -20,6 +20,7 @@ const mockGradData: GetGradBySubjectId[] = [
     studentGroup: "A104",
     studentId: 1,
     studentCode: "631001",
+    prefix: "นาย",
     gender: "Male",
     firstName: "สมชาย",
     lastName: "ใจดี",
@@ -40,6 +41,7 @@ const mockGradData: GetGradBySubjectId[] = [
     studentGroup: "A104",
     studentId: 2,
     studentCode: "631002",
+    prefix: "นางสาว",
     gender: "Female",
     firstName: "สุมิตรา",
     lastName: "สุขใจ",
@@ -60,6 +62,7 @@ const mockGradData: GetGradBySubjectId[] = [
     studentGroup: "A104",
     studentId: 3,
     studentCode: "631003",
+    prefix: "นางสาว",
     gender: "Female",
     firstName: "จารุวรรณ",
     lastName: "เก่งกล้า",
@@ -112,7 +115,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     return mockSubjectData;
   }, [apiData]);
 
-  // Transform mock data with calculated totals
   const transformData = useMemo(() => {
     return mockGradData.map((item, index) => ({
       ...item,
