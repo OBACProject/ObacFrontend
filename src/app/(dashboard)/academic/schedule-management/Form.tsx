@@ -102,7 +102,8 @@ export default function Form() {
       render: (item) => `${item.class}.${item.groupName}`,
     },
     { label: "หลักสูตร", width: "30%", render: (item) => item.facultyName },
-    { label: "รหัสห้อง", width: "40%", render: (item) => item.groupCode },
+    { label: "สาขา", width: "20%", render: (item) => item.programName },
+    { label: "รหัสห้อง", width: "20%", render: (item) => item.groupCode },
     { label: "จำนวนนักเรียน", width: "10%", render: (_) => "-" },
   ];
 
