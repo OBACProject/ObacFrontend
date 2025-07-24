@@ -44,13 +44,13 @@ export default function Form({ term, year, teacherID }: Props) {
           </div>
           <div className="grid h-fit px-4  py-2 gap-1 ">
             <div className="flex gap-2 text-[20px]">
-              <p>{teacherSchedule?.teacher.prefix || "นาย"}</p>
-              <p>{teacherSchedule?.teacher.firstName || "ชื่อ"}</p>
-              <p>{teacherSchedule?.teacher.lastName || "นามสกุล"}</p>
+              <p>{teacherSchedule?.teacher?.prefix || "นาย"}</p>
+              <p>{teacherSchedule?.teacher?.firstName || "ชื่อ"}</p>
+              <p>{teacherSchedule?.teacher?.lastName || "นามสกุล"}</p>
             </div>
             <div className="flex text-gray-700 gap-2 text-[16px]">
               เบอร์ติดต่อ :
-              <p>{teacherSchedule?.teacher.phoneNumber || "08X-XXX-XXXX"}</p>
+              <p>{teacherSchedule?.teacher?.phoneNumber || "08X-XXX-XXXX"}</p>
             </div>
           </div>
         </div>

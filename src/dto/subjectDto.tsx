@@ -6,7 +6,7 @@ export interface GetSubjectBySubjectId {
   description: string;
   isActive: boolean;
 }
-export interface GetAllSubject {
+export interface GetAllSubjectRespond {
   id: number;
   subjectCode: string;
   subjectName: string;

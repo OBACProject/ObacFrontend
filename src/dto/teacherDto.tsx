@@ -29,11 +29,13 @@ export interface GetAllTeacherResponse {
   firstName: string;
   lastName: string;
   teacherCode: string;
+  gender :string;
   facultyId: number;
   facultyName: string;
   program: string;
   phoneNumber: string | null;
 }
+
 
 export interface TeacherDetails {
   teacherId: number;
@@ -123,6 +125,7 @@ export interface TeacherDetail {
   phoneNumber: string;
 }
 
+
 export interface TeacherScheduleItem {
   scheduleSubjectId: number;
   day: string;
@@ -148,3 +151,4 @@ export interface TeacherDetailAndScheduleResponse {
   teacher: TeacherDetail;
   schedule: TeacherScheduleItem[];
 }
+

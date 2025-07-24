@@ -1,5 +1,5 @@
 "use server";
-import { GetAllSubject, GetSubjectBySubjectId } from "@/dto/subjectDto";
+import { GetAllSubjectRespond, GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { cookies } from "next/headers";
 
 export const fetchGetSubjectBySubjectId = async (
@@ -30,7 +30,7 @@ export const fetchGetSubjectBySubjectId = async (
   }
 };
 
-export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
+export const fetchGetAllSubject = async (): Promise<GetAllSubjectRespond[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
@@ -53,14 +53,14 @@ export const fetchGetAllSubject = async (): Promise<GetAllSubject[]> => {
       throw new Error("Invalid API response: Missing 'data' field");
     }
 
-    const data: GetAllSubject[] = json.data;
+    const data: GetAllSubjectRespond[] = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching subjects:", err);
     return [];
   }
 };
-export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
+export const fetchGetAllActiveSubject = async (): Promise<GetAllSubjectRespond[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
@@ -83,7 +83,7 @@ export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
       throw new Error("Invalid API response: Missing 'data' field");
     }
 
-    const data: GetAllSubject[] = json.data;
+    const data: GetAllSubjectRespond[] = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching subjects:", err);
@@ -93,7 +93,7 @@ export const fetchGetAllActiveSubject = async (): Promise<GetAllSubject[]> => {
 
 export const fetchGetAllSubjectByTerm = async (
   term: number
-): Promise<GetAllSubject[]> => {
+): Promise<GetAllSubjectRespond[]> => {
   const token = cookies().get("token")?.value;
   try {
     const response = await fetch(
@@ -116,7 +116,7 @@ export const fetchGetAllSubjectByTerm = async (
       throw new Error("Invalid API response: Missing 'data' field");
     }
 
-    const data: GetAllSubject[] = json.data;
+    const data: GetAllSubjectRespond[] = json.data;
     return data;
   } catch (err) {
     console.error("Error fetching subjects:", err);

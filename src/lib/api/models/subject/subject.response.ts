@@ -11,29 +11,76 @@ interface subject {
     isActive: boolean;
 }
 export interface GetAllSubjectAsyncResponse {
-    data : subject[];
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 export interface GetAllActiveSubjectsResponse {
-     data : subject[];
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
-
 export interface GetSubjectByIdResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 export interface CreateSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 
 export interface UpdateSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 export interface DeleteSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 export interface GetSubjectByTermResponse {
     data : subject[];

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { BookText, GraduationCap, PlusCircle, University } from "lucide-react";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-// import AddSchedulePopUp from "./AddSchedulePopUp";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
@@ -11,6 +10,7 @@ import { GetAllTeachers } from "@/api/teacher/route";
 import NameListScheduleTable, {
   ColumnConfig,
 } from "@/components/Academic/table/NameListScheduleTable";
+import AddSchedulePopUp from "@/components/common/Popup/AddSchedulePopup";
 
 export default function Form() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
@@ -216,11 +216,9 @@ export default function Form() {
       )}
 
       {popUpAddSubject == true && (
-        // <AddSchedulePopUp
-        //   onClosePopUp={setpopUpAddSubject}
-        //   year={year.toString()}
-        // />
-        <div></div>
+        <AddSchedulePopUp
+          onClosePopUp={setpopUpAddSubject}
+        />
       )}
     </div>
   );

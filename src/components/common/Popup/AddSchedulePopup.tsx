@@ -1,77 +1,71 @@
 import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
 import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
+import { fetchGetAllSubject, fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
+import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
+import { GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
+import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
-import { GetAllSubject } from "@/dto/subjectDto";
+import { SubjectItem } from "@/dto/subjectDto";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
+import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
+import { GetAllActiveSubjectsResponse, GetAllSubjectAsyncResponse } from "@/lib/api/models/subject/subject.response";
+import { getCurrentThaiTermYear } from "@/lib/utils";
+import { GetStudentByIdDataApi } from "@/resource/academics/grading/api/individualGradeApiData";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 
 type AddSchedulePopUp = {
   onClosePopUp: (value: boolean) => void;
-  year: string;
 };
 
 
-const GetStudentGroupsByTermYear = async (term: string, year: number) => {
-  try {
-    const response = await fetchGetStudentGroupsByTermYear(term, year);
-    return response;
-  } catch (err) {
-    return [];
-  }
-};
 
 export default function AddSchedulePopUp({
-  onClosePopUp,
-  year,
+  onClosePopUp
 }: AddSchedulePopUp) {
-  const [subjects, setSubject] = useState<GetAllSubject[]>([]);
+  
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
+  const [subjects, setSubject] = useState<SubjectItem[]>([]);
   const [studentGroup, setStudentGroup] = useState<
     StudentGroupItem[]
   >([]);
-  const term = ["1", "2"];
-  const currentYear = new Date().getFullYear() - 1 + 543;
-  const yearsList = Array.from({ length: 3 }, (_, i) =>
-    (currentYear - i).toString()
-  );
-  const [selectedTerm, setSelectedTerm] = useState<string>("1");
-  const [selectedYear, setSelectedYear] = useState<string>(
-    currentYear.toString()
+
+  const { data: subjectActiveData = [] } = usegetAllActiveSubjectsQuery();
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
+  const [term, setTerm] = useState<string>(defaultTerm);
+  const [year, setYear] = useState<number>(
+    currentYear
   );
   useEffect(() => {
     GetAllTeachers().then((item) => {
       setTeacher(item);
     });
-    GetStudentGroupsByTermYear(selectedTerm, Number(selectedYear)).then(
-      (item: any) => {
-        setStudentGroup(item);
+    GetAllActiveSubjectAsync().then((item) => {
+      setSubject(item);
+    });
+    GetAllStudentGroupByTermYear(term,year).then((item:StudentGroupItem[]) => {
+      if(item){
+       setStudentGroup(item);
       }
-    );
+    });
+   
+
+
   }, []);
 
   useEffect(() => {
-    GetStudentGroupsByTermYear(selectedTerm, Number(selectedYear)).then(
-      (item: any) => {
-        setStudentGroup(item);
+    GetAllStudentGroupByTermYear(term,year).then((item:StudentGroupItem[]) => {
+      if(item){
+       setStudentGroup(item);
       }
-    );
-  }, [selectedTerm, selectedYear]);
-
-//   useEffect(() => {
-//     const studentGroupById = studentGroup.find(
-//       (item) => item.id === studentGroupId
-//     );
-//     getAllSubjectByTerm(parseInt(selectedTerm)).then((item) => {
-//       setSubject(item);
-//     });
-//   }, [selectedTerm]);
+    });
+   
+  }, [term, year]);
 
   const days = [
     "วันอาทิตย์",
@@ -85,20 +79,20 @@ export default function AddSchedulePopUp({
   const [day, setDay] = useState<string>("");
   const [period, setPeriod] = useState<string>("");
   const [room, setRoom] = useState<string>("");
+  const [hour, setHour] = useState<string>("");
   const [teacherID, setTeacherID] = useState<number>(0);
   const [subjectID, setSubjectID] = useState<number>(0);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
 
-//   const subjectOptions: SubjectOption[] = subjects.map((item) => ({
-//     value: item.id,
-//     label: `${item.subjectCode} : ${item.subjectName}`,
-//   }));
+  const subjectOptions = subjects.map((item: GetAllActiveSubjectsResponse) => ({
+    value: item.id,
+    label: `${item.code} : ${item.name}`,
+  }));
 
   const teacherOptions = teachers.map((teacher, index) => ({
     value: teacher.teacherId,
-    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.firstName} ${
-      teacher.lastName
-    }`,
+    label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.firstName} ${teacher.lastName
+      }`,
   }));
 
   const groupOptions = studentGroup.map((item) => ({
@@ -116,7 +110,7 @@ export default function AddSchedulePopUp({
       period: period,
       subject_id: subjectID,
       year: Number(year),
-      term: selectedTerm,
+      term: term,
       student_group_id: studentGroupId,
       teacher_id: teacherID,
       room: room,
@@ -154,42 +148,15 @@ export default function AddSchedulePopUp({
           <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
             เพิ่มวิชาสอน
           </div>
-          <div className="flex  px-4 py-2">
-            <div className="w-full flex flex-col p-2 relative">
-              <h1>ภาคเรียน</h1>
-              <Select
-                options={term.map((item) => ({
-                  value: item,
-                  label: item,
-                }))}
-                value={
-                  selectedTerm
-                    ? { value: selectedTerm, label: selectedTerm }
-                    : null
-                }
-                onChange={(selectedOption) =>
-                  setSelectedTerm(selectedOption?.value || "")
-                }
-              />
-            </div>
-            <div className="w-full flex flex-col p-2 relative">
-              <h1>ปีการศึกษา</h1>
-              <Select
-                options={yearsList.map((item) => ({
-                  value: item,
-                  label: item,
-                }))}
-                value={
-                  selectedYear
-                    ? { value: selectedYear, label: selectedYear }
-                    : null
-                }
-                onChange={(selectedOption) =>
-                  setSelectedYear(selectedOption?.value || "")
-                }
-                placeholder="-- เลือกปีการศึกษา --"
-              />
-            </div>
+          <div className="flex w-full justify-between px-4 py-2">
+            
+             <SelectTermAndYear
+                      term={term}
+                      year={year}
+                      currentYear={currentYear}
+                      onChangeTerm={setTerm}
+                      onChangeYear={setYear}
+                    />
           </div>
           <div className="flex px-4 py-2">
             <div className="w-full px-2">
@@ -211,8 +178,8 @@ export default function AddSchedulePopUp({
                 value={
                   studentGroupId
                     ? groupOptions.find(
-                        (item) => item.value === studentGroupId
-                      ) || null
+                      (item) => item.value === studentGroupId
+                    ) || null
                     : null
                 }
                 onChange={(selectedOption) =>
@@ -225,25 +192,33 @@ export default function AddSchedulePopUp({
           <div className="flex px-4 py-2">
             <div className="w-full px-2">
               <h1>วิชาเรียน</h1>
-              {/* <Select
-                options={subjectOptions.map((item) => ({
-                  value: item.value,
-                  label: `${item.label}`,
-                }))}
+              <Select
+                options={subjectOptions}
                 value={
                   subjectID
-                    ? subjectOptions.find(
-                        (item) => item.value.toString() === subjectID.toString()
-                      ) || null
+                    ? subjectOptions.find((item) => item.value === subjectID) || null
                     : null
                 }
                 onChange={(selectedOption) =>
                   setSubjectID(Number(selectedOption?.value || 0))
                 }
                 placeholder="-- เลือกวิชา --"
-              /> */}
+              />
+
             </div>
           </div>
+           <div className="flex  px-4 py-2">
+            <div className="w-full flex flex-col  px-2 relative">
+                 <h1>เวลาเรียน</h1>
+                 
+              <Input
+                type="number"
+                placeholder="--เลือกชั่วโมง--"
+                className="w-full pr-10"
+                onChange={(e) => setHour(e.target.value)}
+              />
+            </div>
+            </div>
           <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col  px-2 relative">
               <h1>วันที่สอน</h1>
@@ -255,9 +230,9 @@ export default function AddSchedulePopUp({
                 value={
                   day
                     ? {
-                        value: day,
-                        label: day,
-                      }
+                      value: day,
+                      label: day,
+                    }
                     : null
                 }
                 onChange={(selectedOption) =>
@@ -276,9 +251,9 @@ export default function AddSchedulePopUp({
                 value={
                   period
                     ? {
-                        value: period,
-                        label: period,
-                      }
+                      value: period,
+                      label: period,
+                    }
                     : null
                 }
                 onChange={(selectedOption) =>
@@ -336,3 +311,6 @@ export default function AddSchedulePopUp({
     </div>
   );
 }
+
+
+
