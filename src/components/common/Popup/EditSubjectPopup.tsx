@@ -1,5 +1,5 @@
 "use client";
-import { UpdateSubject } from "@/api/subject/route";
+import { DeleteSubjectById, UpdateSubject } from "@/api/subject/route";
 import { SubjectItem } from "@/dto/subjectDto";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
@@ -12,7 +12,6 @@ type EditPopUpProps = {
 
 export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
   const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
-
   const [subjectName, setSubjectName] = useState<string>(data.name);
   const [subjectCode, setSubjectCode] = useState<string>(data.code);
   const [credits, setCredit] = useState<number>(data.credits);
@@ -45,12 +44,32 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
       await UpdateSubject(payload);
       toast.success("แก้ไขวิชาสำเร็จ");
       onClosePopUp(false);
-      window.location.reload()
+      window.location.reload();
     } catch (err) {
       console.log(err);
       toast.error("แก้ไขวิชาไม่สำเร็จ");
     }
   };
+
+  const onDelete = async () => {
+    try {
+      const success = await DeleteSubjectById(data.id);
+      if (success) {
+        toast.success("ลบสำเร็จ");
+        setDeleteTrigger(false)
+        onClosePopUp(false);
+        setTimeout(()=>{
+          window.location.reload()
+        },500)
+      } else {
+        toast.error("ลบไม่สำเร็จ ลองอีกครั้ง");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("เกิดข้อผิดพลาด ลองอีกครั้ง");
+    }
+  };
+
   return (
     <div
       className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
@@ -164,7 +183,9 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
           </button>
           <button
             className="px-5 w-[80px] bg-red-400 text-white py-1 rounded-sm  hover:bg-red-600"
-            // onClick={() => Delete()}
+            onClick={() => {
+              setDeleteTrigger(true);
+            }}
           >
             ลบ
           </button>
@@ -179,7 +200,7 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
       {deleteTrigger && (
         <div
           className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
-          // onClick={() => setDeleteTrigger(false)}
+          onClick={() => setDeleteTrigger(false)}
         >
           <div
             className="bg-white rounded-md   lg:w-[300px]  z-100 shadow-lg shadow-gray-500 "
@@ -190,13 +211,13 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
               <div className="flex justify-center gap-5 py-5 w-full">
                 <button
                   className="px-4 bg-gray-300 rounded-md hover:bg-gray-400 py-1 text-black"
-                  // onClick={() => setDeleteTrigger(false)}
+                  onClick={() => setDeleteTrigger(false)}
                 >
                   ยกเลิก
                 </button>
                 <button
                   className="px-4 bg-red-500 rounded-md text-white hover:bg-red-600 py-1 "
-                  // onClick={deleteHandler}
+                  onClick={onDelete}
                 >
                   ตกลง
                 </button>

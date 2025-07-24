@@ -8,7 +8,7 @@ import {
   TeacherScheduleItem,
 } from "@/dto/teacherDto";
 import { GetTeacherDetailAndSchedule } from "@/api/teacher/route";
-import { mockTeacherDetailAndSchedule } from "@/resource/academics/mockData";
+// import { mockTeacherDetailAndSchedule } from "@/resource/academics/mockData";
 type Props = {
   term: string;
   year: string;
@@ -17,15 +17,14 @@ type Props = {
 
 export default function Form({ term, year, teacherID }: Props) {
   const [teacherSchedule, setTeacherSchedule] =
-    useState<TeacherDetailAndScheduleResponse | null>(
-      mockTeacherDetailAndSchedule
-    );
+    useState<TeacherDetailAndScheduleResponse | null>();
 
   useEffect(() => {
     GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
       (d: TeacherDetailAndScheduleResponse | null) => {
         if (d) {
           setTeacherSchedule(d);
+          console.log(d);
         }
       }
     );
@@ -44,13 +43,25 @@ export default function Form({ term, year, teacherID }: Props) {
           </div>
           <div className="grid h-fit px-4  py-2 gap-1 ">
             <div className="flex gap-2 text-[20px]">
-              <p>{teacherSchedule?.teacher?.prefix || "นาย"}</p>
-              <p>{teacherSchedule?.teacher?.firstName || "ชื่อ"}</p>
-              <p>{teacherSchedule?.teacher?.lastName || "นามสกุล"}</p>
+              {teacherSchedule?.teacher ? (
+                <>
+                  <p>{teacherSchedule.teacher.prefix || "คำนำหน้า"}</p>
+                  <p>{teacherSchedule.teacher.firstName || "ชื่อ"}</p>
+                  <p>{teacherSchedule.teacher.lastName || "นามสกุล"}</p>
+                </>
+              ) : (
+                <>
+                  <p>คำนำหน้า</p>
+                  <p>ชื่อ</p>
+                  <p>นามสกุล</p>
+                </>
+              )}
             </div>
             <div className="flex text-gray-700 gap-2 text-[16px]">
               เบอร์ติดต่อ :
-              <p>{teacherSchedule?.teacher?.phoneNumber || "08X-XXX-XXXX"}</p>
+              {teacherSchedule?.teacher && (
+                <p>{teacherSchedule?.teacher.phoneNumber || "08X-XXX-XXXX"}</p>
+              )}
             </div>
           </div>
         </div>

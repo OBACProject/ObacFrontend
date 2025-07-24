@@ -18,6 +18,7 @@ export interface GeneralData {
 export interface StudentList {
   studentId: number;
   studentCode: string;
+  prefix?: string;
   name: string;
   gpa: number;
   gpax: number;

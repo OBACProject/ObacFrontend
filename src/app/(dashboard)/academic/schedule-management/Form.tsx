@@ -77,7 +77,7 @@ export default function Form() {
     {
       label: "ชื่อ",
       width: "20%",
-      render: (item) => `${item.prefix} ${item.firstName} `,
+      render: (item) => `${item.prefix || "นาย,นาง"} ${item.firstName} `,
       className: "text-start lg:pl-6",
     },
     {
@@ -98,12 +98,22 @@ export default function Form() {
     { label: "No.", width: "5%", render: (_, i) => i + 1 },
     {
       label: "ระดับชั้น",
-      width: "15%",
+      width: "10%",
       render: (item) => `${item.class}.${item.groupName}`,
     },
-    { label: "หลักสูตร", width: "30%", render: (item) => item.facultyName },
-    { label: "สาขา", width: "20%", render: (item) => item.programName },
-    { label: "รหัสห้อง", width: "20%", render: (item) => item.groupCode },
+    {
+      label: "หลักสูตร",
+      width: "30%",
+      render: (item) => item.facultyName,
+      className: "text-start lg:pl-6 line-clamp-1",
+    },
+    {
+      label: "สาขา",
+      width: "30%",
+      render: (item) => item.programName,
+      className: "text-start lg:pl-6 line-clamp-1",
+    },
+    { label: "รหัสห้อง", width: "15%", render: (item) => item.groupCode },
     { label: "จำนวนนักเรียน", width: "10%", render: (_) => "-" },
   ];
 
