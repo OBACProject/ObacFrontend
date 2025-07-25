@@ -141,7 +141,7 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto">
+      <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
     สาขาวิชาคอมพิวเตอร์ธุรกิจ (Computer Business)
   </h3>
