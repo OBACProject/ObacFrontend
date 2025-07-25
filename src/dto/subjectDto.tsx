@@ -57,3 +57,21 @@ export interface UpdateSubjectRequest  {
   description: string;
   isActive: boolean;
 }
+
+export interface CreateEnrollmentWithGradeAndScheduleRequest  {
+  subjectId: number,
+  teacherId: number,
+  term: string,
+  year: number,
+  finalGrade: number,
+  room: string,
+  day: string,
+  period: number,
+  collectScore: number,
+  affectiveScore: number,
+  assignmentScore: number,
+  midtermScore: number,
+  finalTermScore: number,
+  totalScore: number,
+  remarks: string
+}

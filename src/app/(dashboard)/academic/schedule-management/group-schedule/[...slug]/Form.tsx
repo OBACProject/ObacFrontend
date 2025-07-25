@@ -1,7 +1,7 @@
 "use client";
 import { CalendarClock, PlusCircle, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import AddGroupSchedulePopUp from "./AddGroupSchedulePopUp";
+import AddGroupSchedulePopUp from "@/components/common/Popup/AddGroupSchedulePopup";
 import { GetStudentGroupScheduleStatus } from "@/api/studentGroup/route";
 import {
   ScheduleItemStudentGroup,
@@ -15,6 +15,16 @@ type Props = {
 };
 
 export default function Form({ term, year, groupId }: Props) {
+  const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
+  const reloadGroupSchedule = () => {
+    GetStudentGroupScheduleStatus(groupId, term, Number(year)).then(
+      (d: StudentGroupScheduleStatus | null) => {
+        if (d) {
+          setScheduleGroup(d);
+        }
+      }
+    );
+  };
   const [scheduleGroup, setScheduleGroup] =
     useState<StudentGroupScheduleStatus>();
 
@@ -26,16 +36,16 @@ export default function Form({ term, year, groupId }: Props) {
         }
       }
     );
-  }, []);
+  }, [groupId, term, year]);
   return (
     <div className="w-full px-10">
       <div className="w-full py-2 flex justify-between items-center">
         <div></div>
         <button
           className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-          // onClick={() => setScheduleBtn(true)}
+          onClick={() => setpopUpAddSubject(true)}
         >
-          <PlusCircle className="w-5 h-5 text-white" />
+          <PlusCircle className="w-5 h-5 text-white " />
           เพิ่มตารางเรียน
         </button>
       </div>
@@ -71,7 +81,7 @@ export default function Form({ term, year, groupId }: Props) {
           <div className="text-center "></div>
         </div>
         {Array.isArray(scheduleGroup?.schedule) &&
-        scheduleGroup.schedule.length > 0 ? (
+          scheduleGroup.schedule.length > 0 ? (
           <div className="w-full">
             {scheduleGroup?.schedule.map(
               (d: ScheduleItemStudentGroup, index) => {
@@ -154,15 +164,15 @@ export default function Form({ term, year, groupId }: Props) {
           </div>
         </div>
       )} */}
-      {/* {scheduleBtn && groupName && (
+      {popUpAddSubject == true && (
         <AddGroupSchedulePopUp
-          term={term}
-          year={year}
+          onClosePopUp={setpopUpAddSubject}
           groupId={groupId}
-          groupName={groupName}
-          onClosePopUp={setScheduleBtn}
+          term={term}
+          year={Number(year)}
+          onReload={reloadGroupSchedule}
         />
-      )} */}
+      )}
     </div>
   );
 }

@@ -3,13 +3,13 @@ import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi
 import { fetchGetAllSubject, fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
 import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
-import { GetAllActiveSubjectAsync } from "@/api/subject/route";
+import { CreateEnrollmentWithGradeAndSchedule, GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
 import { CreateScheduleSubjectRequest } from "@/dto/schedule";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
-import { SubjectItem } from "@/dto/subjectDto";
+import { CreateEnrollmentWithGradeAndScheduleRequest, SubjectItem } from "@/dto/subjectDto";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { GetAllActiveSubjectsResponse, GetAllSubjectAsyncResponse } from "@/lib/api/models/subject/subject.response";
@@ -28,7 +28,7 @@ type AddSchedulePopUp = {
 export default function AddSchedulePopUp({
   onClosePopUp
 }: AddSchedulePopUp) {
-  
+
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
   const [subjects, setSubject] = useState<SubjectItem[]>([]);
   const [studentGroup, setStudentGroup] = useState<
@@ -48,23 +48,23 @@ export default function AddSchedulePopUp({
     GetAllActiveSubjectAsync().then((item) => {
       setSubject(item);
     });
-    GetAllStudentGroupByTermYear(term,year).then((item:StudentGroupItem[]) => {
-      if(item){
-       setStudentGroup(item);
+    GetAllStudentGroupByTermYear(term, year).then((item: StudentGroupItem[]) => {
+      if (item) {
+        setStudentGroup(item);
       }
     });
-   
+
 
 
   }, []);
 
   useEffect(() => {
-    GetAllStudentGroupByTermYear(term,year).then((item:StudentGroupItem[]) => {
-      if(item){
-       setStudentGroup(item);
+    GetAllStudentGroupByTermYear(term, year).then((item: StudentGroupItem[]) => {
+      if (item) {
+        setStudentGroup(item);
       }
     });
-   
+
   }, [term, year]);
 
   const days = [
@@ -105,19 +105,28 @@ export default function AddSchedulePopUp({
       (item) => item.id === studentGroupId
     );
     const studentGroupName = studentGroupById?.groupName;
-    const requestBody: CreateScheduleSubjectRequest = {
-      day: day,
-      period: period,
-      subject_id: subjectID,
-      year: Number(year),
+    const requestBody: CreateEnrollmentWithGradeAndScheduleRequest = {
+      subjectId: Number(subjectID),
+      teacherId: teacherID,
       term: term,
-      student_group_id: studentGroupId,
-      teacher_id: teacherID,
+      year: Number(year),
+      finalGrade: 0,//
       room: room,
+      day: day,
+      period: Number(period),
+      collectScore: 0,
+      affectiveScore: 0,
+      assignmentScore:0,
+      midtermScore: 0,
+      finalTermScore: 0,
+      totalScore: 0,
+      remarks: ""
+
     };
 
+
     try {
-      const response = await fetchCreateScheduleSubject(requestBody);
+      const response = await CreateEnrollmentWithGradeAndSchedule(studentGroupId,requestBody);
       if (response.success) {
         toast.success("สร้างสำเร็จ");
         setTeacherID(0);
@@ -149,14 +158,14 @@ export default function AddSchedulePopUp({
             เพิ่มวิชาสอน
           </div>
           <div className="flex w-full justify-between px-4 py-2">
-            
-             <SelectTermAndYear
-                      term={term}
-                      year={year}
-                      currentYear={currentYear}
-                      onChangeTerm={setTerm}
-                      onChangeYear={setYear}
-                    />
+
+            <SelectTermAndYear
+              term={term}
+              year={year}
+              currentYear={currentYear}
+              onChangeTerm={setTerm}
+              onChangeYear={setYear}
+            />
           </div>
           <div className="flex px-4 py-2">
             <div className="w-full px-2">
@@ -207,10 +216,10 @@ export default function AddSchedulePopUp({
 
             </div>
           </div>
-           <div className="flex  px-4 py-2">
+          <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col  px-2 relative">
-                 <h1>เวลาเรียน</h1>
-                 
+              <h1>เวลาเรียน</h1>
+
               <Input
                 type="number"
                 placeholder="--เลือกชั่วโมง--"
@@ -218,7 +227,7 @@ export default function AddSchedulePopUp({
                 onChange={(e) => setHour(e.target.value)}
               />
             </div>
-            </div>
+          </div>
           <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col  px-2 relative">
               <h1>วันที่สอน</h1>

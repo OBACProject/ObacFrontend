@@ -1,0 +1,331 @@
+import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
+import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
+import { fetchGetAllSubject, fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
+import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
+import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
+import { CreateEnrollmentWithGradeAndSchedule, GetAllActiveSubjectAsync } from "@/api/subject/route";
+import { GetAllTeachers } from "@/api/teacher/route";
+import SelectTermAndYear from "@/components/Academic/SelectTermYear";
+import { Input } from "@/components/ui/input";
+import { CreateScheduleSubjectRequest } from "@/dto/schedule";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
+import { CreateEnrollmentWithGradeAndScheduleRequest, SubjectItem } from "@/dto/subjectDto";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
+import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
+import { GetAllActiveSubjectsResponse, GetAllSubjectAsyncResponse } from "@/lib/api/models/subject/subject.response";
+import { getCurrentThaiTermYear } from "@/lib/utils";
+import { GetStudentByIdDataApi } from "@/resource/academics/grading/api/individualGradeApiData";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { toast } from "react-toastify";
+
+type AddTeacherSchedulePopup = {
+    onClosePopUp: (value: boolean) => void;
+    teacherId?: number;
+    onReload?: () => void;
+};
+
+
+
+export default function AddTeacherSchedulePopup({
+    onClosePopUp, teacherId,onReload
+}: AddTeacherSchedulePopup) {
+
+    const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
+    const [subjects, setSubject] = useState<SubjectItem[]>([]);
+    const [studentGroup, setStudentGroup] = useState<
+        StudentGroupItem[]
+    >([]);
+
+    const { data: subjectActiveData = [] } = usegetAllActiveSubjectsQuery();
+    const { defaultTerm, currentYear } = getCurrentThaiTermYear();
+    const [term, setTerm] = useState<string>(defaultTerm);
+    const [year, setYear] = useState<number>(
+        currentYear
+    );
+    useEffect(() => {
+        GetAllTeachers().then((item) => {
+            setTeacher(item);
+        });
+        GetAllActiveSubjectAsync().then((item) => {
+            setSubject(item);
+        });
+        GetAllStudentGroupByTermYear(term, year).then((item: StudentGroupItem[]) => {
+            if (item) {
+                setStudentGroup(item);
+            }
+        });
+
+
+
+    }, []);
+    useEffect(() => {
+        GetAllStudentGroupByTermYear(term, year).then((item: StudentGroupItem[]) => {
+            if (item) {
+                setStudentGroup(item);
+            }
+        });
+    }, [term, year]);
+
+    useEffect(() => {
+        if (teacherId) {
+            setTeacherID(teacherId);
+        }
+        console.log("teacherId :",teacherId)
+    }, [teacherId]);
+
+    const days = [
+        "วันอาทิตย์",
+        "วันจันทร์",
+        "วันอังคาร",
+        "วันพุธ",
+        "วันพฤหัสบดี",
+        "วันศุกร์",
+        "วันเสาร์",
+    ];
+    const [day, setDay] = useState<string>("");
+    const [period, setPeriod] = useState<string>("");
+    const [room, setRoom] = useState<string>("");
+    const [hour, setHour] = useState<string>("");
+    const [teacherID, setTeacherID] = useState<number>(0);
+    const [subjectID, setSubjectID] = useState<number>(0);
+    const [studentGroupId, setStudentGroupId] = useState<number>(0);
+
+    const subjectOptions = subjects.map((item: GetAllActiveSubjectsResponse) => ({
+        value: item.id,
+        label: `${item.code} : ${item.name}`,
+    }));
+
+    const teacherOptions = teachers.map((teacher, index) => ({
+        value: teacher.teacherId,
+        label: `${teacher.teacherCode ?? `${index + 1}`} : ${teacher.firstName} ${teacher.lastName
+            }`,
+    }));
+    const selectedTeacher = teacherOptions.find(
+        (item) => item.value === teacherID
+    );
+
+    const groupOptions = studentGroup.map((item) => ({
+        value: item.id,
+        label: `${item.class}.${item.groupName}`,
+    }));
+
+    const onSubmit = async () => {
+        const studentGroupById = studentGroup.find(
+            (item) => item.id === studentGroupId
+        );
+        const studentGroupName = studentGroupById?.groupName;
+        const requestBody: CreateEnrollmentWithGradeAndScheduleRequest = {
+            subjectId: Number(subjectID),
+            teacherId: teacherID,
+            term: term,
+            year: Number(year),
+            finalGrade: 0,//
+            room: room,
+            day: day,
+            period: Number(period),
+            collectScore: 0,
+            affectiveScore: 0,
+            assignmentScore: 0,
+            midtermScore: 0,
+            finalTermScore: 0,
+            totalScore: 0,
+            remarks: ""
+
+        };
+
+
+        try {
+            const response = await CreateEnrollmentWithGradeAndSchedule(studentGroupId, requestBody);
+            if (response.success) {
+                toast.success("สร้างสำเร็จ");
+                setTeacherID(0);
+                setSubjectID(0);
+                setStudentGroupId(0);
+                setDay("");
+                setRoom("");
+                if (onReload) {
+      onReload();
+    }
+                onClosePopUp(false);
+                
+            } else {
+                toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
+            }
+            onClosePopUp(false);
+        } catch (err) {
+            console.error("Error creating schedule:", err);
+        }
+    };
+
+    return (
+        <div
+            className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
+            onClick={() => onClosePopUp(false)}
+        >
+            <div
+                className=" bg-white shadow-lg shadow-gray-400   rounded-lg w-4/12 z-100 duration-500"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="px-4 py-5">
+                    <div className="py-2 text-center text-xl text-gray-900 rounded-t-lg bg-white w-full">
+                        เพิ่มวิชาสอน
+                    </div>
+                    <div className="flex w-full justify-between px-4 py-2">
+
+                        <SelectTermAndYear
+                            term={term}
+                            year={year}
+                            currentYear={currentYear}
+                            onChangeTerm={setTerm}
+                            onChangeYear={setYear}
+                        />
+                    </div>
+                    <div className="flex px-4 py-2">
+                        <div className="w-full px-2">
+                            <h1>ห้องเรียน</h1>
+                            <Input
+                                type="text"
+                                placeholder="ห้องเรียน"
+                                className="w-full pr-10"
+                                onChange={(e) => setRoom(e.target.value)}
+                            />
+                        </div>
+                        <div className="w-full">
+                            <h1>กลุ่มเรียน</h1>
+                            <Select
+                                options={groupOptions.map((item) => ({
+                                    value: item.value,
+                                    label: `${item.label} `,
+                                }))}
+                                value={
+                                    studentGroupId
+                                        ? groupOptions.find(
+                                            (item) => item.value === studentGroupId
+                                        ) || null
+                                        : null
+                                }
+                                onChange={(selectedOption) =>
+                                    setStudentGroupId(Number(selectedOption?.value || 0))
+                                }
+                                placeholder="-- เลือกกลุ่มเรียน --"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex px-4 py-2">
+                        <div className="w-full px-2">
+                            <h1>วิชาเรียน</h1>
+                            <Select
+                                options={subjectOptions}
+                                value={
+                                    subjectID
+                                        ? subjectOptions.find((item) => item.value === subjectID) || null
+                                        : null
+                                }
+                                onChange={(selectedOption) =>
+                                    setSubjectID(Number(selectedOption?.value || 0))
+                                }
+                                placeholder="-- เลือกวิชา --"
+                            />
+
+                        </div>
+                    </div>
+                    <div className="flex  px-4 py-2">
+                        <div className="w-full flex flex-col  px-2 relative">
+                            <h1>เวลาเรียน</h1>
+
+                            <Input
+                                type="number"
+                                placeholder="--เลือกชั่วโมง--"
+                                className="w-full pr-10"
+                                onChange={(e) => setHour(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex  px-4 py-2">
+                        <div className="w-full flex flex-col  px-2 relative">
+                            <h1>วันที่สอน</h1>
+                            <Select
+                                options={days.map((item) => ({
+                                    value: item,
+                                    label: item,
+                                }))}
+                                value={
+                                    day
+                                        ? {
+                                            value: day,
+                                            label: day,
+                                        }
+                                        : null
+                                }
+                                onChange={(selectedOption) =>
+                                    setDay(selectedOption?.value || "")
+                                }
+                                placeholder="-- เลือกวันที่สอน --"
+                            />
+                        </div>
+                        <div className="w-full flex flex-col px-2 relative">
+                            <h1>คาบเรียน</h1>
+                            <Select
+                                options={["1", "2", "3", "4", "5"].map((item) => ({
+                                    value: item,
+                                    label: item,
+                                }))}
+                                value={
+                                    period
+                                        ? {
+                                            value: period,
+                                            label: period,
+                                        }
+                                        : null
+                                }
+                                onChange={(selectedOption) =>
+                                    setPeriod(selectedOption?.value || "")
+                                }
+                                placeholder="-- เลือกคาบเรียน --"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex  px-4 py-2">
+                        <div className="w-full px-2">
+                            <h1>อาจารย์ผู้สอน</h1>
+                            <Select
+                                isDisabled={true}
+                                value={selectedTeacher || null}
+                                placeholder={selectedTeacher?.label ?? "-- เลือกอาจารย์ผู้สอน --"}
+
+                            />
+
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center gap-5 mt-4">
+                        <button
+                            className="px-8 text-white py-1 hover:bg-gray-300 hover:text-black bg-gray-400 rounded-sm"
+                            onClick={() => onClosePopUp(false)}
+                        >
+                            ยกเลิก
+                        </button>{" "}
+                        <button
+                            className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-600"
+                            disabled={
+                                !period ||
+                                !day ||
+                                !room ||
+                                !teacherID ||
+                                !subjectID ||
+                                !studentGroup
+                            }
+                            onClick={onSubmit}
+                        >
+                            ตกลง
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+

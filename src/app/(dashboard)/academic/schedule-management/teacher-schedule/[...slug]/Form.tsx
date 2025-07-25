@@ -2,7 +2,7 @@
 import { CalendarClock, PlusCircle, Table, Trash2 } from "lucide-react";
 import React from "react";
 import { useEffect, useState } from "react";
-import AddTeacherSchedulePopUp from "./AddTeacherSchedulePopUp";
+import AddTeacherSchedulePopUp from "@/components/common/Popup/AddTeacherSchedulePopup";
 import {
   TeacherDetailAndScheduleResponse,
   TeacherScheduleItem,
@@ -16,8 +16,18 @@ type Props = {
 };
 
 export default function Form({ term, year, teacherID }: Props) {
+    const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const [teacherSchedule, setTeacherSchedule] =
     useState<TeacherDetailAndScheduleResponse | null>();
+    const reloadTeacherSchedule = () => {
+  GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
+    (d: TeacherDetailAndScheduleResponse | null) => {
+      if (d) {
+        setTeacherSchedule(d);
+      }
+    }
+  );
+};
 
   useEffect(() => {
     GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
@@ -28,7 +38,7 @@ export default function Form({ term, year, teacherID }: Props) {
         }
       }
     );
-  }, []);
+  }, [teacherID]);
 
   return (
     <div className="w-full  px-10 ">
@@ -68,12 +78,12 @@ export default function Form({ term, year, teacherID }: Props) {
         <div className="">
           {" "}
           <button
-            className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-            // onClick={() => setschduleBtn(true)}
-          >
-            <PlusCircle className="w-5 h-5 text-white  " />
-            เพิ่มตารางเรียน
-          </button>
+                    className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+                    onClick={() => setpopUpAddSubject(true)}
+                  >
+                    <PlusCircle className="w-5 h-5 text-white " />
+                    เพิ่มตารางเรียน
+                  </button>
         </div>
       </div>
 
@@ -188,6 +198,13 @@ export default function Form({ term, year, teacherID }: Props) {
           onClosePopUp={setschduleBtn}
         />
       )} */}
+       {popUpAddSubject == true && (
+              <AddTeacherSchedulePopUp
+                onClosePopUp={setpopUpAddSubject}
+                teacherId={Number(teacherID)}
+                onReload={reloadTeacherSchedule} 
+              />
+            )}
     </div>
   );
 }
