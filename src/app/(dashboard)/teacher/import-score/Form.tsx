@@ -47,11 +47,14 @@ export default function Form() {
       },
       termYearGradeGroups: student.termYearGradeGroups,
     };
-    console.log("payload FE : ", payload);
+    // console.log("payload FE : ", payload);
     const success = await UpsertStudentGrades(payload);
 
     if (success) {
       toast.success("บันทึกข้อมูลสำเร็จ")
+      setTimeout(()=>{
+        window.location.reload()
+      },1500)
       setEdit(false);
     } else {
       alert("เกิดข้อผิดพลาด");

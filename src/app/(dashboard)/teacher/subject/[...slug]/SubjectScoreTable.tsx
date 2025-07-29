@@ -2,9 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { SubjectGradeItem } from "@/dto/gradDto";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
 
 interface Props {
   grads?: SubjectGradeItem[];
@@ -32,7 +29,7 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     setGradData(updatedStudents);
   };
 
-  const token = Cookies.get("token");
+  // const token = Cookies.get("token");
 
   // const saveChanges = async () => {
   //   try {
