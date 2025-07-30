@@ -48,7 +48,7 @@ export default function TeacherSidebar({
     }
   };
   return (
-    <div className="fixed flex flex-col z-20  w-full">
+    <div className="fixed top-0 left-0 right-0 flex flex-col z-20  w-full">
       <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
         <div className="flex h-[80px]  items-center">
           <button

@@ -53,7 +53,7 @@ export default function Form({ GroupID }: Props) {
       <NameListScheduleTable
         data={students}
         icon={<Box className="h-6 w-6 text-white" />}
-        title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName}`}
+        title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName} `}
         columns={studentColumns}
         rowHref={(item) => `/academic/student-details/${item.id}`}
         emptyText="ไม่มีข้อมูลชั้นเรียน"

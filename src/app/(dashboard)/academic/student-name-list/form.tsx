@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { BookUser, Box } from "lucide-react";
+import { BookUser, Box, Boxes } from "lucide-react";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import SearchInput from "@/components/Teacher/SearchInput";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
@@ -11,6 +10,7 @@ import NameListScheduleTable, {
   ColumnConfig,
 } from "@/components/Academic/table/NameListScheduleTable";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
+import DownloadStudentListPopup from "@/components/common/Popup/DownloadStudentListPopup";
 
 export default function Form() {
   const onSearch = () => {};
@@ -20,6 +20,7 @@ export default function Form() {
   const [year, setYear] = useState<number>(currentYear);
   const [term, setTerm] = useState<string>(defaultTerm);
 
+  const [pdfListPopup, setPDFListPopup] = useState<boolean>(false);
   useEffect(() => {
     GetAllStudentGroupByTermYear(term, year).then(
       (items: StudentGroupItem[]) => {
@@ -111,16 +112,25 @@ export default function Form() {
           className="text-blue-600"
         />
       </div>
+      <div className="flex pt-5 lg:px-10 items-center justify-between">
+        <div className="flex justify-start   w-fit items-center lg:gap-8 ">
+          <SearchInput onSearchKeyword={onSearch} edit={false} />
+          <SelectTermAndYear
+            term={term}
+            year={year}
+            currentYear={currentYear}
+            onChangeTerm={setTerm}
+            onChangeYear={setYear}
+          />
+        </div>
 
-      <div className="flex pt-5 lg:px-10 justify-start  w-full items-center lg:gap-8 ">
-        <SearchInput onSearchKeyword={onSearch} edit={false} />
-        <SelectTermAndYear
-          term={term}
-          year={year}
-          currentYear={currentYear}
-          onChangeTerm={setTerm}
-          onChangeYear={setYear}
-        />
+        <button
+          onClick={() => setPDFListPopup(true)}
+          className="px-8  bg-white text-blue-600 font-prompt_Light hover:scale-[101%] duration-300 border-blue-500 border-[1px] rounded-md py-1 flex items-center gap-3"
+        >
+          <Boxes className="w-5 h-5 text-blue-600 " />
+          โหลดใบรายชื่อแบบสายชั้น
+        </button>
       </div>
 
       <div className="py-2">
@@ -130,11 +140,12 @@ export default function Form() {
           title={`รายชื่อห้องเรียนของ เทอม ${term} ปีการศึกษา ${year}`}
           columns={studentColumns}
           rowHref={(item) =>
-            `/academic/student-name-list/student-group/${item.id}`
+            `/academic/student-name-list/student-group/${item.id}/${year}`
           }
           emptyText="ไม่มีข้อมูลชั้นเรียน"
         />
       </div>
+      {pdfListPopup && <DownloadStudentListPopup onClosePopUp={setPDFListPopup}/>}
     </div>
   );
 }

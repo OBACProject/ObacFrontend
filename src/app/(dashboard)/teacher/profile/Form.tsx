@@ -18,7 +18,7 @@ export default function ProfileForm() {
 
   return (
     <div
-      className="text-xl bg-gray-200 w-full pb-40 h-full flex justify-center "
+      className="text-xl pb-[300px] bg-gray-200 w-full h-full flex justify-center "
       style={{
         // backgroundColor: "#ffffff",
         backgroundImage: `

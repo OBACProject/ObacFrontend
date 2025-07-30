@@ -53,7 +53,7 @@ export default function NameListScheduleTable<T>({
           {data.map((item, index) => {
             const rowContent = (
               <div
-                className={`grid hover:bg-blue-50 border border-gray-300 border-t-0 text-gray-700`}
+                className={`grid bg-white hover:bg-blue-50 border border-gray-300 border-t-0 text-gray-700`}
                 style={{
                   gridTemplateColumns: columns
                     .map((col) => col.width)

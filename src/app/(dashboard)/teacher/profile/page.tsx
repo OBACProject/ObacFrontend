@@ -4,10 +4,9 @@ import ProfileForm from "./Form";
 
 export default function page() {
   return (
-    <div className="lg:px-10 py-5 px-5">
-      <div className="lg:flex justify-center grid gap-5 pb-20">
+    <div className="h-full">
+      <div className="lg:flex justify-center h-full w-full grid gap-5 ">
         <ProfileForm />
-        {/* <Notice /> */}
       </div>
     </div>
   );
