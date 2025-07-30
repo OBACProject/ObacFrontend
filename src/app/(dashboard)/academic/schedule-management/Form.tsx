@@ -119,7 +119,7 @@ export default function Form() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-5 justify-start px-10">
+      <div className="flex items-center py-5 justify-start px-5">
         <div></div>
         <h1 className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
           <BookText className="w-8 h-8" />
@@ -226,9 +226,7 @@ export default function Form() {
       )}
 
       {popUpAddSubject == true && (
-        <AddSchedulePopUp
-          onClosePopUp={setpopUpAddSubject}
-        />
+        <AddSchedulePopUp onClosePopUp={setpopUpAddSubject} />
       )}
     </div>
   );

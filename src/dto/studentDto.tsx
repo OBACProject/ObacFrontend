@@ -282,3 +282,22 @@ export type UpdateStudentRequestBody = {
   isActive: boolean;
   isAgree: boolean;
 };
+
+export interface StudentGroupDetail {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  students: StudentItems[];
+}
+
+export interface StudentItems {
+  gender: string;
+  status: string | null;
+  id: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+}

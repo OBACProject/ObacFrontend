@@ -143,9 +143,8 @@ export default function AcademicDashboard() {
 
         </div>
 
-        <div className="flex justify-center items-start">
           <ProfileCard username="ภัทรจาริน นภากาญจน์" rolename="ฝ่ายทะเบียน" />
-        </div>
+
       </div>
 
       <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg">

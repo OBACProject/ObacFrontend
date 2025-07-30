@@ -8,6 +8,7 @@ import {
   TeacherScheduleItem,
 } from "@/dto/teacherDto";
 import { GetTeacherDetailAndSchedule } from "@/api/teacher/route";
+import DeleteScheduleSubjectPopup from "@/components/common/Popup/DeleteScheduleSubjectPopup";
 // import { mockTeacherDetailAndSchedule } from "@/resource/academics/mockData";
 type Props = {
   term: string;
@@ -17,6 +18,8 @@ type Props = {
 
 export default function Form({ term, year, teacherID }: Props) {
     const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
+    const [deleteTrigger , setDeleteTrigger] = useState<boolean>(false)
+    const [ scheduleSubjectData ,setScheduleSubjectData] = useState<TeacherScheduleItem>()
   const [teacherSchedule, setTeacherSchedule] =
     useState<TeacherDetailAndScheduleResponse | null>();
     const reloadTeacherSchedule = () => {
@@ -136,9 +139,12 @@ export default function Form({ term, year, teacherID }: Props) {
                 <div className="border-l-[1px] text-center">{d.period}</div>
                 <div className="border-l-[1px] text-center">{d.day}</div>
                 <div className="border-l-[1px] flex justify-center boder-r-[1px] text-center">
-                  <p className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit">
+                  <button onClick={()=>{
+                    setDeleteTrigger(true)
+                    setScheduleSubjectData(d)
+                  }} className="px-2 py-1 h-fit rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit">
                     <Trash2 className="h-4 w-4 text-white" />
-                  </p>
+                  </button>
                 </div>
               </div>
             );
@@ -151,53 +157,13 @@ export default function Form({ term, year, teacherID }: Props) {
           </p>
         </div>
       )}
-      {/* {deleteTrigger && (
-        <div
-          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
-          onClick={() => setDeleteTrigger(false)}
-        >
-          <div
-            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="py-4 w-full text-center text-2xl font-semibold">
-              ยืนยันการลบ
-            </div>
-            <div className="grid place-items-center py-3">
-              <p className="w-[300px] text-center">ลบวิชา {deleteName}</p>
-              <p className="text-gray-600 w-[300px] text-center">
-                ตรวจสอบให้แน่ใจก่อนลบ
-              </p>
-            </div>
-            <div className="flex gap-5 justify-center py-5 w-full">
-              <button
-                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
-                onClick={() => setDeleteTrigger(false)}
-              >
-                ยกเลิก
-              </button>
-              <button
-                className="text-sm w-[90px] py-1.5 bg-red-500 hover:bg-red-600 rounded-md text-white "
-                onClick={() => {
-                  onDeleteSchedule(deleteID, deleteName);
-                }}
-                disabled={!deleteID || !deleteName}
-              >
-                ลบ
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
-      {/* {scheduleBtn && (
-        <AddTeacherSchedulePopUp
-          term={term}
-          year={year}
-          teacherId={Number(teacherID)}
-          teacherName={`${teacherData?.thaiName} ${teacherData?.thaiLastName}`}
-          onClosePopUp={setschduleBtn}
+      {/* {deleteTrigger && scheduleSubjectData &&   && (
+        <DeleteScheduleSubjectPopup
+         schedule={scheduleSubjectData}
+         onClosePopup={deleteTrigger}
         />
       )} */}
+     
        {popUpAddSubject == true && (
               <AddTeacherSchedulePopUp
                 onClosePopUp={setpopUpAddSubject}
