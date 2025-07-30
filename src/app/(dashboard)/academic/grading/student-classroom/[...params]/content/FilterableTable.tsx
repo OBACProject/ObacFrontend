@@ -10,51 +10,13 @@ import { Combobox } from "@/components/common/Combobox/combobox";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
+import { GetSubjectsByStudentGroupIdTermYearResponse } from "@/lib/api/models/subject/subject.response";
 
-// Memoize columns to prevent re-creation on every render
 export const columns = [
   { label: "ลำดับ", key: "index", className: "w-1/12 flex justify-center px-10" },
   { label: "รหัสวิชา", key: "SubjectName", className: "w-6/12 flex justify-center px-10" },
   { label: "อาจารย์", key: "TeacherName", className: "w-3/12 flex px-10" },
   { label: "สถานะ", key: "IsComplete", className: "w-2/12 flex px-10" },
-];
-
-const mockData = [
-  {
-    scheduleSubjectId: 1,
-    SubjectCode: "000101",
-    SubjectName: "000101 - ภาษาไทยพื้นฐาน",
-    TeacherName: "อาจารย์ กนกพร ชัยภูมิ",
-    IsComplete: "ตรวจสอบเสร็จสิ้น",
-  },
-  {
-    scheduleSubjectId: 2,
-    SubjectCode: "000102",
-    SubjectName: "000102 - คณิตศาสตร์พื้นฐาน",
-    TeacherName: "อาจารย์ สุชาติ แสงเพชร",
-    IsComplete: "ยังไม่ตรวจสอบ",
-  },
-  {
-    scheduleSubjectId: 3,
-    SubjectCode: "000103",
-    SubjectName: "000103 - วิทยาศาสตร์ทั่วไป",
-    TeacherName: "อาจารย์ อรอุมา หาญกล้า",
-    IsComplete: "ยังไม่ตรวจสอบ",
-  },
-  {
-    scheduleSubjectId: 4,
-    SubjectCode: "000104",
-    SubjectName: "000104 - ภาษาอังกฤษ",
-    TeacherName: "อาจารย์ รุจิรา นามทอง",
-    IsComplete: "ตรวจสอบเสร็จสิ้น",
-  },
-  {
-    scheduleSubjectId: 5,
-    SubjectCode: "000105",
-    SubjectName: "000105 - ประวัติศาสตร์",
-    TeacherName: "อาจารย์ ธงชัย สมจิต",
-    IsComplete: "ยังไม่ตรวจสอบ",
-  },
 ];
 
 interface Props {
@@ -71,22 +33,25 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   
   const deferredSearch = useDeferredValue(searchTerm);
 
-  const { data, isLoading, isError } = useGetSubjectsByStudentGroupIdTermYearQuery({
+  const { data: apiResponse, isLoading, isError } = useGetSubjectsByStudentGroupIdTermYearQuery({
     studentGroupId: classroomId,
     term,
     year,
-  });
+  }) as { data: any[] | undefined, isLoading: boolean, isError: boolean };
+
+  console.log("FilterableTable apiResponse:", apiResponse);
 
   const sourceData = useMemo(() => {
-    if (!data || data.length === 0) return mockData;
-    
-    return data.map((d: any) => ({
-      scheduleSubjectId: d.scheduleSubjectId, // Preserve the ID for linking
-      SubjectName: `${d.SubjectCode || d.subjectCode || ''} - ${d.SubjectName || d.subjectName || ''}`,
-      TeacherName: d.TeacherName || d.teacherName || "ไม่ระบุ",
-      IsComplete: (d.IsComplete || d.isComplete) ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ",
+    if (!apiResponse || !Array.isArray(apiResponse) || apiResponse.length === 0) {
+      return [];
+    }
+    return apiResponse.map((d: any, index: number) => ({
+      scheduleSubjectId: d.scheduleSubjectId,
+      SubjectName: `${d.subjectCode} - ${d.subjectName}`,
+      TeacherName: d.teacherName || "ไม่ระบุ",
+      IsComplete: d.isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ",
     }));
-  }, [data]);
+  }, [apiResponse]);
 
   const filteredData = useMemo(() => {
     if (!sourceData?.length) return [];

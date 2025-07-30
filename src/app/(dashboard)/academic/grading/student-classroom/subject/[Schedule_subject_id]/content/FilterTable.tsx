@@ -279,23 +279,14 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   });
 
   return (
-    <div className="pb-8">
+    <div className="pb-20 mb-10">
       <div className=" flex px-10 w-full justify-between items-center mb-4">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ${subjectData.class || `ปวส.${subjectData.groupName}/2`} (รหัสวิชา: ${subjectData.subjectCode}) - ${subjectData.subjectName}`}
           className="text-blue"
         />
-        {/* Show indicator for data source */}
-        {apiData && apiData.subjectGrades && apiData.subjectGrades.length > 0 ? (
-          <div className="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-md">
-            ข้อมูลจาก API ({apiData.subjectGrades.length} นักเรียน)
-          </div>
-        ) : (
-          <div className="text-sm text-orange-600 bg-orange-100 px-3 py-1 rounded-md">
-            ใช้ข้อมูลตัวอย่าง
-          </div>
-        )}
+
       </div>
 
       <div className="bg-white h-fit py-4 my-2 rounded-lg border border-gray-200 mx-4">
@@ -374,7 +365,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           )}
         </div>
 
-        <div className="px-4">
+        <div className="px-4 pb-8">
           <StylesTable
             icon={<ScrollText className="w-5 h-5 text-white" />}
             title={`รายชื่อนักเรียนในห้อง ${subjectData.class || `ปวส.${subjectData.groupName}/2`}`}
