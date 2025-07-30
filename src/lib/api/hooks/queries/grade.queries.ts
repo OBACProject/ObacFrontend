@@ -1,4 +1,4 @@
-import { GetGroupSummaryGradeRequest, GetStudentGradesByTermYearRequest, GetStudentIfGradeBelowRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
+import { BulkUpdateStudentGradeByScheduleSubjectIdRequest, GetGroupSummaryGradeRequest, GetStudentGradesByTermYearRequest, GetStudentIfGradeBelowRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
 import {  GetGroupSummaryGradeResponse, GetStudentDetailAndSummaryScoreByStudentCodeResponse, GetStudentGradesByTermYearResponse, GetStudentGroupGradeByScheduleSubjectIdResponse, GetStudentIfGradeBelowResponse } from "@/lib/api/models/grade/grade.response";
 import { gradeService } from "@/lib/api/services/grade.service";
 import { createBaseQuery } from "./base/base.queries";
@@ -29,6 +29,14 @@ export const useGetStudentDetailAndSummaryScoreByStudentCodeQuery = (studentCode
     () => gradeService.GetStudentDetailAndSummaryScoreByStudentCode(studentCode),
   )
 };
+
+
+export const useBulkUpdateStudentGradeByScheduleSubjectId = (options? : Partial<UseMutationOptions<void, Error, { scheduleSubjectId: number; params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] }>>) => {
+  return useBaseUpdateMutation<void, { scheduleSubjectId: number; params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] }, Error>(
+    ({ scheduleSubjectId, params }) => gradeService.BulkUpdateStudentGradeByScheduleSubjectId(scheduleSubjectId, params),
+    options
+  );
+}
 
 export const useGetStudentGroupGradeByScheduleSubjectIdQuery  = createBaseQuery<GetStudentGroupGradeByScheduleSubjectIdResponse, number>(
     (params) => ['studentGroupGrade', params],

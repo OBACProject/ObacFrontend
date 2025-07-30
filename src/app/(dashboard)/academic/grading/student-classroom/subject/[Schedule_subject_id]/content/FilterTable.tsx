@@ -1,99 +1,18 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { createColumns } from "./columns";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { CircleX, Pencil, ScrollText } from "lucide-react";
-import Swal from "sweetalert2";
+import { CircleX, Pencil, ScrollText, CheckCircle } from "lucide-react";
+import ConfirmDialog from "@/components/common/ConfirmDialog/ConfirmDialog";
 import { AnimatePresence, motion } from "framer-motion";
 import ExportFile from "./ExportFile";
 import { Input } from "@/components/ui/input";
-import { useGetStudentGroupGradeByScheduleSubjectIdQuery } from "@/lib/api/hooks/queries/grade.queries";
+import { useGetStudentGroupGradeByScheduleSubjectIdQuery, useBulkUpdateStudentGradeByScheduleSubjectId } from "@/lib/api/hooks/queries/grade.queries";
+import { useUpdateScheduleSubject } from "@/lib/api/hooks/queries/scheduleSubject.queries";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
-
-const mockGradData: GetGradBySubjectId[] = [
-  {
-    gradeId: 101,
-    subjectId: 1,
-    scheduleSubjectId: 1,
-    studentGroup: "A104",
-    studentId: 1,
-    studentCode: "631001",
-    prefix: "นาย",
-    gender: "Male",
-    firstName: "สมชาย",
-    lastName: "ใจดี",
-    subjectName: "คณิตศาสตร์",
-    assignmentscore: 15,
-    collectScore: 8,
-    affectiveScore: 18,
-    midtermScore: 15,
-    finaltermScore: 25,
-    totalScore: 81,
-    grade: "3",
-    remark: "",
-  },
-  {
-    gradeId: 102,
-    subjectId: 1,
-    scheduleSubjectId: 1,
-    studentGroup: "A104",
-    studentId: 2,
-    studentCode: "631002",
-    prefix: "นางสาว",
-    gender: "Female",
-    firstName: "สุมิตรา",
-    lastName: "สุขใจ",
-    subjectName: "คณิตศาสตร์",
-    assignmentscore: 12,
-    collectScore: 6,
-    affectiveScore: 15,
-    midtermScore: 12,
-    finaltermScore: 20,
-    totalScore: 65,
-    grade: "1.5",
-    remark: "ผ.",
-  },
-  {
-    gradeId: 103,
-    subjectId: 1,
-    scheduleSubjectId: 1,
-    studentGroup: "A104",
-    studentId: 3,
-    studentCode: "631003",
-    prefix: "นางสาว",
-    gender: "Female",
-    firstName: "จารุวรรณ",
-    lastName: "เก่งกล้า",
-    subjectName: "คณิตศาสตร์",
-    assignmentscore: 18,
-    collectScore: 9,
-    affectiveScore: 19,
-    midtermScore: 18,
-    finaltermScore: 28,
-    totalScore: 92,
-    grade: "4",
-    remark: "",
-  },
-];
-
-// Mock subject data for when API data is not available
-const mockSubjectData = {
-  subjectName: "คณิตศาสตร์",
-  subjectCode: "MATH101",
-  subjectId: 1,
-  groupName: "A104",
-  groupCode: "A104",
-  class: "ปวส.2",
-  level: 2,
-  isPublish: false,
-  iscomplete: false,
-  term: "1",
-  year: 2568,
-  subjectGrades: []
-};
+import { BulkUpdateStudentGradeByScheduleSubjectIdRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
 
 interface EditableGradePageProps {
   schuduleSubjectId: string;
@@ -103,33 +22,96 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   const [onEdit, setOnEdit] = useState(false);
   const [filterTerm, setFilterTerm] = useState("");
   const [showExport, setShowExport] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    type: "question" as "question" | "success" | "error",
+    title: "",
+    text: "",
+    onConfirm: () => {},
+    showCancel: true,
+    autoClose: 0,
+  });
 
-  const { data: apiData, isLoading, error } = useGetStudentGroupGradeByScheduleSubjectIdQuery(
+  const { data: apiData, isLoading, error, refetch } = useGetStudentGroupGradeByScheduleSubjectIdQuery(
     Number(props.schuduleSubjectId)
   );
-  
-  console.log("EditableGradePage apiData:", apiData);
-  console.log("EditableGradePage subjectGrades:", apiData?.subjectGrades);
-  // Use API data if available, otherwise use mock data
+
+  const bulkUpdateMutation = useBulkUpdateStudentGradeByScheduleSubjectId({
+    onSuccess: () => {
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Error updating grades:", error);
+      setConfirmDialog({
+        isOpen: true,
+        type: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "ไม่สามารถบันทึกข้อมูลได้",
+        onConfirm: () => {},
+        showCancel: false,
+        autoClose: 0,
+      });
+    }
+  });
+
+  const updateScheduleSubjectMutation = useUpdateScheduleSubject({
+    onSuccess: () => {
+      refetch();
+      setConfirmDialog({
+        isOpen: true,
+        type: "success",
+        title: "ตรวจสอบเสร็จสิ้น",
+        text: "อัพเดทสถานะสำเร็จ",
+        onConfirm: () => {},
+        showCancel: false,
+        autoClose: 1500,
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating schedule subject:", error);
+      setConfirmDialog({
+        isOpen: true,
+        type: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "ไม่สามารถอัพเดทสถานะได้",
+        onConfirm: () => {},
+        showCancel: false,
+        autoClose: 0,
+      });
+    }
+  });
+
   const subjectData = useMemo(() => {
     if (apiData) {
       return apiData;
     }
-    return mockSubjectData;
+    return {
+      subjectName: "ไม่มีข้อมูลวิชา",
+      subjectCode: "N/A",
+      subjectId: 0,
+      groupName: "N/A",
+      groupCode: "N/A",
+      class: "N/A",
+      level: 0,
+      isPublish: false,
+      iscomplete: false,
+      term: "1",
+      year: 2568,
+      subjectGrades: []
+    };
   }, [apiData]);
 
   const transformData = useMemo(() => {
-    if (apiData && apiData.subjectGrades && apiData.subjectGrades.length > 0) {
-      // Transform API data to match the table structure
+    if (apiData && apiData.subjectGrades && apiData.subjectGrades.length > 0 && subjectData) {
       return apiData.subjectGrades.map((item, index) => ({
-        gradeId: item.gradeId || index + 1, // Use index if gradeId is not available
+        gradeId: item.gradeId || index + 1,
         subjectId: subjectData.subjectId,
         scheduleSubjectId: Number(props.schuduleSubjectId),
         studentGroup: subjectData.groupName,
         studentId: item.studentId,
         studentCode: item.studentCode,
-        prefix: item.prefix || "นาย",
-        gender: "Male", // API doesn't provide gender, using default
+        prefix: item.prefix,
+        gender: "",
         firstName: item.firstName,
         lastName: item.lastName,
         subjectName: subjectData.subjectName,
@@ -145,32 +127,48 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       }));
     }
     
-    // Fallback to mock data when API data is not available
-    return mockGradData.map((item, index) => ({
-      ...item,
-      index: index + 1,
-      assignmentscore: item.assignmentscore || 0,
-      collectScore: item.collectScore || 0,
-      affectiveScore: item.affectiveScore || 0,
-      midtermScore: item.midtermScore || 0,
-      finaltermScore: item.finaltermScore || 0,
-      totalScore:
-        (item.assignmentscore || 0) +
-        (item.collectScore || 0) +
-        (item.affectiveScore || 0) +
-        (item.midtermScore || 0) +
-        (item.finaltermScore || 0),
-    }));
+    // Return empty array when no data is available
+    return [];
   }, [apiData, subjectData, props.schuduleSubjectId]);
 
   const [tableData, setTableData] = useState<GetGradBySubjectId[]>([]);
   const [originalData, setOriginalData] = useState<GetGradBySubjectId[]>([]);
 
+  // Grade calculation function
+  const calculateGrade = (totalScore: number): string => {
+    if (totalScore >= 80) return "4";      // A
+    if (totalScore >= 75) return "3.5";    // B+
+    if (totalScore >= 70) return "3";      // B
+    if (totalScore >= 65) return "2.5";    // C+
+    if (totalScore >= 60) return "2";      // C
+    if (totalScore >= 55) return "1.5";    // D+
+    if (totalScore >= 50) return "1";      // D
+    return "0";                            // F
+  };
+
+  // Helper function to update total score and grade
+  const updateTotalScoreAndGrade = (updatedData: GetGradBySubjectId[]) => {
+    return updatedData.map(item => {
+      const newTotalScore = (item.assignmentscore || 0) + 
+                           (item.collectScore || 0) + 
+                           (item.affectiveScore || 0) + 
+                           (item.midtermScore || 0) + 
+                           (item.finaltermScore || 0);
+      
+      return {
+        ...item,
+        totalScore: newTotalScore,
+        grade: calculateGrade(newTotalScore)
+      };
+    });
+  };
+
   useMemo(() => {
-    setTableData(transformData);
+    const updatedData = updateTotalScoreAndGrade(transformData || []);
+    setTableData(updatedData);
   }, [transformData]);
 
-  if (isLoading) {
+  if (!apiData || isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-lg">กำลังโหลดข้อมูล...</div>
@@ -187,28 +185,49 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   }
 
   const handleConfirm = async () => {
-    const result = await Swal.fire({
+    setConfirmDialog({
+      isOpen: true,
+      type: "question",
       title: "ยืนยันการบันทึกข้อมูล?",
       text: "คุณต้องการบันทึกคะแนนทั้งหมดใช่หรือไม่",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "ยืนยัน",
-      cancelButtonText: "ยกเลิก",
-    });
+      onConfirm: async () => {
+        try {
+          const updateParams: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] = tableData.map((item) => ({
+            studentId: item.studentId,
+            assignmentScore: item.assignmentscore,
+            collectScore: item.collectScore,
+            affectiveScore: item.affectiveScore,
+            midtermScore: item.midtermScore,
+            finaltermScore: item.finaltermScore,
+            totalScore: item.totalScore,
+            finalGrade: parseFloat(item.grade) || 0,
+            remarks: item.remark || "",
+          }));
 
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "บันทึกสำเร็จ",
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-      setOriginalData(JSON.parse(JSON.stringify(tableData)));
-      setOnEdit(false);
-    } else {
-      setTableData(originalData);
-      setOnEdit(false);
-    }
+          await bulkUpdateMutation.mutateAsync({
+            scheduleSubjectId: Number(props.schuduleSubjectId),
+            params: updateParams
+          });
+
+          setConfirmDialog({
+            isOpen: true,
+            type: "success",
+            title: "บันทึกสำเร็จ",
+            text: "",
+            onConfirm: () => {},
+            showCancel: false,
+            autoClose: 1500,
+          });
+
+          setOriginalData(JSON.parse(JSON.stringify(tableData)));
+          setOnEdit(false);
+        } catch (error) {
+          console.error("Save error:", error);
+        }
+      },
+      showCancel: true,
+      autoClose: 0,
+    });
   };
 
   const handleInputChange = (
@@ -224,12 +243,15 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     updated[index][field] = numericValue;
 
     const { assignmentscore, collectScore, affectiveScore, midtermScore, finaltermScore } = updated[index];
-    updated[index].totalScore =
+    const newTotalScore = 
       (field === "assignmentscore" ? numericValue : assignmentscore) +
       (field === "collectScore" ? numericValue : collectScore) +
       (field === "affectiveScore" ? numericValue : affectiveScore) +
       (field === "midtermScore" ? numericValue : midtermScore) +
       (field === "finaltermScore" ? numericValue : finaltermScore);
+
+    updated[index].totalScore = newTotalScore;
+    updated[index].grade = calculateGrade(newTotalScore);
 
     setTableData(updated);
   };
@@ -248,9 +270,12 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   });
 
   const onChangeGrade = (grade: string, studentId: number) => {
-    const updated = tableData.map((item) =>
-      item.studentId === studentId ? { ...item, grade } : item
-    );
+    const updated = tableData.map((item) => {
+      if (item.studentId === studentId && item.remark && item.remark.trim() !== "") {
+        return { ...item, grade };
+      }
+      return item;
+    });
     setTableData(updated);
   };
 
@@ -267,8 +292,41 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   };
 
   const handleNotEdit = () => {
-    setTableData(originalData); 
-    setOnEdit(false);
+    setConfirmDialog({
+      isOpen: true,
+      type: "question",
+      title: "ยกเลิกการแก้ไข?",
+      text: "การเปลี่ยนแปลงทั้งหมดจะไม่ถูกบันทึก",
+      onConfirm: () => {
+        setTableData(originalData);
+        setOnEdit(false);
+      },
+      showCancel: true,
+      autoClose: 0,
+    });
+  };
+
+  const handleComplete = () => {
+    setConfirmDialog({
+      isOpen: true,
+      type: "question",
+      title: "ยืนยันการตรวจสอบเสร็จสิ้น?",
+      text: "คุณต้องการทำเครื่องหมายการตรวจสอบเสร็จสิ้นใช่หรือไม่",
+      onConfirm: async () => {
+        try {
+          await updateScheduleSubjectMutation.mutateAsync({
+            params: {
+              scheduleSubjectId: Number(props.schuduleSubjectId),
+              isComplete: true
+            }
+          });
+        } catch (error) {
+          console.error("Complete error:", error);
+        }
+      },
+      showCancel: true,
+      autoClose: 0,
+    });
   };
 
   const columnDefs = createColumns({
@@ -283,7 +341,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       <div className=" flex px-10 w-full justify-between items-center mb-4">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ${subjectData.class || `ปวส.${subjectData.groupName}/2`} (รหัสวิชา: ${subjectData.subjectCode}) - ${subjectData.subjectName}`}
+          title={`ตารางวิชาในห้องเรียน ${subjectData?.class || `ปวส.${subjectData?.groupName}/2`} (รหัสวิชา: ${subjectData?.subjectCode}) - ${subjectData?.subjectName}`}
           className="text-blue"
         />
 
@@ -312,16 +370,16 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                     <ExportFile
                       grads={tableData}
                       subject={{
-                        id: subjectData.subjectId,
-                        subjectCode: subjectData.subjectCode || "",
-                        subjectName: subjectData.subjectName || "ชื่อวิชา",
+                        id: subjectData?.subjectId || 0,
+                        subjectCode: subjectData?.subjectCode || "",
+                        subjectName: subjectData?.subjectName || "ชื่อวิชา",
                         credits: 0,
                         description: "",
                         isActive: true,
                       }}
-                      roomName={subjectData.class || `ปวส.${subjectData.groupName}/2`}
-                      term={subjectData.term || "1"}
-                      year={subjectData.year?.toString() || "2568"}
+                      roomName={subjectData?.class || `ปวส.${subjectData?.groupName}/2`}
+                      term={subjectData?.term || "1"}
+                      year={subjectData?.year?.toString() || "2568"}
                     />
                   </motion.div>
                 )}
@@ -343,10 +401,11 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           {onEdit ? (
             <>
               <button
-                className="bg-green-600 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleConfirm}
+                disabled={bulkUpdateMutation.isPending}
               >
-                ยืนยัน
+                {bulkUpdateMutation.isPending ? "กำลังบันทึก..." : "ยืนยัน"}
               </button>
               <button
                 className="bg-red-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-red-600 transition-colors"
@@ -356,25 +415,45 @@ export default function EditableGradePage(props: EditableGradePageProps) {
               </button>
             </>
           ) : (
-            <button
-              className="bg-blue-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-colors"
-              onClick={handleEdit}
-            >
-              แก้ไข <Pencil className="w-5 h-5" />
-            </button>
+            <>
+              <button
+                className="bg-blue-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-colors"
+                onClick={handleEdit}
+              >
+                แก้ไข <Pencil className="w-5 h-5" />
+              </button>
+              <button
+                className="bg-green-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleComplete}
+                disabled={updateScheduleSubjectMutation.isPending}
+              >
+                {updateScheduleSubjectMutation.isPending ? "กำลังประมวลผล..." : "ตรวจสอบเสร็จสิ้น"} <CheckCircle className="w-5 h-5" />
+              </button>
+            </>
           )}
         </div>
 
         <div className="px-4 pb-8">
           <StylesTable
             icon={<ScrollText className="w-5 h-5 text-white" />}
-            title={`รายชื่อนักเรียนในห้อง ${subjectData.class || `ปวส.${subjectData.groupName}/2`}`}
+            title={`รายชื่อนักเรียนในห้อง ${subjectData?.class || `ปวส.${subjectData?.groupName}/2`}`}
             data={filteredData}
             columns={columnDefs}
             pagination={filteredData.length}
           />
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        text={confirmDialog.text}
+        type={confirmDialog.type}
+        showCancel={confirmDialog.showCancel}
+        autoClose={confirmDialog.autoClose}
+      />
     </div>
   );
 }

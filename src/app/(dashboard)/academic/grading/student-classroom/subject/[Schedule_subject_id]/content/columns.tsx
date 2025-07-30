@@ -23,6 +23,24 @@ export const createColumns = ({
   const gradeOptions = ["0", "1", "1.5", "2", "2.5", "3", "3.5", "4"];
   const remarkOptions = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
 
+  const calculateGradeFromScore = (totalScore: number): string => {
+    if (totalScore >= 80) return "4";      
+    if (totalScore >= 75) return "3.5";   
+    if (totalScore >= 70) return "3";     
+    if (totalScore >= 65) return "2.5";    
+    if (totalScore >= 60) return "2";     
+    if (totalScore >= 55) return "1.5";   
+    if (totalScore >= 50) return "1";      
+    return "0";                          
+  };
+
+  const getGradeColor = (grade: string): string => {
+    switch (grade) {
+      case "0": return "bg-red-500 text-white";
+      default: return "bg-blue-200 text-blue-900";
+    }
+  };
+
   return [
     {
       label: "ลำดับ",
@@ -168,7 +186,7 @@ export const createColumns = ({
       label: "รวม (100)",
       className: "w-1/12",
       render: (row) => (
-        <div className="text-center w-full border px-2 py-1 font-semibold">
+        <div className="text-center w-full border px-2 py-1 font-semibold bg-blue-50">
           {row.totalScore}
         </div>
       ),
@@ -178,17 +196,33 @@ export const createColumns = ({
       className: "w-1/12 flex justify-center",
       render: (row) => {
         const hasRemark = row.remark !== null && row.remark.trim() !== "";
+        const calculatedGrade = calculateGradeFromScore(row.totalScore);
+        const gradeColor = getGradeColor(calculatedGrade);
 
-        return onEdit && !hasRemark ? (
-          <Combobox
-            disabled={!onEdit}
-            buttonLabel="เกรด"
-            options={gradeOptions.map((g) => ({ label: g, value: g }))}
-            onSelect={(val) => onChangeGrade(val, row.studentId)}
-            defaultValue={row.grade}
-          />
+        // Show calculated grade (read-only) or manual grade selection for special cases
+        return hasRemark ? (
+          // If student has remarks, allow manual grade selection
+          onEdit ? (
+            <Combobox
+              disabled={!onEdit}
+              buttonLabel="เกรด"
+              options={gradeOptions.map((g) => ({ label: g, value: g }))}
+              onSelect={(val) => onChangeGrade(val, row.studentId)}
+              defaultValue={row.grade}
+            />
+          ) : (
+            <div className={`text-center w-full border px-2 py-1 rounded ${gradeColor}`}>
+              {row.grade}
+            </div>
+          )
         ) : (
-          <div className="text-center w-full border px-2 py-1">{row.grade}</div>
+          // Auto-calculated grade (read-only)
+          <div 
+            className={`text-center w-full border px-2 py-1 rounded font-semibold ${gradeColor}`}
+            title={`คำนวณอัตโนมัติจากคะแนนรวม ${row.totalScore}`}
+          >
+            {calculatedGrade}
+          </div>
         );
       },
     },

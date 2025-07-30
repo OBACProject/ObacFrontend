@@ -10,7 +10,6 @@ import { Combobox } from "@/components/common/Combobox/combobox";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
-import { GetSubjectsByStudentGroupIdTermYearResponse } from "@/lib/api/models/subject/subject.response";
 
 export const columns = [
   { label: "ลำดับ", key: "index", className: "w-1/12 flex justify-center px-10" },
@@ -141,7 +140,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
       <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ปวส.${classroomId}/2`}
+          title={`ตารางวิชาในห้องเรียน ${classroomId}/2`}
           className="text-blue"
         />
         <GradeSubjectSearchBar onChange={handleSearchChange} />

@@ -79,3 +79,27 @@ export interface TermYearGradeGroup {
   totalCredit: number;
   grades: SubjectGrade[];
 }
+
+// export interface BulkUpdateStudents {
+//     studentId : number;
+//     collectScore: number;
+//     assignmentScore: number;
+//     affectiveScore: number;
+//     midtermScore: number;
+//     finaltermScore: number;
+//     totalScore: number;
+//     finalGrade: number;
+//     remarks: string;
+// }
+
+export interface BulkUpdateStudentGradeByScheduleSubjectIdRequest {
+    studentId : number;
+    collectScore: number;
+    assignmentScore: number;
+    affectiveScore: number;
+    midtermScore: number;
+    finaltermScore: number;
+    totalScore: number;
+    finalGrade: number;
+    remarks: string;
+}
