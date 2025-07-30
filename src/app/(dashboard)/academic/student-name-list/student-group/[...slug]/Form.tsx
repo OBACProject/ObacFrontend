@@ -49,7 +49,7 @@ export default function Form({ GroupID }: Props) {
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
 
   return (
-    <div>
+    <div className="bg-white rounded-xl py-4">
       <NameListScheduleTable
         data={students}
         icon={<Box className="h-6 w-6 text-white" />}

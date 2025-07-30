@@ -9,7 +9,7 @@ interface Props {
   icon: React.ReactNode;
   icon_bg: string;
   doc_type: "pdf" | "excel";
-  onClick:()=>void;
+  onClick: () => void;
 }
 
 export default function PDFButtonTemplate({
@@ -18,7 +18,7 @@ export default function PDFButtonTemplate({
   icon,
   icon_bg,
   doc_type,
-  onClick
+  onClick,
 }: Props) {
   return (
     <div className="rounded-lg border border-gray-300 p-4">
@@ -31,8 +31,12 @@ export default function PDFButtonTemplate({
       <div className="grid gap-2 mt-2">
         <h1 className="text-base font-semibold">{title}</h1>
         <p className="text-sm text-gray-500 ">{description}</p>
-        <button className="flex text-white bg-black py-1.5 hover:bg-gray-700 rounded-md items-center justify-center gap-3"
-        onClick={()=>{onClick()}}>
+        <button
+          className="flex text-white bg-black py-1.5 hover:bg-gray-700 rounded-md items-center justify-center gap-3"
+          onClick={() => {
+            onClick();
+          }}
+        >
           <Download /> ดาวน์โหลด
         </button>
       </div>

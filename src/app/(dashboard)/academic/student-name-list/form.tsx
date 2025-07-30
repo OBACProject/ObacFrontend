@@ -1,8 +1,7 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookUser, Box, Users } from "lucide-react";
-
+import { BookUser, Box } from "lucide-react";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import SearchInput from "@/components/Teacher/SearchInput";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
@@ -14,7 +13,6 @@ import NameListScheduleTable, {
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 
 export default function Form() {
-  const router = useRouter();
   const onSearch = () => {};
 
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>();
@@ -26,26 +24,26 @@ export default function Form() {
     GetAllStudentGroupByTermYear(term, year).then(
       (items: StudentGroupItem[]) => {
         const sorted = items.sort((a, b) => {
-        if (a.class === "ปวช" && b.class === "ปวส") return -1;
-        if (a.class === "ปวส" && b.class === "ปวช") return 1;
-        const parseNums = (str: string) =>
-          str.match(/\d+/g)?.map(Number) ?? [];
+          if (a.class === "ปวช" && b.class === "ปวส") return -1;
+          if (a.class === "ปวส" && b.class === "ปวช") return 1;
+          const parseNums = (str: string) =>
+            str.match(/\d+/g)?.map(Number) ?? [];
 
-        const numsA = parseNums(a.groupName);
-        const numsB = parseNums(b.groupName);
-        const majorA = numsA[0] ?? 0;
-        const majorB = numsB[0] ?? 0;
-        if (majorA !== majorB) {
-          return majorA - majorB;
-        }
-        const minorA = numsA[1] ?? 0;
-        const minorB = numsB[1] ?? 0;
-        if (minorA !== minorB) {
-          return minorA - minorB;
-        }
+          const numsA = parseNums(a.groupName);
+          const numsB = parseNums(b.groupName);
+          const majorA = numsA[0] ?? 0;
+          const majorB = numsB[0] ?? 0;
+          if (majorA !== majorB) {
+            return majorA - majorB;
+          }
+          const minorA = numsA[1] ?? 0;
+          const minorB = numsB[1] ?? 0;
+          if (minorA !== minorB) {
+            return minorA - minorB;
+          }
 
-        return a.groupName.localeCompare(b.groupName, "th");
-      });
+          return a.groupName.localeCompare(b.groupName, "th");
+        });
         setStudentGroup(sorted);
       }
     );
@@ -115,15 +113,6 @@ export default function Form() {
       </div>
 
       <div className="flex pt-5 lg:px-10 justify-start  w-full items-center lg:gap-8 ">
-        <button
-          className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600 flex items-center gap-4"
-          onClick={() => {
-            router.push("/academic/student-name-list/student-list");
-          }}
-        >
-          <Users className="text-white h-5 w-5" />
-          รายชื่อนักเรียนทั้งหมด
-        </button>
         <SearchInput onSearchKeyword={onSearch} edit={false} />
         <SelectTermAndYear
           term={term}

@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: PageParams }) {
   const studentGroupID = Params;
 
   return (
-    <div className="pl-12">
+    <div className="pl-12 bg-gray-100">
       <div className="py-4 w-full px-5">
         <HeaderLabel
           Icon={<Users className="h-6 w-6" />}
