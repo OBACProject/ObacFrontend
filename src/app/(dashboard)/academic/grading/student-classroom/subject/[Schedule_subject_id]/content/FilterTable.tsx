@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ExportFile from "./ExportFile";
 import { Input } from "@/components/ui/input";
 import { useGetStudentGroupGradeByScheduleSubjectIdQuery } from "@/lib/api/hooks/queries/grade.queries";
+import { StylesTable } from "@/components/Academic/table/StylesTable";
 
 const mockGradData: GetGradBySubjectId[] = [
   {
@@ -106,7 +107,9 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   const { data: apiData, isLoading, error } = useGetStudentGroupGradeByScheduleSubjectIdQuery(
     Number(props.schuduleSubjectId)
   );
-
+  
+  console.log("EditableGradePage apiData:", apiData);
+  console.log("EditableGradePage subjectGrades:", apiData?.subjectGrades);
   // Use API data if available, otherwise use mock data
   const subjectData = useMemo(() => {
     if (apiData) {
@@ -116,6 +119,33 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   }, [apiData]);
 
   const transformData = useMemo(() => {
+    if (apiData && apiData.subjectGrades && apiData.subjectGrades.length > 0) {
+      // Transform API data to match the table structure
+      return apiData.subjectGrades.map((item, index) => ({
+        gradeId: item.gradeId || index + 1, // Use index if gradeId is not available
+        subjectId: subjectData.subjectId,
+        scheduleSubjectId: Number(props.schuduleSubjectId),
+        studentGroup: subjectData.groupName,
+        studentId: item.studentId,
+        studentCode: item.studentCode,
+        prefix: item.prefix || "นาย",
+        gender: "Male", // API doesn't provide gender, using default
+        firstName: item.firstName,
+        lastName: item.lastName,
+        subjectName: subjectData.subjectName,
+        assignmentscore: item.assignmentScore || 0,
+        collectScore: item.collectScore || 0,
+        affectiveScore: item.affectiveScore || 0,
+        midtermScore: item.midtermScore || 0,
+        finaltermScore: item.finaltermScore || 0,
+        totalScore: item.totalScore || 0,
+        grade: (item.finalGrade !== null ? item.finalGrade?.toString() : "0") || "0",
+        remark: item.remarks || "",
+        index: index + 1,
+      }));
+    }
+    
+    // Fallback to mock data when API data is not available
     return mockGradData.map((item, index) => ({
       ...item,
       index: index + 1,
@@ -131,16 +161,27 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         (item.midtermScore || 0) +
         (item.finaltermScore || 0),
     }));
-  }, []);
+  }, [apiData, subjectData, props.schuduleSubjectId]);
 
-  const [tableData, setTableData] = useState<GetGradBySubjectId[]>(transformData);
+  const [tableData, setTableData] = useState<GetGradBySubjectId[]>([]);
   const [originalData, setOriginalData] = useState<GetGradBySubjectId[]>([]);
 
-  // Show loading state
+  useMemo(() => {
+    setTableData(transformData);
+  }, [transformData]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-lg">กำลังโหลดข้อมูล...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg text-red-600">เกิดข้อผิดพลาดในการโหลดข้อมูล: {error.toString()}</div>
       </div>
     );
   }
@@ -238,33 +279,36 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   });
 
   return (
-    <div className="">
-      <div className=" flex px-10 w-full justify-between items-center">
+    <div className="pb-8">
+      <div className=" flex px-10 w-full justify-between items-center mb-4">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ปวส.${subjectData.groupName}/2 (รหัสวิชา: ${subjectData.subjectCode})`}
+          title={`ตารางวิชาในห้องเรียน ${subjectData.class || `ปวส.${subjectData.groupName}/2`} (รหัสวิชา: ${subjectData.subjectCode}) - ${subjectData.subjectName}`}
           className="text-blue"
         />
-        {/* Show indicator when using mock data
-        {!apiData && !isLoading && (
+        {/* Show indicator for data source */}
+        {apiData && apiData.subjectGrades && apiData.subjectGrades.length > 0 ? (
+          <div className="text-sm text-green-600 bg-green-100 px-3 py-1 rounded-md">
+            ข้อมูลจาก API ({apiData.subjectGrades.length} นักเรียน)
+          </div>
+        ) : (
           <div className="text-sm text-orange-600 bg-orange-100 px-3 py-1 rounded-md">
             ใช้ข้อมูลตัวอย่าง
           </div>
-        )} */}
+        )}
       </div>
 
-      <div className="bg-white h-fit py-2 my-2 rounded-lg border border-gray-200">
-        <div className="bg-white flex items-center justify-between px-10 mt-4">
+      <div className="bg-white h-fit py-4 my-2 rounded-lg border border-gray-200 mx-4">
+        <div className="bg-white flex items-center justify-between px-6 mb-4">
           <div className="flex justify-start items-center gap-2 relative ">
             <div className="relative inline-block">
               <button
                 onClick={() => setShowExport((prev) => !prev)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
               >
                 Export
               </button>
 
-              {/* Drawer ที่โผล่ด้านขวาของปุ่ม */}
               <AnimatePresence>
                 {showExport && (
                   <motion.div
@@ -284,7 +328,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                         description: "",
                         isActive: true,
                       }}
-                      roomName={`ปวส.${subjectData.groupName}/2`}
+                      roomName={subjectData.class || `ปวส.${subjectData.groupName}/2`}
                       term={subjectData.term || "1"}
                       year={subjectData.year?.toString() || "2568"}
                     />
@@ -293,7 +337,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
               </AnimatePresence>
             </div>
           </div>
-          <div className="  flex justify-end w-1/3">
+          <div className="flex justify-end w-1/3">
             <Input
               type="text"
               placeholder="ค้นหาชื่อนักเรียน / รหัส / หมายเหตุ"
@@ -304,17 +348,17 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 px-10 mt-4">
+        <div className="flex justify-end gap-4 px-6 mb-4">
           {onEdit ? (
             <>
               <button
-                className="bg-green-600 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:opacity-80"
+                className="bg-green-600 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-700 transition-colors"
                 onClick={handleConfirm}
               >
                 ยืนยัน
               </button>
               <button
-                className="bg-red-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:opacity-80"
+                className="bg-red-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-red-600 transition-colors"
                 onClick={handleNotEdit}
               >
                 ยกเลิก <CircleX className="w-5 h-5" />
@@ -322,7 +366,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             </>
           ) : (
             <button
-              className="bg-blue-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:opacity-80"
+              className="bg-blue-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-colors"
               onClick={handleEdit}
             >
               แก้ไข <Pencil className="w-5 h-5" />
@@ -330,8 +374,10 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           )}
         </div>
 
-        <div className="mb-4">
-          <DataTable
+        <div className="px-4">
+          <StylesTable
+            icon={<ScrollText className="w-5 h-5 text-white" />}
+            title={`รายชื่อนักเรียนในห้อง ${subjectData.class || `ปวส.${subjectData.groupName}/2`}`}
             data={filteredData}
             columns={columnDefs}
             pagination={filteredData.length}

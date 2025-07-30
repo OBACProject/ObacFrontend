@@ -46,7 +46,7 @@ export class GradeService extends BaseService {
     scheduleSubjectId: number
   ): Promise<GetStudentGroupGradeByScheduleSubjectIdResponse> {
     return this.get<GetStudentGroupGradeByScheduleSubjectIdResponse>(
-      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}/${scheduleSubjectId}`
+      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}?scheduleSubjectId=${scheduleSubjectId}`
     );
   }
 
