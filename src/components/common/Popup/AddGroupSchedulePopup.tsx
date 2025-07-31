@@ -1,6 +1,7 @@
 
+import { CreateEnrollmentWithGradeAndSchedule } from "@/api/schedule/route";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
-import { CreateEnrollmentWithGradeAndSchedule, GetAllActiveSubjectAsync } from "@/api/subject/route";
+import { GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
@@ -23,8 +24,6 @@ type AddGroupSchedulePopUp = {
     teacherId?: number;
     onReload?: () => void;
 };
-
-
 
 export default function AddGroupSchedulePopUp({
     onClosePopUp, groupId, onReload
@@ -85,7 +84,7 @@ export default function AddGroupSchedulePopUp({
     const [day, setDay] = useState<string>("");
     const [period, setPeriod] = useState<string>("");
     const [room, setRoom] = useState<string>("");
-    const [hour, setHour] = useState<string>("");
+
     const [teacherID, setTeacherID] = useState<number>(0);
     const [subjectID, setSubjectID] = useState<number>(0);
     const [studentGroupId, setStudentGroupId] = useState<number>(0);
@@ -222,18 +221,6 @@ export default function AddGroupSchedulePopUp({
                                 placeholder="-- เลือกวิชา --"
                             />
 
-                        </div>
-                    </div>
-                    <div className="flex  px-4 py-2">
-                        <div className="w-full flex flex-col  px-2 relative">
-                            <h1>เวลาเรียน</h1>
-
-                            <Input
-                                type="number"
-                                placeholder="--เลือกชั่วโมง--"
-                                className="w-full pr-10"
-                                onChange={(e) => setHour(e.target.value)}
-                            />
                         </div>
                     </div>
                     <div className="flex  px-4 py-2">

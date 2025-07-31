@@ -1,6 +1,6 @@
+import { CreateEnrollmentWithGradeAndSchedule } from "@/api/schedule/route";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
 import {
-  CreateEnrollmentWithGradeAndSchedule,
   GetAllActiveSubjectAsync,
 } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
