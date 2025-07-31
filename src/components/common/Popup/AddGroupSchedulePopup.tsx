@@ -1,20 +1,16 @@
-import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
-import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { fetchGetAllSubject, fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
-import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
+
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
 import { CreateEnrollmentWithGradeAndSchedule, GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
-import { CreateScheduleSubjectRequest } from "@/dto/schedule";
+
 import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { CreateEnrollmentWithGradeAndScheduleRequest, SubjectItem } from "@/dto/subjectDto";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
-import { GetAllActiveSubjectsResponse, GetAllSubjectAsyncResponse } from "@/lib/api/models/subject/subject.response";
+import { GetAllActiveSubjectsResponse } from "@/lib/api/models/subject/subject.response";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-import { GetStudentByIdDataApi } from "@/resource/academics/grading/api/individualGradeApiData";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";

@@ -101,8 +101,6 @@ export const CreateEnrollmentWithGradeAndSchedule = async (
   try {
     console.log(payload)
     const response = await apiClient.post(`Enrollment/CreateEnrollmentWithGradeAndSchedule?studentGroupId=${studentGroupId}`, payload);
-    console.log("CreateEnrollment success:", response.data);
-     console.log(response.data)
     return { success: true };
   } catch (error: any) {
     const errorMsg = error.response?.data?.message || error.message || "Unknown error";
