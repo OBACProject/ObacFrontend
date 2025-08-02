@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { createColumns } from "./columns";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
@@ -19,6 +20,7 @@ interface EditableGradePageProps {
 } 
 
 export default function EditableGradePage(props: EditableGradePageProps) {
+  const router = useRouter();
   const [onEdit, setOnEdit] = useState(false);
   const [filterTerm, setFilterTerm] = useState("");
   const [showExport, setShowExport] = useState(false);
@@ -61,10 +63,15 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         isOpen: true,
         type: "success",
         title: "ตรวจสอบเสร็จสิ้น",
-        text: "อัพเดทสถานะสำเร็จ",
-        onConfirm: () => {},
+        text: "อัพเดทสถานะสำเร็จ กำลังกลับไปยังหน้ารายการวิชา",
+        onConfirm: () => {
+          const classroomId = subjectData?.subjectId ;
+          const term = subjectData?.term ;
+          const year = subjectData?.year;
+          router.push(`/academic/grading/student-classroom/${classroomId}/${term}/${year}`);
+        },
         showCancel: false,
-        autoClose: 1500,
+        autoClose: 2000,
       });
     },
     onError: (error) => {
@@ -127,7 +134,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       }));
     }
     
-    // Return empty array when no data is available
     return [];
   }, [apiData, subjectData, props.schuduleSubjectId]);
 
@@ -136,17 +142,16 @@ export default function EditableGradePage(props: EditableGradePageProps) {
 
   // Grade calculation function
   const calculateGrade = (totalScore: number): string => {
-    if (totalScore >= 80) return "4";      // A
-    if (totalScore >= 75) return "3.5";    // B+
-    if (totalScore >= 70) return "3";      // B
-    if (totalScore >= 65) return "2.5";    // C+
-    if (totalScore >= 60) return "2";      // C
-    if (totalScore >= 55) return "1.5";    // D+
-    if (totalScore >= 50) return "1";      // D
-    return "0";                            // F
+    if (totalScore >= 80) return "4";     
+    if (totalScore >= 75) return "3.5";   
+    if (totalScore >= 70) return "3";      
+    if (totalScore >= 65) return "2.5";    
+    if (totalScore >= 60) return "2";      
+    if (totalScore >= 55) return "1.5";    
+    if (totalScore >= 50) return "1";      
+    return "0";                            
   };
 
-  // Helper function to update total score and grade
   const updateTotalScoreAndGrade = (updatedData: GetGradBySubjectId[]) => {
     return updatedData.map(item => {
       const newTotalScore = (item.assignmentscore || 0) + 
@@ -416,20 +421,20 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             </>
           ) : (
             <>
+            <button
+              className="bg-green-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleComplete}
+              disabled={updateScheduleSubjectMutation.isPending}
+            >
+              {updateScheduleSubjectMutation.isPending ? "กำลังประมวลผล..." : "ตรวจสอบเสร็จสิ้น"} <CheckCircle className="w-5 h-5" />
+            </button>
               <button
                 className="bg-blue-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-colors"
                 onClick={handleEdit}
               >
                 แก้ไข <Pencil className="w-5 h-5" />
               </button>
-              <button
-                className="bg-green-500 text-white text-lg px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handleComplete}
-                disabled={updateScheduleSubjectMutation.isPending}
-              >
-                {updateScheduleSubjectMutation.isPending ? "กำลังประมวลผล..." : "ตรวจสอบเสร็จสิ้น"} <CheckCircle className="w-5 h-5" />
-              </button>
-            </>
+          </>
           )}
         </div>
 

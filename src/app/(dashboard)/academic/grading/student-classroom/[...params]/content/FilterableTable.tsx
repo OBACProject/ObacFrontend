@@ -3,8 +3,9 @@
 import React, { useState, useMemo, useDeferredValue, useEffect, useCallback } from "react";
 import GradeSubjectSearchBar from "./GradeSubjectSearchBar";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { Calendar, ScrollText } from "lucide-react";
+import { Calendar, ScrollText, CheckCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "framer-motion";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
@@ -12,10 +13,10 @@ import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/que
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 
 export const columns = [
-  { label: "ลำดับ", key: "index", className: "w-1/12 flex justify-center px-10" },
-  { label: "รหัสวิชา", key: "SubjectName", className: "w-6/12 flex justify-center px-10" },
-  { label: "อาจารย์", key: "TeacherName", className: "w-3/12 flex px-10" },
-  { label: "สถานะ", key: "IsComplete", className: "w-2/12 flex px-10" },
+  { label: "ลำดับ", key: "index", className: "w-1/12 text-center flex justify-center" },
+  { label: "รหัสวิชา - ชื่อวิชา", key: "SubjectCode", className: "w-6/12 flex justify-center" },
+  { label: "อาจารย์ผู้สอน", key: "TeacherName", className: "w-3/12 flex justify-center" },
+  { label: "สถานะการตรวจสอบ", key: "IsComplete", className: "w-2/12 text-center flex justify-center" },
 ];
 
 interface Props {
@@ -36,21 +37,55 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     studentGroupId: classroomId,
     term,
     year,
-  }) as { data: any[] | undefined, isLoading: boolean, isError: boolean };
+  });
 
   console.log("FilterableTable apiResponse:", apiResponse);
 
   const sourceData = useMemo(() => {
-    if (!apiResponse || !Array.isArray(apiResponse) || apiResponse.length === 0) {
+    if (!apiResponse || !apiResponse.subjects || !Array.isArray(apiResponse.subjects) || apiResponse.subjects.length === 0) {
       return [];
     }
-    return apiResponse.map((d: any, index: number) => ({
-      scheduleSubjectId: d.scheduleSubjectId,
-      SubjectName: `${d.subjectCode} - ${d.subjectName}`,
-      TeacherName: d.teacherName || "ไม่ระบุ",
-      IsComplete: d.isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ",
-    }));
+    console.log("Source Data subjects:", apiResponse.subjects);
+    console.log("First subject:", apiResponse.subjects[0]);
+    
+    return apiResponse.subjects.map((d: any,) => {
+      console.log("Processing subject:", d);
+      
+      const isComplete = d.isComplete; // lowercase from API
+      const statusBadge = isComplete ? (
+        <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+          <CheckCircle className="w-3 h-3 mr-1" />
+          ตรวจสอบเสร็จสิ้น
+        </Badge>
+      ) : (
+        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+          <Clock className="w-3 h-3 mr-1" />
+          ยังไม่ตรวจสอบ
+        </Badge>
+      );
+
+      return {
+        scheduleSubjectId: d.scheduleSubjectId,
+        SubjectCode: d.subjectCode && d.subjectName ? `${d.subjectCode} - ${d.subjectName}` : d.subjectCode || d.subjectName || "ไม่ระบุรหัสวิชา", // lowercase from API
+        TeacherName: d.teacherName || "ไม่ระบุอาจารย์", // lowercase from API
+        IsComplete: statusBadge,
+        IsCompleteText: isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ", 
+      };
+    });
   }, [apiResponse]);
+
+  const classroomInfo = useMemo(() => {
+    if (!apiResponse) {
+      return {
+        class: `ปวส.${classroomId}/2`,
+        groupName: classroomId.toString()
+      };
+    }
+    return {
+      class: apiResponse?.class || `ปวส.${classroomId}/2`,
+      groupName: apiResponse?.groupName || classroomId.toString()
+    };
+  }, [apiResponse, classroomId]);
 
   const filteredData = useMemo(() => {
     if (!sourceData?.length) return [];
@@ -60,9 +95,9 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     if (deferredSearch.trim()) {
       const searchLower = deferredSearch.toLowerCase();
       result = result.filter((item: any) =>
-        item.SubjectName?.toLowerCase().includes(searchLower) ||
+        item.SubjectCode?.toLowerCase().includes(searchLower) ||
         item.TeacherName?.toLowerCase().includes(searchLower) ||
-        item.IsComplete?.toLowerCase().includes(searchLower)
+        item.IsCompleteText?.toLowerCase().includes(searchLower)
       );
     }
 
@@ -71,7 +106,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     }
     
     if (filterStatus) {
-      result = result.filter((item: any) => item.IsComplete === filterStatus);
+      result = result.filter((item: any) => item.IsCompleteText === filterStatus);
     }
 
     return result;
@@ -90,7 +125,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     if (!sourceData?.length) return [];
     const statuses = new Set<string>();
     sourceData.forEach((d: any) => {
-      if (d.IsComplete) statuses.add(d.IsComplete);
+      if (d.IsCompleteText) statuses.add(d.IsCompleteText);
     });
     return Array.from(statuses).sort();
   }, [sourceData]);
@@ -136,14 +171,16 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   }
 
   return (
-    <>
+    <div className="space-y-6">
       <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ${classroomId}/2`}
+          title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}`}
           className="text-blue"
         />
-        <GradeSubjectSearchBar onChange={handleSearchChange} />
+        <div className="w-1/3">
+          <GradeSubjectSearchBar onChange={handleSearchChange} />
+        </div>
       </div>
 
       <div className="flex justify-end mb-3 px-12 mt-4 items-center gap-2 relative">
@@ -181,24 +218,32 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
         </Button>
       </div>
 
-      <div className="mt-2">
+      <div className="mt-2 px-4">
         {sourceData.length === 0 && (
-          <div className="flex justify-center items-center h-96 text-gray-500 text-lg">
-            {isError ? "เกิดข้อผิดพลาดในการโหลดข้อมูล" : "ไม่มีข้อมูลให้แสดงผล"}
+          <div className="flex flex-col justify-center items-center h-96 text-gray-500 bg-white rounded-lg border border-gray-200 shadow-sm">
+            <ScrollText className="w-16 h-16 text-gray-300 mb-4" />
+            <div className="text-lg font-medium mb-2">
+              {isError ? "เกิดข้อผิดพลาดในการโหลดข้อมูล" : "ไม่มีข้อมูลวิชาที่ลงทะเบียน"}
+            </div>
+            <p className="text-sm text-gray-400">
+              {isError ? "กรุณาลองใหม่อีกครั้ง" : "ยังไม่มีการลงทะเบียนวิชาสำหรับภาคเรียนนี้"}
+            </p>
           </div>
         )}
         
         {sourceData.length > 0 && (
-          <StylesTable
-            icon={<Calendar className="w-5 h-5 text-white" />}
-            title={`รายชื่อวิชาทั้งหมด ปวส.${classroomId}/2`}
-            columns={columns}
-            data={tableData}
-            getRowLink={getRowLink}
-            pagination={10}
-          />
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <StylesTable
+              icon={<Calendar className="w-5 h-5 text-white" />}
+              title={`รายชื่อวิชาทั้งหมด ${classroomInfo.class} - ภาคเรียนที่ ${term} ปีการศึกษา ${year}`}
+              columns={columns}
+              data={tableData}
+              getRowLink={getRowLink}
+              pagination={10}
+            />
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

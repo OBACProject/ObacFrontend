@@ -8,9 +8,8 @@ export class ScheduleSubjectService extends BaseService {
     async updateScheduleSubject(
         request: ScheduleSubjectRequest
     ): Promise<void> {
-        return this.put<void>(
-            SCHEDULE_SUBJECTS_ENDPOINTS.PUT_SCHEDULE_SUBJECTS_BY_ID,
-            `?scheduleSubjectId=${request.scheduleSubjectId}&isComplete=${request.isComplete}`
+        return this.post<void>(
+            `${SCHEDULE_SUBJECTS_ENDPOINTS.POST_ISCOMPLETE_SCHEDULE_SUBJECTS}?scheduleSubjectId=${request.scheduleSubjectId}&isComplete=${request.isComplete}`
         );
     }
 }

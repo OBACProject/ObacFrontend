@@ -34,8 +34,8 @@ export class SubjectService extends BaseService {
     async getSubjectByTerm(params : GetSubjectByTermRequest): Promise<any> {
         return this.get<any>(SUBJECT_ENDPOINTS.GET_SUBJECTS_BY_STUDENT_GROUP_ID_TERM_YEAR, params);
     }
-    async getSubjectsByStudentGroupIdTermYear(params : GetSubjectsByStudentGroupIdTermYearRequest): Promise<GetSubjectsByStudentGroupIdTermYearResponse[]> {
-        return this.get<GetSubjectsByStudentGroupIdTermYearResponse[]>(SUBJECT_ENDPOINTS.GET_SUBJECTS_BY_STUDENT_GROUP_ID_TERM_YEAR, params);
+    async getSubjectsByStudentGroupIdTermYear(params : GetSubjectsByStudentGroupIdTermYearRequest): Promise<GetSubjectsByStudentGroupIdTermYearResponse> {
+        return this.get<GetSubjectsByStudentGroupIdTermYearResponse>(SUBJECT_ENDPOINTS.GET_SUBJECTS_BY_STUDENT_GROUP_ID_TERM_YEAR, params);
     }
     // async getSubjectByTermAndClass(params: any) : Promise<any> {
     //     return this.get<any>(SUBJECT_ENDPOINTS.GET_SUBJECT_BY_TERM_AND_CLASS, params);

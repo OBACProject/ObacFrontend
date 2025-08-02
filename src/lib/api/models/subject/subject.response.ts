@@ -39,15 +39,19 @@ export interface GetSubjectByTermResponse {
 
 
 export interface GetSubjectsByStudentGroupIdTermYearResponse {
-      scheduleSubjectId: number;
-      SubjectId: number;
-      SubjectName: string;
-      SubjectCode: string;
-      TeacherName: string;
-      Term: string;
-      Year: number;
-      IsPublish: boolean;
-      IsComplete: boolean;
+    class : string;
+    groupName : string;
+    subjects : {
+        scheduleSubjectId: number;
+        subjectId: number;
+        subjectName: string;
+        subjectCode: string;
+        teacherName: string;
+        term: string;
+        year: number;
+        isPublish: boolean;
+        isComplete: boolean;
+    }
 }
 
 export interface GetSubjectByStudentId {
