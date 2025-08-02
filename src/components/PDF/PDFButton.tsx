@@ -16,11 +16,11 @@ export const PDFStudentNamelistInGroupButton = ({
 
   return (
     <button
-      className="flex px-8 border-[1px] border-gray-300 text-gray-700 font-prompt bg-white py-1.5
-       hover:scale-[101%] duration-300 rounded-md items-center justify-center gap-3"
+      className="flex px-8 border-[1px] border-gray-300 text-blue-700 font-prompt_Light bg-white py-1.5
+       hover:scale-[101%] duration-300 text-sm rounded-md items-center justify-center gap-3"
       onClick={handleClick}
     >
-      <Download className="text-gray-700 w-5 h-5" />
+      <Download className="text-blue-700 w-5 h-5" />
       รายชื่อนักเรียน PDF
     </button>
   );
