@@ -6,7 +6,7 @@ export interface GetSubjectBySubjectId {
   description: string;
   isActive: boolean;
 }
-export interface GetAllSubject {
+export interface GetAllSubjectRespond {
   id: number;
   subjectCode: string;
   subjectName: string;
@@ -56,4 +56,22 @@ export interface UpdateSubjectRequest  {
   curriculumYear: number;
   description: string;
   isActive: boolean;
+}
+
+export interface CreateEnrollmentWithGradeAndScheduleRequest  {
+  subjectId: number,
+  teacherId: number,
+  term: string,
+  year: number,
+  finalGrade: number,
+  room: string,
+  day: string,
+  period: number,
+  collectScore: number,
+  affectiveScore: number,
+  assignmentScore: number,
+  midtermScore: number,
+  finalTermScore: number,
+  totalScore: number,
+  remarks: string
 }

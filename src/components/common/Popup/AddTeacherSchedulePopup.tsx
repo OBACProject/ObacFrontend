@@ -1,8 +1,6 @@
 import { CreateEnrollmentWithGradeAndSchedule } from "@/api/schedule/route";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
-import {
-  GetAllActiveSubjectAsync,
-} from "@/api/subject/route";
+import { GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
@@ -19,11 +17,17 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 
-type AddSchedulePopUp = {
+type AddTeacherSchedulePopup = {
   onClosePopUp: (value: boolean) => void;
+  teacherId?: number;
+  onReload?: () => void;
 };
 
-export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
+export default function AddTeacherSchedulePopup({
+  onClosePopUp,
+  teacherId,
+  onReload,
+}: AddTeacherSchedulePopup) {
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
   const [subjects, setSubject] = useState<SubjectItem[]>([]);
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
@@ -47,7 +51,6 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
       }
     );
   }, []);
-
   useEffect(() => {
     GetAllStudentGroupByTermYear(term, year).then(
       (item: StudentGroupItem[]) => {
@@ -57,6 +60,13 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
       }
     );
   }, [term, year]);
+
+  useEffect(() => {
+    if (teacherId) {
+      setTeacherID(teacherId);
+    }
+    console.log("teacherId :", teacherId);
+  }, [teacherId]);
 
   const days = [
     "วันอาทิตย์",
@@ -85,6 +95,9 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
       teacher.lastName
     }`,
   }));
+  const selectedTeacher = teacherOptions.find(
+    (item) => item.value === teacherID
+  );
 
   const groupOptions = studentGroup.map((item) => ({
     value: item.id,
@@ -126,6 +139,9 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
         setStudentGroupId(0);
         setDay("");
         setRoom("");
+        if (onReload) {
+          onReload();
+        }
         onClosePopUp(false);
       } else {
         toast.error(`สร้างไม่สำเร็จ: ${response.error}`);
@@ -207,6 +223,7 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
               />
             </div>
           </div>
+
           <div className="flex  px-4 py-2">
             <div className="w-full flex flex-col  px-2 relative">
               <h1>วันที่สอน</h1>
@@ -255,19 +272,11 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
             <div className="w-full px-2">
               <h1>อาจารย์ผู้สอน</h1>
               <Select
-                options={teacherOptions.map((item) => ({
-                  value: item.value,
-                  label: `${item.label} `,
-                }))}
-                value={
-                  teacherID
-                    ? teacherOptions.find((item) => item.value === teacherID)
-                    : null
+                isDisabled={true}
+                value={selectedTeacher || null}
+                placeholder={
+                  selectedTeacher?.label ?? "-- เลือกอาจารย์ผู้สอน --"
                 }
-                onChange={(selectedOption) =>
-                  setTeacherID(Number(selectedOption?.value || 0))
-                }
-                placeholder="-- เลือกอาจารย์ผู้สอน --"
               />
             </div>
           </div>

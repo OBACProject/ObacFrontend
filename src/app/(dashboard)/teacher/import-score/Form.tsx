@@ -17,7 +17,6 @@ import {
 import { toast } from "react-toastify";
 
 export default function Form() {
-
   const [edit, setEdit] = useState<boolean>(false);
   const [creatTableButton, setCreateTableButton] = useState<boolean>(false);
   const [student, setStudent] =
@@ -47,11 +46,14 @@ export default function Form() {
       },
       termYearGradeGroups: student.termYearGradeGroups,
     };
-    console.log("payload FE : ", payload);
+    // console.log("payload FE : ", payload);
     const success = await UpsertStudentGrades(payload);
 
     if (success) {
-      toast.success("บันทึกข้อมูลสำเร็จ")
+      toast.success("บันทึกข้อมูลสำเร็จ");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       setEdit(false);
     } else {
       alert("เกิดข้อผิดพลาด");
@@ -158,7 +160,6 @@ export default function Form() {
                   key={index}
                   scores={student.termYearGradeGroups[index].grades}
                   edit={edit}
-                  
                   onChange={(updatedGrades: SubjectGrade[]) => {
                     setStudent((prev) => {
                       if (!prev) return prev;
@@ -208,7 +209,7 @@ export default function Form() {
                   {
                     term,
                     year,
-                    subjectId:0,
+                    subjectId: 0,
                     subjectName: "",
                     subjectCode: "",
                     gradePoint: 0,

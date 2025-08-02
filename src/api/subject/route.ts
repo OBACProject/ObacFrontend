@@ -84,7 +84,7 @@ export const UpdateSubject = async (payload: UpdateSubjectRequest) => {
 
 export const DeleteSubjectById = async (id: number): Promise<boolean> => {
   try {
-    const response = await apiClient.delete(`/Subject/DeleteSubject/${id}`);
+    const response = await apiClient.delete(`Subject/DeleteSubject/${id}`);
     console.log("Delete success:", response.data);
     return true;
   } catch (error: any) {

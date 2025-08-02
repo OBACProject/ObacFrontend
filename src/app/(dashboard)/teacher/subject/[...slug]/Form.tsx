@@ -4,16 +4,13 @@ import React, { useEffect, useState } from "react";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 import { Pencil } from "lucide-react";
 import SubjectTableForm from "./SubjectScoreTable";
-import { mockStudentGroupGradeResponse } from "@/resource/teachers/mockData";
 import { GetStudentGroupGradeByScheduleSubjectId } from "@/api/grad/route";
 interface Props {
   scheduleID: string;
 }
 
 export default function Form({ scheduleID }: Props) {
-  const [grads, setGrads] = useState<StudentGroupGradeResponse>(
-    mockStudentGroupGradeResponse
-  );
+  const [grads, setGrads] = useState<StudentGroupGradeResponse>();
   const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {

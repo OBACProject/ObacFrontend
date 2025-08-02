@@ -81,13 +81,13 @@ export function HomePageNavBar() {
 
         {isMobile && (
           <div className="flex flex-col sm:flex-row gap-2 mt-3 md:mt-0 justify-end items-center w-full md:w-auto">
-            <Link
+            {/* <Link
               href="/register"
               className="flex items-center gap-2 px-6 py-1 bg-[#143d66] border-white border-2 rounded-full text-white text-base hover:bg-white hover:text-blue-900 duration-500 font-prompt"
             >
               สมัครออนไลน์
               <CircleCheck className="w-5 h-5" />
-            </Link>
+            </Link> */}
             <Link
               href="/login"
               className="flex items-center gap-2 px-6 py-1 border border-white rounded-full text-white text-base hover:bg-white hover:text-black duration-500 font-prompt_Light"

@@ -203,15 +203,7 @@ export type StudentDto = {
   studentName: string;
   studentSurname: string;
 };
-export type StudentListByGroupIDDto = {
-  prefix:string;
-  studentCode: string;
-  studentId: number;
-  gender:string;
-  firstName: string;
-  lastName: string;
-  studentStatus:string;
-}
+
 export type GetStudentListByGroupIDDto = {
   groupId: number;
   groupName: string;
@@ -221,7 +213,7 @@ export type GetStudentListByGroupIDDto = {
   facultyName: string;
   subProgramName: string;
   class: string;
-  students: StudentListByGroupIDDto[];
+  students: StudentItems[];
 };
 export type GetStudentByStudentId = {
   studentId: number;
@@ -282,3 +274,22 @@ export type UpdateStudentRequestBody = {
   isActive: boolean;
   isAgree: boolean;
 };
+
+export interface StudentGroupDetail {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  students: StudentItems[];
+}
+
+export interface StudentItems {
+  gender: string;
+  status: string | null;
+  id: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+}

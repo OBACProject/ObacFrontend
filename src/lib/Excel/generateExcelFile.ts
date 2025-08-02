@@ -3,7 +3,7 @@ import {
   ConvertClassroomToExcelDto,
   Subject,
 } from "@/dto/gradDto";
-import { StudentListByGroupIDDto } from "@/dto/studentDto";
+import { StudentItems } from "@/dto/studentDto";
 import ExcelJS from "exceljs";
 
 export interface GeneralData {
@@ -125,7 +125,7 @@ export async function ConvertScoreToExcel(
 }
 
 export async function ConvertClassroomToExcel(
-  data: StudentListByGroupIDDto[],
+  data: StudentItems[],
   classroom: string
 ) {
   const workbook = new ExcelJS.Workbook();

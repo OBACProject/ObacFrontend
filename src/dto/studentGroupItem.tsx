@@ -5,9 +5,13 @@ export interface StudentGroupItem {
   groupCode: string;
   level: number;
   programId: number;
-  facultyName: string;
+  facultyName: string ;
   programName: string;
-  subProgramName: string;
+  isPublish: boolean;
+  isComplete: boolean;
+  isActive: boolean;
+  year: number;
+  term: string;
 }
 
 export interface ScheduleItemStudentGroup {
