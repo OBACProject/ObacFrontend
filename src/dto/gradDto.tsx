@@ -211,6 +211,7 @@ export interface StudentGroupGradeResponse {
   subjectName: string;
   subjectCode: string;
   subjectId: number;
+  groupId: number;
   groupName: string;
   groupCode: string;
   class: string;
@@ -221,3 +222,25 @@ export interface StudentGroupGradeResponse {
   year: number;
   subjectGrades: SubjectGradeItem[];
 }
+
+export type StudentGroupGrade = {
+  studentId: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+};
+
+export type BulkUpdateStudentGradeResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: boolean;
+  error: null | {
+    code: string;
+    message: string;
+  };
+};
