@@ -4,10 +4,11 @@ import { GraduationCap, AlertCircle, RefreshCw } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import type { GetStudentGradeDetailDto } from "@/dto/gradDto"
-import type { StudentTranscriptData, YearData } from "@/dto/studentDto"
+import type { StudentGroupDetail, StudentTranscriptData, YearData } from "@/dto/studentDto"
 import { StudentInfoCard } from "./../component/StudentInfoCard"
 import { mockStudentTranscriptList } from "./mockData"
 import { StudentTermTable } from "./../component/StudentTermTable"
+import { GetStudentByStudentId } from "@/api/student/route"
 
 const getStudentDataByIdMock = (id: number): Promise<StudentTranscriptData | null> => {
   return new Promise((resolve) => {
@@ -21,7 +22,7 @@ const getStudentDataByIdMock = (id: number): Promise<StudentTranscriptData | nul
 
 const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
   const studentId = Number(params.params)
-  const [studentTranscriptDataById, setStudentTranscriptDataById] = useState<StudentTranscriptData | null>(null)
+  const [studentTranscriptDataById, setStudentTranscriptDataById] = useState<StudentGroupDetail | null>(null)
   const [termData, setTermData] = useState<YearData[]>([])
   const [scoreFileData, setScoreFileData] = useState<GetStudentGradeDetailDto | null>(null)
   const [loading, setLoading] = useState(true)
@@ -32,13 +33,10 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
       setLoading(true)
       setError(null)
 
-      const data = await getStudentDataByIdMock(studentId)
-      if (!data) {
-        throw new Error("ไม่พบข้อมูลนักเรียน")
-      }
+      const data = await GetStudentByStudentId(studentId)
 
       setStudentTranscriptDataById(data)
-      setTermData(data.year)
+      // setTermData(data.)
     } catch (error) {
       console.error("Error fetching student data:", error)
       setError(error instanceof Error ? error.message : "เกิดข้อผิดพลาดในการโหลดข้อมูล")
@@ -109,7 +107,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
           </div>
         </div>
 
-        <StudentInfoCard
+        {/* <StudentInfoCard
           student={studentTranscriptDataById}
           scoreFileData={scoreFileData}
           onDownloadPDF={() => {
@@ -123,7 +121,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
             name: `${studentTranscriptDataById.thaiName} ${studentTranscriptDataById.thaiLastName}`,
             studentCode: studentTranscriptDataById.studentCode,
           }}
-        />
+        /> */}
       </div>
     </section>
   )

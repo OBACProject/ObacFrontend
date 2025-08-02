@@ -1,11 +1,10 @@
-import React from 'react'
+import React from "react";
+import Form from "./form";
 
 export default function page() {
   return (
-    <div>
-        <div>
-            
-        </div>
+    <div className="pl-16 bg-gray-50">
+      <Form />
     </div>
-  )
+  );
 }

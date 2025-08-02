@@ -16,3 +16,18 @@ export const GetStudentGroupByGroupId = async (
     return null;
   }
 };
+export const GetStudentByStudentId = async (
+  StudentId : Number
+): Promise<StudentGroupDetail | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentGroupDetail;
+    }>(`StudentGroup/GetStudentByStudentId?studentGroupId=${StudentId}`);
+    return response.data.data ?? null;
+  } catch (err) {
+    console.log("Error in API route.ts GetStudentByStudentId : ", err);
+    return null;
+  }
+};
