@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import AddGroupSchedulePopUp from "@/components/common/Popup/AddGroupSchedulePopup";
 import { GetStudentGroupScheduleStatus } from "@/api/studentGroup/route";
 import {
-  ScheduleItemStudentGroup,
+  ScheduleItemStudentGroups,
   StudentGroupScheduleStatus,
 } from "@/dto/studentGroupItem";
+import DeleteScheduleSutdentGroupPopup from "@/components/common/Popup/DeleteScheduleSutdentGroupPopup";
 
 type Props = {
   term: string;
@@ -15,8 +16,14 @@ type Props = {
 };
 
 export default function Form({ term, year, groupId }: Props) {
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
+  const [scheduleSubjectData, setScheduleSubjectData] =
+    useState<ScheduleItemStudentGroups>();
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
-  const reloadGroupSchedule = () => {
+  const [scheduleGroup, setScheduleGroup] =
+    useState<StudentGroupScheduleStatus>();
+
+  useEffect(() => {
     GetStudentGroupScheduleStatus(groupId, term, Number(year)).then(
       (d: StudentGroupScheduleStatus | null) => {
         if (d) {
@@ -24,9 +31,7 @@ export default function Form({ term, year, groupId }: Props) {
         }
       }
     );
-  };
-  const [scheduleGroup, setScheduleGroup] =
-    useState<StudentGroupScheduleStatus>();
+  }, []);
 
   useEffect(() => {
     GetStudentGroupScheduleStatus(groupId, term, Number(year)).then(
@@ -80,11 +85,11 @@ export default function Form({ term, year, groupId }: Props) {
           <div className="text-center ">ห้องเรียน</div>
           <div className="text-center "></div>
         </div>
-        {Array.isArray(scheduleGroup?.schedule) &&
-          scheduleGroup.schedule.length > 0 ? (
+        {Array.isArray(scheduleGroup?.schedules) &&
+        scheduleGroup.schedules.length > 0 ? (
           <div className="w-full">
-            {scheduleGroup?.schedule.map(
-              (d: ScheduleItemStudentGroup, index) => {
+            {scheduleGroup?.schedules.map(
+              (d: ScheduleItemStudentGroups, index) => {
                 return (
                   <div
                     key={`${d.subjectCode}-${d.day}-${d.period}`}
@@ -97,7 +102,7 @@ export default function Form({ term, year, groupId }: Props) {
                       {d.subjectCode}
                     </div>
                     <div className="border-l-[1px] text-start pl-2 lg:pl-6">
-                      {d.subjectName}
+                      {d.subjectName} 
                     </div>
                     <div className="border-l-[1px] text-center">
                       {d.curriculumYear}
@@ -109,9 +114,16 @@ export default function Form({ term, year, groupId }: Props) {
                     <div className="border-l-[1px] text-center">{d.day}</div>
                     <div className="border-l-[1px] text-center">{d.room}</div>
                     <div className="border-l-[1px] h-full text-center">
-                      <p className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit">
+                      <button
+                        onClick={() => {
+                          setDeleteTrigger(true);
+                          setScheduleSubjectData(d);
+                          // alert(d.subjectId);
+                        }}
+                        className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
+                      >
                         <Trash2 className="h-4 w-4 text-white" />
-                      </p>
+                      </button>
                     </div>
                   </div>
                 );
@@ -126,51 +138,19 @@ export default function Form({ term, year, groupId }: Props) {
           </div>
         )}
       </div>
-      {/* {deleteTrigger && (
-        <div
-          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
-          onClick={() => setDeleteTrigger(false)}
-        >
-          <div
-            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="py-4 w-full text-center text-2xl font-semibold">
-              ยืนยันการลบ
-            </div>
-            <div className="grid place-items-center py-3">
-              <p className="w-[300px] text-center">ลบวิชา {deleteName}</p>
-              <p className="text-gray-600 w-[300px] text-center">
-                ตรวจสอบให้แน่ใจก่อนลบ
-              </p>
-            </div>
-            <div className="flex gap-5 justify-center py-5 w-full">
-              <button
-                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
-                onClick={() => setDeleteTrigger(false)}
-              >
-                ยกเลิก
-              </button>
-              <button
-                className="text-sm w-[90px] py-1.5 bg-red-500 hover:bg-red-600 rounded-md text-white "
-                onClick={() => {
-                  // onDeleteSchedule(deleteID, deleteName);
-                }}
-                disabled={!deleteID || !deleteName}
-              >
-                ลบ
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
+      {deleteTrigger && scheduleSubjectData && (
+        <DeleteScheduleSutdentGroupPopup
+          scheduleData={scheduleSubjectData}
+          onClosePopup={setDeleteTrigger}
+        />
+      )}
       {popUpAddSubject == true && (
         <AddGroupSchedulePopUp
           onClosePopUp={setpopUpAddSubject}
           groupId={groupId}
           term={term}
           year={Number(year)}
-          onReload={reloadGroupSchedule}
+          // onReload={scheduleGroup}
         />
       )}
     </div>
