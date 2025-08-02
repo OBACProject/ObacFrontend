@@ -57,9 +57,9 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
 
     if (result) {
       toast.success("บันทึกคะแนนสำเร็จ");
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 500);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } else {
       alert("เกิดข้อผิดพลาดในการบันทึก");
     }
