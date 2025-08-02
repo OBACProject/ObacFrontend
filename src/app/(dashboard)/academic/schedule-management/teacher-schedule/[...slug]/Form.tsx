@@ -8,8 +8,8 @@ import {
   TeacherScheduleItem,
 } from "@/dto/teacherDto";
 import { GetTeacherDetailAndSchedule } from "@/api/teacher/route";
-import DeleteScheduleSubjectPopup from "@/components/common/Popup/DeleteScheduleSubjectPopup";
-// import { mockTeacherDetailAndSchedule } from "@/resource/academics/mockData";
+import DeleteScheduleTeacherPopup from "@/components/common/Popup/DeleteScheduleTeacherPopup";
+
 type Props = {
   term: string;
   year: string;
@@ -162,7 +162,7 @@ export default function Form({ term, year, teacherID }: Props) {
         </div>
       )}
       {deleteTrigger && scheduleSubjectData && (
-        <DeleteScheduleSubjectPopup
+        <DeleteScheduleTeacherPopup
           scheduleData={scheduleSubjectData}
           onClosePopup={setDeleteTrigger}
         />

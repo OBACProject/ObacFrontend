@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import AddGroupSchedulePopUp from "@/components/common/Popup/AddGroupSchedulePopup";
 import { GetStudentGroupScheduleStatus } from "@/api/studentGroup/route";
 import {
-  ScheduleItemStudentGroup,
   ScheduleItemStudentGroups,
   StudentGroupScheduleStatus,
 } from "@/dto/studentGroupItem";
+import DeleteScheduleSutdentGroupPopup from "@/components/common/Popup/DeleteScheduleSutdentGroupPopup";
 
 type Props = {
   term: string;
@@ -18,7 +18,7 @@ type Props = {
 export default function Form({ term, year, groupId }: Props) {
   const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
   const [scheduleSubjectData, setScheduleSubjectData] =
-    useState<ScheduleItemStudentGroup>();
+    useState<ScheduleItemStudentGroups>();
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
   const [scheduleGroup, setScheduleGroup] =
     useState<StudentGroupScheduleStatus>();
@@ -31,7 +31,6 @@ export default function Form({ term, year, groupId }: Props) {
         }
       }
     );
-
   }, []);
 
   useEffect(() => {
@@ -117,8 +116,8 @@ export default function Form({ term, year, groupId }: Props) {
                     <div className="border-l-[1px] h-full text-center">
                       <button
                         onClick={() => {
-                          setDeleteTrigger(true)
-                          setScheduleSubjectData(d)
+                          setDeleteTrigger(true);
+                          setScheduleSubjectData(d);
                           alert(d.subjectId);
                         }}
                         className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
@@ -139,44 +138,12 @@ export default function Form({ term, year, groupId }: Props) {
           </div>
         )}
       </div>
-      {/* {deleteTrigger && (
-        <div
-          className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45"
-          onClick={() => setDeleteTrigger(false)}
-        >
-          <div
-            className="bg-white shadow-lg shadow-gray-400   rounded-lg w-[400px] z-100 duration-500"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="py-4 w-full text-center text-2xl font-semibold">
-              ยืนยันการลบ
-            </div>
-            <div className="grid place-items-center py-3">
-              <p className="w-[300px] text-center">ลบวิชา {deleteName}</p>
-              <p className="text-gray-600 w-[300px] text-center">
-                ตรวจสอบให้แน่ใจก่อนลบ
-              </p>
-            </div>
-            <div className="flex gap-5 justify-center py-5 w-full">
-              <button
-                className="text-sm w-[90px] py-1.5 bg-gray-300 hover:bg-gray-400 rounded-md text-black "
-                onClick={() => setDeleteTrigger(false)}
-              >
-                ยกเลิก
-              </button>
-              <button
-                className="text-sm w-[90px] py-1.5 bg-red-500 hover:bg-red-600 rounded-md text-white "
-                onClick={() => {
-                  // onDeleteSchedule(deleteID, deleteName);
-                }}
-                disabled={!deleteID || !deleteName}
-              >
-                ลบ
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
+      {deleteTrigger && scheduleSubjectData && (
+        <DeleteScheduleSutdentGroupPopup
+          scheduleData={scheduleSubjectData}
+          onClosePopup={setDeleteTrigger}
+        />
+      )}
       {popUpAddSubject == true && (
         <AddGroupSchedulePopUp
           onClosePopUp={setpopUpAddSubject}

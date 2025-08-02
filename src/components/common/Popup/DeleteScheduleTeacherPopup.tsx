@@ -8,7 +8,7 @@ interface PropsDelete {
   scheduleData: TeacherScheduleItem;
 }
 
-export default function DeleteScheduleSubjectPopup({
+export default function DeleteScheduleTeacherPopup({
   onClosePopup,
   scheduleData,
 }: PropsDelete) {
