@@ -23,21 +23,24 @@ export default async function page({ params }: { params: PageParams }) {
           </div>
           <div className="flex gap-4 items-center">
             <div className="flex gap-1 items-center text-white">
-              <p>รหัสวิชา : </p>
+              <p>รหัสวิชา </p>
               <p className="text-sm px-4 bg-blue-400 py-0.5 rounded-full">
                 {subjectCode}
               </p>
             </div>
             <div className="flex gap-1 items-center text-white">
-              <p>กลุ่มเรียน : </p>
+              <p>กลุ่มเรียน </p>
               <p className="text-sm px-4 bg-blue-400 py-0.5 rounded-full">
                 {groupName}
               </p>
             </div>
           </div>
-          <h1 className="text-lg bg-blue-400 px-5 py-1 rounded-full w-fit text-white font-prompt_Light">
-            {subjectName}
-          </h1>
+          <div className="flex items-center gap-3">
+            <p className="text-white text-lg">วิชา</p>
+            <h1 className="text-lg bg-blue-400 px-5 py-1 rounded-full w-fit text-white font-prompt_Light">
+              {subjectName}
+            </h1>
+          </div>
         </div>
         <DocumentSection />
       </div>

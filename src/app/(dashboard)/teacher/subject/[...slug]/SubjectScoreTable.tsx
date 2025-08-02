@@ -2,14 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { SubjectGradeItem } from "@/dto/gradDto";
 import { Combobox } from "@/components/common/Combobox/combobox";
+import { BulkUpdateStudentGradeByScheduleSubjectId } from "@/api/grad/route";
+import { toast } from "react-toastify";
+import { Pencil } from "lucide-react";
 
 interface Props {
   grads?: SubjectGradeItem[];
-  onEdit: boolean | null | undefined;
+  scheduleID: number;
 }
 
-export default function SubjectTableForm({ grads, onEdit }: Props) {
-  // const [remark, setRemark] = useState<string>("");
+export default function SubjectTableForm({ grads, scheduleID }: Props) {
+  const [onEdit, setEdit] = useState<boolean>(false);
   const [gradDatas, setGradData] = useState<SubjectGradeItem[]>([]);
 
   useEffect(() => {
@@ -29,61 +32,38 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
     setGradData(updatedStudents);
   };
 
-  // const token = Cookies.get("token");
+  const onSaveGrad = async () => {
+    const payload = gradDatas.map((g) => ({
+      studentId: g.studentId,
+      collectScore: g.collectScore ?? 0,
+      assignmentScore: g.assignmentScore ?? 0,
+      affectiveScore: g.affectiveScore ?? 0,
+      midtermScore: g.midtermScore ?? 0,
+      finaltermScore: g.finaltermScore ?? 0,
+      totalScore:
+        (g.assignmentScore ?? 0) +
+        (g.affectiveScore ?? 0) +
+        (g.collectScore ?? 0) +
+        (g.midtermScore ?? 0) +
+        (g.finaltermScore ?? 0),
+      finalGrade: 0,
+      remarks: g.remarks ?? "",
+    }));
 
-  // const saveChanges = async () => {
-  //   try {
-  //     const result = await Swal.fire({
-  //       title: "ยืนยันข้อมูล?",
-  //       text: "จะไม่สามารถแก้ไขได้",
-  //       icon: "warning",
-  //       showCancelButton: true,
-  //       confirmButtonColor: "#3085d6",
-  //       cancelButtonColor: "#d33",
-  //       confirmButtonText: "ตกลง",
-  //     });
-  //     if (result.isConfirmed) {
-  //       const payload = gradDatas.map((item) => ({
-  //         collectScore: item.collectScore,
-  //         affectiveScore: item.affectiveScore,
-  //         midtermScore: item.midtermScore,
-  //         finaltermScore: item.finaltermScore,
-  //         totalScore:
-  //           (item.assignmentScore ?? 0) +
-  //           (item.affectiveScore ?? 0) +
-  //           (item.collectScore ?? 0) +
-  //           (item.midtermScore ?? 0) +
-  //           (item.finaltermScore ?? 0),
-  //         remark: item.remarks,
-  //       }));
-  //       for (let i = 0; i < payload.length; i++) {
-  //         const response = await fetch(
-  //           `${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/UpdateStudentGrade`,
-  //           {
-  //             method: "PUT",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //             body: JSON.stringify(payload[i]),
-  //           }
-  //         );
-  //         const responseBody = await response.json();
+    const result = await BulkUpdateStudentGradeByScheduleSubjectId(
+      scheduleID,
+      payload
+    );
 
-  //         if (!response.ok) {
-  //           throw new Error(
-  //             responseBody.message || "Failed to update student grades"
-  //           );
-  //         }
-  //       }
-  //     }
-
-  //     toast.success("บันทึกคะแนนสำเร็จ");
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Error saving changes:", error);
-  //   }
-  // };
+    if (result) {
+      toast.success("บันทึกคะแนนสำเร็จ");
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 500);
+    } else {
+      alert("เกิดข้อผิดพลาดในการบันทึก");
+    }
+  };
 
   const gradingScorce = (totalScore: number) => {
     if (totalScore >= 80) return "4";
@@ -124,190 +104,223 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
   };
 
   return (
-    <div className="w-full mb-10 ">
-      <div className="  bg-gray-100 grid grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%] border border-gray-300">
-        <span className="grid place-items-center text-base py-1">No.</span>
-        <span className="grid place-items-center text-base  py-1">
-          รหัสนักเรียน
-        </span>
-        <span className="grid place-items-center text-base  py-1">
-          ชื่อ - นามสกุล
-        </span>
-        <span className="text-center py-1 ">
-          <div className="text-sm">คะแนนจิตพิสัย</div>
-          <div className="text-sm text-gray-500">20 คะแนน</div>
-        </span>
-
-        <span className="text-center py-1 ">
-          <div className="text-sm">คะแนนทดสอบ</div>
-          <div className="text-sm text-gray-500">10 คะแนน</div>
-        </span>
-        <span className="text-center py-1 ">
-          <div className="text-sm">ภาระงาน</div>
-          <div className="text-sm text-gray-500">20 คะแนน</div>
-        </span>
-        <span className="text-center py-1 ">
-          <div className="text-sm">คะแนนกลางภาค</div>
-          <div className="text-sm text-gray-500">20 คะแนน</div>
-        </span>
-        <span className="text-center py-1 ">
-          <div className="text-sm">คะแนนปลายภาค</div>
-          <div className="text-sm text-gray-500">30 คะแนน</div>
-        </span>
-        <span className="grid place-items-center text-base  py-1 ">
-          คะแนนรวม
-        </span>
-        <span className="grid place-items-center  text-base py-1">เกรด</span>
-        <span className="grid place-items-center text-base  py-1">
-          หมายเหตุ
-        </span>
+    <div className="w-full">
+      <div className="flex justify-end  my-2">
+        {onEdit ? (
+          <div className="flex items-center gap-2 justify-center">
+            <button
+              className="py-1.5 bg-red-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-red-400-400 "
+              onClick={() => setEdit(!onEdit)}
+            >
+              ยกเลิก
+            </button>
+            <button
+              onClick={() => onSaveGrad()}
+              className="py-1.5 bg-green-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-green-400 "
+            >
+              บันทึก
+            </button>
+          </div>
+        ) : (
+          <button
+            className="py-1.5 bg-blue-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-blue-400 "
+            onClick={() => setEdit(!onEdit)}
+          >
+            <Pencil className="h-5 w-5" />
+            แก้ไข
+          </button>
+        )}
       </div>
-      {gradDatas?.map((item, index) => {
-        const calculatedGrade =
-          item.remarks && remarkValue.includes(item.remarks)
+      <div className="w-full mb-10 ">
+        <div className="  bg-gray-100 grid grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%] border border-gray-300">
+          <span className="grid place-items-center text-base py-1">No.</span>
+          <span className="grid place-items-center text-base  py-1">
+            รหัสนักเรียน
+          </span>
+          <span className="grid place-items-center text-base  py-1">
+            ชื่อ - นามสกุล
+          </span>
+          <span className="text-center py-1 ">
+            <div className="text-sm">คะแนนจิตพิสัย</div>
+            <div className="text-sm text-gray-500">20 คะแนน</div>
+          </span>
+
+          <span className="text-center py-1 ">
+            <div className="text-sm">คะแนนทดสอบ</div>
+            <div className="text-sm text-gray-500">10 คะแนน</div>
+          </span>
+          <span className="text-center py-1 ">
+            <div className="text-sm">ภาระงาน</div>
+            <div className="text-sm text-gray-500">20 คะแนน</div>
+          </span>
+          <span className="text-center py-1 ">
+            <div className="text-sm">คะแนนกลางภาค</div>
+            <div className="text-sm text-gray-500">20 คะแนน</div>
+          </span>
+          <span className="text-center py-1 ">
+            <div className="text-sm">คะแนนปลายภาค</div>
+            <div className="text-sm text-gray-500">30 คะแนน</div>
+          </span>
+          <span className="grid place-items-center text-base  py-1 ">
+            คะแนนรวม
+          </span>
+          <span className="grid place-items-center  text-base py-1">เกรด</span>
+          <span className="grid place-items-center text-base  py-1">
+            หมายเหตุ
+          </span>
+        </div>
+        {gradDatas?.map((item, index) => {
+          const calculatedGrade =
+            item.remarks && remarkValue.includes(item.remarks)
+              ? item.remarks
+              : gradingScorce(
+                  (item.assignmentScore ?? 0) +
+                    (item.affectiveScore ?? 0) +
+                    (item.collectScore ?? 0) +
+                    (item.midtermScore ?? 0) +
+                    (item.finaltermScore ?? 0)
+                );
+          const finalGradeDisplay = remarkValue.includes(item.remarks ?? "")
             ? item.remarks
-            : gradingScorce(
-                (item.assignmentScore ?? 0) +
+            : calculatedGrade;
+          return (
+            <div
+              className=" text-sm border-b-[1px]  grid group hover:bg-[#e8f3ff] grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%]"
+              key={item.studentId}
+            >
+              <span className="text-center flex items-center justify-center font-semibold border-l-[1px] border-r-[1px] py-1">
+                {index + 1}.
+              </span>
+              <span className="text-center border-r-[1px] py-1 flex items-center justify-center ">
+                {item.studentCode}
+              </span>
+              <span className="text-start pl-5 border-r-[1px] flex py-1 items-center justify-start">
+                {item.firstName} {item.lastName}
+              </span>
+              <input
+                disabled={!onEdit}
+                type="number"
+                value={
+                  item.affectiveScore === 0 ? "" : item.affectiveScore ?? ""
+                }
+                min={0}
+                max={20}
+                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
+                  (item.affectiveScore ?? 0) > 20 ||
+                  (item.affectiveScore ?? 0) < 0
+                    ? "border-red-500 outline-red-500 rounded-md border-[1px]"
+                    : "border-gray-300 border-r-[1px]"
+                }`}
+                onChange={(e) =>
+                  handleInputChange(index, "affectiveScore", e.target.value)
+                }
+              />
+              <input
+                disabled={onEdit != true}
+                type="number"
+                value={item.collectScore === 0 ? "" : item.collectScore ?? ""}
+                min={0}
+                max={50}
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                  (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
+                    ? "outline-red-500 border-red-500 rounded-md border-1"
+                    : "border-gray-300 border-r-[1px]"
+                }`}
+                onChange={(e) =>
+                  handleInputChange(index, "collectScore", e.target.value)
+                }
+              />
+              <input
+                disabled={onEdit != true}
+                type="number"
+                value={
+                  item.assignmentScore === 0 ? "" : item.assignmentScore ?? ""
+                }
+                min={0}
+                max={50}
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                  (item.assignmentScore ?? 0) > 50 ||
+                  (item.assignmentScore ?? 0) < 0
+                    ? "outline-red-500 border-red-500 rounded-md border-1"
+                    : "border-gray-300 border-r-[1px]"
+                }`}
+                onChange={(e) =>
+                  handleInputChange(index, "assignmentScore", e.target.value)
+                }
+              />
+
+              <input
+                disabled={onEdit != true}
+                type="number"
+                value={item.midtermScore === 0 ? "" : item.midtermScore ?? ""}
+                min={0}
+                max={30}
+                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+                  (item.midtermScore ?? 0) > 30 || (item.midtermScore ?? 0) < 0
+                    ? "rounded-md outline-red-500 border-red-500  border-[3px]"
+                    : "border-gray-300 border-r-[1px]"
+                }`}
+                onChange={(e) =>
+                  handleInputChange(index, "midtermScore", e.target.value)
+                }
+              />
+              <input
+                disabled={onEdit != true}
+                type="number"
+                value={
+                  item.finaltermScore === 0 ? "" : item.finaltermScore ?? ""
+                }
+                min={0}
+                max={50}
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                  (item.finaltermScore ?? 0) > 50 ||
+                  (item.finaltermScore ?? 0) < 0
+                    ? "outline-red-500 border-red-500 rounded-md border-1"
+                    : "border-gray-300 border-r-[1px]"
+                }`}
+                onChange={(e) =>
+                  handleInputChange(index, "finaltermScore", e.target.value)
+                }
+              />
+              <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-2">
+                {(item.assignmentScore ?? 0) +
                   (item.affectiveScore ?? 0) +
                   (item.collectScore ?? 0) +
                   (item.midtermScore ?? 0) +
-                  (item.finaltermScore ?? 0)
-              );
-        const finalGradeDisplay = remarkValue.includes(item.remarks ?? "")
-          ? item.remarks
-          : calculatedGrade;
-        return (
-          <div
-            className=" text-sm border-b-[1px]  grid group hover:bg-[#e8f3ff] grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%]"
-            key={item.studentId}
-          >
-            <span className="text-center flex items-center justify-center font-semibold border-l-[1px] border-r-[1px] py-1">
-              {index + 1}.
-            </span>
-            <span className="text-center border-r-[1px] py-1 flex items-center justify-center ">
-              {item.studentCode}
-            </span>
-            <span className="text-start pl-5 border-r-[1px] flex py-1 items-center justify-start">
-              {item.firstName} {item.lastName}
-            </span>
-            <input
-              disabled={!onEdit}
-              type="number"
-              value={item.affectiveScore ?? 0}
-              min={0}
-              max={20}
-              className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
-                (item.affectiveScore ?? 0) > 20 ||
-                (item.affectiveScore ?? 0) < 0
-                  ? "border-red-500 outline-red-500 rounded-md border-[1px]"
-                  : "border-gray-300 border-r-[1px]"
-              }`}
-              onChange={(e) =>
-                handleInputChange(index, "affectiveScore", e.target.value)
-              }
-            />
-            <input
-              disabled={onEdit != true}
-              type="number"
-              value={item.collectScore ?? 0}
-              min={0}
-              max={50}
-              className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
-                (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
-                  ? "outline-red-500 border-red-500 rounded-md border-1"
-                  : "border-gray-300 border-r-[1px]"
-              }`}
-              onChange={(e) =>
-                handleInputChange(index, "collectScore", e.target.value)
-              }
-            />
-            <input
-              disabled={onEdit != true}
-              type="number"
-              value={item.assignmentScore ?? 0}
-              min={0}
-              max={50}
-              className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
-                (item.assignmentScore ?? 0) > 50 ||
-                (item.assignmentScore ?? 0) < 0
-                  ? "outline-red-500 border-red-500 rounded-md border-1"
-                  : "border-gray-300 border-r-[1px]"
-              }`}
-              onChange={(e) =>
-                handleInputChange(index, "assignmentScore", e.target.value)
-              }
-            />
-
-            <input
-              disabled={onEdit != true}
-              type="number"
-              value={item.midtermScore ?? 0}
-              min={0}
-              max={30}
-              className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
-                (item.midtermScore ?? 0) > 30 || (item.midtermScore ?? 0) < 0
-                  ? "rounded-md outline-red-500 border-red-500  border-[3px]"
-                  : "border-gray-300 border-r-[1px]"
-              }`}
-              onChange={(e) =>
-                handleInputChange(index, "midtermScore", e.target.value)
-              }
-            />
-            <input
-              disabled={onEdit != true}
-              type="number"
-              value={item.finaltermScore ?? 0}
-              min={0}
-              max={50}
-              className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
-                (item.finaltermScore ?? 0) > 50 ||
-                (item.finaltermScore ?? 0) < 0
-                  ? "outline-red-500 border-red-500 rounded-md border-1"
-                  : "border-gray-300 border-r-[1px]"
-              }`}
-              onChange={(e) =>
-                handleInputChange(index, "finaltermScore", e.target.value)
-              }
-            />
-            <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-2">
-              {(item.assignmentScore ?? 0) +
-                (item.affectiveScore ?? 0) +
-                (item.collectScore ?? 0) +
-                (item.midtermScore ?? 0) +
-                (item.finaltermScore ?? 0)}
-            </span>
-            <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-base border-r-[1px]">
-              <div className="flex justify-center px-1 py-1">
+                  (item.finaltermScore ?? 0)}
+              </span>
+              <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-base border-r-[1px]">
+                <div className="flex justify-center px-1 py-1">
+                  <Combobox
+                    buttonLabel="เกรด"
+                    disabled={true}
+                    options={gradeValue.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                    onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
+                    defaultValue={finalGradeDisplay}
+                  />
+                </div>
+              </span>
+              <div className="flex justify-center px-1 py-1 border-r-[1px]">
                 <Combobox
-                  buttonLabel="เกรด"
-                  disabled={true}
-                  options={gradeValue.map((item) => ({
+                  buttonLabel="หมายเหตุ"
+                  disabled={!onEdit}
+                  options={remarkValue.map((item) => ({
                     label: item,
                     value: item,
                   }))}
-                  onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
-                  defaultValue={finalGradeDisplay}
+                  onSelect={(selectedGrade) =>
+                    onChangeRemark(selectedGrade, item.studentId)
+                  }
+                  defaultValue={item.remarks || ""}
                 />
               </div>
-            </span>
-            <div className="flex justify-center px-1 py-1 border-r-[1px]">
-              <Combobox
-                buttonLabel="หมายเหตุ"
-                disabled={!onEdit}
-                options={remarkValue.map((item) => ({
-                  label: item,
-                  value: item,
-                }))}
-                onSelect={(selectedGrade) =>
-                  onChangeRemark(selectedGrade, item.studentId)
-                }
-                defaultValue={item.remarks || ""}
-              />
             </div>
-          </div>
-        );
-      })}
-      {/* <div className="my-5 w-full grid place-items-end  ">
+          );
+        })}
+        {/* <div className="my-5 w-full grid place-items-end  ">
         <button
           onClick={saveChanges}
           disabled={!onEdit}
@@ -316,7 +329,8 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           บันทึกคะแนน
         </button>
       </div> */}
-      <hr />
+        <hr />
+      </div>{" "}
     </div>
   );
 }

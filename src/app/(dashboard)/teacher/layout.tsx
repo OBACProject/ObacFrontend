@@ -29,7 +29,7 @@ export default function RootLayout({
           menuItems={TeacherSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="flex-grow h-full pt-16 pr-0 lg:pl-10">{children}</div>
+        <div className="flex-grow h-full pt-16 pr-0 lg:pl-16">{children}</div>
         <HomeFooter />
       </body>
     </html>
