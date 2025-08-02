@@ -102,7 +102,7 @@ export default function Form({ term, year, groupId }: Props) {
                       {d.subjectCode}
                     </div>
                     <div className="border-l-[1px] text-start pl-2 lg:pl-6">
-                      {d.subjectName}
+                      {d.subjectName} 
                     </div>
                     <div className="border-l-[1px] text-center">
                       {d.curriculumYear}
@@ -118,7 +118,7 @@ export default function Form({ term, year, groupId }: Props) {
                         onClick={() => {
                           setDeleteTrigger(true);
                           setScheduleSubjectData(d);
-                          alert(d.subjectId);
+                          // alert(d.subjectId);
                         }}
                         className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
                       >

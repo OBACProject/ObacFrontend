@@ -16,7 +16,7 @@ export default function DeleteScheduleSutdentGroupPopup({
   const onDeleteSchedule = async () => {
     try {
       DeleteEnrollmentGradeAndScheduleByScheduleSubjectId(
-        scheduleData.subjectId
+        scheduleData.scheduleSubjectsId
       );
       toast.success("ลบสำเร็จ");
       onClosePopup(false);
