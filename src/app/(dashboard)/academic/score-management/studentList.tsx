@@ -30,10 +30,9 @@ export default function StudentListPage() {
   const [searchInput, setSearchInput] = useState<string>("")
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("")
   const [selectedFaculty, setSelectedFaculty] = useState<string>("")
-  const [sortBy] = useState<string>("") // Not used in query, but kept for completeness
-  const [ascending] = useState<boolean>(true) // Not used in query, but kept for completeness
+  const [sortBy] = useState<string>("") 
+  const [ascending] = useState<boolean>(true) 
 
-  // State to hold the last successfully fetched data to prevent flickering
   const [lastSuccessfulData, setLastSuccessfulData] = useState<any>(null)
 
   const [filterOptions, setFilterOptions] = useState<{
@@ -43,7 +42,6 @@ export default function StudentListPage() {
 
   const debouncedSearchInput = useDebounce(searchInput, 500)
 
-  // Memoize the combined search text and filters
   const searchText = useMemo(() => {
     const filters = []
     if (debouncedSearchInput) filters.push(debouncedSearchInput)
@@ -52,7 +50,6 @@ export default function StudentListPage() {
     return filters.join(" ")
   }, [debouncedSearchInput, selectedClassLevel, selectedFaculty])
 
-  // Fetch all students for filter options (this query should not be affected by search/pagination)
   const { data: allStudentsData, isLoading: isLoadingFilterOptions } = useGetAllStudentsQuery({
     pageNumber: 1,
     pageSize: 1000,
@@ -61,7 +58,6 @@ export default function StudentListPage() {
     Ascending: true,
   })
 
-  // Populate filter options once allStudentsData is available
   useEffect(() => {
     if (allStudentsData?.items && filterOptions.classLevels.length === 0) {
       const classLevels = Array.from(new Set(allStudentsData.items.map((student) => student.class))).sort()
@@ -70,15 +66,12 @@ export default function StudentListPage() {
     }
   }, [allStudentsData?.items, filterOptions.classLevels.length])
 
-  // Reset currentPage to 1 whenever any filter or debounced search input changes
   useEffect(() => {
-    // Only reset if currentPage is not already 1
     if (currentPage !== 1) {
       setCurrentPage(1)
     }
-  }, [searchText]) // searchText changes when any of its dependencies (debouncedSearchInput, selectedClassLevel, selectedFaculty) change.
+  }, [searchText])
 
-  // Main data fetching query for the table
   const {
     data,
     isLoading: isLoadingTable,
@@ -91,7 +84,6 @@ export default function StudentListPage() {
     Ascending: ascending,
   })
 
-  // Update lastSuccessfulData whenever new data arrives and is not null/undefined
   useEffect(() => {
     if (data) {
       setLastSuccessfulData(data)
@@ -116,7 +108,6 @@ export default function StudentListPage() {
   ]
 
   const tableData = useMemo(() => {
-    // Use lastSuccessfulData for rendering if data is undefined during loading
     const currentData = data || lastSuccessfulData
     if (!currentData?.items) return []
 
@@ -125,17 +116,16 @@ export default function StudentListPage() {
       index: (currentPage - 1) * pageSize + index + 1,
       fullName: `${item.prefix}${item.name} ${item.lastName}`,
     }))
-  }, [data, lastSuccessfulData, currentPage, pageSize]) // Depend on both data and lastSuccessfulData
+  }, [data, lastSuccessfulData, currentPage, pageSize]) 
 
   const getRowLink = useCallback((item: any) => {
-    return `/academic/score-management/individual/${item.id}`
+    return `/academic/score-management/individual/${item.studentCode}`
   }, [])
 
   const clearFilters = () => {
     setSearchInput("")
     setSelectedClassLevel("")
     setSelectedFaculty("")
-    // currentPage will be reset by the useEffect watching searchText
   }
 
   const handlePageChange = (page: number) => {
@@ -148,21 +138,17 @@ export default function StudentListPage() {
 
   const handleClassLevelChange = (value: string) => {
     setSelectedClassLevel(value)
-    // currentPage will be reset by the useEffect watching searchText
   }
 
   const handleFacultyChange = (value: string) => {
     setSelectedFaculty(value)
-    // currentPage will be reset by the useEffect watching searchText
   }
 
   // Only show skeleton if there's no last successful data AND it's loading
-  // This ensures the skeleton only appears on initial load or if a previous fetch failed
   if (isLoadingTable && !lastSuccessfulData) {
     return <TableSkeleton rows={8} columns={5} />
   }
 
-  // Show error message only if there's an error AND no data to display
   if (isError && !lastSuccessfulData) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-sm border">

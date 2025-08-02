@@ -6,52 +6,57 @@ import { Button } from "@/components/ui/button"
 import type { GetStudentGradeDetailDto } from "@/dto/gradDto"
 import type { StudentTranscriptData, YearData } from "@/dto/studentDto"
 import { StudentInfoCard } from "./../component/StudentInfoCard"
-import { mockStudentTranscriptList } from "./mockData"
 import { StudentTermTable } from "./../component/StudentTermTable"
-
-const getStudentDataByIdMock = (id: number): Promise<StudentTranscriptData | null> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const student = mockStudentTranscriptList.find((s) => s.studentId === id) || null
-      resolve(student)
-    }, 600)
-  })
-}
-// it should be replaced with actual API call in 
+import { useGetStudentDetailAndSummaryScoreByStudentCodeQuery } from "@/lib/api/hooks/queries/grade.queries"
 
 const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
-  const studentId = Number(params.params)
+  const studentCode = params.params 
   const [studentTranscriptDataById, setStudentTranscriptDataById] = useState<StudentTranscriptData | null>(null)
   const [termData, setTermData] = useState<YearData[]>([])
   const [scoreFileData, setScoreFileData] = useState<GetStudentGradeDetailDto | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const data = await getStudentDataByIdMock(studentId)
-      if (!data) {
-        throw new Error("ไม่พบข้อมูลนักเรียน")
-      }
-
-      setStudentTranscriptDataById(data)
-      setTermData(data.year)
-    } catch (error) {
-      console.error("Error fetching student data:", error)
-      setError(error instanceof Error ? error.message : "เกิดข้อผิดพลาดในการโหลดข้อมูล")
-    } finally {
-      setLoading(false)
-    }
-  }
+  // Use the real API query with normal pattern
+  const { data: apiData, isLoading, error, refetch } = useGetStudentDetailAndSummaryScoreByStudentCodeQuery(studentCode);
 
   useEffect(() => {
-    fetchData()
-  }, [studentId])
+    if (apiData) {
+      const transformedData: StudentTranscriptData = {
+        studentId: apiData.student.id,
+        firstName: apiData.student.name,
+        lastName: apiData.student.lastName,
+        thaiName: apiData.student.name,
+        thaiLastName: apiData.student.lastName,
+        class: apiData.student.class,
+        currentYear: new Date().getFullYear(),
+        studentCode: apiData.student.studentCode,
+        groupName: apiData.student.groupName,
+        programName: apiData.student.programName,
+        facultyName: apiData.student.facultyName,
+        subProgramName: apiData.student.subProgramName || "",
+        year: apiData.termYearGradeGroups.map(termGroup => ({
+          term: termGroup.term,
+          year: termGroup.year,
+          totalCredit: termGroup.totalCredit,
+          termQuery: termGroup.grades.map(grade => ({
+            subject_name: grade.subjectName,
+            subject_code: grade.subjectCode,
+            credit: grade.credit.toString(),
+            finalGrade: grade.finalGrade?.toString() || "0",
+            remark: grade.remarks || "",
+            collectScore: grade.collectScore,
+            affectiveScore: grade.affectiveScore,
+            testScore: grade.midtermScore + grade.finaltermScore,
+            gradeId: grade.gradeId,
+          }))
+        }))
+      };
 
-  if (loading) {
+      setStudentTranscriptDataById(transformedData);
+      setTermData(transformedData.year);
+    }
+  }, [apiData]);
+
+  if (isLoading) {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-6">
         <div className="flex items-center justify-center py-20">
@@ -70,8 +75,8 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
         <Alert variant="destructive" className="max-w-md mx-auto">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between">
-            <span>{error}</span>
-            <Button variant="outline" size="sm" onClick={fetchData} className="ml-4 bg-transparent">
+            <span>{error?.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล"}</span>
+            <Button variant="outline" size="sm" onClick={() => refetch()} className="ml-4 bg-transparent">
               <RefreshCw className="h-4 w-4 mr-2" />
               ลองใหม่
             </Button>
@@ -81,7 +86,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
     )
   }
 
-  if (!studentTranscriptDataById) {
+  if (!studentTranscriptDataById && !isLoading && !error) {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-6">
         <Alert className="max-w-md mx-auto">
@@ -94,6 +99,10 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
 
   function SummaryGradPDF(scoreFileData: GetStudentGradeDetailDto) {
     throw new Error("Function not implemented.")
+  }
+
+  if (!studentTranscriptDataById) {
+    return null;
   }
 
   return (
