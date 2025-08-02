@@ -78,7 +78,7 @@ export interface GetStudentGroupGradeByScheduleSubjectIdResponse {
   iscomplete : boolean;
   term : string;
   year : number;
-  subjectGrades : SubjectGrade[];
+  subjectGrades : SubjectGradeScheduleSubject[];
 }
 
 export interface GetStudentIfGradeBelowResponse {
@@ -130,10 +130,22 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
     gpax: number;
     status: string;
   }
-  export interface SubjectGrade {
+  
+  export interface SubjectGradeScheduleSubject {
     gradeId: number;
-    finalGrade: number;
-    remark: string;
+    studentId: number;
+    studentCode: string;
+    prefix: string;
+    firstName: string;
+    lastName: string;
+    assignmentScore: number;
+    collectScore: number;
+    affectiveScore: number;
+    midtermScore: number;
+    finaltermScore: number;
+    totalScore: number;
+    finalGrade: number | null;
+    remarks: string | null;
     subjectName: string;
     subjectCode: string;
     credit: number;
@@ -147,5 +159,5 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
     year: number;
     totalGPA: number;
     totalCredit: number;
-    grades: SubjectGrade[];
+    grades: SubjectGradeScheduleSubject[];
   }

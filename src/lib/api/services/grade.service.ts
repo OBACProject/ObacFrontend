@@ -1,6 +1,7 @@
 import { BaseService } from "./base/base.service";
 import { GRADE_ENDPOINTS } from "../endpoints/grade.endpoints";
 import {
+  BulkUpdateStudentGradeByScheduleSubjectIdRequest,
   GetGroupSummaryGradeRequest,
   GetStudentGradesByTermYearRequest,
   GetStudentIfGradeBelowRequest,
@@ -27,6 +28,7 @@ export class GradeService extends BaseService {
     );
   }
   
+  
   async getStudentGradesByTermYear(
     params : GetStudentGradesByTermYearRequest
   ) : Promise<GetStudentGradesByTermYearResponse> {
@@ -35,6 +37,17 @@ export class GradeService extends BaseService {
       params
     );
   }
+
+  async BulkUpdateStudentGradeByScheduleSubjectId(
+    scheduleSubjectId : number,
+    params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[]
+  ) : Promise<void> {
+    return this.put<void>(
+      `${GRADE_ENDPOINTS.UPDATE_BULKUPDATE_STUDENTS_GRADE_BY_SCHEDULE_SUBJECT_ID}?scheduleSubjectId=${scheduleSubjectId}`,
+      params
+    );
+  }
+
   async GetStudentDetailAndSummaryScoreByStudentCode(
     studentCode: string
   ): Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
@@ -46,7 +59,7 @@ export class GradeService extends BaseService {
     scheduleSubjectId: number
   ): Promise<GetStudentGroupGradeByScheduleSubjectIdResponse> {
     return this.get<GetStudentGroupGradeByScheduleSubjectIdResponse>(
-      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}/${scheduleSubjectId}`
+      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}?scheduleSubjectId=${scheduleSubjectId}`
     );
   }
 

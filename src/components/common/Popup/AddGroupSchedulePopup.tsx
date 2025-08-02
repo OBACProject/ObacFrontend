@@ -1,20 +1,17 @@
-import { fetchCreateScheduleSubject } from "@/api/oldApi/schedule/scheduleAPI";
-import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
-import { fetchGetAllSubject, fetchGetAllSubjectByTerm } from "@/api/oldApi/subject/subjectAPI";
-import { fetchGetAllTeacherAsync } from "@/api/oldApi/teacher/teacherAPI";
+
+import { CreateEnrollmentWithGradeAndSchedule } from "@/api/schedule/route";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
-import { CreateEnrollmentWithGradeAndSchedule, GetAllActiveSubjectAsync } from "@/api/subject/route";
+import { GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { GetAllTeachers } from "@/api/teacher/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Input } from "@/components/ui/input";
-import { CreateScheduleSubjectRequest } from "@/dto/schedule";
+
 import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { CreateEnrollmentWithGradeAndScheduleRequest, SubjectItem } from "@/dto/subjectDto";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
-import { GetAllActiveSubjectsResponse, GetAllSubjectAsyncResponse } from "@/lib/api/models/subject/subject.response";
+import { GetAllActiveSubjectsResponse } from "@/lib/api/models/subject/subject.response";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-import { GetStudentByIdDataApi } from "@/resource/academics/grading/api/individualGradeApiData";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -26,8 +23,6 @@ type AddGroupSchedulePopUp = {
     year?: number
     teacherId?: number;
 };
-
-
 
 export default function AddGroupSchedulePopUp({
     onClosePopUp, groupId
@@ -88,7 +83,7 @@ export default function AddGroupSchedulePopUp({
     const [day, setDay] = useState<string>("");
     const [period, setPeriod] = useState<string>("");
     const [room, setRoom] = useState<string>("");
-    const [hour, setHour] = useState<string>("");
+
     const [teacherID, setTeacherID] = useState<number>(0);
     const [subjectID, setSubjectID] = useState<number>(0);
     const [studentGroupId, setStudentGroupId] = useState<number>(0);
@@ -225,18 +220,6 @@ export default function AddGroupSchedulePopUp({
                                 placeholder="-- เลือกวิชา --"
                             />
 
-                        </div>
-                    </div>
-                    <div className="flex  px-4 py-2">
-                        <div className="w-full flex flex-col  px-2 relative">
-                            <h1>เวลาเรียน</h1>
-
-                            <Input
-                                type="number"
-                                placeholder="--เลือกชั่วโมง--"
-                                className="w-full pr-10"
-                                onChange={(e) => setHour(e.target.value)}
-                            />
                         </div>
                     </div>
                     <div className="flex  px-4 py-2">
