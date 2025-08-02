@@ -9,9 +9,9 @@ import {
   GradSummaryGroupData,
   mockGetGradBelowResponse,
   mockGroupSummaryGradeResponse,
+  mockStudentGroupGradeResponse,
   mockStudentListByGroupID,
   mockStudentNameListInSubject,
-  mockStudentScorenSubject,
 } from "@/resource/PDF/mockData";
 
 export const genGradSummaryForStudent = async () => {
@@ -52,7 +52,7 @@ export const genStudentNameInSubject = async () => {
 
 export const genStudentScoreInSubject = async () => {
   try {
-    StudentScoreInSubjectPDF({ data: mockStudentScorenSubject });
+    StudentScoreInSubjectPDF({ data: mockStudentGroupGradeResponse });
   } catch (err) {
     console.log("Error in lib genStudentScoreInSubject.", err);
   }

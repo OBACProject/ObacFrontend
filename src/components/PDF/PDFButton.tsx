@@ -1,6 +1,9 @@
 "use client";
 
-import { genPDFStudentNamelistInGroup } from "@/lib/PDFGenarate/createPDFFile";
+import {
+  genPDFStudentNamelistInGroup,
+  genPDFStudentScoreInSubjectPDF,
+} from "@/lib/PDFGenarate/createPDFFile";
 import { Download } from "lucide-react";
 
 export const PDFStudentNamelistInGroupButton = ({
@@ -22,6 +25,27 @@ export const PDFStudentNamelistInGroupButton = ({
     >
       <Download className="text-blue-700 w-5 h-5" />
       รายชื่อนักเรียน PDF
+    </button>
+  );
+};
+
+export const PDFStudentScoreInSubjectPDF = ({
+  scheduleSubjectID,
+}: {
+  scheduleSubjectID: number;
+}) => {
+  const handleClick = () => {
+    genPDFStudentScoreInSubjectPDF(scheduleSubjectID);
+  };
+
+  return (
+    <button
+      className="flex px-8 border-[1px] border-gray-300 text-blue-700 font-prompt_Light bg-white py-1.5
+       hover:scale-[101%] duration-300 text-sm rounded-md items-center justify-center gap-3"
+      onClick={handleClick}
+    >
+      <Download className="text-blue-700 w-5 h-5" />
+      คะแนนนักเรียน PDF
     </button>
   );
 };

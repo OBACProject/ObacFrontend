@@ -1,15 +1,23 @@
 "use client";
-import { PDFStudentNamelistInGroupButton } from "@/components/PDF/PDFButton";
-import { genStudentScoreInSubject } from "@/lib/PDFGenarate/generateFile";
+import {
+  PDFStudentNamelistInGroupButton,
+  PDFStudentScoreInSubjectPDF,
+} from "@/components/PDF/PDFButton";
+// import { genStudentScoreInSubject } from "@/lib/PDFGenarate/generateFile";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 
 interface Props {
   groupID: number;
   year: number;
+  scheduleSubjectID: number;
 }
 
-export default function DocumentSection({ groupID, year }: Props) {
+export default function DocumentSection({
+  groupID,
+  year,
+  scheduleSubjectID,
+}: Props) {
   return (
     <div className="px-5 py-5 grid ">
       <div className="relative group inline-block">
@@ -23,14 +31,7 @@ export default function DocumentSection({ groupID, year }: Props) {
             <PDFStudentNamelistInGroupButton groupID={groupID} year={year} />
           </div>
 
-          <button
-            className="px-4 py-1.5 rounded-md bg-white text-blue-600 shadow-lg hover:bg-gray-50"
-            onClick={() => {
-              genStudentScoreInSubject();
-            }}
-          >
-            ใบคะแนน PDF
-          </button>
+          <PDFStudentScoreInSubjectPDF scheduleSubjectID={scheduleSubjectID} />
           <button className="px-4 py-1.5 rounded-md bg-white text-blue-600 shadow-lg hover:bg-gray-50">
             รายชื่อ Excel
           </button>

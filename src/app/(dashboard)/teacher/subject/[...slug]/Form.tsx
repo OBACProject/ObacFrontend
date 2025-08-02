@@ -36,7 +36,7 @@ export default function Form({
           <div className="flex gap-2 items-center">
             <GraduationCap className="text-white h-6 w-6" />
             <h1 className="text-2xl text-white font-prompt">
-              ระบบจัดการคะแนนสำหรับอาจารย์
+              ระบบจัดการคะแนนสำหรับอาจารย์ {scheduleID}
             </h1>
           </div>
           <div className="flex gap-4 items-center">
@@ -61,7 +61,11 @@ export default function Form({
           </div>
         </div>
         {grads && (
-          <DocumentSection groupID={grads?.groupId} year={grads?.year} />
+          <DocumentSection
+            groupID={grads?.groupId}
+            year={grads?.year}
+            scheduleSubjectID={Number(scheduleID)}
+          />
         )}
       </div>
       {grads && (
