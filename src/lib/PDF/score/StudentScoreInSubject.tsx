@@ -63,7 +63,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     105,
     77
   );
-  
+
   doc.text(`รายวิชา ${data.subjectName || "ยังไม่ทราบรายวิชา"}`, 15, 83);
   doc.text(`รหัสวิชา ${data.subjectCode || "00000-0000"}`, 105, 83);
   doc.text(`หน่วยกิต ${data.credits || "-"}`, 150, 83);
@@ -244,7 +244,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   // doc.line(205, 291, 4, 291);
 
   doc.line(4, 12, 205, 12);
-
+  let checkNewPage = false;
   autoTable(doc, {
     startY: 12,
     body: [
@@ -352,11 +352,60 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
       y2 = doc.lastAutoTable.finalY;
 
       if (y2 > 250) {
+        if (students.length <= 40) {
+          doc.setFontSize(16);
+          doc.text(
+            "ลงชื่อ.............................................",
+            167,
+            270,
+            {
+              align: "center",
+            }
+          );
+          doc.text(
+            "(.............................................)",
+            170,
+            277,
+            {
+              align: "center",
+            }
+          );
+          doc.text("ผู้ตรวจ", 170, 284, { align: "center" });
+        }
+        checkNewPage = true;
         doc.addPage();
-
         y2 = 14;
       }
     }
+  }
+
+  if (students.length <= 40 && checkNewPage != true) {
+    doc.setFontSize(16);
+    doc.text("ลงชื่อ.............................................", 167, 270, {
+      align: "center",
+    });
+    doc.text("(.............................................)", 170, 277, {
+      align: "center",
+    });
+    doc.text("ผู้ตรวจ", 170, 284, { align: "center" });
+  } else if (students.length > 40) {
+    if (checkNewPage != true) {
+      doc.addPage();
+    }
+    let y3 = y2 + 14;
+    doc.setFontSize(16);
+    doc.text("ลงชื่อ.............................................", 165, y3, {
+      align: "center",
+    });
+    doc.text(
+      "(.............................................)",
+      167 + 3,
+      y3 + 6,
+      {
+        align: "center",
+      }
+    );
+    doc.text("ผู้ตรวจ", 167 + 3, y3 + 13, { align: "center" });
   }
 
   doc.save(`ใบคะแนนวิชา ${data.subjectName} ${data.groupName}.pdf`);
