@@ -134,15 +134,16 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
           ชื่อ - นามสกุล
         </span>
         <span className="text-center py-1 ">
-          <div className="text-sm">ภาระงาน</div>
+          <div className="text-sm">คะแนนจิตพิสัย</div>
           <div className="text-sm text-gray-500">20 คะแนน</div>
         </span>
+
         <span className="text-center py-1 ">
           <div className="text-sm">คะแนนทดสอบ</div>
           <div className="text-sm text-gray-500">10 คะแนน</div>
         </span>
         <span className="text-center py-1 ">
-          <div className="text-sm">คะแนนจิตพิสัย</div>
+          <div className="text-sm">ภาระงาน</div>
           <div className="text-sm text-gray-500">20 คะแนน</div>
         </span>
         <span className="text-center py-1 ">
@@ -190,19 +191,19 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
               {item.firstName} {item.lastName}
             </span>
             <input
-              disabled={onEdit != true}
+              disabled={!onEdit}
               type="number"
-              value={item.assignmentScore ?? 0}
+              value={item.affectiveScore ?? 0}
               min={0}
-              max={50}
-              className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
-                (item.assignmentScore ?? 0) > 50 ||
-                (item.assignmentScore ?? 0) < 0
-                  ? "outline-red-500 border-red-500 rounded-md border-1"
+              max={20}
+              className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
+                (item.affectiveScore ?? 0) > 20 ||
+                (item.affectiveScore ?? 0) < 0
+                  ? "border-red-500 outline-red-500 rounded-md border-[1px]"
                   : "border-gray-300 border-r-[1px]"
               }`}
               onChange={(e) =>
-                handleInputChange(index, "assignmentScore", e.target.value)
+                handleInputChange(index, "affectiveScore", e.target.value)
               }
             />
             <input
@@ -220,23 +221,23 @@ export default function SubjectTableForm({ grads, onEdit }: Props) {
                 handleInputChange(index, "collectScore", e.target.value)
               }
             />
-
             <input
-              disabled={!onEdit}
+              disabled={onEdit != true}
               type="number"
-              value={item.affectiveScore ?? 0}
+              value={item.assignmentScore ?? 0}
               min={0}
-              max={20}
-              className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
-                (item.affectiveScore ?? 0) > 20 ||
-                (item.affectiveScore ?? 0) < 0
-                  ? "border-red-500 outline-red-500 rounded-md border-[1px]"
+              max={50}
+              className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                (item.assignmentScore ?? 0) > 50 ||
+                (item.assignmentScore ?? 0) < 0
+                  ? "outline-red-500 border-red-500 rounded-md border-1"
                   : "border-gray-300 border-r-[1px]"
               }`}
               onChange={(e) =>
-                handleInputChange(index, "affectiveScore", e.target.value)
+                handleInputChange(index, "assignmentScore", e.target.value)
               }
             />
+
             <input
               disabled={onEdit != true}
               type="number"

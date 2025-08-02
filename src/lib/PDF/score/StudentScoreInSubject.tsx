@@ -57,7 +57,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   });
   doc.setFontSize(14);
   doc.text("ระดับชั้น", 15, 77);
-  doc.text(data.groupName + "." + data.groupName + "  รอบ บ่าย", 35, 77);
+  doc.text(data.class + "." + data.groupName + "  รอบ บ่าย", 35, 77);
   doc.text(
     `ภาคเรียนที่   ${defaultTerm}   ปีการศึกษา   ${currentYear}`,
     105,
@@ -252,9 +252,9 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
         "ลำดับ",
         "รหัสนักศึกษา",
         `   ชื่อ - นามสกุล   `,
-        "ภาระงาน",
-        "คะแนนเก็บ",
         "จิตพิสัย",
+        "ทดสอบ",
+        "ภาระงาน",
         "กลางภาค",
         "ปลายภาค",
         "รวม",
@@ -302,9 +302,9 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
             students[i].studentCode,
             `${students[i].prefix} ${students[i].studentFirstName}`,
             `${students[i].studentLastName}`,
-            `${students[i].assignmentScore}`,
-            `${students[i].collectScore}`,
             `${students[i].affectiveScore}`,
+            `${students[i].collectScore}`,
+            `${students[i].assignmentScore}`,
             `${students[i].midtermScore}`,
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,

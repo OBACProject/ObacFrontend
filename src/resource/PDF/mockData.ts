@@ -969,9 +969,10 @@ export const mockStudentScorenSubject: StudentScorenSubject = {
   subjectID: 101,
   subjectCode: "AC101",
   subjectName: "บัญชีขั้นต้น",
-  groupName: "ปวช.2/1",
+  class : "ปวช",
+  groupName: "2/1",
   hour: 1,
-  subjectTeacher: "0",
+  subjectTeacher: "ทดสอบชื่อ ทดสอบนามสกุล",
   credits: 1,
   students: Array.from({ length: 45 }, (_, i) => {
     const collect = Math.floor(Math.random() * 10) + 10;
