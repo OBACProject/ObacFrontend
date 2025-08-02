@@ -157,12 +157,12 @@ export default function Form({ term, year, teacherID }: Props) {
           </p>
         </div>
       )}
-      {/* {deleteTrigger && scheduleSubjectData &&   && (
+      {deleteTrigger && scheduleSubjectData &&   && (
         <DeleteScheduleSubjectPopup
          schedule={scheduleSubjectData}
-         onClosePopup={deleteTrigger}
+         onClosePopup={setDeleteTrigger}
         />
-      )} */}
+      )}
      
        {popUpAddSubject == true && (
               <AddTeacherSchedulePopUp

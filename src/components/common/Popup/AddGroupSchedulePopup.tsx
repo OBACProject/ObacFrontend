@@ -25,13 +25,12 @@ type AddGroupSchedulePopUp = {
     term?: string
     year?: number
     teacherId?: number;
-    onReload?: () => void;
 };
 
 
 
 export default function AddGroupSchedulePopUp({
-    onClosePopUp, groupId, onReload
+    onClosePopUp, groupId
 }: AddGroupSchedulePopUp) {
 
     const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
@@ -148,9 +147,9 @@ export default function AddGroupSchedulePopUp({
                 setStudentGroupId(0);
                 setDay("");
                 setRoom("");
-                if (onReload) {
-                    onReload();
-                }
+                // if (onReload) {
+                //     onReload();
+                // }
                 onClosePopUp(false);
 
             } else {

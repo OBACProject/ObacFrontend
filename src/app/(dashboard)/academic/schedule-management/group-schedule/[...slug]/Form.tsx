@@ -5,6 +5,7 @@ import AddGroupSchedulePopUp from "@/components/common/Popup/AddGroupSchedulePop
 import { GetStudentGroupScheduleStatus } from "@/api/studentGroup/route";
 import {
   ScheduleItemStudentGroup,
+  ScheduleItemStudentGroups,
   StudentGroupScheduleStatus,
 } from "@/dto/studentGroupItem";
 
@@ -15,8 +16,14 @@ type Props = {
 };
 
 export default function Form({ term, year, groupId }: Props) {
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
+  const [scheduleSubjectData, setScheduleSubjectData] =
+    useState<ScheduleItemStudentGroup>();
   const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
-  const reloadGroupSchedule = () => {
+  const [scheduleGroup, setScheduleGroup] =
+    useState<StudentGroupScheduleStatus>();
+
+  useEffect(() => {
     GetStudentGroupScheduleStatus(groupId, term, Number(year)).then(
       (d: StudentGroupScheduleStatus | null) => {
         if (d) {
@@ -24,9 +31,8 @@ export default function Form({ term, year, groupId }: Props) {
         }
       }
     );
-  };
-  const [scheduleGroup, setScheduleGroup] =
-    useState<StudentGroupScheduleStatus>();
+
+  }, []);
 
   useEffect(() => {
     GetStudentGroupScheduleStatus(groupId, term, Number(year)).then(
@@ -80,11 +86,11 @@ export default function Form({ term, year, groupId }: Props) {
           <div className="text-center ">ห้องเรียน</div>
           <div className="text-center "></div>
         </div>
-        {Array.isArray(scheduleGroup?.schedule) &&
-          scheduleGroup.schedule.length > 0 ? (
+        {Array.isArray(scheduleGroup?.schedules) &&
+        scheduleGroup.schedules.length > 0 ? (
           <div className="w-full">
-            {scheduleGroup?.schedule.map(
-              (d: ScheduleItemStudentGroup, index) => {
+            {scheduleGroup?.schedules.map(
+              (d: ScheduleItemStudentGroups, index) => {
                 return (
                   <div
                     key={`${d.subjectCode}-${d.day}-${d.period}`}
@@ -109,9 +115,16 @@ export default function Form({ term, year, groupId }: Props) {
                     <div className="border-l-[1px] text-center">{d.day}</div>
                     <div className="border-l-[1px] text-center">{d.room}</div>
                     <div className="border-l-[1px] h-full text-center">
-                      <p className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit">
+                      <button
+                        onClick={() => {
+                          setDeleteTrigger(true)
+                          setScheduleSubjectData(d)
+                          alert(d.subjectId);
+                        }}
+                        className="px-2 py-1 rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
+                      >
                         <Trash2 className="h-4 w-4 text-white" />
-                      </p>
+                      </button>
                     </div>
                   </div>
                 );
@@ -170,7 +183,7 @@ export default function Form({ term, year, groupId }: Props) {
           groupId={groupId}
           term={term}
           year={Number(year)}
-          onReload={reloadGroupSchedule}
+          // onReload={scheduleGroup}
         />
       )}
     </div>
