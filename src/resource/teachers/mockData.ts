@@ -68,6 +68,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
   subjectName: "คณิตศาสตร์",
   subjectCode: "MATH101",
   subjectId: 1,
+  groupId:1,
   groupName: "2/1",
   groupCode: "G21",
   class: "ปวช.",
