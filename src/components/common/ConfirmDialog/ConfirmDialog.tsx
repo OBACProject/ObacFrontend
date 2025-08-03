@@ -81,71 +81,74 @@ export default function ConfirmDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            className="fixed duration-1000 animate-appearance inset-0 flex items-center justify-center bg-gray-700 bg-opacity-45 z-50"
           >
             {/* Dialog */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.2 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.5 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden"
+              className="bg-white shadow-lg shadow-gray-400 rounded-lg w-4/12 min-w-[400px] max-w-lg mx-4 z-100 duration-500"
             >
-              {/* Header */}
-              <div className={`${bgColorMap[type]} p-6 relative`}>
-                <button
-                  onClick={onClose}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-                
-                <div className="flex items-center space-x-4">
-                  <div className={`${colorMap[type]} flex-shrink-0`}>
-                    <Icon className="w-12 h-12" />
+              <div className="px-4 py-5">
+                {/* Header */}
+                <div className="py-2 text-center relative">
+                  <button
+                    onClick={onClose}
+                    className="absolute top-0 right-0 text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                  
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className={`${colorMap[type]} flex-shrink-0`}>
+                      <Icon className="w-16 h-16" />
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {title}
+                      </h3>
+                      {text && (
+                        <p className="text-gray-600 text-base leading-relaxed px-4">
+                          {text}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {title}
-                    </h3>
-                    {text && (
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {text}
-                      </p>
+                </div>
+
+                {/* Footer */}
+                {(onConfirm || showCancel) && (
+                  <div className="flex justify-center gap-5 mt-6">
+                    {showCancel && (
+                      <button
+                        onClick={handleCancel}
+                        className="px-8 text-white py-2 hover:bg-gray-300 hover:text-black bg-gray-400 rounded-sm transition-colors"
+                      >
+                        {cancelText}
+                      </button>
+                    )}
+                    {onConfirm && (
+                      <button
+                        onClick={handleConfirm}
+                        className={`px-8 text-white py-2 rounded-sm transition-colors ${
+                          type === "error"
+                            ? "bg-red-500 hover:bg-red-600"
+                            : type === "success"
+                            ? "bg-green-500 hover:bg-green-600"
+                            : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                      >
+                        {confirmText}
+                      </button>
                     )}
                   </div>
-                </div>
+                )}
               </div>
-
-              {/* Footer */}
-              {(onConfirm || showCancel) && (
-                <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-                  {showCancel && (
-                    <button
-                      onClick={handleCancel}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                    >
-                      {cancelText}
-                    </button>
-                  )}
-                  {onConfirm && (
-                    <button
-                      onClick={handleConfirm}
-                      className={`px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
-                        type === "error"
-                          ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
-                          : type === "success"
-                          ? "bg-green-600 hover:bg-green-700 focus:ring-green-500"
-                          : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
-                      }`}
-                    >
-                      {confirmText}
-                    </button>
-                  )}
-                </div>
-              )}
             </motion.div>
           </motion.div>
         </>

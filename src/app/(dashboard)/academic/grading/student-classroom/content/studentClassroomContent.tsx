@@ -23,7 +23,7 @@ interface dataTable {
   class: string;
   isComplete: boolean;
   isPublish: boolean;
-  groupId: number; // For navigation
+  groupId: number;
 }
 
 export default function StudentClassroomContent() {
@@ -38,7 +38,6 @@ export default function StudentClassroomContent() {
   const [isPending, startTransition] = useTransition();
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  // Fetch real data
   const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
     term: term,
     year: year,
@@ -49,7 +48,7 @@ export default function StudentClassroomContent() {
     if (!data || !Array.isArray(data)) return [];
 
     return data
-      .sort((a, b) => a.id - b.id) // Sort by groupId (id) ascending
+      .sort((a, b) => a.id - b.id)
       .map((item: GetAllStudentGroupByTermYearResponse, idx: number) => ({
         index: idx + 1,
         class: `${item.class}.${item.groupName}`,
@@ -69,17 +68,17 @@ export default function StudentClassroomContent() {
     {
       label: "ลำดับ",
       key: "index",
-      className: "w-1/6 flex justify-center",
+      className: "w-[10%] flex justify-center",
     },
     {
       label: "ห้องเรียน",
       key: "class",
-      className: "w-1/3 flex justify-center",
+      className: "w-[50%] flex justify-start items-center pl-32",
     },
     {
       label: "สถานะการตรวจสอบ",
       key: "isComplete",
-      className: "w-1/4 flex justify-center",
+      className: "w-[20%] flex justify-center",
       render: (row: dataTable) => (
         <div className="flex justify-center">
           {row.isComplete ? (
@@ -97,7 +96,7 @@ export default function StudentClassroomContent() {
     {
       label: "เผยแพร่เกรด",
       key: "isPublish",
-      className: "w-1/4 flex justify-center",
+      className: "w-[20%] flex justify-center",
       render: (row: dataTable) => {
         const isDisabled = !row.isComplete;
         return (
