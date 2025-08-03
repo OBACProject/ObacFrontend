@@ -1,7 +1,6 @@
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
-  Subject,
 } from "@/dto/gradDto";
 import { StudentItems } from "@/dto/studentDto";
 import ExcelJS from "exceljs";
@@ -101,9 +100,12 @@ export async function ConvertScoreToExcel(
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
     ]);
-    row.eachCell((cell) => {
+    row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle" 
+      };
       cell.border = {
         top: { style: "thin" },
         left: { style: "thin" },
@@ -258,8 +260,11 @@ export async function ConvertClassroomToExcelWithSubject(
       "",
     ]);
 
-    row.eachCell((cell) => {
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle" 
+      };
       cell.font = { size: 10 };
       cell.border = {
         top: { style: "thin" },
