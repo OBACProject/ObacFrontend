@@ -1,5 +1,6 @@
 "use server";
 import { GetAllAcademicUser } from "@/dto/userDto";
+import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
 export const fetchGetAllAcademicUser = async (): Promise<

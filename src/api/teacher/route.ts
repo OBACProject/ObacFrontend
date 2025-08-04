@@ -1,3 +1,4 @@
+import { CreateSubjectRequest } from "@/dto/subjectDto";
 import {
   CardSubjectResponse,
   GetAllTeacherResponse,
@@ -94,5 +95,17 @@ export const GetTeacherDetailAndSchedule = async (
   } catch (error) {
     console.error("Error fetching teacher detail and schedule:", error);
     return null;
+  }
+};
+
+export const CreateTeacher = async (
+  payload: CreateSubjectRequest
+): Promise<boolean> => {
+  try {
+    const response = await apiClient.post("User/CreateTeacher", payload);
+    return response.status === 201;
+  } catch (err) {
+    console.error("Error creating subject:", err);
+    return false;
   }
 };

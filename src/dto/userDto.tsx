@@ -1,4 +1,5 @@
 export interface GetAllAcademicUser {
+  id : number;
   userId: string;
   firstName: string;
   lastName: string;

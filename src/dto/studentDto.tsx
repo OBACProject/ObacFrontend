@@ -78,47 +78,62 @@ export interface StudentGroup {
 export interface GetStudentByGroupId {
   studentId: number;
   studentCode: string;
-  prefix : string | null; 
+  prefix: string | null;
   firstName: string;
   lastName: string;
   isActive: boolean;
-  gender : string;
+  gender: string;
   gpa: number;
   gpax: number;
   totalCredit: number;
   subject: GetSubjectByGroupId[];
 }
 
+// export interface GetAllStudent {
+//   id : number;
+//   studentId: number;
+//   prefix : string |null;
+//   firstName: string | null;
+//   lastName: string | null;
+//   thaiName: string;
+//   thaiLastName: string;
+//   gender: string;
+//   groupName: string;
+//   groupCode :string;
+//   studentGroupId: number;
+//   studentCode: string;
+//   thaiId: string;
+//   email: string;
+//   phoneNumber: string;
+//   address: string;
+//   nationality: string;
+//   religion: string;
+//   role: string;
+//   userId: string;
+//   isActive: boolean;
+//   class: string;
+//   enrollYear: number;
+//   currentYear: number;
+//   graduateYear: number;
+//   currentRoom: string;
+//   programId: number;
+//   programName: string;
+//   facultyId: number;
+//   facultyName: string;
+//   status : string |null;
+//   birthDate: string | null;
+// }
 export interface GetAllStudent {
-  studentId: number;
-  firstName: string | null;
-  lastName: string | null;
-  thaiName: string;
-  thaiLastName: string;
+  id: number,
+  userName: string,
+  firstName: string,
+  lastName: string,
+  phoneNumber: number,
   gender: string;
-  groupName: string;
-  studentGroupId: number;
-  studentCode: string;
-  thaiId: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
-  nationality: string;
-  religion: string;
   role: string;
-  userId: string;
-  isActive: boolean;
-  class: string;
-  enrollYear: number;
-  currentYear: number;
-  graduateYear: number;
-  currentRoom: string;
-  programId: number;
-  programName: string;
-  facultyId: number;
-  facultyName: string;
-  birthDate: string | null;
 }
+
+
 
 export interface GetAllStudentTableDto {
   studentId: number;
@@ -251,23 +266,23 @@ export type GetStudentByStudentId = {
 
 export type UpdateStudentRequestBody = {
   studentId: number;
-  firstName: string |null;
-  lastName: string| null;
+  firstName: string | null;
+  lastName: string | null;
   thaiName: string;
   thaiLastName: string;
   gender: string;
   studentGroupId: number;
   studentCode: string;
-  thaiId: string|null;
-  email: string|null;
-  phoneNumber: string|null;
-  address: string|null;
-  nationality: string|null;
-  religion: string|null;
+  thaiId: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  address: string | null;
+  nationality: string | null;
+  religion: string | null;
   class: string;
-  enrollYear: number|null;
+  enrollYear: number | null;
   currentYear: number;
-  graduateYear: number|null;
+  graduateYear: number | null;
   programId: number;
   facultyId: number;
   birthDate: string | null;

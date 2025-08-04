@@ -1,9 +1,10 @@
-import { TeacherPage } from "./teacherManagement";
+import React from "react";
+import Form from "./form";
 
-export default function Page() {
+export default function page() {
   return (
-    <div>
-      <TeacherPage />
+    <div className="pl-16 bg-gray-50">
+      <Form />
     </div>
   );
 }

@@ -24,6 +24,7 @@
 // }
 
 export interface GetAllTeacherResponse {
+  id : number;
   teacherId: number;
   prefix:string;
   firstName: string;
@@ -151,4 +152,18 @@ export interface TeacherDetailAndScheduleResponse {
   teacher: TeacherDetail;
   schedule: TeacherScheduleItem[];
 }
-
+export interface CreateTeacherRequest {
+  prefix: string;
+  teacherCode: string;
+  hiredDate : string;
+  programId: number;
+  userName :string;
+  password : string;
+  firstName : string;
+  lastName : string;
+  gender : string;
+  citizenId : string;
+  phoneNumber : string;
+  nationality : string;
+  birthDate : string;
+}
