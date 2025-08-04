@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BookText, GraduationCap, PlusCircle, University } from "lucide-react";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import { getCurrentThaiTermYear } from "@/lib/utils";
+import { getCurrentThaiTermYear, sortStudentGroupItems } from "@/lib/utils";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
@@ -27,8 +27,9 @@ export default function Form() {
   useEffect(() => {
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
       if (d) {
-        setStudentGroup(d);
-      }
+      const sorted = sortStudentGroupItems(d);
+      setStudentGroup(sorted);
+    }
     });
     GetAllTeachers().then((d: GetAllTeacherResponse[]) => {
       setTeacher(d);
@@ -40,9 +41,10 @@ export default function Form() {
     setStudentGroup([]);
     setLoading(false);
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
-      if (d) {
-        setStudentGroup(d);
-      }
+     if (d) {
+      const sorted = sortStudentGroupItems(d);
+      setStudentGroup(sorted);
+    }
     });
     setLoading(true);
   }, [term, year]);

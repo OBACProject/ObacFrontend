@@ -47,5 +47,23 @@ export interface StudentGroupScheduleStatus {
   level: number;
   facultyName: string;
   programName: string;
-  schedule: ScheduleItemStudentGroup[];
+  schedules: ScheduleItemStudentGroups[];
 }
+export interface ScheduleItemStudentGroups {
+  class: string;
+  curriculumYear: number;
+  isComplete: boolean;
+  isPublish: boolean;
+  scheduleSubjectsId: number;
+  subjectCode: string;
+  subjectId: number;
+  subjectName: string;
+  term: string;
+  year: number;
+  day:string;
+  period:number;
+  teacherName:string;
+  teacherLastName:string;
+  room:string;
+}
+

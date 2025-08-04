@@ -87,7 +87,7 @@ export function StylesTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className="w-full rounded-sm py-5 px-10">
+    <div className="w-full rounded-sm py-5 px-10 mb-16">
       {/* Table Header */}
       <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600"> 
         {icon}
@@ -105,13 +105,15 @@ export function StylesTable<T extends Record<string, any>>({
       </div>
 
       {paginatedData.length > 0 ? (
-        paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))
+        <div className="pb-8">
+          {paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))}
+        </div>
       ) : (
-        <div className="text-center text-gray-600 py-4">No data available</div>
+        <div className="text-center text-gray-600 py-4 pb-12">No data available</div>
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-end items-center space-x-2 py-4">
+        <div className="flex justify-end items-center space-x-2 py-4 pb-12">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}

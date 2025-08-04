@@ -2,7 +2,6 @@ import {
   SubjectItem,
   CreateSubjectRequest,
   UpdateSubjectRequest,
-  CreateEnrollmentWithGradeAndScheduleRequest,
 } from "@/dto/subjectDto";
 import apiClient from "@/lib/apiClient";
 
@@ -91,20 +90,5 @@ export const DeleteSubjectById = async (id: number): Promise<boolean> => {
   } catch (error: any) {
     console.error("Delete failed:", error.response?.data || error.message);
     return false;
-  }
-};
-
-export const CreateEnrollmentWithGradeAndSchedule = async (
-  studentGroupId: number,
-  payload: CreateEnrollmentWithGradeAndScheduleRequest
-): Promise<{ success: boolean; error?: string }> => {
-  try {
-    console.log(payload)
-    const response = await apiClient.post(`Enrollment/CreateEnrollmentWithGradeAndSchedule?studentGroupId=${studentGroupId}`, payload);
-    return { success: true };
-  } catch (error: any) {
-    const errorMsg = error.response?.data?.message || error.message || "Unknown error";
-    console.error("CreateEnrollment failed:", errorMsg);
-    return { success: false, error: errorMsg };
   }
 };

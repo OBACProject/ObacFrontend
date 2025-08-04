@@ -6,6 +6,7 @@ export const GRADE_ENDPOINTS = {
   GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID : "Grade/GetStudentGroupGradeByScheduleSubjectId",
   GET_GRADE_STUDENT_IF_GRADE_BELOW : "Grade/GetStudentIfGradeBelow",
   POST_GRADE_UPSERTSTUDENT_GRADES : "Grade/UpsertStudentGrades",
+  UPDATE_BULKUPDATE_STUDENTS_GRADE_BY_SCHEDULE_SUBJECT_ID : "Grade/BulkUpdateStudentGradeByScheduleSubjectId",
   DELETE_GRADE_DELETE_GRADE : "Grade/DeleteGrade",
 } as const;
 

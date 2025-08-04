@@ -20,7 +20,7 @@ export const usegetSubjectByIdQuery = createBaseQuery<GetSubjectByIdResponse[], 
     (params) => subjectService.getSubjectById(params),
 );
 
-export const useGetSubjectsByStudentGroupIdTermYearQuery = createBaseQuery<GetSubjectsByStudentGroupIdTermYearResponse[], GetSubjectsByStudentGroupIdTermYearRequest>(
+export const useGetSubjectsByStudentGroupIdTermYearQuery = createBaseQuery<GetSubjectsByStudentGroupIdTermYearResponse, GetSubjectsByStudentGroupIdTermYearRequest>(
     (params) => ['Subjects_StudentGroup_Term_Year', params],
     (params) => subjectService.getSubjectsByStudentGroupIdTermYear(params),
 );

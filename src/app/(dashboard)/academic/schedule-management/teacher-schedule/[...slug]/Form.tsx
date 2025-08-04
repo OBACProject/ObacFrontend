@@ -8,8 +8,8 @@ import {
   TeacherScheduleItem,
 } from "@/dto/teacherDto";
 import { GetTeacherDetailAndSchedule } from "@/api/teacher/route";
-import DeleteScheduleSubjectPopup from "@/components/common/Popup/DeleteScheduleSubjectPopup";
-// import { mockTeacherDetailAndSchedule } from "@/resource/academics/mockData";
+import DeleteScheduleTeacherPopup from "@/components/common/Popup/DeleteScheduleTeacherPopup";
+
 type Props = {
   term: string;
   year: string;
@@ -17,20 +17,21 @@ type Props = {
 };
 
 export default function Form({ term, year, teacherID }: Props) {
-    const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
-    const [deleteTrigger , setDeleteTrigger] = useState<boolean>(false)
-    const [ scheduleSubjectData ,setScheduleSubjectData] = useState<TeacherScheduleItem>()
+  const [popUpAddSubject, setpopUpAddSubject] = useState<boolean>(false);
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false);
+  const [scheduleSubjectData, setScheduleSubjectData] =
+    useState<TeacherScheduleItem>();
   const [teacherSchedule, setTeacherSchedule] =
     useState<TeacherDetailAndScheduleResponse | null>();
-    const reloadTeacherSchedule = () => {
-  GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
-    (d: TeacherDetailAndScheduleResponse | null) => {
-      if (d) {
-        setTeacherSchedule(d);
+  const reloadTeacherSchedule = () => {
+    GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
+      (d: TeacherDetailAndScheduleResponse | null) => {
+        if (d) {
+          setTeacherSchedule(d);
+        }
       }
-    }
-  );
-};
+    );
+  };
 
   useEffect(() => {
     GetTeacherDetailAndSchedule(Number(teacherID), term, Number(year)).then(
@@ -81,12 +82,12 @@ export default function Form({ term, year, teacherID }: Props) {
         <div className="">
           {" "}
           <button
-                    className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-                    onClick={() => setpopUpAddSubject(true)}
-                  >
-                    <PlusCircle className="w-5 h-5 text-white " />
-                    เพิ่มตารางเรียน
-                  </button>
+            className="px-10 py-1.5 flex gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
+            onClick={() => setpopUpAddSubject(true)}
+          >
+            <PlusCircle className="w-5 h-5 text-white " />
+            เพิ่มตารางเรียน
+          </button>
         </div>
       </div>
 
@@ -139,10 +140,13 @@ export default function Form({ term, year, teacherID }: Props) {
                 <div className="border-l-[1px] text-center">{d.period}</div>
                 <div className="border-l-[1px] text-center">{d.day}</div>
                 <div className="border-l-[1px] flex justify-center boder-r-[1px] text-center">
-                  <button onClick={()=>{
-                    setDeleteTrigger(true)
-                    setScheduleSubjectData(d)
-                  }} className="px-2 py-1 h-fit rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit">
+                  <button
+                    onClick={() => {
+                      setDeleteTrigger(true);
+                      setScheduleSubjectData(d);
+                    }}
+                    className="px-2 py-1 h-fit rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
+                  >
                     <Trash2 className="h-4 w-4 text-white" />
                   </button>
                 </div>
@@ -157,20 +161,20 @@ export default function Form({ term, year, teacherID }: Props) {
           </p>
         </div>
       )}
-      {/* {deleteTrigger && scheduleSubjectData &&   && (
-        <DeleteScheduleSubjectPopup
-         schedule={scheduleSubjectData}
-         onClosePopup={deleteTrigger}
+      {deleteTrigger && scheduleSubjectData && (
+        <DeleteScheduleTeacherPopup
+          scheduleData={scheduleSubjectData}
+          onClosePopup={setDeleteTrigger}
         />
-      )} */}
-     
-       {popUpAddSubject == true && (
-              <AddTeacherSchedulePopUp
-                onClosePopUp={setpopUpAddSubject}
-                teacherId={Number(teacherID)}
-                onReload={reloadTeacherSchedule} 
-              />
-            )}
+      )}
+
+      {popUpAddSubject == true && (
+        <AddTeacherSchedulePopUp
+          onClosePopUp={setpopUpAddSubject}
+          teacherId={Number(teacherID)}
+          onReload={reloadTeacherSchedule}
+        />
+      )}
     </div>
   );
 }

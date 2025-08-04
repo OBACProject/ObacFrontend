@@ -16,15 +16,14 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import GradeToggleButton from "../../component/pushlishToggle";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 
 interface dataTable {
-  level: string;
-  years: string;
-  semester: string;
-  status: string;
-  show: boolean;
   index: number;
-  groupId?: number; // Add groupId for navigation
+  class: string;
+  isComplete: boolean;
+  isPublish: boolean;
+  groupId: number; // For navigation
 }
 
 export default function StudentClassroomContent() {
@@ -33,9 +32,9 @@ export default function StudentClassroomContent() {
   const [year, setYear] = useState(currentYear);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [filterLevel, setFilterLevel] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const [filterSemester, setFilterSemester] = useState("");
+  const [filterPublished, setFilterPublished] = useState("");
+  const [filterClass, setFilterClass] = useState("");
   const [isPending, startTransition] = useTransition();
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
@@ -45,78 +44,75 @@ export default function StudentClassroomContent() {
     year: year,
   });
 
-  console.log("StudentClassroomContent data:", data);
 
-  // Transform real data to table format
   const transformedData: dataTable[] = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
 
-    return data.map((item: any, idx: number) => ({
-      level: `${item.level || item.educationLevel || "N/A"} ${
-        item.room || item.roomNumber || item.className || ""
-      }`.trim(),
-      years: String(item.year || item.academicYear || year),
-      semester: String(item.term || item.semester || term),
-      status: item.status || item.gradeStatus || "ยังไม่มีตรวจสอบ",
-      show: item.isPublished || item.show || false,
-      index: idx + 1,
-      groupId: item.groupId || item.id, // For navigation
-    }));
-  }, [data, year, term]);
+    return data
+      .sort((a, b) => a.id - b.id) // Sort by groupId (id) ascending
+      .map((item: GetAllStudentGroupByTermYearResponse, idx: number) => ({
+        index: idx + 1,
+        class: `${item.class}.${item.groupName}`,
+        isComplete: item.isComplete,
+        isPublish: item.isPublish,
+        groupId: item.id, 
+      }));
+  }, [data]);
 
-  // State for table data (for toggle functionality)
   const [tableData, setTableData] = useState<dataTable[]>([]);
 
-  // Update table data when transformed data changes
   useEffect(() => {
     setTableData(transformedData);
   }, [transformedData]);
 
-  // Columns definition
   const columns = [
     {
-      label: "ภาคการศึกษา",
-      key: "semester",
-      className: "w-1/4 flex justify-center",
+      label: "ลำดับ",
+      key: "index",
+      className: "w-1/6 flex justify-center",
     },
     {
-      label: "ระดับการศึกษา",
-      key: "level",
-      className: "w-1/4 flex justify-center",
+      label: "ห้องเรียน",
+      key: "class",
+      className: "w-1/3 flex justify-center",
     },
     {
-      label: "สถานะ",
-      key: "status",
+      label: "สถานะการตรวจสอบ",
+      key: "isComplete",
       className: "w-1/4 flex justify-center",
-      render: (row: { status: string }) => (
+      render: (row: dataTable) => (
         <div className="flex justify-center">
-          {row.status === "ตรวจสอบเสร็จสิ้น" ? (
-            <span className="text-green-500">{row.status}</span>
+          {row.isComplete ? (
+            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+              ตรวจสอบเสร็จสิ้น
+            </span>
           ) : (
-            <span className="text-red-500">{row.status}</span>
+            <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+              ยังไม่ตรวจสอบ
+            </span>
           )}
         </div>
       ),
     },
     {
       label: "เผยแพร่เกรด",
-      key: "show",
+      key: "isPublish",
       className: "w-1/4 flex justify-center",
       render: (row: dataTable) => {
-        const isDisabled = row.status !== "ตรวจสอบเสร็จสิ้น";
+        const isDisabled = !row.isComplete;
         return (
           <div
             className="flex justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <GradeToggleButton
-              isOn={row.show}
+              isOn={row.isPublish}
               disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
                   setTableData((prev) =>
                     prev.map((item, i) =>
-                      i === row.index - 1 ? { ...item, show: newValue } : item
+                      i === row.index - 1 ? { ...item, isPublish: newValue } : item
                     )
                   );
                 }
@@ -130,55 +126,44 @@ export default function StudentClassroomContent() {
 
   useEffect(() => {
     if (!showAdvanced) {
-      setFilterLevel("");
       setFilterStatus("");
-      setFilterSemester("");
+      setFilterPublished("");
+      setFilterClass("");
     }
   }, [showAdvanced]);
 
-  const allLevels = useMemo(
-    () => Array.from(new Set(tableData.map((d) => d.level))),
-    [tableData]
-  );
   const allStatuses = useMemo(
-    () => Array.from(new Set(tableData.map((d) => d.status))),
-    [tableData]
+    () => ["ตรวจสอบเสร็จสิ้น", "ยังไม่ตรวจสอบ"],
+    []
   );
-  const allSemesters = useMemo(
-    () => Array.from(new Set(tableData.map((d) => d.semester))),
+  
+  const allPublishedStatuses = useMemo(
+    () => ["เผยแพร่แล้ว", "ยังไม่เผยแพร่"],
+    []
+  );
+
+  const allClasses = useMemo(
+    () => Array.from(new Set(tableData.map((d) => d.class))).sort(),
     [tableData]
   );
 
   const filteredData = useMemo(() => {
     return tableData.filter((item) => {
-      const matchYear = year === 0 || item.years === String(year);
-      const matchTerm = term === "" || item.semester === term;
-      const matchLevel = filterLevel === "" || item.level === filterLevel;
-      const matchStatus = filterStatus === "" || item.status === filterStatus;
-      const matchSemester =
-        filterSemester === "" || item.semester === filterSemester;
-      const matchSearch =
-        item.level.toLowerCase().includes(deferredSearchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(deferredSearchTerm.toLowerCase());
+      const matchStatus = filterStatus === "" || 
+        (filterStatus === "ตรวจสอบเสร็จสิ้น" && item.isComplete) ||
+        (filterStatus === "ยังไม่ตรวจสอบ" && !item.isComplete);
+      
+      const matchPublished = filterPublished === "" ||
+        (filterPublished === "เผยแพร่แล้ว" && item.isPublish) ||
+        (filterPublished === "ยังไม่เผยแพร่" && !item.isPublish);
+      
+      const matchClass = filterClass === "" || item.class === filterClass;
+      
+      const matchSearch = item.class.toLowerCase().includes(deferredSearchTerm.toLowerCase());
 
-      return (
-        matchYear &&
-        matchTerm &&
-        matchLevel &&
-        matchStatus &&
-        matchSemester &&
-        matchSearch
-      );
+      return matchStatus && matchPublished && matchClass && matchSearch;
     });
-  }, [
-    tableData,
-    year,
-    term,
-    deferredSearchTerm,
-    filterLevel,
-    filterStatus,
-    filterSemester,
-  ]);
+  }, [tableData, deferredSearchTerm, filterStatus, filterPublished, filterClass]);
 
   // Handle loading and error states
   if (isLoading || isPending) {
@@ -252,16 +237,22 @@ export default function StudentClassroomContent() {
               className="flex flex-row gap-2 items-center"
             >
               <Combobox
-                options={allLevels.map((v) => ({ value: v, label: v }))}
-                buttonLabel="ระดับการศึกษา"
-                onSelect={setFilterLevel}
-                defaultValue={filterLevel}
+                options={allClasses.map((v) => ({ value: v, label: v }))}
+                buttonLabel="ห้องเรียน"
+                onSelect={setFilterClass}
+                defaultValue={filterClass}
               />
               <Combobox
                 options={allStatuses.map((v) => ({ value: v, label: v }))}
-                buttonLabel="สถานะ"
+                buttonLabel="สถานะการตรวจสอบ"
                 onSelect={setFilterStatus}
                 defaultValue={filterStatus}
+              />
+              <Combobox
+                options={allPublishedStatuses.map((v) => ({ value: v, label: v }))}
+                buttonLabel="สถานะการเผยแพร่"
+                onSelect={setFilterPublished}
+                defaultValue={filterPublished}
               />
             </motion.div>
           )}
@@ -276,15 +267,21 @@ export default function StudentClassroomContent() {
         </Button>
       </div>
 
+      {/* Data Source Indicator */}
+      <div className="flex justify-center mb-4">
+        {data?.length == 0 &&  (
+          <div className="text-sm text-orange-600 bg-orange-100 px-4 py-2 rounded-md">
+            ไม่พบข้อมูลห้องเรียน
+          </div>
+        )}
+      </div>
+
       {/* Table */}
       <StylesTable
         icon={<School className="w-5 h-5 text-white" />}
         title="ห้องเรียนทั้งหมด"
         columns={columns}
-        data={filteredData.map((item, index) => ({
-          ...item,
-          index: index + 1,
-        }))}
+        data={filteredData}
         getRowLink={(row) =>
           `/academic/grading/student-classroom/${row.groupId}/${term}/${year}`
         }

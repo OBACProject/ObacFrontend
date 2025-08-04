@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import Form from "./form";
 
@@ -8,3 +9,16 @@ export default function page() {
     </div>
   );
 }
+=======
+// import React from 'react'
+
+// export default function page() {
+//   return (
+//     <div>
+//         <div>
+            
+//         </div>
+//     </div>
+//   )
+// }
+>>>>>>> dev
