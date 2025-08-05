@@ -157,16 +157,19 @@ export default function ScoreInputForm({
                 <td className="border text-center px-2 py-1">
                   {edit ? (
                     <input
-  type="number"
-  value={row.finalGrade === 0 ? "" : row.finalGrade ?? ""}
-  max={4}
-  min={0}
-  onChange={(e) =>
-    handleChange(index, "finalGrade", e.target.value === "" ? null : Number(e.target.value))
-  }
-  className="w-[80px] text-center py-1 px-2 border border-gray-200"
-/>
-
+                      type="number"
+                      value={row.finalGrade === 0 ? "" : row.finalGrade ?? ""}
+                      max={4}
+                      min={0}
+                      onChange={(e) =>
+                        handleChange(
+                          index,
+                          "finalGrade",
+                          e.target.value === "" ? null : Number(e.target.value)
+                        )
+                      }
+                      className="w-[80px] text-center py-1 px-2 border border-gray-200"
+                    />
                   ) : (
                     row.finalGrade
                   )}
@@ -184,20 +187,12 @@ export default function ScoreInputForm({
                       className="w-full py-1 px-2 border border-gray-200"
                     >
                       <option value="">-</option>
-                      {/* <option value="น.ร.">น.ร.</option> */}
-                      {/* <option value="ข.ป.">ข.ป.</option> */}
-                      {/* <option value="ถ.ล.">ถ.ล.</option> */}
-                      {/* <option value="ถ.น.">ถ.น.</option> */}
-                      {/* <option value="ถ.พ.">ถ.พ.</option> */}
-                      {/* <option value="ท.">ท.</option> */}
                       <option value="ม.ส.">ม.ส.</option>
                       <option value="ม.ท.">ม.ท.</option>
                       <option value="ผ.">ผ.</option>
                       <option value="ม.ผ.">ม.ผ.</option>
                       <option value="ข.ส.">ข.ส.</option>
                       <option value="ข.ร.">ข.ร.</option>
-                      {/* <option value="ค.ว.ย">ค.ว.ย</option> */}
-                      {/* <option value="ม.ก.">ม.ก.</option> */}
                     </select>
                   ) : (
                     row.remark || "-"

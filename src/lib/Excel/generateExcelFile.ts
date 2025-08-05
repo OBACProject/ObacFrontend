@@ -1,7 +1,6 @@
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
-  Subject,
 } from "@/dto/gradDto";
 import { StudentItems } from "@/dto/studentDto";
 import ExcelJS from "exceljs";
@@ -76,12 +75,12 @@ export async function ConvertScoreToExcel(
       right: { style: "thin" },
     };
   });
-  worksheet.getRow(headerRow.number).height = 15;
+  worksheet.getRow(headerRow.number).height = 18;
 
   worksheet.columns = [
     { key: "index", width: 8 },
     { key: "studentCode", width: 15 },
-    { key: "name", width: 25 },
+    { key: "name", width: 35 },
     { key: "classroom", width: 10 },
     { key: "affectiveScore", width: 15 },
     { key: "collectScore", width: 15 },
@@ -101,9 +100,13 @@ export async function ConvertScoreToExcel(
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
     ]);
-    row.eachCell((cell) => {
+    row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
+      };
       cell.border = {
         top: { style: "thin" },
         left: { style: "thin" },
@@ -111,7 +114,7 @@ export async function ConvertScoreToExcel(
         right: { style: "thin" },
       };
     });
-    row.height = 15;
+    row.height = 18;
   });
 
   // Save the Excel file
@@ -155,12 +158,12 @@ export async function ConvertClassroomToExcel(
       right: { style: "thin" },
     };
   });
-  worksheet.getRow(headerRow.number).height = 18;
+  worksheet.getRow(headerRow.number).height = 20;
 
   worksheet.columns = [
     { key: "index", width: 8 },
     { key: "studentId", width: 15 },
-    { key: "name", width: 25 },
+    { key: "name", width: 35 },
     { key: "space", width: 60 },
     { key: "note", width: 20 },
   ];
@@ -179,6 +182,7 @@ export async function ConvertClassroomToExcel(
       cell.alignment = {
         horizontal: colNumber === 3 ? "left" : "center",
         vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
       };
       cell.font = { size: 10 };
       cell.border = {
@@ -188,7 +192,7 @@ export async function ConvertClassroomToExcel(
         right: { style: "thin" },
       };
     });
-    row.height = 15;
+    row.height = 18;
   });
 
   // Save the Excel file
@@ -238,12 +242,12 @@ export async function ConvertClassroomToExcelWithSubject(
       right: { style: "thin" },
     };
   });
-  worksheet.getRow(headerRow.number).height = 18;
+  worksheet.getRow(headerRow.number).height = 20;
 
   worksheet.columns = [
     { key: "index", width: 8 },
     { key: "studentId", width: 15 },
-    { key: "name", width: 25 },
+    { key: "name", width: 35 },
     { key: "space", width: 60 },
     { key: "note", width: 20 },
   ];
@@ -258,8 +262,12 @@ export async function ConvertClassroomToExcelWithSubject(
       "",
     ]);
 
-    row.eachCell((cell) => {
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
+      };
       cell.font = { size: 10 };
       cell.border = {
         top: { style: "thin" },
@@ -268,7 +276,7 @@ export async function ConvertClassroomToExcelWithSubject(
         right: { style: "thin" },
       };
     });
-    row.height = 15;
+    row.height = 18;
   });
 
   // Save the Excel file
@@ -294,13 +302,13 @@ export async function ConvertClassroomGradingToExcel(
   worksheet.mergeCells("A1:G1");
   const titleCell = worksheet.getCell("A1");
   titleCell.value = `วันที่พิมพ์: ${new Date().toLocaleDateString()} วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ`;
-  titleCell.alignment = { horizontal: "center" };
+  titleCell.alignment = { horizontal: "center", vertical: "middle" };
   titleCell.font = { size: 14, bold: true };
 
   worksheet.mergeCells("A2:G2");
   const classCell = worksheet.getCell("A2");
   classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ห้อง: ${generalData.class}.${generalData.groupName}`;
-  classCell.alignment = { horizontal: "center" };
+  classCell.alignment = { horizontal: "center", vertical: "middle" };
   classCell.font = { size: 12, bold: true };
 
   const uniqueSubjects = Array.from(
@@ -340,7 +348,7 @@ export async function ConvertClassroomGradingToExcel(
   worksheet.columns = [
     { key: "index", width: 8 },
     { key: "studentCode", width: 15 },
-    { key: "name", width: 25 },
+    { key: "name", width: 35 },
     ...uniqueSubjects.map(() => ({ width: 20 })),
     { key: "gpa", width: 12 },
     { key: "gpax", width: 12 },
@@ -362,6 +370,7 @@ export async function ConvertClassroomGradingToExcel(
       cell.alignment = {
         vertical: "middle",
         horizontal: colNumber === 3 ? "left" : "center",
+        indent: colNumber === 3 ? 1 : 0
       };
       cell.border = {
         top: { style: "thin" },
@@ -370,6 +379,7 @@ export async function ConvertClassroomGradingToExcel(
         right: { style: "thin" },
       };
     });
+    row.height = 18;
   });
 
   const buffer = await workbook.xlsx.writeBuffer();

@@ -3,11 +3,12 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../../Font/THSarabunFont";
 import THSarabunFontBold from "../../Font/THSarabunBold";
-import { StudentScorenSubject } from "@/dto/pdfDto";
+// import { StudentScorenSubject } from "@/dto/pdfDto";
 import { getCurrentThaiTermYear } from "@/lib/utils";
+import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
 interface DataList {
-  data: StudentScorenSubject;
+  data: StudentGroupGradeResponse;
 }
 
 const StudentScoreInSubjectPDF = ({ data }: DataList) => {
@@ -57,7 +58,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   });
   doc.setFontSize(14);
   doc.text("ระดับชั้น", 15, 77);
-  doc.text(data.groupName + "." + data.groupName + "  รอบ บ่าย", 35, 77);
+  doc.text(data.class + "." + data.groupName + "  รอบ บ่าย", 35, 77);
   doc.text(
     `ภาคเรียนที่   ${defaultTerm}   ปีการศึกษา   ${currentYear}`,
     105,
@@ -66,7 +67,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   doc.text(`รายวิชา ${data.subjectName || "ยังไม่ทราบรายวิชา"}`, 15, 83);
   doc.text(`รหัสวิชา ${data.subjectCode || "00000-0000"}`, 105, 83);
-  doc.text(`หน่วยกิต ${data.credits || "-"}`, 150, 83);
+  doc.text(`หน่วยกิต ${data.credit || "-"}`, 150, 83);
 
   doc.text(`เวลาเรียน ${data.hour}`, 15, 89);
 
@@ -128,7 +129,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   doc.text("หมายเหตุ", 179, 126.5);
 
-  doc.text(`${data.students.length}`, 22.5, 153.5);
+  doc.text(`${data.subjectGrades.length}`, 22.5, 153.5);
 
   doc.text("4", 37, 140);
   doc.text("3.5", 44, 140);
@@ -232,7 +233,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     align: "center",
   });
   doc.setFontSize(14);
-  doc.text(`รหัสวิชา ${data.subjectID} วิชา ${data.subjectName}`, 120, 10, {
+  doc.text(`รหัสวิชา ${data.subjectId} วิชา ${data.subjectName}`, 120, 10, {
     align: "center",
   });
 
@@ -244,7 +245,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   // doc.line(205, 291, 4, 291);
 
   doc.line(4, 12, 205, 12);
-
+  let checkNewPage = false;
   autoTable(doc, {
     startY: 12,
     body: [
@@ -252,9 +253,9 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
         "ลำดับ",
         "รหัสนักศึกษา",
         `   ชื่อ - นามสกุล   `,
-        "ภาระงาน",
-        "คะแนนเก็บ",
         "จิตพิสัย",
+        "ทดสอบ",
+        "ภาระงาน",
         "กลางภาค",
         "ปลายภาค",
         "รวม",
@@ -291,7 +292,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   doc.setFont("THSarabun");
   let y2 = doc.lastAutoTable.finalY;
-  const students = data.students;
+  const students = data.subjectGrades;
   if (students) {
     for (let i = 0; i < students.length; i++) {
       autoTable(doc, {
@@ -300,15 +301,15 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
           [
             i + 1,
             students[i].studentCode,
-            `${students[i].prefix} ${students[i].studentFirstName}`,
-            `${students[i].studentLastName}`,
-            `${students[i].assignmentScore}`,
-            `${students[i].collectScore}`,
+            `${students[i].prefix} ${students[i].firstName}`,
+            `${students[i].lastName}`,
             `${students[i].affectiveScore}`,
+            `${students[i].collectScore}`,
+            `${students[i].assignmentScore}`,
             `${students[i].midtermScore}`,
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,
-            `${students[i].remark !== null ? students[i].remark : ""}`,
+            `${students[i].remarks !== null ? students[i].remarks : ""}`,
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -352,11 +353,60 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
       y2 = doc.lastAutoTable.finalY;
 
       if (y2 > 250) {
+        if (students.length <= 40) {
+          doc.setFontSize(16);
+          doc.text(
+            "ลงชื่อ.............................................",
+            167,
+            270,
+            {
+              align: "center",
+            }
+          );
+          doc.text(
+            "(.............................................)",
+            170,
+            277,
+            {
+              align: "center",
+            }
+          );
+          doc.text("ผู้ตรวจ", 170, 284, { align: "center" });
+        }
+        checkNewPage = true;
         doc.addPage();
-
         y2 = 14;
       }
     }
+  }
+
+  if (students.length <= 40 && checkNewPage != true) {
+    doc.setFontSize(16);
+    doc.text("ลงชื่อ.............................................", 167, 270, {
+      align: "center",
+    });
+    doc.text("(.............................................)", 170, 277, {
+      align: "center",
+    });
+    doc.text("ผู้ตรวจ", 170, 284, { align: "center" });
+  } else if (students.length > 40) {
+    if (checkNewPage != true) {
+      doc.addPage();
+    }
+    let y3 = y2 + 14;
+    doc.setFontSize(16);
+    doc.text("ลงชื่อ.............................................", 165, y3, {
+      align: "center",
+    });
+    doc.text(
+      "(.............................................)",
+      167 + 3,
+      y3 + 6,
+      {
+        align: "center",
+      }
+    );
+    doc.text("ผู้ตรวจ", 167 + 3, y3 + 13, { align: "center" });
   }
 
   doc.save(`ใบคะแนนวิชา ${data.subjectName} ${data.groupName}.pdf`);

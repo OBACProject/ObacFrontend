@@ -5,7 +5,6 @@ import {
 import { StudentItems } from "@/dto/studentDto";
 import { GeneralData, StudentList } from "./generateExcelFile";
 
-// Updated mock data with new interface
 export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
   {
     studentCode: "65010001",
