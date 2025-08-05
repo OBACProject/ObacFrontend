@@ -25,3 +25,10 @@ export const useUpdateStudentGroupByStudentGroupIdMutation = (options? : Partial
     options
   );
 }
+
+export const useUpdatePublishStatusByStudentGroupIdMutation = (options? : Partial<UseMutationOptions<void , Error , { studentGroupId: number; isPublished: boolean }>>) => {
+  return useBaseUpdateMutation<void, { studentGroupId: number; isPublished: boolean }, Error>(
+    ({ studentGroupId, isPublished }) => studentGroupService.updatePublishStatusByStudentGroupId(studentGroupId, isPublished),
+    options
+  );
+}

@@ -16,6 +16,7 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import GradeToggleButton from "../../component/pushlishToggle";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { useUpdatePublishStatusByStudentGroupIdMutation } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 
 interface dataTable {
@@ -42,6 +43,19 @@ export default function StudentClassroomContent() {
   const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
     term: term,
     year: year,
+  });
+
+  // Mutation for updating publish status
+  const updatePublishStatusMutation = useUpdatePublishStatusByStudentGroupIdMutation({
+    onSuccess: () => {
+      // Optionally show success message or refetch data
+      console.log("Publish status updated successfully");
+    },
+    onError: (error) => {
+      console.error("Failed to update publish status:", error);
+      // Revert the optimistic update on error
+      // This will be handled by rolling back the state change
+    }
   });
 
 
@@ -116,11 +130,26 @@ export default function StudentClassroomContent() {
               disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
+                  // Optimistic update - update UI immediately
                   setTableData((prev) =>
                     prev.map((item, i) =>
                       i === row.index - 1 ? { ...item, isPublish: newValue } : item
                     )
                   );
+                  
+                  // Call API to update publish status
+                  updatePublishStatusMutation.mutate({
+                    studentGroupId: row.groupId,
+                    isPublished: newValue 
+                  }, {
+                    onError: () => {
+                      setTableData((prev) =>
+                        prev.map((item, i) =>
+                          i === row.index - 1 ? { ...item, isPublish: !newValue } : item
+                        )
+                      );
+                    }
+                  });
                 }
               }}
             />
@@ -171,7 +200,6 @@ export default function StudentClassroomContent() {
     });
   }, [tableData, deferredSearchTerm, filterStatus, filterPublished, filterClass]);
 
-  // Handle loading and error states
   if (isLoading || isPending) {
     return (
       <>
