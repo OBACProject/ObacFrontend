@@ -15,7 +15,6 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
   const [termData, setTermData] = useState<YearData[]>([])
   const [scoreFileData, setScoreFileData] = useState<GetStudentGradeDetailDto | null>(null)
 
-  // Use the real API query with normal pattern
   const { data: apiData, isLoading, error, refetch } = useGetStudentDetailAndSummaryScoreByStudentCodeQuery(studentCode);
 
   useEffect(() => {

@@ -21,6 +21,7 @@ import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGr
 interface dataTable {
   index: number;
   class: string;
+  space: string;
   isComplete: boolean;
   isPublish: boolean;
   groupId: number;
@@ -52,6 +53,7 @@ export default function StudentClassroomContent() {
       .map((item: GetAllStudentGroupByTermYearResponse, idx: number) => ({
         index: idx + 1,
         class: `${item.class}.${item.groupName}`,
+        space: "",
         isComplete: item.isComplete,
         isPublish: item.isPublish,
         groupId: item.id, 
@@ -73,7 +75,12 @@ export default function StudentClassroomContent() {
     {
       label: "ห้องเรียน",
       key: "class",
-      className: "w-[50%] flex justify-start items-center pl-32",
+      className: "w-[30%] flex justify-center items-center pl-32",
+    },
+    {
+      label : " ",
+      key : "space",
+      className: "w-[20%] flex justify-center",
     },
     {
       label: "สถานะการตรวจสอบ",

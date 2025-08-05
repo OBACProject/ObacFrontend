@@ -103,3 +103,22 @@ export interface BulkUpdateStudentGradeByScheduleSubjectIdRequest {
     finalGrade: number;
     remarks: string;
 }
+
+export interface UpdateStudentGradeScoreRequest {
+    gradeId: number;
+    finalGrade: number;
+    remark: string;
+    subjectId: number;
+    subjectName: string;
+    subjectCode: string;
+    credit: number;
+    gradePoint: number;
+    term: string;
+    year: number;
+    collectScore: number;
+    assignmentScore: number;
+    affectiveScore: number;
+    midtermScore: number;
+    finaltermScore: number;
+    totalScore: number;
+}

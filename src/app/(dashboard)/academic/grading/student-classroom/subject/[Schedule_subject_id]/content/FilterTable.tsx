@@ -140,7 +140,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   const [tableData, setTableData] = useState<GetGradBySubjectId[]>([]);
   const [originalData, setOriginalData] = useState<GetGradBySubjectId[]>([]);
 
-  // Grade calculation function
   const calculateGrade = (totalScore: number): string => {
     if (totalScore >= 80) return "4";     
     if (totalScore >= 75) return "3.5";   

@@ -10,7 +10,6 @@ import { TableSkeleton } from "./component/skeletons/TableSkeleton"
 import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries"
 import { StyledServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable"
 
-// Helper hook for debouncing values
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
   useEffect(() => {
@@ -31,9 +30,7 @@ export default function StudentListPage() {
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("")
   const [selectedFaculty, setSelectedFaculty] = useState<string>("")
   const [sortBy] = useState<string>("") 
-  const [ascending] = useState<boolean>(true) 
-
-  const [lastSuccessfulData, setLastSuccessfulData] = useState<any>(null)
+  const [ascending] = useState<boolean>(true)
 
   const [filterOptions, setFilterOptions] = useState<{
     classLevels: string[]
@@ -45,50 +42,242 @@ export default function StudentListPage() {
   const searchText = useMemo(() => {
     const filters = []
     if (debouncedSearchInput) filters.push(debouncedSearchInput)
-    if (selectedClassLevel) filters.push(`class:${selectedClassLevel}`)
-    if (selectedFaculty) filters.push(`faculty:${selectedFaculty}`)
+    if (selectedClassLevel) {
+
+      const [classLevel, groupName] = selectedClassLevel.split('.')
+      if (classLevel && groupName) {
+        filters.push(`class:"${classLevel}"`)
+        filters.push(`groupName:"${groupName}"`)
+      }
+    }
+    if (selectedFaculty) filters.push(`facultyName:"${selectedFaculty}"`)
     return filters.join(" ")
   }, [debouncedSearchInput, selectedClassLevel, selectedFaculty])
 
-  const { data: allStudentsData, isLoading: isLoadingFilterOptions } = useGetAllStudentsQuery({
+  const { data: allStudentsData, isLoading: isLoadingFilterOptions, isError } = useGetAllStudentsQuery({
     pageNumber: 1,
-    pageSize: 1000,
+    pageSize: 10000,
     searchText: undefined,
     sortBy: undefined,
     Ascending: true,
   })
 
   useEffect(() => {
-    if (allStudentsData?.items && filterOptions.classLevels.length === 0) {
-      const classLevels = Array.from(new Set(allStudentsData.items.map((student) => student.class))).sort()
-      const uniqueFaculties = Array.from(new Set(allStudentsData.items.map((student) => student.facultyName))).sort()
+    if (allStudentsData?.items) {
+      const classLevels = Array.from(new Set(
+        allStudentsData.items
+          .map((student) => `${student.class}.${student.groupName}`)
+          .filter((classGroup) => classGroup && classGroup.trim() !== "" && !classGroup.includes("undefined") && !classGroup.includes("null"))
+      )).sort((a, b) => {
+        const [classA, groupA] = a.split('.')
+        const [classB, groupB] = b.split('.')
+        
+        const getClassInfo = (classStr: string) => {
+          if (classStr.includes('ปวช')) {
+            const levelMatch = classStr.match(/ปวช\.?(\d+)/)
+            return { 
+              type: 'ปวช', 
+              level: levelMatch ? parseInt(levelMatch[1]) : 0,
+              fullClass: classStr
+            }
+          } else if (classStr.includes('ปวส')) {
+            const levelMatch = classStr.match(/ปวส\.?(\d+)/)
+            return { 
+              type: 'ปวส', 
+              level: levelMatch ? parseInt(levelMatch[1]) : 0,
+              fullClass: classStr
+            }
+          }
+          return { type: 'other', level: 0, fullClass: classStr }
+        }
+        
+        const infoA = getClassInfo(classA)
+        const infoB = getClassInfo(classB)
+        
+        if (infoA.type !== infoB.type) {
+          if (infoA.type === 'ปวช' && infoB.type === 'ปวส') return -1
+          if (infoA.type === 'ปวส' && infoB.type === 'ปวช') return 1
+          return infoA.type.localeCompare(infoB.type)
+        }
+        
+        if (infoA.level !== infoB.level) {
+          return infoA.level - infoB.level
+        }
+        
+        const parseGroupName = (groupStr: string) => {
+          if (groupStr.includes('/')) {
+            const [main, sub] = groupStr.split('/')
+            return {
+              main: parseInt(main) || 0,
+              sub: parseInt(sub) || 0,
+              original: groupStr
+            }
+          }
+          const num = parseInt(groupStr)
+          return {
+            main: isNaN(num) ? 0 : num,
+            sub: 0,
+            original: groupStr
+          }
+        }
+        
+        const groupInfoA = parseGroupName(groupA)
+        const groupInfoB = parseGroupName(groupB)
+        
+        // Sort by main group number first
+        if (groupInfoA.main !== groupInfoB.main) {
+          return groupInfoA.main - groupInfoB.main
+        }
+        
+        // Then sort by sub group number
+        if (groupInfoA.sub !== groupInfoB.sub) {
+          return groupInfoA.sub - groupInfoB.sub
+        }
+        
+        // Finally, sort alphabetically if all else is equal
+        return groupInfoA.original.localeCompare(groupInfoB.original)
+      })
+      
+      const uniqueFaculties = Array.from(new Set(
+        allStudentsData.items
+          .map((student) => student.facultyName)
+          .filter((faculty) => faculty && faculty.trim() !== "")
+      )).sort()
+      
       setFilterOptions({ classLevels, uniqueFaculties })
     }
-  }, [allStudentsData?.items, filterOptions.classLevels.length])
+  }, [allStudentsData?.items])
 
   useEffect(() => {
     if (currentPage !== 1) {
       setCurrentPage(1)
     }
-  }, [searchText])
+  }, [debouncedSearchInput, selectedClassLevel, selectedFaculty]) // Reset to page 1 when filters change
 
-  const {
-    data,
-    isLoading: isLoadingTable,
-    isError,
-  } = useGetAllStudentsQuery({
-    pageNumber: currentPage,
-    pageSize: pageSize,
-    searchText: searchText || undefined,
-    sortBy: sortBy || undefined,
-    Ascending: ascending,
-  })
+  // Client-side filtering and sorting
+  const filteredAndSortedData = useMemo(() => {
+    if (!allStudentsData?.items) return { items: [], totalCount: 0 }
 
-  useEffect(() => {
-    if (data) {
-      setLastSuccessfulData(data)
+    let filteredItems = [...allStudentsData.items]
+
+    // Apply search filters
+    if (debouncedSearchInput) {
+      filteredItems = filteredItems.filter(student => 
+        student.studentCode?.toLowerCase().includes(debouncedSearchInput.toLowerCase()) ||
+        `${student.prefix}${student.name} ${student.lastName}`.toLowerCase().includes(debouncedSearchInput.toLowerCase())
+      )
     }
-  }, [data])
+
+    if (selectedClassLevel) {
+      const [classLevel, groupName] = selectedClassLevel.split('.')
+      if (classLevel && groupName) {
+        filteredItems = filteredItems.filter(student => 
+          student.class === classLevel && student.groupName === groupName
+        )
+      }
+    }
+
+    if (selectedFaculty) {
+      filteredItems = filteredItems.filter(student => 
+        student.facultyName === selectedFaculty
+      )
+    }
+
+    // Sort the filtered items
+    filteredItems.sort((a, b) => {
+      const getClassInfo = (classStr: string | null | undefined) => {
+        if (!classStr) return { type: 'other', level: 999 }
+        
+        if (classStr.includes('ปวช')) {
+          const levelMatch = classStr.match(/ปวช\.?(\d+)/)
+          return { 
+            type: 'ปวช', 
+            level: levelMatch ? parseInt(levelMatch[1]) : 0,
+          }
+        } else if (classStr.includes('ปวส')) {
+          const levelMatch = classStr.match(/ปวส\.?(\d+)/)
+          return { 
+            type: 'ปวส', 
+            level: levelMatch ? parseInt(levelMatch[1]) : 0,
+          }
+        }
+        return { type: 'other', level: 0 }
+      }
+      
+      const infoA = getClassInfo(a.class)
+      const infoB = getClassInfo(b.class)
+      
+      // Sort by education type first (ปวช before ปวส)
+      if (infoA.type !== infoB.type) {
+        if (infoA.type === 'ปวช' && infoB.type === 'ปวส') return -1
+        if (infoA.type === 'ปวส' && infoB.type === 'ปวช') return 1
+        if (infoA.type === 'other') return 1
+        if (infoB.type === 'other') return -1
+        return infoA.type.localeCompare(infoB.type)
+      }
+      
+      // If same education type, sort by level
+      if (infoA.level !== infoB.level) {
+        return infoA.level - infoB.level
+      }
+      
+      // Handle group names with slashes
+      const parseGroupName = (groupStr: string | null | undefined) => {
+        if (!groupStr) {
+          return { main: 999, sub: 999, original: '' }
+        }
+        
+        if (groupStr.includes('/')) {
+          const [main, sub] = groupStr.split('/')
+          return {
+            main: parseInt(main) || 0,
+            sub: parseInt(sub) || 0,
+            original: groupStr
+          }
+        }
+        const num = parseInt(groupStr)
+        return {
+          main: isNaN(num) ? 999 : num,
+          sub: 0,
+          original: groupStr
+        }
+      }
+      
+      const groupInfoA = parseGroupName(a.groupName)
+      const groupInfoB = parseGroupName(b.groupName)
+      
+      if (groupInfoA.main !== groupInfoB.main) {
+        return groupInfoA.main - groupInfoB.main
+      }
+      
+      if (groupInfoA.sub !== groupInfoB.sub) {
+        return groupInfoA.sub - groupInfoB.sub
+      }
+      
+      return (a.studentCode || '').localeCompare(b.studentCode || '')
+    })
+
+    return {
+      items: filteredItems,
+      totalCount: filteredItems.length
+    }
+  }, [allStudentsData?.items, debouncedSearchInput, selectedClassLevel, selectedFaculty])
+
+  // Pagination logic
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const paginatedItems = filteredAndSortedData.items.slice(startIndex, endIndex)
+    
+    return {
+      items: paginatedItems,
+      totalCount: filteredAndSortedData.totalCount,
+      totalPages: Math.ceil(filteredAndSortedData.totalCount / pageSize),
+      pageNumber: currentPage,
+      hasNextPage: endIndex < filteredAndSortedData.totalCount,
+      hasPreviousPage: currentPage > 1
+    }
+  }, [filteredAndSortedData, currentPage, pageSize])
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-2/16" },
@@ -99,7 +288,9 @@ export default function StudentListPage() {
       className: "w-6/16",
       render: (item: any) => `${item.prefix}${item.name} ${item.lastName}`,
     },
-    { label: "ระดับชั้น", key: "class", className: "w-2/16" },
+    { label: "ระดับชั้น", key: "class", className: "w-2/16" ,
+      render: (item : any) => `${item.class}.${item.groupName}`
+    },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
@@ -108,15 +299,12 @@ export default function StudentListPage() {
   ]
 
   const tableData = useMemo(() => {
-    const currentData = data || lastSuccessfulData
-    if (!currentData?.items) return []
-
-    return currentData.items.map((item: any, index: number) => ({
+    return paginatedData.items.map((item: any, index: number) => ({
       ...item,
       index: (currentPage - 1) * pageSize + index + 1,
-      fullName: `${item.prefix}${item.name} ${item.lastName}`,
+      fullName: `${item.prefix || ''}${item.name || ''} ${item.lastName || ''}`,
     }))
-  }, [data, lastSuccessfulData, currentPage, pageSize]) 
+  }, [paginatedData.items, currentPage, pageSize]) 
 
   const getRowLink = useCallback((item: any) => {
     return `/academic/score-management/individual/${item.studentCode}`
@@ -144,12 +332,11 @@ export default function StudentListPage() {
     setSelectedFaculty(value)
   }
 
-  // Only show skeleton if there's no last successful data AND it's loading
-  if (isLoadingTable && !lastSuccessfulData) {
+  if (isLoadingFilterOptions) {
     return <TableSkeleton rows={8} columns={5} />
   }
 
-  if (isError && !lastSuccessfulData) {
+  if (isError) {
     return (
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="text-center text-red-600 py-8">เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง</div>
@@ -171,7 +358,7 @@ export default function StudentListPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">ระดับการศึกษา</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">ระดับชั้น/กลุ่มเรียน</label>
               <Combobox
                 options={[
                   { value: "", label: "ทั้งหมด" },
@@ -180,8 +367,9 @@ export default function StudentListPage() {
                     label: classData,
                   })),
                 ]}
-                buttonLabel={selectedClassLevel || "เลือกระดับการศึกษา"}
+                buttonLabel={selectedClassLevel || (isLoadingFilterOptions ? "กำลังโหลด..." : "เลือกระดับชั้น/กลุ่มเรียน")}
                 onSelect={handleClassLevelChange}
+                disabled={isLoadingFilterOptions}
               />
             </div>
             <div>
@@ -194,8 +382,9 @@ export default function StudentListPage() {
                     label: data,
                   })),
                 ]}
-                buttonLabel={selectedFaculty || "เลือกหลักสูตรการศึกษา"}
+                buttonLabel={selectedFaculty || (isLoadingFilterOptions ? "กำลังโหลด..." : "เลือกหลักสูตรการศึกษา")}
                 onSelect={handleFacultyChange}
+                disabled={isLoadingFilterOptions}
               />
             </div>
             <div>
@@ -245,10 +434,10 @@ export default function StudentListPage() {
       </div>
       <div className="flex items-center justify-between text-sm text-gray-600">
         <span>
-          แสดง {lastSuccessfulData?.items?.length || 0} จาก {lastSuccessfulData?.totalCount || 0} รายการ
-          {lastSuccessfulData && ` (หน้า ${lastSuccessfulData.pageNumber} จาก ${lastSuccessfulData.totalPages})`}
+          แสดง {paginatedData.items.length} จาก {paginatedData.totalCount} รายการ
+          {paginatedData.totalCount > 0 && ` (หน้า ${paginatedData.pageNumber} จาก ${paginatedData.totalPages})`}
         </span>
-        {isLoadingTable && <span className="text-blue-600 text-sm">กำลังโหลด...</span>}
+        {isLoadingFilterOptions && <span className="text-blue-600 text-sm">กำลังโหลด...</span>}
       </div>
       <StyledServerPaginatedDataTable
       title="รายชื่อนักเรียน"
@@ -257,12 +446,12 @@ export default function StudentListPage() {
         data={tableData}
         getRowLink={getRowLink}
         currentPage={currentPage}
-        totalPages={lastSuccessfulData?.totalPages || 1}
-        totalCount={lastSuccessfulData?.totalCount || 0}
+        totalPages={paginatedData.totalPages}
+        totalCount={paginatedData.totalCount}
         pageSize={pageSize}
         onPageChange={handlePageChange}
-        hasNextPage={lastSuccessfulData?.hasNextPage || false}
-        hasPreviousPage={lastSuccessfulData?.hasPreviousPage || false}
+        hasNextPage={paginatedData.hasNextPage}
+        hasPreviousPage={paginatedData.hasPreviousPage}
       />
     </div>
   )

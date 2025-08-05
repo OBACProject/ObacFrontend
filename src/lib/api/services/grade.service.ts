@@ -5,6 +5,7 @@ import {
   GetGroupSummaryGradeRequest,
   GetStudentGradesByTermYearRequest,
   GetStudentIfGradeBelowRequest,
+  UpdateStudentGradeScoreRequest,
   UpsertStudentGradesRequest,
 
 } from "../models/grade/grade.request";
@@ -70,6 +71,30 @@ export class GradeService extends BaseService {
       GRADE_ENDPOINTS.GET_GRADE_STUDENT_IF_GRADE_BELOW,
       params
     );
+  }
+  async updateStudentGradeByGradeId(
+    params : UpdateStudentGradeScoreRequest
+  ) : Promise<string> {
+    try {
+      const response = await this.client.put(
+        GRADE_ENDPOINTS.UPDATE_STUDENT_GRADE_BY_GRADE_ID,
+        params
+      );
+      
+      // Handle the specific response format for this endpoint
+      if (response.status === 200) {
+        // The API returns { "message": "Student grade updated successfully." }
+        return response.data?.message || "Grade updated successfully";
+      }
+      
+      throw new Error("Failed to update student grade");
+    } catch (error: any) {
+      // If it's already an error with a message, re-throw it
+      if (error.response?.status === 200 && error.response?.data?.message) {
+        return error.response.data.message;
+      }
+      throw error;
+    }
   }
 
     async upsertStudentGrades(
