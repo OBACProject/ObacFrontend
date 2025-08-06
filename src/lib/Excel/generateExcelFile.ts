@@ -56,9 +56,9 @@ export async function ConvertScoreToExcel(
     "รหัสนักเรียน",
     "ชื่อ-นามสกุล",
     "ห้องเรียน",
-    "คะแนนภารระงาน (20)",
+    "คะแนนจิตพิสัย (20)",
     "คะแนนเก็บ (10)",
-    "คะแนนประพฤติ (20)",
+    "คะแนนภารระงาน (20)",
     "คะแนนสอบกลางภาค (20)",
     "คะแนนสอบปลายภาค (30)",
     "คะแนนรวม",
@@ -94,11 +94,12 @@ export async function ConvertScoreToExcel(
       item.studentCode, // รหัสนักเรียน
       item.name, // ชื่อ-นามสกุล
       classroom, // ห้องเรียน
-      item.assignmentscore, // คะแนนภาระงาน (20)
       item.affectiveScore, // คะแนนจิตพิสัย (20)
       item.collectScore, // คะแนนเก็บ (10)
-      item.midtermScore, // คะแนนสอบ (30)
-      item.finaltermScore, // คะแนนรวม (20)
+      item.assignmentscore, // คะแนนภาระงาน (20)
+      item.midtermScore, // คะแนนสอบกลางภาค (20)
+      item.finaltermScore, // คะแนนปลายภาค (30)
+      item.collectScore + item.assignmentscore + item.affectiveScore + item.midtermScore + item.finaltermScore, // คะแนนรวม
     ]);
     row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };
