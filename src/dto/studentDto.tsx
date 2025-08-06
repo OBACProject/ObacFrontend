@@ -123,14 +123,37 @@ export interface GetStudentByGroupId {
 //   status : string |null;
 //   birthDate: string | null;
 // }
+
+
 export interface GetAllStudent {
-  id: number,
-  userName: string,
-  firstName: string,
-  lastName: string,
-  phoneNumber: number,
+  studentId: number;
+  studentCode: string;
+  class: string;
+  groupName: string;
+  groupCode: string;
+  id: string;
+  userName: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
   gender: string;
   role: string;
+  isActive: boolean;
+}
+
+
+export interface CreateStudentRequest {
+  userName: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string; 
+  prefix: string; 
 }
 
 

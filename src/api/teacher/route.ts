@@ -1,6 +1,7 @@
 import { CreateSubjectRequest } from "@/dto/subjectDto";
 import {
   CardSubjectResponse,
+  CreateTeacherRequest,
   GetAllTeacherResponse,
   TeacherDetailAndScheduleResponse,
   TeacherDetails,
@@ -78,6 +79,17 @@ export const GetAllTeachers = async (): Promise<GetAllTeacherResponse[]> => {
     return [];
   }
 };
+export const GetAllTeacherUsers = async (): Promise<GetAllTeacherResponse[] | []> => {
+  try {
+    const response = await apiClient.get("Admin/GetAllTeacherUsers");
+    console.log("📦 Response from API:", response.data);
+    const users = response.data?.data?.users;
+    return Array.isArray(users) ? users : [];
+  } catch (err) {
+    console.log("Error in GetAllTeachers : ", err);
+    return [];
+  }
+};
 
 export const GetTeacherDetailAndSchedule = async (
   teacherId: number,
@@ -99,7 +111,7 @@ export const GetTeacherDetailAndSchedule = async (
 };
 
 export const CreateTeacher = async (
-  payload: CreateSubjectRequest
+  payload: CreateTeacherRequest
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("User/CreateTeacher", payload);

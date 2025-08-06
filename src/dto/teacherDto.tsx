@@ -35,6 +35,7 @@ export interface GetAllTeacherResponse {
   facultyName: string;
   program: string;
   phoneNumber: string | null;
+  isActive : boolean;
 }
 
 
@@ -156,7 +157,7 @@ export interface CreateTeacherRequest {
   prefix: string;
   teacherCode: string;
   hiredDate : string;
-  programId: number;
+  programId?: number;
   userName :string;
   password : string;
   firstName : string;

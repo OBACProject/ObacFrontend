@@ -1,52 +1,45 @@
 "use client";
-import { BookOpen, LibraryBig, Pencil, PlusCircle } from "lucide-react";
+import { BookOpen, LibraryBig, PlusCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { SubjectItem } from "@/dto/subjectDto";
-import { GetAllSubjectAsync } from "@/api/subject/route";
-import { EditSubjectPopUp } from "@/components/common/Popup/EditSubjectPopup";
-import { AddSubjectPopUp } from "@/components/common/Popup/AddSubjectPopup";
-import { GetAllTeachers } from "@/api/teacher/route";
-import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
-import { fetchGetAllAcademicUser } from "@/api/user/userAPI";
+import { GetAllAcademicUsers } from "@/api/user/userAPI";
 import { GetAllAcademicUser } from "@/dto/userDto";
+import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
+import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
+import { useRouter } from "next/navigation"; 
+import AddAcademicAccountPopup from "@/components/common/Popup/AddAcademicAccountPopup";
 
 export default function Form() {
-  const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
+  const [teachers, setTeacher] = useState<GetAllAcademicUser[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedSubject, setSelectedSubject] = useState<SubjectItem | null>(null);
-
   const [openCreatSubjectPopup, setOpenCreatePopUp] = useState<boolean>(false);
-  const [openEditSubjectPopup, setOpenEditSubjectPopup] = useState<boolean>(false);
-
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 10;
+   const router = useRouter();
 
   useEffect(() => {
-    fetchGetAllAcademicUser().then((d: GetAllAcademicUser[]) => {
+    GetAllAcademicUsers().then((d: GetAllAcademicUser[]) => {
       if (d) {
-        const sortedData = d.sort((a, b) => a.id - b.id);
-        // setTeacher(sortedData);
-      } else {
-        console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");
+        setTeacher(d);
       }
     });
   }, []);
 
-  const filtereTeachers = useMemo(() => {
+  const filteredAcademicUsers = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
-    return teachers.filter((teacher) => {
-      const code = teacher.teacherCode?.toLowerCase() ?? "";
-      const firstName = teacher.firstName?.toLowerCase() ?? "";
-      const lastName = teacher.lastName?.toLowerCase() ?? "";
-      const fullName = `${teacher.prefix ?? ""} ${teacher.firstName ?? ""} ${teacher.lastName ?? ""}`.toLowerCase();
+    if (!Array.isArray(teachers)) return [];
+
+    return teachers.filter((user) => {
+      const firstName = user.firstName?.toLowerCase() ?? "";
+      const lastName = user.lastName?.toLowerCase() ?? "";
+      const fullName = `${user.prefix ?? ""} ${user.firstName ?? ""} ${user.lastName ?? ""}`.toLowerCase();
+      const phone = user.phoneNumber?.toLowerCase() ?? "";
 
       return (
         lowerSearch === "" ||
-        code.includes(lowerSearch) ||
         firstName.includes(lowerSearch) ||
         lastName.includes(lowerSearch) ||
-        fullName.includes(lowerSearch)
+        fullName.includes(lowerSearch) ||
+        phone.includes(lowerSearch)
       );
     });
   }, [teachers, searchTerm]);
@@ -54,15 +47,24 @@ export default function Form() {
   const paginatedTeachers = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return filtereTeachers.slice(start, end);
-  }, [filtereTeachers, currentPage]);
+    return filteredAcademicUsers.slice(start, end);
+  }, [filteredAcademicUsers, currentPage]);
+
+  const handleToggleActive = (userId: string, newState: boolean) => {
+    setTeacher((prev) =>
+      prev.map((t) =>
+        t.id === userId ? { ...t, isActive: newState } : t
+      )
+    );
+    // TODO: call API update ถ้ามี
+  };
 
   return (
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
         <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
           <LibraryBig className="h-8 w-8" />
-          ระบบจัดการอาจารย์
+          ระบบจัดการบุคลากรภายใน
         </h1>
       </div>
 
@@ -73,7 +75,7 @@ export default function Form() {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // reset ไปหน้าแรกเวลาค้นหาใหม่
+            setCurrentPage(1);
           }}
           className="border border-gray-400 px-4 py-1 rounded-md"
         />
@@ -82,67 +84,65 @@ export default function Form() {
           onClick={() => setOpenCreatePopUp(true)}
         >
           <PlusCircle className="w-5 h-5 text-white" />
-          เพิ่มบัญชีอาจารย์
+          เพิ่มบัญชีบุคลากรภายใน
         </button>
       </div>
 
-      {teachers.length > 0 ? (
+      {filteredAcademicUsers.length > 0 ? (
         <div className="w-full rounded-sm px-10">
-          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+          {/* Header */}
+          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-blue-600">
             <BookOpen className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
-              รายชื่ออาจารย์ทั้งหมด
+              รายชื่อบุคลากรภายในทั้งหมด
               <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">
-                {filtereTeachers.length || "-"}
+                {filteredAcademicUsers.length || "-"}
               </p>
               รายการ
             </div>
           </div>
 
-          <div className="w-full shadow-lg grid grid-cols-[5%_15%_30%_20%_15%_15%] bg-gray-100 text-gray-800 border-t border-b border-gray-400 py-1 px-4 text-center text-lg items-center justify-center">
-            <div>ลำดับ</div>
-            <div>รหัสอาจารย์</div>
-            <div>ชื่ออาจารย์</div>
-            <div>แผนก</div>
-            <div>สถานะ</div>
-            <div>Action</div>
+          {/* ตาราง */}
+          <div className="shadow-lg w-full text-sm">
+            {/* Header */}
+            <div className="grid grid-cols-[5%_40%_25%_30%] text-white bg-gradient-to-r from-blue-500 to-blue-600 text-lg">
+              <div className="flex items-center justify-center py-2">ลำดับ</div>
+              <div className="flex items-center justify-center py-2">ชื่อบุคลากรภายใน</div>
+              <div className="flex items-center justify-center py-2">เบอร์โทร</div>
+              <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
+            </div>
+
+            {/* Data Rows */}
+            {paginatedTeachers.map((item, index) => (
+              <div
+                key={item.id}
+                onClick={() => router.push(`/admin/academic-details/1`)}
+
+                className="cursor-pointer grid grid-cols-[5%_14%_26%_25%_30%] bg-white hover:bg-blue-100 text-gray-800 text-base"
+              >
+                <div className="flex items-center justify-center py-2">
+                  {(currentPage - 1) * itemsPerPage + index + 1}.
+                </div>
+                <div></div>
+                <div className="flex text-center items-center justify-start py-2 px-4">
+                  {`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}
+                </div>
+                <div className="flex items-center justify-center py-2">
+                  {item.phoneNumber || "-"}
+                </div>
+                <div className="flex items-center justify-center py-2">
+                  <IsActiveToggleProps
+                    isActive={item.isActive} 
+                    onToggle={(value) =>
+                      handleToggleActive(item.id, value)
+                    }
+                  />
+                </div>
+              </div>
+            ))}
           </div>
 
-          {paginatedTeachers.map((item: GetAllTeacherResponse, index) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-[5%_15%_30%_20%_15%_15%] bg-white hover:bg-blue-100 border border-gray-300 border-t-0"
-            >
-              <div className="text-center flex items-center justify-center text-black border-r py-1 border-gray-300">
-                {(currentPage - 1) * itemsPerPage + index + 1}.
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {item.teacherCode}
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {item.program}
-              </div>
-              <div className="text-center flex items-center justify-center text-green-600 font-semibold py-1 px-4 border-r border-gray-300">
-                ใช้งาน
-              </div>
-              <div className="text-center flex items-center justify-center py-1">
-                <button
-                  className="text-blue-600 hover:text-blue-800"
-                  onClick={() => {
-                    // setSelectedSubject(...)
-                    // setOpenEditSubjectPopup(true)
-                  }}
-                >
-                  <Pencil className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          ))}
-
-          {/* Pagination Controls */}
+          {/* Pagination */}
           <div className="flex justify-center items-center gap-4 mt-4">
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
@@ -153,18 +153,20 @@ export default function Form() {
             </button>
 
             <span className="text-sm text-gray-700">
-              หน้า {currentPage} / {Math.ceil(filtereTeachers.length / itemsPerPage)}
+              หน้า {currentPage} / {Math.ceil(filteredAcademicUsers.length / itemsPerPage)}
             </span>
 
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= Math.ceil(filtereTeachers.length / itemsPerPage)}
+              disabled={currentPage >= Math.ceil(filteredAcademicUsers.length / itemsPerPage)}
             >
               ถัดไป
             </button>
           </div>
         </div>
+
+
       ) : (
         <div className="w-full grid place-items-center py-10">
           <div className="py-10 border-gray-400 border-2 border-dashed text-5xl text-gray-500 font-extrabold rounded-lg grid place-items-center w-[700px]">
@@ -173,18 +175,9 @@ export default function Form() {
         </div>
       )}
 
-      {/* Popup */}
+      {/* Popups */}
       {openCreatSubjectPopup && (
-        <AddTeacherAccountPopup
-          onClosePopUp={setOpenCreatePopUp}
-        />
-      )}
-
-      {openEditSubjectPopup && selectedSubject && (
-        <EditSubjectPopUp
-          onClosePopUp={setOpenEditSubjectPopup}
-          data={selectedSubject}
-        />
+        <AddAcademicAccountPopup onClosePopUp={setOpenCreatePopUp} />
       )}
     </div>
   );

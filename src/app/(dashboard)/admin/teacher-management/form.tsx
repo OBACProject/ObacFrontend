@@ -5,26 +5,36 @@ import { SubjectItem } from "@/dto/subjectDto";
 import { GetAllSubjectAsync } from "@/api/subject/route";
 import { EditSubjectPopUp } from "@/components/common/Popup/EditSubjectPopup";
 import { AddSubjectPopUp } from "@/components/common/Popup/AddSubjectPopup";
-import { GetAllTeachers } from "@/api/teacher/route";
+import { GetAllTeachers, GetAllTeacherUsers } from "@/api/teacher/route";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
+import { useRouter } from "next/navigation";
+import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
 
 export default function Form() {
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<SubjectItem | null>(null);
-
   const [openCreatSubjectPopup, setOpenCreatePopUp] = useState<boolean>(false);
   const [openEditSubjectPopup, setOpenEditSubjectPopup] = useState<boolean>(false);
-
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 10;
+
+  const handleToggleActive = (userId: string, newState: boolean) => {
+    setTeacher((prev) =>
+      prev.map((t) =>
+        t.id === userId ? { ...t, isActive: newState } : t
+      )
+    );
+    // TODO: call API update ถ้ามี
+  };
 
   useEffect(() => {
-    GetAllTeachers().then((d: GetAllTeacherResponse[]) => {
+    GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
       if (d) {
-        const sortedData = d.sort((a, b) => a.id - b.id);
-        setTeacher(sortedData);
+        console.log(d);
+        setTeacher(d);
       } else {
         console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");
       }
@@ -71,7 +81,7 @@ export default function Form() {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // reset ไปหน้าแรกเวลาค้นหาใหม่
+            setCurrentPage(1);
           }}
           className="border border-gray-400 px-4 py-1 rounded-md"
         />
@@ -97,50 +107,53 @@ export default function Form() {
             </div>
           </div>
 
-          <div className="w-full shadow-lg grid grid-cols-[5%_15%_30%_20%_15%_15%] bg-gray-100 text-gray-800 border-t border-b border-gray-400 py-1 px-4 text-center text-lg items-center justify-center">
-            <div>ลำดับ</div>
-            <div>รหัสอาจารย์</div>
-            <div>ชื่ออาจารย์</div>
-            <div>แผนก</div>
-            <div>สถานะ</div>
-            <div>Action</div>
+          <div className="shadow-lg w-full text-sm">
+            <div className="grid grid-cols-[5%_15%_30%_20%_30%] text-white bg-gradient-to-r from-blue-500 to-indigo-600 text-lg">
+              <div className="flex items-center justify-center py-2">ลำดับ</div>
+              <div className="flex items-center justify-center py-2">รหัสอาจารย์</div>
+              <div className="flex items-center justify-center py-2">ชื่ออาจารย์</div>
+              <div className="flex items-center justify-center py-2">แผนก</div>
+              <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
+            </div>
+
+            {paginatedTeachers.map((item, index) => (
+              <div
+                key={item.id}
+                onClick={() => router.push(`/admin/teacher-details/1`)}
+                className="cursor-pointer grid grid-cols-[5%_15%_9%_21%_20%_30%] bg-white hover:bg-blue-100 text-gray-800 text-base"
+              >
+                <div className="flex items-center justify-center py-2">
+                  {(currentPage - 1) * itemsPerPage + index + 1}.
+                </div>
+
+                <div className="flex items-center justify-center py-2">
+                  {item.teacherCode}
+                </div>
+                <div></div>
+
+                <div className="flex items-center py-2 px-4 w-full">
+                  <span className="text-start">{`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}</span>
+                </div>
+
+
+                <div className="flex items-center justify-center py-2">
+                  {item.program}
+                </div>
+
+                <div className="flex items-center justify-center py-2">
+
+                  <IsActiveToggleProps
+                    isActive={item.isActive} 
+                    onToggle={(value) =>
+                      handleToggleActive(item.id, value)
+                    }
+                  />
+
+                </div>
+              </div>
+            ))}
           </div>
 
-          {paginatedTeachers.map((item: GetAllTeacherResponse, index) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-[5%_15%_30%_20%_15%_15%] bg-white hover:bg-blue-100 border border-gray-300 border-t-0"
-            >
-              <div className="text-center flex items-center justify-center text-black border-r py-1 border-gray-300">
-                {(currentPage - 1) * itemsPerPage + index + 1}.
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {item.teacherCode}
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}
-              </div>
-              <div className="text-center flex items-center justify-center text-gray-700 py-1 px-4 border-r border-gray-300">
-                {item.program}
-              </div>
-              <div className="text-center flex items-center justify-center text-green-600 font-semibold py-1 px-4 border-r border-gray-300">
-                ใช้งาน
-              </div>
-              <div className="text-center flex items-center justify-center py-1">
-                <button
-                  className="text-blue-600 hover:text-blue-800"
-                  onClick={() => {
-                    // setSelectedSubject(...)
-                    // setOpenEditSubjectPopup(true)
-                  }}
-                >
-                  <Pencil className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          ))}
-
-          {/* Pagination Controls */}
           <div className="flex justify-center items-center gap-4 mt-4">
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
@@ -171,11 +184,8 @@ export default function Form() {
         </div>
       )}
 
-      {/* Popup */}
       {openCreatSubjectPopup && (
-        <AddTeacherAccountPopup
-          onClosePopUp={setOpenCreatePopUp}
-        />
+        <AddTeacherAccountPopup onClosePopUp={setOpenCreatePopUp} />
       )}
 
       {openEditSubjectPopup && selectedSubject && (

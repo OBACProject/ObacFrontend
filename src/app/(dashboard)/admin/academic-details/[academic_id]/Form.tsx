@@ -1,28 +1,27 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Pencil, Save, CircleX } from "lucide-react";
 
-const mockTeacherDetail = {
-  userName: "teacher.jane",
+const mockAcademicDetail = {
+  userName: "academic.john",
   password: "********",
-  firstName: "Jane",
-  lastName: "Doe",
-  studentCode: "T123456",
-  gender: "หญิง",
-  citizenId: "1234567890123",
-  phoneNumber: "0812345678",
+  firstName: "John",
+  lastName: "Smith",
+  academicCode: "A123456",
+  gender: "ชาย",
+  citizenId: "9876543210123",
+  phoneNumber: "0898765432",
   nationality: "ไทย",
-  birthDate: "1985-06-15",
-  prefix: "นางสาว",
+  birthDate: "1980-12-25",
+  prefix: "นาย",
 };
 
 type Props = {
-  teacherId: number;
+  academicId: number;
 };
 
-export default function TeacherDetailForm({ teacherId }: Props) {
-  const [formData, setFormData] = useState(mockTeacherDetail);
+export default function AcademicDetailForm({ academicId }: Props) {
+  const [formData, setFormData] = useState(mockAcademicDetail);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (field: keyof typeof formData, value: string) => {
@@ -30,13 +29,12 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   };
 
   const handleSave = () => {
-    // TODO: call API here
     console.log("Saving", formData);
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setFormData(mockTeacherDetail);
+    setFormData(mockAcademicDetail);
     setIsEditing(false);
   };
 
@@ -45,20 +43,20 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Box className="h-6 w-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-blue-700">รายละเอียดอาจารย์</h1>
+          <h1 className="text-2xl font-bold text-blue-700">รายละเอียดบุคลากรภายใน</h1>
         </div>
         <div className="flex items-center">
           {isEditing ? (
             <div className="flex gap-2">
               <button
-                className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
+                className="w-[120px] h-fit bg-green-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
                 onClick={handleSave}
               >
                 <Save className="w-5 h-5" />
                 บันทึก
               </button>
               <button
-                className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white"
+                className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
                 onClick={handleCancel}
               >
                 <CircleX className="w-5 h-5" />
@@ -67,7 +65,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
             </div>
           ) : (
             <button
-              className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white"
+              className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
               onClick={() => setIsEditing(true)}
             >
               <Pencil className="w-5 h-5" />
@@ -88,7 +86,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         <Info label="เพศ" value={formData.gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
         <Info label="วันเกิด" value={formData.birthDate} editable={isEditing} onChange={(v) => handleChange("birthDate", v)} type="date" />
 
-        <Info label="รหัสอาจารย์" value={formData.studentCode} editable={isEditing} onChange={(v) => handleChange("studentCode", v)} />
+        <Info label="รหัสบุคลากรภายใน" value={formData.academicCode} editable={isEditing} onChange={(v) => handleChange("academicCode", v)} />
         <Info label="รหัสประชาชน" value={formData.citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
         <Info label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />

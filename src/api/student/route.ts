@@ -33,14 +33,14 @@ export const GetStudentByStudentId = async (
 };
 export const GetAllStudents = async (): Promise<GetAllStudent[] | []> => {
   try {
-    const response = await apiClient.get<{
-      responseCode: string;
-      responseMessage: string;
-      data: GetAllStudent[];
-    }>("Admin/GetAllStudentUsers");
-    return response.data.data ?? [];
+    const response = await apiClient.get("Admin/GetAllStudentUsers");
+    console.log("📦 Response from API:", response.data);
+
+    const users = response.data?.data?.users;
+
+    return Array.isArray(users) ? users : [];
   } catch (err) {
-    console.log("Error in GetAllStudents : ", err);
+    console.log("❌ Error in GetAllStudents:", err);
     return [];
   }
 };

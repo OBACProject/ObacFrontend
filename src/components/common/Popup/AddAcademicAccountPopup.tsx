@@ -1,16 +1,15 @@
 "use client";
-import { CreateTeacher } from "@/api/teacher/route";
-import { CreateTeacherRequest } from "@/dto/teacherDto";
 import React, { useState } from "react";
+// import { CreateAcademic } from "@/api/academic/route";
+// import { CreateAcademicRequest } from "@/dto/academicDto";
 import { toast } from "react-toastify";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
 };
 
-export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
-  const [teacherCode, setTeacherCode] = useState("");
-  const [program, setProgram] = useState<number | null>(null);
+export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
+  const [academicCode, setAcademicCode] = useState("");
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -19,7 +18,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   const [citizenId, setCitizenId] = useState("");
   const [nationality, setNationality] = useState("ไทย");
   const [birthDate, setBirthDate] = useState("");
-  const [hiredDate, setHiredDate] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,7 +26,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
 
   const handleSubmit = async () => {
     if (
-      !teacherCode ||
+      !academicCode ||
       !firstName ||
       !lastName ||
       !phone ||
@@ -36,8 +34,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
       !password ||
       !confirmPassword ||
       !citizenId ||
-      !birthDate ||
-      !hiredDate
+      !birthDate
     ) {
       toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
@@ -48,11 +45,9 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
       return;
     }
 
-    const payload: CreateTeacherRequest = {
+    const payload: CreateAcademicRequest = {
       prefix,
-      teacherCode,
-      hiredDate,
-      programId: program ?? undefined,
+      academicCode,
       userName: username,
       password,
       firstName,
@@ -65,15 +60,15 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
     };
 
     try {
-      const success = await CreateTeacher(payload);
+      const success = await CreateAcademic(payload);
       if (success) {
-        toast.success("สร้างบัญชีอาจารย์สำเร็จแล้ว");
+        toast.success("สร้างบัญชีบุคลากรภายในสำเร็จแล้ว");
         onClosePopUp(false);
       } else {
-        toast.error("ไม่สามารถสร้างบัญชีอาจารย์ได้");
+        toast.error("ไม่สามารถสร้างบัญชีบุคลากรภายในได้");
       }
     } catch (error) {
-      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีอาจารย์");
+      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีบุคลากรภายใน");
       console.error(error);
     }
   };
@@ -81,35 +76,20 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีอาจารย์</h2>
+        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีบุคลากรภายใน</h2>
 
-        {/* แถว 1 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm">รหัสอาจารย์</label>
+            <label className="text-sm">รหัสบุคลากร</label>
             <input
               type="text"
-              value={teacherCode}
-              onChange={(e) => setTeacherCode(e.target.value)}
+              value={academicCode}
+              onChange={(e) => setAcademicCode(e.target.value)}
               className="w-full border px-3 py-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="text-sm">รหัสแผนก (Program ID)</label>
-            <input
-              type="number"
-              value={program ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setProgram(val === "" ? null : Number(val));
-              }}
-              className="w-full border px-3 py-2 rounded"
-              placeholder="ไม่บังคับกรอก"
             />
           </div>
         </div>
 
-        {/* แถว 2 */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -143,7 +123,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 3 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">เพศ</label>
@@ -161,16 +140,12 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
             <input
               type="tel"
               value={phone}
-              onChange={(e) => {
-                const onlyDigits = e.target.value.replace(/\D/g, "");
-                setPhone(onlyDigits);
-              }}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
               className="w-full border px-3 py-2 rounded"
             />
           </div>
         </div>
 
-        {/* แถว 4 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสประชาชน</label>
@@ -192,29 +167,16 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 5 */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm">วันเกิด</label>
-            <input
-              type="date"
-              value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
-            />
-          </div>
-          <div>
-            <label className="text-sm">วันที่เริ่มงาน</label>
-            <input
-              type="date"
-              value={hiredDate}
-              onChange={(e) => setHiredDate(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
-            />
-          </div>
+        <div>
+          <label className="text-sm">วันเกิด</label>
+          <input
+            type="date"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            className="w-full border px-3 py-2 rounded"
+          />
         </div>
 
-        {/* แถว 6 */}
         <div>
           <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
           <input
@@ -225,7 +187,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           />
         </div>
 
-        {/* แถว 7 */}
         <div>
           <label className="text-sm">รหัสผ่าน</label>
           <div className="relative">
@@ -245,7 +206,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 8 */}
         <div>
           <label className="text-sm">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -265,7 +225,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* ปุ่ม */}
         <div className="flex justify-end gap-3 pt-4">
           <button
             className="px-4 py-1 bg-gray-300 rounded"
