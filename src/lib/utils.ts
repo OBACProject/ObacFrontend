@@ -1,24 +1,25 @@
-import { ScheduleItemStudentGroups, StudentGroupItem } from "@/dto/studentGroupItem";
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import {
+  ScheduleItemStudentGroups,
+  StudentGroupItem,
+} from "@/dto/studentGroupItem";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getCurrentThaiTermYear() {
   const date = new Date();
-  const currentMonth = date.getMonth(); 
+  const currentMonth = date.getMonth();
 
-  const currentYear = currentMonth > 4
-    ? date.getFullYear() + 543
-    : date.getFullYear() + 543 - 1;
+  const currentYear =
+    currentMonth > 4 ? date.getFullYear() + 543 : date.getFullYear() + 543 - 1;
 
   const defaultTerm = currentMonth > 4 ? "1" : "2";
 
   return { defaultTerm, currentYear };
 }
-
 
 export function sortStudentGroupItems(
   groups: StudentGroupItem[]
