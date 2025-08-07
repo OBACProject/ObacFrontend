@@ -32,9 +32,6 @@ export function setAuthCookie(token: string) {
       throw new Error("Invalid token format.");
     }
   const { Role: role, Name: name, UserID: userId } = decodedPayload;
-    console.log("Role:", role);
-    console.log("Name:", name);
-    console.log("User ID:", userId);
   const expires = new Date(new Date().getTime() + 8 * 60 * 60 * 1000);
 
   Cookies.set("role", role, { expires });

@@ -16,7 +16,6 @@ export const CreateEnrollmentWithGradeAndSchedule = async (
   payload: CreateEnrollmentWithGradeAndScheduleRequest
 ): Promise<{ success: boolean; error?: string }> => {
   try {
-    console.log(payload);
     const response = await apiClient.post(
       `Enrollment/CreateEnrollmentWithGradeAndSchedule?studentGroupId=${studentGroupId}`,
       payload

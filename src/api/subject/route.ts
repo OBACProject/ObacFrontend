@@ -73,7 +73,6 @@ export const CreateSubject = async (
 
 export const UpdateSubject = async (payload: UpdateSubjectRequest) => {
   try {
-    console.log("api : ", payload);
     const res = await apiClient.put("Subject/UpdateSubject", payload);
     return res.data;
   } catch (error) {
@@ -85,7 +84,6 @@ export const UpdateSubject = async (payload: UpdateSubjectRequest) => {
 export const DeleteSubjectById = async (id: number): Promise<boolean> => {
   try {
     const response = await apiClient.delete(`Subject/DeleteSubject/${id}`);
-    console.log("Delete success:", response.data);
     return true;
   } catch (error: any) {
     console.error("Delete failed:", error.response?.data || error.message);

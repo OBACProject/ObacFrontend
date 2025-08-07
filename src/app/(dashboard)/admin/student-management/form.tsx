@@ -26,7 +26,7 @@ export default function Form() {
   useEffect(() => {
     GetAllStudents().then((d) => {
       if (Array.isArray(d)) {
-        console.log("ดึงข้อมูลนักเรียน:", d);
+
         setStudents(d);
       } else {
         console.error("ไม่ได้ข้อมูลเป็น array:", d);
@@ -109,7 +109,6 @@ export default function Form() {
                 key={item.id}
                 onClick={() => {
                   if (item.studentId) {
-                    console.log("Navigating to student details:", item.studentId);
                     router.push(`/admin/student-details/${(item.studentId)}`);
                   }
                 }}

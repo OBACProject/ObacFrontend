@@ -144,7 +144,6 @@ export default function Form({ studentId }: Props) {
         isActive: students.isActive ?? true,
         isAgree: false,
       });
-      console.log(formData);
     }
   }, [students]);
 
@@ -161,7 +160,6 @@ export default function Form({ studentId }: Props) {
   const onSaveChangeStudentData = async () => {
     try {
       if (students) {
-        console.log(formData);
         const response = await fetchUpdateStudent(formData);
         if (response) {
           setOnEdit(false);

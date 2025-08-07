@@ -27,7 +27,6 @@ export default function AcademicDetailForm({ academicId }: Props) {
   };
 
   const handleSave = () => {
-    console.log("Saving", formData);
     setOriginalData(formData);
     setIsEditing(false);
     // TODO: call update API here

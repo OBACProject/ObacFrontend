@@ -9,7 +9,6 @@ type Props = {
 };
 
 export default function StudentDetailForm({ studentId }: Props) {
-  console.log("Rendering StudentDetailForm for studentId:", studentId);
   const [formData, setFormData] = useState<GetStudentDetailResponse | null>(null);
   const [originalData, setOriginalData] = useState<GetStudentDetailResponse | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -18,7 +17,7 @@ export default function StudentDetailForm({ studentId }: Props) {
   useEffect(() => {
     GetStudentDetailById(Number(studentId)).then((data) => {
       if (data) {
-        console.log("Fetched student data:", data);
+  
         setFormData(data);
         setOriginalData(data);
       }
@@ -31,10 +30,8 @@ export default function StudentDetailForm({ studentId }: Props) {
   };
 
   const handleSave = () => {
-    console.log("Saving student data:", formData);
     setOriginalData(formData);
     setIsEditing(false);
-    // 🔁 TODO: call updateStudent API
   };
 
   const handleCancel = () => {

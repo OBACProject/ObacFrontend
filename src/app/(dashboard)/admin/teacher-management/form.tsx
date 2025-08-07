@@ -33,7 +33,6 @@ export default function Form() {
   useEffect(() => {
     GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
       if (d) {
-        console.log(d);
         setTeacher(d);
       } else {
         console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");

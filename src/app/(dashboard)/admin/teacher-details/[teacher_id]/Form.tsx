@@ -31,10 +31,8 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   };
 
   const handleSave = () => {
-    console.log("Saving", formData);
     setOriginalData(formData);
     setIsEditing(false);
-    // TODO: call update API here
   };
 
   const handleCancel = () => {

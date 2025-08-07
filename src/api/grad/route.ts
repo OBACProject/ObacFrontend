@@ -32,9 +32,7 @@ export const UpsertStudentGrades = async (
   payload: UpsertStudentGradesRequest
 ): Promise<boolean> => {
   try {
-    console.log("payload : ", payload);
     const response = await apiClient.put("Grade/UpsertStudentGrades", payload);
-    console.log(response);
     return response.status === 200;
   } catch (err) {
     console.error("Error upserting student grades:", err);
