@@ -109,7 +109,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
   const getRowLink = useCallback(
     (item: TransformedStudentData) => {
-      return `/academic/score-management/individual/${item.studentId}`
+      return `/academic/score-management/individual/${item.studentCode}`
     },
     []
   )

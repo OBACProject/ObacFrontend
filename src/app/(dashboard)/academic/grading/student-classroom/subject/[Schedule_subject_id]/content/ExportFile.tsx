@@ -1,17 +1,15 @@
 // === components/grad/ExportFile.tsx ===
 "use client";
 import React from "react";
-// import { GetGradBySubjectId, GetSubjectBySubjectId } from "@/dto";
 import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
 import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
-  ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
-import { GetGradBySubjectId } from "@/dto/gradDto";
+import { GetGradBySubjectId, StudentGroupGradeResponse, SubjectGradeItem } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
-import { mockStudentNameListInSubject, mockStudentScorenSubject } from "@/resource/PDF/mockData";
+import { StudentNameListInSubject } from "@/dto/pdfDto";
 
 interface ExportFileProps {
   grads: GetGradBySubjectId[];
@@ -50,13 +48,65 @@ export default function ExportFile({
     };
   });
 
+  const convertToStudentGroupGradeResponse = (): StudentGroupGradeResponse => {
+    return {
+      subjectName: subject?.subjectName || "",
+      subjectCode: subject?.subjectCode || "",
+      credit: subject?.credits || 0,
+      hour: 0, 
+      subjectTeacher: "", 
+      subjectId: subject?.id || 0,
+      groupId: 0,
+      groupName: roomName,
+      groupCode: "",
+      class: roomName,
+      level: 0,
+      isPublish: false,
+      isComplete: false,
+      term: term,
+      year: parseInt(year),
+      subjectGrades: grads.map((item) => ({
+        studentId: item.studentId,
+        studentCode: item.studentCode,
+        prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
+        firstName: item.firstName,
+        lastName: item.lastName,
+        assignmentScore: item.assignmentscore || 0,
+        collectScore: item.collectScore || 0,
+        midtermScore: item.midtermScore || 0,
+        finaltermScore: item.finaltermScore || 0,
+        affectiveScore: item.affectiveScore || 0,
+        totalScore: item.totalScore || 0,
+        finalGrade: parseFloat(item.grade) || 0,
+        remarks: item.remark || "",
+      }))
+    };
+  };
+
+  // Convert grads data to StudentNameListInSubject format for PDF
+  const convertToStudentNameList = (): StudentNameListInSubject => {
+    return {
+      subjectID: subject?.id || 0,
+      subjectCode: subject?.subjectCode || "",
+      subjectName: subject?.subjectName || "",
+      groupName: roomName,
+      students: grads.map((item) => ({
+        studentID: item.studentId,
+        studentCode: item.studentCode,
+        prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
+        studentFirstName: item.firstName,
+        studentLastName: item.lastName,
+      }))
+    };
+  };
+
   return (
     <div className="flex flex-row flex-wrap gap-2">
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
           StudentScoreInSubjectPDF({
-           data: mockStudentScorenSubject
+           data: convertToStudentGroupGradeResponse()
           })
         }
       >
@@ -66,7 +116,7 @@ export default function ExportFile({
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
           StudentNameInSubject({
-            data:mockStudentNameListInSubject
+            data: convertToStudentNameList()
           })
         }
       >

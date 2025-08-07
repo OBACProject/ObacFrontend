@@ -1,4 +1,4 @@
-import { BulkUpdateStudentGradeByScheduleSubjectIdRequest, GetGroupSummaryGradeRequest, GetStudentGradesByTermYearRequest, GetStudentIfGradeBelowRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
+import { BulkUpdateStudentGradeByScheduleSubjectIdRequest, GetGroupSummaryGradeRequest, GetStudentGradesByTermYearRequest, GetStudentIfGradeBelowRequest, UpdateStudentGradeScoreRequest, UpsertStudentGradesRequest } from "@/lib/api/models/grade/grade.request";
 import {  GetGroupSummaryGradeResponse, GetStudentDetailAndSummaryScoreByStudentCodeResponse, GetStudentGradesByTermYearResponse, GetStudentGroupGradeByScheduleSubjectIdResponse, GetStudentIfGradeBelowResponse } from "@/lib/api/models/grade/grade.response";
 import { gradeService } from "@/lib/api/services/grade.service";
 import { createBaseQuery } from "./base/base.queries";
@@ -23,13 +23,27 @@ export const useGetStudentGradesByTermYearQuery = createBaseQuery<
   (params) => gradeService.getStudentGradesByTermYear(params),
 );
 
-export const useGetStudentDetailAndSummaryScoreByStudentCodeQuery = (studentCode: string) => {
-  return createBaseQuery<GetStudentDetailAndSummaryScoreByStudentCodeResponse, string>(
-    () => ['studentDetailAndSummaryScore', studentCode],
-    () => gradeService.GetStudentDetailAndSummaryScoreByStudentCode(studentCode),
-  )
-};
+// export const useGetStudentDetailAndSummaryScoreByStudentCodeQuery = createBaseQuery<
+//   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+//   GetStudentGradesByTermYearRequest>(
+//   (params) => ['studentDetailAndSummaryScore', params],
+//   (params) => gradeService.GetStudentDetailAndSummaryScoreByStudentCode(params),
+// );
 
+export const useGetStudentDetailAndSummaryScoreByStudentCodeQuery = createBaseQuery<
+  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  string
+>(
+  (params) => ['studentDetailAndSummaryScore', params],
+  (params) => gradeService.GetStudentDetailAndSummaryScoreByStudentCode(params),
+);
+
+export const useUpdateStudentGradeByGradeIdMutation = (options? : Partial<UseMutationOptions<string, Error, UpdateStudentGradeScoreRequest>>) => {
+  return useBaseUpdateMutation<string, UpdateStudentGradeScoreRequest, Error>(
+    gradeService.updateStudentGradeByGradeId.bind(gradeService),
+    options
+  );
+}
 
 export const useBulkUpdateStudentGradeByScheduleSubjectId = (options? : Partial<UseMutationOptions<void, Error, { scheduleSubjectId: number; params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] }>>) => {
   return useBaseUpdateMutation<void, { scheduleSubjectId: number; params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] }, Error>(

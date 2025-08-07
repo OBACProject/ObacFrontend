@@ -16,14 +16,16 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import GradeToggleButton from "../../component/pushlishToggle";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { useUpdatePublishStatusByStudentGroupIdMutation } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 
 interface dataTable {
   index: number;
   class: string;
+  space: string;
   isComplete: boolean;
   isPublish: boolean;
-  groupId: number; // For navigation
+  groupId: number;
 }
 
 export default function StudentClassroomContent() {
@@ -38,10 +40,22 @@ export default function StudentClassroomContent() {
   const [isPending, startTransition] = useTransition();
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  // Fetch real data
   const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
     term: term,
     year: year,
+  });
+
+  // Mutation for updating publish status
+  const updatePublishStatusMutation = useUpdatePublishStatusByStudentGroupIdMutation({
+    onSuccess: () => {
+      // Optionally show success message or refetch data
+      console.log("Publish status updated successfully");
+    },
+    onError: (error) => {
+      console.error("Failed to update publish status:", error);
+      // Revert the optimistic update on error
+      // This will be handled by rolling back the state change
+    }
   });
 
 
@@ -49,10 +63,11 @@ export default function StudentClassroomContent() {
     if (!data || !Array.isArray(data)) return [];
 
     return data
-      .sort((a, b) => a.id - b.id) // Sort by groupId (id) ascending
+      .sort((a, b) => a.id - b.id)
       .map((item: GetAllStudentGroupByTermYearResponse, idx: number) => ({
         index: idx + 1,
         class: `${item.class}.${item.groupName}`,
+        space: "",
         isComplete: item.isComplete,
         isPublish: item.isPublish,
         groupId: item.id, 
@@ -69,17 +84,22 @@ export default function StudentClassroomContent() {
     {
       label: "ลำดับ",
       key: "index",
-      className: "w-1/6 flex justify-center",
+      className: "w-[10%] flex justify-center",
     },
     {
       label: "ห้องเรียน",
       key: "class",
-      className: "w-1/3 flex justify-center",
+      className: "w-[30%] flex justify-center items-center pl-32",
+    },
+    {
+      label : " ",
+      key : "space",
+      className: "w-[20%] flex justify-center",
     },
     {
       label: "สถานะการตรวจสอบ",
       key: "isComplete",
-      className: "w-1/4 flex justify-center",
+      className: "w-[20%] flex justify-center",
       render: (row: dataTable) => (
         <div className="flex justify-center">
           {row.isComplete ? (
@@ -97,7 +117,7 @@ export default function StudentClassroomContent() {
     {
       label: "เผยแพร่เกรด",
       key: "isPublish",
-      className: "w-1/4 flex justify-center",
+      className: "w-[20%] flex justify-center",
       render: (row: dataTable) => {
         const isDisabled = !row.isComplete;
         return (
@@ -110,11 +130,26 @@ export default function StudentClassroomContent() {
               disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
+                  // Optimistic update - update UI immediately
                   setTableData((prev) =>
                     prev.map((item, i) =>
                       i === row.index - 1 ? { ...item, isPublish: newValue } : item
                     )
                   );
+                  
+                  // Call API to update publish status
+                  updatePublishStatusMutation.mutate({
+                    studentGroupId: row.groupId,
+                    isPublished: newValue 
+                  }, {
+                    onError: () => {
+                      setTableData((prev) =>
+                        prev.map((item, i) =>
+                          i === row.index - 1 ? { ...item, isPublish: !newValue } : item
+                        )
+                      );
+                    }
+                  });
                 }
               }}
             />
@@ -165,7 +200,6 @@ export default function StudentClassroomContent() {
     });
   }, [tableData, deferredSearchTerm, filterStatus, filterPublished, filterClass]);
 
-  // Handle loading and error states
   if (isLoading || isPending) {
     return (
       <>

@@ -1,10 +1,8 @@
-import React from "react";
-import Form from "./form";
+
+import React from 'react'
 
 export default function page() {
   return (
-    <div className="pl-16">
-      <Form />
-    </div>
-  );
+    <div>page</div>
+  )
 }

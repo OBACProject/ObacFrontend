@@ -168,7 +168,24 @@ export interface GetAllStudentTableDto {
   subProgramName: string;
   programName: string;
 }
-
+// {
+//   "affectiveScore": 20,
+//   "assignmentScore": 0,
+//   "collectScore": 0,
+//   "credit": 2,
+//   "finalGrade": 3,
+//   "finaltermScore": 30,
+//   "gradeId": 1823,
+//   "gradePoint": 6,
+//   "midtermScore": 20,
+//   "remark": "",
+//   "subjectCode": "30000-1101",
+//   "subjectId": 1,
+//   "subjectName": "ทักษะภาษาไทยเพื่อการสื่อสารในงานอาชีพ",
+//   "term": "1",
+//   "totalScore": 70,
+//   "year": 2568
+// }
 export interface TermQuery {
   subject_name: string;
   subject_code: string;

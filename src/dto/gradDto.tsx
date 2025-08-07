@@ -195,6 +195,7 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
 export interface SubjectGradeItem {
   studentId: number;
   studentCode: string;
+  prefix:string;
   firstName: string;
   lastName: string;
   assignmentScore:number;
@@ -210,7 +211,11 @@ export interface SubjectGradeItem {
 export interface StudentGroupGradeResponse {
   subjectName: string;
   subjectCode: string;
+  credit:number;
+  hour:number;
+  subjectTeacher:string;
   subjectId: number;
+  groupId: number;
   groupName: string;
   groupCode: string;
   class: string;
@@ -221,3 +226,25 @@ export interface StudentGroupGradeResponse {
   year: number;
   subjectGrades: SubjectGradeItem[];
 }
+
+export type StudentGroupGrade = {
+  studentId: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+};
+
+export type BulkUpdateStudentGradeResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: boolean;
+  error: null | {
+    code: string;
+    message: string;
+  };
+};

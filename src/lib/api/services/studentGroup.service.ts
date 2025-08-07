@@ -17,7 +17,11 @@ export class StudentGroupService extends BaseService {
     }
     async updateStudentGroupByStudentGroupId(params : UpdateStudentGroupByStudentGroupIdRequest): Promise<void> {
         const data = this.put<void>(STUDENT_GROUP_ENDPOINTS.UPDATE_STUDENT_GROUP_BY_STUDENT_GROUP_ID, params);
-        return this.get<void>(STUDENT_GROUP_ENDPOINTS.UPDATE_STUDENT_GROUP_BY_STUDENT_GROUP_ID, params);
+        return this.put<void>(STUDENT_GROUP_ENDPOINTS.UPDATE_STUDENT_GROUP_BY_STUDENT_GROUP_ID, params);
+    }
+    async updatePublishStatusByStudentGroupId(studentGroupId: number, isPublished: boolean): Promise<void> {
+        const data = this.put<void>(`${STUDENT_GROUP_ENDPOINTS.PUT_IS_PUBLISHED_BY_STUDENT_GROUP_ID}?studentGroupId=${studentGroupId}&isPublished=${isPublished}`, {});
+        return this.put<void>(`${STUDENT_GROUP_ENDPOINTS.PUT_IS_PUBLISHED_BY_STUDENT_GROUP_ID}?studentGroupId=${studentGroupId}&isPublished=${isPublished}`, {});
     }
 }
 

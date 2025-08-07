@@ -965,53 +965,148 @@ export const mockStudentNameListInSubject: StudentNameListInSubject = {
   ],
 };
 
-export const mockStudentScorenSubject: StudentScorenSubject = {
-  subjectID: 101,
-  subjectCode: "AC101",
-  subjectName: "บัญชีขั้นต้น",
-  groupName: "ปวช.2/1",
-  hour: 1,
-  subjectTeacher: "0",
-  credits: 1,
-  students: Array.from({ length: 45 }, (_, i) => {
-    const collect = Math.floor(Math.random() * 10) + 10;
-    const midterm = Math.floor(Math.random() * 20) + 20;
-    const final = Math.floor(Math.random() * 20) + 20;
-    const affective = Math.floor(Math.random() * 10) + 5;
-    const assignment = Math.floor(Math.random() * 10) + 5;
-    const total = collect + final + affective + midterm + assignment;
+import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
-    const gradeMap = (score: number): string => {
-      if (score >= 80) return "4";
-      if (score >= 75) return "3.5";
-      if (score >= 70) return "3";
-      if (score >= 65) return "2.5";
-      if (score >= 60) return "2";
-      if (score >= 55) return "1.5";
-      if (score >= 50) return "1";
-      return "0";
-    };
-
-    const grade = gradeMap(total);
-    const remark = grade === "0" ? "ร" : "";
-
-    return {
-      studentId: i + 1,
-      studentCode: `65110${(i + 1).toString().padStart(3, "0")}`,
-      prefix: i % 2 === 0 ? "นาย" : "นางสาว",
-      studentFirstName: i % 2 === 0 ? `สมชาย${i + 1}` : `สมหญิง${i + 1}`,
-      studentLastName: "ใจดี",
-      collectScore: collect,
-      midtermScore: midterm,
-      finaltermScore: final,
-      assignmentScore: assignment,
-      affectiveScore: affective,
-      totalScore: total,
-      grade: grade,
-      remark: remark,
-    };
-  }),
+export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
+  subjectName: "คณิตศาสตร์พื้นฐาน",
+  subjectCode: "MATH101",
+  credit: 3,
+  hour: 45,
+  subjectTeacher: "อาจารย์ณัฐวุฒิ ใจดี",
+  subjectId: 101,
+  groupId: 5,
+  groupName: "ห้อง ม.4/1",
+  groupCode: "G401",
+  class: "ม.4",
+  level: 4,
+  isPublish: true,
+  isComplete: false,
+  term: "1",
+  year: 2567,
+  subjectGrades: [
+    {
+      studentId: 1001,
+      studentCode: "64001",
+      prefix: "นาย",
+      firstName: "ศราวุธ",
+      lastName: "แก้วใส",
+      assignmentScore: 15,
+      collectScore: 10,
+      affectiveScore: 10,
+      midtermScore: 15,
+      finaltermScore: 20,
+      totalScore: 70,
+      finalGrade: 3,
+      remarks: "",
+    },
+    {
+      studentId: 1002,
+      studentCode: "64002",
+      prefix: "นางสาว",
+      firstName: "ปวีณา",
+      lastName: "สมใจ",
+      assignmentScore: 14,
+      collectScore: 8,
+      affectiveScore: 10,
+      midtermScore: 14,
+      finaltermScore: 18,
+      totalScore: 64,
+      finalGrade: 2.5,
+      remarks: "",
+    },
+    {
+      studentId: 1003,
+      studentCode: "64003",
+      prefix: "นาย",
+      firstName: "ชยพล",
+      lastName: "สายใจ",
+      assignmentScore: 13,
+      collectScore: 9,
+      affectiveScore: 9,
+      midtermScore: 12,
+      finaltermScore: 17,
+      totalScore: 60,
+      finalGrade: 2,
+      remarks: "",
+    },
+    {
+      studentId: 1004,
+      studentCode: "64004",
+      prefix: "นางสาว",
+      firstName: "พรสุดา",
+      lastName: "นิลวงศ์",
+      assignmentScore: 10,
+      collectScore: 6,
+      affectiveScore: 8,
+      midtermScore: 11,
+      finaltermScore: 15,
+      totalScore: 50,
+      finalGrade: 1,
+      remarks: "",
+    },
+    {
+      studentId: 1005,
+      studentCode: "64005",
+      prefix: "นาย",
+      firstName: "กิตติพงษ์",
+      lastName: "ทองดี",
+      assignmentScore: 9,
+      collectScore: 5,
+      affectiveScore: 6,
+      midtermScore: 8,
+      finaltermScore: 12,
+      totalScore: 40,
+      finalGrade: 0,
+      remarks: "มผ.",
+    },
+    {
+      studentId: 1006,
+      studentCode: "64006",
+      prefix: "นางสาว",
+      firstName: "ธัญลักษณ์",
+      lastName: "สุวรรณ",
+      assignmentScore: 18,
+      collectScore: 10,
+      affectiveScore: 10,
+      midtermScore: 20,
+      finaltermScore: 25,
+      totalScore: 83,
+      finalGrade: 4,
+      remarks: "",
+    },
+    {
+      studentId: 1007,
+      studentCode: "64007",
+      prefix: "นาย",
+      firstName: "ณัฐพล",
+      lastName: "สายชล",
+      assignmentScore: 16,
+      collectScore: 9,
+      affectiveScore: 9,
+      midtermScore: 18,
+      finaltermScore: 20,
+      totalScore: 72,
+      finalGrade: 3,
+      remarks: "",
+    },
+    {
+      studentId: 1008,
+      studentCode: "64008",
+      prefix: "นางสาว",
+      firstName: "พัชรี",
+      lastName: "วงศ์รักษ์",
+      assignmentScore: 12,
+      collectScore: 7,
+      affectiveScore: 8,
+      midtermScore: 10,
+      finaltermScore: 14,
+      totalScore: 51,
+      finalGrade: 1,
+      remarks: "",
+    },
+  ],
 };
+
 
 export const mockGetGradBelowResponse: GetGradBelowResponse[] = [];
 

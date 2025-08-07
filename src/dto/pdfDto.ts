@@ -21,6 +21,7 @@ export interface StudentScorenSubject {
   subjectTeacher:string;
   hour:number;
   credits : number;
+  class:string;
   groupName: string;
   students: StudentScore[];
 }
