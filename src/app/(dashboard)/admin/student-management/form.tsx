@@ -12,7 +12,7 @@ export default function Form() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false); // ✅ popup state
+  const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false); 
   const itemsPerPage = 10;
   const handleToggleActive = (userId: string, newState: boolean) => {
     setStudents((prev) =>
