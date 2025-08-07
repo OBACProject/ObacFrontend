@@ -1,44 +1,48 @@
 "use client";
-import React, { useState } from "react";
-import { Box, Pencil, Save, CircleX } from "lucide-react";
-
-const mockStudentDetail = {
-  userName: "6823509",
-  password: "********",
-  prefix: "นาย",
-  firstName: "ธรรมรัตน์",
-  lastName: "ศักดิ์สิทธิ์",
-  studentCode: "6823509",
-  class: "ปวช",
-  groupName: "1/1",
-  gender: "ชาย",
-  citizenId: "1234567890123",
-  phoneNumber: "0812345678",
-  nationality: "ไทย",
-  birthDate: "2005-06-20",
-};
+import React, { useEffect, useState } from "react";
+import { Box, Pencil, Save, CircleX, Eye, EyeOff } from "lucide-react";
+import { GetStudentDetailResponse } from "@/dto/studentDto";
+import { GetStudentDetailById } from "@/api/student/route";
 
 type Props = {
-  studentId: number;
+  studentId: string;
 };
 
 export default function StudentDetailForm({ studentId }: Props) {
-  const [formData, setFormData] = useState(mockStudentDetail);
+  console.log("Rendering StudentDetailForm for studentId:", studentId);
+  const [formData, setFormData] = useState<GetStudentDetailResponse | null>(null);
+  const [originalData, setOriginalData] = useState<GetStudentDetailResponse | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  useEffect(() => {
+    GetStudentDetailById(Number(studentId)).then((data) => {
+      if (data) {
+        console.log("Fetched student data:", data);
+        setFormData(data);
+        setOriginalData(data);
+      }
+    });
+  }, [studentId]);
+
+  const handleChange = (field: keyof GetStudentDetailResponse, value: string) => {
+    if (!formData) return;
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSave = () => {
     console.log("Saving student data:", formData);
+    setOriginalData(formData);
     setIsEditing(false);
+    // 🔁 TODO: call updateStudent API
   };
 
   const handleCancel = () => {
-    setFormData(mockStudentDetail);
+    setFormData(originalData);
     setIsEditing(false);
   };
+
+  if (!formData) return <div className="p-10">Loading...</div>;
 
   return (
     <div className="w-full p-10">
@@ -50,27 +54,18 @@ export default function StudentDetailForm({ studentId }: Props) {
         <div className="flex items-center">
           {isEditing ? (
             <div className="flex gap-2">
-              <button
-                className="w-[120px] h-fit bg-green-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
-                onClick={handleSave}
-              >
-                <Save className="w-5 h-5" />
+              <button className="bg-green-500 text-white px-4 py-1 rounded flex items-center gap-2" onClick={handleSave}>
+                <Save className="w-4 h-4" />
                 บันทึก
               </button>
-              <button
-                className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
-                onClick={handleCancel}
-              >
-                <CircleX className="w-5 h-5" />
+              <button className="bg-red-500 text-white px-4 py-1 rounded flex items-center gap-2" onClick={handleCancel}>
+                <CircleX className="w-4 h-4" />
                 ยกเลิก
               </button>
             </div>
           ) : (
-            <button
-              className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white"
-              onClick={() => setIsEditing(true)}
-            >
-              <Pencil className="w-5 h-5" />
+            <button className="bg-blue-500 text-white px-4 py-1 rounded flex items-center gap-2" onClick={() => setIsEditing(true)}>
+              <Pencil className="w-4 h-4" />
               แก้ไข
             </button>
           )}
@@ -78,8 +73,21 @@ export default function StudentDetailForm({ studentId }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6">
-        <Info label="ชื่อผู้ใช้" value={formData.userName} editable={isEditing} onChange={(v) => handleChange("userName", v)} />
-        <Info label="รหัสผ่าน" value={formData.password} editable={isEditing} onChange={(v) => handleChange("password", v)} type="password" />
+        <Info label="ชื่อผู้ใช้" value={formData.username} editable={isEditing} onChange={(v) => handleChange("username", v)} />
+        <Info
+          label="รหัสผ่าน"
+          value={formData.password}
+          editable={isEditing}
+          onChange={(v) => handleChange("password", v)}
+          type={showPassword ? "text" : "password"}
+          suffixIcon={
+            isEditing && (
+              <button onClick={() => setShowPassword(!showPassword)} type="button" className="ml-2">
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            )
+          }
+        />
         <Info label="คำนำหน้า" value={formData.prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
         <Info label="ชื่อจริง" value={formData.firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
         <Info label="นามสกุล" value={formData.lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
@@ -103,6 +111,7 @@ function Info({
   onChange,
   type = "text",
   options,
+  suffixIcon,
 }: {
   label: string;
   value: string;
@@ -110,31 +119,26 @@ function Info({
   onChange?: (value: string) => void;
   type?: "text" | "tel" | "date" | "select" | "password";
   options?: string[];
+  suffixIcon?: React.ReactNode;
 }) {
   return (
     <div>
       <label className="text-sm text-gray-500">{label}</label>
       {editable ? (
         type === "select" && options ? (
-          <select
-            value={value}
-            onChange={(e) => onChange?.(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          >
+          <select value={value} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded">
             {options.map((opt) => (
               <option key={opt}>{opt}</option>
             ))}
           </select>
         ) : (
-          <input
-            type={type}
-            value={value}
-            onChange={(e) => onChange?.(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          />
+          <div className="flex items-center">
+            <input type={type} value={value} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded" />
+            {suffixIcon}
+          </div>
         )
       ) : (
-        <p className="text-lg mt-1">{value}</p>
+        <p className="text-lg mt-1">{type === "password" ? "••••••••" : value}</p>
       )}
     </div>
   );

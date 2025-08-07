@@ -51,11 +51,11 @@ export default function Form() {
   }, [filteredAcademicUsers, currentPage]);
 
   const handleToggleActive = (userId: string, newState: boolean) => {
-    setTeacher((prev) =>
-      prev.map((t) =>
-        t.id === userId ? { ...t, isActive: newState } : t
-      )
-    );
+    // setTeacher((prev) =>
+    //   prev.map((t) =>
+    //     t.id === userId ? { ...t, isActive: newState } : t
+    //   )
+    // );
     // TODO: call API update ถ้ามี
   };
 
@@ -133,9 +133,9 @@ export default function Form() {
                 <div className="flex items-center justify-center py-2">
                   <IsActiveToggleProps
                     isActive={item.isActive} 
-                    onToggle={(value) =>
-                      handleToggleActive(item.id, value)
-                    }
+                    // onToggle={(value) =>
+                    //   handleToggleActive(item.id, value)
+                    // }
                   />
                 </div>
               </div>

@@ -89,43 +89,43 @@ export interface GetStudentByGroupId {
   subject: GetSubjectByGroupId[];
 }
 
-// export interface GetAllStudent {
-//   id : number;
-//   studentId: number;
-//   prefix : string |null;
-//   firstName: string | null;
-//   lastName: string | null;
-//   thaiName: string;
-//   thaiLastName: string;
-//   gender: string;
-//   groupName: string;
-//   groupCode :string;
-//   studentGroupId: number;
-//   studentCode: string;
-//   thaiId: string;
-//   email: string;
-//   phoneNumber: string;
-//   address: string;
-//   nationality: string;
-//   religion: string;
-//   role: string;
-//   userId: string;
-//   isActive: boolean;
-//   class: string;
-//   enrollYear: number;
-//   currentYear: number;
-//   graduateYear: number;
-//   currentRoom: string;
-//   programId: number;
-//   programName: string;
-//   facultyId: number;
-//   facultyName: string;
-//   status : string |null;
-//   birthDate: string | null;
-// }
-
-
 export interface GetAllStudent {
+  id : number;
+  studentId: number;
+  prefix : string |null;
+  firstName: string | null;
+  lastName: string | null;
+  thaiName: string;
+  thaiLastName: string;
+  gender: string;
+  groupName: string;
+  groupCode :string;
+  studentGroupId: number;
+  studentCode: string;
+  thaiId: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  nationality: string;
+  religion: string;
+  role: string;
+  userId: string;
+  isActive: boolean;
+  class: string;
+  enrollYear: number;
+  currentYear: number;
+  graduateYear: number;
+  currentRoom: string;
+  programId: number;
+  programName: string;
+  facultyId: number;
+  facultyName: string;
+  status : string |null;
+  birthDate: string | null;
+}
+
+
+export interface GetAllStudentUser {
   studentId: number;
   studentCode: string;
   class: string;
@@ -140,6 +140,27 @@ export interface GetAllStudent {
   role: string;
   isActive: boolean;
 }
+
+export interface GetStudentDetailResponse {
+  id: number;
+  username: string;
+  password: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+  class: string;
+  groupName: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 
 
 export interface CreateStudentRequest {

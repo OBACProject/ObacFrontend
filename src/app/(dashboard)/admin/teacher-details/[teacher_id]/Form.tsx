@@ -1,44 +1,48 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, Pencil, Save, CircleX } from "lucide-react";
+import { Box, Pencil, Save, CircleX, EyeOff, Eye } from "lucide-react";
+import { GetTeacherDetailUser } from "@/api/teacher/route";
+import { GetTeacherDetailUserResponse } from "@/dto/teacherDto";
 
-const mockTeacherDetail = {
-  userName: "teacher.jane",
-  password: "********",
-  firstName: "Jane",
-  lastName: "Doe",
-  studentCode: "T123456",
-  gender: "หญิง",
-  citizenId: "1234567890123",
-  phoneNumber: "0812345678",
-  nationality: "ไทย",
-  birthDate: "1985-06-15",
-  prefix: "นางสาว",
-};
-
+// กำหนด Props รับ teacherId มาด้วย
 type Props = {
   teacherId: number;
 };
 
 export default function TeacherDetailForm({ teacherId }: Props) {
-  const [formData, setFormData] = useState(mockTeacherDetail);
+  const [formData, setFormData] = useState<GetTeacherDetailUserResponse | null>(null);
+  const [originalData, setOriginalData] = useState<GetTeacherDetailUserResponse | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  useEffect(() => {
+    GetTeacherDetailUser(teacherId).then((data) => {
+      if (data) {
+        setFormData(data);
+        setOriginalData(data);
+      }
+    });
+  }, [teacherId]);
+
+  const handleChange = (field: keyof GetTeacherDetailUserResponse, value: string) => {
+    if (formData) {
+      setFormData({ ...formData, [field]: value });
+    }
   };
 
   const handleSave = () => {
-    // TODO: call API here
     console.log("Saving", formData);
+    setOriginalData(formData);
     setIsEditing(false);
+    // TODO: call update API here
   };
 
   const handleCancel = () => {
-    setFormData(mockTeacherDetail);
+    setFormData(originalData);
     setIsEditing(false);
   };
+
+  if (!formData) return <div className="p-10">Loading...</div>;
 
   return (
     <div className="w-full p-10">
@@ -78,7 +82,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6">
-        <Info label="ชื่อผู้ใช้" value={formData.userName} editable={isEditing} onChange={(v) => handleChange("userName", v)} />
+        <Info label="ชื่อผู้ใช้" value={formData.username} editable={isEditing} onChange={(v) => handleChange("username", v)} />
         <Info label="รหัสผ่าน" value={formData.password} editable={isEditing} onChange={(v) => handleChange("password", v)} type="password" />
 
         <Info label="คำนำหน้า" value={formData.prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
@@ -88,7 +92,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         <Info label="เพศ" value={formData.gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
         <Info label="วันเกิด" value={formData.birthDate} editable={isEditing} onChange={(v) => handleChange("birthDate", v)} type="date" />
 
-        <Info label="รหัสอาจารย์" value={formData.studentCode} editable={isEditing} onChange={(v) => handleChange("studentCode", v)} />
+        <Info label="รหัสอาจารย์" value={formData.teacherCode} editable={isEditing} onChange={(v) => handleChange("teacherCode", v)} />
         <Info label="รหัสประชาชน" value={formData.citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
         <Info label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
@@ -112,11 +116,31 @@ function Info({
   type?: "text" | "tel" | "date" | "select" | "password";
   options?: string[];
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+
   return (
     <div>
       <label className="text-sm text-gray-500">{label}</label>
+
       {editable ? (
-        type === "select" && options ? (
+        isPassword ? (
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={value}
+              onChange={(e) => onChange?.(e.target.value)}
+              className="w-full border px-3 py-2 rounded pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-2 text-gray-500 hover:text-gray-800"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+        ) : type === "select" && options ? (
           <select
             value={value}
             onChange={(e) => onChange?.(e.target.value)}
@@ -134,6 +158,8 @@ function Info({
             className="w-full border px-3 py-2 rounded"
           />
         )
+      ) : isPassword ? (
+        <p className="text-lg mt-1">••••••••</p> // แสดงเป็นจุดตอนไม่ได้แก้ไข
       ) : (
         <p className="text-lg mt-1">{value}</p>
       )}

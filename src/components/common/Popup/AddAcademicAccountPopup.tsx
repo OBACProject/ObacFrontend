@@ -1,4 +1,5 @@
 "use client";
+import { CreateAcademicRequest } from "@/dto/userDto";
 import React, { useState } from "react";
 // import { CreateAcademic } from "@/api/academic/route";
 // import { CreateAcademicRequest } from "@/dto/academicDto";
@@ -48,7 +49,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     const payload: CreateAcademicRequest = {
       prefix,
       academicCode,
-      userName: username,
+      username: username,
       password,
       firstName,
       lastName,
@@ -60,13 +61,13 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     };
 
     try {
-      const success = await CreateAcademic(payload);
-      if (success) {
-        toast.success("สร้างบัญชีบุคลากรภายในสำเร็จแล้ว");
-        onClosePopUp(false);
-      } else {
-        toast.error("ไม่สามารถสร้างบัญชีบุคลากรภายในได้");
-      }
+    //   const success = await CreateAcademic(payload);
+    //   if (success) {
+    //     toast.success("สร้างบัญชีบุคลากรภายในสำเร็จแล้ว");
+    //     onClosePopUp(false);
+    //   } else {
+    //     toast.error("ไม่สามารถสร้างบัญชีบุคลากรภายในได้");
+    //   }
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีบุคลากรภายใน");
       console.error(error);

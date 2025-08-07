@@ -3,6 +3,7 @@ import {
   CardSubjectResponse,
   CreateTeacherRequest,
   GetAllTeacherResponse,
+  GetTeacherDetailUserResponse,
   TeacherDetailAndScheduleResponse,
   TeacherDetails,
 } from "@/dto/teacherDto";
@@ -90,6 +91,28 @@ export const GetAllTeacherUsers = async (): Promise<GetAllTeacherResponse[] | []
     return [];
   }
 };
+
+
+export const GetTeacherDetailUser = async (
+  teacherId: number
+): Promise<GetTeacherDetailUserResponse | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetTeacherDetailUserResponse;
+    }>("/Admin/GetTeacherDetails", {
+      params: { teacherId }, // ✅ ส่งเป็น query string
+    });
+
+    console.log("📦 Response from API:", response.data);
+    return response.data?.data ?? null;
+  } catch (err) {
+    console.error("❌ Error in GetTeacherDetailUser: ", err);
+    return null;
+  }
+};
+
 
 export const GetTeacherDetailAndSchedule = async (
   teacherId: number,

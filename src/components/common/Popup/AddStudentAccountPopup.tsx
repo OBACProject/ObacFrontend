@@ -1,4 +1,5 @@
 "use client";
+import { CreateStudentRequest } from "@/dto/studentDto";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 // import { CreateStudent } from "@/api/student/route";
@@ -60,13 +61,13 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     };
 
     try {
-      const success = await CreateStudent(payload);
-      if (success) {
-        toast.success("สร้างบัญชีนักเรียนสำเร็จแล้ว");
-        onClosePopUp(false);
-      } else {
-        toast.error("ไม่สามารถสร้างบัญชีนักเรียนได้");
-      }
+    //   const success = await CreateStudent(payload);
+    //   if (success) {
+    //     toast.success("สร้างบัญชีนักเรียนสำเร็จแล้ว");
+    //     onClosePopUp(false);
+    //   } else {
+    //     toast.error("ไม่สามารถสร้างบัญชีนักเรียนได้");
+    //   }
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีนักเรียน");
       console.error(error);

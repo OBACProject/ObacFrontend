@@ -3,23 +3,23 @@ import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GetAllStudents } from "@/api/student/route";
-import { GetAllStudent } from "@/dto/studentDto";
+import { GetAllStudent, GetAllStudentUser } from "@/dto/studentDto";
 import CreateStudentPopup from "@/components/common/Popup/AddStudentAccountPopup";
 import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
 
 export default function Form() {
-  const [students, setStudents] = useState<GetAllStudent[]>([]);
+  const [students, setStudents] = useState<GetAllStudentUser[]>([]);
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false); 
+  const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false);
   const itemsPerPage = 10;
   const handleToggleActive = (userId: string, newState: boolean) => {
-    setStudents((prev) =>
-      prev.map((t) =>
-        t.id === userId ? { ...t, isActive: newState } : t
-      )
-    );
+    // setStudents((prev) =>
+    //   prev.map((t) =>
+    //     t.id === userId ? { ...t, isActive: newState } : t
+    //   )
+    // );
     // TODO: call API update ถ้ามี
   };
 
@@ -33,7 +33,7 @@ export default function Form() {
       }
     });
   }, []);
-  
+
 
   const filteredStudents = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
@@ -107,7 +107,12 @@ export default function Form() {
             {paginatedStudents.map((item, index) => (
               <div
                 key={item.id}
-                onClick={() => router.push(`/admin/student-details/${item.id}`)}
+                onClick={() => {
+                  if (item.studentId) {
+                    console.log("Navigating to student details:", item.studentId);
+                    router.push(`/admin/student-details/${(item.studentId)}`);
+                  }
+                }}
                 className="cursor-pointer grid grid-cols-[5%_20%_25%_20%_15%_15%] bg-white hover:bg-blue-100 text-gray-800 text-base"
               >
                 <div className="flex items-center justify-center py-2">
@@ -127,10 +132,10 @@ export default function Form() {
                 </div>
                 <div className="flex items-center justify-center py-2">
                   <IsActiveToggleProps
-                    isActive={item.isActive} 
-                    onToggle={(value) =>
-                      handleToggleActive(item.id, value)
-                    }
+                    isActive={item.isActive}
+                    // onToggle={(value) =>
+                    //   handleToggleActive(item.id, value)
+                    // }
                   />
                 </div>
               </div>

@@ -22,11 +22,11 @@ export default function Form() {
   const itemsPerPage = 10;
 
   const handleToggleActive = (userId: string, newState: boolean) => {
-    setTeacher((prev) =>
-      prev.map((t) =>
-        t.id === userId ? { ...t, isActive: newState } : t
-      )
-    );
+    // setTeacher((prev) =>
+    //   prev.map((t) =>
+    //     t.id === userId ? { ...t, isActive: newState } : t
+    //   )
+    // );
     // TODO: call API update ถ้ามี
   };
 
@@ -119,7 +119,7 @@ export default function Form() {
             {paginatedTeachers.map((item, index) => (
               <div
                 key={item.id}
-                onClick={() => router.push(`/admin/teacher-details/1`)}
+                onClick={() => router.push(`/admin/teacher-details/${item.teacherId}`)}
                 className="cursor-pointer grid grid-cols-[5%_15%_9%_21%_20%_30%] bg-white hover:bg-blue-100 text-gray-800 text-base"
               >
                 <div className="flex items-center justify-center py-2">
@@ -144,9 +144,9 @@ export default function Form() {
 
                   <IsActiveToggleProps
                     isActive={item.isActive} 
-                    onToggle={(value) =>
-                      handleToggleActive(item.id, value)
-                    }
+                    // onToggle={(value) =>
+                    //   handleToggleActive(item.id, value)
+                    // }
                   />
 
                 </div>

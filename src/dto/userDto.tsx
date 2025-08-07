@@ -26,6 +26,19 @@ export interface GetAllAcademicUser {
   role: string;
   isActive : boolean;
 }
+export interface GetAcademicDetailUserResponse {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  academicCode: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string;
+  prefix: string;
+}
 
 export interface GetUserInfoById {
   thaiId: string;
@@ -39,4 +52,18 @@ export interface GetUserInfoById {
   nationality: string;
   religion: string;
   picId: null;
+}
+
+export interface CreateAcademicRequest {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  academicCode: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string;
+  prefix: string;
 }
