@@ -41,7 +41,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
             subject_code: grade.subjectCode,
             credit: grade.credit.toString(),
             finalGrade: grade.finalGrade?.toString() || "0",
-            remark: grade.remarks || "",
+            remark: grade.remark || "",
             collectScore: grade.collectScore,
             affectiveScore: grade.affectiveScore,
             testScore: grade.midtermScore + grade.finaltermScore,

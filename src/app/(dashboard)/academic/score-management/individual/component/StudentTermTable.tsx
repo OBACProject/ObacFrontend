@@ -49,21 +49,22 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
       label: "เกรด",
       key: "finalGrade",
       className: "w-3/12 px-4 py-1 text-center font-medium",
-      render: (row: any) => (
-        <span className={`px-2 py-1 rounded text-xs font-medium ${row.isFailed ? "text-red-800" : "text-green-800"}`}>
-          {row.finalGrade}
-        </span>
-        // <Badge
-        //   variant={row.isFailed ? "destructive" : "default"}
-        //   className={`px-3 py-1 font-semibold ${
-        //     row.isFailed ? " text-red-800 border-red-200" : " text-green-800 border-green-200"
-        //   }`}
-        // >
-        //   {row.finalGrade}
-        // </Badge>
-      ),
+      render: (row: any) => {
+        const showValue = row.remark && row.remark !== "" ? row.remark : row.finalGrade;
+        console.log("Row data:",row.finalGrade, row.remark);
+        const shouldHighlight = row.isFailed && row.remark !== "ผ.";
+        return (
+          <span
+            className={`px-2 py-1 rounded text-xs font-medium ${
+              shouldHighlight ? "text-red-800" : !row.isFailed ? "text-green-800" : ""
+            }`}
+          >
+            {showValue}
+          </span>
+        );
+      },
     },
-  ]
+  ];
 
   const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
     let totalGradePoints = 0
@@ -84,6 +85,10 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
   }
 
   const getGpaColor = (gpa: string) => {
+
+    if (gpa == "ผ.") {
+      return "text-blue-600 bg-blue-50 border-blue-200"
+    }
     const gpaValue = Number.parseFloat(gpa)
     if (gpaValue >= 3.5) return "text-green-600 bg-green-50 border-green-200"
     if (gpaValue >= 3.0) return "text-blue-600 bg-blue-50 border-blue-200"
@@ -92,21 +97,39 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
   }
 
   const getFailedSubjectsCount = (termQuery: TermQuery[]) => {
-    return termQuery.filter(
-      (term) => (term.remark !== "ผ." && term.remark !== null && term.remark !== "") || term.finalGrade === "0",
-    ).length
+    return termQuery.filter((term) => {
+      if (term.remark && term.remark !== "") {
+        return term.remark !== "ผ.";
+      } else {
+        return term.finalGrade === "0";
+      }
+    }).length;
   }
 
   return (
     <div className="space-y-6">
       {termData.map((year, index) => {
-        const transformedData = year.termQuery.map((term) => ({
-          subject_name: term.subject_name,
-          subject_code: term.subject_code,
-          credit: term.credit,
-          finalGrade: term.remark === null || term.remark === "" ? term.finalGrade : term.remark,
-          isFailed: (term.remark !== "ผ." && term.remark !== null && term.remark !== "") || term.finalGrade === "0",
-        }))
+        const transformedData = year.termQuery.map((term) => {
+          let isFailed = false;
+          if (term.remark && term.remark !== "") {
+            if (term.remark === "ผ.") {
+              isFailed = false;
+            } else {
+              isFailed = true;
+            }
+          } else if (term.finalGrade === "0") {
+            isFailed = true;
+          }
+          return {
+            subject_name: term.subject_name,
+            subject_code: term.subject_code,
+            credit: term.credit,
+            finalGrade: term.finalGrade,
+            remark: term.remark,
+            isFailed,
+          };
+        })
+        console.log("Transformed data:", transformedData)
 
         const gpa = calculateGpa(year.termQuery, year.totalCredit)
         const failedCount = getFailedSubjectsCount(year.termQuery)
