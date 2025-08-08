@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { useGetAllProgramsQuery } from "@/lib/api/hooks/queries/program.queries";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
+import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 
 interface ClassroomTable {
   class: string;
@@ -71,23 +73,27 @@ export function ClassroomGrading() {
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
 
-  const {
-    data: apiData,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetAllProgramsQuery();
+  const { data : apiData, isLoading, isError, refetch } = useGetAllStudentGroupByTermYearQuery({
+    term: selectedTerm,
+    year: Number(selectedYear),
+  });
+
+  // Refetch data when selectedTerm or selectedYear changes
+  useEffect(() => {
+    refetch();
+  }, [selectedTerm, selectedYear, refetch]);
+
 
   const debouncedSearchInput = useDebounce(searchInput, 300);
 
   const transformedData: ClassroomTable[] = useMemo(() => {
     if (!apiData) return [];
 
-    return apiData.map((item: GetAllProgramsWithStudentGroupResponse) => ({
+    return apiData.map((item: GetAllStudentGroupByTermYearResponse) => ({
       class: `${item.class} ${item.groupName}`,
       facultyName: item.facultyName ?? "ไม่ระบุ",
       programName: item.programName ?? "ไม่ระบุ",
-      groupId: item.groupId,
+      groupId: item.id,
       groupCode: item.groupCode,
     }));
   }, [apiData]);

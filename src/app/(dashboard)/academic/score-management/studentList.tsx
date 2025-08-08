@@ -29,8 +29,7 @@ export default function StudentListPage() {
   const [searchInput, setSearchInput] = useState<string>("")
   const [selectedClassLevel, setSelectedClassLevel] = useState<string>("")
   const [selectedFaculty, setSelectedFaculty] = useState<string>("")
-  const [sortBy] = useState<string>("") 
-  const [ascending] = useState<boolean>(true)
+
 
   const [filterOptions, setFilterOptions] = useState<{
     classLevels: string[]
@@ -38,21 +37,7 @@ export default function StudentListPage() {
   }>({ classLevels: [], uniqueFaculties: [] })
 
   const debouncedSearchInput = useDebounce(searchInput, 500)
-
-  const searchText = useMemo(() => {
-    const filters = []
-    if (debouncedSearchInput) filters.push(debouncedSearchInput)
-    if (selectedClassLevel) {
-
-      const [classLevel, groupName] = selectedClassLevel.split('.')
-      if (classLevel && groupName) {
-        filters.push(`class:"${classLevel}"`)
-        filters.push(`groupName:"${groupName}"`)
-      }
-    }
-    if (selectedFaculty) filters.push(`facultyName:"${selectedFaculty}"`)
-    return filters.join(" ")
-  }, [debouncedSearchInput, selectedClassLevel, selectedFaculty])
+  
 
   const { data: allStudentsData, isLoading: isLoadingFilterOptions, isError } = useGetAllStudentsQuery({
     pageNumber: 1,

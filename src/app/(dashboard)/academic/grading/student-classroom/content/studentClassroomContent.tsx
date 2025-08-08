@@ -48,13 +48,10 @@ export default function StudentClassroomContent() {
   // Mutation for updating publish status
   const updatePublishStatusMutation = useUpdatePublishStatusByStudentGroupIdMutation({
     onSuccess: () => {
-      // Optionally show success message or refetch data
       console.log("Publish status updated successfully");
     },
     onError: (error) => {
       console.error("Failed to update publish status:", error);
-      // Revert the optimistic update on error
-      // This will be handled by rolling back the state change
     }
   });
 

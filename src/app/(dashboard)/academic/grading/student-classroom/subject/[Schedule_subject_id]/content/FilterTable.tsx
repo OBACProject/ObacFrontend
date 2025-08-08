@@ -440,7 +440,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         <div className="px-4 pb-8">
           <StylesTable
             icon={<ScrollText className="w-5 h-5 text-white" />}
-            title={`รายชื่อนักเรียนในห้อง ${subjectData?.class || `ปวส.${subjectData?.groupName}/2`}`}
+            title={`รายชื่อนักเรียนในห้อง ${subjectData.class}.${subjectData.groupName}`}
             data={filteredData}
             columns={columnDefs}
             pagination={filteredData.length}
