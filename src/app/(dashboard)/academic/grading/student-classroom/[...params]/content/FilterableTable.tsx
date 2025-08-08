@@ -75,15 +75,9 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   }, [apiResponse]);
 
   const classroomInfo = useMemo(() => {
-    if (!apiResponse) {
-      return {
-        class: `ปวส.${classroomId}/2`,
-        groupName: classroomId.toString()
-      };
-    }
     return {
-      class: apiResponse?.class || `ปวส.${classroomId}/2`,
-      groupName: apiResponse?.groupName || classroomId.toString()
+      class: apiResponse?.class,
+      groupName: apiResponse?.groupName
     };
   }, [apiResponse, classroomId]);
 
@@ -175,7 +169,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
       <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}`}
+          title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}.${classroomInfo.groupName}`}
           className="text-blue"
         />
         <div className="w-1/3">
