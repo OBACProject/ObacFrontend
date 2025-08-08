@@ -129,7 +129,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         finaltermScore: item.finaltermScore || 0,
         totalScore: item.totalScore || 0,
         grade: (item.finalGrade !== null ? item.finalGrade?.toString() : "0") || "0",
-        remark: item.remarks || "",
+        remark: item.remark || "",
         index: index + 1,
       }));
     }
