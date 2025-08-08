@@ -1,8 +1,12 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import { CreateTeacher } from "@/api/teacher/route";
 import { CreateTeacherRequest } from "@/dto/teacherDto";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+
+import { GetAllProgramWithStudentGroupResponse } from "@/dto/programDto";
+import { GetAllProgramWithStudentGroup } from "@/api/program/rount";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
@@ -11,6 +15,7 @@ type Props = {
 export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   const [teacherCode, setTeacherCode] = useState("");
   const [program, setProgram] = useState<number | null>(null);
+
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -26,61 +31,99 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async () => {
-    if (
-      !teacherCode ||
-      !firstName ||
-      !lastName ||
-      !phone ||
-      !username ||
-      !password ||
-      !confirmPassword ||
-      !citizenId ||
-      !birthDate ||
-      !hiredDate
-    ) {
-      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
-      return;
-    }
+  // programs dropdown state
+  const [programs, setPrograms] = useState<GetAllProgramWithStudentGroupResponse[]>([]);
+  const [loadingPrograms, setLoadingPrograms] = useState<boolean>(false);
+  const [programsError, setProgramsError] = useState<string | null>(null);
 
-    if (password !== confirmPassword) {
-      toast.error("รหัสผ่านไม่ตรงกัน");
-      return;
-    }
-
-    const payload: CreateTeacherRequest = {
-      prefix,
-      teacherCode,
-      hiredDate,
-      programId: program ?? undefined,
-      userName: username,
-      password,
-      firstName,
-      lastName,
-      gender,
-      citizenId,
-      phoneNumber: phone,
-      nationality,
-      birthDate,
+  useEffect(() => {
+    const loadPrograms = async () => {
+      try {
+        setLoadingPrograms(true);
+        setProgramsError(null);
+        const data = await GetAllProgramWithStudentGroup();
+        // อยากให้แสดงสวย ๆ: เรียงตาม facultyName > programName > groupName
+        data.sort((a, b) =>
+          `${a.facultyName}|${a.programName}|${a.groupName}`.localeCompare(
+            `${b.facultyName}|${b.programName}|${b.groupName}`,
+            "th"
+          )
+        );
+        setPrograms(data);
+      } catch (e) {
+        console.error(e);
+        setProgramsError("โหลดรายการแผนกไม่สำเร็จ");
+      } finally {
+        setLoadingPrograms(false);
+      }
     };
 
-    try {
-      const success = await CreateTeacher(payload);
-      if (success) {
-        toast.success("สร้างบัญชีอาจารย์สำเร็จแล้ว");
-        onClosePopUp(false);
-      } else {
-        toast.error("ไม่สามารถสร้างบัญชีอาจารย์ได้");
-      }
-    } catch (error) {
-      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีอาจารย์");
-      console.error(error);
-    }
+    loadPrograms();
+  }, []);
+
+
+ // ใน AddTeacherAccountPopup.tsx
+const handleSubmit = async () => {
+  if (!teacherCode || !username || !password || !firstName || !lastName || !birthDate || !hiredDate || !program) {
+    toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล, วันเกิด, วันที่เริ่มงาน, แผนก/ห้อง");
+    return;
+  }
+  if (password !== confirmPassword) {
+    toast.error("รหัสผ่านไม่ตรงกัน");
+    return;
+  }
+
+  const payload: CreateTeacherRequest = {
+    prefix,
+    teacherCode: teacherCode.trim(),
+    hiredDate,                      // ✅ FIX: ส่ง hiredDate ตรง ๆ
+    programId: Number(program),
+    userName: username.trim(),
+    password,
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
+    gender: gender || "",           // ตามตัวอย่างที่บอกว่าส่งค่าว่างได้
+    citizenId: citizenId || "",
+    phoneNumber: phone || "",
+    nationality: nationality || "",
+    birthDate,                      // ✅ รูปแบบ "YYYY-MM-DD"
   };
+
+  try {
+    const ok = await CreateTeacher(payload);
+    if (ok) {
+      toast.success("สร้างบัญชีอาจารย์สำเร็จ");
+      onClosePopUp(true);
+    } else {
+      toast.error("ไม่สามารถสร้างบัญชีอาจารย์ได้");
+    }
+  } catch (err: any) {
+    // ดึง error message จากหลังบ้าน
+    const backendMsg =
+      err?.response?.data?.responseMessage ||
+      err?.response?.data?.title ||
+      err?.message;
+
+    // ถ้ามี model state errors (.errors)
+    const modelErrors = err?.response?.data?.errors;
+    if (modelErrors && typeof modelErrors === "object") {
+      const firstKey = Object.keys(modelErrors)[0];
+      const firstMsg = Array.isArray(modelErrors[firstKey]) ? modelErrors[firstKey][0] : String(modelErrors[firstKey]);
+      toast.error(firstMsg);
+    } else if (backendMsg) {
+      toast.error(backendMsg);
+    } else {
+      toast.error("เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+    }
+    console.error("CreateTeacher error:", err?.response?.data || err);
+  }
+};
+
+
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-[650px] space-y-4 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีอาจารย์</h2>
 
         {/* แถว 1 */}
@@ -94,18 +137,40 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
               className="w-full border px-3 py-2 rounded"
             />
           </div>
+
+          {/* เปลี่ยนจาก input number -> dropdown */}
           <div>
-            <label className="text-sm">รหัสแผนก (Program ID)</label>
-            <input
-              type="number"
+            <label className="text-sm">รหัสแผนก (เลือกจากห้อง/แผนก)</label>
+            <select
               value={program ?? ""}
               onChange={(e) => {
                 const val = e.target.value;
                 setProgram(val === "" ? null : Number(val));
               }}
               className="w-full border px-3 py-2 rounded"
-              placeholder="ไม่บังคับกรอก"
-            />
+              disabled={loadingPrograms || !!programsError}
+            >
+              <option value="">
+                {loadingPrograms
+                  ? "กำลังโหลดข้อมูล..."
+                  : programsError
+                  ? "โหลดข้อมูลไม่สำเร็จ"
+                  : "-- เลือกห้อง (แสดง groupName) --"}
+              </option>
+
+              {programs.map((p) => (
+                <option
+                  key={`${p.programId}-${p.groupId}`}
+                  value={p.programId}
+                >
+                  {p.groupName} — {p.programName} ({p.facultyName})
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              * ระบบจะบันทึกเป็น Program ID:{" "}
+              <b>{program ?? "-"}</b>
+            </p>
           </div>
         </div>
 
@@ -276,6 +341,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
+            disabled={loadingPrograms && program === null}
           >
             บันทึกข้อมูล
           </button>
@@ -284,3 +350,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
     </div>
   );
 }
+function renderErrorFromAxios(err: any) {
+  throw new Error("Function not implemented.");
+}
+

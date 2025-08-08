@@ -113,7 +113,6 @@ export const GetTeacherDetailUser = async (
   }
 };
 
-
 export const GetTeacherDetailAndSchedule = async (
   teacherId: number,
   term: string,
@@ -133,14 +132,15 @@ export const GetTeacherDetailAndSchedule = async (
   }
 };
 
-export const CreateTeacher = async (
-  payload: CreateTeacherRequest
-): Promise<boolean> => {
+export async function CreateTeacher(payload: CreateTeacherRequest): Promise<boolean> {
   try {
-    const response = await apiClient.post("User/CreateTeacher", payload);
-    return response.status === 201;
-  } catch (err) {
-    console.error("Error creating subject:", err);
-    return false;
+    const res = await apiClient.post("/Admin/CreateTeacher", payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    // สมมติหลังบ้านส่ง { responseCode: "000", ... } ตอนสำเร็จ
+    return res?.data?.responseCode === "000";
+  } catch (err: any) {
+    // โยน error กลับไปให้ popup โชว์รายละเอียด
+    throw err;
   }
-};
+}

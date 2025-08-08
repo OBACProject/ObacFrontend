@@ -176,17 +176,18 @@ export interface TeacherDetailAndScheduleResponse {
   schedule: TeacherScheduleItem[];
 }
 export interface CreateTeacherRequest {
-  prefix: string;
-  teacherCode: string;
-  hiredDate : string;
-  programId?: number;
-  userName :string;
-  password : string;
-  firstName : string;
-  lastName : string;
-  gender : string;
-  citizenId : string;
-  phoneNumber : string;
-  nationality : string;
-  birthDate : string;
-}
+    prefix: string;
+    teacherCode: string;
+    hiredDate: string;
+    programId?: number;
+    userName: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    citizenId: string;
+    phoneNumber: string;
+    nationality: string;
+    birthDate: string;
+  };
+
