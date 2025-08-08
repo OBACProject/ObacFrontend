@@ -117,7 +117,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
           </div>
         </div>
 
-        {/* <StudentInfoCard
+        <StudentInfoCard
           student={studentTranscriptDataById}
           scoreFileData={scoreFileData}
           onDownloadPDF={() => {
@@ -131,7 +131,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
             name: `${studentTranscriptDataById.thaiName} ${studentTranscriptDataById.thaiLastName}`,
             studentCode: studentTranscriptDataById.studentCode,
           }}
-        /> */}
+        />
       </div>
     </section>
   )
