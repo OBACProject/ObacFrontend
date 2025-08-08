@@ -29,7 +29,6 @@ export class GradeService extends BaseService {
     );
   }
   
-  
   async getStudentGradesByTermYear(
     params : GetStudentGradesByTermYearRequest
   ) : Promise<GetStudentGradesByTermYearResponse> {
