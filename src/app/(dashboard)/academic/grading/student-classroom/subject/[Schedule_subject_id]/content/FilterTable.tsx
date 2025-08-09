@@ -381,7 +381,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                         description: "",
                         isActive: true,
                       }}
-                      roomName={subjectData?.class || `ปวส.${subjectData?.groupName}/2`}
+                      roomName={`${subjectData?.class}.${subjectData?.groupName}`}
                       term={subjectData?.term || "1"}
                       year={subjectData?.year?.toString() || "2568"}
                     />

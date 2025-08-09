@@ -1,3 +1,4 @@
+"use client"
 import {
   convertGradBySubjectId,
   ConvertClassroomToExcelDto,
@@ -90,16 +91,16 @@ export async function ConvertScoreToExcel(
 
   data.forEach((item, index) => {
     const row = worksheet.addRow([
-      index + 1, // ลำดับ
-      item.studentCode, // รหัสนักเรียน
-      item.name, // ชื่อ-นามสกุล
-      classroom, // ห้องเรียน
+      index + 1,
+      item.studentCode, 
+      item.name,
+      `${classroom} `,
+      item.assignmentscore, // คะแนนภาระงาน (20)
       item.affectiveScore, // คะแนนจิตพิสัย (20)
       item.collectScore, // คะแนนเก็บ (10)
-      item.assignmentscore, // คะแนนภาระงาน (20)
-      item.midtermScore, // คะแนนสอบกลางภาค (20)
-      item.finaltermScore, // คะแนนปลายภาค (30)
-      item.collectScore + item.assignmentscore + item.affectiveScore + item.midtermScore + item.finaltermScore, // คะแนนรวม
+      item.midtermScore, // คะแนนสอบ (30)
+      item.finaltermScore, // คะแนนรวม (20)
+      item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore, // คะแนนรวม
     ]);
     row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };

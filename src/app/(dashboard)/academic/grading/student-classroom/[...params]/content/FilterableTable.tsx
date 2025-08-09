@@ -74,8 +74,13 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     ) {
       return [];
     }
-    return apiResponse.subjects.map((d: any) => {
-      const isComplete = d.isComplete;
+    console.log("Source Data subjects:", apiResponse.subjects);
+    console.log("First subject:", apiResponse.subjects[0]);
+    
+    return apiResponse.subjects.map((d: any,) => {
+      console.log("Processing subject:", d);
+      
+      const isComplete = d.isComplete; 
       const statusBadge = isComplete ? (
         <Badge
           variant="default"
@@ -96,11 +101,8 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
 
       return {
         scheduleSubjectId: d.scheduleSubjectId,
-        SubjectCode:
-          d.subjectCode && d.subjectName
-            ? `${d.subjectCode} - ${d.subjectName}`
-            : d.subjectCode || d.subjectName || "ไม่ระบุรหัสวิชา", // lowercase from API
-        TeacherName: d.teacherName || "ไม่ระบุอาจารย์", // lowercase from API
+        SubjectCode: d.subjectCode && d.subjectName ? `${d.subjectCode} - ${d.subjectName}` : d.subjectCode || d.subjectName || "ไม่ระบุรหัสวิชา", 
+        TeacherName: d.teacherName || "ไม่ระบุอาจารย์", 
         IsComplete: statusBadge,
         IsCompleteText: isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ",
       };
