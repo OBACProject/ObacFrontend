@@ -36,7 +36,6 @@ export const GetStudentGroupScheduleStatus = async (
     }>(
       `StudentGroup/GetStudentGroupScheduleStatus?studentGroupId=${studentGroupId}&term=${term}&year=${year}`
     );
-    // console.log(response.data.data)
     return response.data.data ?? null;
   } catch (error) {
     console.error("Failed to fetch student group schedule status", error);

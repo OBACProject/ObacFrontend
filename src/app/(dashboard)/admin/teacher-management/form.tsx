@@ -1,21 +1,28 @@
 "use client";
-import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
+import { UserRoundCheck, UserPen, Pencil, PlusCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
+import { SubjectItem } from "@/dto/subjectDto";
+import { GetAllSubjectAsync } from "@/api/subject/route";
+import { EditSubjectPopUp } from "@/components/common/Popup/EditSubjectPopup";
+import { AddSubjectPopUp } from "@/components/common/Popup/AddSubjectPopup";
+import { GetAllTeachers, GetAllTeacherUsers } from "@/api/teacher/route";
+import { GetAllTeacherResponse } from "@/dto/teacherDto";
+import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
 import { useRouter } from "next/navigation";
-import { GetAllStudents } from "@/api/student/route";
-import { GetAllStudent, GetAllStudentUser } from "@/dto/studentDto";
-import CreateStudentPopup from "@/components/common/Popup/AddStudentAccountPopup";
 import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
 
 export default function Form() {
-  const [students, setStudents] = useState<GetAllStudentUser[]>([]);
+  const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<SubjectItem | null>(null);
+  const [openCreatSubjectPopup, setOpenCreatePopUp] = useState<boolean>(false);
+  const [openEditSubjectPopup, setOpenEditSubjectPopup] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false);
   const itemsPerPage = 10;
+
   const handleToggleActive = (userId: string, newState: boolean) => {
-    // setStudents((prev) =>
+    // setTeacher((prev) =>
     //   prev.map((t) =>
     //     t.id === userId ? { ...t, isActive: newState } : t
     //   )
@@ -24,47 +31,52 @@ export default function Form() {
   };
 
   useEffect(() => {
-    GetAllStudents().then((d) => {
-      if (Array.isArray(d)) {
-
-        setStudents(d);
+    GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
+      if (d) {
+        setTeacher(d);
       } else {
-        console.error("ไม่ได้ข้อมูลเป็น array:", d);
+        console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");
       }
     });
   }, []);
 
-
-  const filteredStudents = useMemo(() => {
+  const filtereTeachers = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
-    if (!lowerSearch) return students;
+    return teachers.filter((teacher) => {
+      const code = teacher.teacherCode?.toLowerCase() ?? "";
+      const firstName = teacher.firstName?.toLowerCase() ?? "";
+      const lastName = teacher.lastName?.toLowerCase() ?? "";
+      const fullName = `${teacher.prefix ?? ""} ${teacher.firstName ?? ""} ${teacher.lastName ?? ""}`.toLowerCase();
 
-    return students.filter((student) => {
-      const combinedText = Object.values(student)
-        .map((value) => String(value ?? "").toLowerCase())
-        .join(" ");
-      return combinedText.includes(lowerSearch);
+      return (
+        lowerSearch === "" ||
+        code.includes(lowerSearch) ||
+        firstName.includes(lowerSearch) ||
+        lastName.includes(lowerSearch) ||
+        fullName.includes(lowerSearch)
+      );
     });
-  }, [students, searchTerm]);
+  }, [teachers, searchTerm]);
 
-  const paginatedStudents = useMemo(() => {
+  const paginatedTeachers = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return filteredStudents.slice(start, start + itemsPerPage);
-  }, [filteredStudents, currentPage]);
+    const end = start + itemsPerPage;
+    return filtereTeachers.slice(start, end);
+  }, [filtereTeachers, currentPage]);
 
   return (
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
         <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
           <UserPen className="h-8 w-8" />
-          ระบบจัดการนักเรียน
+          ระบบจัดการอาจารย์
         </h1>
       </div>
 
       <div className="px-10 pt-6 pb-4 flex justify-between gap-5">
         <input
           type="text"
-          placeholder="ค้นหารายชื่อนักเรียน"
+          placeholder="ค้นหารายชื่อ"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -74,68 +86,68 @@ export default function Form() {
         />
         <button
           className="px-10 py-1 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-          onClick={() => setOpenCreateStudentPopup(true)} // ✅ เปิด popup
+          onClick={() => setOpenCreatePopUp(true)}
         >
           <PlusCircle className="w-5 h-5 text-white" />
-          เพิ่มบัญชีนักเรียน
+          เพิ่มบัญชีอาจารย์
         </button>
       </div>
 
-      {students.length > 0 ? (
+      {teachers.length > 0 ? (
         <div className="w-full rounded-sm px-10">
           <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
             <UserRoundCheck className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
-              รายชื่อนักเรียนทั้งหมด
+              รายชื่ออาจารย์ทั้งหมด
               <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">
-                {filteredStudents.length || "-"}
+                {filtereTeachers.length || "-"}
               </p>
               รายการ
             </div>
           </div>
 
           <div className="shadow-lg w-full text-sm">
-            <div className="grid grid-cols-[5%_20%_25%_20%_15%_15%] text-white bg-gradient-to-r from-blue-500 to-indigo-600 text-lg">
+            <div className="grid grid-cols-[5%_15%_30%_20%_30%] text-white bg-gradient-to-r from-blue-500 to-indigo-600 text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
-              <div className="flex items-center justify-center py-2">รหัสนักเรียน</div>
-              <div className="flex items-center justify-center py-2">ชื่อ-นามสกุล</div>
-              <div className="flex items-center justify-center py-2">ห้องเรียน</div>
-              <div className="flex items-center justify-center py-2">เพศ</div>
-              <div className="flex items-center justify-center py-2">สถานะ</div>
+              <div className="flex items-center justify-center py-2">รหัสอาจารย์</div>
+              <div className="flex items-center justify-center py-2">ชื่ออาจารย์</div>
+              <div className="flex items-center justify-center py-2">แผนก</div>
+              <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
             </div>
 
-            {paginatedStudents.map((item, index) => (
+            {paginatedTeachers.map((item, index) => (
               <div
                 key={item.id}
-                onClick={() => {
-                  if (item.studentId) {
-                    router.push(`/admin/student-details/${(item.studentId)}`);
-                  }
-                }}
-                className="cursor-pointer grid grid-cols-[5%_20%_25%_20%_15%_15%] bg-white hover:bg-blue-100 text-gray-800 text-base"
+                onClick={() => router.push(`/admin/teacher-details/${item.teacherId}`)}
+                className="cursor-pointer grid grid-cols-[5%_15%_9%_21%_20%_30%] bg-white hover:bg-blue-100 text-gray-800 text-base"
               >
                 <div className="flex items-center justify-center py-2">
                   {(currentPage - 1) * itemsPerPage + index + 1}.
                 </div>
+
                 <div className="flex items-center justify-center py-2">
-                  {item.studentCode}
+                  {item.teacherCode}
                 </div>
-                <div className="flex items-center justify-start py-2 px-4">
-                  {item.prefix} {item.firstName} {item.lastName}
+                <div></div>
+
+                <div className="flex items-center py-2 px-4 w-full">
+                  <span className="text-start">{`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}</span>
                 </div>
+
+
                 <div className="flex items-center justify-center py-2">
-                  {item.class} {item.groupName}
+                  {item.program}
                 </div>
+
                 <div className="flex items-center justify-center py-2">
-                  {item.gender}
-                </div>
-                <div className="flex items-center justify-center py-2">
+
                   <IsActiveToggleProps
-                    isActive={item.isActive}
+                    isActive={item.isActive} 
                     // onToggle={(value) =>
                     //   handleToggleActive(item.id, value)
                     // }
                   />
+
                 </div>
               </div>
             ))}
@@ -151,13 +163,13 @@ export default function Form() {
             </button>
 
             <span className="text-sm text-gray-700">
-              หน้า {currentPage} / {Math.ceil(filteredStudents.length / itemsPerPage)}
+              หน้า {currentPage} / {Math.ceil(filtereTeachers.length / itemsPerPage)}
             </span>
 
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= Math.ceil(filteredStudents.length / itemsPerPage)}
+              disabled={currentPage >= Math.ceil(filtereTeachers.length / itemsPerPage)}
             >
               ถัดไป
             </button>
@@ -171,18 +183,14 @@ export default function Form() {
         </div>
       )}
 
-      {openCreateStudentPopup && (
-        <CreateStudentPopup
-          onClosePopUp={(shouldReload: boolean) => {
-            setOpenCreateStudentPopup(false);
-            if (shouldReload) {
-              GetAllStudents().then((d) => {
-                if (Array.isArray(d)) {
-                  setStudents(d);
-                }
-              });
-            }
-          }}
+      {openCreatSubjectPopup && (
+        <AddTeacherAccountPopup onClosePopUp={setOpenCreatePopUp} />
+      )}
+
+      {openEditSubjectPopup && selectedSubject && (
+        <EditSubjectPopUp
+          onClosePopUp={setOpenEditSubjectPopup}
+          data={selectedSubject}
         />
       )}
     </div>

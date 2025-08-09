@@ -36,7 +36,6 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
     };
 
     try {
-      console.log("paylode... : ", payload);
       await CreateSubject(payload);
       toast.success("เพิ่มวิชาสำเร็จ");
       onClosePopUp(false);

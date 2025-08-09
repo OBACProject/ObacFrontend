@@ -1,9 +1,10 @@
-import { AcademicPage } from "./academicManagement";
+import React from "react";
+import Form from "./form";
 
-export default function Page() {
+export default function page() {
   return (
-    <div>
-      <AcademicPage />
+    <div className="pl-16 ">
+      <Form />
     </div>
   );
 }

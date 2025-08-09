@@ -1,3 +1,4 @@
+
 import { GetAllStudentTableDto, StudentTranscriptData } from "@/dto/studentDto";
 import {
   GetAllStudentDataApi,
@@ -6,7 +7,6 @@ import {
 
 export async function getAllStudentViewData() {
   const studentData = await GetAllStudentDataApi();
-  // console.log(studentData);
 
   const studentTableData: GetAllStudentTableDto[] = studentData.map(
     (student) => ({

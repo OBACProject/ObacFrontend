@@ -12,11 +12,9 @@ interface Props {
 
 export function ClassroomGradeManagement({ groupId, term, year }: Props) {
   try {
-    console.log("ClassroomGradeManagement props", { groupId, term, year })
     const params: GetGroupSummaryGradeRequest = { groupId, term, year }
     
     const {data , isLoading , isError} = useGetGroupSummaryGradeQuery(params)
-    console.log("ClassroomGradeManagement data", data)
     if (isLoading) {
         return <ClassroomGradeManagementSkeleton />
         }

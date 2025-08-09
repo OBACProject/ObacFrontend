@@ -65,14 +65,11 @@ export default function Main() {
         prefix: item.prefix ?? "",
       }))
     )
-    console.log("Mock data set:", mockGetGradBelowResponse);
     setIsSearch(true);
     setSearchTrigger(false);
   };
 
   const handleStudentName = (id: number,prefix : string, fname: string, lname: string) => {
-    console.log("Selected student ID:", id);
-    console.log("Selected student name:", `${prefix}${fname} ${lname}`);
     const data: IndividualStudentInfoData = {
       studentId: id,
       studentName: prefix+fname + " " + lname,

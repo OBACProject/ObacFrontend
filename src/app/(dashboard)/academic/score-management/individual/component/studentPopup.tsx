@@ -135,7 +135,6 @@ export function StudentPopup({
 
   useEffect(() => {
     if (selectedSubject) {
-      console.log('Selected Subject Data:', selectedSubject);
       setScore({
         assignmentScore: selectedSubject.assignmentScore || 0,
         collectScore: selectedSubject.collectScore || 0,
@@ -146,9 +145,6 @@ export function StudentPopup({
     }
   }, [selectedSubject]);
 
-  useEffect(() => {
-    console.log('Current Score State:', score);
-  }, [score]);
 
   const handleInputChange = (field: string, value: string) => {
     const numericValue = parseFloat(value) || 0;

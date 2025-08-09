@@ -143,7 +143,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("ผ.", 111, 140);
   doc.text("มผ.", 124, 140);
   doc.text("ร.", 139, 140);
-  doc.text("ข.ร.", 150, 140);
+  doc.text("ข.ร.", 151, 140);
   doc.text("ข.ส.", 167, 140);
 
   doc.setFontSize(20);

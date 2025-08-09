@@ -25,7 +25,6 @@ export function ClassroomGradeClient({ initialData }: Props) {
   const debouncedSearchInput = useDebounce(filters.searchInput, 300)
 
   const processedData = useMemo(() => preProcessClassroomData(initialData), [initialData])
-  console.log("Processed data:", processedData)
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -105,7 +104,6 @@ export function ClassroomGradeClient({ initialData }: Props) {
       index: index + 1,
     }))
   }, [filteredData])
-  console.log("Table data:", tableData)
 
   const getRowLink = useCallback(
     (item: TransformedStudentData) => {

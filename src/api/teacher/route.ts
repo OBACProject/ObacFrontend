@@ -1,6 +1,9 @@
+import { CreateSubjectRequest } from "@/dto/subjectDto";
 import {
   CardSubjectResponse,
+  CreateTeacherRequest,
   GetAllTeacherResponse,
+  GetTeacherDetailUserResponse,
   TeacherDetailAndScheduleResponse,
   TeacherDetails,
 } from "@/dto/teacherDto";
@@ -77,6 +80,37 @@ export const GetAllTeachers = async (): Promise<GetAllTeacherResponse[]> => {
     return [];
   }
 };
+export const GetAllTeacherUsers = async (): Promise<GetAllTeacherResponse[] | []> => {
+  try {
+    const response = await apiClient.get("Admin/GetAllTeacherUsers");
+    const users = response.data?.data?.users;
+    return Array.isArray(users) ? users : [];
+  } catch (err) {
+    console.log("Error in GetAllTeachers : ", err);
+    return [];
+  }
+};
+
+
+export const GetTeacherDetailUser = async (
+  teacherId: number
+): Promise<GetTeacherDetailUserResponse | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetTeacherDetailUserResponse;
+    }>("/Admin/GetTeacherDetails", {
+      params: { teacherId },
+    });
+
+    return response.data?.data ?? null;
+  } catch (err) {
+    console.error("❌ Error in GetTeacherDetailUser: ", err);
+    return null;
+  }
+};
+
 
 export const GetTeacherDetailAndSchedule = async (
   teacherId: number,
@@ -94,5 +128,17 @@ export const GetTeacherDetailAndSchedule = async (
   } catch (error) {
     console.error("Error fetching teacher detail and schedule:", error);
     return null;
+  }
+};
+
+export const CreateTeacher = async (
+  payload: CreateTeacherRequest
+): Promise<boolean> => {
+  try {
+    const response = await apiClient.post("User/CreateTeacher", payload);
+    return response.status === 201;
+  } catch (err) {
+    console.error("Error creating subject:", err);
+    return false;
   }
 };

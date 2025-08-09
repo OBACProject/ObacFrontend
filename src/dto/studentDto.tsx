@@ -78,11 +78,11 @@ export interface StudentGroup {
 export interface GetStudentByGroupId {
   studentId: number;
   studentCode: string;
-  prefix : string | null; 
+  prefix: string | null;
   firstName: string;
   lastName: string;
   isActive: boolean;
-  gender : string;
+  gender: string;
   gpa: number;
   gpax: number;
   totalCredit: number;
@@ -90,13 +90,16 @@ export interface GetStudentByGroupId {
 }
 
 export interface GetAllStudent {
+  id : number;
   studentId: number;
+  prefix : string |null;
   firstName: string | null;
   lastName: string | null;
   thaiName: string;
   thaiLastName: string;
   gender: string;
   groupName: string;
+  groupCode :string;
   studentGroupId: number;
   studentCode: string;
   thaiId: string;
@@ -117,8 +120,64 @@ export interface GetAllStudent {
   programName: string;
   facultyId: number;
   facultyName: string;
+  status : string |null;
   birthDate: string | null;
 }
+
+
+export interface GetAllStudentUser {
+  studentId: number;
+  studentCode: string;
+  class: string;
+  groupName: string;
+  groupCode: string;
+  id: string;
+  userName: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  role: string;
+  isActive: boolean;
+}
+
+export interface GetStudentDetailResponse {
+  id: number;
+  username: string;
+  password: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+  class: string;
+  groupName: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+
+export interface CreateStudentRequest {
+  userName: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string; 
+  prefix: string; 
+}
+
+
 
 export interface GetAllStudentTableDto {
   studentId: number;
@@ -268,23 +327,23 @@ export type GetStudentByStudentId = {
 
 export type UpdateStudentRequestBody = {
   studentId: number;
-  firstName: string |null;
-  lastName: string| null;
+  firstName: string | null;
+  lastName: string | null;
   thaiName: string;
   thaiLastName: string;
   gender: string;
   studentGroupId: number;
   studentCode: string;
-  thaiId: string|null;
-  email: string|null;
-  phoneNumber: string|null;
-  address: string|null;
-  nationality: string|null;
-  religion: string|null;
+  thaiId: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  address: string | null;
+  nationality: string | null;
+  religion: string | null;
   class: string;
-  enrollYear: number|null;
+  enrollYear: number | null;
   currentYear: number;
-  graduateYear: number|null;
+  graduateYear: number | null;
   programId: number;
   facultyId: number;
   birthDate: string | null;

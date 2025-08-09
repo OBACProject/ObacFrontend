@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "http://localhost:5111/api";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "https://obac-api-dev.ekawit.ac.th/api";
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "https://obac-api-dev.ekawit.ac.th/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "https://obac-api-test.ekawit.ac.th/api";
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000, 
