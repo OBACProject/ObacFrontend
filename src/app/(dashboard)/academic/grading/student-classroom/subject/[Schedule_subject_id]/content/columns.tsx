@@ -36,7 +36,7 @@ export const createColumns = ({
 
   const getGradeColor = (grade: string): string => {
     switch (grade) {
-      case "0": return "bg-red-500 text-white";
+      case "0": return "bg-red-400 text-white";
       default: return "bg-blue-200 text-blue-900";
     }
   };
