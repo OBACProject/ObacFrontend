@@ -78,7 +78,6 @@ export function ClassroomGrading() {
     year: Number(selectedYear),
   });
 
-  // Refetch data when selectedTerm or selectedYear changes
   useEffect(() => {
     refetch();
   }, [selectedTerm, selectedYear, refetch]);
@@ -149,6 +148,7 @@ export function ClassroomGrading() {
       const yearLevel = Number.parseInt(item.class.substring(5, 6), 10);
       const matchYearLevel = currentYear - Number(selectedYear);
       let isYearLevelValid = false;
+      
 
       const matchSearch = debouncedSearchInput
         ? item.groupCode
@@ -209,6 +209,10 @@ export function ClassroomGrading() {
     [router, selectedTerm, selectedYear]
   );
 
+  const handleDownloadExcel = async () => {
+    
+  }
+
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-1/12 justify-center" },
@@ -248,6 +252,7 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
+              // handleDownloadExcel(Number(row.groupId), row.class);
               e.stopPropagation();
             }}
           >
