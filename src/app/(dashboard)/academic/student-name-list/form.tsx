@@ -130,7 +130,7 @@ export default function Form() {
 
         <button
           onClick={() => setPDFListPopup(true)}
-          className="px-8  bg-white text-blue-600 font-prompt_Light hover:scale-[101%] duration-300 border-blue-500 border-[1px] rounded-md py-1 flex items-center gap-3"
+          className="px-8  bg-white text-blue-600 font-prompt_Light hover:scale-[101%] duration-300 border-gray-300 shadow border-[1px] rounded-md py-1 flex items-center gap-3"
         >
           <Boxes className="w-5 h-5 text-blue-600 " />
           โหลดใบรายชื่อแบบสายชั้น

@@ -20,16 +20,45 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 // import { toast } from "react-toastify";
 import InputBox from "@/components/Teacher/InputBox";
-// import { GetStudentByStudentId } from "@/api/student/route";
-import { StudentDetail } from "@/dto/studentDto";
+import { StudentDetail, StudentDetails } from "@/dto/studentDto";
+import { GetStudentDetailByStudentId } from "@/api/student/route";
 
 type Props = {
-  studentCode: string;
+  studentID: string;
 };
 
-export default function Form({ studentCode }: Props) {
+const emptyStudent: StudentDetails = {
+  id: 0,
+  prefix: "",
+  name: "",
+  lastName: "",
+  gender: "",
+  nationality: "",
+  birthDate: "",
+  citizenId: "",
+  studentCode: "",
+  phoneNumber: "",
+  studentGroupId: 0,
+  groupName: "",
+  groupCode: "",
+  class: "",
+  level: 0,
+  programName: "",
+  subProgramName: "",
+  facultyName: "",
+  gpax: 0,
+  status: "",
+  programId: 0,
+  isActive: true,
+  thaiID: "",
+  religion: "",
+  address: "",
+  email: "",
+};
+
+export default function Form({ studentID }: Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
-  const [students, setStudent] = useState<StudentDetail | null>();
+  const [students, setStudent] = useState<StudentDetails | null>();
   const [educateStatus, setEducateStatus] = useState(students?.status || "");
 
   const [term, setTerm] = useState<string>("2");
@@ -39,86 +68,31 @@ export default function Form({ studentCode }: Props) {
   const [changeGroupPopUp, setChangeGroupPopUp] = useState<boolean>(false);
 
   useEffect(() => {
-    // GetStudentByStudentId(studentId).then((d) => {});
+    GetStudentDetailByStudentId(Number(studentID)).then((item) => {
+      if (item) {
+        setStudent(item);
+      }
+    });
   }, []);
 
-  const [formData, setFormData] = useState<StudentDetail>({
-    studentId: 0,
-    firstName: "",
-    lastName: "",
-    status: "",
-    gender: "Male",
-    thaiId: "",
-    groupId: 0,
-    studentCode: "",
-    email: "",
-    phoneNumber: "",
-    class: "",
-    address: "",
-    nationality: "",
-    enrollYear: 0,
-    religion: "",
-    currentYear: 0,
-    graduateYear: 0,
-    programId: 0,
-    facultyId: 0,
-    programName: "",
-    facultyName: "",
-    birthDate: "2000-01-01",
-    currentRoom: "",
-    isActive: true,
-    isAgree: true,
-  });
-
-  // const handleEditChange = () => {
-  //   setOnEdit((onEdit) => !onEdit);
-  // };
+  const [formData, setFormData] = useState<StudentDetails>(emptyStudent);
 
   useEffect(() => {
-    if (!students) return;
-
-    // sync สถานะปุ่ม/ดรอปดาวน์
-    setEducateStatus(students.status ?? "");
-
-    // map เป็น StudentDetail ให้ครบทุกฟิลด์
-    setFormData({
-      studentId: students.studentId ?? 0,
-      firstName: students.firstName ?? "",
-      lastName: students.lastName ?? "",
-      status: students.status ?? "",
-      gender:
-        students.gender === "Male" || students.gender === "Female"
-          ? students.gender
-          : "Male",
-
-      thaiId: students.thaiId ?? "",
-      groupId: students.groupId ?? 0,
-      studentCode: students.studentCode ?? "",
-      email: students.email ?? "",
-      phoneNumber: students.phoneNumber ?? "",
-      class: students.class ?? "",
-      address: students.address ?? "",
-      nationality: students.nationality ?? "",
-      enrollYear: students.enrollYear ?? 0,
-      religion: students.religion ?? "",
-      currentYear: students.currentYear ?? 0,
-      graduateYear: students.graduateYear ?? 0,
-      programId: students.programId ?? 0,
-      facultyId: students.facultyId ?? 0,
-
-      programName: students.programName ?? "",
-      facultyName: students.facultyName ?? "",
-      currentRoom: students.currentRoom ?? "",
-
-      birthDate:
-        students.birthDate && students.birthDate !== ""
-          ? students.birthDate
-          : "2000-01-01",
-
-      isActive: students.isActive ?? true,
-      isAgree: students.isAgree ?? true,
+    GetStudentDetailByStudentId(Number(studentID)).then((item) => {
+      if (item) {
+        const normalized: StudentDetails = {
+          ...emptyStudent,
+          ...item,
+          gpax: item.gpax ?? 0,
+          isActive: item.isActive ?? true,
+        };
+        setStudent(normalized);
+        setFormData(normalized);
+        setEducateStatus(normalized.status || "");
+      }
     });
-  }, [students]);
+  }, [studentID]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -169,15 +143,9 @@ export default function Form({ studentCode }: Props) {
             <Download className="w-4 h-4" />
             ผลการเรียนล่าสุด PDF
           </button> */}
-
           <button
             className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"
-            onClick={async () => {
-              // const data2 = await fetchGetStudentGradeDetail(studentId);
-              // if (data2) {
-              //   SummaryGradPDF(data2);
-              // }
-            }}
+            onClick={async () => {}}
           >
             <Download className="w-4 h-4" />
             ผลการเรียนรวม PDF
@@ -228,7 +196,7 @@ export default function Form({ studentCode }: Props) {
             ย้ายห้องเรียน
           </button>
           <Link
-            href={`/academic/score-management/individual/${studentCode}`}
+            href={`/academic/score-management/individual/${students?.studentCode}`}
             className="flex gap-2 items-center px-5 py-1 rounded-full bg-slate-200 hover:bg-slate-300"
           >
             <FileChartColumn className="h-5 w-5" />
@@ -247,7 +215,7 @@ export default function Form({ studentCode }: Props) {
               </button>{" "}
               <button
                 className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white "
-                // onClick={handleEditChange}
+                onClick={() => setOnEdit(!onEdit)}
               >
                 <CircleX className="w-5 h-5" />
                 ยกเลิก
@@ -256,7 +224,7 @@ export default function Form({ studentCode }: Props) {
           ) : (
             <button
               className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white "
-              // onClick={handleEditChange}
+              onClick={() => setOnEdit(!onEdit)}
             >
               <Pencil className="w-5 h-5" />
               แก้ไข
@@ -268,17 +236,6 @@ export default function Form({ studentCode }: Props) {
         <div className="relative rounded-md border-t shadow-gray-300 w-fit shadow-md  bg-white ">
           <div className="grid gap-4 px-10 py-5">
             <div className="flex items-center gap-4">
-              {/* <div className="flex items-center gap-1">
-                <p className="w-[100px]">รหัสนักเรียน</p>
-                <input
-                  name="studentCode"
-                  type="text"
-                  className="px-4 w-[150px] focus:outline-blue-400 py-1.5 rounded-sm border border-gray-300 text-gray-500 focus:text-black enabled:border-blue-400"
-                  value={formData.studentCode}
-                  onChange={handleChange}
-                  disabled={!onEdit}
-                />
-              </div> */}
               <InputBox
                 label="รหัสนักเรียน"
                 name="studentCode"
@@ -292,7 +249,7 @@ export default function Form({ studentCode }: Props) {
               />
               {onEdit ? (
                 <select
-                  name="gender"
+                  name="prefix"
                   className="border border-gray-300 rounded-md px-2 py-1.5"
                   onChange={handleChange}
                   value={formData.gender || "Male"}
@@ -302,17 +259,13 @@ export default function Form({ studentCode }: Props) {
                 </select>
               ) : (
                 <div>
-                  {students?.gender == "Male" ? (
-                    <label>นาย</label>
-                  ) : (
-                    <label>นางสาว</label>
-                  )}
+                  <label>{students?.prefix}</label>
                 </div>
               )}
               <InputBox
                 label="ชื่อ"
                 name="firstName"
-                value={formData.firstName || "ไม่มีข้อมูล"}
+                value={formData.name || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ชื่อจริง"
                 inputWidth="w-[200px]"
@@ -337,8 +290,7 @@ export default function Form({ studentCode }: Props) {
               <div className="flex items-center gap-2">
                 <p className="">ชั้นปี</p>
                 <div className="px-4 border-gray-300 border bg-white py-1.5 rounded-sm">
-                  {students?.class || "โหลด.."}.
-                  {students?.currentRoom || "โหลด.."}
+                  {students?.class || "--"}.{students?.groupName || "--"}
                 </div>
               </div>
               <InputBox
@@ -387,7 +339,7 @@ export default function Form({ studentCode }: Props) {
             <InputBox
               label="เลขบัตรประชาชน"
               name="thaiId"
-              value={formData.thaiId || "ไม่มีข้อมูล"}
+              value={formData.thaiID || "ไม่มีข้อมูล"}
               onChange={handleChange}
               placeholder="เลขบัตรประชาชน"
               inputWidth="w-[200px]"
@@ -522,17 +474,17 @@ export default function Form({ studentCode }: Props) {
           </div>
         </div>
       </div>
-      {submitStudentStatus && students?.studentId && (
+      {submitStudentStatus && students?.id && (
         <ConfirmChangeStudentsStatus
           onClickPopUp={(value) => setSubmitStudentStatus(value)}
           status={educateStatus}
-          studentId={students.studentId}
+          studentId={students.id}
         />
       )}
-      {changeGroupPopUp && students?.studentId && (
+      {changeGroupPopUp && students?.id && (
         <ChangeStudentGroup
           onClickPopUp={(value) => setChangeGroupPopUp(value)}
-          studentId={students?.studentId}
+          studentId={students?.id}
         />
       )}
     </div>
