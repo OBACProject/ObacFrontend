@@ -143,7 +143,7 @@ export default function AcademicDashboard() {
 
         </div>
 
-          <ProfileCard username="ภัทรจาริน นภากาญจน์" rolename="ฝ่ายทะเบียน" />
+          <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
 
       </div>
 

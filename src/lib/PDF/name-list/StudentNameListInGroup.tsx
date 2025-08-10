@@ -86,20 +86,13 @@ const StudentNameListInGroupPDF = ({
 
   if (student) {
     for (let i = 0; i < student.length; i++) {
-      let gender = "";
-      if (student[i].gender == "ชาย") {
-        gender = "นาย";
-      }
-      if (student[i].gender == "หญิง") {
-        gender = "นางสาว";
-      }
       autoTable(doc, {
         startY: y2,
         body: [
           [
             i + 1,
             student[i].studentCode,
-            `${gender} ${student[i].firstName}`,
+            `${student[i].prefix} ${student[i].firstName}`,
             `${student[i].lastName}`,
             "",
             "",

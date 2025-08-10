@@ -1,5 +1,6 @@
 import {
   StudentGroupItem,
+  StudentGroupResponse,
   StudentGroupScheduleStatus,
 } from "@/dto/studentGroupItem";
 import apiClient from "@/lib/apiClient";
@@ -40,5 +41,22 @@ export const GetStudentGroupScheduleStatus = async (
   } catch (error) {
     console.error("Failed to fetch student group schedule status", error);
     return null;
+  }
+};
+
+export const GetStudentListByClass = async (
+  className: string,
+  level: number
+): Promise<StudentGroupResponse[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentGroupResponse[];
+    }>(`Student/GetStudentListByClass?className=${className}&level=${level}`);
+    return response.data.data ?? [];
+  } catch (err) {
+    console.error("Error in api GetStudentListByClass ", err);
+    return [];
   }
 };

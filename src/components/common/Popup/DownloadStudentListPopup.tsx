@@ -1,5 +1,9 @@
 "use client";
 
+import { GetStudentListByClass } from "@/api/studentGroup/route";
+import BulkStudentNameListInLevelPDF from "@/lib/PDF/name-list/BulkStudentNameList";
+import { getCurrentThaiTermYear } from "@/lib/utils";
+import { Download, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -14,8 +18,10 @@ export default function DownloadStudentListPopup({
   // const [classGroup, setClassGroup] = useState<string>("");
 
   const [selectValue, setSelectValue] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onDowLoad = async (value: string) => {
+    setIsLoading(true);
     if (!value) {
       toast.error("กรุณาเลือกสายชั้นก่อนดาวน์โหลด");
       return;
@@ -29,10 +35,23 @@ export default function DownloadStudentListPopup({
 
     const classGroup = match[1];
     const level = Number(match[2]);
+    const { currentYear } = getCurrentThaiTermYear();
 
-    console.log("classGroup:", classGroup, "level:", level);
-
-    // await fetchWith(classGroup, level)
+    const studentNameList = await GetStudentListByClass(classGroup, level);
+    console.log(studentNameList);
+    try {
+      BulkStudentNameListInLevelPDF({
+        data: studentNameList,
+        year: currentYear,
+        classGroup: classGroup,
+        level: level,
+      });
+      setIsLoading(false);
+      toast.success("ดาวน์โหลดเอกสารสำเร็จ");
+    } catch (err) {
+      toast.error("การดาวน์โหลดผิดพลาด");
+      setIsLoading(false);
+    }
   };
   return (
     <div
@@ -45,7 +64,7 @@ export default function DownloadStudentListPopup({
       >
         <div className=" text-black text-center px-5 py-5 lg:py-8 lg:px-10 grid gap-5">
           <h1 className="text-gray-500">
-            เลือกสายชั้นเพื่อดาวน์โหลดรายชื่อนักเรียนทุกห้องของสายชั้นนั้น
+            เลือกสายชั้นเพื่อดาวน์โหลดรายชื่อนักเรียนทุกห้องของสายชั้น
           </h1>
           <div className="flex gap-4 items-center justify-center ">
             <p className="text-base text-gray-800">เลือกสายชั้น</p>
@@ -67,13 +86,18 @@ export default function DownloadStudentListPopup({
             <button
               onClick={() => onDowLoad(selectValue)}
               disabled={!selectValue}
-              className={`px-8 py-1.5 w-fit rounded-md text-white
-    ${
-      selectValue
-        ? "bg-blue-500 hover:bg-blue-400"
-        : "bg-blue-300 cursor-not-allowed"
-    }`}
+              className={`px-8 py-1.5 h-fit w-fit rounded-md text-white flex items-center gap-4 justify-center
+              ${
+                selectValue
+                  ? "bg-blue-500 hover:bg-blue-400"
+                  : "bg-blue-300 cursor-not-allowed"
+              }`}
             >
+              {isLoading ? (
+                <LoaderCircle className="w-5 h-5 text-white animate-spin duration-500" />
+              ) : (
+                <Download className="w-5 h-5 text-white" />
+              )}
               ดาวน์โหลดรายชื่อ
             </button>
           </div>
