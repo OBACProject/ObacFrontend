@@ -345,6 +345,7 @@ export type UpdateStudentRequestBody = {
 };
 
 export interface StudentGroupDetail {
+  sort(arg0: (a: StudentItems, b: StudentItems) => number): unknown;
   studentGroupId: number;
   groupName: string;
   groupCode: string;
