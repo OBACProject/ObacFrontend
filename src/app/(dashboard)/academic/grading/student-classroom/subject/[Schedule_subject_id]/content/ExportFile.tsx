@@ -5,6 +5,7 @@ import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
 import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
+  ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
 import { GetGradBySubjectId, StudentGroupGradeResponse, SubjectGradeItem } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
@@ -89,7 +90,7 @@ export default function ExportFile({
       subjectID: subject?.id || 0,
       subjectCode: subject?.subjectCode || "",
       subjectName: subject?.subjectName || "",
-      groupName: roomName,
+      groupName: roomName ,
       students: grads.map((item) => ({
         studentID: item.studentId,
         studentCode: item.studentCode,
@@ -122,21 +123,21 @@ export default function ExportFile({
       >
         ดาวน์โหลดรายชื่อ PDF
       </Button>
-      {/* <Button
+      <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
-        // onClick={() =>
-        //   ConvertScoreToExcel(
-        //     convertGrad,
-        //     term,
-        //     year,
-        //     subject?.subjectCode ?? "",
-        //     subject?.subjectName ?? "",
-        //     roomName ?? ""
-        //   )
-        // }
+        onClick={() =>
+          ConvertScoreToExcel(
+            convertGrad,
+            term,
+            year,
+            subject?.subjectCode ?? "",
+            subject?.subjectName ?? "",
+            roomName ?? ""
+          )
+        }
       >
         ดาวน์โหลดใบคะแนน Excel
-      </Button> */}
+      </Button>
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>

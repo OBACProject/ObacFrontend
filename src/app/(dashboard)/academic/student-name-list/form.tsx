@@ -145,7 +145,9 @@ export default function Form() {
           emptyText="ไม่มีข้อมูลชั้นเรียน"
         />
       </div>
-      {pdfListPopup && <DownloadStudentListPopup onClosePopUp={setPDFListPopup}/>}
+      {pdfListPopup && (
+        <DownloadStudentListPopup onClosePopUp={setPDFListPopup} />
+      )}
     </div>
   );
 }

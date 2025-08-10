@@ -8,11 +8,12 @@ import GroupSelector, {
 import GradeFilter from "@/components/Academic/GradeFilter";
 import ConfirmPromoteModal from "@/components/Academic/ConfirmPromoteModal";
 import { ArrowUpDown } from "lucide-react";
-import { fetchGetStudentGroupsByTermYear } from "@/api/oldApi/student/studentApi";
 import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { GetGropGradeAboveModel } from "@/dto/gradDto";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import StudentSelectListTable from "@/components/Academic/StudentSelectListTable";
+import { getCurrentThaiTermYear, sortStudentGroupItems } from "@/lib/utils";
+import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
 // import { GetStudentGroupsByTermYearDto, GetGropGradeAboveModel } from "@/dto/gradDto";
 
 const mockGroup: GetGropGradeAboveModel = {
@@ -121,13 +122,7 @@ const mockGroup: GetGropGradeAboveModel = {
 };
 
 export default function Main() {
-  const dateTime = new Date();
-  const currentMonth = dateTime.getMonth();
-  const currentYear =
-    currentMonth > 5
-      ? dateTime.getFullYear() + 543
-      : dateTime.getFullYear() + 543 - 1;
-  const defaultTerm = currentMonth > 5 ? "1" : "2";
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
 
   const [groups, setGroups] = useState<StudentGroupItem[]>([]);
   const [groupID, setGroupID] = useState<number>(0);
@@ -148,8 +143,9 @@ export default function Main() {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const data = await fetchGetStudentGroupsByTermYear(term, year);
-        setGroups(data || []);
+        const data = await GetAllStudentGroupByTermYear(term, year);
+        const sorted = sortStudentGroupItems(data);
+        setGroups(sorted || []);
       } catch (err) {
         console.error("Failed to fetch groups", err);
         setGroups([]);
@@ -175,38 +171,7 @@ export default function Main() {
     // }
   };
 
-  const onPromoteStudentGroup = async () => {
-    // if (!newGroup) return;
-    // setConfirmPromoteTrigger(true);
-    // const nextGroupName = `${nextGroupNameA}/${nextGroupNameB}`;
-    // const studentIds = newGroup.student.map((s) => Number(s.studentId));
-    // const randomPrefix = `${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
-    // const randomNumber = Math.floor(100 + Math.random() * 900);
-    // try {
-    //   const res = await fetchPromoteStudentGroup({
-    //     studentIds,
-    //     groupId: groupID,
-    //     newGroupName: nextGroupName,
-    //     newGroupCode: `${randomPrefix}-${randomNumber}`,
-    //     year,
-    //     term,
-    //   });
-    //   if (res?.ok !== false) {
-    //     toast.success("เลื่อนชั้นเรียนสำเร็จ");
-    //     SetPromoteTrigger(false);
-    //     setNextGroupNameA("");
-    //     setNextGroupNameB("");
-    //     setTimeout(() => window.location.reload(), 1500);
-    //   } else {
-    //     toast.error("เกิดข้อผิดพลาดในการเลื่อนชั้นเรียน");
-    //   }
-    // } catch (err) {
-    //   console.error("Promote error", err);
-    //   toast.error("ไม่สามารถเลื่อนชั้นได้");
-    // } finally {
-    //   setConfirmPromoteTrigger(false);
-    // }
-  };
+  const onPromoteStudentGroup = async () => {};
 
   return (
     <div className="pl-16 py-5">
@@ -244,7 +209,7 @@ export default function Main() {
         {isSearch && newGroup ? (
           <>
             <p className="mb-3 text-gray-600 font-medium">
-              ชั้นเรียนปัจจุบัน:{" "}
+              ชั้นเรียนปัจจุบัน:
               <span className="text-blue-800 font-semibold">
                 {newGroup.class}.{newGroup.groupName}
               </span>

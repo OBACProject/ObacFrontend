@@ -90,16 +90,16 @@ export interface GetStudentByGroupId {
 }
 
 export interface GetAllStudent {
-  id : number;
+  id: number;
   studentId: number;
-  prefix : string |null;
+  prefix: string | null;
   firstName: string | null;
   lastName: string | null;
   thaiName: string;
   thaiLastName: string;
   gender: string;
   groupName: string;
-  groupCode :string;
+  groupCode: string;
   studentGroupId: number;
   studentCode: string;
   thaiId: string;
@@ -120,10 +120,9 @@ export interface GetAllStudent {
   programName: string;
   facultyId: number;
   facultyName: string;
-  status : string |null;
+  status: string | null;
   birthDate: string | null;
 }
-
 
 export interface GetAllStudentUser {
   studentId: number;
@@ -161,8 +160,6 @@ export interface GetStudentDetailResponse {
   updatedAt: string;
 }
 
-
-
 export interface CreateStudentRequest {
   userName: string;
   password: string;
@@ -173,11 +170,9 @@ export interface CreateStudentRequest {
   citizenId: string;
   phoneNumber: string;
   nationality: string;
-  birthDate: string; 
-  prefix: string; 
+  birthDate: string;
+  prefix: string;
 }
-
-
 
 export interface GetAllStudentTableDto {
   studentId: number;
@@ -291,7 +286,7 @@ export type GetStudentListByGroupIDDto = {
   class: string;
   students: StudentItems[];
 };
-export type GetStudentByStudentId = {
+export type StudentDetailByStudentID = {
   studentId: number;
   firstName: string | null;
   lastName: string | null;
@@ -323,8 +318,6 @@ export type GetStudentByStudentId = {
   birthDate: string | null;
 };
 
-
-
 export type UpdateStudentRequestBody = {
   studentId: number;
   firstName: string | null;
@@ -352,6 +345,7 @@ export type UpdateStudentRequestBody = {
 };
 
 export interface StudentGroupDetail {
+  sort(arg0: (a: StudentItems, b: StudentItems) => number): unknown;
   studentGroupId: number;
   groupName: string;
   groupCode: string;
@@ -368,4 +362,32 @@ export interface StudentItems {
   firstName: string;
   lastName: string;
   studentCode: string;
+}
+
+export interface StudentDetail {
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  status: string;
+  gender: string;
+  thaiId: string;
+  groupId: number;
+  studentCode: string;
+  email: string;
+  phoneNumber: string;
+  class: string;
+  address: string;
+  nationality: string;
+  enrollYear: number;
+  religion: string;
+  currentYear: number;
+  graduateYear: number;
+  programId: number;
+  facultyId: number;
+  programName:string;
+  facultyName:string;
+  birthDate:string;
+  currentRoom:string;
+  isActive:boolean;
+  isAgree:boolean;
 }

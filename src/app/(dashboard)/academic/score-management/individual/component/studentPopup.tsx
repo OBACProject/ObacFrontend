@@ -135,7 +135,6 @@ export function StudentPopup({
 
   useEffect(() => {
     if (selectedSubject) {
-      console.log('Selected Subject Data:', selectedSubject);
       setScore({
         assignmentScore: selectedSubject.assignmentScore || 0,
         collectScore: selectedSubject.collectScore || 0,
@@ -146,9 +145,6 @@ export function StudentPopup({
     }
   }, [selectedSubject]);
 
-  useEffect(() => {
-    console.log('Current Score State:', score);
-  }, [score]);
 
   const handleInputChange = (field: string, value: string) => {
     const numericValue = parseFloat(value) || 0;
@@ -327,7 +323,7 @@ export function StudentPopup({
                         <div className="flex justify-between py-1">
                           <span className="text-gray-700 font-medium">เกรดสุดท้าย:</span>
                           <span className="font-bold text-green-600">
-                            {selectedSubject.finalGrade || selectedSubject.remarks || 'N/A'}
+                            {selectedSubject.finalGrade || selectedSubject.remark || 'N/A'}
                           </span>
                         </div>
                       </div>

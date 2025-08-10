@@ -38,7 +38,6 @@ export default function Form({ term, year, teacherID }: Props) {
       (d: TeacherDetailAndScheduleResponse | null) => {
         if (d) {
           setTeacherSchedule(d);
-          console.log(d);
         }
       }
     );

@@ -13,7 +13,7 @@ interface Props {
 }
 export default function Form({ GroupID }: Props) {
   const [studentGroupDetail, setStudentGroupDetail] =
-    useState<StudentGroupDetail | null>(null);
+    useState<StudentGroupDetail>();
 
   const studentColumns: ColumnConfig<StudentItems>[] = [
     { label: "No.", width: "5%", render: (_, i) => i + 1 },
@@ -42,11 +42,20 @@ export default function Form({ GroupID }: Props) {
     },
   ];
   useEffect(() => {
-    GetStudentGroupByGroupId(GroupID).then((items) => {
-      setStudentGroupDetail(items);
-    });
-  }, []);
+    (async () => {
+      const data = (await GetStudentGroupByGroupId(
+        GroupID
+      )) as StudentGroupDetail;
+      const sortedStudents = [...(data.students ?? [])].sort((a, b) =>
+        a.studentCode.localeCompare(b.studentCode, undefined, { numeric: true })
+      );
+
+      setStudentGroupDetail({ ...data, students: sortedStudents });
+    })();
+  }, [GroupID]);
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
+
+  
 
   return (
     <div className="bg-white rounded-xl py-4">
@@ -55,7 +64,7 @@ export default function Form({ GroupID }: Props) {
         icon={<Box className="h-6 w-6 text-white" />}
         title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName} `}
         columns={studentColumns}
-        rowHref={(item) => `/academic/student-details/${item.id}`}
+        rowHref={(item) => `/academic/student-details/${item.studentCode}`}
         emptyText="ไม่มีข้อมูลชั้นเรียน"
       />
     </div>

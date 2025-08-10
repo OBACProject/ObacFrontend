@@ -83,7 +83,6 @@ export const GetAllTeachers = async (): Promise<GetAllTeacherResponse[]> => {
 export const GetAllTeacherUsers = async (): Promise<GetAllTeacherResponse[] | []> => {
   try {
     const response = await apiClient.get("Admin/GetAllTeacherUsers");
-    console.log("📦 Response from API:", response.data);
     const users = response.data?.data?.users;
     return Array.isArray(users) ? users : [];
   } catch (err) {
@@ -102,10 +101,9 @@ export const GetTeacherDetailUser = async (
       responseMessage: string;
       data: GetTeacherDetailUserResponse;
     }>("/Admin/GetTeacherDetails", {
-      params: { teacherId }, // ✅ ส่งเป็น query string
+      params: { teacherId },
     });
 
-    console.log("📦 Response from API:", response.data);
     return response.data?.data ?? null;
   } catch (err) {
     console.error("❌ Error in GetTeacherDetailUser: ", err);

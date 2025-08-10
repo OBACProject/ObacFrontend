@@ -46,7 +46,6 @@ export default function Form() {
       },
       termYearGradeGroups: student.termYearGradeGroups,
     };
-    // console.log("payload FE : ", payload);
     const success = await UpsertStudentGrades(payload);
 
     if (success) {

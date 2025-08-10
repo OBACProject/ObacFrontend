@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { useGetAllProgramsQuery } from "@/lib/api/hooks/queries/program.queries";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
+import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
+import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 
 interface ClassroomTable {
   class: string;
@@ -71,23 +73,26 @@ export function ClassroomGrading() {
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
 
-  const {
-    data: apiData,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetAllProgramsQuery();
+  const { data : apiData, isLoading, isError, refetch } = useGetAllStudentGroupByTermYearQuery({
+    term: selectedTerm,
+    year: Number(selectedYear),
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [selectedTerm, selectedYear, refetch]);
+
 
   const debouncedSearchInput = useDebounce(searchInput, 300);
 
   const transformedData: ClassroomTable[] = useMemo(() => {
     if (!apiData) return [];
 
-    return apiData.map((item: GetAllProgramsWithStudentGroupResponse) => ({
+    return apiData.map((item: GetAllStudentGroupByTermYearResponse) => ({
       class: `${item.class} ${item.groupName}`,
       facultyName: item.facultyName ?? "ไม่ระบุ",
       programName: item.programName ?? "ไม่ระบุ",
-      groupId: item.groupId,
+      groupId: item.id,
       groupCode: item.groupCode,
     }));
   }, [apiData]);
@@ -143,6 +148,7 @@ export function ClassroomGrading() {
       const yearLevel = Number.parseInt(item.class.substring(5, 6), 10);
       const matchYearLevel = currentYear - Number(selectedYear);
       let isYearLevelValid = false;
+      
 
       const matchSearch = debouncedSearchInput
         ? item.groupCode
@@ -203,6 +209,10 @@ export function ClassroomGrading() {
     [router, selectedTerm, selectedYear]
   );
 
+  const handleDownloadExcel = async () => {
+    
+  }
+
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-1/12 justify-center" },
@@ -242,6 +252,7 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
+              // handleDownloadExcel(Number(row.groupId), row.class);
               e.stopPropagation();
             }}
           >

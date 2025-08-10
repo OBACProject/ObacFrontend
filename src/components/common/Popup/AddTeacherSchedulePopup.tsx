@@ -65,7 +65,6 @@ export default function AddTeacherSchedulePopup({
     if (teacherId) {
       setTeacherID(teacherId);
     }
-    console.log("teacherId :", teacherId);
   }, [teacherId]);
 
   const days = [

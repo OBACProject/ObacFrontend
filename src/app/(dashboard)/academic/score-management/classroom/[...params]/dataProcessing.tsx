@@ -30,7 +30,6 @@ export interface ProcessedClassroomData {
 export const preProcessClassroomData = (
   data: GetGroupSummaryGradeResponse
 ): ProcessedClassroomData => {
-  console.log(data.students);
   const students = data.students ?? [];
 
   const subjectToStudentsMap: Record<string, string[]> = {};
@@ -47,9 +46,6 @@ export const preProcessClassroomData = (
   });
 
   const uniqueSubjects = Object.keys(subjectToStudentsMap).sort();
-
-  console.log("Unique subjects:", uniqueSubjects);
-  console.log("Subject to students map:", subjectToStudentsMap);
 
   const processedStudents: TransformedStudentData[] = students.map(
     (student) => ({

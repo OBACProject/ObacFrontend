@@ -295,7 +295,6 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   const students = data.subjectGrades;
   if (students) {
     for (let i = 0; i < students.length; i++) {
-      console.log(students[i].remarks)
       autoTable(doc, {
         startY: y2,
         body: [

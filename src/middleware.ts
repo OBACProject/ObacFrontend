@@ -48,7 +48,7 @@ export function middleware(req: NextRequest) {
         case "Academic":
           return NextResponse.redirect(new URL("/academic/profile", req.url));
         case "Admin":
-          return NextResponse.redirect(new URL("/admin/academic-management", req.url));
+          return NextResponse.redirect(new URL("/admin/profile", req.url));
         default:
           return NextResponse.redirect(new URL("/login", req.url));
       }

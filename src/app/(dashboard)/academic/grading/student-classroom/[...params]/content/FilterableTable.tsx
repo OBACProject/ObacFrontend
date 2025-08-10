@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, useDeferredValue, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useMemo,
+  useDeferredValue,
+  useEffect,
+  useCallback,
+} from "react";
 import GradeSubjectSearchBar from "./GradeSubjectSearchBar";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { Calendar, ScrollText, CheckCircle, Clock } from "lucide-react";
@@ -13,10 +19,26 @@ import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/que
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 
 export const columns = [
-  { label: "ลำดับ", key: "index", className: "w-1/12 text-center flex justify-center" },
-  { label: "รหัสวิชา - ชื่อวิชา", key: "SubjectCode", className: "w-6/12 flex justify-center" },
-  { label: "อาจารย์ผู้สอน", key: "TeacherName", className: "w-3/12 flex justify-center" },
-  { label: "สถานะการตรวจสอบ", key: "IsComplete", className: "w-2/12 text-center flex justify-center" },
+  {
+    label: "ลำดับ",
+    key: "index",
+    className: "w-1/12 text-center flex justify-center",
+  },
+  {
+    label: "รหัสวิชา - ชื่อวิชา",
+    key: "SubjectCode",
+    className: "w-6/12 flex justify-center",
+  },
+  {
+    label: "อาจารย์ผู้สอน",
+    key: "TeacherName",
+    className: "w-3/12 flex justify-center",
+  },
+  {
+    label: "สถานะการตรวจสอบ",
+    key: "IsComplete",
+    className: "w-2/12 text-center flex justify-center",
+  },
 ];
 
 interface Props {
@@ -30,19 +52,26 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   const [filterLevel, setFilterLevel] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
-  
+
   const deferredSearch = useDeferredValue(searchTerm);
 
-  const { data: apiResponse, isLoading, isError } = useGetSubjectsByStudentGroupIdTermYearQuery({
+  const {
+    data: apiResponse,
+    isLoading,
+    isError,
+  } = useGetSubjectsByStudentGroupIdTermYearQuery({
     studentGroupId: classroomId,
     term,
     year,
   });
 
-  console.log("FilterableTable apiResponse:", apiResponse);
-
   const sourceData = useMemo(() => {
-    if (!apiResponse || !apiResponse.subjects || !Array.isArray(apiResponse.subjects) || apiResponse.subjects.length === 0) {
+    if (
+      !apiResponse ||
+      !apiResponse.subjects ||
+      !Array.isArray(apiResponse.subjects) ||
+      apiResponse.subjects.length === 0
+    ) {
       return [];
     }
     console.log("Source Data subjects:", apiResponse.subjects);
@@ -51,14 +80,20 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     return apiResponse.subjects.map((d: any,) => {
       console.log("Processing subject:", d);
       
-      const isComplete = d.isComplete; // lowercase from API
+      const isComplete = d.isComplete; 
       const statusBadge = isComplete ? (
-        <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+        <Badge
+          variant="default"
+          className="bg-green-100 text-green-800 border-green-200"
+        >
           <CheckCircle className="w-3 h-3 mr-1" />
           ตรวจสอบเสร็จสิ้น
         </Badge>
       ) : (
-        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+        <Badge
+          variant="secondary"
+          className="bg-yellow-100 text-yellow-800 border-yellow-200"
+        >
           <Clock className="w-3 h-3 mr-1" />
           ยังไม่ตรวจสอบ
         </Badge>
@@ -66,10 +101,10 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
 
       return {
         scheduleSubjectId: d.scheduleSubjectId,
-        SubjectCode: d.subjectCode && d.subjectName ? `${d.subjectCode} - ${d.subjectName}` : d.subjectCode || d.subjectName || "ไม่ระบุรหัสวิชา", // lowercase from API
-        TeacherName: d.teacherName || "ไม่ระบุอาจารย์", // lowercase from API
+        SubjectCode: d.subjectCode && d.subjectName ? `${d.subjectCode} - ${d.subjectName}` : d.subjectCode || d.subjectName || "ไม่ระบุรหัสวิชา", 
+        TeacherName: d.teacherName || "ไม่ระบุอาจารย์", 
         IsComplete: statusBadge,
-        IsCompleteText: isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ", 
+        IsCompleteText: isComplete ? "ตรวจสอบเสร็จสิ้น" : "ยังไม่ตรวจสอบ",
       };
     });
   }, [apiResponse]);
@@ -78,35 +113,38 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     if (!apiResponse) {
       return {
         class: `ปวส.${classroomId}/2`,
-        groupName: classroomId.toString()
+        groupName: classroomId.toString(),
       };
     }
     return {
-      class: apiResponse?.class || `ปวส.${classroomId}/2`,
-      groupName: apiResponse?.groupName || classroomId.toString()
+      class: apiResponse?.class,
+      groupName: apiResponse?.groupName
     };
   }, [apiResponse, classroomId]);
 
   const filteredData = useMemo(() => {
     if (!sourceData?.length) return [];
-    
+
     let result = sourceData;
 
     if (deferredSearch.trim()) {
       const searchLower = deferredSearch.toLowerCase();
-      result = result.filter((item: any) =>
-        item.SubjectCode?.toLowerCase().includes(searchLower) ||
-        item.TeacherName?.toLowerCase().includes(searchLower) ||
-        item.IsCompleteText?.toLowerCase().includes(searchLower)
+      result = result.filter(
+        (item: any) =>
+          item.SubjectCode?.toLowerCase().includes(searchLower) ||
+          item.TeacherName?.toLowerCase().includes(searchLower) ||
+          item.IsCompleteText?.toLowerCase().includes(searchLower)
       );
     }
 
     if (filterLevel) {
       result = result.filter((item: any) => item.TeacherName === filterLevel);
     }
-    
+
     if (filterStatus) {
-      result = result.filter((item: any) => item.IsCompleteText === filterStatus);
+      result = result.filter(
+        (item: any) => item.IsCompleteText === filterStatus
+      );
     }
 
     return result;
@@ -130,11 +168,12 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
     return Array.from(statuses).sort();
   }, [sourceData]);
 
-  const tableData = useMemo(() => 
-    filteredData.map((item: any, index: number) => ({
-      ...item,
-      index: index + 1,
-    })),
+  const tableData = useMemo(
+    () =>
+      filteredData.map((item: any, index: number) => ({
+        ...item,
+        index: index + 1,
+      })),
     [filteredData]
   );
 
@@ -151,11 +190,12 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   }, []);
 
   const toggleAdvanced = useCallback(() => {
-    setShowAdvanced(prev => !prev);
+    setShowAdvanced((prev) => !prev);
   }, []);
 
-  const getRowLink = useCallback((row: any) => 
-    `/academic/grading/student-classroom/subject/${row.scheduleSubjectId}`,
+  const getRowLink = useCallback(
+    (row: any) =>
+      `/academic/grading/student-classroom/subject/${row.scheduleSubjectId}`,
     []
   );
 
@@ -175,7 +215,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
       <div className="flex px-10 w-full justify-between items-center">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}`}
+          title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}.${classroomInfo.groupName}`}
           className="text-blue"
         />
         <div className="w-1/3">
@@ -200,7 +240,10 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
                 defaultValue={filterLevel}
               />
               <Combobox
-                options={allStatuses.map((v: string) => ({ value: v, label: v }))}
+                options={allStatuses.map((v: string) => ({
+                  value: v,
+                  label: v,
+                }))}
                 buttonLabel="สถานะ"
                 onSelect={handleFilterStatusSelect}
                 defaultValue={filterStatus}
@@ -223,14 +266,18 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
           <div className="flex flex-col justify-center items-center h-96 text-gray-500 bg-white rounded-lg border border-gray-200 shadow-sm">
             <ScrollText className="w-16 h-16 text-gray-300 mb-4" />
             <div className="text-lg font-medium mb-2">
-              {isError ? "เกิดข้อผิดพลาดในการโหลดข้อมูล" : "ไม่มีข้อมูลวิชาที่ลงทะเบียน"}
+              {isError
+                ? "เกิดข้อผิดพลาดในการโหลดข้อมูล"
+                : "ไม่มีข้อมูลวิชาที่ลงทะเบียน"}
             </div>
             <p className="text-sm text-gray-400">
-              {isError ? "กรุณาลองใหม่อีกครั้ง" : "ยังไม่มีการลงทะเบียนวิชาสำหรับภาคเรียนนี้"}
+              {isError
+                ? "กรุณาลองใหม่อีกครั้ง"
+                : "ยังไม่มีการลงทะเบียนวิชาสำหรับภาคเรียนนี้"}
             </p>
           </div>
         )}
-        
+
         {sourceData.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
             <StylesTable

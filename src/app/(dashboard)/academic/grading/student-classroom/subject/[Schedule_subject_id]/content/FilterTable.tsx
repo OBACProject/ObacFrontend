@@ -129,7 +129,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         finaltermScore: item.finaltermScore || 0,
         totalScore: item.totalScore || 0,
         grade: (item.finalGrade !== null ? item.finalGrade?.toString() : "0") || "0",
-        remark: item.remarks || "",
+        remark: item.remark || "",
         index: index + 1,
       }));
     }
@@ -381,7 +381,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                         description: "",
                         isActive: true,
                       }}
-                      roomName={subjectData?.class || `ปวส.${subjectData?.groupName}/2`}
+                      roomName={`${subjectData?.class}.${subjectData?.groupName}`}
                       term={subjectData?.term || "1"}
                       year={subjectData?.year?.toString() || "2568"}
                     />
@@ -440,7 +440,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         <div className="px-4 pb-8">
           <StylesTable
             icon={<ScrollText className="w-5 h-5 text-white" />}
-            title={`รายชื่อนักเรียนในห้อง ${subjectData?.class || `ปวส.${subjectData?.groupName}/2`}`}
+            title={`รายชื่อนักเรียนในห้อง ${subjectData.class}.${subjectData.groupName}`}
             data={filteredData}
             columns={columnDefs}
             pagination={filteredData.length}
