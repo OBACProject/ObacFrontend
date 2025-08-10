@@ -1,19 +1,10 @@
 "use client";
-import { fetchGetStudentGradeDetail } from "@/api/oldApi/grad/gradAPI";
-import {
-  fetchGetStudentByStudentId,
-  fetchUpdateStudent,
-} from "@/api/oldApi/student/studentApi";
-import GradPerTerms from "@/lib/PDF/score/GradPerTerm";
-import SummaryGradPDF from "@/lib/PDF/score/SummaryGradeForStudent";
+
+// import SummaryGradPDF from "@/lib/PDF/score/SummaryGradeForStudent";
 import ChangeStudentGroup from "@/components/common/Popup/changeStudentGroup";
 import ConfirmChangeStudentsStatus from "@/components/common/Popup/confirmChangeStudentsStatus";
-import {
-  GetStudentByStudentId,
-  UpdateStudentRequestBody,
-} from "@/dto/studentDto";
+
 import { educationOptions } from "@/resource/academics/options/studentOption";
-import { gradeService } from "@/lib/api/services/grade.service";
 import {
   ArrowRightLeft,
   CircleX,
@@ -27,126 +18,107 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { GetStudentGradesByTermYearRequest } from "@/lib/api/models/grade/grade.request";
+// import { toast } from "react-toastify";
 import InputBox from "@/components/Teacher/InputBox";
+// import { GetStudentByStudentId } from "@/api/student/route";
+import { StudentDetail } from "@/dto/studentDto";
 
 type Props = {
-  studentId: number;
+  studentCode: string;
 };
 
-const fetchStudentGrad = async (
-  studentId: number,
-  term: string,
-  year: number
-) => {
-  try {
-    const requestData: GetStudentGradesByTermYearRequest = {
-      studentId: studentId,
-      term: term,
-      year: year,
-    };
-
-    const data = await gradeService.getStudentGradesByTermYear(requestData);
-    return data;
-  } catch (err) {
-    console.error("Failed to fetch data.");
-    return null;
-  }
-};
-
-const fetchStudentData = async (studentId: number) => {
-  try {
-    const data = await fetchGetStudentByStudentId(studentId);
-    return data;
-  } catch (err) {
-    return null;
-  }
-};
-
-export default function Form({ studentId }: Props) {
+export default function Form({ studentCode }: Props) {
   const [onEdit, setOnEdit] = useState<boolean>(false);
-  const [students, setStudent] = useState<GetStudentByStudentId>();
-  const [educateStatus, setEducateStatus] = useState(
-    students?.studentStatus || ""
-  );
+  const [students, setStudent] = useState<StudentDetail | null>();
+  const [educateStatus, setEducateStatus] = useState(students?.status || "");
 
   const [term, setTerm] = useState<string>("2");
   const [year, setYear] = useState<number>(2567);
   const [submitStudentStatus, setSubmitStudentStatus] =
     useState<boolean>(false);
   const [changeGroupPopUp, setChangeGroupPopUp] = useState<boolean>(false);
+
   useEffect(() => {
-    fetchStudentData(studentId).then((d: any) => {
-      setStudent(d);
-    });
+    // GetStudentByStudentId(studentId).then((d) => {});
   }, []);
 
-  const [formData, setFormData] = useState<UpdateStudentRequestBody>({
+  const [formData, setFormData] = useState<StudentDetail>({
     studentId: 0,
     firstName: "",
     lastName: "",
-    thaiName: "",
-    thaiLastName: "",
-    gender: "",
-    studentGroupId: 0,
-    studentCode: "",
+    status: "",
+    gender: "Male",
     thaiId: "",
+    groupId: 0,
+    studentCode: "",
     email: "",
     phoneNumber: "",
+    class: "",
     address: "",
     nationality: "",
-    religion: "",
-    class: "",
     enrollYear: 0,
+    religion: "",
     currentYear: 0,
     graduateYear: 0,
     programId: 0,
     facultyId: 0,
-    birthDate: "",
+    programName: "",
+    facultyName: "",
+    birthDate: "2000-01-01",
+    currentRoom: "",
     isActive: true,
     isAgree: true,
   });
 
-  const handleEditChange = () => {
-    setOnEdit((onEdit) => !onEdit);
-  };
-  useEffect(() => {
-    if (students?.studentStatus) {
-      setEducateStatus(students.studentStatus);
-    }
-    if (students) {
-      setFormData({
-        studentId: students.studentId || 0,
-        firstName: students.firstName || null,
-        lastName: students.lastName || null,
-        thaiName: students.thaiName || "ไม่ทราบ",
-        thaiLastName: students.thaiLastName || "ไม่ทราบ",
-        gender: students.gender || "ไม่ทราบ",
-        studentGroupId: students.studentGroupId || 0,
-        studentCode: students.studentCode || "ยังไม่มี",
-        thaiId: students.thaiId || null,
-        email: students.email || null,
-        phoneNumber: students.phoneNumber || null,
-        address: students.address || null,
-        nationality: students.nationality || null,
-        religion: students.religion || null,
-        class: students.class || "ยังไม่มี",
-        enrollYear: students.enrollYear || null,
-        currentYear: students.currentYear || 0,
-        graduateYear: students.graduateYear || null,
-        programId: students.programId || 0,
-        facultyId: students.facultyId || 0,
-        birthDate:
-          students.birthDate && students.birthDate !== ""
-            ? students.birthDate
-            : null,
-        isActive: students.isActive ?? true,
-        isAgree: false,
-      });
-    }
-  }, [students]);
+  // const handleEditChange = () => {
+  //   setOnEdit((onEdit) => !onEdit);
+  // };
 
+  useEffect(() => {
+    if (!students) return;
+
+    // sync สถานะปุ่ม/ดรอปดาวน์
+    setEducateStatus(students.status ?? "");
+
+    // map เป็น StudentDetail ให้ครบทุกฟิลด์
+    setFormData({
+      studentId: students.studentId ?? 0,
+      firstName: students.firstName ?? "",
+      lastName: students.lastName ?? "",
+      status: students.status ?? "",
+      gender:
+        students.gender === "Male" || students.gender === "Female"
+          ? students.gender
+          : "Male",
+
+      thaiId: students.thaiId ?? "",
+      groupId: students.groupId ?? 0,
+      studentCode: students.studentCode ?? "",
+      email: students.email ?? "",
+      phoneNumber: students.phoneNumber ?? "",
+      class: students.class ?? "",
+      address: students.address ?? "",
+      nationality: students.nationality ?? "",
+      enrollYear: students.enrollYear ?? 0,
+      religion: students.religion ?? "",
+      currentYear: students.currentYear ?? 0,
+      graduateYear: students.graduateYear ?? 0,
+      programId: students.programId ?? 0,
+      facultyId: students.facultyId ?? 0,
+
+      programName: students.programName ?? "",
+      facultyName: students.facultyName ?? "",
+      currentRoom: students.currentRoom ?? "",
+
+      birthDate:
+        students.birthDate && students.birthDate !== ""
+          ? students.birthDate
+          : "2000-01-01",
+
+      isActive: students.isActive ?? true,
+      isAgree: students.isAgree ?? true,
+    });
+  }, [students]);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -157,25 +129,25 @@ export default function Form({ studentId }: Props) {
     }));
   };
 
-  const onSaveChangeStudentData = async () => {
-    try {
-      if (students) {
-        const response = await fetchUpdateStudent(formData);
-        if (response) {
-          setOnEdit(false);
-          toast.success("แก้ไขและบันทึกสำเร็จ");
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        } else {
-          toast.error("เกิดข้อผิดพลาด");
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error("เกิดข้อผิดพลาด");
-    }
-  };
+  // const onSaveChangeStudentData = async () => {
+  //   try {
+  //     if (students) {
+  //       const response = await fetchUpdateStudent(formData);
+  //       if (response) {
+  //         setOnEdit(false);
+  //         toast.success("แก้ไขและบันทึกสำเร็จ");
+  //         setTimeout(() => {
+  //           window.location.reload();
+  //         }, 1500);
+  //       } else {
+  //         toast.error("เกิดข้อผิดพลาด");
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error("เกิดข้อผิดพลาด");
+  //   }
+  // };
 
   return (
     <div className="px-10">
@@ -201,10 +173,10 @@ export default function Form({ studentId }: Props) {
           <button
             className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"
             onClick={async () => {
-              const data2 = await fetchGetStudentGradeDetail(studentId);
-              if (data2) {
-                SummaryGradPDF(data2);
-              }
+              // const data2 = await fetchGetStudentGradeDetail(studentId);
+              // if (data2) {
+              //   SummaryGradPDF(data2);
+              // }
             }}
           >
             <Download className="w-4 h-4" />
@@ -256,7 +228,7 @@ export default function Form({ studentId }: Props) {
             ย้ายห้องเรียน
           </button>
           <Link
-            href={`/academic/score-management/individual/${students?.studentId}`}
+            href={`/academic/score-management/individual/${studentCode}`}
             className="flex gap-2 items-center px-5 py-1 rounded-full bg-slate-200 hover:bg-slate-300"
           >
             <FileChartColumn className="h-5 w-5" />
@@ -268,14 +240,14 @@ export default function Form({ studentId }: Props) {
             <div className="flex gap-2">
               <button
                 className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
-                onClick={onSaveChangeStudentData}
+                // onClick={onSaveChangeStudentData}
               >
                 <Save className="w-5 h-5" />
                 บันทึก
               </button>{" "}
               <button
                 className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white "
-                onClick={handleEditChange}
+                // onClick={handleEditChange}
               >
                 <CircleX className="w-5 h-5" />
                 ยกเลิก
@@ -284,7 +256,7 @@ export default function Form({ studentId }: Props) {
           ) : (
             <button
               className="w-[120px] h-fit bg-blue-400 hover:bg-blue-600 rounded-md items-centerhover:opacity-75 pl-2 gap-2 flex justify-center py-1 items-center text-white "
-              onClick={handleEditChange}
+              // onClick={handleEditChange}
             >
               <Pencil className="w-5 h-5" />
               แก้ไข
@@ -339,8 +311,8 @@ export default function Form({ studentId }: Props) {
               )}
               <InputBox
                 label="ชื่อ"
-                name="thaiName"
-                value={formData.thaiName || "ไม่มีข้อมูล"}
+                name="firstName"
+                value={formData.firstName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ชื่อจริง"
                 inputWidth="w-[200px]"
@@ -350,8 +322,8 @@ export default function Form({ studentId }: Props) {
               />
               <InputBox
                 label="นามสกุล"
-                name="thaiLastName"
-                value={formData.thaiLastName || "ไม่มีข้อมูล"}
+                name="lastName"
+                value={formData.lastName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="นามสกุล"
                 inputWidth="w-[200px]"
@@ -495,7 +467,9 @@ export default function Form({ studentId }: Props) {
             />
           </div>
           <div className="flex gap-5 items-center">
-            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">มารดา</p>
+            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">
+              มารดา
+            </p>
             <InputBox
               label="ชื่อจริง"
               name="name"
@@ -519,8 +493,10 @@ export default function Form({ studentId }: Props) {
               disable={!onEdit}
             />
           </div>
-           <div className="flex gap-5 items-center">
-            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">บิดา</p>
+          <div className="flex gap-5 items-center">
+            <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">
+              บิดา
+            </p>
             <InputBox
               label="ชื่อจริง"
               name="name"

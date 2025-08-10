@@ -55,7 +55,7 @@ export default function Form({ GroupID }: Props) {
         icon={<Box className="h-6 w-6 text-white" />}
         title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName} `}
         columns={studentColumns}
-        rowHref={(item) => `/academic/student-details/${item.id}`}
+        rowHref={(item) => `/academic/student-details/${item.studentCode}`}
         emptyText="ไม่มีข้อมูลชั้นเรียน"
       />
     </div>
