@@ -1,4 +1,5 @@
 import {
+  CreateStudentRequest,
   GetAllStudentUser,
   GetStudentDetailResponse,
   StudentGroupDetail,
@@ -68,5 +69,17 @@ export const GetStudentDetailById = async (
   } catch (err) {
     console.error("❌ Error in GetStudentDetailById: ", err);
     return null;
+  }
+};
+
+export const CreateStudent = async (
+  payload: CreateStudentRequest
+): Promise<boolean> => {
+  try {
+    const response = await apiClient.post("User/CreateStudent", payload);
+    return [200, 201, 204].includes(response.status) 
+  } catch (err: any) {
+    console.error("Error creating academic:", err);
+    return false;
   }
 };

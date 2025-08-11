@@ -67,3 +67,17 @@ export interface ScheduleItemStudentGroups {
   room:string;
 }
 
+export interface GetAllStudentGroupRequest {
+  id?: number;
+  groupName?: string;
+  groupCode?: string;
+  class?: string;
+  level?: number;
+  programId?: number;
+  year?: number;
+  term?: string;
+  isPublish?: boolean;
+  isComplete?: boolean;
+  isActive?: boolean;
+}
+

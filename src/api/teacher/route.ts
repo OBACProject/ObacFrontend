@@ -100,7 +100,7 @@ export const GetTeacherDetailUser = async (
       responseCode: string;
       responseMessage: string;
       data: GetTeacherDetailUserResponse;
-    }>("/Admin/GetTeacherDetails", {
+    }>("Admin/GetTeacherDetails", {
       params: { teacherId },
     });
 
@@ -130,15 +130,15 @@ export const GetTeacherDetailAndSchedule = async (
   }
 };
 
-export async function CreateTeacher(payload: CreateTeacherRequest): Promise<boolean> {
+export const CreateTeacher = async (
+  payload: CreateTeacherRequest
+): Promise<boolean> => {
   try {
-    const res = await apiClient.post("/Admin/CreateTeacher", payload, {
-      headers: { "Content-Type": "application/json" },
-    });
-    // สมมติหลังบ้านส่ง { responseCode: "000", ... } ตอนสำเร็จ
-    return res?.data?.responseCode === "000";
+    const response = await apiClient.post("User/CreateTeacher", payload);
+    return [200, 201, 204].includes(response.status) 
+       || response.data?.isSuccess === true;
   } catch (err: any) {
-    // โยน error กลับไปให้ popup โชว์รายละเอียด
+    console.error("Error creating teacher:", err);
     throw err;
   }
-}
+};

@@ -1,15 +1,17 @@
 "use client";
-import { UserRoundCheck, UserPen, Pencil, PlusCircle } from "lucide-react";
+import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { SubjectItem } from "@/dto/subjectDto";
 import { GetAllSubjectAsync } from "@/api/subject/route";
 import { EditSubjectPopUp } from "@/components/common/Popup/EditSubjectPopup";
 import { AddSubjectPopUp } from "@/components/common/Popup/AddSubjectPopup";
-import { GetAllTeachers, GetAllTeacherUsers } from "@/api/teacher/route";
+import { GetAllTeacherUsers } from "@/api/teacher/route";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
 import { useRouter } from "next/navigation";
-import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
+import IsActiveToggleProps from "@/components/common/Toggle/IsActiveToggle";
+import { toast } from "react-toastify";
+import { UpdateIsActiveUser } from "@/api/user/userAPI";
 
 export default function Form() {
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
@@ -20,34 +22,25 @@ export default function Form() {
   const [openEditSubjectPopup, setOpenEditSubjectPopup] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const handleToggleActive = (userId: string, newState: boolean) => {
-    // setTeacher((prev) =>
-    //   prev.map((t) =>
-    //     t.id === userId ? { ...t, isActive: newState } : t
-    //   )
-    // );
-    // TODO: call API update ถ้ามี
-  };
+  // ✅ helper: เรียงตาม teacherId (น้อย→มาก)
+  const sortByTeacherId = (arr: GetAllTeacherResponse[]) =>
+    [...arr].sort((a, b) => Number(a.teacherId ?? 0) - Number(b.teacherId ?? 0));
 
   useEffect(() => {
     GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
-      if (d) {
-        setTeacher(d);
-      } else {
-        console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");
-      }
+      if (d) setTeacher(sortByTeacherId(d)); // ✅ เรียงตั้งแต่แรก
     });
   }, []);
 
   const filtereTeachers = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
-    return teachers.filter((teacher) => {
+    const filtered = teachers.filter((teacher) => {
       const code = teacher.teacherCode?.toLowerCase() ?? "";
       const firstName = teacher.firstName?.toLowerCase() ?? "";
       const lastName = teacher.lastName?.toLowerCase() ?? "";
       const fullName = `${teacher.prefix ?? ""} ${teacher.firstName ?? ""} ${teacher.lastName ?? ""}`.toLowerCase();
-
       return (
         lowerSearch === "" ||
         code.includes(lowerSearch) ||
@@ -56,6 +49,7 @@ export default function Form() {
         fullName.includes(lowerSearch)
       );
     });
+    return sortByTeacherId(filtered); // ✅ หลังกรองก็ยังเรียงตาม teacherId
   }, [teachers, searchTerm]);
 
   const paginatedTeachers = useMemo(() => {
@@ -63,6 +57,40 @@ export default function Form() {
     const end = start + itemsPerPage;
     return filtereTeachers.slice(start, end);
   }, [filtereTeachers, currentPage]);
+
+  // ✅ toggle isActive (optimistic + rollback + toast)
+  const handleToggleActive = async (userId: string, nextState: boolean, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+
+    const snapshot = [...teachers];
+    setTeacher((prev) =>
+      prev.map((t) => (String(t.id) === userId ? { ...t, isActive: nextState } : t))
+    );
+    setUpdatingId(userId);
+
+    try {
+      const ok = await UpdateIsActiveUser({ userId, isActive: nextState });
+      if (ok) toast.success("อัปเดตสถานะเรียบร้อย");
+      else throw new Error("อัปเดตไม่สำเร็จ");
+    } catch (err: any) {
+      setTeacher(snapshot); // rollback
+      const errors = err?.response?.data?.errors;
+      if (errors && typeof errors === "object") {
+        const firstKey = Object.keys(errors)[0];
+        const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
+        toast.error(firstMsg);
+      } else {
+        const msg =
+          err?.response?.data?.detail ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "อัปเดตไม่สำเร็จ";
+        toast.error(msg);
+      }
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -95,7 +123,7 @@ export default function Form() {
 
       {teachers.length > 0 ? (
         <div className="w-full rounded-sm px-10">
-          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <UserRoundCheck className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
               รายชื่ออาจารย์ทั้งหมด
@@ -106,9 +134,9 @@ export default function Form() {
             </div>
           </div>
 
-          <div className="shadow-lg w-full text-sm">
-            <div className="grid grid-cols-[5%_15%_30%_20%_30%] text-white bg-gradient-to-r from-blue-500 to-indigo-600 text-lg">
-              <div className="flex items-center justify-center py-2">ลำดับ</div>
+          <div className="shadow-lg w-full text-sm ">
+            <div className="grid grid-cols-[5%_15%_30%_20%_30%] text-black bg-gray-50 border-b to-indigo-600 text-lg">
+              <div className="flex items-center justify-center py-2 ">ลำดับ</div>
               <div className="flex items-center justify-center py-2">รหัสอาจารย์</div>
               <div className="flex items-center justify-center py-2">ชื่ออาจารย์</div>
               <div className="flex items-center justify-center py-2">แผนก</div>
@@ -134,20 +162,19 @@ export default function Form() {
                   <span className="text-start">{`${item.prefix ?? ""} ${item.firstName ?? ""} ${item.lastName ?? ""}`}</span>
                 </div>
 
-
                 <div className="flex items-center justify-center py-2">
-                  {item.program}
+                  {item.programName}
                 </div>
 
-                <div className="flex items-center justify-center py-2">
-
+                <div
+                  className="flex items-center justify-center py-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <IsActiveToggleProps
-                    isActive={item.isActive} 
-                    // onToggle={(value) =>
-                    //   handleToggleActive(item.id, value)
-                    // }
+                    isActive={item.isActive}
+                    disabled={updatingId === String(item.id)}
+                    onToggle={(value: boolean) => handleToggleActive(item.id as unknown as string, value)}
                   />
-
                 </div>
               </div>
             ))}

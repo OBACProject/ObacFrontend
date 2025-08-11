@@ -1,4 +1,5 @@
 "use client";
+import { CreateAcademic } from "@/api/user/userAPI";
 import { CreateAcademicRequest } from "@/dto/userDto";
 import React, { useState } from "react";
 // import { CreateAcademic } from "@/api/academic/route";
@@ -61,23 +62,19 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     };
 
     try {
-    //   const success = await CreateAcademic(payload);
-    //   if (success) {
-    //     toast.success("สร้างบัญชีบุคลากรภายในสำเร็จแล้ว");
-    //     onClosePopUp(false);
-    //   } else {
-    //     toast.error("ไม่สามารถสร้างบัญชีบุคลากรภายในได้");
-    //   }
-    } catch (error) {
-      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีบุคลากรภายใน");
-      console.error(error);
+      await CreateAcademic(payload);
+      toast.success("เพิ่มวิชาสำเร็จ");
+      onClosePopUp(false);
+    } catch (err) {
+      console.error("Error saving teacher:", err);
+      toast.error("บันทึกวิชาไม่สำเร็จ");
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีบุคลากรภายใน</h2>
+        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีฝ่ายทะเบียน</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <div>

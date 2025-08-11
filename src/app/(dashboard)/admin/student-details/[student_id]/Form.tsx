@@ -17,7 +17,7 @@ export default function StudentDetailForm({ studentId }: Props) {
   useEffect(() => {
     GetStudentDetailById(Number(studentId)).then((data) => {
       if (data) {
-  
+
         setFormData(data);
         setOriginalData(data);
       }
@@ -130,12 +130,18 @@ function Info({
           </select>
         ) : (
           <div className="flex items-center">
-            <input type={type} value={value} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded" />
+            <input type={type} value={value} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded " />
             {suffixIcon}
           </div>
         )
       ) : (
-        <p className="text-lg mt-1">{type === "password" ? "••••••••" : value}</p>
+        <p className="w-full border px-3 py-2 rounded">
+          {type === "password"
+            ? "••••••••"
+            : value?.trim()
+              ? value
+              : "—"}
+        </p>
       )}
     </div>
   );

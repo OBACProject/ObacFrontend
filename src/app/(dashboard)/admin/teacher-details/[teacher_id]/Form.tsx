@@ -117,6 +117,9 @@ function Info({
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
 
+  // ✅ กำหนด fallback ถ้าไม่มีข้อมูล
+  const displayValue = value?.toString().trim() ? value : "—";
+
   return (
     <div>
       <label className="text-sm text-gray-500">{label}</label>
@@ -126,7 +129,7 @@ function Info({
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              value={value}
+              value={value || ""}
               onChange={(e) => onChange?.(e.target.value)}
               className="w-full border px-3 py-2 rounded pr-10"
             />
@@ -140,7 +143,7 @@ function Info({
           </div>
         ) : type === "select" && options ? (
           <select
-            value={value}
+            value={value || ""}
             onChange={(e) => onChange?.(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           >
@@ -151,15 +154,15 @@ function Info({
         ) : (
           <input
             type={type}
-            value={value}
+            value={value || ""}
             onChange={(e) => onChange?.(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
         )
       ) : isPassword ? (
-        <p className="text-lg mt-1">••••••••</p> // แสดงเป็นจุดตอนไม่ได้แก้ไข
+        <p className="w-full border px-3 py-2 rounded">••••••••</p>
       ) : (
-        <p className="text-lg mt-1">{value}</p>
+        <p className="w-full border px-3 py-2 rounded">{displayValue}</p>
       )}
     </div>
   );

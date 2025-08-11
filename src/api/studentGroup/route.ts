@@ -1,4 +1,5 @@
 import {
+  GetAllStudentGroupRequest,
   StudentGroupItem,
   StudentGroupScheduleStatus,
 } from "@/dto/studentGroupItem";
@@ -42,3 +43,19 @@ export const GetStudentGroupScheduleStatus = async (
     return null;
   }
 };
+
+export const GetAllStudentGroup = async (): Promise<GetAllStudentGroupRequest[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetAllStudentGroupRequest[];
+    }>("StudentGroup/GetAllStudentGroup");
+
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log("Error in GetAllStudentGroup : ", err);
+    return [];
+  }
+};
+

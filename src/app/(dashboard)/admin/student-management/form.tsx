@@ -3,9 +3,12 @@ import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GetAllStudents } from "@/api/student/route";
-import { GetAllStudent, GetAllStudentUser } from "@/dto/studentDto";
+import { GetAllStudentUser } from "@/dto/studentDto";
 import CreateStudentPopup from "@/components/common/Popup/AddStudentAccountPopup";
-import IsActiveToggleProps from "../../../../components/common/Toggle/IsActiveToggle";
+import IsActiveToggleProps from "@/components/common/Toggle/IsActiveToggle";
+import { toast } from "react-toastify";
+import { UpdateIsActiveUser } from "@/api/user/userAPI";
+import AddStudentAccountPopup from "@/components/common/Popup/AddStudentAccountPopup";
 
 export default function Form() {
   const [students, setStudents] = useState<GetAllStudentUser[]>([]);
@@ -13,27 +16,24 @@ export default function Form() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openCreateStudentPopup, setOpenCreateStudentPopup] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const itemsPerPage = 10;
-  const handleToggleActive = (userId: string, newState: boolean) => {
-    // setStudents((prev) =>
-    //   prev.map((t) =>
-    //     t.id === userId ? { ...t, isActive: newState } : t
-    //   )
-    // );
-    // TODO: call API update ถ้ามี
-  };
+
+  // ✅ helper: sort ตามรหัสนักเรียน (natural sort)
+  const sortByStudentCode = (arr: GetAllStudentUser[]) =>
+    [...arr].sort((a, b) =>
+      (a.studentCode ?? "").localeCompare(b.studentCode ?? "", undefined, {
+        numeric: true,
+        sensitivity: "base",
+      })
+    );
 
   useEffect(() => {
     GetAllStudents().then((d) => {
-      if (Array.isArray(d)) {
-
-        setStudents(d);
-      } else {
-        console.error("ไม่ได้ข้อมูลเป็น array:", d);
-      }
+      if (Array.isArray(d)) setStudents(sortByStudentCode(d)); // ✅ จัดเรียงตอนโหลดครั้งแรก
+      else console.error("ไม่ได้ข้อมูลเป็น array:", d);
     });
   }, []);
-
 
   const filteredStudents = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
@@ -51,6 +51,44 @@ export default function Form() {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredStudents.slice(start, start + itemsPerPage);
   }, [filteredStudents, currentPage]);
+
+  // ✅ toggle isActive (optimistic + rollback + toast)
+  const handleToggleActive = async (userId: string, nextState: boolean) => {
+    const snapshot = [...students];
+    setStudents((prev) =>
+      prev.map((s) => (s.id === userId ? { ...s, isActive: nextState } : s))
+    );
+    setUpdatingId(userId);
+
+    try {
+      const ok = await UpdateIsActiveUser({ userId, isActive: nextState });
+      if (ok) {
+        toast.success("อัปเดตสถานะเรียบร้อย");
+      } else {
+        throw new Error("อัปเดตไม่สำเร็จ");
+      }
+    } catch (err: any) {
+      // rollback
+      setStudents(snapshot);
+      const errors = err?.response?.data?.errors;
+      if (errors && typeof errors === "object") {
+        const firstKey = Object.keys(errors)[0];
+        const firstMsg = Array.isArray(errors[firstKey])
+          ? errors[firstKey][0]
+          : String(errors[firstKey]);
+        toast.error(firstMsg);
+      } else {
+        const msg =
+          err?.response?.data?.detail ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "อัปเดตไม่สำเร็จ";
+        toast.error(msg);
+      }
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -74,7 +112,7 @@ export default function Form() {
         />
         <button
           className="px-10 py-1 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-600 text-white rounded-3xl"
-          onClick={() => setOpenCreateStudentPopup(true)} // ✅ เปิด popup
+          onClick={() => setOpenCreateStudentPopup(true)}
         >
           <PlusCircle className="w-5 h-5 text-white" />
           เพิ่มบัญชีนักเรียน
@@ -83,7 +121,7 @@ export default function Form() {
 
       {students.length > 0 ? (
         <div className="w-full rounded-sm px-10">
-          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
+          <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <UserRoundCheck className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
               รายชื่อนักเรียนทั้งหมด
@@ -95,7 +133,7 @@ export default function Form() {
           </div>
 
           <div className="shadow-lg w-full text-sm">
-            <div className="grid grid-cols-[5%_20%_25%_20%_15%_15%] text-white bg-gradient-to-r from-blue-500 to-indigo-600 text-lg">
+            <div className="grid grid-cols-[5%_20%_25%_20%_15%_15%] text-black bg-gray-50 border-b to-indigo-600 text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
               <div className="flex items-center justify-center py-2">รหัสนักเรียน</div>
               <div className="flex items-center justify-center py-2">ชื่อ-นามสกุล</div>
@@ -109,7 +147,7 @@ export default function Form() {
                 key={item.id}
                 onClick={() => {
                   if (item.studentId) {
-                    router.push(`/admin/student-details/${(item.studentId)}`);
+                    router.push(`/admin/student-details/${item.studentId}`);
                   }
                 }}
                 className="cursor-pointer grid grid-cols-[5%_20%_25%_20%_15%_15%] bg-white hover:bg-blue-100 text-gray-800 text-base"
@@ -129,12 +167,14 @@ export default function Form() {
                 <div className="flex items-center justify-center py-2">
                   {item.gender}
                 </div>
-                <div className="flex items-center justify-center py-2">
+                <div
+                  className="flex items-center justify-center py-2"
+                  onClick={(e) => e.stopPropagation()} // กันเปิดหน้า detail ตอนกดสวิตช์
+                >
                   <IsActiveToggleProps
                     isActive={item.isActive}
-                    // onToggle={(value) =>
-                    //   handleToggleActive(item.id, value)
-                    // }
+                    disabled={updatingId === item.id}
+                    onToggle={(value: boolean) => handleToggleActive(item.id, value)}
                   />
                 </div>
               </div>
@@ -172,14 +212,12 @@ export default function Form() {
       )}
 
       {openCreateStudentPopup && (
-        <CreateStudentPopup
+        <AddStudentAccountPopup
           onClosePopUp={(shouldReload: boolean) => {
             setOpenCreateStudentPopup(false);
             if (shouldReload) {
               GetAllStudents().then((d) => {
-                if (Array.isArray(d)) {
-                  setStudents(d);
-                }
+                if (Array.isArray(d)) setStudents(d);
               });
             }
           }}

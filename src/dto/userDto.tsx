@@ -67,3 +67,7 @@ export interface CreateAcademicRequest {
   birthDate: string;
   prefix: string;
 }
+export interface UpdateIsActiveUserRequest {
+  userId: string;
+  isActive: boolean;
+}

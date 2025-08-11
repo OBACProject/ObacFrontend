@@ -44,7 +44,7 @@ export default function AcademicDetailForm({ academicId }: Props) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Box className="h-6 w-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-blue-700">รายละเอียดบุคลากรภายใน</h1>
+          <h1 className="text-2xl font-bold text-blue-700">รายละเอียดฝ่ายทะเบียน</h1>
         </div>
         <div className="flex items-center">
           {isEditing ? (
@@ -75,7 +75,7 @@ export default function AcademicDetailForm({ academicId }: Props) {
         <Info label="นามสกุล" value={formData.lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
         <Info label="เพศ" value={formData.gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
         <Info label="วันเกิด" value={formData.birthDate} editable={isEditing} onChange={(v) => handleChange("birthDate", v)} type="date" />
-        <Info label="รหัสบุคลากรภายใน" value={formData.academicCode} editable={isEditing} onChange={(v) => handleChange("academicCode", v)} />
+        <Info label="รหัสฝ่ายทะเบียน" value={formData.academicCode} editable={isEditing} onChange={(v) => handleChange("academicCode", v)} />
         <Info label="รหัสประชาชน" value={formData.citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
         <Info label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
@@ -141,9 +141,9 @@ function Info({
           />
         )
       ) : isPassword ? (
-        <p className="text-lg mt-1">••••••••</p>
+        <p className="border px-3 py-2 rounded">••••••••</p>
       ) : (
-        <p className="text-lg mt-1">{value}</p>
+        <p className="border px-3 py-2 rounded">{value}</p>
       )}
     </div>
   );

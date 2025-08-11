@@ -33,7 +33,7 @@ export interface GetAllTeacherResponse {
   gender :string;
   facultyId: number;
   facultyName: string;
-  program: string;
+  programName: string;
   phoneNumber: string | null;
   isActive : boolean;
 }

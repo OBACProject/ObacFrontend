@@ -1,16 +1,35 @@
 "use client";
-import { CreateStudentRequest } from "@/dto/studentDto";
-import React, { useState } from "react";
+
+import { CreateStudent } from "@/api/student/route";
+import { GetAllStudentGroup } from "@/api/studentGroup/route";
+import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// import { CreateStudent } from "@/api/student/route";
-// import { CreateStudentRequest } from "@/dto/studentDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
 };
 
+type CreateStudentRequest = {
+  userName: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+  gender: string;
+  citizenId: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: string; // "YYYY-MM-DD"
+  prefix: string;
+  studentGroupId: number;
+};
+
 export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
+  // form states
   const [studentCode, setStudentCode] = useState("");
+  const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
+
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,60 +44,110 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // groups dropdown state
+  const [groups, setGroups] = useState<GetAllStudentGroupRequest[]>([]);
+  const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
+  const [groupsError, setGroupsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadGroups = async () => {
+      try {
+        setLoadingGroups(true);
+        setGroupsError(null);
+        const data = await GetAllStudentGroup();
+
+        // เอาเฉพาะ active (ถ้าต้องการทั้งหมดให้เอา filter ออก)
+        const active = data.filter((g) => g.isActive !== false);
+
+        // เรียงสวย ๆ: groupCode > class > groupName (natural sort/locale TH)
+        active.sort((a, b) =>
+          `${a.groupCode ?? ""}|${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
+            `${b.groupCode ?? ""}|${b.class ?? ""}|${b.groupName ?? ""}`,
+            "th",
+            { numeric: true, sensitivity: "base" }
+          )
+        );
+
+        setGroups(active);
+      } catch (e) {
+        console.error(e);
+        setGroupsError("โหลดรายการห้องเรียนไม่สำเร็จ");
+      } finally {
+        setLoadingGroups(false);
+      }
+    };
+
+    loadGroups();
+  }, []);
+
   const handleSubmit = async () => {
+    // validate
     if (
-      !studentCode ||
-      !firstName ||
-      !lastName ||
-      !phone ||
-      !username ||
+      !username.trim() ||
       !password ||
-      !confirmPassword ||
-      !citizenId ||
-      !birthDate
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !birthDate ||
+      !studentCode.trim() ||
+      !studentGroupId
     ) {
-      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      toast.error(
+        "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: Username, Password, ชื่อ, นามสกุล, วันเกิด, รหัสนักเรียน, กลุ่มเรียน"
+      );
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error("รหัสผ่านไม่ตรงกัน");
       return;
     }
 
     const payload: CreateStudentRequest = {
-      userName: username,
+      userName: username.trim(),
       password,
-      firstName,
-      lastName,
-      studentCode,
-      gender,
-      citizenId,
-      phoneNumber: phone,
-      nationality,
-      birthDate,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      studentCode: studentCode.trim(),
+      gender: gender || "",
+      citizenId: citizenId || "",
+      phoneNumber: phone || "",
+      nationality: nationality || "",
+      birthDate, // "YYYY-MM-DD" จาก <input type="date">
       prefix,
+      studentGroupId: Number(studentGroupId),
     };
 
     try {
-    //   const success = await CreateStudent(payload);
-    //   if (success) {
-    //     toast.success("สร้างบัญชีนักเรียนสำเร็จแล้ว");
-    //     onClosePopUp(false);
-    //   } else {
-    //     toast.error("ไม่สามารถสร้างบัญชีนักเรียนได้");
-    //   }
-    } catch (error) {
-      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีนักเรียน");
-      console.error(error);
+      await CreateStudent(payload);
+      toast.success("สร้างบัญชีนักเรียนสำเร็จ");
+      onClosePopUp(true); // แจ้งให้หน้า parent reload
+    } catch (err: any) {
+      console.error("CreateStudent error:", err?.response?.data || err);
+
+      // ดึงข้อความจาก backend (ProblemDetails / ModelState)
+      const modelErrors = err?.response?.data?.errors;
+      if (modelErrors && typeof modelErrors === "object") {
+        const firstKey = Object.keys(modelErrors)[0];
+        const firstMsg = Array.isArray(modelErrors[firstKey])
+          ? modelErrors[firstKey][0]
+          : String(modelErrors[firstKey]);
+        toast.error(firstMsg);
+      } else {
+        const backendMsg =
+          err?.response?.data?.responseMessage ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+        toast.error(backendMsg);
+      }
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-[650px] space-y-4 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีนักเรียน</h2>
 
+        {/* แถว 1 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสนักเรียน</label>
@@ -89,8 +158,41 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               className="w-full border px-3 py-2 rounded"
             />
           </div>
+
+          {/* Student Group dropdown */}
+          <div>
+            <label className="text-sm">กลุ่มเรียน (เลือกห้อง)</label>
+            <select
+              value={studentGroupId ?? ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                setStudentGroupId(val === "" ? null : Number(val));
+              }}
+              className="w-full border px-3 py-2 rounded"
+              disabled={loadingGroups || !!groupsError}
+            >
+              <option value="">
+                {loadingGroups
+                  ? "กำลังโหลดข้อมูล..."
+                  : groupsError
+                  ? "โหลดข้อมูลไม่สำเร็จ"
+                  : "-- เลือกกลุ่มเรียน --"}
+              </option>
+
+              {groups.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {/* แสดง groupCode | class groupName */}
+                  {`${g.groupCode ?? "-"} | ${(g.class ?? "") + (g.class ? " " : "") + (g.groupName ?? "")}`}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              * ระบบจะบันทึกเป็น StudentGroup ID: <b>{studentGroupId ?? "-"}</b>
+            </p>
+          </div>
         </div>
 
+        {/* แถว 2 */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -124,6 +226,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
+        {/* แถว 3 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">เพศ</label>
@@ -141,12 +244,16 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             <input
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+              onChange={(e) => {
+                const onlyDigits = e.target.value.replace(/\D/g, "");
+                setPhone(onlyDigits);
+              }}
               className="w-full border px-3 py-2 rounded"
             />
           </div>
         </div>
 
+        {/* แถว 4 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสประชาชน</label>
@@ -168,26 +275,29 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        <div>
-          <label className="text-sm">วันเกิด</label>
-          <input
-            type="date"
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          />
+        {/* แถว 5 */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm">วันเกิด</label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
+        {/* แถว 6 */}
         <div>
           <label className="text-sm">รหัสผ่าน</label>
           <div className="relative">
@@ -207,6 +317,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
+        {/* แถว 7 */}
         <div>
           <label className="text-sm">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -226,6 +337,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
+        {/* ปุ่ม */}
         <div className="flex justify-end gap-3 pt-4">
           <button
             className="px-4 py-1 bg-gray-300 rounded"
@@ -236,6 +348,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
+            disabled={loadingGroups && studentGroupId === null}
           >
             บันทึกข้อมูล
           </button>

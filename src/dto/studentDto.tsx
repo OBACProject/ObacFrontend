@@ -172,7 +172,9 @@ export interface CreateStudentRequest {
   nationality: string;
   birthDate: string;
   prefix: string;
+  studentGroupId : number;
 }
+
 
 export interface GetAllStudentTableDto {
   studentId: number;

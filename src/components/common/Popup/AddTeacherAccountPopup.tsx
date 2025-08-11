@@ -88,35 +88,14 @@ const handleSubmit = async () => {
     nationality: nationality || "",
     birthDate,                      // ✅ รูปแบบ "YYYY-MM-DD"
   };
-
   try {
-    const ok = await CreateTeacher(payload);
-    if (ok) {
-      toast.success("สร้างบัญชีอาจารย์สำเร็จ");
-      onClosePopUp(true);
-    } else {
-      toast.error("ไม่สามารถสร้างบัญชีอาจารย์ได้");
-    }
-  } catch (err: any) {
-    // ดึง error message จากหลังบ้าน
-    const backendMsg =
-      err?.response?.data?.responseMessage ||
-      err?.response?.data?.title ||
-      err?.message;
-
-    // ถ้ามี model state errors (.errors)
-    const modelErrors = err?.response?.data?.errors;
-    if (modelErrors && typeof modelErrors === "object") {
-      const firstKey = Object.keys(modelErrors)[0];
-      const firstMsg = Array.isArray(modelErrors[firstKey]) ? modelErrors[firstKey][0] : String(modelErrors[firstKey]);
-      toast.error(firstMsg);
-    } else if (backendMsg) {
-      toast.error(backendMsg);
-    } else {
-      toast.error("เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
-    }
-    console.error("CreateTeacher error:", err?.response?.data || err);
-  }
+        await CreateTeacher(payload);
+        toast.success("เพิ่มวิชาสำเร็จ");
+        onClosePopUp(false);
+      } catch (err) {
+        console.error("Error saving teacher:", err);
+        toast.error("บันทึกวิชาไม่สำเร็จ");
+      }
 };
 
 
