@@ -1,17 +1,17 @@
 "use client";
-import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
+import { UserRoundCheck, PlusCircle, GraduationCap } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GetAllStudents } from "@/api/student/route";
 import { GetAllStudentUser } from "@/dto/studentDto";
-import CreateStudentPopup from "@/components/common/Popup/AddStudentAccountPopup";
+import AddStudentAccountPopup from "@/components/common/Popup/AddStudentAccountPopup";
 import IsActiveToggleProps from "@/components/common/Toggle/IsActiveToggle";
 import { toast } from "react-toastify";
 import { UpdateIsActiveUser } from "@/api/user/userAPI";
-import AddStudentAccountPopup from "@/components/common/Popup/AddStudentAccountPopup";
 
 export default function Form() {
   const [students, setStudents] = useState<GetAllStudentUser[]>([]);
+  const [loading, setLoading] = useState(true); 
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -19,7 +19,6 @@ export default function Form() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const itemsPerPage = 10;
 
-  // ✅ helper: sort ตามรหัสนักเรียน (natural sort)
   const sortByStudentCode = (arr: GetAllStudentUser[]) =>
     [...arr].sort((a, b) =>
       (a.studentCode ?? "").localeCompare(b.studentCode ?? "", undefined, {
@@ -29,10 +28,25 @@ export default function Form() {
     );
 
   useEffect(() => {
-    GetAllStudents().then((d) => {
-      if (Array.isArray(d)) setStudents(sortByStudentCode(d)); // ✅ จัดเรียงตอนโหลดครั้งแรก
-      else console.error("ไม่ได้ข้อมูลเป็น array:", d);
-    });
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const data = await GetAllStudents();
+        if (isMounted && Array.isArray(data)) {
+          setStudents(sortByStudentCode(data));
+        }
+      } catch (err) {
+        console.error("โหลดข้อมูลนักเรียนล้มเหลว:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const filteredStudents = useMemo(() => {
@@ -52,7 +66,6 @@ export default function Form() {
     return filteredStudents.slice(start, start + itemsPerPage);
   }, [filteredStudents, currentPage]);
 
-  // ✅ toggle isActive (optimistic + rollback + toast)
   const handleToggleActive = async (userId: string, nextState: boolean) => {
     const snapshot = [...students];
     setStudents((prev) =>
@@ -68,7 +81,6 @@ export default function Form() {
         throw new Error("อัปเดตไม่สำเร็จ");
       }
     } catch (err: any) {
-      // rollback
       setStudents(snapshot);
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
@@ -94,7 +106,7 @@ export default function Form() {
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
         <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
-          <UserPen className="h-8 w-8" />
+          <GraduationCap className="h-8 w-8" />
           ระบบจัดการนักเรียน
         </h1>
       </div>
@@ -119,7 +131,16 @@ export default function Form() {
         </button>
       </div>
 
-      {students.length > 0 ? (
+      {loading ? (
+        <div className="w-full px-10 py-5">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="animate-pulse bg-gray-200 h-10 mb-2 rounded"
+            ></div>
+          ))}
+        </div>
+      ) : students.length > 0 ? (
         <div className="w-full rounded-sm px-10">
           <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <UserRoundCheck className="w-5 h-5 text-white" />
@@ -169,7 +190,7 @@ export default function Form() {
                 </div>
                 <div
                   className="flex items-center justify-center py-2"
-                  onClick={(e) => e.stopPropagation()} // กันเปิดหน้า detail ตอนกดสวิตช์
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <IsActiveToggleProps
                     isActive={item.isActive}
@@ -217,7 +238,7 @@ export default function Form() {
             setOpenCreateStudentPopup(false);
             if (shouldReload) {
               GetAllStudents().then((d) => {
-                if (Array.isArray(d)) setStudents(d);
+                if (Array.isArray(d)) setStudents(sortByStudentCode(d));
               });
             }
           }}

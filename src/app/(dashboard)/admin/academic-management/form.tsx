@@ -23,7 +23,7 @@ export default function Form() {
     const bFirst = b.firstName ?? "";
     const firstCmp = aFirst.localeCompare(bFirst, "th", { sensitivity: "base" });
     if (firstCmp !== 0) return firstCmp;
-    // tie-breaker ด้วย lastName
+ 
     return (a.lastName ?? "").localeCompare(b.lastName ?? "", "th", { sensitivity: "base" });
   });
 
@@ -54,7 +54,7 @@ export default function Form() {
   }, [filteredAcademicUsers, currentPage]);
 
   const handleToggleActive = async (userId: string, nextState: boolean) => {
-    // optimistic update
+
     const snapshot = [...teachers];
     setTeacher((prev) => prev.map((t) => (String(t.id) === userId ? { ...t, isActive: nextState } : t)));
     setUpdatingId(userId);
@@ -67,7 +67,7 @@ export default function Form() {
         throw new Error("อัปเดตไม่สำเร็จ");
       }
     } catch (err: any) {
-      // rollback
+
       setTeacher(snapshot);
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
@@ -144,7 +144,7 @@ export default function Form() {
             {paginatedTeachers.map((item, index) => (
               <div
                 key={item.id}
-                onClick={() => router.push(`/admin/academic-details/${item.id}`)}
+                onClick={() => router.push(`/admin/academic-details/${item.academicId}`)}
                 className="cursor-pointer grid grid-cols-[5%_14%_26%_25%_30%] bg-white hover:bg-blue-100 text-gray-800 text-base"
               >
                 <div className="flex items-center justify-center py-2">
@@ -159,7 +159,7 @@ export default function Form() {
                 </div>
                 <div
                   className="flex items-center justify-center py-2"
-                  onClick={(e) => e.stopPropagation()} // กันเผลอเปิดหน้า detail ตอนกดสวิตช์
+                  onClick={(e) => e.stopPropagation()}  
                 >
                   <IsActiveToggleProps
                     isActive={item.isActive}

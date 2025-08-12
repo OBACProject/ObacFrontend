@@ -1,5 +1,5 @@
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import { CreateAcademicRequest, GetAcademicDetailUserResponse, GetAllAcademicUser, UpdateIsActiveUserRequest } from "@/dto/userDto";
+import { CreateAcademicRequest, GetAcademicDetailUserResponse, GetAllAcademicUser, UpdateIsActiveUserRequest, UpdateUserDetailRequest, UpdateUserPasswordRequest } from "@/dto/userDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
@@ -32,7 +32,7 @@ export const GetAcademicDetailUser = async (
     }>(`/Admin/GetAcademicDetails?academicId=${academicId}`);
     return response.data.data ?? null;
   } catch (error) {
-    console.error("❌ Error in GetAcademicDetailUser:", error);
+    console.error("Error in GetAcademicDetailUser:", error);
     return null;
   }
 };
@@ -54,7 +54,7 @@ export const UpdateIsActiveUser = async (
   { userId, isActive }: UpdateIsActiveUserRequest
 ): Promise<boolean> => {
   try {
-    // ✅ PUT + query string, ไม่มี body
+  
     const res = await apiClient.put(
       "Admin/UpdateUserActive",
       null,
@@ -63,6 +63,46 @@ export const UpdateIsActiveUser = async (
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
     console.error("UpdateIsActiveUser error:", err?.response?.data || err);
-    throw err; // ให้ UI ดึงข้อความไปแสดงได้
+    throw err; 
+  }
+};
+
+export const UpdateUserDetails = async (payload: UpdateUserDetailRequest)=> {
+  try {
+    const res = await apiClient.put(
+      "Admin/UpdateUserDetails",payload);
+    return [200, 201, 204].includes(res.status);
+  } catch (err: any) {
+    console.error("UpdateUserDetails error:", err?.response?.data || err);
+    throw err; 
+  }
+};
+
+
+export const UpdateUserPassword = async (
+  { userId, newPassword,confirmPassword }: UpdateUserPasswordRequest
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put(
+      "Admin/UpdateUserPassword",
+      null,
+      { params: { userId, newPassword,confirmPassword } }
+    );
+    return [200, 201, 204].includes(res.status);
+  } catch (err: any) {
+    console.error("UpdateUserPassword error:", err?.response?.data || err);
+    throw err; 
+  }
+};
+
+export const DeleteUser = async (userId: string): Promise<boolean> => {
+  try {
+    const response = await apiClient.delete(`Admin/DeleteUser`, {
+      params: { userId },
+    });
+    return response.status >= 200 && response.status < 300;
+  } catch (err: any) {
+    console.error("DeleteUser error:", err?.response?.data || err);
+    throw err;
   }
 };

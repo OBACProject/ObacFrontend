@@ -24,13 +24,12 @@ export default function Form() {
   const itemsPerPage = 10;
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  // ✅ helper: เรียงตาม teacherId (น้อย→มาก)
   const sortByTeacherId = (arr: GetAllTeacherResponse[]) =>
     [...arr].sort((a, b) => Number(a.teacherId ?? 0) - Number(b.teacherId ?? 0));
 
   useEffect(() => {
     GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
-      if (d) setTeacher(sortByTeacherId(d)); // ✅ เรียงตั้งแต่แรก
+      if (d) setTeacher(sortByTeacherId(d));
     });
   }, []);
 
@@ -49,7 +48,7 @@ export default function Form() {
         fullName.includes(lowerSearch)
       );
     });
-    return sortByTeacherId(filtered); // ✅ หลังกรองก็ยังเรียงตาม teacherId
+    return sortByTeacherId(filtered); 
   }, [teachers, searchTerm]);
 
   const paginatedTeachers = useMemo(() => {
@@ -58,7 +57,7 @@ export default function Form() {
     return filtereTeachers.slice(start, end);
   }, [filtereTeachers, currentPage]);
 
-  // ✅ toggle isActive (optimistic + rollback + toast)
+ 
   const handleToggleActive = async (userId: string, nextState: boolean, e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -73,7 +72,7 @@ export default function Form() {
       if (ok) toast.success("อัปเดตสถานะเรียบร้อย");
       else throw new Error("อัปเดตไม่สำเร็จ");
     } catch (err: any) {
-      setTeacher(snapshot); // rollback
+      setTeacher(snapshot); 
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
         const firstKey = Object.keys(errors)[0];

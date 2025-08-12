@@ -1,6 +1,6 @@
 "use client";
 
-import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
+import { UserRoundCheck, UserPen, PlusCircle, DoorOpen } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GetAllStudentGroup } from "@/api/studentGroup/route";
@@ -16,7 +16,7 @@ export default function Form() {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const itemsPerPage = 10;
 
-  // ✅ เรียงตามรหัสห้อง groupCode (natural sort)
+  
   const sortByGroupCode = (arr: GetAllStudentGroupRequest[]) =>
     [...arr].sort((a, b) =>
       (a.groupCode ?? "").localeCompare(b.groupCode ?? "", "th", {
@@ -31,7 +31,7 @@ export default function Form() {
     });
   }, []);
 
-  // ค้นหาจาก groupCode / groupName / class / term / year
+  
   const filteredGroups = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
     if (!q) return groups;
@@ -51,7 +51,7 @@ export default function Form() {
       );
     });
 
-    return sortByGroupCode(filtered); // ✅ คงลำดับตาม groupCode หลังกรอง
+    return sortByGroupCode(filtered); 
   }, [groups, searchTerm]);
 
   const paginated = useMemo(() => {
@@ -59,7 +59,7 @@ export default function Form() {
     return filteredGroups.slice(start, start + itemsPerPage);
   }, [filteredGroups, currentPage]);
 
-  // ✅ toggle isActive (optimistic + rollback + toast)
+
   const handleToggleActive = async (id: number, nextState: boolean, e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -75,7 +75,7 @@ export default function Form() {
         throw new Error("อัปเดตไม่สำเร็จ");
       }
     } catch (err: any) {
-      setGroups(snapshot); // rollback
+      setGroups(snapshot); 
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
         const firstKey = Object.keys(errors)[0];
@@ -98,8 +98,8 @@ export default function Form() {
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
         <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
-          <UserPen className="h-8 w-8" />
-          ระบบจัดการห้องเรียน (Student Group)
+          <DoorOpen className="h-8 w-8" />
+          ระบบจัดการห้องเรียน
         </h1>
       </div>
 
@@ -154,7 +154,7 @@ export default function Form() {
             {paginated.map((item, index) => (
               <div
                 key={item.id}
-                // onClick={() => router.push(`/admin/student-group-details/${item.id}`)}
+               
                 className="cursor-default grid grid-cols-[8%_20%_27%_15%_15%_15%] bg-white hover:bg-blue-100 text-gray-800 text-base"
               >
                 <div className="flex items-center justify-center py-2">
