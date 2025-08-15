@@ -4,6 +4,7 @@ import { GetStudentGroupByGroupId } from "@/api/student/route";
 import NameListScheduleTable, {
   ColumnConfig,
 } from "@/components/Academic/table/NameListScheduleTable";
+import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
 import { StudentGroupDetail, StudentItems } from "@/dto/studentDto";
 import { Box } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -13,7 +14,9 @@ interface Props {
 }
 export default function Form({ GroupID }: Props) {
   const [studentGroupDetail, setStudentGroupDetail] =
-    useState<StudentGroupDetail | null>(null);
+    useState<StudentGroupDetail>();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const studentColumns: ColumnConfig<StudentItems>[] = [
     { label: "No.", width: "5%", render: (_, i) => i + 1 },
@@ -42,22 +45,34 @@ export default function Form({ GroupID }: Props) {
     },
   ];
   useEffect(() => {
-    GetStudentGroupByGroupId(GroupID).then((items) => {
-      setStudentGroupDetail(items);
-    });
-  }, []);
+    (async () => {
+      const data = (await GetStudentGroupByGroupId(
+        GroupID
+      )) as StudentGroupDetail;
+      const sortedStudents = [...(data.students ?? [])].sort((a, b) =>
+        a.studentCode.localeCompare(b.studentCode, undefined, { numeric: true })
+      );
+
+      setStudentGroupDetail({ ...data, students: sortedStudents });
+      setIsLoading(true)
+    })();
+  }, [GroupID]);
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
 
   return (
     <div className="bg-white rounded-xl py-4">
-      <NameListScheduleTable
-        data={students}
-        icon={<Box className="h-6 w-6 text-white" />}
-        title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName} `}
-        columns={studentColumns}
-        rowHref={(item) => `/academic/student-details/${item.id}`}
-        emptyText="ไม่มีข้อมูลชั้นเรียน"
-      />
+      {isLoading ? (
+        <NameListScheduleTable
+          data={students}
+          icon={<Box className="h-6 w-6 text-white" />}
+          title={`ห้อง ${studentGroupDetail?.class}.${studentGroupDetail?.groupName} `}
+          columns={studentColumns}
+          rowHref={(item) => `/academic/student-details/${item.id}`}
+          emptyText="ไม่มีข้อมูลชั้นเรียน"
+        />
+      ) : (
+        <LoadingDataTable />
+      )}
     </div>
   );
 }

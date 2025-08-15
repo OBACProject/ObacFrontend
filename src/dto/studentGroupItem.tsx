@@ -5,7 +5,7 @@ export interface StudentGroupItem {
   groupCode: string;
   level: number;
   programId: number;
-  facultyName: string ;
+  facultyName: string;
   programName: string;
   isPublish: boolean;
   isComplete: boolean;
@@ -30,7 +30,7 @@ export interface ScheduleItemStudentGroup {
   studentCount: number;
   class: string;
   level: number;
-  curriculumYear:number;
+  curriculumYear: number;
   isComplete: boolean;
   isPublish: boolean;
   teacherId: number;
@@ -60,10 +60,26 @@ export interface ScheduleItemStudentGroups {
   subjectName: string;
   term: string;
   year: number;
-  day:string;
-  period:number;
-  teacherName:string;
-  teacherLastName:string;
-  room:string;
+  day: string;
+  period: number;
+  teacherName: string;
+  teacherLastName: string;
+  room: string;
 }
 
+export interface Students {
+  id: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+}
+
+export interface StudentGroupResponse {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  students: Students[];
+}

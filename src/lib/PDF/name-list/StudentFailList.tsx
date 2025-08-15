@@ -80,7 +80,7 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
             `${student[i].prefix} ${student[i].firstName}`,
             `${student[i].lastName}`,
             `${student[i].class}.${student[i].groupName}`,
-            `${student[i].gpa.toFixed(2)}`,"000-000"
+            `${student[i].gpa.toFixed(2)}`,""
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },

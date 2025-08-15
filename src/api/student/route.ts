@@ -1,4 +1,9 @@
-import { GetAllStudent, GetAllStudentUser, GetStudentDetailResponse, StudentGroupDetail } from "@/dto/studentDto";
+import {
+  GetAllStudentUser,
+  GetStudentDetailResponse,
+  StudentDetails,
+  StudentGroupDetail,
+} from "@/dto/studentDto";
 import apiClient from "@/lib/apiClient";
 
 export const GetStudentGroupByGroupId = async (
@@ -16,8 +21,9 @@ export const GetStudentGroupByGroupId = async (
     return null;
   }
 };
+
 export const GetStudentByStudentId = async (
-  StudentId : Number
+  StudentId: Number
 ): Promise<StudentGroupDetail | null> => {
   try {
     const response = await apiClient.get<{
@@ -31,6 +37,7 @@ export const GetStudentByStudentId = async (
     return null;
   }
 };
+
 export const GetAllStudents = async (): Promise<GetAllStudentUser[] | []> => {
   try {
     const response = await apiClient.get("Admin/GetAllStudentUsers");
@@ -40,7 +47,7 @@ export const GetAllStudents = async (): Promise<GetAllStudentUser[] | []> => {
 
     return Array.isArray(users) ? users : [];
   } catch (err) {
-    console.log("❌ Error in GetAllStudents:", err);
+    console.log("Error in GetAllStudents:", err);
     return [];
   }
 };
@@ -56,11 +63,26 @@ export const GetStudentDetailById = async (
     }>("/Admin/GetStudentDetails", {
       params: { studentId },
     });
-
-    console.log("📦 Response from API:", response.data);
     return response.data?.data ?? null;
   } catch (err) {
     console.error("❌ Error in GetStudentDetailById: ", err);
+    return null;
+  }
+};
+
+export const GetStudentDetailByStudentId = async (
+  studentId: number
+): Promise<StudentDetails | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentDetails;
+    }>(`Student/GetStudentDetailByStudentId/${studentId}`);
+
+    return response.data?.data ?? null;
+  } catch (err) {
+    console.error(" Error in GetStudentDetailByStudentId: ", err);
     return null;
   }
 };
