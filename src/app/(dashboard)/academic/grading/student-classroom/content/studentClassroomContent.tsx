@@ -194,7 +194,7 @@ export default function StudentClassroomContent() {
       const matchSearch = item.class.toLowerCase().includes(deferredSearchTerm.toLowerCase());
 
       return matchStatus && matchPublished && matchClass && matchSearch;
-    });
+    }).sort((a,b) => a.groupId - b.groupId);
   }, [tableData, deferredSearchTerm, filterStatus, filterPublished, filterClass]);
 
   if (isLoading || isPending) {

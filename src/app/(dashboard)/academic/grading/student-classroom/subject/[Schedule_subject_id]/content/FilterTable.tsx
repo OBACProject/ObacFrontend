@@ -168,7 +168,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   };
 
   useMemo(() => {
-    const updatedData = updateTotalScoreAndGrade(transformData || []);
+    const updatedData = updateTotalScoreAndGrade(transformData || []).sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updatedData);
   }, [transformData]);
 
@@ -256,7 +256,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
 
     updated[index].totalScore = newTotalScore;
     updated[index].grade = calculateGrade(newTotalScore);
-
+    updated.sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
 
@@ -271,7 +271,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       code.includes(search) ||
       remark.includes(search)
     );
-  });
+  }).sort((a, b) => a.studentCode.localeCompare(b.studentCode));
 
   const onChangeGrade = (grade: string, studentId: number) => {
     const updated = tableData.map((item) => {
@@ -279,14 +279,14 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         return { ...item, grade };
       }
       return item;
-    });
+    }).sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
 
   const onChangeRemark = (remark: string, studentId: number) => {
     const updated = tableData.map((item) =>
       item.studentId === studentId ? { ...item, remark } : item
-    );
+    ).sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
 
