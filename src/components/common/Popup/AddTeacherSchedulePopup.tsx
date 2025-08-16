@@ -12,7 +12,7 @@ import {
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { GetAllActiveSubjectsResponse } from "@/lib/api/models/subject/subject.response";
-import { getCurrentThaiTermYear } from "@/lib/utils";
+import { getCurrentThaiTermYear, sortStudentGroupItems } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -46,7 +46,8 @@ export default function AddTeacherSchedulePopup({
     GetAllStudentGroupByTermYear(term, year).then(
       (item: StudentGroupItem[]) => {
         if (item) {
-          setStudentGroup(item);
+          const sorted = sortStudentGroupItems(item);
+          setStudentGroup(sorted);
         }
       }
     );
@@ -55,7 +56,8 @@ export default function AddTeacherSchedulePopup({
     GetAllStudentGroupByTermYear(term, year).then(
       (item: StudentGroupItem[]) => {
         if (item) {
-          setStudentGroup(item);
+          const sorted = sortStudentGroupItems(item);
+          setStudentGroup(sorted);
         }
       }
     );

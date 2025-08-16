@@ -22,7 +22,7 @@ export default function Form() {
       if (d) {
         const sortedData = d.sort((a, b) => a.id - b.id);
         setSubject(sortedData);
-        setIsLoading(true)
+        setIsLoading(true);
       } else {
         console.log("ไม่มีข้อมูลเข้ามา ตรวจสอบ api ด่วน");
       }
@@ -149,10 +149,7 @@ export default function Form() {
         <LoadingDataTable />
       )}
       {openCreatSubjectPopup && (
-        <AddSubjectPopUp
-          onClosePopUp={setOpenCreatePopUp}
-          // onSave={getAddSubjectProps}
-        />
+        <AddSubjectPopUp onClosePopUp={setOpenCreatePopUp} />
       )}
       {openEditSubjectPopup && selectedSubject && (
         <EditSubjectPopUp

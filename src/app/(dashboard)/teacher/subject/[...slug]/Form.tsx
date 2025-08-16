@@ -49,7 +49,8 @@ export default function Form({
             <div className="flex gap-1 items-center text-white">
               <p>กลุ่มเรียน </p>
               <p className="text-sm px-4 bg-blue-400 py-0.5 rounded-full">
-                {groupName}
+                {grads?.class}.
+                {grads?.groupName}
               </p>
             </div>
           </div>

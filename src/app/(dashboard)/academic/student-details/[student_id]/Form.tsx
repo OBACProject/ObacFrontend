@@ -20,8 +20,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 // import { toast } from "react-toastify";
 import InputBox from "@/components/Teacher/InputBox";
-import { StudentDetail, StudentDetails } from "@/dto/studentDto";
+import { StudentDetails } from "@/dto/studentDto";
 import { GetStudentDetailByStudentId } from "@/api/student/route";
+import { getCurrentThaiTermYear } from "@/lib/utils";
+import { PDFStudentTransScriptButton } from "@/components/PDF/PDFButton";
 
 type Props = {
   studentID: string;
@@ -57,12 +59,12 @@ const emptyStudent: StudentDetails = {
 };
 
 export default function Form({ studentID }: Props) {
+  const { currentYear, defaultTerm } = getCurrentThaiTermYear();
   const [onEdit, setOnEdit] = useState<boolean>(false);
   const [students, setStudent] = useState<StudentDetails | null>();
   const [educateStatus, setEducateStatus] = useState(students?.status || "");
-
-  const [term, setTerm] = useState<string>("2");
-  const [year, setYear] = useState<number>(2567);
+  const [term, setTerm] = useState<string>(defaultTerm);
+  const [year, setYear] = useState<number>(currentYear);
   const [submitStudentStatus, setSubmitStudentStatus] =
     useState<boolean>(false);
   const [changeGroupPopUp, setChangeGroupPopUp] = useState<boolean>(false);
@@ -131,29 +133,7 @@ export default function Form({ studentID }: Props) {
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-1">
-          {/* <button
-            className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
-            onClick={async () => {
-              const data = await fetchStudentGrad(studentId, term, year);
-              if (data) {
-                GradPerTerms(data);
-              }
-            }}
-          >
-            <Download className="w-4 h-4" />
-            ผลการเรียนล่าสุด PDF
-          </button> */}
-          <button
-            className="text-sm items-center flex justify-center gap-2 bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit"
-            onClick={async () => {}}
-          >
-            <Download className="w-4 h-4" />
-            ผลการเรียนรวม PDF
-          </button>
-          <button className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 rounded-full px-5 py-1 shadow-sm shadow-slate-300 h-fit cursor-not-allowed">
-            <Download className="w-4 h-4" />
-            ประวัติส่วนตัว PDF
-          </button>
+          <PDFStudentTransScriptButton studentID={Number(studentID)} />
         </div>
       </div>
 
