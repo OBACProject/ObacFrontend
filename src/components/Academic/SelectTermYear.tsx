@@ -16,7 +16,7 @@ export default function SelectTermAndYear({
   onChangeYear,
 }: SelectTermAndYearProps) {
   return (
-    <>
+    <div className="flex items-center justify-center gap-4">
       <div className="flex items-center gap-2 text-gray-600">
         <div>ภาคเรียน</div>
         <select
@@ -36,10 +36,10 @@ export default function SelectTermAndYear({
         <div>ปีการศึกษา</div>
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
-          value={year === 0 ? '' : year}
+          value={year === 0 ? "" : year}
           onChange={(e) => {
             const selected = e.target.value;
-            if (selected === '') {
+            if (selected === "") {
               onChangeYear(0);
             } else {
               onChangeYear(Number(selected));
@@ -53,8 +53,7 @@ export default function SelectTermAndYear({
             </option>
           ))}
         </select>
-
       </div>
-    </>
+    </div>
   );
 }

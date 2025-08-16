@@ -18,12 +18,14 @@ export default function AcademicDashboard() {
     if (!studentClassData) return null;
 
     const validData = studentClassData.filter(
-      item => item.class && 
-      item.genderCount?.gender && 
-      (item.genderCount.gender === 'ชาย' || item.genderCount.gender === 'หญิง') &&
-      !item.class.includes('/') &&
-      (item.class.split('.').length) <= 1 &&
-      (item.class.startsWith('ปวช') || item.class.startsWith('ปวส'))
+      (item) =>
+        item.class &&
+        item.genderCount?.gender &&
+        (item.genderCount.gender === "ชาย" ||
+          item.genderCount.gender === "หญิง") &&
+        !item.class.includes("/") &&
+        item.class.split(".").length <= 1 &&
+        (item.class.startsWith("ปวช") || item.class.startsWith("ปวส"))
     );
 
     const genderTotals = validData.reduce((acc, item) => {
@@ -118,7 +120,30 @@ export default function AcademicDashboard() {
   }
 
   return (
-    <div className="lg:px-10 py-5 px-5 bg-gray-100">
+    <div
+      className="lg:px-10 py-5 px-5 bg-blue-100"
+      style={{
+        backgroundImage: `
+      /* เส้นตั้ง */
+      repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1) 0px,
+        rgba(255, 255, 255, 1) 1px,
+        transparent 1px,
+        transparent 20px
+      ),
+      /* เส้นนอน */
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 0px,
+        rgba(255, 255, 255, 1) 1px,
+        transparent 1px,
+        transparent 20px
+      )
+    `,
+        backgroundSize: "20px 20px",
+      }}
+    >
       <div className="w-full px-5">
         <HeaderLabel
           title="ภาพรวมโรงเรียน"
@@ -140,11 +165,10 @@ export default function AcademicDashboard() {
             label={chartData.classType.labels}
             backgroundColor={["#B388EB", "#7D7D7D"]}
           />
-
         </div>
 
-          <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
-
+        <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
+       
       </div>
 
       <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg">

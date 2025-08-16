@@ -44,16 +44,20 @@ export const GetStudentGroupScheduleStatus = async (
   }
 };
 
-export const GetStudentListByClass = async (
+export const GetStudentListByClassLevelTermYear = async (
   className: string,
-  level: number
+  level: number,
+  term: string,
+  year: number
 ): Promise<StudentGroupResponse[]> => {
   try {
     const response = await apiClient.get<{
       responseCode: string;
       responseMessage: string;
       data: StudentGroupResponse[];
-    }>(`Student/GetStudentListByClass?className=${className}&level=${level}`);
+    }>(
+      `Student/GetStudentListByClassLevelTermYear?className=${className}&level=${level}&term=${term}&year=${year}`
+    );
     return response.data.data ?? [];
   } catch (err) {
     console.error("Error in api GetStudentListByClass ", err);

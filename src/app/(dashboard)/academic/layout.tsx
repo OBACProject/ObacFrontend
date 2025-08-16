@@ -30,7 +30,7 @@ export default function RootLayout({
           menuItems={AcademicSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="flex-1 pt-20 lg:pl-10 pb-32">{children}</div>
+        <div className="flex-1 pt-20 lg:pl-10 ">{children}</div>
         <HomeFooter />
       </body>
     </html>
