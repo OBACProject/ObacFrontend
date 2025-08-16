@@ -11,38 +11,15 @@ export default function ProfileForm() {
   useEffect(() => {
     GetTeacherDetails().then((d) => {
       if (d) {
+        console.log(d);
         setTeacher(d);
       }
     });
   }, []);
 
   return (
-    <div
-      className="text-xl pb-[300px] bg-gray-200 w-full h-full flex justify-center "
-      style={{
-        // backgroundColor: "#ffffff",
-        backgroundImage: `
-      /* เส้นตั้ง */
-      repeating-linear-gradient(
-        to right,
-        rgba(255, 255, 255, 1) 0px,
-        rgba(255, 255, 255, 1) 1px,
-        transparent 1px,
-        transparent 20px
-      ),
-      /* เส้นนอน */
-      repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 1) 0px,
-        rgba(255, 255, 255, 1) 1px,
-        transparent 1px,
-        transparent 20px
-      )
-    `,
-        backgroundSize: "20px 20px",
-      }}
-    >
-      <div className="mt-20 w-fit lg:px-20 px-8 py-5 flex justify-center border-[2px] border-blue-400 rounded-xl shadow-md bg-white   items-center">
+    <div className="text-xl z-10  w-full h-fit flex justify-center ">
+      <div className="w-fit lg:px-20 px-8 py-5 flex justify-center border-[2px] border-blue-400 rounded-xl shadow-md bg-white   items-center">
         <div className="grid place-items-center gap-8">
           <div className="font-prompt text-2xl text-blue-800">
             ข้อมูลอาจารย์
