@@ -31,11 +31,12 @@ export default function page() {
       <div className="relative w-full flex items-center justify-center min-h-[calc(80dvh-2rem)]  overflow-hidden">
         <div className="pointer-events-none absolute inset-0 ">
           <div
-            className="absolute size-72 lg:size-96 top-10 right-40 -translate-x-1/2 rounded-full
-                 bg-gradient-to-br from-sky-400/50 via-cyan-300/40 to-emerald-300/30
-                  mix-blend-multiply will-change-transform
-                 [animation:blob_22s_ease-in-out_infinite,pulseOpacity_12s_ease-in-out_infinite]"
+            className="absolute size-96 rounded-full
+                bg-gradient-to-br from-sky-400/50 via-cyan-300/40 to-emerald-300/30
+                mix-blend-multiply will-change-transform right-40
+                [animation:blob_22s_ease-in-out_infinite,pulseOpacity_12s_ease-in-out_infinite]"
           />
+
           <div
             className="absolute size-64 lg:size-80 bottom-10 right-1/3 rounded-full
                  bg-gradient-to-br from-indigo-400/45 via-blue-300/35 to-cyan-200/30
@@ -43,6 +44,7 @@ export default function page() {
                  animation-delay-2000
                  [animation:blob_26s_ease-in-out_infinite,pulseOpacity_15s_ease-in-out_infinite]"
           />
+
           <div
             className="absolute size-64 lg:size-72 top-1/3 left-10 rounded-full
                  bg-gradient-to-br from-fuchsia-400/40 via-pink-300/30 to-rose-200/25
@@ -50,6 +52,7 @@ export default function page() {
                  animation-delay-4000
                  [animation:blob_30s_ease-in-out_infinite,pulseOpacity_18s_ease-in-out_infinite]"
           />
+
           <div
             className="absolute size-40 lg:size-52 bottom-1/4 left-1/2 -translate-x-1/2 rounded-full
                  bg-gradient-to-br from-teal-400/40 to-emerald-300/30
