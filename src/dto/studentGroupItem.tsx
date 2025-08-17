@@ -81,3 +81,20 @@ export interface GetAllStudentGroupRequest {
   isActive?: boolean;
 }
 
+export interface CreateStudentGroupRequest{
+  groupName: string;
+  class: string;
+  groupCode: string;
+  level: number;
+  programId: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  isActive: boolean;
+  year: number;
+  term: string;
+}
+
+export interface UpdateStudentGroupActiveRequest {
+  studentGroupId: string;
+  isActive: boolean;
+}

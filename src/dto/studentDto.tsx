@@ -124,6 +124,7 @@ export interface GetAllStudent {
   birthDate: string | null;
 }
 
+
 export interface GetAllStudentUser {
   studentId: number;
   studentCode: string;
@@ -139,6 +140,25 @@ export interface GetAllStudentUser {
   role: string;
   isActive: boolean;
 }
+
+export type GetAllStudentsPagedParams = {
+  pageNumber?: number;    
+  pageSize?: number;       
+  searchTerm?: string;    
+  searchCategory?: string; 
+  sortBy?: string;         
+  ascending?: boolean;     
+};
+
+export type GetAllStudentsPagedResponse = {
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: GetAllStudentUser[];
+};
 
 export interface GetStudentDetailResponse {
   id: number;

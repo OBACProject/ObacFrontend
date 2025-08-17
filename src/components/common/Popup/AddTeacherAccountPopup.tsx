@@ -1,21 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 
 import { CreateTeacher } from "@/api/teacher/route";
-import { CreateTeacherRequest } from "@/dto/teacherDto";
+import type { CreateTeacherRequest } from "@/dto/teacherDto";
 
-import { GetAllProgramWithStudentGroupResponse } from "@/dto/programDto";
-import { GetAllProgramWithStudentGroup } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/rount";
+import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
 };
 
 export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
+  
   const [teacherCode, setTeacherCode] = useState("");
-  const [program, setProgram] = useState<number | null>(null);
-
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -31,101 +30,197 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // programs dropdown state
-  const [programs, setPrograms] = useState<GetAllProgramWithStudentGroupResponse[]>([]);
-  const [loadingPrograms, setLoadingPrograms] = useState<boolean>(false);
+ 
+  const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
+  const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
+  
+  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
+  const [selectedProgramName, setSelectedProgramName] = useState<string>("");
+  const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
+  const [resolvedProgramId, setResolvedProgramId] = useState<number | null>(null);
+
+ 
   useEffect(() => {
-    const loadPrograms = async () => {
+    const load = async () => {
       try {
         setLoadingPrograms(true);
         setProgramsError(null);
-        const data = await GetAllProgramWithStudentGroup();
-        // อยากให้แสดงสวย ๆ: เรียงตาม facultyName > programName > groupName
-        data.sort((a, b) =>
-          `${a.facultyName}|${a.programName}|${a.groupName}`.localeCompare(
-            `${b.facultyName}|${b.programName}|${b.groupName}`,
-            "th"
-          )
-        );
-        setPrograms(data);
+        const data = await GetAllPrograms();
+        setProgramRows(Array.isArray(data) ? data : []);
       } catch (e) {
         console.error(e);
-        setProgramsError("โหลดรายการแผนกไม่สำเร็จ");
+        setProgramsError("โหลดรายการโปรแกรมไม่สำเร็จ");
       } finally {
         setLoadingPrograms(false);
       }
     };
-
-    loadPrograms();
+    load();
   }, []);
 
 
- // ใน AddTeacherAccountPopup.tsx
-const handleSubmit = async () => {
-  if (!teacherCode || !username || !password || !firstName || !lastName || !birthDate || !hiredDate || !program) {
-    toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล, วันเกิด, วันที่เริ่มงาน, แผนก/ห้อง");
-    return;
-  }
-  if (password !== confirmPassword) {
-    toast.error("รหัสผ่านไม่ตรงกัน");
-    return;
-  }
+  const faculties = useMemo(() => {
+    const set = new Set(programRows.map((r) => r.facultyName).filter(Boolean));
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows]);
 
-  const payload: CreateTeacherRequest = {
-    prefix,
-    teacherCode: teacherCode.trim(),
-    hiredDate,                      // ✅ FIX: ส่ง hiredDate ตรง ๆ
-    programId: Number(program),
-    userName: username.trim(),
-    password,
-    firstName: firstName.trim(),
-    lastName: lastName.trim(),
-    gender: gender || "",           // ตามตัวอย่างที่บอกว่าส่งค่าว่างได้
-    citizenId: citizenId || "",
-    phoneNumber: phone || "",
-    nationality: nationality || "",
-    birthDate,                      // ✅ รูปแบบ "YYYY-MM-DD"
+  const programNames = useMemo(() => {
+    const set = new Set(
+      programRows
+        .filter((r) => !selectedFaculty || r.facultyName === selectedFaculty)
+        .map((r) => r.programName)
+        .filter(Boolean)
+    );
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows, selectedFaculty]);
+
+  const subProgramNames = useMemo(() => {
+    const set = new Set(
+      programRows
+        .filter(
+          (r) =>
+            (!selectedFaculty || r.facultyName === selectedFaculty) &&
+            (!selectedProgramName || r.programName === selectedProgramName)
+        )
+        .map((r) => r.subProgramName)
+        .filter(Boolean)
+    );
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows, selectedFaculty, selectedProgramName]);
+
+  useEffect(() => {
+    if (!selectedFaculty || !selectedProgramName || !selectedSubProgramName) {
+      setResolvedProgramId(null);
+      return;
+    }
+    const found = programRows.find(
+      (r) =>
+        r.facultyName === selectedFaculty &&
+        r.programName === selectedProgramName &&
+        r.subProgramName === selectedSubProgramName
+    );
+    setResolvedProgramId(found ? found.programId : null);
+  }, [selectedFaculty, selectedProgramName, selectedSubProgramName, programRows]);
+
+  const onSelectFaculty = (val: string) => {
+    setSelectedFaculty(val);
+    setSelectedProgramName("");
+    setSelectedSubProgramName("");
+    setResolvedProgramId(null);
   };
-  try {
-        await CreateTeacher(payload);
-        toast.success("เพิ่มวิชาสำเร็จ");
-        onClosePopUp(false);
-      } catch (err) {
-        console.error("Error saving teacher:", err);
-        toast.error("บันทึกวิชาไม่สำเร็จ");
+  const onSelectProgramName = (val: string) => {
+    setSelectedProgramName(val);
+    setSelectedSubProgramName("");
+    setResolvedProgramId(null);
+  };
+  const onSelectSubProgramName = (val: string) => {
+    setSelectedSubProgramName(val);
+    
+  };
+
+  const handleSubmit = async () => {
+   
+    if (
+      !teacherCode ||
+      !username ||
+      !password ||
+      !firstName ||
+      !lastName ||
+      !birthDate ||
+      !hiredDate ||
+      !resolvedProgramId
+    ) {
+      toast.error(
+        "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล, วันเกิด, วันที่เริ่มงาน และเลือกคณะ/สาขา/แขนงให้ครบ"
+      );
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("รหัสผ่านไม่ตรงกัน");
+      return;
+    }
+    
+    if (!/^\d+$/.test(teacherCode)) {
+      toast.error("รหัสอาจารย์ต้องเป็นตัวเลขเท่านั้น");
+      return;
+    }
+    if (phone && !/^\d{10}$/.test(phone)) {
+      toast.error("เบอร์โทรต้องเป็นตัวเลข 10 หลัก");
+      return;
+    }
+    if (citizenId && !/^\d{13}$/.test(citizenId)) {
+      toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
+      return;
+    }
+
+    const payload: CreateTeacherRequest = {
+      prefix,
+      teacherCode: teacherCode.trim(),
+      hiredDate, 
+      programId: Number(resolvedProgramId), 
+      userName: username.trim(),
+      password,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      gender: gender || "",
+      citizenId: citizenId || "",
+      phoneNumber: phone || "",
+      nationality: nationality || "",
+      birthDate, 
+    };
+
+    try {
+      await CreateTeacher(payload);
+      toast.success("เพิ่มบัญชีอาจารย์สำเร็จ");
+      onClosePopUp(true);
+    } catch (err: any) {
+      console.error("Error saving teacher:", err?.response?.data || err);
+      const modelErrors = err?.response?.data?.errors;
+      if (modelErrors && typeof modelErrors === "object") {
+        const firstKey = Object.keys(modelErrors)[0];
+        const firstMsg = Array.isArray(modelErrors[firstKey])
+          ? modelErrors[firstKey][0]
+          : String(modelErrors[firstKey]);
+        toast.error(firstMsg);
+      } else {
+        const backendMsg =
+          err?.response?.data?.responseMessage ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "บันทึกข้อมูลไม่สำเร็จ";
+        toast.error(backendMsg);
       }
-};
-
-
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[650px] space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-[720px] space-y-4 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีอาจารย์</h2>
 
-        {/* แถว 1 */}
+       
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสอาจารย์</label>
             <input
               type="text"
               value={teacherCode}
-              onChange={(e) => setTeacherCode(e.target.value)}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (/^\d*$/.test(v)) setTeacherCode(v); 
+              }}
               className="w-full border px-3 py-2 rounded"
+              placeholder="ตัวเลขเท่านั้น"
             />
           </div>
 
-          {/* เปลี่ยนจาก input number -> dropdown */}
+         
           <div>
-            <label className="text-sm">รหัสแผนก (เลือกจากห้อง/แผนก)</label>
+            <label className="text-sm">คณะ (Faculty)</label>
             <select
-              value={program ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                setProgram(val === "" ? null : Number(val));
-              }}
+              value={selectedFaculty}
+              onChange={(e) => onSelectFaculty(e.target.value)}
               className="w-full border px-3 py-2 rounded"
               disabled={loadingPrograms || !!programsError}
             >
@@ -134,26 +229,54 @@ const handleSubmit = async () => {
                   ? "กำลังโหลดข้อมูล..."
                   : programsError
                   ? "โหลดข้อมูลไม่สำเร็จ"
-                  : "-- เลือกห้อง (แสดง groupName) --"}
+                  : "— เลือกคณะ —"}
               </option>
-
-              {programs.map((p) => (
-                <option
-                  key={`${p.programId}-${p.groupId}`}
-                  value={p.programId}
-                >
-                  {p.groupName} — {p.programName} ({p.facultyName})
+              {faculties.map((f) => (
+                <option key={f} value={f}>
+                  {f}
                 </option>
               ))}
             </select>
-            <p className="text-xs text-gray-500 mt-1">
-              * ระบบจะบันทึกเป็น Program ID:{" "}
-              <b>{program ?? "-"}</b>
-            </p>
+          </div>
+        </div>
+      
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm">สาขา (Program)</label>
+            <select
+              value={selectedProgramName}
+              onChange={(e) => onSelectProgramName(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              disabled={!selectedFaculty || loadingPrograms || !!programsError}
+            >
+              <option value="">{!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}</option>
+              {programNames.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-sm">แขนง/สาขาย่อย (Sub Program)</label>
+            <select
+              value={selectedSubProgramName}
+              onChange={(e) => onSelectSubProgramName(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              disabled={!selectedProgramName || loadingPrograms || !!programsError}
+            >
+              <option value="">{!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}</option>
+              {subProgramNames.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* แถว 2 */}
+ 
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -187,7 +310,7 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* แถว 3 */}
+       
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">เพศ</label>
@@ -210,19 +333,24 @@ const handleSubmit = async () => {
                 setPhone(onlyDigits);
               }}
               className="w-full border px-3 py-2 rounded"
+              placeholder="เช่น 0812345678"
             />
           </div>
         </div>
 
-        {/* แถว 4 */}
+     
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสประชาชน</label>
             <input
               type="text"
               value={citizenId}
-              onChange={(e) => setCitizenId(e.target.value)}
+              onChange={(e) => {
+                const onlyDigits = e.target.value.replace(/\D/g, "");
+                if (onlyDigits.length <= 13) setCitizenId(onlyDigits);
+              }}
               className="w-full border px-3 py-2 rounded"
+              placeholder="13 หลัก"
             />
           </div>
           <div>
@@ -236,7 +364,7 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* แถว 5 */}
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">วันเกิด</label>
@@ -258,7 +386,9 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* แถว 6 */}
+
+
+  
         <div>
           <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
           <input
@@ -269,7 +399,7 @@ const handleSubmit = async () => {
           />
         </div>
 
-        {/* แถว 7 */}
+    
         <div>
           <label className="text-sm">รหัสผ่าน</label>
           <div className="relative">
@@ -289,7 +419,7 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* แถว 8 */}
+    
         <div>
           <label className="text-sm">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -309,18 +439,15 @@ const handleSubmit = async () => {
           </div>
         </div>
 
-        {/* ปุ่ม */}
+       
         <div className="flex justify-end gap-3 pt-4">
-          <button
-            className="px-4 py-1 bg-gray-300 rounded"
-            onClick={() => onClosePopUp(false)}
-          >
+          <button className="px-4 py-1 bg-gray-300 rounded" onClick={() => onClosePopUp(false)}>
             ยกเลิก
           </button>
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
-            disabled={loadingPrograms && program === null}
+            disabled={loadingPrograms}
           >
             บันทึกข้อมูล
           </button>
@@ -329,7 +456,3 @@ const handleSubmit = async () => {
     </div>
   );
 }
-function renderErrorFromAxios(err: any) {
-  throw new Error("Function not implemented.");
-}
-

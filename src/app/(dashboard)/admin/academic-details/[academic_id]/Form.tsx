@@ -48,7 +48,7 @@ export default function AcademicDetailForm({ academicId }: Props) {
   const [originalData, setOriginalData] = useState<GetAcademicDetailUserResponse | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
-  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false); // ⬅️ state popup ลบ
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {

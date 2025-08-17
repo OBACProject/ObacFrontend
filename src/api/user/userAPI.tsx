@@ -1,5 +1,5 @@
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import { CreateAcademicRequest, GetAcademicDetailUserResponse, GetAllAcademicUser, UpdateIsActiveUserRequest, UpdateUserDetailRequest, UpdateUserPasswordRequest } from "@/dto/userDto";
+import { CreateAcademicRequest, GetAcademicDetailUserResponse, GetAllAcademicUser, GetUserCountRespond, UpdateIsActiveUserRequest, UpdateUserDetailRequest, UpdateUserPasswordRequest } from "@/dto/userDto";
 import apiClient from "@/lib/apiClient";
 import { cookies } from "next/headers";
 
@@ -106,3 +106,24 @@ export const DeleteUser = async (userId: string): Promise<boolean> => {
     throw err;
   }
 };
+
+export const GetUserCount = async (): Promise<GetUserCountRespond> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetUserCountRespond;
+    }>("Admin/GetUserCount");
+
+    return response.data.data;
+  } catch (err) {
+    console.log("Error in GetAllAcademicUsers: ", err);
+    return {
+      totalUserCount: 0,
+      totalStudentCount: 0,
+      totalTeacherCount: 0,
+      totalAcademicCount: 0,
+    };
+  }
+};
+

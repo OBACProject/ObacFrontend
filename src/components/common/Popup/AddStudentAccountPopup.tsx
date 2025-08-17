@@ -3,8 +3,11 @@
 import { CreateStudent } from "@/api/student/route";
 import { GetAllStudentGroup } from "@/api/studentGroup/route";
 import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+
+import { GetAllPrograms } from "@/api/program/rount";
+import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
@@ -20,13 +23,18 @@ type CreateStudentRequest = {
   citizenId: string;
   phoneNumber: string;
   nationality: string;
-  birthDate: string; // "YYYY-MM-DD"
+  birthDate: string;
   prefix: string;
   studentGroupId: number;
 };
 
-// helper: แปลงข้อความแสดงใน dropdown
-function formatGroupLabel(g: GetAllStudentGroupRequest) {
+type MergedGroup = GetAllStudentGroupRequest & {
+  facultyName?: string;
+  programName?: string;
+  subProgramName?: string;
+};
+
+function formatGroupLabel(g: MergedGroup) {
   const cls = g.class ?? "-";
   const name = g.groupName ?? "-";
   const term = g.term ? String(g.term) : "-";
@@ -39,7 +47,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [studentCode, setStudentCode] = useState("");
   const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
 
-  const [prefix, setPrefix] = useState("นาย");
+  // ✅ เปลี่ยนค่าเริ่มต้นเป็นค่าว่าง (ให้ผู้ใช้เลือกเอง)
+  const [prefix, setPrefix] = useState<string>("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("ชาย");
@@ -53,150 +62,127 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // groups state
-  const [groups, setGroups] = useState<GetAllStudentGroupRequest[]>([]);
+  // data state
+  const [rawGroups, setRawGroups] = useState<GetAllStudentGroupRequest[]>([]);
+  const [programs, setPrograms] = useState<GetAllProgramsResponse[]>([]);
+  const [groups, setGroups] = useState<MergedGroup[]>([]);
+
   const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
   const [groupsError, setGroupsError] = useState<string | null>(null);
 
-  // ✅ Combobox state (ช่องเดียว)
-  const [comboOpen, setComboOpen] = useState(false);
-  const [comboInput, setComboInput] = useState(""); // ข้อความในช่อง (ค้นหา/แสดง label)
-  const [highlightIndex, setHighlightIndex] = useState<number>(-1);
-  const comboRef = useRef<HTMLDivElement | null>(null);
-  const listRef = useRef<HTMLUListElement | null>(null);
+  // cascading selects
+  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
+  const [selectedProgramName, setSelectedProgramName] = useState<string>("");
+  const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
 
-  // โหลดห้องเรียน
   useEffect(() => {
-    const loadGroups = async () => {
+    const load = async () => {
       try {
         setLoadingGroups(true);
         setGroupsError(null);
-        const data = await GetAllStudentGroup();
-
-        const active = data.filter((g) => g.isActive !== false);
-
-        // เรียงตาม groupCode > class > groupName
-        active.sort((a, b) =>
-          `${a.groupCode ?? ""}|${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
-            `${b.groupCode ?? ""}|${b.class ?? ""}|${b.groupName ?? ""}`,
-            "th",
-            { numeric: true, sensitivity: "base" }
-          )
-        );
-
-        setGroups(active);
+        const [prog, grp] = await Promise.all([GetAllPrograms(), GetAllStudentGroup()]);
+        setPrograms(Array.isArray(prog) ? prog : []);
+        setRawGroups(Array.isArray(grp) ? grp : []);
       } catch (e) {
         console.error(e);
-        setGroupsError("โหลดรายการห้องเรียนไม่สำเร็จ");
+        setGroupsError("โหลดข้อมูลไม่สำเร็จ");
       } finally {
         setLoadingGroups(false);
       }
     };
-
-    loadGroups();
+    load();
   }, []);
 
-  // ตั้งค่า label ในช่องเมื่อเลือกห้องเรียนแล้ว
   useEffect(() => {
-    if (!studentGroupId) {
-      setComboInput("");
+    if (!rawGroups.length) {
+      setGroups([]);
       return;
     }
-    const found = groups.find((g) => g.id === studentGroupId);
-    if (found) setComboInput(formatGroupLabel(found));
-  }, [studentGroupId, groups]);
+    const map = new Map<number, GetAllProgramsResponse>();
+    for (const p of programs) map.set(p.programId, p);
 
-  // กรองรายการตามที่พิมพ์ในช่อง combobox
-  const filteredGroups = useMemo(() => {
-    const q = comboInput.trim().toLowerCase();
-    if (!q) return groups;
+    const activeMerged: MergedGroup[] = rawGroups
+      .filter((g) => g.isActive !== false)
+      .map((g) => {
+        const p = map.get(Number(g.programId));
+        return {
+          ...g,
+          facultyName: p?.facultyName,
+          programName: p?.programName,
+          subProgramName: p?.subProgramName,
+        };
+      });
+
+    activeMerged.sort((a, b) =>
+      `${a.facultyName ?? ""}|${a.programName ?? ""}|${a.subProgramName ?? ""}|${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
+        `${b.facultyName ?? ""}|${b.programName ?? ""}|${b.subProgramName ?? ""}|${b.class ?? ""}|${b.groupName ?? ""}`,
+        "th",
+        { numeric: true, sensitivity: "base" }
+      )
+    );
+
+    setGroups(activeMerged);
+  }, [rawGroups, programs]);
+
+  const faculties = useMemo(() => {
+    const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [groups]);
+
+  const programNames = useMemo(() => {
+    const s = new Set(
+      groups
+        .filter((g) => !selectedFaculty || g.facultyName === selectedFaculty)
+        .map((g) => g.programName)
+        .filter(Boolean) as string[]
+    );
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [groups, selectedFaculty]);
+
+  const subProgramNames = useMemo(() => {
+    const s = new Set(
+      groups
+        .filter(
+          (g) =>
+            (!selectedFaculty || g.facultyName === selectedFaculty) &&
+            (!selectedProgramName || g.programName === selectedProgramName)
+        )
+        .map((g) => g.subProgramName)
+        .filter(Boolean) as string[]
+    );
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [groups, selectedFaculty, selectedProgramName]);
+
+  const filteredGroupOptions = useMemo(() => {
     return groups.filter((g) => {
-      const hay = [
-        g.groupCode,
-        g.groupName,
-        g.class,
-        g.term,
-        g.year?.toString(),
-        formatGroupLabel(g),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(q);
+      if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
+      if (selectedProgramName && g.programName !== selectedProgramName) return false;
+      if (selectedSubProgramName && g.subProgramName !== selectedSubProgramName) return false;
+      return true;
     });
-  }, [groups, comboInput]);
+  }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName]);
 
-  // ปิด dropdown เมื่อคลิกนอก
-  useEffect(() => {
-    const onClickOutside = (e: MouseEvent) => {
-      if (comboRef.current && !comboRef.current.contains(e.target as Node)) {
-        setComboOpen(false);
-        setHighlightIndex(-1);
-        // ถ้าไม่ได้เลือก (studentGroupId == null) และพิมพ์ไว้ ให้คงข้อความไว้เป็น search ก็ได้
-        // หรือจะเคลียร์ก็ได้: setComboInput("")
-      }
-    };
-    document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
-  }, []);
+  const onSelectFaculty = (val: string) => {
+    setSelectedFaculty(val);
+    setSelectedProgramName("");
+    setSelectedSubProgramName("");
+    setStudentGroupId(null);
+  };
+  const onSelectProgramName = (val: string) => {
+    setSelectedProgramName(val);
+    setSelectedSubProgramName("");
+    setStudentGroupId(null);
+  };
+  const onSelectSubProgramName = (val: string) => {
+    setSelectedSubProgramName(val);
+    setStudentGroupId(null);
+  };
 
-  // คีย์บอร์ดควบคุม combobox
-  const onComboKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!comboOpen && (e.key === "ArrowDown" || e.key === "Enter")) {
-      setComboOpen(true);
-      setHighlightIndex(0);
+  const handleSubmit = async () => {
+    if (!prefix) {
+      toast.error("กรุณาเลือกคำนำหน้า");
       return;
     }
-
-    if (!comboOpen) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setHighlightIndex((i) => Math.min(i + 1, filteredGroups.length - 1));
-      scrollHighlightedIntoView();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setHighlightIndex((i) => Math.max(i - 1, 0));
-      scrollHighlightedIntoView();
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (highlightIndex >= 0 && filteredGroups[highlightIndex]) {
-        const g = filteredGroups[highlightIndex];
-        setStudentGroupId(g.id ?? null);
-        setComboInput(formatGroupLabel(g));
-        setComboOpen(false);
-      }
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      setComboOpen(false);
-      setHighlightIndex(-1);
-    }
-  };
-
-  const scrollHighlightedIntoView = () => {
-    // เลื่อนให้ option ที่ไฮไลต์อยู่ในวิวง่ายๆ
-    if (!listRef.current) return;
-    const el = listRef.current.querySelector('[data-highlighted="true"]') as HTMLElement | null;
-    if (el) {
-      el.scrollIntoView({ block: "nearest" });
-    }
-  };
-
-  const handleChooseGroup = (g: GetAllStudentGroupRequest) => {
-    setStudentGroupId(g.id ?? null);
-    setComboInput(formatGroupLabel(g));
-    setComboOpen(false);
-  };
-
-  const clearGroup = () => {
-    setStudentGroupId(null);
-    setComboInput("");
-    setHighlightIndex(-1);
-    setComboOpen(false);
-  };
-
-  // Submit
-  const handleSubmit = async () => {
     if (
       !username.trim() ||
       !password ||
@@ -206,22 +192,17 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       !studentCode.trim() ||
       !studentGroupId
     ) {
-      toast.error(
-        "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: Username, Password, ชื่อ, นามสกุล, วันเกิด, รหัสนักเรียน, กลุ่มเรียน"
-      );
+      toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
       return;
     }
-
     if (password !== confirmPassword) {
       toast.error("รหัสผ่านไม่ตรงกัน");
       return;
     }
-
     if (!/^\d{13}$/.test(citizenId)) {
       toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
       return;
     }
-
     if (!/^\d{10}$/.test(phone)) {
       toast.error("เบอร์โทรต้องเป็นตัวเลข 10 หลัก");
       return;
@@ -238,7 +219,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       phoneNumber: phone.trim(),
       nationality: nationality || "",
       birthDate,
-      prefix,
+      prefix : prefix || "",
       studentGroupId: Number(studentGroupId),
     };
 
@@ -248,7 +229,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       onClosePopUp(true);
     } catch (err: any) {
       console.error("CreateStudent error:", err?.response?.data || err);
-
       const modelErrors = err?.response?.data?.errors;
       if (modelErrors && typeof modelErrors === "object") {
         const firstKey = Object.keys(modelErrors)[0];
@@ -267,108 +247,125 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     }
   };
 
+  const selectedGroup = useMemo(
+    () => groups.find((g) => g.id === studentGroupId),
+    [groups, studentGroupId]
+  );
+
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[650px] space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl p-7 w-[780px] space-y-6 max-h-[92vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีนักเรียน</h2>
 
-        {/* แถว 1 */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-1">
-            <label className="text-sm">รหัสนักเรียน</label>
-            <input
-              type="text"
-              value={studentCode}
-              onChange={(e) => setStudentCode(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
-            />
-          </div>
-
-          <div ref={comboRef} className="relative col-span-2">
-            <label className="text-sm">กลุ่มเรียน (เลือกห้อง)</label>
-            <div className="flex items-center gap-2">
+        {/* เลือกคณะ → สาขา → แขนง → ห้อง */}
+        <div className="space-y-3">
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="text-sm">รหัสนักเรียน</label>
               <input
                 type="text"
-                placeholder={
-                  loadingGroups
+                value={studentCode}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setStudentCode(value);
+                  }
+                }}
+                className="w-full border px-3 py-2 rounded"
+                placeholder="เช่น 65001"
+              />
+            </div>
+
+
+            <div>
+              <label className="text-sm">คณะ (Faculty)</label>
+              <select
+                value={selectedFaculty}
+                onChange={(e) => onSelectFaculty(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                disabled={loadingGroups || !!groupsError || faculties.length === 0}
+              >
+                <option value="">
+                  {loadingGroups
                     ? "กำลังโหลดข้อมูล..."
                     : groupsError
                       ? "โหลดข้อมูลไม่สำเร็จ"
-                      : "พิมพ์เพื่อค้นหาและเลือกห้อง..."
-                }
-                value={comboInput}
-                onChange={(e) => {
-                  setComboInput(e.target.value);
-                  setComboOpen(true);
-                  setHighlightIndex(0);
-                }}
-                onFocus={() => setComboOpen(true)}
-                onKeyDown={onComboKeyDown}
-                className="w-full border px-3 py-2 rounded"
-                disabled={loadingGroups || !!groupsError}
-                aria-expanded={comboOpen}
-                aria-controls="group-combobox-list"
-                aria-autocomplete="list"
-              />
-              {studentGroupId && (
-                <button
-                  type="button"
-                  onClick={clearGroup}
-                  className="text-sm text-red-800 hover:text-gray-800 px-2"
-                  title="ล้างค่า"
-                >
-                  ล้าง
-                </button>
-              )}
+                      : "— เลือกคณะ —"}
+                </option>
+                {faculties.map((f) => (
+                  <option key={f} value={f}>
+                    {f}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {comboOpen && !loadingGroups && !groupsError && (
-              <ul
-                id="group-combobox-list"
-                ref={listRef}
-                role="listbox"
-                className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-lg"
+            <div>
+              <label className="text-sm">สาขา (Program)</label>
+              <select
+                value={selectedProgramName}
+                onChange={(e) => onSelectProgramName(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                disabled={!selectedFaculty || loadingGroups || !!groupsError}
               >
-                {filteredGroups.length === 0 ? (
-                  <li className="px-3 py-2 text-sm text-gray-500">ไม่พบรายการที่ตรงกับคำค้น</li>
-                ) : (
-                  filteredGroups.map((g, idx) => {
-                    const isHighlighted = idx === highlightIndex;
-                    return (
-                      <li
-                        key={g.id}
-                        role="option"
-                        aria-selected={isHighlighted}
-                        data-highlighted={isHighlighted ? "true" : "false"}
-                        className={`px-3 py-2 cursor-pointer text-sm ${isHighlighted ? "bg-blue-100" : "hover:bg-gray-100"
-                          }`}
-                        onMouseEnter={() => setHighlightIndex(idx)}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => handleChooseGroup(g)}
-                      >
-                        {formatGroupLabel(g)}
-                      </li>
-                    );
-                  })
-                )}
-              </ul>
-            )}
+                <option value="">{!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}</option>
+                {programNames.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-            <p className="text-xs text-gray-500 mt-1">
-              {studentGroupId
-                ? (() => {
-                  const selected = groups.find((g) => g.id === studentGroupId);
-                  if (!selected) return "* ยังไม่ได้เลือกกลุ่มเรียน";
-                  return `* ระบบจะบันทึกเป็น กลุ่มเรียน : ${selected.class ?? ""} ${selected.groupName ?? ""} (เทอม ${selected.term ?? "-"} ปีการศึกษา ${selected.year ?? "-"})`;
-                })()
-                : "* ยังไม่ได้เลือกกลุ่มเรียน"}
-            </p>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="text-sm">แขนง/สาขาย่อย (Sub Program)</label>
+              <select
+                value={selectedSubProgramName}
+                onChange={(e) => onSelectSubProgramName(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                disabled={!selectedProgramName || loadingGroups || !!groupsError}
+              >
+                <option value="">
+                  {!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}
+                </option>
+                {subProgramNames.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
 
+            <div className="col-span-2">
+              <label className="text-sm">ห้อง (Student Group)</label>
+              <select
+                value={studentGroupId ?? ""}
+                onChange={(e) => setStudentGroupId(e.target.value === "" ? null : Number(e.target.value))}
+                className="w-full border px-3 py-2 rounded"
+                disabled={!selectedSubProgramName || loadingGroups || !!groupsError}
+              >
+                <option value="">
+                  {!selectedSubProgramName ? "— เลือกแขนงก่อน —" : "— เลือกห้อง —"}
+                </option>
+                {filteredGroupOptions.map((g) => (
+                  <option key={g.id} value={g.id ?? ""}>
+                    {formatGroupLabel(g)}
+                  </option>
+                ))}
+              </select>
+
+              <p className="text-xs text-gray-500 mt-1">
+                {studentGroupId && selectedGroup
+                  ? `* ระบบจะบันทึกเป็น กลุ่มเรียน : ${selectedGroup.class ?? ""} ${selectedGroup.groupName ?? ""} (เทอม ${selectedGroup.term ?? "-"} ปีการศึกษา ${selectedGroup.year ?? "-"})`
+                  : "* ยังไม่ได้เลือกกลุ่มเรียน"}
+              </p>
+            </div>
           </div>
         </div>
 
-
-        {/* แถว 2 */}
+        {/* ข้อมูลผู้ใช้ */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -377,9 +374,11 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               onChange={(e) => setPrefix(e.target.value)}
               className="w-full border px-3 py-2 rounded"
             >
-              <option>นาย</option>
-              <option>นาง</option>
-              <option>นางสาว</option>
+            
+              <option value="">— เลือกคำนำหน้า —</option>
+              <option value="นาย">นาย</option>
+              <option value="นาง">นาง</option>
+              <option value="นางสาว">นางสาว</option>
             </select>
           </div>
           <div>
@@ -402,7 +401,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 3 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">เพศ</label>
@@ -429,7 +427,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 4 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสประชาชน</label>
@@ -454,7 +451,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 5 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">วันเกิด</label>
@@ -476,7 +472,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 6 */}
         <div>
           <label className="text-sm">รหัสผ่าน</label>
           <div className="relative">
@@ -496,7 +491,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* แถว 7 */}
         <div>
           <label className="text-sm">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -516,18 +510,14 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* ปุ่ม */}
-        <div className="flex justify-end gap-3 pt-4">
-          <button
-            className="px-4 py-1 bg-gray-300 rounded"
-            onClick={() => onClosePopUp(false)}
-          >
+        <div className="flex justify-end gap-3 pt-2">
+          <button className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded" onClick={() => onClosePopUp(false)}>
             ยกเลิก
           </button>
           <button
-            className="px-4 py-1 bg-blue-600 text-white rounded"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
             onClick={handleSubmit}
-            disabled={loadingGroups && studentGroupId === null}
+            disabled={loadingGroups}
           >
             บันทึกข้อมูล
           </button>

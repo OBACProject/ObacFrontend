@@ -118,7 +118,7 @@ export default function Form() {
 
       {filteredAcademicUsers.length > 0 ? (
         <div className="w-full rounded-sm px-10">
-          {/* Header */}
+          
           <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <BookOpen className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
@@ -130,9 +130,9 @@ export default function Form() {
             </div>
           </div>
 
-          {/* Table */}
+      
           <div className="shadow-lg w-full text-sm">
-            {/* Header */}
+            
             <div className="grid grid-cols-[5%_40%_25%_30%] text-black bg-gray-50 border-b text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
               <div className="flex items-center justify-center py-2">ชื่อฝ่ายทะเบียน</div>
@@ -140,7 +140,7 @@ export default function Form() {
               <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
             </div>
 
-            {/* Rows */}
+  
             {paginatedTeachers.map((item, index) => (
               <div
                 key={item.id}
@@ -171,7 +171,7 @@ export default function Form() {
             ))}
           </div>
 
-          {/* Pagination */}
+    
           <div className="flex justify-center items-center gap-4 mt-4">
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
@@ -202,7 +202,7 @@ export default function Form() {
         </div>
       )}
 
-      {/* Popup */}
+  
       {openCreatSubjectPopup && (
         <AddAcademicAccountPopup onClosePopUp={setOpenCreatePopUp} />
       )}

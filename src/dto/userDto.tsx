@@ -90,3 +90,10 @@ export interface UpdateUserPasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface GetUserCountRespond{
+totalUserCount: number;
+totalStudentCount: number;
+totalTeacherCount: number;
+totalAcademicCount: number;
+}

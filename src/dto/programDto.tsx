@@ -20,3 +20,9 @@ export type GetAllProgramWithStudentGroupResponse = {
   groupCode: string;
   level: number;
 };
+export type GetAllProgramsResponse ={
+  programId: number;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+}
