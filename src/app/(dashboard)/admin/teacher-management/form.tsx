@@ -1,10 +1,6 @@
 "use client";
 import { UserRoundCheck, UserPen, PlusCircle } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
-import { SubjectItem } from "@/dto/subjectDto";
-import { GetAllSubjectAsync } from "@/api/subject/route";
-import { EditSubjectPopUp } from "@/components/common/Popup/EditSubjectPopup";
-import { AddSubjectPopUp } from "@/components/common/Popup/AddSubjectPopup";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { GetAllTeacherUsers } from "@/api/teacher/route";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
 import AddTeacherAccountPopup from "@/components/common/Popup/AddTeacherAccountPopup";
@@ -17,9 +13,7 @@ export default function Form() {
   const [teachers, setTeacher] = useState<GetAllTeacherResponse[]>([]);
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedSubject, setSelectedSubject] = useState<SubjectItem | null>(null);
   const [openCreatSubjectPopup, setOpenCreatePopUp] = useState<boolean>(false);
-  const [openEditSubjectPopup, setOpenEditSubjectPopup] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -27,13 +21,16 @@ export default function Form() {
   const sortByTeacherId = (arr: GetAllTeacherResponse[]) =>
     [...arr].sort((a, b) => Number(a.teacherId ?? 0) - Number(b.teacherId ?? 0));
 
-  useEffect(() => {
-    GetAllTeacherUsers().then((d: GetAllTeacherResponse[]) => {
-      if (d) setTeacher(sortByTeacherId(d));
-    });
+  const fetchTeachers = useCallback(async () => {
+    const d = await GetAllTeacherUsers();
+    if (d) setTeacher(sortByTeacherId(d));
   }, []);
 
-  const filtereTeachers = useMemo(() => {
+  useEffect(() => {
+    fetchTeachers();
+  }, [fetchTeachers]);
+
+  const filteredTeachers = useMemo(() => {
     const lowerSearch = searchTerm.trim().toLowerCase();
     const filtered = teachers.filter((teacher) => {
       const code = teacher.teacherCode?.toLowerCase() ?? "";
@@ -48,16 +45,15 @@ export default function Form() {
         fullName.includes(lowerSearch)
       );
     });
-    return sortByTeacherId(filtered); 
+    return sortByTeacherId(filtered);
   }, [teachers, searchTerm]);
 
   const paginatedTeachers = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return filtereTeachers.slice(start, end);
-  }, [filtereTeachers, currentPage]);
+    return filteredTeachers.slice(start, end);
+  }, [filteredTeachers, currentPage]);
 
- 
   const handleToggleActive = async (userId: string, nextState: boolean, e?: React.MouseEvent) => {
     e?.stopPropagation();
 
@@ -72,7 +68,7 @@ export default function Form() {
       if (ok) toast.success("อัปเดตสถานะเรียบร้อย");
       else throw new Error("อัปเดตไม่สำเร็จ");
     } catch (err: any) {
-      setTeacher(snapshot); 
+      setTeacher(snapshot);
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
         const firstKey = Object.keys(errors)[0];
@@ -127,7 +123,7 @@ export default function Form() {
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
               รายชื่ออาจารย์ทั้งหมด
               <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">
-                {filtereTeachers.length || "-"}
+                {filteredTeachers.length || "-"}
               </p>
               รายการ
             </div>
@@ -172,7 +168,7 @@ export default function Form() {
                   <IsActiveToggleProps
                     isActive={item.isActive}
                     disabled={updatingId === String(item.id)}
-                    onToggle={(value: boolean) => handleToggleActive(item.id as unknown as string, value)}
+                    onToggle={(value: boolean) => handleToggleActive(String(item.id), value)}
                   />
                 </div>
               </div>
@@ -189,13 +185,13 @@ export default function Form() {
             </button>
 
             <span className="text-sm text-gray-700">
-              หน้า {currentPage} / {Math.ceil(filtereTeachers.length / itemsPerPage)}
+              หน้า {currentPage} / {Math.ceil(filteredTeachers.length / itemsPerPage)}
             </span>
 
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= Math.ceil(filtereTeachers.length / itemsPerPage)}
+              disabled={currentPage >= Math.ceil(filteredTeachers.length / itemsPerPage)}
             >
               ถัดไป
             </button>
@@ -210,13 +206,13 @@ export default function Form() {
       )}
 
       {openCreatSubjectPopup && (
-        <AddTeacherAccountPopup onClosePopUp={setOpenCreatePopUp} />
-      )}
-
-      {openEditSubjectPopup && selectedSubject && (
-        <EditSubjectPopUp
-          onClosePopUp={setOpenEditSubjectPopup}
-          data={selectedSubject}
+        <AddTeacherAccountPopup
+          onClosePopUp={setOpenCreatePopUp}
+          // ✅ หลังสร้างเสร็จ: รีเฟรชตาราง + กลับหน้า 1
+          onCreated={async () => {
+            await fetchTeachers();
+            setCurrentPage(1);
+          }}
         />
       )}
     </div>

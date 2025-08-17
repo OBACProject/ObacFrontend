@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -7,21 +8,25 @@ import { toast } from "react-toastify";
 import { GetTeacherDetailUser } from "@/api/teacher/route";
 import type { GetTeacherDetailUserResponse } from "@/dto/teacherDto";
 
-import { UpdateUserDetails } from "@/api/user/userAPI";
-import type { UpdateUserDetailRequest } from "@/dto/userDto";
+import { GetAllPrograms } from "@/api/program/rount";
+import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";
 import DeleteUserPopup from "@/components/common/Popup/DeleteUserPopup";
 
-import { GetAllPrograms } from "@/api/program/rount";
-import type { GetAllProgramsResponse } from "@/dto/programDto";
+import { UpdateTeacherUser } from "@/api/teacher/route";
+import type { UpdateTeacherUserRequest } from "@/dto/teacherDto";
 
-/* ---------------- Date helpers ---------------- */
-function toISODate(input?: string | null): string {
+
+function toISODateOnly(input?: string | null): string {
+ 
   if (!input) return "";
+  
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(input))) return String(input);
+ 
   const t = String(input).match(/^(\d{4})-(\d{2})-(\d{2})T/);
   if (t) return `${t[1]}-${t[2]}-${t[3]}`;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(String(input))) return String(input);
+  
   const dmy = String(input).match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
   if (dmy) {
     const dd = dmy[1].padStart(2, "0");
@@ -29,6 +34,7 @@ function toISODate(input?: string | null): string {
     const yy = dmy[3];
     return `${yy}-${mm}-${dd}`;
   }
+
   const d = new Date(String(input));
   if (!isNaN(d.getTime())) {
     const yy = d.getFullYear();
@@ -36,8 +42,9 @@ function toISODate(input?: string | null): string {
     const dd = String(d.getDate()).padStart(2, "0");
     return `${yy}-${mm}-${dd}`;
   }
-  return String(input);
+  return "";
 }
+
 function isoToDMY(iso?: string | null): string {
   if (!iso) return "";
   const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -46,7 +53,6 @@ function isoToDMY(iso?: string | null): string {
   return `${dd}/${mm}/${y}`;
 }
 
-/* ---------------- Component ---------------- */
 type Props = { teacherId: number };
 
 export default function TeacherDetailForm({ teacherId }: Props) {
@@ -58,30 +64,34 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Programs
+
   const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
-  // Cascade selections
+ 
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
 
-  // programId สุดท้ายที่เลือกได้จาก cascade (ต้องส่งตอน save)
+  
   const [selectedProgramId, setSelectedProgramId] = useState<number | null>(null);
 
-  // โหลดข้อมูลอาจารย์
+  
   useEffect(() => {
-    GetTeacherDetailUser(teacherId).then((data) => {
+    (async () => {
+      const data = await GetTeacherDetailUser(teacherId);
       if (!data) return;
-      const normalized = { ...data, birthDate: toISODate(data.birthDate) };
+      const normalized = {
+        ...data,
+        birthDate: toISODateOnly((data as any).birthDate),
+        hiredDate: toISODateOnly((data as any).hiredDate),
+      } as GetTeacherDetailUserResponse & { hiredDate?: string | null };
       setFormData(normalized);
       setOriginalData(normalized);
-    });
+    })();
   }, [teacherId]);
 
-  // โหลด Programs
   useEffect(() => {
     const load = async () => {
       try {
@@ -97,29 +107,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
           )
         );
         setProgramRows(rows);
-
-        // เซ็ตค่า cascade เริ่มต้นจาก programId ในโปรไฟล์ (ถ้ามี)
-        // รองรับหลายรูปแบบ field ที่อาจเจอ
-        const pidFromProfile =
-          (originalData as any)?.programId ??
-          (originalData as any)?.ProgramId ??
-          (originalData as any)?.program?.programId ??
-          (data as any)?.programId ??
-          null;
-
-        const found = rows.find((r) => r.programId === Number(pidFromProfile));
-        if (found) {
-          setSelectedFaculty(found.facultyName || "");
-          setSelectedProgramName(found.programName || "");
-          setSelectedSubProgramName(found.subProgramName || "");
-          setSelectedProgramId(found.programId);
-        } else {
-          // ถ้าไม่พบ ให้รีเซ็ต
-          setSelectedFaculty("");
-          setSelectedProgramName("");
-          setSelectedSubProgramName("");
-          setSelectedProgramId(null);
-        }
       } catch (e) {
         console.error(e);
         setProgramsError("โหลดข้อมูลโปรแกรมไม่สำเร็จ");
@@ -128,10 +115,31 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       }
     };
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originalData?.programId]);
+  }, []);
 
-  // options ของแต่ละชั้น
+  useEffect(() => {
+    if (!formData || programRows.length === 0) return;
+    const pid =
+      (formData as any)?.programId ??
+      (formData as any)?.ProgramId ??
+      (formData as any)?.program?.programId ??
+      null;
+
+    const found = programRows.find((r) => r.programId === Number(pid));
+    if (found) {
+      setSelectedFaculty(found.facultyName || "");
+      setSelectedProgramName(found.programName || "");
+      setSelectedSubProgramName(found.subProgramName || "");
+      setSelectedProgramId(found.programId);
+    } else {
+      setSelectedFaculty("");
+      setSelectedProgramName("");
+      setSelectedSubProgramName("");
+      setSelectedProgramId(null);
+    }
+  }, [formData, programRows]);
+
+  
   const faculties = useMemo(() => {
     const s = new Set(programRows.map((p) => p.facultyName).filter(Boolean) as string[]);
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
@@ -161,7 +169,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
   }, [programRows, selectedFaculty, selectedProgramName]);
 
-  // เมื่อเปลี่ยนค่า cascade ให้รีเซ็ตชั้นถัดไป และคำนวณ programId ให้ตรงกับสามชั้น
+
   const onSelectFaculty = (val: string) => {
     setSelectedFaculty(val);
     setSelectedProgramName("");
@@ -175,7 +183,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   };
   const onSelectSubProgramName = (val: string) => {
     setSelectedSubProgramName(val);
-    // map 3 ชั้น -> programId
     const found = programRows.find(
       (p) =>
         p.facultyName === selectedFaculty &&
@@ -190,8 +197,9 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     return programRows.find((p) => p.programId === selectedProgramId) || null;
   }, [selectedProgramId, programRows]);
 
-  const handleChange = (field: keyof GetTeacherDetailUserResponse, value: string) => {
-    if (formData) setFormData({ ...formData, [field]: value });
+  const handleChange = (field: keyof GetTeacherDetailUserResponse | "hiredDate", value: string) => {
+    if (!formData) return;
+    setFormData({ ...(formData as any), [field]: value } as any);
   };
 
   const handleSave = async () => {
@@ -210,31 +218,67 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       return;
     }
 
-    const userId = (formData as any)?.id ?? (formData as any)?.userId;
-    if (!userId) {
-      toast.error("ไม่พบรหัสผู้ใช้ (userId)");
+    const teacherIdNum =
+      Number((formData as any)?.teacherId) ||
+      Number(teacherId) || 0;
+
+    if (!teacherIdNum) {
+      toast.error("ไม่พบรหัสอาจารย์ (teacherId)");
       return;
     }
 
-    const payload: UpdateUserDetailRequest & { programId?: number } = {
-      id: String(userId),
+    const birthDateStr = toISODateOnly((formData as any).birthDate);
+    const hiredDateStr = toISODateOnly((formData as any).hiredDate);
+    if (!birthDateStr) { toast.error("รูปแบบวันเกิดไม่ถูกต้อง"); return; }
+    if (!hiredDateStr) { toast.error("กรุณาเลือกวันที่เข้าทำงาน"); return; }
+
+    const isActive =
+      typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
+
+    const payload: UpdateTeacherUserRequest = {
+      teacherId: teacherIdNum,
       prefix: formData.prefix ?? "",
       firstName: formData.firstName ?? "",
       lastName: formData.lastName ?? "",
-      phoneNumber: formData.phoneNumber ?? "",
-      citizenId: formData.citizenId ?? "",
       gender: formData.gender ?? "",
-      nationality: formData.nationality ?? "",
-      birthDate: toISODate(formData.birthDate),
+      teacherCode: (formData as any).teacherCode ?? "",
       programId: Number(selectedProgramId),
+      isActive,
+      hiredDate: hiredDateStr,
+      birthDate: birthDateStr,
+      phoneNumber: formData.phoneNumber ?? "",
+      nationality: formData.nationality ?? "",
+      citizenId: formData.citizenId ?? "",
     };
+
 
     try {
       setSaving(true);
-      const ok = await UpdateUserDetails(payload);
+      const ok = await UpdateTeacherUser(payload);
       if (ok) {
         toast.success("บันทึกข้อมูลเรียบร้อย");
-        setOriginalData((prev) => (prev ? { ...prev, ...(formData as any) } : (formData as any)));
+       
+        setFormData((prev) =>
+          prev
+            ? ({
+              ...prev,
+              programId: Number(selectedProgramId),
+              birthDate: birthDateStr,
+              hiredDate: hiredDateStr,
+            } as any)
+            : prev
+        );
+        setOriginalData((prev) =>
+          prev
+            ? ({
+              ...prev,
+              ...(formData as any),
+              programId: Number(selectedProgramId),
+              birthDate: birthDateStr,
+              hiredDate: hiredDateStr,
+            } as any)
+            : (formData as any)
+        );
         setIsEditing(false);
       } else {
         toast.error("บันทึกข้อมูลไม่สำเร็จ");
@@ -260,7 +304,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
   const handleCancel = () => {
     setFormData(originalData);
-    // รีเซ็ต cascade กลับตามเดิมจาก originalData
+    
     const pid =
       (originalData as any)?.programId ??
       (originalData as any)?.ProgramId ??
@@ -364,17 +408,35 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
       <div className="grid grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6">
         {/* account */}
-        <Info label="ชื่อผู้ใช้" value={formData.username} editable={false} />
+        <Info label="ชื่อผู้ใช้" value={(formData as any).username} editable={false} />
 
-        <Info label="คำนำหน้า" value={formData.prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
-        <Info label="ชื่อจริง" value={formData.firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
-        <Info label="นามสกุล" value={formData.lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
-        <Info label="เพศ" value={formData.gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
-        <Info label="วันเกิด" value={formData.birthDate} editable={isEditing} onChange={(v) => handleChange("birthDate", toISODate(v))} type="date" />
-        <Info label="รหัสอาจารย์" value={formData.teacherCode} editable={isEditing} onChange={(v) => handleChange("teacherCode", v)} />
-        <Info label="รหัสประชาชน" value={formData.citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
-        <Info label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
-        <Info label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
+        <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
+        <Info label="ชื่อจริง" value={(formData as any).firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
+        <Info label="นามสกุล" value={(formData as any).lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
+        <Info label="เพศ" value={(formData as any).gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
+
+        {/* วันเกิด */}
+        <Info
+          label="วันเกิด"
+          value={(formData as any).birthDate}
+          editable={isEditing}
+          onChange={(v) => handleChange("birthDate", toISODateOnly(v))}
+          type="date"
+        />
+
+        <Info label="รหัสอาจารย์" value={(formData as any).teacherCode} editable={isEditing} onChange={(v) => handleChange("teacherCode", v)} />
+        <Info label="รหัสประชาชน" value={(formData as any).citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
+        <Info label="เบอร์โทร" value={(formData as any).phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
+        <Info label="สัญชาติ" value={(formData as any).nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
+
+        {/* วันที่เข้าทำงาน */}
+        <Info
+          label="วันที่เข้าทำงาน (hiredDate)"
+          value={(formData as any).hiredDate as any}
+          editable={isEditing}
+          onChange={(v) => handleChange("hiredDate", toISODateOnly(v))}
+          type="date"
+        />
 
         {/* ---------- Program (View / Edit) ---------- */}
         <div className="col-span-2">
@@ -399,8 +461,8 @@ export default function TeacherDetailForm({ teacherId }: Props) {
                     {loadingPrograms
                       ? "กำลังโหลดข้อมูล..."
                       : programsError
-                      ? "โหลดข้อมูลไม่สำเร็จ"
-                      : "— เลือกคณะ —"}
+                        ? "โหลดข้อมูลไม่สำเร็จ"
+                        : "— เลือกคณะ —"}
                   </option>
                   {faculties.map((f) => (
                     <option key={f} value={f}>
@@ -448,6 +510,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
                     </option>
                   ))}
                 </select>
+                <p className="text-xs text-gray-500 mt-1">Program ID ที่จะบันทึก: <b>{selectedProgramId ?? "-"}</b></p>
               </div>
             </div>
           )}
@@ -490,7 +553,8 @@ function Info({
   const isDate = type === "date";
 
   if (!editable) {
-    const display = isDate ? (value ? isoToDMY(String(value)) : "—") : value && String(value).trim() !== "" ? String(value) : "—";
+    const display =
+      isDate ? (value ? isoToDMY(String(value)) : "—") : value && String(value).trim() !== "" ? String(value) : "—";
     return (
       <div>
         <label className="text-sm text-gray-500">{label}</label>
@@ -518,7 +582,13 @@ function Info({
     return (
       <div>
         <label className="text-sm text-gray-500">{label}</label>
-        <input type="date" value={value ?? ""} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded" lang="th-TH" />
+        <input
+          type="date"
+          value={value ?? ""}
+          onChange={(e) => onChange?.(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+          lang="th-TH"
+        />
       </div>
     );
   }

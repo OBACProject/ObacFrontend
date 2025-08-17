@@ -107,7 +107,7 @@ export const GetTeacherDetailUser = async (
 
     return response.data?.data ?? null;
   } catch (err) {
-    console.error("❌ Error in GetTeacherDetailUser: ", err);
+    console.error("Error in GetTeacherDetailUser: ", err);
     return null;
   }
 };
@@ -144,8 +144,10 @@ export const CreateTeacher = async (
   }
 };
 
+
 export const UpdateTeacherUser = async (payload: UpdateTeacherUserRequest) => {
   try {
+  
     const res = await apiClient.put("Teacher/UpdateTeacherUser", payload);
     return res.data;
   } catch (error) {

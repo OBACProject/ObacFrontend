@@ -10,10 +10,10 @@ import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
+  onCreated?: () => Promise<void> | void; 
 };
 
-export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
-  
+export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Props) {
   const [teacherCode, setTeacherCode] = useState("");
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
@@ -30,18 +30,15 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
- 
   const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
-  
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
   const [resolvedProgramId, setResolvedProgramId] = useState<number | null>(null);
 
- 
   useEffect(() => {
     const load = async () => {
       try {
@@ -58,7 +55,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
     };
     load();
   }, []);
-
 
   const faculties = useMemo(() => {
     const set = new Set(programRows.map((r) => r.facultyName).filter(Boolean));
@@ -116,11 +112,9 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
   };
   const onSelectSubProgramName = (val: string) => {
     setSelectedSubProgramName(val);
-    
   };
 
   const handleSubmit = async () => {
-   
     if (
       !teacherCode ||
       !username ||
@@ -140,7 +134,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
       toast.error("รหัสผ่านไม่ตรงกัน");
       return;
     }
-    
+
     if (!/^\d+$/.test(teacherCode)) {
       toast.error("รหัสอาจารย์ต้องเป็นตัวเลขเท่านั้น");
       return;
@@ -157,8 +151,8 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
     const payload: CreateTeacherRequest = {
       prefix,
       teacherCode: teacherCode.trim(),
-      hiredDate, 
-      programId: Number(resolvedProgramId), 
+      hiredDate, // YYYY-MM-DD จาก input type="date"
+      programId: Number(resolvedProgramId),
       userName: username.trim(),
       password,
       firstName: firstName.trim(),
@@ -167,13 +161,16 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
       citizenId: citizenId || "",
       phoneNumber: phone || "",
       nationality: nationality || "",
-      birthDate, 
+      birthDate, // YYYY-MM-DD
     };
 
     try {
       await CreateTeacher(payload);
       toast.success("เพิ่มบัญชีอาจารย์สำเร็จ");
-      onClosePopUp(true);
+      // ✅ แจ้งหน้าแม่ให้รีเฟรช
+      await onCreated?.();
+      // ✅ ปิดป็อปอัป
+      onClosePopUp(false);
     } catch (err: any) {
       console.error("Error saving teacher:", err?.response?.data || err);
       const modelErrors = err?.response?.data?.errors;
@@ -199,7 +196,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
       <div className="bg-white rounded-lg shadow-lg p-6 w-[720px] space-y-4 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีอาจารย์</h2>
 
-       
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสอาจารย์</label>
@@ -208,14 +204,13 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
               value={teacherCode}
               onChange={(e) => {
                 const v = e.target.value;
-                if (/^\d*$/.test(v)) setTeacherCode(v); 
+                if (/^\d*$/.test(v)) setTeacherCode(v);
               }}
               className="w-full border px-3 py-2 rounded"
               placeholder="ตัวเลขเท่านั้น"
             />
           </div>
 
-         
           <div>
             <label className="text-sm">คณะ (Faculty)</label>
             <select
@@ -239,7 +234,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
             </select>
           </div>
         </div>
-      
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">สาขา (Program)</label>
@@ -276,7 +271,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
- 
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -310,7 +304,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-       
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">เพศ</label>
@@ -328,17 +321,13 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
             <input
               type="tel"
               value={phone}
-              onChange={(e) => {
-                const onlyDigits = e.target.value.replace(/\D/g, "");
-                setPhone(onlyDigits);
-              }}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
               className="w-full border px-3 py-2 rounded"
               placeholder="เช่น 0812345678"
             />
           </div>
         </div>
 
-     
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">รหัสประชาชน</label>
@@ -364,7 +353,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm">วันเกิด</label>
@@ -386,9 +374,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-
-
-  
         <div>
           <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
           <input
@@ -399,7 +384,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           />
         </div>
 
-    
         <div>
           <label className="text-sm">รหัสผ่าน</label>
           <div className="relative">
@@ -419,7 +403,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-    
         <div>
           <label className="text-sm">ยืนยันรหัสผ่าน</label>
           <div className="relative">
@@ -439,7 +422,6 @@ export default function AddTeacherAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-       
         <div className="flex justify-end gap-3 pt-4">
           <button className="px-4 py-1 bg-gray-300 rounded" onClick={() => onClosePopUp(false)}>
             ยกเลิก

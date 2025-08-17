@@ -446,15 +446,14 @@ export interface StudentDetails {
 }
 
 
-export interface UpdateStudentUserRequest 
-{
+export interface UpdateStudentUserRequest {
   studentId: number;
   prefix: string;
   firstName: string;
   lastName: string;
   gender: string;
   studentGroupId: number;
-  birthDate : Date;
+  birthDate: string;         
   studentCode: string;
   enrollYear: number;
   currentLevel: number;

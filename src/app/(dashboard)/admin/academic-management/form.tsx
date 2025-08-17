@@ -1,7 +1,7 @@
 "use client";
 
 import { BookOpen, LibraryBig, PlusCircle } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { GetAllAcademicUsers, UpdateIsActiveUser } from "@/api/user/userAPI";
 import { GetAllAcademicUser } from "@/dto/userDto";
 import AddAcademicAccountPopup from "@/components/common/Popup/AddAcademicAccountPopup";
@@ -17,36 +17,38 @@ export default function Form() {
   const itemsPerPage = 10;
   const router = useRouter();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
   const sortByFirstName = (arr: GetAllAcademicUser[]) =>
-  [...arr].sort((a, b) => {
-    const aFirst = a.firstName ?? "";
-    const bFirst = b.firstName ?? "";
-    const firstCmp = aFirst.localeCompare(bFirst, "th", { sensitivity: "base" });
-    if (firstCmp !== 0) return firstCmp;
- 
-    return (a.lastName ?? "").localeCompare(b.lastName ?? "", "th", { sensitivity: "base" });
-  });
+    [...arr].sort((a, b) => {
+      const aFirst = a.firstName ?? "";
+      const bFirst = b.firstName ?? "";
+      const firstCmp = aFirst.localeCompare(bFirst, "th", { sensitivity: "base" });
+      if (firstCmp !== 0) return firstCmp;
+      return (a.lastName ?? "").localeCompare(b.lastName ?? "", "th", { sensitivity: "base" });
+    });
+  const fetchUsers = useCallback(async () => {
+    const d = await GetAllAcademicUsers();
+    if (d) setTeacher(sortByFirstName(d));
+  }, []);
 
   useEffect(() => {
-  GetAllAcademicUsers().then((d) => {
-    if (d) setTeacher(sortByFirstName(d)); 
-  });
-}, []);
+    fetchUsers();
+  }, [fetchUsers]);
 
   const filteredAcademicUsers = useMemo(() => {
-  const q = searchTerm.trim().toLowerCase();
-  if (!q) return teachers; 
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return teachers;
 
-  const filtered = teachers.filter((u) => {
-    const first = u.firstName?.toLowerCase() ?? "";
-    const last = u.lastName?.toLowerCase() ?? "";
-    const full = `${u.prefix ?? ""} ${u.firstName ?? ""} ${u.lastName ?? ""}`.toLowerCase();
-    const phone = u.phoneNumber?.toLowerCase() ?? "";
-    return first.includes(q) || last.includes(q) || full.includes(q) || phone.includes(q);
-  });
+    const filtered = teachers.filter((u) => {
+      const first = u.firstName?.toLowerCase() ?? "";
+      const last = u.lastName?.toLowerCase() ?? "";
+      const full = `${u.prefix ?? ""} ${u.firstName ?? ""} ${u.lastName ?? ""}`.toLowerCase();
+      const phone = u.phoneNumber?.toLowerCase() ?? "";
+      return first.includes(q) || last.includes(q) || full.includes(q) || phone.includes(q);
+    });
 
-  return sortByFirstName(filtered);
-}, [teachers, searchTerm]);
+    return sortByFirstName(filtered);
+  }, [teachers, searchTerm]);
 
   const paginatedTeachers = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -54,9 +56,10 @@ export default function Form() {
   }, [filteredAcademicUsers, currentPage]);
 
   const handleToggleActive = async (userId: string, nextState: boolean) => {
-
     const snapshot = [...teachers];
-    setTeacher((prev) => prev.map((t) => (String(t.id) === userId ? { ...t, isActive: nextState } : t)));
+    setTeacher((prev) =>
+      prev.map((t) => (String(t.id) === userId ? { ...t, isActive: nextState } : t))
+    );
     setUpdatingId(userId);
 
     try {
@@ -67,7 +70,6 @@ export default function Form() {
         throw new Error("อัปเดตไม่สำเร็จ");
       }
     } catch (err: any) {
-
       setTeacher(snapshot);
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
@@ -99,7 +101,7 @@ export default function Form() {
       <div className="px-10 pt-6 pb-4 flex justify-between gap-5">
         <input
           type="text"
-          placeholder="ค้นหาราชชื่อ"
+          placeholder="ค้นหารายชื่อ"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -118,7 +120,6 @@ export default function Form() {
 
       {filteredAcademicUsers.length > 0 ? (
         <div className="w-full rounded-sm px-10">
-          
           <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <BookOpen className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
@@ -130,9 +131,7 @@ export default function Form() {
             </div>
           </div>
 
-      
           <div className="shadow-lg w-full text-sm">
-            
             <div className="grid grid-cols-[5%_40%_25%_30%] text-black bg-gray-50 border-b text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
               <div className="flex items-center justify-center py-2">ชื่อฝ่ายทะเบียน</div>
@@ -140,7 +139,6 @@ export default function Form() {
               <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
             </div>
 
-  
             {paginatedTeachers.map((item, index) => (
               <div
                 key={item.id}
@@ -159,7 +157,7 @@ export default function Form() {
                 </div>
                 <div
                   className="flex items-center justify-center py-2"
-                  onClick={(e) => e.stopPropagation()}  
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <IsActiveToggleProps
                     isActive={item.isActive}
@@ -171,7 +169,6 @@ export default function Form() {
             ))}
           </div>
 
-    
           <div className="flex justify-center items-center gap-4 mt-4">
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
@@ -202,9 +199,15 @@ export default function Form() {
         </div>
       )}
 
-  
       {openCreatSubjectPopup && (
-        <AddAcademicAccountPopup onClosePopUp={setOpenCreatePopUp} />
+        <AddAcademicAccountPopup
+          onClosePopUp={setOpenCreatePopUp}
+      
+          onCreated={async () => {
+            await fetchUsers();
+            setCurrentPage(1);
+          }}
+        />
       )}
     </div>
   );

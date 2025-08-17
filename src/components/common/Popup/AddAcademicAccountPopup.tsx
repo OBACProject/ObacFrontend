@@ -1,16 +1,16 @@
 "use client";
+
 import { CreateAcademic } from "@/api/user/userAPI";
 import { CreateAcademicRequest } from "@/dto/userDto";
 import React, { useState } from "react";
-// import { CreateAcademic } from "@/api/academic/route";
-// import { CreateAcademicRequest } from "@/dto/academicDto";
 import { toast } from "react-toastify";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
+  onCreated?: () => Promise<void> | void; 
 };
 
-export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
+export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Props) {
   const [academicCode, setAcademicCode] = useState("");
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
@@ -50,7 +50,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     const payload: CreateAcademicRequest = {
       prefix,
       academicCode,
-      username: username,
+      username,
       password,
       firstName,
       lastName,
@@ -63,11 +63,14 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
 
     try {
       await CreateAcademic(payload);
-      toast.success("เพิ่มวิชาสำเร็จ");
+      toast.success("เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
+      // ✅ แจ้งหน้าหลักให้รีเฟรชรายการ
+      await onCreated?.();
+      // ✅ ปิดป็อปอัป
       onClosePopUp(false);
     } catch (err) {
-      console.error("Error saving teacher:", err);
-      toast.error("บันทึกวิชาไม่สำเร็จ");
+      console.error("Error saving academic:", err);
+      toast.error("บันทึกข้อมูลไม่สำเร็จ");
     }
   };
 

@@ -329,7 +329,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     gender: formData.gender ?? "",
     studentGroupId: Number(selectedGroupId),
     studentCode: formData.studentCode ?? "",
-    birthDate: birth,               
+    birthDate: toISODate(formData.birthDate),        
     enrollYear,                     
     currentLevel,                   
     graduateYear,                   
@@ -343,8 +343,6 @@ export default function StudentDetailForm({ studentId }: Props) {
     const res = await UpdateStudentUser(payload);
     if (res) {
       toast.success("บันทึกข้อมูลเรียบร้อย");
-
-     
       const found = groups.find((g) => g.id === selectedGroupId);
       setFormData((prev) =>
         prev
@@ -357,9 +355,7 @@ export default function StudentDetailForm({ studentId }: Props) {
               lastName: payload.lastName,
               gender: payload.gender,
               studentCode: payload.studentCode,
-              birthDate: toISODate(payload.birthDate.toISOString()),
-              
-              
+              birthDate: toISODate(formData.birthDate),
               enrollYear: payload.enrollYear,
               
               currentLevel: payload.currentLevel,
