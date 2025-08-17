@@ -112,6 +112,10 @@ const config: Config = {
         blobSlow: "blob 28s ease-in-out infinite",
         pulseOpacity: "pulseOpacity 12s ease-in-out infinite",
         bgShift: "bgShift 30s ease-in-out infinite",
+         "blob-22-pulse-12": "blob 22s ease-in-out infinite, pulseOpacity 12s ease-in-out infinite",
+        "blob-26-pulse-15": "blob 26s ease-in-out infinite, pulseOpacity 15s ease-in-out infinite",
+        "blob-30-pulse-18": "blob 30s ease-in-out infinite, pulseOpacity 18s ease-in-out infinite",
+        "blob-19-pulse-10": "blob 19s ease-in-out infinite, pulseOpacity 10s ease-in-out infinite",
       },
       backgroundImage: {
         authBg: "/images/obac_view.jpg",
