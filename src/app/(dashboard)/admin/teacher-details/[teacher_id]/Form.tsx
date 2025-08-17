@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Pencil, Save, CircleX, KeyRound, Trash2, UserPen } from "lucide-react";
+import { Pencil, Save, CircleX, KeyRound, Trash2, UserPen, LoaderCircle } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { GetTeacherDetailUser } from "@/api/teacher/route";
@@ -13,7 +13,6 @@ import type { UpdateUserDetailRequest } from "@/dto/userDto";
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";
 import DeleteUserPopup from "@/components/common/Popup/DeleteUserPopup";
 
-// ✅ ใช้รายการ Program เพื่อให้ผู้ใช้เลือกเปลี่ยนได้
 import { GetAllPrograms } from "@/api/program/rount";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
@@ -59,12 +58,17 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // ✅ Programs สำหรับ dropdown
+  // Programs
   const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
-  // ✅ program ที่เลือกอยู่ (ใช้เลข programId)
+  // Cascade selections
+  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
+  const [selectedProgramName, setSelectedProgramName] = useState<string>("");
+  const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
+
+  // programId สุดท้ายที่เลือกได้จาก cascade (ต้องส่งตอน save)
   const [selectedProgramId, setSelectedProgramId] = useState<number | null>(null);
 
   // โหลดข้อมูลอาจารย์
@@ -74,14 +78,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       const normalized = { ...data, birthDate: toISODate(data.birthDate) };
       setFormData(normalized);
       setOriginalData(normalized);
-
-      // เดา field programId จาก response หลายรูปแบบที่เจอได้บ่อย
-      const pid =
-        (data as any).programId ??
-        (data as any).ProgramId ??
-        (data as any)?.program?.programId ??
-        null;
-      setSelectedProgramId(pid ? Number(pid) : null);
     });
   }, [teacherId]);
 
@@ -93,7 +89,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         setProgramsError(null);
         const data = await GetAllPrograms();
         const rows = Array.isArray(data) ? data : [];
-        // เรียงให้อ่านง่าย
         rows.sort((a, b) =>
           `${a.facultyName}|${a.programName}|${a.subProgramName}`.localeCompare(
             `${b.facultyName}|${b.programName}|${b.subProgramName}`,
@@ -102,6 +97,29 @@ export default function TeacherDetailForm({ teacherId }: Props) {
           )
         );
         setProgramRows(rows);
+
+        // เซ็ตค่า cascade เริ่มต้นจาก programId ในโปรไฟล์ (ถ้ามี)
+        // รองรับหลายรูปแบบ field ที่อาจเจอ
+        const pidFromProfile =
+          (originalData as any)?.programId ??
+          (originalData as any)?.ProgramId ??
+          (originalData as any)?.program?.programId ??
+          (data as any)?.programId ??
+          null;
+
+        const found = rows.find((r) => r.programId === Number(pidFromProfile));
+        if (found) {
+          setSelectedFaculty(found.facultyName || "");
+          setSelectedProgramName(found.programName || "");
+          setSelectedSubProgramName(found.subProgramName || "");
+          setSelectedProgramId(found.programId);
+        } else {
+          // ถ้าไม่พบ ให้รีเซ็ต
+          setSelectedFaculty("");
+          setSelectedProgramName("");
+          setSelectedSubProgramName("");
+          setSelectedProgramId(null);
+        }
       } catch (e) {
         console.error(e);
         setProgramsError("โหลดข้อมูลโปรแกรมไม่สำเร็จ");
@@ -110,12 +128,66 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       }
     };
     load();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [originalData?.programId]);
 
-  // program info ปัจจุบัน (สำหรับแสดงผลตอนดู/แก้)
+  // options ของแต่ละชั้น
+  const faculties = useMemo(() => {
+    const s = new Set(programRows.map((p) => p.facultyName).filter(Boolean) as string[]);
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows]);
+
+  const programNames = useMemo(() => {
+    const s = new Set(
+      programRows
+        .filter((p) => !selectedFaculty || p.facultyName === selectedFaculty)
+        .map((p) => p.programName)
+        .filter(Boolean) as string[]
+    );
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows, selectedFaculty]);
+
+  const subProgramNames = useMemo(() => {
+    const s = new Set(
+      programRows
+        .filter(
+          (p) =>
+            (!selectedFaculty || p.facultyName === selectedFaculty) &&
+            (!selectedProgramName || p.programName === selectedProgramName)
+        )
+        .map((p) => p.subProgramName)
+        .filter(Boolean) as string[]
+    );
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
+  }, [programRows, selectedFaculty, selectedProgramName]);
+
+  // เมื่อเปลี่ยนค่า cascade ให้รีเซ็ตชั้นถัดไป และคำนวณ programId ให้ตรงกับสามชั้น
+  const onSelectFaculty = (val: string) => {
+    setSelectedFaculty(val);
+    setSelectedProgramName("");
+    setSelectedSubProgramName("");
+    setSelectedProgramId(null);
+  };
+  const onSelectProgramName = (val: string) => {
+    setSelectedProgramName(val);
+    setSelectedSubProgramName("");
+    setSelectedProgramId(null);
+  };
+  const onSelectSubProgramName = (val: string) => {
+    setSelectedSubProgramName(val);
+    // map 3 ชั้น -> programId
+    const found = programRows.find(
+      (p) =>
+        p.facultyName === selectedFaculty &&
+        p.programName === selectedProgramName &&
+        p.subProgramName === val
+    );
+    setSelectedProgramId(found ? found.programId : null);
+  };
+
   const programInfo = useMemo(() => {
-    if (!selectedProgramId || !programRows.length) return null;
-    return programRows.find((p) => p.programId === Number(selectedProgramId)) || null;
+    if (!selectedProgramId) return null;
+    return programRows.find((p) => p.programId === selectedProgramId) || null;
   }, [selectedProgramId, programRows]);
 
   const handleChange = (field: keyof GetTeacherDetailUserResponse, value: string) => {
@@ -134,7 +206,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       return;
     }
     if (!selectedProgramId) {
-      toast.error("กรุณาเลือก Program");
+      toast.error("กรุณาเลือก คณะ / สาขา / แขนง ให้ครบ");
       return;
     }
 
@@ -144,7 +216,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       return;
     }
 
-    // ✅ แนบ programId ไปด้วย (ถ้า backend รองรับ)
     const payload: UpdateUserDetailRequest & { programId?: number } = {
       id: String(userId),
       prefix: formData.prefix ?? "",
@@ -163,10 +234,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       const ok = await UpdateUserDetails(payload);
       if (ok) {
         toast.success("บันทึกข้อมูลเรียบร้อย");
-        // sync ค่าเดิม
-        setOriginalData((prev) =>
-          prev ? { ...prev, ...(formData as any) } : (formData as any)
-        );
+        setOriginalData((prev) => (prev ? { ...prev, ...(formData as any) } : (formData as any)));
         setIsEditing(false);
       } else {
         toast.error("บันทึกข้อมูลไม่สำเร็จ");
@@ -192,18 +260,36 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
   const handleCancel = () => {
     setFormData(originalData);
-    // รีเซ็ต program ที่เลือกกลับตามเดิม
+    // รีเซ็ต cascade กลับตามเดิมจาก originalData
     const pid =
       (originalData as any)?.programId ??
       (originalData as any)?.ProgramId ??
       (originalData as any)?.program?.programId ??
       null;
-    setSelectedProgramId(pid ? Number(pid) : null);
 
+    const found = programRows.find((r) => r.programId === Number(pid));
+    if (found) {
+      setSelectedFaculty(found.facultyName || "");
+      setSelectedProgramName(found.programName || "");
+      setSelectedSubProgramName(found.subProgramName || "");
+      setSelectedProgramId(found.programId);
+    } else {
+      setSelectedFaculty("");
+      setSelectedProgramName("");
+      setSelectedSubProgramName("");
+      setSelectedProgramId(null);
+    }
     setIsEditing(false);
   };
 
-  if (!formData) return <div className="p-10">Loading...</div>;
+  if (!formData)
+    return (
+      <div className="w-full h-full bg-white border-[1px] border-blue-400 rounded-xl py-5 lg:py-10 flex gap-5 lg:gap-10 items-center justify-center">
+        <LoaderCircle className="w-12 h-12 text-blue-400 animate-spin" />
+        <h1 className="text-xl text-gray-600 font-prompt">กำลังโหลดข้อมูล... </h1>
+      </div>
+    );
+
   const userId = (formData as any)?.id ?? (formData as any)?.userId ?? "";
 
   return (
@@ -290,41 +376,78 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         <Info label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
 
-        {/* ---------- Program: dropdown เมื่อแก้ไข / แสดงผลเมื่อดู ---------- */}
+        {/* ---------- Program (View / Edit) ---------- */}
         <div className="col-span-2">
           {!isEditing ? (
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <ReadOnlyBox label="คณะ (Faculty)" value={programInfo?.facultyName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
               <ReadOnlyBox label="สาขา (Program)" value={programInfo?.programName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
               <ReadOnlyBox label="แขนง (Sub Program)" value={programInfo?.subProgramName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-              <ReadOnlyBox label="Program ID" value={selectedProgramId ? String(selectedProgramId) : "—"} />
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-4 items-end">
-              <div className="col-span-4">
-                <label className="text-sm text-gray-700">เลือก Program</label>
+            <div className="grid grid-cols-3 gap-4">
+              {/* Faculty */}
+              <div>
+                <label className="text-sm text-gray-700">คณะ (Faculty)</label>
                 <select
-                  value={selectedProgramId ?? ""}
-                  onChange={(e) => setSelectedProgramId(e.target.value === "" ? null : Number(e.target.value))}
+                  value={selectedFaculty}
+                  onChange={(e) => onSelectFaculty(e.target.value)}
                   className="w-full border px-3 py-2 rounded"
-                  disabled={loadingPrograms || !!programsError}
+                  disabled={loadingPrograms || !!programsError || faculties.length === 0}
                 >
                   <option value="">
                     {loadingPrograms
                       ? "กำลังโหลดข้อมูล..."
                       : programsError
                       ? "โหลดข้อมูลไม่สำเร็จ"
-                      : "— เลือก Program —"}
+                      : "— เลือกคณะ —"}
                   </option>
-                  {programRows.map((p) => (
-                    <option key={p.programId} value={p.programId}>
-                      {p.programName} — {p.subProgramName || "-"} ({p.facultyName})
+                  {faculties.map((f) => (
+                    <option key={f} value={f}>
+                      {f}
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  * จะบันทึกเป็น Program ID: <b>{selectedProgramId ?? "-"}</b>
-                </p>
+              </div>
+
+              {/* Program */}
+              <div>
+                <label className="text-sm text-gray-700">สาขา (Program)</label>
+                <select
+                  value={selectedProgramName}
+                  onChange={(e) => onSelectProgramName(e.target.value)}
+                  className="w-full border px-3 py-2 rounded"
+                  disabled={!selectedFaculty || loadingPrograms || !!programsError}
+                >
+                  <option value="">
+                    {!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}
+                  </option>
+                  {programNames.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sub Program */}
+              <div>
+                <label className="text-sm text-gray-700">แขนง (Sub Program)</label>
+                <select
+                  value={selectedSubProgramName}
+                  onChange={(e) => onSelectSubProgramName(e.target.value)}
+                  className="w-full border px-3 py-2 rounded"
+                  disabled={!selectedProgramName || loadingPrograms || !!programsError}
+                >
+                  <option value="">
+                    {!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}
+                  </option>
+                  {subProgramNames.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}

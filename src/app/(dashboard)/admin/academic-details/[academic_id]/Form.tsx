@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, Pencil, Save, CircleX, KeyRound, Trash2, LibraryBig } from "lucide-react";
+import { Box, Pencil, Save, CircleX, KeyRound, Trash2, LibraryBig, LoaderCircle } from "lucide-react";
 import { GetAcademicDetailUser, UpdateUserDetails } from "@/api/user/userAPI";
 import { GetAcademicDetailUserResponse, UpdateUserDetailRequest } from "@/dto/userDto";
 import { toast } from "react-toastify";
@@ -129,7 +129,10 @@ export default function AcademicDetailForm({ academicId }: Props) {
     setIsEditing(false);
   };
 
-  if (!formData) return <div className="p-10">Loading...</div>;
+  if (!formData) return <div className="w-full h-full bg-white border-[1px] border-blue-400 rounded-xl py-5 lg:py-10 flex gap-5 lg:gap-10 items-center justify-center h-fit">
+      <LoaderCircle className="w-12 h-12 text-blue-400 animate-spin" />
+      <h1 className="text-xl text-gray-600 font-prompt">กำลังโหลดข้อมูล... </h1>
+    </div>
   const userId = (formData as any)?.id ?? (formData as any)?.userId;
 
   return (
