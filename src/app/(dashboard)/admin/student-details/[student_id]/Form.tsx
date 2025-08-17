@@ -12,11 +12,9 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { GetStudentDetailResponse } from "@/dto/studentDto";
-import { GetStudentDetailById } from "@/api/student/route";
+import { GetStudentDetailResponse, UpdateStudentUserRequest } from "@/dto/studentDto";
+import { GetStudentDetailById, UpdateStudentUser } from "@/api/student/route";
 
-import { UpdateUserDetails } from "@/api/user/userAPI";
-import type { UpdateUserDetailRequest } from "@/dto/userDto";
 
 import { GetAllStudentGroup } from "@/api/studentGroup/route";
 import type { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
@@ -27,7 +25,7 @@ import type { GetAllProgramsResponse } from "@/dto/programDto";
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";
 import DeleteUserPopup from "@/components/common/Popup/DeleteUserPopup";
 
-/* -------------------- Utils -------------------- */
+
 function toISODate(input?: string | null): string {
   if (!input) return "";
   const isoT = input?.match?.(/^(\d{4})-(\d{2})-(\d{2})T/);
@@ -61,7 +59,7 @@ function cx(...s: Array<string | false | undefined>) {
   return s.filter(Boolean).join(" ");
 }
 
-/* -------------------- Types -------------------- */
+
 type Props = { studentId: string };
 
 type MergedGroup = GetAllStudentGroupRequest & {
@@ -70,7 +68,6 @@ type MergedGroup = GetAllStudentGroupRequest & {
   subProgramName?: string;
 };
 
-/* -------------------- Component -------------------- */
 export default function StudentDetailForm({ studentId }: Props) {
   const [formData, setFormData] = useState<GetStudentDetailResponse | null>(
     null
@@ -83,7 +80,7 @@ export default function StudentDetailForm({ studentId }: Props) {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
 
-  // data sources
+ 
   const [rawGroups, setRawGroups] = useState<GetAllStudentGroupRequest[]>([]);
   const [programs, setPrograms] = useState<GetAllProgramsResponse[]>([]);
   const [groups, setGroups] = useState<MergedGroup[]>([]);
@@ -91,7 +88,7 @@ export default function StudentDetailForm({ studentId }: Props) {
   const [loadingSources, setLoadingSources] = useState(true);
   const [sourcesError, setSourcesError] = useState<string | null>(null);
 
-  // cascade selections
+  
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] =
@@ -117,7 +114,7 @@ export default function StudentDetailForm({ studentId }: Props) {
           };
           setFormData(normalized);
           setOriginalData(normalized);
-          // @ts-ignore - backend อาจคืน studentGroupId มาด้วย
+         
           if ((detail as any)?.studentGroupId) {
             setSelectedGroupId(Number((detail as any).studentGroupId));
           }
@@ -135,7 +132,6 @@ export default function StudentDetailForm({ studentId }: Props) {
     load();
   }, [studentId]);
 
-  // merge program-names into groups
   useEffect(() => {
     if (!rawGroups.length) {
       setGroups([]);
@@ -166,7 +162,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     setGroups(merged);
   }, [rawGroups, programs]);
 
-  // When we know selectedGroupId, set cascade names for read mode convenience
+ 
   useEffect(() => {
     if (!selectedGroupId || !groups.length) return;
     const g = groups.find((x) => x.id === selectedGroupId);
@@ -176,7 +172,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     setSelectedSubProgramName(g.subProgramName || "");
   }, [selectedGroupId, groups]);
 
-  // lists for cascade
+
   const faculties = useMemo(() => {
     const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
     return Array.from(s).sort((a, b) =>
@@ -253,104 +249,159 @@ export default function StudentDetailForm({ studentId }: Props) {
   };
 
   const handleSave = async () => {
-    if (!formData) return;
+  if (!formData) return;
 
-    if (!formData.prefix) {
-      toast.error("กรุณาเลือกคำนำหน้า");
-      return;
-    }
-    if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
-      toast.error("กรุณากรอกชื่อและนามสกุล");
-      return;
-    }
-    if (!formData.birthDate) {
-      toast.error("กรุณาเลือกวันเกิด");
-      return;
-    }
-    if (!/^\d+$/.test(String(formData.studentCode || ""))) {
-      toast.error("รหัสนักเรียนต้องเป็นตัวเลขเท่านั้น");
-      return;
-    }
-    if (!selectedGroupId) {
-      toast.error("กรุณาเลือกห้อง (Student Group)");
-      return;
-    }
+  
+  if (!formData.prefix) {
+    toast.error("กรุณาเลือกคำนำหน้า");
+    return;
+  }
+  if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
+    toast.error("กรุณากรอกชื่อและนามสกุล");
+    return;
+  }
+  if (!formData.birthDate) {
+    toast.error("กรุณาเลือกวันเกิด");
+    return;
+  }
+  if (!/^\d+$/.test(String(formData.studentCode || ""))) {
+    toast.error("รหัสนักเรียนต้องเป็นตัวเลขเท่านั้น");
+    return;
+  }
+  if (!selectedGroupId) {
+    toast.error("กรุณาเลือกห้อง (Student Group)");
+    return;
+  }
 
-    const userId = (formData as any)?.id ?? (formData as any)?.userId;
-    if (!userId) {
-      toast.error("ไม่พบรหัสผู้ใช้ (userId)");
-      return;
-    }
+  
+  const chosenGroup = groups.find((g) => g.id === selectedGroupId);
 
-    const payload: UpdateUserDetailRequest & { studentGroupId?: number } = {
-      id: String(userId),
-      prefix: formData.prefix ?? "",
-      firstName: formData.firstName ?? "",
-      lastName: formData.lastName ?? "",
-      phoneNumber: formData.phoneNumber ?? "",
-      citizenId: formData.citizenId ?? "",
-      gender: formData.gender ?? "",
-      nationality: formData.nationality ?? "",
-      birthDate: toISODate(formData.birthDate),
-      studentGroupId: Number(selectedGroupId),
-    };
+  const studentId =
+    Number((formData as any)?.studentId) ||
+    Number((formData as any)?.id) ||
+    Number((formData as any)?.userId);
 
-    try {
-      setSaving(true);
-      const ok = await UpdateUserDetails(payload);
-      if (ok) {
-        toast.success("บันทึกข้อมูลเรียบร้อย");
+  if (!studentId) {
+    toast.error("ไม่พบรหัสนักเรียน (studentId)");
+    return;
+  }
 
-        // sync class/groupName on UI
-        const found = groups.find((g) => g.id === selectedGroupId);
-        setFormData((prev) =>
-          prev
-            ? {
-                ...prev,
-                class: found?.class ?? prev.class,
-                groupName: found?.groupName ?? prev.groupName,
-              }
-            : prev
-        );
-        setOriginalData((prev) =>
-          prev
-            ? {
-                ...prev,
-                class: found?.class ?? prev.class,
-                groupName: found?.groupName ?? prev.groupName,
-              }
-            : prev
-        );
+ 
+  const enrollYear =
+    Number((formData as any)?.enrollYear) ||
+    Number((formData as any)?.year) ||
+    new Date().getFullYear(); 
 
-        setIsEditing(false);
-      } else {
-        toast.error("บันทึกข้อมูลไม่สำเร็จ");
-      }
-    } catch (err: any) {
-      const errors = err?.response?.data?.errors;
-      if (errors && typeof errors === "object") {
-        const firstKey = Object.keys(errors)[0];
-        const firstMsg = Array.isArray(errors[firstKey])
-          ? errors[firstKey][0]
-          : String(errors[firstKey]);
-        toast.error(firstMsg);
-      } else {
-        const msg =
-          err?.response?.data?.responseMessage ||
-          err?.response?.data?.title ||
-          err?.message ||
-          "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
-        toast.error(msg);
-      }
-    } finally {
-      setSaving(false);
-    }
+  const currentLevel =
+    Number((formData as any)?.currentLevel) ||
+    Number((formData as any)?.level) ||
+    Number(chosenGroup?.level) ||
+    1;
+
+  const graduateYear =
+    Number((formData as any)?.graduateYear) || 0; 
+
+  const programId =
+    Number((formData as any)?.programId) ||
+    Number(chosenGroup?.programId) ||
+    0;
+
+  const isActive =
+    typeof (formData as any)?.isActive === "boolean"
+      ? (formData as any).isActive
+      : true;
+
+  const status =
+    String((formData as any)?.status || "") || "Active";
+
+  const payload: UpdateStudentUserRequest = {
+    studentId,
+    prefix: formData.prefix ?? "",
+    firstName: formData.firstName ?? "",
+    lastName: formData.lastName ?? "",
+    gender: formData.gender ?? "",
+    studentGroupId: Number(selectedGroupId),
+    studentCode: formData.studentCode ?? "",
+    // birthDate: toISODate(formData.birthDate),
+    programId,
+    isActive,
+    status,
   };
+
+  try {
+    setSaving(true);
+    const res = await UpdateStudentUser(payload);
+    if (res) {
+      toast.success("บันทึกข้อมูลเรียบร้อย");
+
+      
+      const found = groups.find((g) => g.id === selectedGroupId);
+      setFormData((prev) =>
+        prev
+          ? {
+              ...prev,
+              class: found?.class ?? prev.class,
+              groupName: found?.groupName ?? prev.groupName,
+             
+              prefix: payload.prefix,
+              firstName: payload.firstName,
+              lastName: payload.lastName,
+              gender: payload.gender,
+              studentCode: payload.studentCode,
+            
+              enrollYear: payload.enrollYear,
+            
+              currentLevel: payload.currentLevel,
+           
+              graduateYear: payload.graduateYear,
+          
+              programId: payload.programId,
+           
+              isActive: payload.isActive,
+        
+              status: payload.status,
+            }
+          : prev
+      );
+      setOriginalData((prev) =>
+        prev
+          ? {
+              ...prev,
+              class: found?.class ?? prev.class,
+              groupName: found?.groupName ?? prev.groupName,
+            }
+          : prev
+      );
+
+      setIsEditing(false);
+    } else {
+      toast.error("บันทึกข้อมูลไม่สำเร็จ");
+    }
+  } catch (err: any) {
+    const errors = err?.response?.data?.errors;
+    if (errors && typeof errors === "object") {
+      const firstKey = Object.keys(errors)[0];
+      const firstMsg = Array.isArray(errors[firstKey])
+        ? errors[firstKey][0]
+        : String(errors[firstKey]);
+      toast.error(firstMsg);
+    } else {
+      const msg =
+        err?.response?.data?.responseMessage ||
+        err?.response?.data?.title ||
+        err?.message ||
+        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+      toast.error(msg);
+    }
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   const handleCancel = () => {
     setFormData(originalData);
     if (originalData) {
-      // @ts-ignore
       const ogId = (originalData as any)?.studentGroupId ?? null;
       setSelectedGroupId(ogId);
     } else setSelectedGroupId(null);
@@ -371,7 +422,6 @@ export default function StudentDetailForm({ studentId }: Props) {
 
   const userId = (formData as any)?.id ?? (formData as any)?.userId ?? "";
 
-  /* -------------------- UI -------------------- */
   return (
     <div className="w-full p-10">
       <div className="flex items-center justify-between mb-6">

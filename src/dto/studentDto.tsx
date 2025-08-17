@@ -139,6 +139,7 @@ export interface GetAllStudentUser {
   gender: string;
   role: string;
   isActive: boolean;
+  userId : string;
 }
 
 export type GetAllStudentsPagedParams = {
@@ -442,4 +443,22 @@ export interface StudentDetails {
   religion:string;
   address:string;
   email:string;
+}
+
+
+export interface UpdateStudentUserRequest 
+{
+  studentId: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  studentGroupId: number;
+  studentCode: string;
+  enrollYear: number;
+  currentLevel: number;
+  graduateYear: number;
+  programId: number;
+  isActive: boolean;
+  status: string;
 }

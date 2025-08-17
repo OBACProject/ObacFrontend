@@ -17,12 +17,16 @@ export default function Form() {
   const [groups, setGroups] = useState<GetAllStudentGroupRequest[]>([]);
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
   const [openDeleteId, setOpenDeleteId] = useState<number | null>(null);
-  const [deleting, setDeleting] = useState(false); 
+  const [deleting, setDeleting] = useState(false);
   const router = useRouter();
+
+  // ค้นหา + paginate (ฝั่ง client)
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updatingId, setUpdatingId] = useState<number | null>(null);
   const itemsPerPage = 10;
+
+  // ป้องกันกดสวิตช์ตอนกำลังอัปเดต
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
 
   const sortByGroupCode = (arr: GetAllStudentGroupRequest[]) =>
     [...arr].sort((a, b) =>
@@ -41,6 +45,7 @@ export default function Form() {
     fetchGroups();
   }, []);
 
+  // กรองตามคำค้น
   const filteredGroups = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
     if (!q) return groups;
@@ -49,7 +54,7 @@ export default function Form() {
       const code = (g.groupCode ?? "").toLowerCase();
       const name = (g.groupName ?? "").toLowerCase();
       const cls = (g.class ?? "").toLowerCase();
-      const term = (g.term ?? "").toLowerCase();
+      const term = String(g.term ?? "").toLowerCase();
       const year = String(g.year ?? "").toLowerCase();
       return (
         code.includes(q) ||
@@ -63,6 +68,18 @@ export default function Form() {
     return sortByGroupCode(filtered);
   }, [groups, searchTerm]);
 
+  // คำนวณหน้ารวม + ขอบเขตแสดงผล
+  const totalCount = filteredGroups.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
+  const currentFrom = totalCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const currentTo = Math.min(currentPage * itemsPerPage, totalCount);
+
+  // ถ้าจำนวนหน้าลดลง (จากการค้นหา/ลบ) ให้หนีบ currentPage ให้อยู่ในช่วงที่ถูกต้อง
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [totalPages, currentPage]);
+
+  // ตัดหน้าที่จะแสดง
   const paginated = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredGroups.slice(start, start + itemsPerPage);
@@ -131,7 +148,6 @@ export default function Form() {
     }
   };
 
-
   return (
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
@@ -148,7 +164,7 @@ export default function Form() {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1);
+            setCurrentPage(1); // รีเซ็ตไปหน้า 1 เมื่อมีการค้นหา
           }}
           className="border border-gray-400 px-4 py-1 rounded-md"
         />
@@ -162,16 +178,19 @@ export default function Form() {
         </button>
       </div>
 
-      {filteredGroups.length > 0 ? (
+      {totalCount > 0 ? (
         <div className="w-full rounded-sm px-10">
           <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-blue-500 ">
             <UserRoundCheck className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
               รายการกลุ่มเรียนทั้งหมด
               <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">
-                {filteredGroups.length}
+                {totalCount}
               </p>
               รายการ
+              <span className="text-sm opacity-90">
+                (แสดง {currentFrom}-{currentTo})
+              </span>
             </div>
           </div>
 
@@ -220,13 +239,38 @@ export default function Form() {
                 </div>
 
                 <div className="flex items-center justify-center py-2 gap-3">
-                  <Trash2
-                    className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700"
-                    onClick={() => openDeleteConfirm(item.id as number)}
-                  />
+                  <span title="ลบกลุ่มเรียน">
+                    <Trash2
+                      className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700"
+                      onClick={() => openDeleteConfirm(item.id as number)}
+                    />
+                  </span>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ✅ ตัวควบคุมหน้า */}
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <button
+              className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              ก่อนหน้า
+            </button>
+
+            <span className="text-sm text-gray-700">
+              หน้า {currentPage} / {totalPages}
+            </span>
+
+            <button
+              className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages}
+            >
+              ถัดไป
+            </button>
           </div>
         </div>
       ) : (
@@ -241,11 +285,16 @@ export default function Form() {
         <AddStudentGroupPopup
           onClosePopUp={(shouldReload) => {
             setOpenCreatePopup(false);
-            if (shouldReload) fetchGroups();
+            if (shouldReload) {
+              // สร้างแล้วกลับไปหน้า 1 เพื่อเห็นรายการใหม่
+              setCurrentPage(1);
+              fetchGroups();
+            }
           }}
         />
       )}
 
+      {/* Modal ยืนยันลบ */}
       {(() => {
         const selectedItem = groups.find((g) => g.id === openDeleteId);
         return openDeleteId !== null && selectedItem && (
@@ -263,8 +312,7 @@ export default function Form() {
               <p className="text-sm text-gray-700 mb-6">
                 ต้องการลบกลุ่มเรียนหมายเลข{" "}
                 <b>
-                  {`${selectedItem.class ?? ""}${selectedItem.class ? " " : ""}${selectedItem.groupName ?? ""} 
-  เทอม ${selectedItem.term || "-"} ปี ${selectedItem.year ?? "-"}`}
+                  {`${selectedItem.class ?? ""}${selectedItem.class ? " " : ""}${selectedItem.groupName ?? ""} เทอม ${selectedItem.term || "-"} ปี ${selectedItem.year ?? "-"}`}
                 </b>{" "}
                 ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
               </p>
@@ -288,9 +336,6 @@ export default function Form() {
           </div>
         );
       })()}
-
     </div>
   );
 }
-
-

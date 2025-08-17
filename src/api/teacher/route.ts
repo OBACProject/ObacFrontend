@@ -142,3 +142,13 @@ export const CreateTeacher = async (
     throw err;
   }
 };
+
+// export const UpdateTeacherUser = async (payload: UpdateTeacherUserRequest) => {
+//   try {
+//     const res = await apiClient.put("Teacher/UpdateTeacherUser", payload);
+//     return res.data;
+//   } catch (error) {
+//     console.error("UpdateTeacherUser Error:", error);
+//     return null;
+//   }
+// };

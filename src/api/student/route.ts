@@ -6,6 +6,7 @@ import {
   GetStudentDetailResponse,
   StudentDetails,
   StudentGroupDetail,
+  UpdateStudentUserRequest,
 } from "@/dto/studentDto";
 import apiClient from "@/lib/apiClient";
 
@@ -94,6 +95,7 @@ export const GetAllStudentsPaged = async (
       gender: String(r.gender ?? ""),
       role: String(r.role ?? "Student"),
       isActive: Boolean(r.isActive ?? true),
+      userId: String(r.userId ?? r.id ?? ""),
     }));
 
     return {
@@ -164,5 +166,15 @@ export const CreateStudent = async (
   } catch (err: any) {
     console.error("Error creating academic:", err);
     return false;
+  }
+};
+
+export const UpdateStudentUser = async (payload: UpdateStudentUserRequest) => {
+  try {
+    const res = await apiClient.put("Student/UpdateStudentUser", payload);
+    return res.data;
+  } catch (error) {
+    console.error("UpdateStudentUser Error:", error);
+    return null;
   }
 };
