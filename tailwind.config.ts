@@ -1,5 +1,3 @@
-import { transform } from "next/dist/build/swc";
-import { blob } from "stream/consumers";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -85,113 +83,41 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
-        appearanceIn: {
-          "0%": { opacity: "0", transform: "scale(0.98)" },
-          "100%": { opacity: "1", transform: "scale(1)" },
-        },
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
         blob: {
-          "0%": {
-            transform: "translate(10px,0px) scale(1)",
-          },
-          "33%": {
-            transform: "translate(50px,-60px) scale(1.2)",
-          },
-          "66%": {
-            transform: "translate(-50px,60px) scale(0.8)",
-          },
-          "100%": {
-            transform: "translate(10px,0px) scale(1)",
-          },
-        },
-        blob2: {
-          "0%": {
-            transform: "translate(20px,0px) scale(1)",
+          "0%": { transform: "translate(0,0) scale(1)" },
+          "20%": {
+            transform: "translate(60px,-40px) scale(1.12) rotate(4deg)",
           },
           "40%": {
-            transform: "translate(-40px,60px) scale(0.8)",
+            transform: "translate(-40px,70px) scale(0.92) rotate(-6deg)",
           },
-          "66%": {
-            transform: "translate(40px,-60px) scale(1.2)",
+          "60%": { transform: "translate(50px,30px) scale(1.06) rotate(2deg)" },
+          "80%": {
+            transform: "translate(-30px,-60px) scale(0.98) rotate(-3deg)",
           },
-          "100%": {
-            transform: "translate(20px,0px) scale(1)",
-          },
-
+          "100%": { transform: "translate(0,0) scale(1) rotate(0deg)" },
         },
-        "fade-in-down": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-10px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+        pulseOpacity: {
+          "0%,100%": { opacity: "0.45" },
+          "50%": { opacity: "0.7" },
         },
-        "fade-out-up": {
-          "0%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-          "100%": {
-            opacity: "0",
-            transform: "translateY(-10px)",
-          },
+        bgShift: {
+          "0%,100%": { backgroundPosition: "0% 0%" },
+          "50%": { backgroundPosition: "100% 100%" },
         },
-        "accordion-down": {
-          "0%": { opacity: "0", transform: "translateY(-8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "accordion-up": {
-          "0%": { opacity: "1", transform: "translateY(0)" },
-          "100%": { opacity: "0", transform: "translateY(-8px)" },
-        },
-        "fade-slide-down": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-16px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-        },
-        "fade-slide-up": {
-          "0%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-          "100%": {
-            opacity: "0",
-            transform: "translateY(-16px)",
-          },
-        },
-
       },
       animation: {
-        fadeIn: "fadeIn 2s ease-in-out",
-        fastFade: "fadeIn 1s ease-in-out",
-        fadeStep1: "fadeIn 3s ease-in-out",
-        fadeStep2: "fadeIn 4s ease-in-out",
-        blob: "blob 7s infinite",
-        blob2: "blob2 7s infinite",
-        // appearance: "appearanceIn 0.1s ease-out",
-        "fade-in-down": "fade-in-down 300ms ease-out forwards",
-        "fade-out-up": "fade-out-up 200ms ease-in forwards",
-        "accordion-down": "accordion-down 300ms ease-out forwards",
-        "accordion-up": "accordion-up 200ms ease-in forwards",
-        "fade-slide-down": "fade-slide-down 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
-        "fade-slide-up": "fade-slide-up 250ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+        blobFast: "blob 14s ease-in-out infinite",
+        blob: "blob 20s ease-in-out infinite",
+        blobSlow: "blob 28s ease-in-out infinite",
+        pulseOpacity: "pulseOpacity 12s ease-in-out infinite",
+        bgShift: "bgShift 30s ease-in-out infinite",
       },
       backgroundImage: {
         authBg: "/images/obac_view.jpg",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")]
+  plugins: [require("tailwindcss-animate")],
 };
 export default config;

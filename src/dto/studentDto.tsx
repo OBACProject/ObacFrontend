@@ -406,10 +406,40 @@ export interface StudentDetail {
   graduateYear: number;
   programId: number;
   facultyId: number;
-  programName:string;
-  facultyName:string;
-  birthDate:string;
-  currentRoom:string;
-  isActive:boolean;
-  isAgree:boolean;
+  programName: string;
+  facultyName: string;
+  birthDate: string;
+  currentRoom: string;
+  isActive: boolean;
+  isAgree: boolean;
+}
+
+export interface StudentDetails {
+  id: number;
+  prefix: string;
+  name: string;
+  lastName: string;
+  gender: string;
+  nationality: string;
+  birthDate: string;
+  citizenId: string;
+  studentCode: string;
+  phoneNumber: string;
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  programName: string;
+  subProgramName: string;
+  facultyName: string;
+  gpax: number;
+  status: string;
+  programId: number;
+  isActive: boolean;
+  
+  thaiID:string;
+  religion:string;
+  address:string;
+  email:string;
 }

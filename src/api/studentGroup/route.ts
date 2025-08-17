@@ -2,6 +2,7 @@ import {
   CreateStudentGroupRequest,
   GetAllStudentGroupRequest,
   StudentGroupItem,
+  StudentGroupResponse,
   StudentGroupScheduleStatus,
   UpdateStudentGroupActiveRequest,
 } from "@/dto/studentGroupItem";
@@ -43,6 +44,27 @@ export const GetStudentGroupScheduleStatus = async (
   } catch (error) {
     console.error("Failed to fetch student group schedule status", error);
     return null;
+  }
+};
+
+export const GetStudentListByClassLevelTermYear = async (
+  className: string,
+  level: number,
+  term: string,
+  year: number
+): Promise<StudentGroupResponse[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentGroupResponse[];
+    }>(
+      `Student/GetStudentListByClassLevelTermYear?className=${className}&level=${level}&term=${term}&year=${year}`
+    );
+    return response.data.data ?? [];
+  } catch (err) {
+    console.error("Error in api GetStudentListByClass ", err);
+    return [];
   }
 };
 

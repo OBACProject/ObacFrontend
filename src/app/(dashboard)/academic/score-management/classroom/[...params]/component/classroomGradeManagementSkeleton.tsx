@@ -23,7 +23,7 @@ export function ClassroomGradeManagementSkeleton() {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
+      {/* <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="bg-gray-50 p-4 rounded-lg border">
           <div className="space-y-4">
             <div className="h-6 bg-gray-200 rounded w-32 animate-pulse"></div>
@@ -43,7 +43,7 @@ export function ClassroomGradeManagementSkeleton() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="mb-4">

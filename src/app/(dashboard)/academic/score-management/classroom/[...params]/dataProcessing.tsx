@@ -56,8 +56,11 @@ export const preProcessClassroomData = (
       gpax: parseFloat(student.gpax.toFixed(2)),
       totalCredit: student.totalCredit,
       subjects: Object.fromEntries(
-        (student.subject ?? []).map((sub) => [sub.subjectName, sub.grade])
-      ),
+      (student.subject ?? []).map((sub) => [
+        sub.subjectName, 
+        sub.remark && sub.remark.trim() !== '' ? sub.remark : sub.grade
+      ])
+    ),
       failedSubjects: (student.subject ?? []).filter(
         (sub) => parseFloat(sub.grade) === 0
       ).length,

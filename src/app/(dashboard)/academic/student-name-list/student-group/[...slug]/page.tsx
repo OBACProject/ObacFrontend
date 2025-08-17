@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: PageParams }) {
         </div>
       </div>
       <div className="px-5 pb-5">
-        <Form GroupID={studentGroupID}  />
+        <Form GroupID={studentGroupID} />
       </div>
     </div>
   );

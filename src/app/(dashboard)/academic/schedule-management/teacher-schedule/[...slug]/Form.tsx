@@ -9,6 +9,7 @@ import {
 } from "@/dto/teacherDto";
 import { GetTeacherDetailAndSchedule } from "@/api/teacher/route";
 import DeleteScheduleTeacherPopup from "@/components/common/Popup/DeleteScheduleTeacherPopup";
+import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
 
 type Props = {
   term: string;
@@ -38,10 +39,13 @@ export default function Form({ term, year, teacherID }: Props) {
       (d: TeacherDetailAndScheduleResponse | null) => {
         if (d) {
           setTeacherSchedule(d);
+          setIsLoading(true);
         }
       }
     );
   }, [teacherID]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
     <div className="w-full  px-10 ">
@@ -89,77 +93,87 @@ export default function Form({ term, year, teacherID }: Props) {
           </button>
         </div>
       </div>
-
-      <div className="w-full ">
-        <div className="py-2 px-5 flex items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
-          <CalendarClock className="text-white h-6 w-6" />
-          <div className="text-white ">ตารางสอนของอาจารย์</div>
-          <div className="flex items-center text-white  gap-4">
-            ภาคเรียนที่{" "}
-            <p className="px-4 py-0.5 rounded-md  bg-blue-400 w-fit">{term}</p>
-            ปีการศึกษา{" "}
-            <p className="px-4 py-0.5 rounded-md  bg-blue-400 w-fit">{year}</p>
+      {isLoading ? (
+        <div className="w-full ">
+          <div className="py-2 px-5 flex items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
+            <CalendarClock className="text-white h-6 w-6" />
+            <div className="text-white ">ตารางสอนของอาจารย์</div>
+            <div className="flex items-center text-white  gap-4">
+              ภาคเรียนที่{" "}
+              <p className="px-4 py-0.5 rounded-md  bg-blue-400 w-fit">
+                {term}
+              </p>
+              ปีการศึกษา{" "}
+              <p className="px-4 py-0.5 rounded-md  bg-blue-400 w-fit">
+                {year}
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="w-full grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] shadow-lg bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1  text-center text-lg">
-          <div className="text-center ">ลำดับ</div>
-          <div className="text-center ">รหัสวิชา</div>
-          <div className="text-center ">ชื่อวิชา</div>
-          <div className="text-center ">ปีหลักสูตร</div>
-          <div className="text-center ">สายชั้น</div>
-          <div className="text-center ">ห้องเรียน</div>
-          <div className="text-center ">คาบเรียน</div>
-          <div className="text-center  ">วันสอน</div>
-          <div className="text-center "></div>
-        </div>
-      </div>
-      {Array.isArray(teacherSchedule?.schedule) &&
-      teacherSchedule.schedule.length > 0 ? (
-        <div className="w-full">
-          {teacherSchedule.schedule.map((d: TeacherScheduleItem, index) => {
-            return (
-              <div
-                key={d.level}
-                className="w-full grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] py-1 shadow-md hover:bg-blue-50 border-b-[1px] bg-white border-gray-300"
-              >
-                <div className="border-l-[1px] text-center">{index + 1}</div>
-                <div className="border-l-[1px] text-center">
-                  {d.subjectCode}
-                </div>
-                <div className="border-l-[1px] text-start pl-6">
-                  {d.subjectName}
-                </div>
-                <div className="border-l-[1px] text-center">
-                  {d.curriculumYear}
-                </div>
-                <div className="border-l-[1px] text-center">
-                  {d.class}.{d.studentGroupName}
-                </div>
-                <div className="border-l-[1px] text-center">{d.room}</div>
-                <div className="border-l-[1px] text-center">{d.period}</div>
-                <div className="border-l-[1px] text-center">{d.day}</div>
-                <div className="border-l-[1px] flex justify-center boder-r-[1px] text-center">
-                  <button
-                    onClick={() => {
-                      setDeleteTrigger(true);
-                      setScheduleSubjectData(d);
-                    }}
-                    className="px-2 py-1 h-fit rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
+          <div className="w-full grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] shadow-lg bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1  text-center text-lg">
+            <div className="text-center ">ลำดับ</div>
+            <div className="text-center ">รหัสวิชา</div>
+            <div className="text-center ">ชื่อวิชา</div>
+            <div className="text-center ">ปีหลักสูตร</div>
+            <div className="text-center ">สายชั้น</div>
+            <div className="text-center ">ห้องเรียน</div>
+            <div className="text-center ">คาบเรียน</div>
+            <div className="text-center  ">วันสอน</div>
+            <div className="text-center "></div>
+          </div>{" "}
+          {Array.isArray(teacherSchedule?.schedule) &&
+          teacherSchedule.schedule.length > 0 ? (
+            <div className="w-full">
+              {teacherSchedule.schedule.map((d: TeacherScheduleItem, index) => {
+                return (
+                  <div
+                    key={d.level}
+                    className="w-full grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] py-1 shadow-md hover:bg-blue-50 border-b-[1px] bg-white border-gray-300"
                   >
-                    <Trash2 className="h-4 w-4 text-white" />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                    <div className="border-l-[1px] text-center">
+                      {index + 1}
+                    </div>
+                    <div className="border-l-[1px] text-center">
+                      {d.subjectCode}
+                    </div>
+                    <div className="border-l-[1px] text-start pl-6">
+                      {d.subjectName}
+                    </div>
+                    <div className="border-l-[1px] text-center">
+                      {d.curriculumYear}
+                    </div>
+                    <div className="border-l-[1px] text-center">
+                      {d.class}.{d.studentGroupName}
+                    </div>
+                    <div className="border-l-[1px] text-center">{d.room}</div>
+                    <div className="border-l-[1px] text-center">{d.period}</div>
+                    <div className="border-l-[1px] text-center">{d.day}</div>
+                    <div className="border-l-[1px] flex justify-center boder-r-[1px] text-center">
+                      <button
+                        onClick={() => {
+                          setDeleteTrigger(true);
+                          setScheduleSubjectData(d);
+                        }}
+                        className="px-2 py-1 h-fit rounded-md hover:bg-red-500 hover:scale-105 duration-200 bg-red-400 w-fit"
+                      >
+                        <Trash2 className="h-4 w-4 text-white" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="w-full py-10 grid place-items-center border-2 border-gray-300 border-dashed rounded-lg">
+              <p className="text-4xl text-gray-500 font-extrabold">
+                ไม่มีตารางเรียน
+              </p>
+            </div>
+          )}
         </div>
       ) : (
-        <div className="w-full py-10 grid place-items-center border-2 border-gray-300 border-dashed rounded-lg">
-          <p className="text-4xl text-gray-500 font-extrabold">
-            ไม่มีตารางเรียน
-          </p>
-        </div>
+        <LoadingDataTable />
       )}
+
       {deleteTrigger && scheduleSubjectData && (
         <DeleteScheduleTeacherPopup
           scheduleData={scheduleSubjectData}

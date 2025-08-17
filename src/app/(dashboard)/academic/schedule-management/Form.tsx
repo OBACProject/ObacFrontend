@@ -11,6 +11,7 @@ import NameListScheduleTable, {
   ColumnConfig,
 } from "@/components/Academic/table/NameListScheduleTable";
 import AddSchedulePopUp from "@/components/common/Popup/AddSchedulePopup";
+import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
 
 export default function Form() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
@@ -27,9 +28,9 @@ export default function Form() {
   useEffect(() => {
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
       if (d) {
-      const sorted = sortStudentGroupItems(d);
-      setStudentGroup(sorted);
-    }
+        const sorted = sortStudentGroupItems(d);
+        setStudentGroup(sorted);
+      }
     });
     GetAllTeachers().then((d: GetAllTeacherResponse[]) => {
       setTeacher(d);
@@ -41,10 +42,10 @@ export default function Form() {
     setStudentGroup([]);
     setLoading(false);
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
-     if (d) {
-      const sorted = sortStudentGroupItems(d);
-      setStudentGroup(sorted);
-    }
+      if (d) {
+        const sorted = sortStudentGroupItems(d);
+        setStudentGroup(sorted);
+      }
     });
     setLoading(true);
   }, [term, year]);
@@ -79,7 +80,7 @@ export default function Form() {
     {
       label: "ชื่อ",
       width: "20%",
-      render: (item) => `${item.prefix || "นาย,นาง"} ${item.firstName} `,
+      render: (item) => `${item.prefix || "อาจารย์"} ${item.firstName} `,
       className: "text-start lg:pl-6",
     },
     {
@@ -218,13 +219,7 @@ export default function Form() {
           />
         )
       ) : (
-        <div className="py-5 px-5">
-          <div className="border-2 rounded-md border-dashed border-gray-400 grid place-items-center py-10">
-            <div className="text-4xl text-gray-500 font-semibold animate-pulse">
-              Loading...
-            </div>
-          </div>
-        </div>
+        <LoadingDataTable />
       )}
 
       {popUpAddSubject == true && (

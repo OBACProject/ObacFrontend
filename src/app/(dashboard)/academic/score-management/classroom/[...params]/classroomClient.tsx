@@ -1,18 +1,20 @@
-"use client"
+"use client";
 
-import { DataTable } from "@/components/common/MainTable/table_style_1"
-import { Button } from "@/components/ui/button"
-import { Download, FileText, Users } from "lucide-react"
-import { useState, useMemo, useCallback } from "react"
-import HeaderLabel from "@/components/common/labelText/HeaderLabel"
-import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response"
-import { useDebounce } from "@/hooks/useDebounce"
-import { FilterState, FilterBar } from "./component/filterBar"
-import { preProcessClassroomData } from "./dataProcessing"
-import { TransformedStudentData } from "./mockData"
+import { DataTable } from "@/components/common/MainTable/table_style_1";
+import { Button } from "@/components/ui/button";
+import { Download, FileText, Search, Users } from "lucide-react";
+import { useState, useMemo, useCallback } from "react";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response";
+import { useDebounce } from "@/hooks/useDebounce";
+import { FilterState, FilterBar } from "./component/filterBar";
+import { preProcessClassroomData } from "./dataProcessing";
+import { TransformedStudentData } from "./mockData";
+import { ClassroomInfoTable } from "@/components/Academic/table/classroomInfoTable";
+import { Input } from "@/components/ui/input";
 
 interface Props {
-  initialData: GetGroupSummaryGradeResponse
+  initialData: GetGroupSummaryGradeResponse;
 }
 
 export function ClassroomGradeClient({ initialData }: Props) {
@@ -20,184 +22,206 @@ export function ClassroomGradeClient({ initialData }: Props) {
     searchInput: "",
     selectedGradeFilter: "",
     selectedSubjectFilter: "",
-  })
+  });
 
-  const debouncedSearchInput = useDebounce(filters.searchInput, 300)
-
-  const processedData = useMemo(() => preProcessClassroomData(initialData), [initialData])
+  const debouncedSearchInput = useDebounce(filters.searchInput, 300);
+  const processedData = useMemo(
+    () => preProcessClassroomData(initialData),
+    [initialData]
+  );
+  console.log("Processed Data:", processedData);
 
   const columns = useMemo(() => {
     const baseColumns = [
-      { label: "ลำดับ", key: "index", className: "w-1/12" },
-      { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/12" },
-      { label: "ชื่อ - นามสกุล", key: "name", className: "w-3/12" },
-      { label: "GPA", key: "gpa", className: "w-1/12 text-center" },
-      { label: "GPAX", key: "gpax", className: "w-1/12 text-center" },
-    ]
+      {
+        label: "ลำดับ",
+        key: "index",
+        className: "w-[5%] text-sm sticky flex justify-center bg-white z-10",
+      },
+      {
+        label: "รหัสนักเรียน",
+        key: "studentCode",
+        className: "w-[10%] text-sm sticky  left-[5%] bg-white z-10",
+      },
+      {
+        label: "ชื่อ - นามสกุล",
+        key: "name",
+        className:
+          "w-[15%] text-sm text-center flex justify-start sticky left-[15%] bg-white z-10",
+      },
+    ];
 
-    const subjectColumns = processedData.subjects.map(subject => ({
-      label: subject,
-      key: `subjects.${subject}`,
-      className: "w-1/12 text-center",
+    // Ensure we always have 10 columns
+    const filledSubjects = [
+      ...processedData.subjects,
+      ...Array(Math.max(0, 10 - processedData.subjects.length)).fill(""),
+    ];
+
+    const subjectColumns = filledSubjects.map((subject, idx) => ({
+      label: subject || "",
+      key: subject ? `subjects.${subject}` : `subjects.blank${idx}`,
+      className: "w-[6%] text-center flex justify-center text-sm",
       render: (row: any) => {
-        const grade = row.subjects[subject] || "N/A"
-        const gradeValue = parseFloat(grade)
-        const isFailedGrade = gradeValue === 0
-        const isPassedGrade = gradeValue > 0
-
+        if (!subject) {
+          return <span className="text-gray-400">-</span>;
+        }
+        const grade = row.subjects[subject] || "-";
+        const gradeValue = parseFloat(grade);
+        const isFailedGrade = gradeValue === 0;
+        const isPassedGrade = gradeValue > 0;
         return (
           <span
-            className={`px-2 py-1 rounded text-xs font-medium ${
+            className={`px-2 py-1 rounded text-xs font-medium line-clamp-4 break-words whitespace-pre-line ${
               isFailedGrade
-                ? " text-red-800"
+                ? "text-red-800"
                 : isPassedGrade
-                ? " text-green-800"
-                : " text-gray-800"
+                ? "text-green-800"
+                : "text-gray-800"
             }`}
+            style={{
+              display: "block",
+              maxHeight: "4.5em",
+              overflow: "hidden",
+            }}
           >
             {grade}
           </span>
-        )
+        );
       },
-    }))
+    }));
 
-    return [...baseColumns, ...subjectColumns]
-  }, [processedData.subjects])
+    const gradeColumns = [
+      {
+        label: "GPA",
+        key: "gpa",
+        className: "w-[5%] text-center flex justify-center text-sm",
+      },
+      {
+        label: "GPAX",
+        key: "gpax",
+        className: "w-[5%] text-center flex justify-center text-sm",
+      },
+    ];
+
+    return [...baseColumns, ...subjectColumns, ...gradeColumns];
+  }, [processedData.subjects]);
 
   const filteredData = useMemo(() => {
-    if (!debouncedSearchInput && !filters.selectedGradeFilter && !filters.selectedSubjectFilter) {
-      return processedData.students
+    if (
+      !debouncedSearchInput &&
+      !filters.selectedGradeFilter &&
+      !filters.selectedSubjectFilter
+    ) {
+      return processedData.students;
     }
 
     return processedData.students.filter((student) => {
       const matchSearch = debouncedSearchInput
-        ? student.studentCode.toLowerCase().includes(debouncedSearchInput.toLowerCase()) ||
-          student.name.toLowerCase().includes(debouncedSearchInput.toLowerCase())
-        : true
+        ? student.studentCode
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase()) ||
+          student.name
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase())
+        : true;
 
-      const matchGrade = filters.selectedGradeFilter
-        ? (() => {
-            const gpa = student.gpa
-            switch (filters.selectedGradeFilter) {
-              case "excellent": return gpa >= 3.5
-              case "good": return gpa >= 3.0 && gpa < 3.5
-              case "fair": return gpa >= 2.5 && gpa < 3.0
-              case "poor": return gpa >= 2.0 && gpa < 2.5
-              case "failed": return gpa < 2.0
-              default: return true
-            }
-          })()
-        : true
-
-      const matchSubject = filters.selectedSubjectFilter
-        ? student.subjects[filters.selectedSubjectFilter] && 
-          parseFloat(student.subjects[filters.selectedSubjectFilter]) === 0
-        : true
-
-      return matchSearch && matchGrade && matchSubject
-    })
-  }, [processedData.students, debouncedSearchInput, filters.selectedGradeFilter, filters.selectedSubjectFilter])
+      return matchSearch;
+    });
+  }, [
+    processedData.students,
+    debouncedSearchInput,
+    filters.selectedGradeFilter,
+    filters.selectedSubjectFilter,
+  ]);
 
   const tableData = useMemo(() => {
-    return filteredData.map((student, index) => ({
+    const sorted = [...filteredData].sort((a, b) =>
+      a.studentCode.localeCompare(b.studentCode)
+    );
+    return sorted.map((student, index) => ({
       ...student,
       index: index + 1,
-    }))
-  }, [filteredData])
+    }));
+  }, [filteredData]);
 
-  const getRowLink = useCallback(
-    (item: TransformedStudentData) => {
-      return `/academic/score-management/individual/${item.studentCode}`
-    },
-    []
-  )
+  const getRowLink = useCallback((item: TransformedStudentData) => {
+    return `/academic/score-management/individual/${item.studentCode}`;
+  }, []);
 
-  const handleFilterChange = (newFilters: Partial<FilterState>) => {
-    setFilters(prev => ({ ...prev, ...newFilters }))
-  }
-
-  const clearFilters = () => {
-    setFilters({
-      searchInput: "",
-      selectedGradeFilter: "",
-      selectedSubjectFilter: "",
-    })
-  }
-
-  const handleDownloadGrades = () => {
-    console.log("Downloading grades...")
-  }
-
-  const handleDownloadTranscripts = () => {
-    console.log("Downloading transcripts...")
-  }
+  const onFilterChange = useCallback((updatedFilter: Partial<FilterState>) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...updatedFilter,
+    }));
+  }, []);
 
   return (
     <>
       <div className="w-full flex justify-start">
-        <HeaderLabel Icon={<Users className="h-7 w-7" />} title={"จัดการคะแนน ห้องเรียน"}/>
+        <HeaderLabel
+          Icon={<Users className="h-7 w-7" />}
+          title={"จัดการคะแนน ห้องเรียน"}
+        />
       </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
+      <div className="bg-white px-6 py-2 rounded-lg shadow-sm border">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              {processedData.generalData.class} - {processedData.generalData.groupName}
+              {processedData.generalData.class} -{" "}
+              {processedData.generalData.groupName}
             </h2>
             <p className="text-gray-600 mt-1">
-              {processedData.generalData.facultyName} - {processedData.generalData.programName}
+              {processedData.generalData.facultyName} -{" "}
+              {processedData.generalData.programName}
             </p>
             <p className="text-sm text-gray-500">
-              ปีการศึกษา {processedData.generalData.year} เทอม {processedData.generalData.term}
+              ปีการศึกษา {processedData.generalData.year} เทอม{" "}
+              {processedData.generalData.term}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <Button
-              onClick={handleDownloadGrades}
-              className="flex items-center gap-2"
+              onClick={() => console.log("Downloading grades...")}
               variant="outline"
               size="sm"
+              className="flex items-center gap-2"
             >
               <Download className="h-4 w-4" />
-              ดาวน์โหลดคะแนน
+              <span>ดาวน์โหลดคะแนน</span>
             </Button>
+
             <Button
-              onClick={handleDownloadTranscripts}
-              className="flex items-center gap-2"
+              onClick={() => console.log("Downloading transcripts...")}
               variant="outline"
               size="sm"
+              className="flex items-center gap-2"
             >
               <FileText className="h-4 w-4" />
-              ดาวน์โหลด Transcript
+              <span>ดาวน์โหลด Transcript</span>
             </Button>
+
+            <div className="ml-auto relative w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                type="text"
+                placeholder="ค้นหารหัสนักเรียน"
+                className="pl-9 pr-3 w-full text-sm"
+                value={filters.searchInput}
+                onChange={(e) =>
+                  onFilterChange({ searchInput: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Filters */}
-      <FilterBar
-        filters={filters}
-        subjects={processedData.subjects}
-        onFilterChange={handleFilterChange}
-        onClearFilters={clearFilters}
-        debouncedSearchInput={debouncedSearchInput}
+      {/* Horizontal scroll wrapper with minimum table width */}
+      <ClassroomInfoTable
+        columns={columns}
+        data={tableData}
+        getRowLink={getRowLink}
+        pagination={tableData.length}
       />
-
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-          <span>
-            แสดง {tableData.length} จาก {processedData.students.length} รายการ
-          </span>
-        </div>
-
-        {/* Data Table */}
-        <DataTable
-          columns={columns}
-          data={tableData}
-          getRowLink={getRowLink}
-          pagination={15}
-        />
-      </div>
     </>
-  )
+  );
 }

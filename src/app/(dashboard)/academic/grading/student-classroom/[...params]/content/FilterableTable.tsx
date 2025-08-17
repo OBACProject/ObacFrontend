@@ -169,11 +169,13 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   }, [sourceData]);
 
   const tableData = useMemo(
-    () =>
-      filteredData.map((item: any, index: number) => ({
+    () => {
+      const sorted = [...filteredData].sort((a, b) => String(a.scheduleSubjectId).localeCompare(String(b.scheduleSubjectId)));
+      return sorted.map((item: any, index: number) => ({
         ...item,
         index: index + 1,
-      })),
+      }));
+    },
     [filteredData]
   );
 

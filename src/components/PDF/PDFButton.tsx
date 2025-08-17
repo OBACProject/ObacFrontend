@@ -19,11 +19,11 @@ export const PDFStudentNamelistInGroupButton = ({
 
   return (
     <button
-      className="flex px-8 border-[1px] border-gray-300 text-blue-700 font-prompt_Light bg-white py-1.5
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
        hover:scale-[101%] duration-300 text-sm rounded-md items-center justify-center gap-3"
       onClick={handleClick}
     >
-      <Download className="text-blue-700 w-5 h-5" />
+      <Download className="text-blue-500 w-5 h-5" />
       รายชื่อนักเรียน PDF
     </button>
   );
@@ -40,12 +40,32 @@ export const PDFStudentScoreInSubjectPDF = ({
 
   return (
     <button
-      className="flex px-8 border-[1px] border-gray-300 text-blue-700 font-prompt_Light bg-white py-1.5
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
        hover:scale-[101%] duration-300 text-sm rounded-md items-center justify-center gap-3"
       onClick={handleClick}
     >
-      <Download className="text-blue-700 w-5 h-5" />
+      <Download className="text-blue-500 w-5 h-5" />
       คะแนนนักเรียน PDF
+    </button>
+  );
+};
+
+export const PDFStudentTransScriptButton = ({
+  studentID,
+}: {
+  studentID: number;
+}) => {
+  const handleDownLoadPDF = (studentID: number) => {};
+  return (
+    <button
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
+       hover:scale-[101%] duration-300 text-sm rounded-md items-center justify-center gap-3"
+      onClick={() => {
+        handleDownLoadPDF(studentID);
+      }}
+    >
+      <Download className="text-blue-500 w-5 h-5" />
+      ดาวโหลดผลการเรียน
     </button>
   );
 };
