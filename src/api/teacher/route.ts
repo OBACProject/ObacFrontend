@@ -6,6 +6,7 @@ import {
   GetTeacherDetailUserResponse,
   TeacherDetailAndScheduleResponse,
   TeacherDetails,
+  UpdateTeacherUserRequest,
 } from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
 import axios from "axios";

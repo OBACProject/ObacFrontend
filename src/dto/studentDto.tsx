@@ -454,6 +454,7 @@ export interface UpdateStudentUserRequest
   lastName: string;
   gender: string;
   studentGroupId: number;
+  birthDate : Date;
   studentCode: string;
   enrollYear: number;
   currentLevel: number;

@@ -191,3 +191,18 @@ export interface CreateTeacherRequest {
     birthDate: string;
   };
 
+ export interface  UpdateTeacherUserRequest{
+  id: string;
+  citizenId: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  nationality: string;
+  birthDate: Date; 
+  prefix: string;
+  teacherId: number;
+  teacherCode: string;
+  hiredDate: string; 
+  programId: number;
+ }

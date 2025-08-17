@@ -248,10 +248,9 @@ export default function StudentDetailForm({ studentId }: Props) {
     setSelectedGroupId(null);
   };
 
-  const handleSave = async () => {
+ const handleSave = async () => {
   if (!formData) return;
 
-  
   if (!formData.prefix) {
     toast.error("กรุณาเลือกคำนำหน้า");
     return;
@@ -273,8 +272,11 @@ export default function StudentDetailForm({ studentId }: Props) {
     return;
   }
 
-  
   const chosenGroup = groups.find((g) => g.id === selectedGroupId);
+  if (!chosenGroup) {
+    toast.error("ไม่พบข้อมูลห้องที่เลือก");
+    return;
+  }
 
   const studentId =
     Number((formData as any)?.studentId) ||
@@ -286,33 +288,38 @@ export default function StudentDetailForm({ studentId }: Props) {
     return;
   }
 
- 
-  const enrollYear =
-    Number((formData as any)?.enrollYear) ||
-    Number((formData as any)?.year) ||
-    new Date().getFullYear(); 
+  const enrollYearRaw =
+    (formData as any)?.enrollYear ?? (formData as any)?.year ?? new Date().getFullYear();
+  const currentLevelRaw =
+    (formData as any)?.currentLevel ?? (formData as any)?.level ?? chosenGroup?.level ?? 1;
+  const graduateYearRaw = (formData as any)?.graduateYear ?? 0; 
 
-  const currentLevel =
-    Number((formData as any)?.currentLevel) ||
-    Number((formData as any)?.level) ||
-    Number(chosenGroup?.level) ||
-    1;
+  const enrollYear = Number(enrollYearRaw);
+  const currentLevel = Number(currentLevelRaw);
+  const graduateYear = Number(graduateYearRaw);
 
-  const graduateYear =
-    Number((formData as any)?.graduateYear) || 0; 
+  if ([enrollYear, currentLevel, graduateYear].some((n) => Number.isNaN(n))) {
+    toast.error("รูปแบบตัวเลขของปี/ชั้นปีไม่ถูกต้อง");
+    return;
+  }
 
   const programId =
-    Number((formData as any)?.programId) ||
-    Number(chosenGroup?.programId) ||
-    0;
+    Number((formData as any)?.programId) || Number(chosenGroup?.programId);
+  if (!programId) {
+    toast.error("ไม่พบ Program ของห้องที่เลือก");
+    return;
+  }
 
+  
   const isActive =
-    typeof (formData as any)?.isActive === "boolean"
-      ? (formData as any).isActive
-      : true;
+    typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
+  const status = String((formData as any)?.status || "Active");
 
-  const status =
-    String((formData as any)?.status || "") || "Active";
+  const birth = new Date(formData.birthDate as string);
+  if (isNaN(birth.getTime())) {
+    toast.error("รูปแบบวันเกิดไม่ถูกต้อง");
+    return;
+  }
 
   const payload: UpdateStudentUserRequest = {
     studentId,
@@ -322,8 +329,11 @@ export default function StudentDetailForm({ studentId }: Props) {
     gender: formData.gender ?? "",
     studentGroupId: Number(selectedGroupId),
     studentCode: formData.studentCode ?? "",
-    // birthDate: toISODate(formData.birthDate),
-    programId,
+    birthDate: birth,               
+    enrollYear,                     
+    currentLevel,                   
+    graduateYear,                   
+    programId,                     
     isActive,
     status,
   };
@@ -334,7 +344,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     if (res) {
       toast.success("บันทึกข้อมูลเรียบร้อย");
 
-      
+     
       const found = groups.find((g) => g.id === selectedGroupId);
       setFormData((prev) =>
         prev
@@ -342,24 +352,27 @@ export default function StudentDetailForm({ studentId }: Props) {
               ...prev,
               class: found?.class ?? prev.class,
               groupName: found?.groupName ?? prev.groupName,
-             
               prefix: payload.prefix,
               firstName: payload.firstName,
               lastName: payload.lastName,
               gender: payload.gender,
               studentCode: payload.studentCode,
-            
+              birthDate: toISODate(payload.birthDate.toISOString()),
+              
+              
               enrollYear: payload.enrollYear,
-            
+              
               currentLevel: payload.currentLevel,
-           
+              
               graduateYear: payload.graduateYear,
-          
+              
               programId: payload.programId,
-           
+              
               isActive: payload.isActive,
-        
+              
               status: payload.status,
+              
+              studentGroupId: payload.studentGroupId,
             }
           : prev
       );
@@ -381,9 +394,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     const errors = err?.response?.data?.errors;
     if (errors && typeof errors === "object") {
       const firstKey = Object.keys(errors)[0];
-      const firstMsg = Array.isArray(errors[firstKey])
-        ? errors[firstKey][0]
-        : String(errors[firstKey]);
+      const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
       toast.error(firstMsg);
     } else {
       const msg =
