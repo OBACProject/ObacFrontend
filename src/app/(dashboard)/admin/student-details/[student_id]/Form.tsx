@@ -268,7 +268,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     return;
   }
   if (!selectedGroupId) {
-    toast.error("กรุณาเลือกห้อง (Student Group)");
+    toast.error("กรุณาเลือกห้อง  ");
     return;
   }
 

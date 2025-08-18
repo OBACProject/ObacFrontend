@@ -442,15 +442,15 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         <div className="col-span-2">
           {!isEditing ? (
             <div className="grid grid-cols-3 gap-4">
-              <ReadOnlyBox label="คณะ (Faculty)" value={programInfo?.facultyName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-              <ReadOnlyBox label="สาขา (Program)" value={programInfo?.programName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-              <ReadOnlyBox label="แขนง (Sub Program)" value={programInfo?.subProgramName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
+              <ReadOnlyBox label="คณะ " value={programInfo?.facultyName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
+              <ReadOnlyBox label="สาขา  " value={programInfo?.programName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
+              <ReadOnlyBox label="แขนง  " value={programInfo?.subProgramName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-4">
               {/* Faculty */}
               <div>
-                <label className="text-sm text-gray-700">คณะ (Faculty)</label>
+                <label className="text-sm text-gray-700">คณะ </label>
                 <select
                   value={selectedFaculty}
                   onChange={(e) => onSelectFaculty(e.target.value)}
@@ -474,7 +474,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
               {/* Program */}
               <div>
-                <label className="text-sm text-gray-700">สาขา (Program)</label>
+                <label className="text-sm text-gray-700">สาขา  </label>
                 <select
                   value={selectedProgramName}
                   onChange={(e) => onSelectProgramName(e.target.value)}
@@ -494,7 +494,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
               {/* Sub Program */}
               <div>
-                <label className="text-sm text-gray-700">แขนง (Sub Program)</label>
+                <label className="text-sm text-gray-700">แขนง  </label>
                 <select
                   value={selectedSubProgramName}
                   onChange={(e) => onSelectSubProgramName(e.target.value)}

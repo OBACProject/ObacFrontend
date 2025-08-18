@@ -23,7 +23,7 @@ type CreateStudentRequest = {
   citizenId: string;
   phoneNumber: string;
   nationality: string;
-  birthDate: string;
+  birthDate: string; // "YYYY-MM-DD"
   prefix: string;
   studentGroupId: number;
 };
@@ -34,12 +34,10 @@ type MergedGroup = GetAllStudentGroupRequest & {
   subProgramName?: string;
 };
 
-function formatGroupLabel(g: MergedGroup) {
+function formatRoomLabel(g: MergedGroup) {
   const cls = g.class ?? "-";
   const name = g.groupName ?? "-";
-  const term = g.term ? String(g.term) : "-";
-  const year = g.year ? String(g.year) : "-";
-  return `${cls}. ${name} (เทอม ${term} ปีการศึกษา ${year})`;
+  return `${cls}. ${name}`;
 }
 
 export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
@@ -47,7 +45,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [studentCode, setStudentCode] = useState("");
   const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
 
-  // ✅ เปลี่ยนค่าเริ่มต้นเป็นค่าว่าง (ให้ผู้ใช้เลือกเอง)
   const [prefix, setPrefix] = useState<string>("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -70,10 +67,14 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
   const [groupsError, setGroupsError] = useState<string | null>(null);
 
-  // cascading selects
+  // cascading selects (คณะ → สาขา → แขนง)
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
+
+  // ⬇️ ขั้นใหม่: เทอม → ปีการศึกษา → ห้อง
+  const [selectedTerm, setSelectedTerm] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>("");
 
   useEffect(() => {
     const load = async () => {
@@ -93,6 +94,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     load();
   }, []);
 
+  // map group + program
   useEffect(() => {
     if (!rawGroups.length) {
       setGroups([]);
@@ -124,6 +126,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setGroups(activeMerged);
   }, [rawGroups, programs]);
 
+  // ขั้นคณะ/สาขา/แขนง
   const faculties = useMemo(() => {
     const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
@@ -153,7 +156,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
   }, [groups, selectedFaculty, selectedProgramName]);
 
-  const filteredGroupOptions = useMemo(() => {
+  // กลุ่มที่ถูกกรองตาม คณะ/สาขา/แขนง
+  const filteredBySubProgram = useMemo(() => {
     return groups.filter((g) => {
       if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
       if (selectedProgramName && g.programName !== selectedProgramName) return false;
@@ -162,19 +166,68 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     });
   }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName]);
 
+  // ⬇️ options ของ เทอม / ปี / ห้อง จาก filteredBySubProgram
+  const termOptions = useMemo(() => {
+    const s = new Set(
+      filteredBySubProgram.map((g) => String(g.term ?? "")).filter((x) => x && x !== "-")
+    );
+    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { numeric: true, sensitivity: "base" }));
+  }, [filteredBySubProgram]);
+
+  const yearOptions = useMemo(() => {
+    const s = new Set(
+      filteredBySubProgram
+        .filter((g) => !selectedTerm || String(g.term ?? "") === selectedTerm)
+        .map((g) => String(g.year ?? ""))
+        .filter((x) => x && x !== "-")
+    );
+    // ปีอยากให้เรียงจากมากไปน้อย (ล่าสุดก่อน)
+    return Array.from(s).sort((a, b) => Number(b) - Number(a));
+  }, [filteredBySubProgram, selectedTerm]);
+
+  const roomOptions = useMemo(() => {
+    return filteredBySubProgram
+      .filter((g) => (!selectedTerm || String(g.term ?? "") === selectedTerm) && (!selectedYear || String(g.year ?? "") === selectedYear))
+      .sort((a, b) =>
+        `${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
+          `${b.class ?? ""}|${b.groupName ?? ""}`,
+          "th",
+          { numeric: true, sensitivity: "base" }
+        )
+      );
+  }, [filteredBySubProgram, selectedTerm, selectedYear]);
+
+  // เปลี่ยนค่าส่วนบน ให้รีเซ็ตค่าถัดไป
   const onSelectFaculty = (val: string) => {
     setSelectedFaculty(val);
     setSelectedProgramName("");
     setSelectedSubProgramName("");
+    setSelectedTerm("");
+    setSelectedYear("");
     setStudentGroupId(null);
   };
   const onSelectProgramName = (val: string) => {
     setSelectedProgramName(val);
     setSelectedSubProgramName("");
+    setSelectedTerm("");
+    setSelectedYear("");
     setStudentGroupId(null);
   };
   const onSelectSubProgramName = (val: string) => {
     setSelectedSubProgramName(val);
+    setSelectedTerm("");
+    setSelectedYear("");
+    setStudentGroupId(null);
+  };
+
+  // เปลี่ยนค่า เทอม/ปี → รีเซ็ตส่วนถัดไป
+  const onSelectTerm = (val: string) => {
+    setSelectedTerm(val);
+    setSelectedYear("");
+    setStudentGroupId(null);
+  };
+  const onSelectYear = (val: string) => {
+    setSelectedYear(val);
     setStudentGroupId(null);
   };
 
@@ -218,8 +271,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       citizenId: citizenId.trim(),
       phoneNumber: phone.trim(),
       nationality: nationality || "",
-      birthDate,
-      prefix : prefix || "",
+      birthDate, // จาก input type="date" เป็นรูปแบบ YYYY-MM-DD อยู่แล้ว
+      prefix: prefix || "",
       studentGroupId: Number(studentGroupId),
     };
 
@@ -247,7 +300,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     }
   };
 
-  const selectedGroup = useMemo(
+  const selectedRoom = useMemo(
     () => groups.find((g) => g.id === studentGroupId),
     [groups, studentGroupId]
   );
@@ -257,7 +310,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       <div className="bg-white rounded-2xl shadow-xl p-7 w-[780px] space-y-6 max-h-[92vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีนักเรียน</h2>
 
-        {/* เลือกคณะ → สาขา → แขนง → ห้อง */}
+        {/* เลือกคณะ → สาขา → แขนง → เทอม → ปี → ห้อง */}
         <div className="space-y-3">
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -276,9 +329,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               />
             </div>
 
-
             <div>
-              <label className="text-sm">คณะ (Faculty)</label>
+              <label className="text-sm">คณะ </label>
               <select
                 value={selectedFaculty}
                 onChange={(e) => onSelectFaculty(e.target.value)}
@@ -301,7 +353,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </div>
 
             <div>
-              <label className="text-sm">สาขา (Program)</label>
+              <label className="text-sm">สาขา  </label>
               <select
                 value={selectedProgramName}
                 onChange={(e) => onSelectProgramName(e.target.value)}
@@ -320,7 +372,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="text-sm">แขนง/สาขาย่อย (Sub Program)</label>
+              <label className="text-sm">แขนง/สาขาย่อย  </label>
               <select
                 value={selectedSubProgramName}
                 onChange={(e) => onSelectSubProgramName(e.target.value)}
@@ -338,27 +390,69 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               </select>
             </div>
 
-            <div className="col-span-2">
-              <label className="text-sm">ห้อง (Student Group)</label>
+            {/* ⬇️ เทอม */}
+            <div>
+              <label className="text-sm">เทอม  </label>
+              <select
+                value={selectedTerm}
+                onChange={(e) => onSelectTerm(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                disabled={!selectedSubProgramName || loadingGroups || !!groupsError || termOptions.length === 0}
+              >
+                <option value="">
+                  {!selectedSubProgramName ? "— เลือกแขนงก่อน —" : "— เลือกเทอม —"}
+                </option>
+                {termOptions.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* ⬇️ ปีการศึกษา */}
+            <div>
+              <label className="text-sm">ปีการศึกษา </label>
+              <select
+                value={selectedYear}
+                onChange={(e) => onSelectYear(e.target.value)}
+                className="w-full border px-3 py-2 rounded"
+                disabled={!selectedTerm || loadingGroups || !!groupsError || yearOptions.length === 0}
+              >
+                <option value="">
+                  {!selectedTerm ? "— เลือกเทอมก่อน —" : "— เลือกปีการศึกษา —"}
+                </option>
+                {yearOptions.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* ⬇️ ห้องเรียน */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-3">
+              <label className="text-sm">ห้อง  </label>
               <select
                 value={studentGroupId ?? ""}
                 onChange={(e) => setStudentGroupId(e.target.value === "" ? null : Number(e.target.value))}
                 className="w-full border px-3 py-2 rounded"
-                disabled={!selectedSubProgramName || loadingGroups || !!groupsError}
+                disabled={!selectedYear || loadingGroups || !!groupsError}
               >
                 <option value="">
-                  {!selectedSubProgramName ? "— เลือกแขนงก่อน —" : "— เลือกห้อง —"}
+                  {!selectedYear ? "— เลือกปีการศึกษาก่อน —" : "— เลือกห้อง —"}
                 </option>
-                {filteredGroupOptions.map((g) => (
+                {roomOptions.map((g) => (
                   <option key={g.id} value={g.id ?? ""}>
-                    {formatGroupLabel(g)}
+                    {formatRoomLabel(g)}
                   </option>
                 ))}
               </select>
-
               <p className="text-xs text-gray-500 mt-1">
-                {studentGroupId && selectedGroup
-                  ? `* ระบบจะบันทึกเป็น กลุ่มเรียน : ${selectedGroup.class ?? ""} ${selectedGroup.groupName ?? ""} (เทอม ${selectedGroup.term ?? "-"} ปีการศึกษา ${selectedGroup.year ?? "-"})`
+                {studentGroupId && selectedRoom
+                  ? `* กลุ่มเรียน: ${selectedRoom.class ?? ""} ${selectedRoom.groupName ?? ""} (เทอม ${selectedRoom.term ?? "-"} ปี ${selectedRoom.year ?? "-"})`
                   : "* ยังไม่ได้เลือกกลุ่มเรียน"}
               </p>
             </div>
@@ -374,7 +468,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               onChange={(e) => setPrefix(e.target.value)}
               className="w-full border px-3 py-2 rounded"
             >
-            
               <option value="">— เลือกคำนำหน้า —</option>
               <option value="นาย">นาย</option>
               <option value="นาง">นาง</option>
@@ -462,7 +555,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             />
           </div>
           <div>
-            <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
+            <label className="text-sm">ชื่อผู้ใช้ </label>
             <input
               type="text"
               value={username}

@@ -179,7 +179,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
         </div>
 
         <div>
-          <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
+          <label className="text-sm">ชื่อผู้ใช้ </label>
           <input
             type="text"
             value={username}

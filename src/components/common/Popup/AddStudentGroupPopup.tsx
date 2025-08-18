@@ -266,7 +266,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                         </div>
 
                         <div>
-                            <label className="text-sm">เทอม (Term)</label>
+                            <label className="text-sm">เทอม  </label>
                             <select
                                 value={term}
                                 onChange={(e) => setTerm(e.target.value as "1" | "2")}
@@ -278,7 +278,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                         </div>
 
                         <div>
-                            <label className="text-sm">ปีการศึกษา (Year)</label>
+                            <label className="text-sm">ปีการศึกษา </label>
                             <input
                                 type="number"
                                 value={year}
@@ -299,7 +299,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                     <h3 className="text-base font-semibold text-gray-800">เลือกแผนก / สาขา</h3>
                     <div className="grid grid-cols-3 gap-4">
                         <div>
-                            <label className="text-sm">คณะ (Faculty)</label>
+                            <label className="text-sm">คณะ </label>
                             <select
                                 value={selectedFaculty}
                                 onChange={(e) => onSelectFaculty(e.target.value)}
@@ -322,7 +322,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                         </div>
 
                         <div>
-                            <label className="text-sm">สาขา (Program)</label>
+                            <label className="text-sm">สาขา  </label>
                             <select
                                 value={selectedProgramName}
                                 onChange={(e) => onSelectProgramName(e.target.value)}
@@ -339,7 +339,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                         </div>
 
                         <div>
-                            <label className="text-sm">แขนง/สาขาย่อย (Sub Program)</label>
+                            <label className="text-sm">แขนง/สาขาย่อย  </label>
                             <select
                                 value={selectedSubProgramName}
                                 onChange={(e) => onSelectSubProgramName(e.target.value)}

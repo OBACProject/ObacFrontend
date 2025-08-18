@@ -212,7 +212,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
           </div>
 
           <div>
-            <label className="text-sm">คณะ (Faculty)</label>
+            <label className="text-sm">คณะ </label>
             <select
               value={selectedFaculty}
               onChange={(e) => onSelectFaculty(e.target.value)}
@@ -237,7 +237,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm">สาขา (Program)</label>
+            <label className="text-sm">สาขา  </label>
             <select
               value={selectedProgramName}
               onChange={(e) => onSelectProgramName(e.target.value)}
@@ -254,7 +254,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
           </div>
 
           <div>
-            <label className="text-sm">แขนง/สาขาย่อย (Sub Program)</label>
+            <label className="text-sm">แขนง/สาขาย่อย  </label>
             <select
               value={selectedSubProgramName}
               onChange={(e) => onSelectSubProgramName(e.target.value)}
@@ -375,7 +375,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
         </div>
 
         <div>
-          <label className="text-sm">ชื่อผู้ใช้ (Username)</label>
+          <label className="text-sm">ชื่อผู้ใช้ </label>
           <input
             type="text"
             value={username}
