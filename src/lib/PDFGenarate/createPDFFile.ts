@@ -2,8 +2,12 @@
 import { GetStudentGroupByGroupId } from "@/api/student/route";
 import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
-import { GetStudentGroupGradeByScheduleSubjectId } from "@/api/grad/route";
+import {
+  BulkGetStudentGradeByStudentGroupId,
+  GetStudentGroupGradeByScheduleSubjectId,
+} from "@/api/grad/route";
 import { StudentItems } from "@/dto/studentDto";
+import BulkStudentTranscript from "../PDF/score/BulkStudentTranscript";
 
 const parseStudentCode = (code?: string): number | null => {
   const digits =
@@ -57,6 +61,25 @@ export const genPDFStudentScoreInSubjectPDF = async (
       StudentScoreInSubjectPDF({ data: responseData });
     } else {
       console.error("ไม่พบข้อมูลคะแนนนักเรียน (responseData เป็น null)");
+    }
+  } catch (err) {
+    console.log("Error in lib genStudentNamelistInGroup.", err);
+  }
+};
+
+export const genBulkPDFStudentScoreInSubjectPDF = async (groupID: number) => {
+  try {
+    const response = await BulkGetStudentGradeByStudentGroupId(groupID);
+    if (response) {
+      BulkStudentTranscript(
+        response.studentGrades,
+        response.class,
+        response.groupName,
+        response.facultyName,
+        response.programName,
+        response.term,
+        response.year
+      );
     }
   } catch (err) {
     console.log("Error in lib genStudentNamelistInGroup.", err);

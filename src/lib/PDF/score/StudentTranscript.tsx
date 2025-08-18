@@ -5,7 +5,7 @@ import THSarabunFont from "../../Font/THSarabunFont";
 import THSarabunFontBold from "../../Font/THSarabunBold";
 import { GetStudentGradeDetailDto } from "@/dto/gradDto";
 
-const SummaryGradeForStudent = (grads: GetStudentGradeDetailDto) => {
+const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
   const getThaiDate = () => {
     const now = new Date();
     const day = now.getDate();
@@ -265,4 +265,4 @@ const SummaryGradeForStudent = (grads: GetStudentGradeDetailDto) => {
   doc.save(`${grads.studentCode} ${grads.thaiName} ${grads.thaiLastName}.pdf`);
 };
 
-export default SummaryGradeForStudent;
+export default StudentTranscript;
