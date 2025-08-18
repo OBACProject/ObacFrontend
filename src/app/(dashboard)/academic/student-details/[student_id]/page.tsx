@@ -8,7 +8,7 @@ export default function Page({ params }: { params: { student_id?: string } }) {
   }
 
   return (
-    <div className="pl-20">
+    <div className="pl-20 h-full  bg-gray-100">
       {studentID ? <Form studentID={studentID} /> : <LoadingDataTable />}
     </div>
   );

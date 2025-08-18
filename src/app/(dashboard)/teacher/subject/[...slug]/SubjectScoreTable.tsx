@@ -185,16 +185,16 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
             : calculatedGrade;
           return (
             <div
-              className=" text-sm border-b-[1px]  grid group hover:bg-[#e8f3ff] grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%]"
+              className=" text-sm border-b-[1px] h-fit grid group hover:bg-[#e8f3ff] grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%]"
               key={item.studentId}
             >
-              <span className="text-center flex items-center justify-center font-semibold border-l-[1px] border-r-[1px] py-1">
+              <span className="text-center flex items-center justify-center font-semibold border-l-[1px] border-r-[1px] py-0">
                 {index + 1}.
               </span>
-              <span className="text-center border-r-[1px] py-1 flex items-center justify-center ">
+              <span className="text-center border-r-[1px] py-0 flex items-center justify-center ">
                 {item.studentCode}
               </span>
-              <span className="text-start pl-5 border-r-[1px] flex py-1 items-center justify-start">
+              <span className="text-start pl-5 border-r-[1px] flex py-0 items-center justify-start">
                 {item.firstName} {item.lastName}
               </span>
               <input
@@ -205,7 +205,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 }
                 min={0}
                 max={20}
-                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff]  bg-white  ${
+                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-0 group-hover:bg-[#e8f3ff]  bg-white  ${
                   (item.affectiveScore ?? 0) > 20 ||
                   (item.affectiveScore ?? 0) < 0
                     ? "border-red-500 outline-red-500 rounded-md border-[1px]"
@@ -221,7 +221,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 value={item.collectScore === 0 ? "" : item.collectScore ?? ""}
                 min={0}
                 max={50}
-                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
                   (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
                     : "border-gray-300 border-r-[1px]"
@@ -238,7 +238,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 }
                 min={0}
                 max={50}
-                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
                   (item.assignmentScore ?? 0) > 50 ||
                   (item.assignmentScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
@@ -255,7 +255,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 value={item.midtermScore === 0 ? "" : item.midtermScore ?? ""}
                 min={0}
                 max={30}
-                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-2 group-hover:bg-[#e8f3ff] ${
+                className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-0 group-hover:bg-[#e8f3ff] ${
                   (item.midtermScore ?? 0) > 30 || (item.midtermScore ?? 0) < 0
                     ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                     : "border-gray-300 border-r-[1px]"
@@ -272,7 +272,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 }
                 min={0}
                 max={50}
-                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-2  group-hover:bg-[#e8f3ff] ${
+                className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
                   (item.finaltermScore ?? 0) > 50 ||
                   (item.finaltermScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
@@ -282,7 +282,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                   handleInputChange(index, "finaltermScore", e.target.value)
                 }
               />
-              <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-2">
+              <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-0">
                 {(item.assignmentScore ?? 0) +
                   (item.affectiveScore ?? 0) +
                   (item.collectScore ?? 0) +
@@ -290,7 +290,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                   (item.finaltermScore ?? 0)}
               </span>
               <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-base border-r-[1px]">
-                <div className="flex justify-center px-1 py-1">
+                <div className="flex justify-center px-1 py-0.5">
                   <Combobox
                     buttonLabel="เกรด"
                     disabled={true}
@@ -303,7 +303,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                   />
                 </div>
               </span>
-              <div className="flex justify-center px-1 py-1 border-r-[1px]">
+              <div className="flex justify-center px-1 py-0.5 border-r-[1px]">
                 <Combobox
                   buttonLabel="หมายเหตุ"
                   disabled={!onEdit}

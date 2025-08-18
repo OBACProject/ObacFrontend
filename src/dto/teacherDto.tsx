@@ -33,7 +33,7 @@ export interface GetAllTeacherResponse {
   gender :string;
   facultyId: number;
   facultyName: string;
-  program: string;
+  programName: string;
   phoneNumber: string | null;
   isActive : boolean;
 }
@@ -176,17 +176,33 @@ export interface TeacherDetailAndScheduleResponse {
   schedule: TeacherScheduleItem[];
 }
 export interface CreateTeacherRequest {
+    prefix: string;
+    teacherCode: string;
+    hiredDate: string;
+    programId?: number;
+    userName: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    citizenId: string;
+    phoneNumber: string;
+    nationality: string;
+    birthDate: string;
+  };
+
+export interface UpdateTeacherUserRequest {
+  teacherId: number;
   prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
   teacherCode: string;
-  hiredDate : string;
-  programId?: number;
-  userName :string;
-  password : string;
-  firstName : string;
-  lastName : string;
-  gender : string;
-  citizenId : string;
-  phoneNumber : string;
-  nationality : string;
-  birthDate : string;
+  programId: number;
+  isActive: boolean;      
+  hiredDate: string;      
+  birthDate: string;     
+  phoneNumber: string;
+  nationality: string;
+  citizenId: string;
 }

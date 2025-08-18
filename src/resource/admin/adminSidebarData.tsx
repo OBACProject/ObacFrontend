@@ -5,6 +5,7 @@ import {
   UserRoundPen,
   Newspaper,
   House,
+  DoorOpen as Room,
 } from "lucide-react";
 
 export interface ProfileData {
@@ -69,12 +70,23 @@ export const AdminSidebarData: AdminSidebarProps = {
       ),
     },
     {
-      title: "จัดการบุคลากรภายใน",
-      tooltip: "จัดการบุคลากรภายใน",
+      title: "จัดการฝ่ายทะเบียน",
+      tooltip: "จัดการฝ่ายทะเบียน",
       href: "/admin/academic-management",
       headLink:"/admin/academic-management",
       icon: (
         <BookMarked
+          style={{ width: "2.0rem", height: "2.0rem" }}
+        />
+      ),
+    },
+    {
+      title: "จัดการห้องเรียน",
+      tooltip: "จัดการฝ่ายทะเบียน",
+      href: "/admin/student-group-management",
+      headLink:"/admin/student-group-management",
+      icon: (
+        <Room
           style={{ width: "2.0rem", height: "2.0rem" }}
         />
       ),

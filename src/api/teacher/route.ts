@@ -6,6 +6,7 @@ import {
   GetTeacherDetailUserResponse,
   TeacherDetailAndScheduleResponse,
   TeacherDetails,
+  UpdateTeacherUserRequest,
 } from "@/dto/teacherDto";
 import apiClient from "@/lib/apiClient";
 import axios from "axios";
@@ -100,17 +101,16 @@ export const GetTeacherDetailUser = async (
       responseCode: string;
       responseMessage: string;
       data: GetTeacherDetailUserResponse;
-    }>("/Admin/GetTeacherDetails", {
+    }>("Admin/GetTeacherDetails", {
       params: { teacherId },
     });
 
     return response.data?.data ?? null;
   } catch (err) {
-    console.error("❌ Error in GetTeacherDetailUser: ", err);
+    console.error("Error in GetTeacherDetailUser: ", err);
     return null;
   }
 };
-
 
 export const GetTeacherDetailAndSchedule = async (
   teacherId: number,
@@ -136,9 +136,22 @@ export const CreateTeacher = async (
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("User/CreateTeacher", payload);
-    return response.status === 201;
-  } catch (err) {
-    console.error("Error creating subject:", err);
-    return false;
+    return [200, 201, 204].includes(response.status) 
+       || response.data?.isSuccess === true;
+  } catch (err: any) {
+    console.error("Error creating teacher:", err);
+    throw err;
+  }
+};
+
+
+export const UpdateTeacherUser = async (payload: UpdateTeacherUserRequest) => {
+  try {
+  
+    const res = await apiClient.put("Teacher/UpdateTeacherUser", payload);
+    return res.data;
+  } catch (error) {
+    console.error("UpdateTeacherUser Error:", error);
+    return null;
   }
 };

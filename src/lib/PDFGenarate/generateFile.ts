@@ -4,7 +4,7 @@ import StudentNameInSubject from "../PDF/name-list/StudentNameInSubject";
 import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
 import GroupSummaryGradPDF from "../PDF/score/GroupSummaryGrade";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
-import SummaryGradeForStudent from "../PDF/score/SummaryGradeForStudent";
+import SummaryGradeForStudent from "../PDF/score/StudentTranscript";
 import {
   GradSummaryGroupData,
   mockGetGradBelowResponse,

@@ -124,6 +124,7 @@ export interface GetAllStudent {
   birthDate: string | null;
 }
 
+
 export interface GetAllStudentUser {
   studentId: number;
   studentCode: string;
@@ -138,7 +139,27 @@ export interface GetAllStudentUser {
   gender: string;
   role: string;
   isActive: boolean;
+  userId : string;
 }
+
+export type GetAllStudentsPagedParams = {
+  pageNumber?: number;    
+  pageSize?: number;       
+  searchTerm?: string;    
+  searchCategory?: string; 
+  sortBy?: string;         
+  ascending?: boolean;     
+};
+
+export type GetAllStudentsPagedResponse = {
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: GetAllStudentUser[];
+};
 
 export interface GetStudentDetailResponse {
   id: number;
@@ -172,7 +193,9 @@ export interface CreateStudentRequest {
   nationality: string;
   birthDate: string;
   prefix: string;
+  studentGroupId : number;
 }
+
 
 export interface GetAllStudentTableDto {
   studentId: number;
@@ -420,4 +443,22 @@ export interface StudentDetails {
   religion:string;
   address:string;
   email:string;
+}
+
+
+export interface UpdateStudentUserRequest {
+  studentId: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  studentGroupId: number;
+  birthDate: string;         
+  studentCode: string;
+  enrollYear: number;
+  currentLevel: number;
+  graduateYear: number;
+  programId: number;
+  isActive: boolean;
+  status: string;
 }

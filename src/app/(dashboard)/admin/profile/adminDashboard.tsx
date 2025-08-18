@@ -1,167 +1,65 @@
 "use client";
 
-import BarChart from "@/components/Academic/BarChart";
-import DonutChart from "@/components/Academic/DonutChart";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { GraduationCap, LibraryBig, UserPen } from "lucide-react";
 import ProfileCard from "@/components/Academic/ProfileCard";
-import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { useGetStudentClassCountDtosQuery } from "@/lib/api/hooks/queries/dashboard.queries";
-import { ChartPie } from "lucide-react";
-import React, { useMemo } from "react";
+import StatCard from "@/components/common/Card/card-stat";
+import { GetUserCount } from "@/api/user/userAPI";
+import { GetUserCountRespond } from "@/dto/userDto";
+
 
 export default function AdminDashboard() {
-  const {
-    data: studentClassData,
-    isLoading,
-    error,
-  } = useGetStudentClassCountDtosQuery();
-  const chartData = useMemo(() => {
-    if (!studentClassData) return null;
+  const [counts, setCounts] = useState<GetUserCountRespond | null>(null);
 
-    const validData = studentClassData.filter(
-      item => item.class && 
-      item.genderCount?.gender && 
-      (item.genderCount.gender === 'ชาย' || item.genderCount.gender === 'หญิง') &&
-      !item.class.includes('/') &&
-      (item.class.split('.').length) <= 1 &&
-      (item.class.startsWith('ปวช') || item.class.startsWith('ปวส'))
-    );
-
-    const genderTotals = validData.reduce((acc, item) => {
-      const gender = item.genderCount.gender;
-      acc[gender] = (acc[gender] || 0) + item.genderCount.count;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const classTotals = validData.reduce((acc, item) => {
-      const classType = item.class.startsWith("ปวช") ? "ปวช" : "ปวส";
-      acc[classType] = (acc[classType] || 0) + item.genderCount.count;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const barChartData = validData.reduce((acc, item) => {
-      const key = `${item.class}.${item.level}`;
-      if (!acc[key]) {
-        acc[key] = { label: key, ชาย: 0, หญิง: 0 };
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const data = await GetUserCount();
+        setCounts(data);
+      } catch (err) {
+        console.error("โหลดข้อมูลผู้ใช้ล้มเหลว:", err);
       }
-      acc[key][item.genderCount.gender as "ชาย" | "หญิง"] =
-        item.genderCount.count;
-      return acc;
-    }, {} as Record<string, { label: string; ชาย: number; หญิง: number }>);
-
-    const labels = Object.keys(barChartData).sort();
-    const maleData = labels.map((label) => barChartData[label].ชาย);
-    const femaleData = labels.map((label) => barChartData[label].หญิง);
-
-    return {
-      gender: {
-        values: [genderTotals["ชาย"] || 0, genderTotals["หญิง"] || 0],
-        labels: ["ชาย", "หญิง"],
-      },
-      classType: {
-        values: [classTotals["ปวช"] || 0, classTotals["ปวส"] || 0],
-        labels: ["ปวช", "ปวส"],
-      },
-      barChart: {
-        labels,
-        maleData,
-        femaleData,
-      },
     };
-  }, [studentClassData]);
 
-  if (isLoading) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg">Loading...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg text-red-500">Error loading data</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!chartData) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg">No data available</div>
-        </div>
-      </div>
-    );
-  }
+    fetchCounts();
+  }, []);
 
   return (
-    <div className="lg:px-10 py-5 px-5 bg-gray-100">
-      <div className="w-full px-5">
-        <HeaderLabel
-          title="ภาพรวมโรงเรียน"
-          Icon={<ChartPie className="h-7 w-7 text-white" />}
-        />
-      </div>
-      <div className="flex flex-col lg:flex-row lg:justify-between gap-6 px-4 py-6">
-        {/* Chart Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          <DonutChart
-            title="จำนวนนักเรียน ชาย-หญิง"
-            value={chartData.gender.values}
-            label={chartData.gender.labels}
-            backgroundColor={["#8AB6F9", "#FF8DC7"]}
+    <div className="bg-gray-100 min-h-screen">
+      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 px-6 lg:px-10 py-10">
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+          <StatCard
+            title="จำนวนนักเรียนในระบบ"
+            value={counts?.totalStudentCount ?? 0}
+            icon={UserPen}
+            gradient="bg-gradient-to-r from-sky-400 to-sky-600"
+            hoverGradient="from-sky-500 to-sky-700"
+            route="/admin/student-management"
           />
-          <DonutChart
-            title="สัดส่วน ปวช-ปวส"
-            value={chartData.classType.values}
-            label={chartData.classType.labels}
-            backgroundColor={["#B388EB", "#7D7D7D"]}
+          <StatCard
+            title="จำนวนครูในระบบ"
+            value={counts?.totalTeacherCount ?? 0}
+            icon={GraduationCap}
+            gradient="bg-gradient-to-r from-orange-400 to-red-500"
+            hoverGradient="from-orange-500 to-red-600"
+            route="/admin/teacher-management"
           />
-          <DonutChart
-            title="สัดส่วน จำนวนอาจารย์"
-            value={chartData.classType.values}
-            label={chartData.classType.labels}
-            backgroundColor={["#06dfbb", "#005b8e"]}
+          <StatCard
+            title="จำนวนฝ่ายทะเบียนในระบบ"
+            value={counts?.totalAcademicCount ?? 0}
+            icon={LibraryBig}
+            gradient="bg-gradient-to-r from-violet-500 to-purple-700"
+            hoverGradient="from-violet-600 to-purple-800"
+            route="/admin/academic-management"
           />
-
         </div>
 
+   
+        <div className="w-full lg:w-[360px] shrink-0">
           <ProfileCard username="ภัทรจาริน นภากาญจน์" rolename="ฝ่ายทะเบียน" />
-
-      </div>
-
-      <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg">
-        <h1 className="text-xl font-prompt text-blue-600">
-          แผนภูมิแสดงจำนวนนักเรียน ชาย-หญิง ปวช - ปวส
-        </h1>
-        <BarChart
-          labels={chartData.barChart.labels}
-          maleData={chartData.barChart.maleData}
-          femaleData={chartData.barChart.femaleData}
-        />
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ export interface ApiConfig {
 }
 
 export const defaultApiConfig: ApiConfig = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL_V2 || 'http://localhost:3000/api/v2',
+  baseURL: process.env.NEXT_PUBLIC_API_URL_V2 || 'https://obac-api-dev.ekawit.ac.th/api/',
   timeout: 30000,
   // withCredentials: true,
 };

@@ -2,7 +2,10 @@ import React from "react";
 import Form from "./Form";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { Users } from "lucide-react";
-import { PDFStudentNamelistInGroupButton } from "@/components/PDF/PDFButton";
+import {
+  BulkPDFStudentTranscriptPDF,
+  PDFStudentNamelistInGroupButton,
+} from "@/components/PDF/PDFButton";
 
 type PageParams = Promise<{ slug: number[] }>;
 
@@ -18,11 +21,12 @@ export default async function Page({ params }: { params: PageParams }) {
           title="รายชื่อนักเรียนในห้อง"
         />
         <div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center gap-2 justify-end">
             <PDFStudentNamelistInGroupButton
               groupID={studentGroupID}
               year={year}
             />
+            <BulkPDFStudentTranscriptPDF groupID={studentGroupID} />
           </div>
         </div>
       </div>

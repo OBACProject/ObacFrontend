@@ -56,12 +56,12 @@ export function Combobox({
         setOpen(open);
       }}
     >
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="">
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`w-full shadow-sm bg-white hover:bg-sky-50 rounded-lg border justify-between `}
+          className="w-full shadow-sm bg-white hover:bg-sky-50 rounded-lg justify-between py-0.5 h-fit"
           disabled={disabled}
         >
           {value
@@ -71,8 +71,8 @@ export function Combobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={`w-full p-0`}>
-        <Command className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 dark:border-gray-600 ">
-          <CommandInput placeholder="Search..." className={`h-9`} />
+        <Command className="block px-2.5 pb-1 pt-1 w-full  text-sm text-gray-900 bg-white rounded-lg border border-gray-200 dark:border-gray-600 ">
+          <CommandInput placeholder="Search..." className={`h-5 `} />
           <CommandList>
             <CommandEmpty>No options found.</CommandEmpty>
             <CommandGroup>
@@ -80,6 +80,7 @@ export function Combobox({
                 <CommandItem
                   key={option.value}
                   value={option.value}
+                  className="py-1 px-2 text-sm"
                   onSelect={(currentValue) => {
                     if (disabled) return;
                     const selectedValue =

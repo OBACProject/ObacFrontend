@@ -2,6 +2,7 @@ import {
   BulkUpdateStudentGradeResponse,
   StudentGroupGrade,
   StudentGroupGradeResponse,
+  StudentGroupGrades,
 } from "@/dto/gradDto";
 import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
@@ -77,6 +78,23 @@ export const BulkUpdateStudentGradeByScheduleSubjectId = async (
     return response.data;
   } catch (err) {
     console.error("API error:", err);
+    return null;
+  }
+};
+
+export const BulkGetStudentGradeByStudentGroupId = async (
+  groupID: number
+): Promise<StudentGroupGrades | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentGroupGrades;
+    }>(`Grade/BulkGetStudentGradeByStudentGroupId?studentGroupId=${groupID}`);
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching student group grades:", error);
     return null;
   }
 };

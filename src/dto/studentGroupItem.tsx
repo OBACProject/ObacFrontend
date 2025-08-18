@@ -67,6 +67,38 @@ export interface ScheduleItemStudentGroups {
   room: string;
 }
 
+export interface GetAllStudentGroupRequest {
+  id?: number;
+  groupName?: string;
+  groupCode?: string;
+  class?: string;
+  level?: number;
+  programId?: number;
+  year?: number;
+  term?: string;
+  isPublish?: boolean;
+  isComplete?: boolean;
+  isActive?: boolean;
+  totalStudents ?: number;
+}
+
+export interface CreateStudentGroupRequest{
+  groupName: string;
+  class: string;
+  groupCode: string;
+  level: number;
+  programId: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  isActive: boolean;
+  year: number;
+  term: string;
+}
+
+export interface UpdateStudentGroupActiveRequest {
+  studentGroupId: string;
+  isActive: boolean;
+}
 export interface Students {
   id: number;
   prefix: string;

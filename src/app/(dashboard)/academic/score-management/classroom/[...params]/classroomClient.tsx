@@ -12,6 +12,7 @@ import { preProcessClassroomData } from "./dataProcessing";
 import { TransformedStudentData } from "./mockData";
 import { ClassroomInfoTable } from "@/components/Academic/table/classroomInfoTable";
 import { Input } from "@/components/ui/input";
+import { BulkPDFStudentTranscriptPDF } from "@/components/PDF/PDFButton";
 
 interface Props {
   initialData: GetGroupSummaryGradeResponse;
@@ -190,15 +191,9 @@ export function ClassroomGradeClient({ initialData }: Props) {
               <span>ดาวน์โหลดคะแนน</span>
             </Button>
 
-            <Button
-              onClick={() => console.log("Downloading transcripts...")}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <FileText className="h-4 w-4" />
-              <span>ดาวน์โหลด Transcript</span>
-            </Button>
+            <BulkPDFStudentTranscriptPDF
+              groupID={processedData.generalData.groupId}
+            />
 
             <div className="ml-auto relative w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />

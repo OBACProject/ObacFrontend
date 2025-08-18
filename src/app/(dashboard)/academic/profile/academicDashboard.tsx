@@ -5,7 +5,7 @@ import DonutChart from "@/components/Academic/DonutChart";
 import ProfileCard from "@/components/Academic/ProfileCard";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { useGetStudentClassCountDtosQuery } from "@/lib/api/hooks/queries/dashboard.queries";
-import { ChartPie } from "lucide-react";
+import { ChartPie, LoaderCircle } from "lucide-react";
 import React, { useMemo } from "react";
 
 export default function AcademicDashboard() {
@@ -18,12 +18,14 @@ export default function AcademicDashboard() {
     if (!studentClassData) return null;
 
     const validData = studentClassData.filter(
-      item => item.class && 
-      item.genderCount?.gender && 
-      (item.genderCount.gender === 'ชาย' || item.genderCount.gender === 'หญิง') &&
-      !item.class.includes('/') &&
-      (item.class.split('.').length) <= 1 &&
-      (item.class.startsWith('ปวช') || item.class.startsWith('ปวส'))
+      (item) =>
+        item.class &&
+        item.genderCount?.gender &&
+        (item.genderCount.gender === "ชาย" ||
+          item.genderCount.gender === "หญิง") &&
+        !item.class.includes("/") &&
+        item.class.split(".").length <= 1 &&
+        (item.class.startsWith("ปวช") || item.class.startsWith("ปวส"))
     );
 
     const genderTotals = validData.reduce((acc, item) => {
@@ -78,8 +80,9 @@ export default function AcademicDashboard() {
             Icon={<ChartPie className="h-7 w-7 text-white" />}
           />
         </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg">Loading...</div>
+        <div className="w-full h-full bg-white border-[1px] border-blue-400 rounded-xl py-5 lg:py-10 flex gap-5 lg:gap-10 items-center justify-center h-fit">
+          <LoaderCircle className="w-12 h-12 text-blue-400 animate-spin" />
+          <h1 className="text-xl text-gray-600 font-prompt">กำลังโหลดข้อมูล... </h1>
         </div>
       </div>
     );
@@ -118,7 +121,30 @@ export default function AcademicDashboard() {
   }
 
   return (
-    <div className="lg:px-10 py-5 px-5 bg-gray-100">
+    <div
+      className="lg:px-10 py-5 px-5 bg-blue-100"
+      style={{
+        backgroundImage: `
+      /* เส้นตั้ง */
+      repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1) 0px,
+        rgba(255, 255, 255, 1) 1px,
+        transparent 1px,
+        transparent 20px
+      ),
+      /* เส้นนอน */
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 0px,
+        rgba(255, 255, 255, 1) 1px,
+        transparent 1px,
+        transparent 20px
+      )
+    `,
+        backgroundSize: "20px 20px",
+      }}
+    >
       <div className="w-full px-5">
         <HeaderLabel
           title="ภาพรวมโรงเรียน"
@@ -140,10 +166,9 @@ export default function AcademicDashboard() {
             label={chartData.classType.labels}
             backgroundColor={["#B388EB", "#7D7D7D"]}
           />
-
         </div>
 
-          <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
+        <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
 
       </div>
 

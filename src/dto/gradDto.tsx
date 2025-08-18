@@ -10,7 +10,7 @@ export interface GradStudentInSubject {
   firstName: string;
   lastName: string;
   subjectName: string;
-  assignmentscore :number
+  assignmentscore: number;
   collectScore: number;
   affectiveScore: number;
   midtermscore: number;
@@ -27,7 +27,7 @@ export interface GetGradBySubjectId {
   studentGroup: string;
   studentId: number;
   studentCode: string;
-  prefix : string;
+  prefix: string;
   gender: string;
   firstName: string;
   lastName: string;
@@ -48,7 +48,7 @@ export interface GetGradBySubjectId {
 // finaltermscore ปลายภาค : 30
 export interface convertGradBySubjectId {
   studentCode: string;
-  name: string; 
+  name: string;
   assignmentscore: number;
   collectScore: number;
   affectiveScore: number;
@@ -120,7 +120,7 @@ export interface GetGropGradeAboveModel {
 export interface GetGropGradeBelowModel {
   studentId: number;
   studentCode: string;
-  prefix : string;
+  prefix: string;
   firstName: string;
   lastName: string;
   facultyName: string;
@@ -195,10 +195,10 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
 export interface SubjectGradeItem {
   studentId: number;
   studentCode: string;
-  prefix:string;
+  prefix: string;
   firstName: string;
   lastName: string;
-  assignmentScore:number;
+  assignmentScore: number;
   collectScore: number;
   affectiveScore: number;
   midtermScore: number;
@@ -211,9 +211,9 @@ export interface SubjectGradeItem {
 export interface StudentGroupGradeResponse {
   subjectName: string;
   subjectCode: string;
-  credit:number;
-  hour:number;
-  subjectTeacher:string;
+  credit: number;
+  hour: number;
+  subjectTeacher: string;
   subjectId: number;
   groupId: number;
   groupName: string;
@@ -248,3 +248,44 @@ export type BulkUpdateStudentGradeResponse = {
     message: string;
   };
 };
+
+export interface SubjectGrade {
+  gradeId: number;
+  finalGrade: number;
+  remark: string;
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  credit: number;
+  gradePoint: number;
+  term: string;
+  year: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+}
+
+export interface StudentGrade {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  subjectGrades: SubjectGrade[];
+}
+
+export interface StudentGroupGrades {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  term: string;
+  year: number;
+  facultyName: string;
+  programName: string;
+  studentGrades: StudentGrade[];
+}

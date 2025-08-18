@@ -28,9 +28,9 @@ export default function Form() {
   useEffect(() => {
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
       if (d) {
-      const sorted = sortStudentGroupItems(d);
-      setStudentGroup(sorted);
-    }
+        const sorted = sortStudentGroupItems(d);
+        setStudentGroup(sorted);
+      }
     });
     GetAllTeachers().then((d: GetAllTeacherResponse[]) => {
       setTeacher(d);
@@ -42,10 +42,10 @@ export default function Form() {
     setStudentGroup([]);
     setLoading(false);
     GetAllStudentGroupByTermYear(term, year).then((d: StudentGroupItem[]) => {
-     if (d) {
-      const sorted = sortStudentGroupItems(d);
-      setStudentGroup(sorted);
-    }
+      if (d) {
+        const sorted = sortStudentGroupItems(d);
+        setStudentGroup(sorted);
+      }
     });
     setLoading(true);
   }, [term, year]);
@@ -219,7 +219,7 @@ export default function Form() {
           />
         )
       ) : (
-       <LoadingDataTable/>
+        <LoadingDataTable />
       )}
 
       {popUpAddSubject == true && (

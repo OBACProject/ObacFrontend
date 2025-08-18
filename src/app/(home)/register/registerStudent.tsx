@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { StudentCreateData } from "@/dto/studentDto";
 import { useState } from "react";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import { fetchCreateStudentAsync } from "@/api/oldApi/student/studentApi";
 import { useRouter } from "next/navigation";
 export function RegisterStudent() {
   const router = useRouter();
@@ -38,10 +37,6 @@ export function RegisterStudent() {
   );
 
   // fetchCreate Student
-  const handelSubmit = async () => {
-    await fetchCreateStudentAsync(createStudentData);
-    // router.push("/home/");
-  };
 
   const [booleanThaiId, setBooleanThaiId] = useState<boolean | null>(null);
   const validateThaiIdData = (id: string) => {
@@ -213,10 +208,7 @@ export function RegisterStudent() {
         {/* programId */}
 
         <div className="flex justify-end">
-          <button
-            onClick={handelSubmit}
-            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-          >
+          <button className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
             ส่งรายละเอียดข้อมูล
           </button>
         </div>

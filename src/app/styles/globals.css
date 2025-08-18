@@ -141,14 +141,11 @@ input[type="number"] {
 
 
 @layer utilities {
-  .animation-delay-2000{
-    animation-delay: 2s;
-  }
-  .animation-delay-4000{
-    animation-delay:4s;
-  }
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
+  .animation-delay-6000 { animation-delay: 6s; }
+  .will-change-transform { will-change: transform; }
 }
-
 
 @font-face {
   font-family: 'Prompt';
