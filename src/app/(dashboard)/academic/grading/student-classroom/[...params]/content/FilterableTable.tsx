@@ -17,7 +17,13 @@ import { Combobox } from "@/components/common/Combobox/combobox";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetSubjectsByStudentGroupIdTermYearQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
-
+// const sorted: {
+//     scheduleSubjectId: any;
+//     SubjectCode: any;
+//     TeacherName: any;
+//     IsComplete: React.JSX.Element;
+//     IsCompleteText: string;
+// }[]
 export const columns = [
   {
     label: "ลำดับ",
@@ -27,7 +33,11 @@ export const columns = [
   {
     label: "รหัสวิชา - ชื่อวิชา",
     key: "SubjectCode",
-    className: "w-6/12 flex justify-center",
+    className: "w-6/12",
+    render: (row : any) => {
+
+      return <span className="flex justify-start pl-16">{row.SubjectCode} </span>
+    }
   },
   {
     label: "อาจารย์ผู้สอน",
@@ -110,12 +120,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   }, [apiResponse]);
 
   const classroomInfo = useMemo(() => {
-    if (!apiResponse) {
-      return {
-        class: `ปวส.${classroomId}/2`,
-        groupName: classroomId.toString(),
-      };
-    }
+
     return {
       class: apiResponse?.class,
       groupName: apiResponse?.groupName

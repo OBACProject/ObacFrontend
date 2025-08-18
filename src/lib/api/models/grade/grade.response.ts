@@ -144,8 +144,8 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
     midtermScore: number;
     finaltermScore: number;
     totalScore: number;
-    finalGrade: number | null;
-    remark: string | null;
+    finalGrade: number;
+    remarks: string | null;
     subjectName: string;
     subjectCode: string;
     credit: number;

@@ -38,8 +38,8 @@ export interface GetGradBySubjectId {
   midtermScore: number;
   finaltermScore: number;
   totalScore: number;
-  grade: string;
-  remark: string;
+  finalGrade: number;
+  remarks: string;
 }
 // assignmentscore คะแนนภารระงาน : 20
 // collectscore คะแนนเก็บ (ทดสอบ) : 10

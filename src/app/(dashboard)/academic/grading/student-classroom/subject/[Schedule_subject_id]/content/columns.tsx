@@ -13,7 +13,11 @@ export const createColumns = ({
     index: number,
     field: keyof Pick<
       GetGradBySubjectId,
-      "assignmentscore" | "collectScore" | "affectiveScore" | "midtermScore" | "finaltermScore"
+      | "assignmentscore"
+      | "collectScore"
+      | "affectiveScore"
+      | "midtermScore"
+      | "finaltermScore"
     >,
     value: string
   ) => void;
@@ -21,50 +25,53 @@ export const createColumns = ({
   onChangeRemark: (remark: string, studentId: number) => void;
 }): Column<GetGradBySubjectId>[] => {
   const gradeOptions = ["0", "1", "1.5", "2", "2.5", "3", "3.5", "4"];
-  const remarkOptions = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+  const remarkOptions = ["", "ผ.", "มผ.", "ขส.", "ขร.", "มส."]; // Added empty option
 
   const calculateGradeFromScore = (totalScore: number): string => {
-    if (totalScore >= 80) return "4";      
-    if (totalScore >= 75) return "3.5";   
-    if (totalScore >= 70) return "3";     
-    if (totalScore >= 65) return "2.5";    
-    if (totalScore >= 60) return "2";     
-    if (totalScore >= 55) return "1.5";   
-    if (totalScore >= 50) return "1";      
-    return "0";                          
+    if (totalScore >= 80) return "4";
+    if (totalScore >= 75) return "3.5";
+    if (totalScore >= 70) return "3";
+    if (totalScore >= 65) return "2.5";
+    if (totalScore >= 60) return "2";
+    if (totalScore >= 55) return "1.5";
+    if (totalScore >= 50) return "1";
+    return "0";
   };
 
   const getGradeColor = (grade: string): string => {
     switch (grade) {
-      case "0": return "bg-red-400 text-white";
-      default: return "bg-blue-200 text-blue-900";
+      case "0":
+        return "bg-red-400 text-white";
+      default:
+        return "bg-blue-200 text-blue-900";
     }
   };
 
   return [
     {
       label: "ลำดับ",
-      className: "w-1/12 flex justify-center",
+      className: "w-1/12 flex justify-center text-sm",
       render: (row) => `${row.index}`,
     },
     {
       label: "รหัสนักเรียน",
       key: "studentCode",
-      className: "w-1/12 ",
+      className: "w-1/12 text-sm",
     },
     {
       label: "ชื่อ - นามสกุล",
-      className: "w-3/12 ",
-      render: (row) => 
-      <span className="pl-6">
-        {row.prefix} {row.firstName} {row.lastName}
-      </span>,
+      className: "w-3/12 text-sm",
+      render: (row) => (
+        <span className="pl-6">
+          {row.prefix} {row.firstName} {row.lastName}
+        </span>
+      ),
     },
-   {
+    {
       label: "คะแนนจิตพิสัย (20)",
-      className: "w-1/12 ",
+      className: "w-1/12 text-sm",
       render: (row) =>
-        onEdit && !row.remark ? (
+        onEdit && !row.remarks ? (
           <input
             type="number"
             min={0}
@@ -87,9 +94,9 @@ export const createColumns = ({
     },
     {
       label: "คะแนนทดสอบ (10)",
-      className: "w-1/12",
+      className: "w-1/12 text-sm",
       render: (row) =>
-        onEdit && !row.remark ? (
+        onEdit && !row.remarks ? (
           <input
             type="number"
             min={0}
@@ -112,9 +119,9 @@ export const createColumns = ({
     },
     {
       label: "ภารระงาน (20)",
-      className: "w-1/12",
+      className: "w-1/12 text-sm",
       render: (row) =>
-        onEdit && !row.remark ? (
+        onEdit && !row.remarks ? (
           <input
             type="number"
             min={0}
@@ -137,9 +144,9 @@ export const createColumns = ({
     },
     {
       label: "ตะแนนกลางภาค (20)",
-      className: "w-1/12",
+      className: "w-1/12 text-sm",
       render: (row) =>
-        onEdit && !row.remark ? (
+        onEdit && !row.remarks ? (
           <input
             type="number"
             min={0}
@@ -162,9 +169,9 @@ export const createColumns = ({
     },
     {
       label: "คะแนนปลายภาค (30)",
-      className: "w-1/12 ",
+      className: "w-1/12 text-sm",
       render: (row) =>
-        onEdit && !row.remark ? (
+        onEdit && !row.remarks ? (
           <input
             type="number"
             min={0}
@@ -187,7 +194,7 @@ export const createColumns = ({
     },
     {
       label: "รวม (100)",
-      className: "w-1/12",
+      className: "w-1/12 text-sm",
       render: (row) => (
         <div className="text-center w-full border px-2 py-1 font-semibold bg-blue-50">
           {row.totalScore}
@@ -196,31 +203,43 @@ export const createColumns = ({
     },
     {
       label: "เกรด",
-      className: "w-1/12 flex justify-center",
+      className: "w-1/12 flex justify-center text-sm",
       render: (row) => {
-        const hasRemark = row.remark !== null && row.remark.trim() !== "";
+        const hasRemark = row.remarks && row.remarks.trim() !== "";
         const calculatedGrade = calculateGradeFromScore(row.totalScore);
         const gradeColor = getGradeColor(calculatedGrade);
 
-        // Show calculated grade (read-only) or manual grade selection for special cases
-        return hasRemark ? (
-          // If student has remarks, allow manual grade selection
-          onEdit ? (
+        // If there's a remark, show the remark instead of grade
+        if (hasRemark) {
+          return (
+            <div className="text-center w-full border px-2 py-1 rounded font-semibold text-blue-800">
+              {row.remarks}
+            </div>
+          );
+        }
+
+        // If there's a finalGrade and no remark, show finalGrade (editable if onEdit is true)
+        if (row.finalGrade && !hasRemark) {
+          return onEdit ? (
             <Combobox
               disabled={!onEdit}
               buttonLabel="เกรด"
               options={gradeOptions.map((g) => ({ label: g, value: g }))}
               onSelect={(val) => onChangeGrade(val, row.studentId)}
-              defaultValue={row.grade}
+              defaultValue={String(row.finalGrade)}
             />
           ) : (
-            <div className={`text-center w-full border px-2 py-1 rounded ${gradeColor}`}>
-              {row.grade}
+            <div
+              className={`text-center w-full border px-2 py-1 rounded ${gradeColor}`}
+            >
+              {row.finalGrade}
             </div>
-          )
-        ) : (
-          // Auto-calculated grade (read-only)
-          <div 
+          );
+        }
+
+        // Fallback to calculated grade from totalScore
+        return (
+          <div
             className={`text-center w-full border px-2 py-1 rounded font-semibold ${gradeColor}`}
             title={`คำนวณอัตโนมัติจากคะแนนรวม ${row.totalScore}`}
           >
@@ -237,13 +256,16 @@ export const createColumns = ({
           <Combobox
             disabled={!onEdit}
             buttonLabel="หมายเหตุ"
-            options={remarkOptions.map((r) => ({ label: r, value: r }))}
+            options={remarkOptions.map((r) => ({ 
+              label: r || "-", 
+              value: r 
+            }))}
             onSelect={(val) => onChangeRemark(val, row.studentId)}
-            defaultValue={row.remark || "หมายเหตุ"}
+            defaultValue={row.remarks || ""}
           />
         ) : (
           <div className="text-center w-full border h-6 px-2">
-            {row.remark}
+            {row.remarks || ""}
           </div>
         ),
     },
