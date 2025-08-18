@@ -323,7 +323,7 @@ export function StudentPopup({
                         <div className="flex justify-between py-1">
                           <span className="text-gray-700 font-medium">เกรดสุดท้าย:</span>
                           <span className="font-bold text-green-600">
-                            {selectedSubject.finalGrade || selectedSubject.remark || 'N/A'}
+                            {selectedSubject.finalGrade || selectedSubject.remarks || 'N/A'}
                           </span>
                         </div>
                       </div>
