@@ -233,7 +233,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     align: "center",
   });
   doc.setFontSize(14);
-  doc.text(`รหัสวิชา ${data.subjectId} วิชา ${data.subjectName}`, 120, 10, {
+  doc.text(`รหัสวิชา ${data.subjectCode} วิชา ${data.subjectName}`, 120, 10, {
     align: "center",
   });
 
@@ -259,6 +259,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
         "กลางภาค",
         "ปลายภาค",
         "รวม",
+        "เกรด",
         "หมายเหตุ",
       ],
     ],
@@ -279,13 +280,14 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
       0: { cellWidth: 10 },
       1: { cellWidth: 20 },
       2: { cellWidth: 55 },
-      3: { cellWidth: 17 },
-      4: { cellWidth: 17 },
+      3: { cellWidth: 16 },
+      4: { cellWidth: 16 },
       5: { cellWidth: 17 },
       6: { cellWidth: 17 },
       7: { cellWidth: 17 },
-      8: { cellWidth: 16 },
-      9: { cellWidth: 15 },
+      8: { cellWidth: 10 },
+      9: { cellWidth: 10 },
+      10: { cellWidth: 13, fontSize: 12 },
     },
     margin: { left: 4, right: 0 },
   });
@@ -309,6 +311,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
             `${students[i].midtermScore}`,
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,
+            `${students[i].finalGrade}`,
             `${students[i].remarks !== null ? students[i].remarks : ""}`,
           ],
         ],
@@ -340,13 +343,14 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
             lineWidth: { right: 0.2, left: 0, top: 0.2, bottom: 0.2 },
             cellPadding: { left: 0, right: 0, top: 0.5, bottom: 0.5 },
           },
-          4: { cellWidth: 17 },
-          5: { cellWidth: 17 },
+          4: { cellWidth: 16 },
+          5: { cellWidth: 16 },
           6: { cellWidth: 17 },
           7: { cellWidth: 17 },
           8: { cellWidth: 17 },
-          9: { cellWidth: 16 },
-          10: { cellWidth: 15 },
+          9: { cellWidth: 10 },
+          10: { cellWidth: 10 },
+          11: { cellWidth: 13 },
         },
         margin: { left: 4, right: 0 },
       });
