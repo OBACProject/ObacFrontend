@@ -79,6 +79,7 @@ export interface GetAllStudentGroupRequest {
   isPublish?: boolean;
   isComplete?: boolean;
   isActive?: boolean;
+  totalStudents ?: number;
 }
 
 export interface CreateStudentGroupRequest{

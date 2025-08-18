@@ -198,10 +198,10 @@ export default function Form() {
           </div>
         </div>
       ) : (
-        <div className="w-full grid place-items-center py-10">
-          <div className="py-10 border-gray-400 border-2 border-dashed text-5xl text-gray-500 font-extrabold rounded-lg grid place-items-center w-[700px]">
-            ไม่มีข้อมูล
-          </div>
+        <div className="w-full px-10 py-5">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="animate-pulse bg-gray-200 h-10 mb-2 rounded" />
+          ))}
         </div>
       )}
 

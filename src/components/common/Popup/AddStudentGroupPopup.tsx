@@ -361,7 +361,6 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
                         program={selectedProgramName}
                         subProgram={selectedSubProgramName}
                     />
-                    <p className="text-xs text-gray-500">* ระบบจะบันทึกเป็น Program ID: <b>{resolvedProgramId ?? "-"}</b></p>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-1">

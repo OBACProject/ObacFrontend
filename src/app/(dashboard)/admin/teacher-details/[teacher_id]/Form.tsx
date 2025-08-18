@@ -510,7 +510,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">Program ID ที่จะบันทึก: <b>{selectedProgramId ?? "-"}</b></p>
               </div>
             </div>
           )}

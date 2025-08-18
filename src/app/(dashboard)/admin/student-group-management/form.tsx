@@ -20,12 +20,12 @@ export default function Form() {
   const [deleting, setDeleting] = useState(false);
   const router = useRouter();
 
-  // ค้นหา + paginate (ฝั่ง client)
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // ป้องกันกดสวิตช์ตอนกำลังอัปเดต
+  
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
   const sortByGroupCode = (arr: GetAllStudentGroupRequest[]) =>
@@ -45,7 +45,6 @@ export default function Form() {
     fetchGroups();
   }, []);
 
-  // กรองตามคำค้น
   const filteredGroups = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
     if (!q) return groups;
@@ -68,18 +67,17 @@ export default function Form() {
     return sortByGroupCode(filtered);
   }, [groups, searchTerm]);
 
-  // คำนวณหน้ารวม + ขอบเขตแสดงผล
+  
   const totalCount = filteredGroups.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
   const currentFrom = totalCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const currentTo = Math.min(currentPage * itemsPerPage, totalCount);
 
-  // ถ้าจำนวนหน้าลดลง (จากการค้นหา/ลบ) ให้หนีบ currentPage ให้อยู่ในช่วงที่ถูกต้อง
   useEffect(() => {
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [totalPages, currentPage]);
 
-  // ตัดหน้าที่จะแสดง
+  
   const paginated = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredGroups.slice(start, start + itemsPerPage);
@@ -122,10 +120,29 @@ export default function Form() {
     }
   };
 
-  const openDeleteConfirm = (id: number) => setOpenDeleteId(id);
+
+  const openDeleteConfirm = (id: number) => {
+    const found = groups.find((g) => g.id === id);
+    const count = Number(found?.totalStudents ?? 0);
+    if (count > 0) {
+      toast.warn(`ไม่สามารถลบห้องนี้ได้ เนื่องจากมีนักเรียนอยู่ ${count} คน`);
+      return;
+    }
+    setOpenDeleteId(id);
+  };
 
   const confirmDelete = async () => {
     if (openDeleteId == null) return;
+
+    
+    const found = groups.find((g) => g.id === openDeleteId);
+    const count = Number(found?.totalStudents ?? 0);
+    if (count > 0) {
+      toast.warn(`ไม่สามารถลบห้องนี้ได้ เนื่องจากมีนักเรียนอยู่ ${count} คน`);
+      setOpenDeleteId(null);
+      return;
+    }
+
     try {
       setDeleting(true);
       const ok = await DeleteStudentGroupById(openDeleteId);
@@ -164,7 +181,7 @@ export default function Form() {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // รีเซ็ตไปหน้า 1 เมื่อมีการค้นหา
+            setCurrentPage(1); 
           }}
           className="border border-gray-400 px-4 py-1 rounded-md"
         />
@@ -195,59 +212,76 @@ export default function Form() {
           </div>
 
           <div className="shadow-lg w-full text-sm">
-            <div className="grid grid-cols-[8%_18%_22%_12%_12%_14%_14%] text-black bg-gray-50 border-b text-lg">
+            {/* ⬇️ เพิ่มคอลัมน์ จำนวนนักเรียน และปรับสัดส่วนคอลัมน์ */}
+            <div className="grid grid-cols-[8%_16%_22%_10%_12%_12%_10%_10%] text-black bg-gray-50 border-b text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
               <div className="flex items-center justify-center py-2">รหัสห้อง</div>
               <div className="flex items-center justify-center py-2">ห้อง</div>
               <div className="flex items-center justify-center py-2">ภาคเรียน</div>
               <div className="flex items-center justify-center py-2">ปีการศึกษา</div>
+              <div className="flex items-center justify-center py-2">จำนวนนักเรียน</div>
               <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
               <div className="flex items-center justify-center py-2">การจัดการ</div>
             </div>
 
-            {paginated.map((item, index) => (
-              <div
-                key={item.id}
-                className="cursor-default grid grid-cols-[8%_18%_22%_12%_12%_14%_14%] bg-white hover:bg-blue-100 text-gray-800 text-base"
-              >
-                <div className="flex items-center justify-center py-2">
-                  {(currentPage - 1) * itemsPerPage + index + 1}.
-                </div>
+            {paginated.map((item, index) => {
+              const count = Number(item.totalStudents ?? 0);
+              const canDelete = count === 0;
 
-                <div className="flex items-center justify-center py-2">
-                  {item.groupCode || "-"}
-                </div>
+              return (
+                <div
+                  key={item.id}
+                  className="cursor-default grid grid-cols-[8%_16%_22%_10%_12%_12%_10%_10%] bg-white hover:bg-blue-100 text-gray-800 text-base"
+                >
+                  <div className="flex items-center justify-center py-2">
+                    {(currentPage - 1) * itemsPerPage + index + 1}.
+                  </div>
 
-                <div className="flex items-center justify-center py-2">
-                  {(item.class ?? "") + (item.class ? " " : "") + (item.groupName ?? "")}
-                </div>
+                  <div className="flex items-center justify-center py-2">
+                    {item.groupCode || "-"}
+                  </div>
 
-                <div className="flex items-center justify-center py-2">
-                  {item.term || "-"}
-                </div>
+                  <div className="flex items-center justify-center py-2">
+                    {(item.class ?? "") + (item.class ? " " : "") + (item.groupName ?? "")}
+                  </div>
 
-                <div className="flex items-center justify-center py-2">
-                  {item.year ?? "-"}
-                </div>
+                  <div className="flex items-center justify-center py-2">
+                    {item.term || "-"}
+                  </div>
 
-                <div className="flex items-center justify-center py-2">
-                  <IsActiveToggleProps
-                    isActive={!!item.isActive}
-                    disabled={updatingId === item.id}
-                    onToggle={(value: boolean) => handleToggleActive(item.id as number, value)}
-                  />
-                </div>
+                  <div className="flex items-center justify-center py-2">
+                    {item.year ?? "-"}
+                  </div>
 
-                <div className="flex items-center justify-center py-2 gap-3">
-                  <span title="ลบกลุ่มเรียน">
-                    <Trash2
-                      className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700"
-                      onClick={() => openDeleteConfirm(item.id as number)}
+                  {/* ⬇️ แสดงจำนวนนักเรียน */}
+                  <div className="flex items-center justify-center py-2">
+                    {count}
+                  </div>
+
+                  <div className="flex items-center justify-center py-2">
+                    <IsActiveToggleProps
+                      isActive={!!item.isActive}
+                      disabled={updatingId === item.id}
+                      onToggle={(value: boolean) => handleToggleActive(item.id as number, value)}
                     />
-                  </span>
+                  </div>
+
+                  <div className="flex items-center justify-center py-2 gap-3">
+                    <span title={canDelete ? "ลบกลุ่มเรียน" : "มีนักเรียนอยู่ ไม่สามารถลบได้"}>
+                      <Trash2
+                        className={
+                          "w-5 h-5 cursor-pointer " +
+                          (canDelete
+                            ? "text-red-500 hover:text-red-700"
+                            : "text-gray-300 cursor-not-allowed")
+                        }
+                        onClick={() => canDelete && openDeleteConfirm(item.id as number)}
+                      />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* ✅ ตัวควบคุมหน้า */}
@@ -274,10 +308,10 @@ export default function Form() {
           </div>
         </div>
       ) : (
-        <div className="w-full grid place-items-center py-10">
-          <div className="py-10 border-gray-400 border-2 border-dashed text-5xl text-gray-500 font-extrabold rounded-lg grid place-items-center w-[700px]">
-            ไม่มีข้อมูล
-          </div>
+        <div className="w-full px-10 py-5">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="animate-pulse bg-gray-200 h-10 mb-2 rounded" />
+          ))}
         </div>
       )}
 
@@ -286,7 +320,6 @@ export default function Form() {
           onClosePopUp={(shouldReload) => {
             setOpenCreatePopup(false);
             if (shouldReload) {
-              // สร้างแล้วกลับไปหน้า 1 เพื่อเห็นรายการใหม่
               setCurrentPage(1);
               fetchGroups();
             }
