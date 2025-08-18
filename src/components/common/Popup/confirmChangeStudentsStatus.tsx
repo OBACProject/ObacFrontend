@@ -1,6 +1,5 @@
 "use client";
-
-import { fetchUpdateStudentStatus } from "@/api/oldApi/student/studentApi";
+import { UpdateStudentStatus } from "@/api/student/route";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -10,13 +9,6 @@ type Props = {
   status: string;
 };
 
-const UpdateStudentStatus = async (
-  id: number,
-  status: string
-): Promise<boolean> => {
-  return await fetchUpdateStudentStatus(id, status);
-};
-
 export default function ConfirmChangeStudentsStatus({
   studentId,
   status,
@@ -24,16 +16,13 @@ export default function ConfirmChangeStudentsStatus({
 }: Props) {
   const onChangeStudentStatus = async () => {
     try {
-      const isUpdated = await UpdateStudentStatus(studentId, status);
-
-      if (isUpdated) {
-        onClickPopUp(false);
-        toast.success(`เปลี่ยนสถานะสำเร็จ`);
+      const response = await UpdateStudentStatus(studentId, status);
+      onClickPopUp(false);
+      if (response) {
+        toast.success("เปลี่ยนสถานะสำเร็จ");
         setTimeout(() => {
           window.location.reload();
-        }, 1500);
-      } else {
-        toast.error("ไม่สามารถปรับสถานะได้");
+        }, 1000);
       }
     } catch (err) {
       console.error("Failed to update student status.");

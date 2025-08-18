@@ -2,29 +2,10 @@ import React, { useEffect, useState } from "react";
 import { CardSchedule } from "@/components/common/Card/card-schedule";
 import { Badge } from "@/components/ui/badge";
 import { StudentCardSubjectData } from "@/resource/students/studentCardSubjectData";
-import { fetchGetScheduleOfStudentByStudentID } from "@/api/oldApi/schedule/scheduleAPI";
 import { StudentGroupScheduleSubject } from "@/dto/schedule";
 
 type Props = {
   student_id: number;
-};
-
-const getScheudleData = async (
-  studentId: number,
-  term: string,
-  year: number
-) => {
-  try {
-    const response = await fetchGetScheduleOfStudentByStudentID(
-      studentId,
-      term,
-      year
-    );
-    return response;
-  } catch (err) {
-    console.log("Error fetch in Front-End");
-    return [];
-  }
 };
 
 export default function Form({ student_id }: Props) {
@@ -35,9 +16,9 @@ export default function Form({ student_id }: Props) {
   );
 
   useEffect(() => {
-    getScheudleData(student_id, "1", 2024).then((item: any) => {
-      setSchedules(item);
-    });
+    // getScheudleData(student_id, "1", 2024).then((item: any) => {
+    //   setSchedules(item);
+    // });
   }, []);
 
   return (
@@ -52,7 +33,6 @@ export default function Form({ student_id }: Props) {
         </Badge>
       </div>
 
-      
       {schedules.length > 0 ? (
         <div>
           {schedules?.map((item: StudentGroupScheduleSubject, index) => (

@@ -1,8 +1,5 @@
 "use client";
-import {
-  fetchGetStudentGroupsByTermYear,
-  fetchUpdateGroup,
-} from "@/api/oldApi/student/studentApi";
+
 import { StudentGroupItem } from "@/dto/studentGroupItem";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
@@ -15,7 +12,7 @@ interface Props {
 
 const GetStudentGroupsByTermYear = async (term: string, year: number) => {
   try {
-    return await fetchGetStudentGroupsByTermYear(term, year);
+    // return await fetchGetStudentGroupsByTermYear(term, year);
   } catch (err) {
     return [];
   }
@@ -52,16 +49,16 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
 
   const onChangeStudentGroup = async () => {
     try {
-      const response = await fetchUpdateGroup(studentId, studentGroupId);
-      if (response) {
-        toast.success("ย้ายห้องสำเร็จ");
-        onClickPopUp(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      } else {
-        toast.error("ไม่สามารถย้ายได้");
-      }
+      // const response = await fetchUpdateGroup(studentId, studentGroupId);
+      // if (response) {
+      //   toast.success("ย้ายห้องสำเร็จ");
+      //   onClickPopUp(false);
+      //   setTimeout(() => {
+      //     window.location.reload();
+      //   }, 1500);
+      // } else {
+      //   toast.error("ไม่สามารถย้ายได้");
+      // }
     } catch (err) {
       toast.error("ไม่สามารถย้ายได้");
     }

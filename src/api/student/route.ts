@@ -86,3 +86,21 @@ export const GetStudentDetailByStudentId = async (
     return null;
   }
 };
+
+export const UpdateStudentStatus = async (
+  studentId: number,
+  status: string
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put<{
+      responseCode: string;
+      responseMessage: string;
+      data: boolean;
+    }>("Student/UpdateStudentStatus", null, { params: { studentId, status } });
+
+    return res.data.data ?? false;
+  } catch (err) {
+    console.error("Error in UpdateStudentStatus:", err);
+    return false;
+  }
+};

@@ -1,5 +1,4 @@
 "use client";
-import { GetGropGradeBelow } from "@/api/oldApi/grad/gradAPI";
 import StudentFailListPDF from "@/lib/PDF/name-list/StudentFailList";
 import { GetGropGradeBelowModel } from "@/dto/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
@@ -60,19 +59,24 @@ export default function Main() {
     // }
     setSearchTrigger(true);
     setStudent(
-      mockGetGradBelowResponse.map(item => ({
+      mockGetGradBelowResponse.map((item) => ({
         ...item,
         prefix: item.prefix ?? "",
       }))
-    )
+    );
     setIsSearch(true);
     setSearchTrigger(false);
   };
 
-  const handleStudentName = (id: number,prefix : string, fname: string, lname: string) => {
+  const handleStudentName = (
+    id: number,
+    prefix: string,
+    fname: string,
+    lname: string
+  ) => {
     const data: IndividualStudentInfoData = {
       studentId: id,
-      studentName: prefix+fname + " " + lname,
+      studentName: prefix + fname + " " + lname,
     };
     localStorage.setItem("selectedStudentData", JSON.stringify(data));
     localStorage.setItem("activeTabStudent", "individualStudentInfo");
@@ -83,7 +87,12 @@ export default function Main() {
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
-        <HeaderLabel Icon={<User className="h-7 w-7 text-white"/>} bg_icon="bg-red-500" title="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
+        <HeaderLabel
+          Icon={<User className="h-7 w-7 text-white" />}
+          bg_icon="bg-red-500"
+          title="นักเรียนไม่ผ่านเกณฑ์"
+          className="text-red-600"
+        />
       </div>
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
         <SelectTermAndYear
@@ -176,15 +185,13 @@ export default function Main() {
                     <div className="py-1 text-lg text-center">
                       ชื่อ - นามสกุล
                     </div>
-                    <div className="py-1 text-lg text-center">
-                      ห้องเรียน
-                    </div>  
+                    <div className="py-1 text-lg text-center">ห้องเรียน</div>
                     <div className="py-1 text-lg text-center">
                       เกรดเทอมล่าสุด
-                    </div>    
+                    </div>
                     <div className="py-1 text-lg text-center">
                       เลขที่ใบเสร็จ
-                    </div>  
+                    </div>
                   </div>
                   {students.map((item, index) => (
                     <div
@@ -206,7 +213,8 @@ export default function Main() {
                         {item.studentCode}
                       </div>
                       <div className="text-start py-1 pl-8">
-                        {item.prefix}{item.firstName}
+                        {item.prefix}
+                        {item.firstName}
                       </div>
                       <div className="text-start py-1 border-r border-gray-400">
                         {item.lastName}
@@ -217,9 +225,7 @@ export default function Main() {
                       <div className="text-center border-r border-gray-400 py-1">
                         {item.gpa.toFixed(2)}
                       </div>
-                      <div className="text-center  py-1">
-                        -
-                      </div>
+                      <div className="text-center  py-1">-</div>
                     </div>
                   ))}
                 </div>

@@ -1,25 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const getStudentUser = async () => {
-  try {
-    const response = await fetchStudentUser();
-    return response;
-  } catch (err) {
-    console.error("Failed to fetch student by ID:", err);
-  }
-};
+
 
 import Form from "./Form";
-import { fetchStudentUser } from "@/api/oldApi/student/studentApi";
 
 export default function Page() {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [studentId, setStudentID] = useState<string>("");
   useEffect(() => {
-    getStudentUser().then((item: any) => {
-      setStudentID(item?.studentId);
-    });
+
   }, []);
   useEffect(() => {
       setLoading(true);
