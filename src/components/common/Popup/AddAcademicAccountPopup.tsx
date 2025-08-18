@@ -1,15 +1,16 @@
 "use client";
+
+import { CreateAcademic } from "@/api/user/userAPI";
 import { CreateAcademicRequest } from "@/dto/userDto";
 import React, { useState } from "react";
-// import { CreateAcademic } from "@/api/academic/route";
-// import { CreateAcademicRequest } from "@/dto/academicDto";
 import { toast } from "react-toastify";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
+  onCreated?: () => Promise<void> | void; 
 };
 
-export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
+export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Props) {
   const [academicCode, setAcademicCode] = useState("");
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
@@ -49,7 +50,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     const payload: CreateAcademicRequest = {
       prefix,
       academicCode,
-      username: username,
+      username,
       password,
       firstName,
       lastName,
@@ -61,23 +62,22 @@ export default function AddAcademicAccountPopup({ onClosePopUp }: Props) {
     };
 
     try {
-    //   const success = await CreateAcademic(payload);
-    //   if (success) {
-    //     toast.success("สร้างบัญชีบุคลากรภายในสำเร็จแล้ว");
-    //     onClosePopUp(false);
-    //   } else {
-    //     toast.error("ไม่สามารถสร้างบัญชีบุคลากรภายในได้");
-    //   }
-    } catch (error) {
-      toast.error("เกิดข้อผิดพลาดในการสร้างบัญชีบุคลากรภายใน");
-      console.error(error);
+      await CreateAcademic(payload);
+      toast.success("เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
+      // ✅ แจ้งหน้าหลักให้รีเฟรชรายการ
+      await onCreated?.();
+      // ✅ ปิดป็อปอัป
+      onClosePopUp(false);
+    } catch (err) {
+      console.error("Error saving academic:", err);
+      toast.error("บันทึกข้อมูลไม่สำเร็จ");
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีบุคลากรภายใน</h2>
+        <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีฝ่ายทะเบียน</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <div>

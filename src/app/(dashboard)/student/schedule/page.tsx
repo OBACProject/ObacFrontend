@@ -12,16 +12,17 @@ export default function Page() {
 
   }, []);
   useEffect(() => {
-      setLoading(true);
-    }, [studentId]);
+    setLoading(true);
+  }, [studentId]);
   return (
     <div>
       {isLoading && studentId ? (
-        <Form  student_id={Number(studentId)}/>
+        <Form student_id={Number(studentId)} />
       ) : (
         <div className="px-10  grid place-items-center py-4">
-          <div className="px-10 animate-pulse py-10 grid place-items-center text-4xl font-extrabold text-gray-600   w-full border-2 border-dashed border-gray-400 rounded-md">
-            Loading...
+          <div className="w-full h-full bg-white border-[1px] border-blue-400 rounded-xl py-5 lg:py-10 flex gap-5 lg:gap-10 items-center justify-center h-fit">
+            <LoaderCircle className="w-12 h-12 text-blue-400 animate-spin" />
+            <h1 className="text-xl text-gray-600 font-prompt">กำลังโหลดข้อมูล... </h1>
           </div>
         </div>
       )}
