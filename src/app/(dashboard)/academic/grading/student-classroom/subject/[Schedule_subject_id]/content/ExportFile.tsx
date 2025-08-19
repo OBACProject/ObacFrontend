@@ -78,8 +78,8 @@ export default function ExportFile({
         finaltermScore: item.finaltermScore || 0,
         affectiveScore: item.affectiveScore || 0,
         totalScore: item.totalScore || 0,
-        finalGrade: parseFloat(item.grade?.toString() ?? "0") || 0,
-        remarks: typeof item.remark === "number" ? item.remark.toString() : (item.remark || ""),
+        finalGrade: parseFloat(String(item.grade)) || 0,
+        remarks: item.remark ? String(item.remark) : "",
       }))
     };
   };

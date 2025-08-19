@@ -52,15 +52,15 @@ export const preProcessClassroomData = (
       studentId: student.studentId,
       studentCode: student.studentCode,
       name: `${student.prefix}${student.firstName} ${student.lastName}`,
-      gpa: parseFloat(student.gpa.toFixed(2)),
-      gpax: parseFloat(student.gpax.toFixed(2)),
+      gpa: Number(Number(student.gpa).toFixed(2)),
+      gpax: Number(Number(student.gpax).toFixed(2)),
       totalCredit: student.totalCredit,
       subjects: Object.fromEntries(
-      (student.subject ?? []).map((sub) => [
-        sub.subjectName, 
-        sub.remark && sub.remark.trim() !== '' ? sub.remark : sub.grade
-      ])
-    ),
+        (student.subject ?? []).map((sub) => [
+          sub.subjectName,
+          sub.remark && sub.remark.trim() !== "" ? sub.remark : sub.grade,
+        ])
+      ),
       failedSubjects: (student.subject ?? []).filter(
         (sub) => parseFloat(sub.grade) === 0
       ).length,
@@ -82,6 +82,6 @@ export const preProcessClassroomData = (
       year: data.year,
     },
     students: processedStudents,
-    subjects: uniqueSubjects.length > 0 ? uniqueSubjects : [], 
+    subjects: uniqueSubjects.length > 0 ? uniqueSubjects : [],
   };
 };
