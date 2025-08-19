@@ -105,6 +105,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
       }
     }).length;
   }
+  console.log("Term data:", termData);
 
   return (
     <div className="space-y-6">
@@ -120,6 +121,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
           } else if (term.finalGrade === "0") {
             isFailed = true;
           }
+          console.log("Term data:", term, "Is failed:", isFailed);
           return {
             subject_name: term.subject_name,
             subject_code: term.subject_code,
