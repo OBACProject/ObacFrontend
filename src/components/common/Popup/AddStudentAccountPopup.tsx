@@ -6,7 +6,7 @@ import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 
-import { GetAllPrograms } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {

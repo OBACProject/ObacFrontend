@@ -19,7 +19,7 @@ import { GetStudentDetailById, UpdateStudentUser } from "@/api/student/route";
 import { GetAllStudentGroup } from "@/api/studentGroup/route";
 import type { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 
-import { GetAllPrograms } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";

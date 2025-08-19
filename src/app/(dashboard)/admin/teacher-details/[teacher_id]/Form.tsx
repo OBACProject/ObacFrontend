@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { GetTeacherDetailUser } from "@/api/teacher/route";
 import type { GetTeacherDetailUserResponse } from "@/dto/teacherDto";
 
-import { GetAllPrograms } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";

@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateStudentGroup } from "@/api/studentGroup/route";
 import type { CreateStudentGroupRequest } from "@/dto/studentGroupItem";
-import { GetAllPrograms } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
