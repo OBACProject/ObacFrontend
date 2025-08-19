@@ -1,5 +1,4 @@
 import { GetAllProgramsResponse, GetAllProgramWithStudentGroupResponse } from "@/dto/programDto";
-import { CreateEnrollmentWithGradeAndScheduleRequest } from "@/dto/subjectDto";
 import apiClient from "@/lib/apiClient";
 
 

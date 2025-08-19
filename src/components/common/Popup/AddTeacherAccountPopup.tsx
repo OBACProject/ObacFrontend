@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { CreateTeacher } from "@/api/teacher/route";
 import type { CreateTeacherRequest } from "@/dto/teacherDto";
 
-import { GetAllPrograms } from "@/api/program/rount";
+import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
