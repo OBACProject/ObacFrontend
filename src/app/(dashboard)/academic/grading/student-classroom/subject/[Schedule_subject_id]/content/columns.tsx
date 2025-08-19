@@ -39,6 +39,7 @@ export const createColumns = ({
   };
 
   const getGradeColor = (grade: string): string => {
+    console.log("Grade:", grade);
     switch (grade) {
       case "0":
         return "bg-red-400 text-white";
@@ -205,9 +206,14 @@ export const createColumns = ({
       label: "เกรด",
       className: "w-1/12 flex justify-center text-sm",
       render: (row) => {
-        const hasRemark = row.remarks && row.remarks.trim() !== "";
-        const calculatedGrade = calculateGradeFromScore(row.totalScore);
-        const gradeColor = getGradeColor(calculatedGrade);
+                const hasRemark = row.remarks && row.remarks.trim() !== "";
+                const calculatedGrade = calculateGradeFromScore(row.totalScore);
+                let gradeColor;
+                if (row.finalGrade !== null && row.finalGrade !== undefined) {
+                  gradeColor = getGradeColor(String(row.finalGrade));
+                } else {
+                  gradeColor = getGradeColor(calculatedGrade || String(row.finalGrade));
+                }
 
         // If there's a remark, show the remark instead of grade
         if (hasRemark) {
