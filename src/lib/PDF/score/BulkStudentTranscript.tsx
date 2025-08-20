@@ -41,9 +41,9 @@ const BulkStudentTranscript = (
     unit: "mm",
     format: "a4",
   });
-
   const img = new Image();
   img.src = "/asset/footprintOBAC.png";
+
   for (let i = 0; i < data.length; i++) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -54,6 +54,7 @@ const BulkStudentTranscript = (
     doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
 
     const thaiDate = getThaiDate();
+
     doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
     doc.addFileToVFS("THSarabunBold.ttf", THSarabunFontBold);
 
@@ -80,10 +81,10 @@ const BulkStudentTranscript = (
     doc.text("รายงานผลการศึกษา", 90, 24);
 
     doc.setFontSize(14);
-    doc.text(`รหัสนักศึกษา : ${data[i].studentCode}`, 30, 30);
+    doc.text(`รหัสนักศึกษา : ${data[i]?.studentCode}`, 30, 30);
     doc.text("ชื่อ - สกุล   : ", 110.5, 30);
     doc.text(
-      `${data[i].prefix} ${data[i].firstName} ${data[i]?.lastName}`,
+      `${data[i]?.prefix} ${data[i]?.firstName} ${data[i]?.lastName}`,
       130,
       30
     );
@@ -95,11 +96,11 @@ const BulkStudentTranscript = (
 
     doc.text(`ชั้นปี : ${classGroup}.${groupName}`, 42, 40);
     doc.text("สาขาวิชา     : ", 110, 40);
-    doc.text(`${facultyName}`, 130, 40);
+    doc.text(`${programName}`, 130, 40);
 
     doc.text("สถานะนักเรียน : กำลังศึกษา", 28.5, 45);
     doc.text("สาขางาน     : ", 110, 45);
-    doc.text(`${programName}`, 130, 45);
+    doc.text(`-`, 130, 45);
 
     doc.line(5, 50, 205, 50);
     doc.line(5, 50, 5, 257);
@@ -144,7 +145,7 @@ const BulkStudentTranscript = (
 
     let AllOfGrad = 0;
     let AllOfCredit = 0;
-    for (let i = 0; i < data[i].subjectGrades.length; i++) {
+    for (let i = 0; i < data[i].subjectGradesTermYear.length; i++) {
       if (swift == false && startColumn >= 250) {
         startColumn = 64;
         Xaxis = 130;
@@ -156,7 +157,7 @@ const BulkStudentTranscript = (
       }
       doc.setFont("THSarabunBold", "bold");
       doc.text(
-        `ภาคเรียนที่ ${data[i].subjectGrades[i].term} ปีการศึกษา ${data[i].subjectGrades[i].year}`,
+        `ภาคเรียนที่ ${data[i].subjectGradesTermYear[i].term} ปีการศึกษา ${data[i].subjectGradesTermYear[i].year}`,
         Xaxis + 7,
         startColumn
       );
@@ -166,7 +167,11 @@ const BulkStudentTranscript = (
       let CreditCount = 0;
       let CountGrad = 0;
 
-      for (let j = 0; j < data[i].subjectGrades.length; j++) {
+      for (
+        let j = 0;
+        j < data[i].subjectGradesTermYear[i].subjectGrades.length;
+        j++
+      ) {
         if (swift == false && inStartColoume >= 250) {
           inStartColoume = 63;
           inStartColoume = inStartColoume + 5;
@@ -179,32 +184,36 @@ const BulkStudentTranscript = (
           swift = false;
         }
         let GradResult =
-          Number(data[i].subjectGrades[j].finalGrade) *
-          Number(data[i].subjectGrades[j].credit);
+          Number(data[i].subjectGradesTermYear[i].subjectGrades[j].finalGrade) *
+          Number(data[i].subjectGradesTermYear[i].subjectGrades[j].credit);
         CountGrad += GradResult;
-        CreditCount += Number(data[i].subjectGrades[j].credit);
+        CreditCount += Number(
+          data[i].subjectGradesTermYear[i].subjectGrades[j].credit
+        );
 
         AllOfGrad += GradResult;
-        AllOfCredit += Number(data[i].subjectGrades[j].credit);
+        AllOfCredit += Number(
+          data[i].subjectGradesTermYear[i].subjectGrades[j].credit
+        );
         doc.text(
-          `${data[i].subjectGrades[j].subjectCode}`,
+          `${data[i].subjectGradesTermYear[i].subjectGrades[j].subjectCode}`,
           Xaxis - 23,
           inStartColoume
         );
         doc.text(
-          `${data[i].subjectGrades[j].subjectName}`,
+          `${data[i].subjectGradesTermYear[i].subjectGrades[j].subjectName}`,
           Xaxis - 4,
           inStartColoume
         );
         doc.text(
-          `${data[i].subjectGrades[j].credit}`,
+          `${data[i].subjectGradesTermYear[i].subjectGrades[j].credit}`,
           Xaxis + 56,
           inStartColoume
         );
         doc.text(
           `${
-            data[i].subjectGrades[j].remark ||
-            data[i].subjectGrades[j].finalGrade ||
+            data[i].subjectGradesTermYear[i].subjectGrades[j].remark ||
+            data[i].subjectGradesTermYear[i].subjectGrades[j].finalGrade ||
             0
           }`,
           Xaxis + 62,
@@ -265,10 +274,15 @@ const BulkStudentTranscript = (
       280
     );
     doc.text("( นายวิทวัต โยธินนรธรรม )", 133, 285);
-    doc.text(`${thaiDate}`, 180, 295);
-  }
 
-  doc.save(`ผลการเรียนห้อง ${classGroup}.${groupName} ${term}/${year}.pdf`);
+    doc.text(`${thaiDate}`, 180, 295);
+
+
+    if (i != data.length - 1) {
+      doc.addPage();
+    }
+  }
+  doc.save(`ใบสรุปเกรด ${classGroup}.${groupName} ปี ${term}-${year}.pdf`);
 };
 
 export default BulkStudentTranscript;

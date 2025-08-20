@@ -6,7 +6,9 @@ import {
   genPDFStudentScoreInSubjectPDF,
   genPDFStudentTranscriptPDF,
 } from "@/lib/PDFGenarate/createPDFFile";
-import { Download } from "lucide-react";
+import { Download, LoaderCircle } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export const PDFStudentNamelistInGroupButton = ({
   groupID,
@@ -79,17 +81,39 @@ export const BulkPDFStudentTranscriptPDF = ({
 }: {
   groupID: number;
 }) => {
-  const handleClick = () => {
-    genBulkPDFStudentTranscriptPDF(groupID);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleClick = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const ok = await genBulkPDFStudentTranscriptPDF(groupID);
+      if (ok) {
+        toast.success("ดาวน์โหลดสำเร็จ");
+      } else {
+        toast.error("ผิดพลาด");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("ผิดพลาด");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <button
       className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
-       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
+       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3 disabled:opacity-60"
       onClick={handleClick}
+      disabled={isLoading}
+      type="button"
     >
-      <Download className="text-blue-500 w-5 h-5" />
+      {isLoading ? (
+        <LoaderCircle className="text-blue-500 w-5 h-5 animate-spin" />
+      ) : (
+        <Download className="text-blue-500 w-5 h-5" />
+      )}
       ดาวโหลดผลการเรียนทั้งห้องเรียน
     </button>
   );

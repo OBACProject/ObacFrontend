@@ -195,7 +195,7 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
 export interface SubjectGradeItem {
   studentId: number;
   studentCode: string;
-  status:string;
+  status: string;
   prefix: string;
   firstName: string;
   lastName: string;
@@ -269,13 +269,19 @@ export interface SubjectGrade {
   totalScore: number;
 }
 
+export interface SubjectGradesTermYear {
+  term: string;
+  year: number;
+  subjectGrades: SubjectGrade[];
+}
+
 export interface StudentGrade {
   studentId: number;
   studentCode: string;
   prefix: string;
   firstName: string;
   lastName: string;
-  subjectGrades: SubjectGrade[];
+  subjectGradesTermYear: SubjectGradesTermYear[];
 }
 
 export interface StudentGroupGrades {
@@ -290,7 +296,6 @@ export interface StudentGroupGrades {
   programName: string;
   studentGrades: StudentGrade[];
 }
-
 
 export interface StudentGradeItem {
   gradeId: number;
@@ -323,11 +328,11 @@ export interface StudentGradesResponse {
   prefix: string;
   firstName: string;
   lastName: string;
-  
-  class:string;
-  groupName:string;
-  facultyName:string;
-  programName:string;
+
+  class: string;
+  groupName: string;
+  facultyName: string;
+  programName: string;
 
   subjectGradesTermYear: SubjectGradesByTermYear[];
 }
