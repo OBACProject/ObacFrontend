@@ -40,7 +40,15 @@ export default function Form({ GroupID }: Props) {
     {
       label: "สถานะ",
       width: "60%",
-      render: (item) => item.status || "-",
+      render: (item) => (
+        <span
+          className={`inline-flex items-center justify-center px-2 py-0.5 text-sm font-medium rounded-full border ${getStatusClass(
+            item.status || ""
+          )}`}
+        >
+          {item.status || "-"}
+        </span>
+      ),
       className: "flex justify-center",
     },
   ];
@@ -54,10 +62,32 @@ export default function Form({ GroupID }: Props) {
       );
 
       setStudentGroupDetail({ ...data, students: sortedStudents });
-      setIsLoading(true)
+      setIsLoading(true);
     })();
   }, [GroupID]);
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
+  const getStatusClass = (status?: string) => {
+    switch (status) {
+      case "กำลังศึกษา":
+        return "text-green-600 bg-green-50 border-green-200 px-8";
+      case "นักศึกษาใหม่":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200 px-8";
+      case "พักการเรียน":
+        return "bg-red-600 text-white  px-4";
+      case "คัดชื่อออก":
+        return "text-red-600 bg-red-50 border-red-200 w-[80%]";
+      case "สำเร็จการศึกษา":
+        return "bg-blue-600 text-white  px-8";
+      case "ทดลองเรียน":
+        return "bg-yellow-500 text-white  px-4";
+      case "ลาออก":
+        return "bg-gray-500 text-white  w-[80%]";
+      case "กำลังติดตาม":
+        return "bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 text-white  px-8";
+      default:
+        return "text-gray-700 bg-gray-50 border-gray-200 px-8";
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl py-4">

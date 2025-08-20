@@ -33,8 +33,14 @@ export const genPDFStudentNamelistInGroup = async (
   try {
     const data = await GetStudentGroupByGroupId(groupID);
     if (!data) throw new Error("ไม่พบข้อมูลกลุ่มนักเรียน");
+    const EXCLUDED_STATUSES = new Set(["คัดชื่อออก", "ลาออก"]);
 
-    const studentsSorted = [...(data.students ?? [])].sort(byStudentCodeDesc);
+    const activeStudents = (data.students ?? []).filter((s) => {
+      const status = (s.status ?? "").trim();
+      return !EXCLUDED_STATUSES.has(status);
+    });
+
+    const studentsSorted = [...(activeStudents ?? [])].sort(byStudentCodeDesc);
     StudentNameListInGroupPDF({
       student: studentsSorted,
       studentGroup: `${data?.class}.${data?.groupName}`,
@@ -52,8 +58,12 @@ export const genPDFStudentScoreInSubjectPDF = async (
     const responseData = await GetStudentGroupGradeByScheduleSubjectId(
       scheduleSubjectID
     );
-
+    const EXCLUDED_STATUSES = new Set(["คัดชื่อออก", "ลาออก"]);
     if (responseData) {
+      // const activeStudents = (responseData.students ?? []).filter((s) => {
+      //   const status = (s.status ?? "").trim();
+      //   return !EXCLUDED_STATUSES.has(status);
+      // });
       responseData.subjectGrades.sort((a, b) =>
         a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
       );

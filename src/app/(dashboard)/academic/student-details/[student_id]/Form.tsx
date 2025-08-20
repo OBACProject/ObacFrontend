@@ -206,21 +206,26 @@ export default function Form({ studentID }: Props) {
                   labelSize="text-base"
                   disable={!onEdit}
                 />
-                {onEdit ? (
+                <div className="flex gap-3 items-center justify-center px-3">
+                  <p>คำนำหน้า</p>
+                   {onEdit ? (
                   <select
                     name="prefix"
                     className="border border-gray-300 rounded-md px-2 py-1.5"
                     onChange={handleChange}
-                    value={formData.gender || "Male"}
+                    value={formData.prefix || "-"}
                   >
-                    <option value="Male">นาย</option>
-                    <option value="Female">นางสาว</option>
+                    <option value="นาย">นาย</option>
+                    <option value="นางสาว">นางสาว</option>
+                    <option value="นาง">นาง</option>
                   </select>
                 ) : (
                   <div>
-                    <label>{students?.prefix}</label>
+                    <label className="py-1.5 px-4 bg-gray-50 rounded-md border-gray-200 border">{students?.prefix}</label>
                   </div>
                 )}
+                </div>
+               
                 <InputBox
                   label="ชื่อ"
                   name="firstName"
@@ -328,6 +333,27 @@ export default function Form({ studentID }: Props) {
                 labelSize="text-base"
                 disable={!onEdit}
               />
+              <div className="flex items-center justify-center px-3 gap-3"><p className="text-gray-700">เพศ </p>
+                {onEdit ? (
+                <select
+                  name="prefix"
+                  className="border border-gray-300 rounded-md px-2 py-1.5"
+                  onChange={handleChange}
+                  value={formData.gender || "ไม่ทราบ"}
+                >
+                  <option value="ชาย">ชาย</option>
+                  <option value="หญิง">หญิง</option>
+                </select>
+              ) : (
+                <div className="flex items-center justify-center gap-4">
+                  
+                  <label className="px-4 py-1.5 border-gray-200 border rounded-md bg-gray-50 ">
+                    {students?.gender}
+                  </label>
+                </div>
+              )}
+              </div>
+              
             </div>
             <div className="flex gap-5 items-center">
               <InputBox
