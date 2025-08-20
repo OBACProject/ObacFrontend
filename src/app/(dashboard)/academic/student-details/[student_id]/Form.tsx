@@ -111,6 +111,7 @@ export default function Form({ studentID }: Props) {
           รายละเอียดนักเรียน
         </div>
         <div className="flex gap-1">
+          {studentID}
           <PDFStudentTransScriptButton studentID={Number(studentID)} />
         </div>
       </div>

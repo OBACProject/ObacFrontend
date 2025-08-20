@@ -1,8 +1,7 @@
 "use client";
-import { Download, User, BookOpen, GraduationCap } from "lucide-react";
+import { User, BookOpen, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { GetStudentGradeDetailDto } from "@/dto/gradDto";
 import type { StudentTranscriptData } from "@/dto/studentDto";
@@ -106,7 +105,7 @@ export const StudentInfoCard = ({
               <h3 className="text-sm font-semibold text-slate-700 mb-3">
                 ดาวน์โหลดเอกสาร
               </h3>
-{/* 
+              {/* 
               {scoreFileData && (
                 <Button
                   onClick={onDownloadPDF}
