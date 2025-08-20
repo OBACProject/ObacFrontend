@@ -1,9 +1,10 @@
 "use client";
 
 import {
-  genBulkPDFStudentScoreInSubjectPDF,
+  genBulkPDFStudentTranscriptPDF,
   genPDFStudentNamelistInGroup,
   genPDFStudentScoreInSubjectPDF,
+  genPDFStudentTranscriptPDF,
 } from "@/lib/PDFGenarate/createPDFFile";
 import { Download } from "lucide-react";
 
@@ -56,7 +57,9 @@ export const PDFStudentTransScriptButton = ({
 }: {
   studentID: number;
 }) => {
-  const handleDownLoadPDF = (studentID: number) => {};
+  const handleDownLoadPDF = (studentID: number) => {
+    genPDFStudentTranscriptPDF(studentID);
+  };
   return (
     <button
       className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
@@ -77,7 +80,7 @@ export const BulkPDFStudentTranscriptPDF = ({
   groupID: number;
 }) => {
   const handleClick = () => {
-    genBulkPDFStudentScoreInSubjectPDF(groupID);
+    genBulkPDFStudentTranscriptPDF(groupID);
   };
 
   return (

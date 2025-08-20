@@ -3,9 +3,9 @@
 import jsPDF from "jspdf";
 import THSarabunFont from "../../Font/THSarabunFont";
 import THSarabunFontBold from "../../Font/THSarabunBold";
-import { GetStudentGradeDetailDto } from "@/dto/gradDto";
+import { StudentGradesResponse } from "@/dto/gradDto";
 
-const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
+const StudentTranscript = (grads: StudentGradesResponse) => {
   const getThaiDate = () => {
     const now = new Date();
     const day = now.getDate();
@@ -24,7 +24,7 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
       "ธันวาคม",
     ];
     const month = monthNames[now.getMonth()];
-    const year = now.getFullYear() + 543; // Convert to Thai Buddhist year
+    const year = now.getFullYear() + 543;
 
     return `วันที่ ${day} ${month} ${year}`;
   };
@@ -45,12 +45,6 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
   doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
 
   const thaiDate = getThaiDate();
-  let gender = "";
-  if (grads.gender == "Female") {
-    gender = "นางสาว";
-  } else {
-    gender = "นาย";
-  }
 
   doc.addFileToVFS("THSarabun.ttf", THSarabunFont);
   doc.addFileToVFS("THSarabunBold.ttf", THSarabunFontBold);
@@ -80,7 +74,7 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
   doc.setFontSize(14);
   doc.text(`รหัสนักศึกษา : ${grads?.studentCode}`, 30, 30);
   doc.text("ชื่อ - สกุล   : ", 110.5, 30);
-  doc.text(`${gender} ${grads?.thaiName} ${grads?.thaiLastName}`, 130, 30);
+  doc.text(`${grads?.prefix} ${grads?.firstName} ${grads?.lastName}`, 130, 30);
 
   doc.setFont("THSarabun", "normal");
   doc.text("รอบ : เช้า", 42, 35);
@@ -138,7 +132,7 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
 
   let AllOfGrad = 0;
   let AllOfCredit = 0;
-  for (let i = 0; i < grads.year.length; i++) {
+  for (let i = 0; i < grads.subjectGradesTermYear.length; i++) {
     if (swift == false && startColumn >= 250) {
       startColumn = 64;
       Xaxis = 130;
@@ -150,7 +144,7 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
     }
     doc.setFont("THSarabunBold", "bold");
     doc.text(
-      `ภาคเรียนที่ ${grads.year[i].term} ปีการศึกษา ${grads.year[i].year}`,
+      `ภาคเรียนที่ ${grads.subjectGradesTermYear[i].term} ปีการศึกษา ${grads.subjectGradesTermYear[i].year}`,
       Xaxis + 7,
       startColumn
     );
@@ -160,7 +154,11 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
     let CreditCount = 0;
     let CountGrad = 0;
 
-    for (let j = 0; j < grads.year[i].termQuery.length; j++) {
+    for (
+      let j = 0;
+      j < grads.subjectGradesTermYear[i].subjectGrades.length;
+      j++
+    ) {
       if (swift == false && inStartColoume >= 250) {
         inStartColoume = 63;
         inStartColoume = inStartColoume + 5;
@@ -173,32 +171,36 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
         swift = false;
       }
       let GradResult =
-        Number(grads.year[i].termQuery[j].finalGrade) *
-        Number(grads.year[i].termQuery[j].credit);
+        Number(grads.subjectGradesTermYear[i].subjectGrades[j].finalGrade) *
+        Number(grads.subjectGradesTermYear[i].subjectGrades[j].credit);
       CountGrad += GradResult;
-      CreditCount += Number(grads.year[i].termQuery[j].credit);
+      CreditCount += Number(
+        grads.subjectGradesTermYear[i].subjectGrades[j].credit
+      );
 
       AllOfGrad += GradResult;
-      AllOfCredit += Number(grads.year[i].termQuery[j].credit);
+      AllOfCredit += Number(
+        grads.subjectGradesTermYear[i].subjectGrades[j].credit
+      );
       doc.text(
-        `${grads.year[i].termQuery[j].subject_code}`,
+        `${grads.subjectGradesTermYear[i].subjectGrades[j].subjectCode}`,
         Xaxis - 23,
         inStartColoume
       );
       doc.text(
-        `${grads.year[i].termQuery[j].subject_name}`,
+        `${grads.subjectGradesTermYear[i].subjectGrades[j].subjectName}`,
         Xaxis - 4,
         inStartColoume
       );
       doc.text(
-        `${grads.year[i].termQuery[j].credit}`,
+        `${grads.subjectGradesTermYear[i].subjectGrades[j].credit}`,
         Xaxis + 56,
         inStartColoume
       );
       doc.text(
         `${
-          grads.year[i].termQuery[j].remark ||
-          grads.year[i].termQuery[j].finalGrade ||
+          grads.subjectGradesTermYear[i].subjectGrades[j].remark ||
+          grads.subjectGradesTermYear[i].subjectGrades[j].finalGrade ||
           0
         }`,
         Xaxis + 62,
@@ -262,7 +264,7 @@ const StudentTranscript = (grads: GetStudentGradeDetailDto) => {
 
   doc.text(`${thaiDate}`, 180, 295);
 
-  doc.save(`${grads.studentCode} ${grads.thaiName} ${grads.thaiLastName}.pdf`);
+  doc.save(`${grads.studentCode} ${grads.firstName} ${grads.lastName}.pdf`);
 };
 
 export default StudentTranscript;

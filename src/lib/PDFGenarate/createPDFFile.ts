@@ -4,10 +4,12 @@ import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
 import {
   BulkGetStudentGradeByStudentGroupId,
+  BulkGetStudentGradeByStudentId,
   GetStudentGroupGradeByScheduleSubjectId,
 } from "@/api/grad/route";
 import { StudentItems } from "@/dto/studentDto";
 import BulkStudentTranscript from "../PDF/score/BulkStudentTranscript";
+import StudentTranscript from "../PDF/score/StudentTranscript";
 
 const parseStudentCode = (code?: string): number | null => {
   const digits =
@@ -50,7 +52,6 @@ export const genPDFStudentNamelistInGroup = async (
     console.log("Error in lib genStudentNamelistInGroup.", err);
   }
 };
-
 export const genPDFStudentScoreInSubjectPDF = async (
   scheduleSubjectID: number
 ) => {
@@ -58,15 +59,21 @@ export const genPDFStudentScoreInSubjectPDF = async (
     const responseData = await GetStudentGroupGradeByScheduleSubjectId(
       scheduleSubjectID
     );
-    const EXCLUDED_STATUSES = new Set(["คัดชื่อออก", "ลาออก"]);
+
+    const EXCLUDED_STATUSES = new Set(
+      ["คัดชื่อออก", "ลาออก"].map((s) => s.trim())
+    );
+
     if (responseData) {
-      // const activeStudents = (responseData.students ?? []).filter((s) => {
-      //   const status = (s.status ?? "").trim();
-      //   return !EXCLUDED_STATUSES.has(status);
-      // });
-      responseData.subjectGrades.sort((a, b) =>
-        a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
-      );
+      const filteredSorted = (responseData.subjectGrades ?? [])
+        .filter((s) => !EXCLUDED_STATUSES.has((s.status ?? "").trim()))
+        .sort((a, b) =>
+          (a.studentCode ?? "").localeCompare(b.studentCode ?? "", "en", {
+            numeric: true,
+          })
+        );
+
+      responseData.subjectGrades = filteredSorted;
 
       StudentScoreInSubjectPDF({ data: responseData });
     } else {
@@ -77,7 +84,18 @@ export const genPDFStudentScoreInSubjectPDF = async (
   }
 };
 
-export const genBulkPDFStudentScoreInSubjectPDF = async (groupID: number) => {
+export const genPDFStudentTranscriptPDF = async (studentID: number) => {
+  try {
+    const response = await BulkGetStudentGradeByStudentId(studentID);
+    if (response) {
+      StudentTranscript(response);
+    }
+  } catch (err) {
+    console.log("Error in lib genStudentNamelistInGroup.", err);
+  }
+};
+
+export const genBulkPDFStudentTranscriptPDF = async (groupID: number) => {
   try {
     const response = await BulkGetStudentGradeByStudentGroupId(groupID);
     if (response) {

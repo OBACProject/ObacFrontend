@@ -19,7 +19,9 @@ export default function Form({
   subjectName,
 }: Props) {
   const [grads, setGrads] = useState<StudentGroupGradeResponse>();
-
+  const EXCLUDED_STATUSES = new Set(
+    ["คัดชื่อออก", "ลาออก"].map((s) => s.trim())
+  );
   const byStudentCodeDesc = (a: SubjectGradeItem, b: SubjectGradeItem) => {
     const an = /^\d+$/.test(a.studentCode) ? Number(a.studentCode) : NaN;
     const bn = /^\d+$/.test(b.studentCode) ? Number(b.studentCode) : NaN;
@@ -29,15 +31,18 @@ export default function Form({
 
   useEffect(() => {
     GetStudentGroupGradeByScheduleSubjectId(Number(scheduleID)).then((d) => {
-      if (d) {
-        const sorted = {
-          ...d,
-          subjectGrades: [...(d.subjectGrades ?? [])].sort(byStudentCodeDesc),
-        };
-        setGrads(sorted);
-      } else {
+      if (!d) {
         console.log("การดึงข้อมูลคะแนนเรียนมีปัญหา โปรดเช็ค api ");
+        return;
       }
+      const filtered = (d.subjectGrades ?? []).filter((s) => {
+        const status = (s.status ?? "").trim();
+        return !EXCLUDED_STATUSES.has(status);
+      });
+
+      const sortedGrades = [...filtered].sort(byStudentCodeDesc);
+      const sorted = { ...d, subjectGrades: sortedGrades };
+      setGrads(sorted);
     });
   }, []);
   return (

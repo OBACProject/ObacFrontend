@@ -1,5 +1,6 @@
 import {
   BulkUpdateStudentGradeResponse,
+  StudentGradesResponse,
   StudentGroupGrade,
   StudentGroupGradeResponse,
   StudentGroupGrades,
@@ -91,6 +92,22 @@ export const BulkGetStudentGradeByStudentGroupId = async (
       responseMessage: string;
       data: StudentGroupGrades;
     }>(`Grade/BulkGetStudentGradeByStudentGroupId?studentGroupId=${groupID}`);
+
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching student group grades:", error);
+    return null;
+  }
+};
+export const BulkGetStudentGradeByStudentId = async (
+  studentID: number
+): Promise<StudentGradesResponse | null> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentGradesResponse;
+    }>(`Grade/BulkGetStudentGradeByStudentId?studentId=${studentID}`);
 
     return response.data.data;
   } catch (error) {
