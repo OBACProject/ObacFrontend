@@ -214,8 +214,6 @@ export const createColumns = ({
                 } else {
                   gradeColor = getGradeColor(calculatedGrade || String(row.finalGrade));
                 }
-
-        // If there's a remark, show the remark instead of grade
         if (hasRemark) {
           return (
             <div className="text-center w-full border px-2 py-1 rounded font-semibold text-blue-800">
@@ -223,7 +221,6 @@ export const createColumns = ({
             </div>
           );
         }
-
         // If there's a finalGrade and no remark, show finalGrade (editable if onEdit is true)
         if (row.finalGrade && !hasRemark) {
           return onEdit ? (
@@ -242,7 +239,6 @@ export const createColumns = ({
             </div>
           );
         }
-
         // Fallback to calculated grade from totalScore
         return (
           <div

@@ -96,35 +96,35 @@ export function ClassroomGradeClient({ initialData }: Props) {
         label: "GPA",
         key: "gpa",
         className: "w-[5%] text-center flex justify-center text-sm",
-        render: (row : any) => {
-          const gpa = row.gpa || "-";
+        render: (row: any) => {
+          const gpa = row.gpa;
           return (
             <span
               className={`px-2 py-1 rounded text-xs font-medium ${
-                gpa === "-" ? "text-gray-400" : "text-gray-800"
+                typeof gpa === "number" ? "text-gray-800" : "text-gray-400"
               }`}
             >
-              {gpa.toFixed(2) || "-"}
+              {typeof gpa === "number" ? gpa.toFixed(2) : "-"}
             </span>
           );
-        }
+        },
       },
       {
         label: "GPAX",
         key: "gpax",
         className: "w-[5%] text-center flex justify-center text-sm",
-        render: (row : any) => {
-          const gpax = row.gpax || "-";
+        render: (row: any) => {
+          const gpax = row.gpax
           return (
             <span
               className={`px-2 py-1 rounded text-xs font-medium ${
-                gpax === "-" ? "text-gray-400" : "text-gray-800"
+                typeof gpax === "number" ? "text-gray-800" : "text-gray-400"
               }`}
             >
-              {gpax.toFixed(2) || "-"}
+              {typeof gpax === "number" ? gpax.toFixed(2) : "-"}
             </span>
           );
-        }
+        },
       },
     ];
 
