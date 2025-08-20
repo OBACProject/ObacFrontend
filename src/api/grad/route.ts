@@ -93,12 +93,21 @@ export const BulkGetStudentGradeByStudentGroupId = async (
       data: StudentGroupGrades;
     }>(`Grade/BulkGetStudentGradeByStudentGroupId?studentGroupId=${groupID}`);
 
-    return response.data.data;
+    const data = response.data.data;
+
+    if (data && data.studentGrades) {
+      data.studentGrades.sort((a, b) =>
+        a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+      );
+    }
+
+    return data;
   } catch (error) {
     console.error("Error fetching student group grades:", error);
     return null;
   }
 };
+
 export const BulkGetStudentGradeByStudentId = async (
   studentID: number
 ): Promise<StudentGradesResponse | null> => {

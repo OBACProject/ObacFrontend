@@ -95,7 +95,9 @@ export const genPDFStudentTranscriptPDF = async (studentID: number) => {
   }
 };
 
-export const genBulkPDFStudentTranscriptPDF = async (groupID: number) => {
+export const genBulkPDFStudentTranscriptPDF = async (
+  groupID: number
+): Promise<boolean> => {
   try {
     const response = await BulkGetStudentGradeByStudentGroupId(groupID);
     if (response) {
@@ -108,8 +110,12 @@ export const genBulkPDFStudentTranscriptPDF = async (groupID: number) => {
         response.term,
         response.year
       );
+      return true;
+    } else {
+      return false;
     }
   } catch (err) {
     console.log("Error in lib genStudentNamelistInGroup.", err);
+    return false;
   }
 };
