@@ -1,121 +1,117 @@
-"use client"
-import { useEffect, useState } from "react"
-import type React from "react"
-import { useRouter } from "next/navigation"
-import Cookies from "js-cookie"
-import { toast } from "react-toastify"
-import { Loader2, UserRound } from "lucide-react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useLoginMutation } from "@/lib/api/hooks/queries/auth.queries"
+"use client";
+import { useEffect, useState } from "react";
+import type React from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { Loader2, LoaderCircle, UserRound } from "lucide-react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useLoginMutation } from "@/lib/api/hooks/queries/auth.queries";
 
 interface LoginFormProps {
-  session?: { role?: string; name?: string }
+  session?: { role?: string; name?: string };
 }
 
 export default function LoginForm({ session }: LoginFormProps) {
-  const router = useRouter()
-  const login = useLoginMutation()
-  const [role, setRole] = useState<string | null>(session?.role || null)
-  const [name, setName] = useState<string | null>(session?.name || null)
+  const router = useRouter();
+  const login = useLoginMutation();
+  const [role, setRole] = useState<string | null>(session?.role || null);
+  const [name, setName] = useState<string | null>(session?.name || null);
 
   useEffect(() => {
-    const cookieRole = Cookies.get("role")
-    const cookieName = Cookies.get("name")
+    const cookieRole = Cookies.get("role");
+    const cookieName = Cookies.get("name");
 
     if (cookieRole && cookieName) {
-      setRole(cookieRole)
-      setName(cookieName)
+      setRole(cookieRole);
+      setName(cookieName);
     }
-  }, [])
+  }, []);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const formData = new FormData(event.currentTarget)
-      const userName = formData.get("userName")?.toString().trim()
-      const password = formData.get("password")?.toString().trim()
+      const formData = new FormData(event.currentTarget);
+      const userName = formData.get("userName")?.toString().trim();
+      const password = formData.get("password")?.toString().trim();
 
-      if (!userName || !password) throw new Error("Missing fields")
+      if (!userName || !password) throw new Error("Missing fields");
 
-      await login.mutateAsync({ userName, password })
+      await login.mutateAsync({ userName, password });
 
-      const newRole = Cookies.get("role")
-      const newName = Cookies.get("name")
+      const newRole = Cookies.get("role");
+      const newName = Cookies.get("name");
 
       if (!newRole || !newName) {
-        throw new Error("Missing role or name in cookie")
+        throw new Error("Missing role or name in cookie");
       }
 
-      setRole(newRole)
-      setName(newName)
-      toast.success("เข้าสู่ระบบสำเร็จ")
-      handleLoginButton()
+      setRole(newRole);
+      setName(newName);
+      toast.success("เข้าสู่ระบบสำเร็จ");
+      handleLoginButton();
     } catch (error) {
-      console.error(error)
-      toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง")
+      console.error(error);
+      toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง");
     }
-  }
+  };
 
   const handleLogout = () => {
-    Cookies.remove("role")
-    Cookies.remove("name")
-    Cookies.remove("authToken")
-    toast.info("ออกจากระบบสำเร็จ")
-    setRole(null)
-    setName(null)
-    window.location.reload()
-  }
+    Cookies.remove("role");
+    Cookies.remove("name");
+    Cookies.remove("authToken");
+    toast.info("ออกจากระบบสำเร็จ");
+    setRole(null);
+    setName(null);
+    window.location.reload();
+  };
 
   const handleLoginButton = () => {
-    const newRole = Cookies.get("role")
+    const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
-        router.push("/student/schedule")
-        break
+        router.push("/student/schedule");
+        break;
       case "Teacher":
-        router.push("/teacher/profile")
-        break
+        router.push("/teacher/profile");
+        break;
       case "Academic":
-        router.push("/academic/profile")
-        break
+        router.push("/academic/profile");
+        break;
       case "Admin":
-        router.push("/admin/academic-management")
-        break
+        router.push("/admin/academic-management");
+        break;
       default:
-        toast.error("สิทธิการเข้าถึงผิดพลาด")
+        toast.error("สิทธิการเข้าถึงผิดพลาด");
     }
-  }
+  };
 
   return (
     <div className="relative w-full h-screen grid place-items-center pb-40 bg-repeat bg-cover bg-opacity-10 bg-bottom">
       <div className="absolute inset-0 -z-10">
-        <Image src="/images/obac_view.jpg" alt="Background" fill className="object-cover" priority />
+        <Image
+          src="/images/obac_view.jpg"
+          alt="Background"
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45 w-full h-screen" />
       {role && name ? (
         <div className="absolute my-10 bg-white lg:w-[500px] w-fit rounded-lg px-10 py-12">
           <div className="space-y-4 text-center grid place-items-center">
             <p className="p-2 rounded-full bg-blue-500 w-fit">
-             <UserRound className="text-white h-12 w-12" /> 
+              <UserRound className="text-white h-12 w-12" />
             </p>
-            <h1 className=" text-lg lg:text-3xl font-prompt">Welcome to OBAC</h1>
-            <div className="text-lg">{name}</div>
-            <div className="mt-5 grid place-items-center gap-4">
-              <button
-                onClick={handleLoginButton}
-                className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg text-white transform hover:scale-105 transition duration-500"
-              >
-                กลับเข้าสู่ระบบ
-              </button>
-              <Button
-                onClick={handleLogout}
-                variant="destructive"
-                className="bg-gradient-to-tr from-red-500/70 to-pink-400 hover:from-red-600 hover:to-pink-500 transform hover:scale-105 transition duration-500"
-              >
-                ออกจากระบบ
-              </Button>
+            <div className="text-lg animate-pulse text-blue-800 py-1">ตรวจสอบความปลอดภัย</div>
+            <div className="grid w-full place-items-center py-4 gap-3">
+              <LoaderCircle className="text-blue-500 w-20 h-20 animate-spin " />
+              <h1 className="text-blue-500 text-xl font-prompt ">
+                กำลังเข้าสู่ระบบ...
+              </h1>
             </div>
           </div>
         </div>
@@ -125,10 +121,28 @@ export default function LoginForm({ session }: LoginFormProps) {
           method="post"
           className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
-          <Image src="/images/obac_navbar_logo.png" alt="OBAC Logo" width={112} height={112} className="h-28" />
+          <Image
+            src="/images/obac_navbar_logo.png"
+            alt="OBAC Logo"
+            width={112}
+            height={112}
+            className="h-28"
+          />
           <div className="grid gap-3 w-full place-items-center">
-            <Input type="text" name="userName" placeholder="Username / ชื่อผู้ใช้" required className="w-3/5" />
-            <Input type="password" name="password" placeholder="Password / รหัสผ่าน" required className="w-3/5" />
+            <Input
+              type="text"
+              name="userName"
+              placeholder="Username / ชื่อผู้ใช้"
+              required
+              className="w-3/5"
+            />
+            <Input
+              type="password"
+              name="password"
+              placeholder="Password / รหัสผ่าน"
+              required
+              className="w-3/5"
+            />
           </div>
           <Button
             type="submit"
@@ -138,9 +152,8 @@ export default function LoginForm({ session }: LoginFormProps) {
             {login.isPending && <Loader2 className="w-5 h-5 animate-spin" />}
             {login.isPending ? "เข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
           </Button>
-          
         </form>
       )}
     </div>
-  )
+  );
 }

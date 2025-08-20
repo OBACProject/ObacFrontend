@@ -22,14 +22,62 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
     setGradData(sortedData);
   }, [grads]);
 
-  const handleInputChange = (
+  const LIMITS: Record<
+    | "affectiveScore"
+    | "collectScore"
+    | "assignmentScore"
+    | "midtermScore"
+    | "finaltermScore",
+    number
+  > = {
+    affectiveScore: 20,
+    collectScore: 10,
+    assignmentScore: 20,
+    midtermScore: 20,
+    finaltermScore: 30,
+  };
+
+  const clamp = (n: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, n));
+
+  const handleScoreChange = (
     index: number,
-    field: keyof SubjectGradeItem,
-    value: string
+    field: keyof typeof LIMITS,
+    raw: string
   ) => {
-    const updatedStudents = [...gradDatas];
-    (updatedStudents[index] as any)[field] = parseFloat(value) || 0;
-    setGradData(updatedStudents);
+    if (raw === "") {
+      const updated = [...gradDatas];
+      (updated[index] as any)[field] = 0;
+      setGradData(updated);
+      return;
+    }
+
+    const sanitizeInt = (raw: string) => raw.replace(/[^\d]/g, "");
+    const cleaned = sanitizeInt(raw);
+
+    const num = cleaned === "" ? 0 : Number(cleaned);
+    const safe = clamp(num, 0, LIMITS[field]);
+
+    const updated = [...gradDatas];
+    (updated[index] as any)[field] = safe;
+    setGradData(updated);
+  };
+
+  const handlePasteNumeric: React.ClipboardEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    const text = e.clipboardData.getData("text");
+    if (!/^\d+$/.test(text)) {
+      e.preventDefault();
+    }
+  };
+
+  const blockNonNumericKeys: React.KeyboardEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    if (["e", "E", "+", "-", ".", ","].includes(e.key)) {
+      e.preventDefault();
+    }
   };
 
   const onSaveGrad = async () => {
@@ -199,12 +247,14 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
               </span>
               <input
                 disabled={!onEdit}
+                onKeyDown={blockNonNumericKeys}
                 type="number"
                 value={
                   item.affectiveScore === 0 ? "" : item.affectiveScore ?? ""
                 }
                 min={0}
                 max={20}
+                onPaste={handlePasteNumeric}
                 className={`text-center enabled:bg-blue-50 enabled:text-blue-600   focus:outline-blue-500  py-0 group-hover:bg-[#e8f3ff]  bg-white  ${
                   (item.affectiveScore ?? 0) > 20 ||
                   (item.affectiveScore ?? 0) < 0
@@ -212,74 +262,82 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                     : "border-gray-300 border-r-[1px]"
                 }`}
                 onChange={(e) =>
-                  handleInputChange(index, "affectiveScore", e.target.value)
+                  handleScoreChange(index, "affectiveScore", e.target.value)
                 }
               />
               <input
+                onPaste={handlePasteNumeric}
+                onKeyDown={blockNonNumericKeys}
                 disabled={onEdit != true}
                 type="number"
                 value={item.collectScore === 0 ? "" : item.collectScore ?? ""}
                 min={0}
-                max={50}
+                max={10}
                 className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
-                  (item.collectScore ?? 0) > 50 || (item.collectScore ?? 0) < 0
+                  (item.collectScore ?? 0) > 10 || (item.collectScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
                     : "border-gray-300 border-r-[1px]"
                 }`}
                 onChange={(e) =>
-                  handleInputChange(index, "collectScore", e.target.value)
+                  handleScoreChange(index, "collectScore", e.target.value)
                 }
               />
               <input
+                onPaste={handlePasteNumeric}
+                onKeyDown={blockNonNumericKeys}
                 disabled={onEdit != true}
                 type="number"
                 value={
                   item.assignmentScore === 0 ? "" : item.assignmentScore ?? ""
                 }
                 min={0}
-                max={50}
+                max={20}
                 className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
-                  (item.assignmentScore ?? 0) > 50 ||
+                  (item.assignmentScore ?? 0) > 20 ||
                   (item.assignmentScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
                     : "border-gray-300 border-r-[1px]"
                 }`}
                 onChange={(e) =>
-                  handleInputChange(index, "assignmentScore", e.target.value)
+                  handleScoreChange(index, "assignmentScore", e.target.value)
                 }
               />
 
               <input
+                onPaste={handlePasteNumeric}
+                onKeyDown={blockNonNumericKeys}
                 disabled={onEdit != true}
                 type="number"
                 value={item.midtermScore === 0 ? "" : item.midtermScore ?? ""}
                 min={0}
-                max={30}
+                max={20}
                 className={`text-center enabled:bg-blue-50 enabled:text-blue-600   bg-white  focus:outline-blue-500  py-0 group-hover:bg-[#e8f3ff] ${
-                  (item.midtermScore ?? 0) > 30 || (item.midtermScore ?? 0) < 0
+                  (item.midtermScore ?? 0) > 20 || (item.midtermScore ?? 0) < 0
                     ? "rounded-md outline-red-500 border-red-500  border-[3px]"
                     : "border-gray-300 border-r-[1px]"
                 }`}
                 onChange={(e) =>
-                  handleInputChange(index, "midtermScore", e.target.value)
+                  handleScoreChange(index, "midtermScore", e.target.value)
                 }
               />
               <input
+                onPaste={handlePasteNumeric}
+                onKeyDown={blockNonNumericKeys}
                 disabled={onEdit != true}
                 type="number"
                 value={
                   item.finaltermScore === 0 ? "" : item.finaltermScore ?? ""
                 }
                 min={0}
-                max={50}
+                max={30}
                 className={` text-center enabled:bg-blue-50  enabled:text-blue-600  bg-white focus:outline-blue-500 py-0  group-hover:bg-[#e8f3ff] ${
-                  (item.finaltermScore ?? 0) > 50 ||
+                  (item.finaltermScore ?? 0) > 30 ||
                   (item.finaltermScore ?? 0) < 0
                     ? "outline-red-500 border-red-500 rounded-md border-1"
                     : "border-gray-300 border-r-[1px]"
                 }`}
                 onChange={(e) =>
-                  handleInputChange(index, "finaltermScore", e.target.value)
+                  handleScoreChange(index, "finaltermScore", e.target.value)
                 }
               />
               <span className="text-center text-green-600 font-semibold flex justify-center items-center border-r-[1px] py-0">
