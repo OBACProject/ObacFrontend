@@ -2,9 +2,9 @@
 import StudentFailListPDF from "../PDF/name-list/StudentFailList";
 import StudentNameInSubject from "../PDF/name-list/StudentNameInSubject";
 import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
+import ExampleTranscript from "../PDF/score/MockTranscript";
 import GroupSummaryGradPDF from "../PDF/score/GroupSummaryGrade";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
-import SummaryGradeForStudent from "../PDF/score/StudentTranscript";
 import {
   GradSummaryGroupData,
   mockGetGradBelowResponse,
@@ -16,7 +16,7 @@ import {
 
 export const genGradSummaryForStudent = async () => {
   try {
-    SummaryGradeForStudent(GradSummaryGroupData);
+    ExampleTranscript(GradSummaryGroupData);
   } catch (err) {
     console.log("Error in lib SummaryGradeForStudent.", err);
   }
