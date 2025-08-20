@@ -14,6 +14,23 @@ export interface GetAllStudentGroupByTermYearResponse {
     year: number;
     term: string;
 }
+export interface StudentItems {
+  gender: string;
+  status: string | null;
+  id: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  studentCode: string;
+}
+export interface GetStudentGroupByGroupIdResponse {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  students: StudentItems[];
+}
 
 export interface GetStudentGroupScheduleStatusResponse {
     studentGroupId : number;

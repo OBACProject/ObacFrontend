@@ -6,6 +6,7 @@ export interface GetAllStudentGroupByTermYearRequest  {
     year : number,
 }
 
+
 export interface GetStudentGroupScheduleStatusRequest  {
     studentGroupId : number;
     term : string; 

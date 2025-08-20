@@ -1,6 +1,6 @@
 import { createBaseQuery } from "./base/base.queries";
 import { studentGroupService } from "@/lib/api/services/studentGroup.service";
-import { GetAllStudentGroupByTermYearResponse, GetStudentGroupScheduleStatusResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
+import { GetAllStudentGroupByTermYearResponse, GetStudentGroupByGroupIdResponse, GetStudentGroupScheduleStatusResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
 import { GetAllStudentGroupByTermYearRequest, GetStudentGroupScheduleStatusRequest, UpdateStudentGroupByStudentGroupIdRequest } from "@/lib/api/models/studentGroup/studentGroup.request";
 import { useBaseUpdateMutation } from "./base/base.mutation";
 import { UseMutationOptions } from "@tanstack/react-query";
@@ -12,6 +12,11 @@ import { UseMutationOptions } from "@tanstack/react-query";
 export const useGetAllStudentGroupByTermYearQuery = createBaseQuery<GetAllStudentGroupByTermYearResponse[], GetAllStudentGroupByTermYearRequest>(
     (params) => ['studentGroup', params],
     (params) => studentGroupService.getAllStudentGroups(params),
+);
+
+export const useGetStudentGroupByGroupIdQuery = createBaseQuery<GetStudentGroupByGroupIdResponse, string>(
+    (groupId) => ['studentGroup', groupId],
+    (groupId) => studentGroupService.getStudentGroupByGroupId(groupId),
 );
 
 export const useGetStudentGroupScheduleStatusQuery = createBaseQuery<GetStudentGroupScheduleStatusResponse[], GetStudentGroupScheduleStatusRequest>(

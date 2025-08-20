@@ -1,12 +1,16 @@
 import { STUDENT_GROUP_ENDPOINTS } from "../endpoints/studentGroup.endpoints";
 import { GetAllStudentGroupByTermYearRequest, GetStudentGroupScheduleStatusRequest, UpdateStudentGroupByStudentGroupIdRequest } from "../models/studentGroup/studentGroup.request";
-import { GetAllStudentGroupByTermYearResponse, GetStudentGroupScheduleStatusResponse } from "../models/studentGroup/studentGroup.response";
+import { GetAllStudentGroupByTermYearResponse, GetStudentGroupByGroupIdResponse, GetStudentGroupScheduleStatusResponse } from "../models/studentGroup/studentGroup.response";
 import { BaseService } from "./base/base.service";
 
 
 
 
 export class StudentGroupService extends BaseService {
+    async getStudentGroupByGroupId(groupId: string): Promise<GetStudentGroupByGroupIdResponse> {
+        const data = this.get<GetStudentGroupByGroupIdResponse>(`${STUDENT_GROUP_ENDPOINTS.GET_STUDENT_GROUP_BY_GROUP_ID}/${groupId}`);
+        return this.get<GetStudentGroupByGroupIdResponse>(`${STUDENT_GROUP_ENDPOINTS.GET_STUDENT_GROUP_BY_GROUP_ID}?studentGroupId=${groupId}`);
+    }
     async getAllStudentGroups(params : GetAllStudentGroupByTermYearRequest): Promise<GetAllStudentGroupByTermYearResponse[]> {
         const data = this.get<GetAllStudentGroupByTermYearResponse[]>(STUDENT_GROUP_ENDPOINTS.GET_ALL_STUDENT_GROUP_BY_TERM_YEAR, params);
         return this.get<GetAllStudentGroupByTermYearResponse[]>(STUDENT_GROUP_ENDPOINTS.GET_ALL_STUDENT_GROUP_BY_TERM_YEAR, params);
