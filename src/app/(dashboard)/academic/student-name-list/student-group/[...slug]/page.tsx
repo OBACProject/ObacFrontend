@@ -6,6 +6,7 @@ import {
   BulkPDFStudentTranscriptPDF,
   PDFStudentNamelistInGroupButton,
 } from "@/components/PDF/PDFButton";
+import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
 
 type PageParams = Promise<{ slug: number[] }>;
 
@@ -25,6 +26,9 @@ export default async function Page({ params }: { params: PageParams }) {
             <PDFStudentNamelistInGroupButton
               groupID={studentGroupID}
               year={year}
+            />
+            <ExcelStudentNamelistInGroupButton
+              groupID={String(studentGroupID)}
             />
             <BulkPDFStudentTranscriptPDF groupID={studentGroupID} />
           </div>
