@@ -7,7 +7,11 @@ import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
-import { GetGradBySubjectId, StudentGroupGradeResponse, SubjectGradeItem } from "@/dto/gradDto";
+import {
+  GetGradBySubjectId,
+  StudentGroupGradeResponse,
+  SubjectGradeItem,
+} from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
 import { StudentNameListInSubject } from "@/dto/pdfDto";
@@ -37,7 +41,12 @@ export default function ExportFile({
       affectiveScore: item.affectiveScore,
       midtermScore: item.midtermScore,
       finaltermScore: item.finaltermScore,
-      totalScore:  item.affectiveScore + item.assignmentscore + item.collectScore + item.midtermScore + item.finaltermScore,
+      totalScore:
+        item.affectiveScore +
+        item.assignmentscore +
+        item.collectScore +
+        item.midtermScore +
+        item.finaltermScore,
     };
   });
 
@@ -48,14 +57,15 @@ export default function ExportFile({
       name: `${prefix} ${item.firstName} ${item.lastName}`,
     };
   });
-
+  const asString = (v: unknown) =>
+    v === null || v === undefined ? "" : String(v);
   const convertToStudentGroupGradeResponse = (): StudentGroupGradeResponse => {
     return {
       subjectName: subject?.subjectName || "",
       subjectCode: subject?.subjectCode || "",
       credit: subject?.credits || 0,
-      hour: 0, 
-      subjectTeacher: "", 
+      hour: 0,
+      subjectTeacher: "",
       subjectId: subject?.id || 0,
       groupId: 0,
       groupName: roomName,
@@ -69,6 +79,7 @@ export default function ExportFile({
       subjectGrades: grads.map((item) => ({
         studentId: item.studentId,
         studentCode: item.studentCode,
+        status: asString(item.status),
         prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
         firstName: item.firstName,
         lastName: item.lastName,
@@ -80,7 +91,7 @@ export default function ExportFile({
         totalScore: item.totalScore || 0,
         finalGrade: parseFloat(String(item.grade)) || 0,
         remarks: item.remark ? String(item.remark) : "",
-      }))
+      })),
     };
   };
 
@@ -90,14 +101,15 @@ export default function ExportFile({
       subjectID: subject?.id || 0,
       subjectCode: subject?.subjectCode || "",
       subjectName: subject?.subjectName || "",
-      groupName: roomName ,
+      groupName: roomName,
       students: grads.map((item) => ({
         studentID: item.studentId,
         studentCode: item.studentCode,
+        status: item.status,
         prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
         studentFirstName: item.firstName,
         studentLastName: item.lastName,
-      }))
+      })),
     };
   };
 
@@ -107,7 +119,7 @@ export default function ExportFile({
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
           StudentScoreInSubjectPDF({
-           data: convertToStudentGroupGradeResponse()
+            data: convertToStudentGroupGradeResponse(),
           })
         }
       >
@@ -117,7 +129,7 @@ export default function ExportFile({
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>
           StudentNameInSubject({
-            data: convertToStudentNameList()
+            data: convertToStudentNameList(),
           })
         }
       >

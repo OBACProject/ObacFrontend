@@ -988,6 +988,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
       studentId: 1001,
       studentCode: "64001",
       prefix: "นาย",
+      status: "",
       firstName: "ศราวุธ",
       lastName: "แก้วใส",
       assignmentScore: 15,
@@ -1002,6 +1003,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     {
       studentId: 1002,
       studentCode: "64002",
+      status: "",
       prefix: "นางสาว",
       firstName: "ปวีณา",
       lastName: "สมใจ",
@@ -1016,6 +1018,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     },
     {
       studentId: 1003,
+      status: "",
       studentCode: "64003",
       prefix: "นาย",
       firstName: "ชยพล",
@@ -1033,6 +1036,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
       studentId: 1004,
       studentCode: "64004",
       prefix: "นางสาว",
+      status: "",
       firstName: "พรสุดา",
       lastName: "นิลวงศ์",
       assignmentScore: 10,
@@ -1050,6 +1054,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
       prefix: "นาย",
       firstName: "กิตติพงษ์",
       lastName: "ทองดี",
+      status: "",
       assignmentScore: 9,
       collectScore: 5,
       affectiveScore: 6,
@@ -1061,6 +1066,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     },
     {
       studentId: 1006,
+      status: "",
       studentCode: "64006",
       prefix: "นางสาว",
       firstName: "ธัญลักษณ์",
@@ -1077,6 +1083,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     {
       studentId: 1007,
       studentCode: "64007",
+      status: "",
       prefix: "นาย",
       firstName: "ณัฐพล",
       lastName: "สายชล",
@@ -1091,6 +1098,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     },
     {
       studentId: 1008,
+      status: "",
       studentCode: "64008",
       prefix: "นางสาว",
       firstName: "พัชรี",
@@ -1106,7 +1114,6 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
     },
   ],
 };
-
 
 export const mockGetGradBelowResponse: GetGradBelowResponse[] = [];
 
