@@ -80,15 +80,12 @@ export class GradeService extends BaseService {
         params
       );
       
-      // Handle the specific response format for this endpoint
       if (response.status === 200) {
-        // The API returns { "message": "Student grade updated successfully." }
         return response.data?.message || "Grade updated successfully";
       }
       
       throw new Error("Failed to update student grade");
     } catch (error: any) {
-      // If it's already an error with a message, re-throw it
       if (error.response?.status === 200 && error.response?.data?.message) {
         return error.response.data.message;
       }

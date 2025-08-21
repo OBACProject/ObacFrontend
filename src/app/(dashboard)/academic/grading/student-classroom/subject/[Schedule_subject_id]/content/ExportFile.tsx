@@ -10,8 +10,12 @@ import { GetGradBySubjectId, StudentGroupGradeResponse } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
 import { StudentNameListInSubject } from "@/dto/pdfDto";
-import { PDFStudentNamelistInGroupButton, PDFStudentScoreInSubjectPDF } from "@/components/PDF/PDFButton";
+import {
+  PDFStudentNamelistInGroupButton,
+  PDFStudentScoreInSubjectPDF,
+} from "@/components/PDF/PDFButton";
 import { getCurrentThaiTermYear } from "@/lib/utils";
+import { Download } from "lucide-react";
 
 interface ExportFileProps {
   grads: GetGradBySubjectId[];
@@ -20,7 +24,7 @@ interface ExportFileProps {
   term: string;
   year: string;
   scheduleSubjectID: number;
-  groupID : number;
+  groupID: number;
 }
 
 export default function ExportFile({
@@ -30,7 +34,7 @@ export default function ExportFile({
   term,
   year,
   scheduleSubjectID,
-  groupID
+  groupID,
 }: ExportFileProps) {
   const convertGrad = grads.map((item) => {
     const prefix = item.gender === "Male" ? "นาย" : "นางสาว";
@@ -58,69 +62,17 @@ export default function ExportFile({
       name: `${prefix} ${item.firstName} ${item.lastName}`,
     };
   });
-  const asString = (v: unknown) =>
-    v === null || v === undefined ? "" : String(v);
-  const convertToStudentGroupGradeResponse = (): StudentGroupGradeResponse => {
-    return {
-      subjectName: subject?.subjectName || "",
-      subjectCode: subject?.subjectCode || "",
-      credit: subject?.credits || 0,
-      hour: 0,
-      subjectTeacher: "",
-      subjectId: subject?.id || 0,
-      groupId: 0,
-      groupName: roomName,
-      groupCode: "",
-      class: roomName,
-      level: 0,
-      isPublish: false,
-      isComplete: false,
-      term: term,
-      year: parseInt(year),
-      subjectGrades: grads.map((item) => ({
-        studentId: item.studentId,
-        studentCode: item.studentCode,
-        status: asString(item.status),
-        prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
-        firstName: item.firstName,
-        lastName: item.lastName,
-        assignmentScore: item.assignmentscore || 0,
-        collectScore: item.collectScore || 0,
-        midtermScore: item.midtermScore || 0,
-        finaltermScore: item.finaltermScore || 0,
-        affectiveScore: item.affectiveScore || 0,
-        totalScore: item.totalScore || 0,
-        finalGrade: parseFloat(String(item.grade)) || 0,
-        remarks: item.remark ? String(item.remark) : "",
-      })),
-    };
-  };
-  const {currentYear} = getCurrentThaiTermYear()
 
-  // Convert grads data to StudentNameListInSubject format for PDF
-  const convertToStudentNameList = (): StudentNameListInSubject => {
-    return {
-      subjectID: subject?.id || 0,
-      subjectCode: subject?.subjectCode || "",
-      subjectName: subject?.subjectName || "",
-      groupName: roomName,
-      students: grads.map((item) => ({
-        studentID: item.studentId,
-        studentCode: item.studentCode,
-        status: item.status,
-        prefix: item.prefix || (item.gender === "Male" ? "นาย" : "นางสาว"),
-        studentFirstName: item.firstName,
-        studentLastName: item.lastName,
-      })),
-    };
-  };
+  const { currentYear } = getCurrentThaiTermYear();
+
 
   return (
     <div className="flex flex-row w-[250px] flex-wrap gap-2">
       <PDFStudentScoreInSubjectPDF scheduleSubjectID={scheduleSubjectID} />
       <PDFStudentNamelistInGroupButton groupID={groupID} year={currentYear} />
       <Button
-        className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
+        className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
+       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
         onClick={() =>
           ConvertScoreToExcel(
             convertGrad,
@@ -132,10 +84,12 @@ export default function ExportFile({
           )
         }
       >
+        <Download className="text-blue-500 w-5 h-5" />
         ดาวน์โหลดใบคะแนน Excel
       </Button>
       <Button
-        className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
+        className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
+       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
         onClick={() =>
           ConvertClassroomToExcelWithSubject(
             convertStudentExcel,
@@ -145,6 +99,7 @@ export default function ExportFile({
           )
         }
       >
+        <Download className="text-blue-500 w-5 h-5" />
         ดาวน์โหลดใบรายชื่อ Excel
       </Button>
     </div>

@@ -121,4 +121,5 @@ export interface UpdateStudentGradeScoreRequest {
     midtermScore: number;
     finaltermScore: number;
     totalScore: number;
+    receiptNo : string;
 }

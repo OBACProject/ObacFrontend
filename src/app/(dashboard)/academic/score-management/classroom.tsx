@@ -9,6 +9,8 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
+import { GetGroupSummaryGradeRequest } from "@/lib/api/models/grade/grade.request";
+import { useGetGroupSummaryGradeQuery } from "@/lib/api/hooks/queries/grade.queries";
 
 interface ClassroomTable {
   class: string;
@@ -96,6 +98,14 @@ export function ClassroomGrading() {
       groupCode: item.groupCode,
     }));
   }, [apiData]);
+  // const handleDownloadPDF = (groupId: number) => {
+  //   const paramsSummary: GetGroupSummaryGradeRequest = { groupId , selectedTerm ,selectedYear};
+
+  //   const {data } = useGetGroupSummaryGradeQuery(paramsSummary)
+  //   // get data from groupId
+
+  //   // set to use a PDF export Library
+  // };
 
   const clearFilters = useCallback(() => {
     setSearchInput("");
@@ -197,7 +207,7 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
-              // handleDownloadPDF(Number(row.groupId), row.class);
+              // handleDownloadPDF(Number(row.groupId));
               e.stopPropagation();
             }}
           >

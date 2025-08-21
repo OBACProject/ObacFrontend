@@ -9,6 +9,7 @@ import {
 } from "@/lib/api/hooks/queries/grade.queries";
 import { UpdateStudentGradeScoreRequest } from "@/lib/api/models/grade/grade.request";
 import { SubjectGradeScheduleSubject } from "@/lib/api/models/grade/grade.response";
+
 type ScoreKey =
   | "assignmentScore"
   | "collectScore"
@@ -46,6 +47,7 @@ export interface SubjectData {
   term?: string;
   year?: number;
   gradePoint?: number;
+  receiptNo?: string;
 }
 
 interface StudentPopupProps {
@@ -72,6 +74,7 @@ export function StudentPopup({
   });
 
   const [remark, setRemark] = useState("");
+  const [receiptNo, setReceiptNo] = useState(""); // Added receiptNo state
   const [selectedSubject, setSelectedSubject] =
     useState<SubjectGradeScheduleSubject | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<string>("");
@@ -108,6 +111,7 @@ export function StudentPopup({
       });
     },
   });
+
   const s = (x: number | string | null | undefined) =>
     x == null ? "" : String(x);
   const toNum = (v: string) => (v === "" ? 0 : Number(v) || 0);
@@ -144,6 +148,7 @@ export function StudentPopup({
       }
 
       setRemark(subjects.remark || "");
+      setReceiptNo(subjects.receiptNo || ""); // Initialize receiptNo
 
       if (studentDetailData && subjects.subject_name) {
         const matchingSubject = studentDetailData.termYearGradeGroups
@@ -183,11 +188,13 @@ export function StudentPopup({
       setScore((prev) => ({ ...prev, [field]: value }));
     }
   };
+
   const clampOnBlur = (field: ScoreKey) => {
     const max = MAX_SCORES[field];
     const n = Math.min(Math.max(toNum(score[field]), 0), max);
     setScore((s) => ({ ...s, [field]: n === 0 ? "" : String(n) }));
   };
+
   const gradingScorce = (totalScore: number) => {
     if (totalScore >= 80) return "4";
     if (totalScore >= 75) return "3.5";
@@ -198,12 +205,14 @@ export function StudentPopup({
     if (totalScore >= 50) return "1";
     return "0";
   };
+
   const totalScore = () =>
     toNum(score.assignmentScore) +
     toNum(score.collectScore) +
     toNum(score.affectiveScore) +
     toNum(score.midtermScore) +
     toNum(score.finaltermScore);
+
   const handleConfirm = async () => {
     try {
       const result = await Swal.fire({
@@ -243,8 +252,18 @@ export function StudentPopup({
           midtermScore: toNum(score.midtermScore),
           finaltermScore: toNum(score.finaltermScore),
           totalScore: totalScore,
+          receiptNo: receiptNo,
         };
-
+        await Swal.fire({
+          title: "ตรวจสอบ Payload",
+          html: `<pre style="text-align:left;">${JSON.stringify(
+            payload,
+            null,
+            2
+          )}</pre>`,
+          icon: "info",
+          confirmButtonText: "ดำเนินการต่อ",
+        });
         updateGradeMutation.mutate(payload);
       }
     } catch (error) {
@@ -257,6 +276,7 @@ export function StudentPopup({
       });
     }
   };
+
   return (
     <>
       {isOpen && (
@@ -307,6 +327,7 @@ export function StudentPopup({
                   </div>
                 </div>
               )}
+
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <h1>{subjects?.subject_name || "ไม่มีข้อมูลวิชา"}</h1>
@@ -387,6 +408,7 @@ export function StudentPopup({
                     </div>
                   </div>
                 )}
+
                 <div className="p-2">
                   <h1>คะแนนงาน (20 คะแนน)</h1>
                   <Input
@@ -492,6 +514,16 @@ export function StudentPopup({
                   }))}
                   onSelect={setRemark}
                   defaultValue={subjects?.remark}
+                />
+              </div>
+
+              <div className="p-2">
+                <h1>เลขที่ใบเสร็จ</h1>
+                <Input
+                  type="text"
+                  placeholder="เลขที่ใบเสร็จ"
+                  value={receiptNo}
+                  onChange={(e) => setReceiptNo(e.target.value)}
                 />
               </div>
 

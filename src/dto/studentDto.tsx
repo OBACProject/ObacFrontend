@@ -235,6 +235,7 @@ export interface TermQuery {
   affectiveScore: number;
   testScore: number;
   gradeId: number;
+  receiptNo: string;
 }
 
 export interface YearData {

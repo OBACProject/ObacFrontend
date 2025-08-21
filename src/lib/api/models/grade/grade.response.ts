@@ -153,6 +153,7 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
     gradePoint: number;
     term: string;
     year: number;
+    receiptNo: string;
   }
   
    interface TermYearGradeGroup {

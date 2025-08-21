@@ -47,6 +47,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
             affectiveScore: grade.affectiveScore,
             testScore: grade.midtermScore + grade.finaltermScore,
             gradeId: grade.gradeId,
+            receiptNo : grade.receiptNo || "",
           }))
         }))
       };

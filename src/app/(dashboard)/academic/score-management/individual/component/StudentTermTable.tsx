@@ -33,7 +33,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
     {
       label: "รายวิชา",
       key: "subject_name",
-      className: "w-5/12 px-4 py-1 text-left font-medium",
+      className: "w-4/12 px-4 py-1 text-left font-medium",
     },
     {
       label: "รหัสวิชา",
@@ -43,12 +43,12 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
     {
       label: "หน่วยกิต",
       key: "credit",
-      className: "w-2/12 px-4 py-1 text-center font-medium",
+      className: "w-1/12 px-4 py-1 text-center font-medium",
     },
     {
       label: "เกรด",
       key: "finalGrade",
-      className: "w-3/12 px-4 py-1 text-center font-medium",
+      className: "w-3/12 px-4 py-1 text-center font-medium flex justify-center ",
       render: (row: any) => {
         const showValue = row.remark && row.remark !== "" ? row.remark : row.finalGrade;
         console.log("Row data:",row.finalGrade, row.remark);
@@ -60,6 +60,18 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
             }`}
           >
             {showValue}
+          </span>
+        );
+      },
+    },
+    {
+      label: "เลขที่ใบเสร็จ",
+      key: "receiptNo",
+      className: "w-2/12 px-4 py-1 text-center font-medium",
+      render: (row: any) => {
+        return (
+          <span className="text-sm text-gray-600">
+            {row.receiptNo || "-"}
           </span>
         );
       },
@@ -121,13 +133,13 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
           } else if (term.finalGrade === "0") {
             isFailed = true;
           }
-          console.log("Term data:", term, "Is failed:", isFailed);
           return {
             subject_name: term.subject_name,
             subject_code: term.subject_code,
             credit: term.credit,
             finalGrade: term.finalGrade,
             remark: term.remark,
+            receiptNo: term.receiptNo, 
             isFailed,
           };
         })
