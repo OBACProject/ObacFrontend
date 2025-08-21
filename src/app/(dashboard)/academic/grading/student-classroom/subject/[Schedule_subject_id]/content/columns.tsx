@@ -12,10 +12,10 @@ type Field =
 
 export const createColumns = ({
   onEdit,
-  handleInputChange, // (index, field, value:string) => void  // อัปเดต draft (string)
-  handleBlur, // (index, field, min, max, commitNumber) => void // clamp + commit number
-  draft, // Record<number, Partial<Record<Field, string>>>
-  commitNumber, // (idx, field, n:number) => void
+  handleInputChange,
+  handleBlur,
+  draft,
+  commitNumber,
   onChangeGrade,
   onChangeRemark,
 }: {
@@ -41,7 +41,6 @@ export const createColumns = ({
     idx: number,
     field: Field
   ): string => {
-    // ใช้ draft ระหว่างพิมพ์; ถ้าไม่มี draft ให้ Fallback เป็นค่าจาก row (แปลงเป็น string)
     const inDraft = draft[idx]?.[field];
     if (inDraft !== undefined) return inDraft;
     const raw = (row as any)[field];
@@ -83,7 +82,7 @@ export const createColumns = ({
     // จิตพิสัย (20)
     {
       label: "คะแนนจิตพิสัย (20)",
-      className: "w-1/12 bg-blue-50 text-sm",
+      className: `w-1/12 text-sm  'bg-white`,
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
@@ -93,7 +92,9 @@ export const createColumns = ({
             min={0}
             max={20}
             value={valueOf(row, idxOf(row), "affectiveScore")}
-            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
+            className={`text-center  ${
+              onEdit ? "bg-blue-50" : "bg-white"
+            }  rounded-sm w-full px-2 py-1`}
             onChange={(e) =>
               handleInputChange(idxOf(row), "affectiveScore", e.target.value)
             }
@@ -111,7 +112,7 @@ export const createColumns = ({
     // ทดสอบ (10)
     {
       label: "คะแนนทดสอบ (10)",
-      className: "w-1/12 bg-blue-50 text-sm",
+      className: `w-1/12 text-sm  'bg-white`,
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
@@ -121,7 +122,9 @@ export const createColumns = ({
             min={0}
             max={10}
             value={valueOf(row, idxOf(row), "collectScore")}
-            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
+            className={`text-center  ${
+              onEdit ? "bg-blue-50" : "bg-white"
+            }  rounded-sm w-full px-2 py-1`}
             onChange={(e) =>
               handleInputChange(idxOf(row), "collectScore", e.target.value)
             }
@@ -137,7 +140,7 @@ export const createColumns = ({
     // ภาระงาน (20)
     {
       label: "ภาระงาน (20)",
-      className: "w-1/12 bg-blue-50 text-sm",
+      className: `w-1/12 text-sm  'bg-white`,
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
@@ -147,7 +150,9 @@ export const createColumns = ({
             min={0}
             max={20}
             value={valueOf(row, idxOf(row), "assignmentscore")}
-            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
+            className={`text-center  ${
+              onEdit ? "bg-blue-50" : "bg-white"
+            }  rounded-sm w-full px-2 py-1`}
             onChange={(e) =>
               handleInputChange(idxOf(row), "assignmentscore", e.target.value)
             }
@@ -165,7 +170,7 @@ export const createColumns = ({
     // กลางภาค (20)
     {
       label: "คะแนนกลางภาค (20)",
-      className: "w-1/12 bg-blue-50 text-sm",
+      className: `w-1/12 text-sm  'bg-white`,
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
@@ -175,7 +180,9 @@ export const createColumns = ({
             min={0}
             max={20}
             value={valueOf(row, idxOf(row), "midtermScore")}
-            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
+            className={`text-center  ${
+              onEdit ? "bg-blue-50" : "bg-white"
+            }  rounded-sm w-full px-2 py-1`}
             onChange={(e) =>
               handleInputChange(idxOf(row), "midtermScore", e.target.value)
             }
@@ -193,7 +200,7 @@ export const createColumns = ({
     // ปลายภาค (30)
     {
       label: "คะแนนปลายภาค (30)",
-      className: "w-1/12 bg-blue-50 text-sm",
+      className: `w-1/12 text-sm  'bg-white`,
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
@@ -203,7 +210,9 @@ export const createColumns = ({
             min={0}
             max={30}
             value={valueOf(row, idxOf(row), "finaltermScore")}
-            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
+            className={`text-center  ${
+              onEdit ? "bg-blue-50" : "bg-white"
+            }  rounded-sm w-full px-2 py-1`}
             onChange={(e) =>
               handleInputChange(idxOf(row), "finaltermScore", e.target.value)
             }
@@ -218,7 +227,6 @@ export const createColumns = ({
         ),
     },
 
-    // รวม / เกรด / หมายเหตุ เหมือนเดิม…
     {
       label: "รวม (100)",
       className: "w-1/12 text-sm",

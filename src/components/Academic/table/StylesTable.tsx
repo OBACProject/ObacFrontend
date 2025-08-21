@@ -18,6 +18,7 @@ interface TableProps<T> {
   isEdit?: boolean;
   title?: string;
   icon?: React.ReactNode;
+  rowHover?: string;
 }
 
 export function StylesTable<T extends Record<string, any>>({
@@ -28,6 +29,7 @@ export function StylesTable<T extends Record<string, any>>({
   getRowLink,
   title,
   icon,
+  rowHover,
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -52,7 +54,7 @@ export function StylesTable<T extends Record<string, any>>({
       return (
         <div
           key={`cell-${rowIndex}-${colIndex}`}
-          className={`text-center flex items-center px-4 py-1   border-1 ${col.className}`}
+          className={`text-center flex items-center px-4 py-1  border-1 ${col.className}`}
         >
           {renderContent != null ? renderContent : "-"}
         </div>
@@ -63,7 +65,7 @@ export function StylesTable<T extends Record<string, any>>({
       return (
         <Link key={`row-${rowIndex}`} href={getRowLink(item)}>
           <div
-            className={`w-full shadow-md flex border border-r-0 border-gray-100 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+            className={`w-full shadow-md flex border border-r-0 border-gray-100 border-t-0  hover:bg-blue-100 text-gray-700 cursor-pointer ${
               rowIndex % 2 === 0 ? "bg-white" : "bg-white"
             }`}
           >
@@ -75,7 +77,9 @@ export function StylesTable<T extends Record<string, any>>({
       return (
         <div
           key={`row-${rowIndex}`}
-          className={`w-full shadow-md flex border border-r-0 border-gray-200 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
+          className={`w-full shadow-md flex border border-r-0 border-gray-200 border-t-0  ${
+            rowHover ? `${rowHover}` : "hover:bg-blue-100"
+          } text-gray-700 cursor-pointer ${
             rowIndex % 2 === 0 ? "bg-white" : "bg-white"
           }`}
           onClick={() => onRowClick && onRowClick(item)}
@@ -87,9 +91,9 @@ export function StylesTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className="w-full rounded-sm ">
+    <div className={`w-full rounded-sm  `}>
       {/* Table Header */}
-      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600"> 
+      <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
         {icon}
         <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>
@@ -109,7 +113,9 @@ export function StylesTable<T extends Record<string, any>>({
           {paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))}
         </div>
       ) : (
-        <div className="text-center text-gray-600 py-4 pb-12">No data available</div>
+        <div className="text-center text-gray-600 py-4 pb-12">
+          No data available
+        </div>
       )}
 
       {totalPages > 1 && (
