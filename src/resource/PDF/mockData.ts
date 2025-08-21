@@ -1,4 +1,4 @@
-import { GetStudentGradeDetailDto } from "@/dto/gradDto";
+import { GetStudentGradeDetailDto, GradBelowResponse } from "@/dto/gradDto";
 import { GroupSummaryGradeResponse } from "@/dto/gradingDto";
 import { StudentNameListInSubject, StudentScorenSubject } from "@/dto/pdfDto";
 import { StudentItems } from "@/dto/studentDto";
@@ -287,6 +287,81 @@ export const mockGroupSummaryGradeResponse: GroupSummaryGradeResponse = {
     };
   }),
 };
+
+export function generateMockStudents(count: number): GradBelowResponse[] {
+  const prefixes = ["นาย", "นางสาว"];
+  const firstNames = [
+    "จตุรงค์",
+    "กัญญาณี",
+    "พิมพ์พร",
+    "สิรินยา",
+    "ณัฐวุฒิ",
+    "อรุณ",
+    "สุชาติ",
+    "มานพ",
+    "วราภรณ์",
+    "ปิยบุตร",
+    "ธนพร",
+    "เกษม",
+    "ชลธิชา",
+    "วุฒิชัย",
+    "สายใจ",
+    "อภิชาติ",
+    "ดวงพร",
+    "ศิริชัย",
+    "สุพรรณี",
+    "ยุทธนา",
+  ];
+  const lastNames = [
+    "เรืองเกษม",
+    "ชอบการ",
+    "แก้วสวาสดิ์",
+    "พิพัฒน์",
+    "ใจดี",
+    "หอมหวน",
+    "มีนา",
+    "ทองสุข",
+    "สุขุมวาที",
+    "เพชรดี",
+    "โสมสกาว",
+    "สมบูรณ์",
+    "กาญจนพงศ์",
+    "คชาภรณ์",
+    "บวรศักดิ์",
+    "เพชรสุวรรณ",
+    "วัฒนศิริ",
+    "รัตนชัย",
+    "จันทร์เพ็ญ",
+    "สุดา",
+  ];
+
+  const result: GradBelowResponse[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    result.push({
+      prefix: prefixes[Math.floor(Math.random() * prefixes.length)],
+      studentId: i,
+      studentCode: (6823000 + i).toString(),
+      firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
+      lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
+      facultyName: "คณะบริหารธุรกิจ",
+      programName: "การจัดการ",
+      subProgramName: "การจัดการทั่วไป",
+      class: `ปวช.${Math.floor(Math.random() * 3) + 1}`,
+      currentLevel: Math.floor(Math.random() * 3) + 1,
+      groupName: `ห้อง ${Math.floor(Math.random() * 5) + 1}/${
+        Math.floor(Math.random() * 3) + 1
+      }`,
+      term: `${Math.floor(Math.random() * 2) + 1}`,
+      year: 2568,
+      gpax: parseFloat((Math.random() * 4).toFixed(2)),
+    });
+  }
+
+  return result;
+}
+
+export const mockStudents = generateMockStudents(40);
 
 export const mockStudentListByGroupID: StudentItems[] = [
   {

@@ -7,11 +7,11 @@ import GroupSummaryGradPDF from "../PDF/score/GroupSummaryGrade";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
 import {
   GradSummaryGroupData,
-  mockGetGradBelowResponse,
   mockGroupSummaryGradeResponse,
   mockStudentGroupGradeResponse,
   mockStudentListByGroupID,
   mockStudentNameListInSubject,
+  mockStudents,
 } from "@/resource/PDF/mockData";
 
 export const genGradSummaryForStudent = async () => {
@@ -61,7 +61,7 @@ export const genStudentScoreInSubject = async () => {
 export const genStudentNotPassList = async () => {
   try {
     StudentFailListPDF({
-      student: mockGetGradBelowResponse,
+      student: mockStudents,
       currentYear: 2568,
       classGroup: "ปวช 2",
     });
