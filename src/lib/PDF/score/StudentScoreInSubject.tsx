@@ -311,8 +311,12 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
             `${students[i].midtermScore}`,
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,
-            `${students[i].finalGrade}`,
-            `${students[i].remarks !== null ? students[i].remarks : ""}`,
+            `${
+              students[i].remarks !== null
+                ? students[i].remarks
+                : students[i].finalGrade
+            }`,
+            ``,
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
