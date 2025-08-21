@@ -32,6 +32,7 @@ export interface SubjectItem {
   curriculumYear:number;
   description: string | null;
   isActive: boolean;
+  hour:number;
 }
 
 export interface CreateSubjectRequest {
@@ -43,6 +44,7 @@ export interface CreateSubjectRequest {
   class: string;
   curriculumYear:number;
   description: string | null;
+  hour:number;
 }
 
 export interface UpdateSubjectRequest  {
@@ -56,6 +58,7 @@ export interface UpdateSubjectRequest  {
   curriculumYear: number;
   description: string;
   isActive: boolean;
+  hour:number;
 }
 
 export interface CreateEnrollmentWithGradeAndScheduleRequest  {

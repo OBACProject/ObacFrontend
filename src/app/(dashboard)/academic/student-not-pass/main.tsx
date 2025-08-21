@@ -207,7 +207,7 @@ export default function Main() {
                         {item.studentCode}
                       </div>
                       <div className="text-start py-1 pl-8">
-                        {item.prefix}
+                        {item.prefix}&nbsp;
                         {item.firstName}
                       </div>
                       <div className="text-start py-1 border-r border-gray-400">

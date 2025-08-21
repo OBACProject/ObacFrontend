@@ -15,6 +15,7 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
   const [subjectName, setSubjectName] = useState<string>(data.name);
   const [subjectCode, setSubjectCode] = useState<string>(data.code);
   const [credits, setCredit] = useState<number>(data.credits);
+  const [hour, setHour] = useState<number>(data.hour);
   const [term, setTerm] = useState<string>(data.term);
   const [classLevel, setClassLevel] = useState<number>(data.level);
   const [classType, setClassType] = useState<string>(data.class);
@@ -39,6 +40,7 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
       curriculumYear: curriculumYear,
       description: description || "",
       isActive: isActive,
+      hour: hour,
     };
     try {
       await UpdateSubject(payload);
@@ -56,11 +58,11 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
       const success = await DeleteSubjectById(data.id);
       if (success) {
         toast.success("ลบสำเร็จ");
-        setDeleteTrigger(false)
+        setDeleteTrigger(false);
         onClosePopUp(false);
-        setTimeout(()=>{
-          window.location.reload()
-        },500)
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         toast.error("ลบไม่สำเร็จ ลองอีกครั้ง");
       }
@@ -160,6 +162,14 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
             <input
               onChange={(e) => setCurriculumYear(Number(e.target.value))}
               value={curriculumYear}
+              className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
+            />
+          </div>
+          <div className="flex w-full items-center gap-2">
+            <label>ชั่วโมงเรียน </label>
+            <input
+              onChange={(e) => setHour(Number(e.target.value))}
+              value={hour}
               className="w-[200px] px-5 py-1 border border-gray-200 rounded-sm"
             />
           </div>

@@ -13,6 +13,7 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
   const levelOptions = classType === "ปวช" ? ["1", "2", "3"] : ["1", "2"];
   const [subjectName, setSubjectName] = useState<string>("");
   const [subjectCode, setSubjectCode] = useState<string>("");
+  const [hour, setHour] = useState<number>();
   const [term, setTerm] = useState<string>("");
   const [credit, setCredit] = useState<number>();
   const [curriculumYear, setCurriumYear] = useState<number>();
@@ -33,6 +34,7 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
       class: classType,
       curriculumYear: Number(curriculumYear),
       description,
+      hour: Number(hour),
     };
 
     try {
@@ -111,6 +113,17 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
               placeholder="พ.ศ."
               onChange={(e) => setCurriumYear(Number(e.target.value))}
               value={curriculumYear}
+            />
+          </div>
+          <div className=" flex gap-3 items-center">
+            <p>ชั่วโมงเรียน</p>
+            <input
+              className="border-[1px] lg:w-[120px]  pl-2 py-0.5"
+              type="number"
+              placeholder="0"
+              min={0}
+              onChange={(e) => setHour(Number(e.target.value))}
+              value={hour}
             />
           </div>
           <div className="flex gap-3 items-center">
