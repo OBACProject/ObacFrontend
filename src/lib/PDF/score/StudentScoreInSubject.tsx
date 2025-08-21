@@ -312,7 +312,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,
             `${
-              students[i].remarks !== null
+              students[i].remarks !== ""
                 ? students[i].remarks
                 : students[i].finalGrade
             }`,
