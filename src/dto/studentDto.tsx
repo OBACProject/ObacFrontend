@@ -87,6 +87,7 @@ export interface GetStudentByGroupId {
   gpax: number;
   totalCredit: number;
   subject: GetSubjectByGroupId[];
+  status : string;
 }
 
 export interface GetAllStudent {

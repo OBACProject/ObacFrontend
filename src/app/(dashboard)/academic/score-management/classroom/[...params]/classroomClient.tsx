@@ -8,8 +8,8 @@ import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response";
 import { useDebounce } from "@/hooks/useDebounce";
 import { FilterState, FilterBar } from "./component/filterBar";
-import { preProcessClassroomData } from "./dataProcessing";
-import { TransformedStudentData } from "./mockData";
+import { preProcessClassroomData, TransformedStudentData } from "./dataProcessing";
+// import { TransformedStudentData } from "./mockData";
 import { ClassroomInfoTable } from "@/components/Academic/table/classroomInfoTable";
 import { Input } from "@/components/ui/input";
 import { BulkPDFStudentTranscriptPDF } from "@/components/PDF/PDFButton";
@@ -30,7 +30,6 @@ export function ClassroomGradeClient({ initialData }: Props) {
     () => preProcessClassroomData(initialData),
     [initialData]
   );
-  console.log("Processed Data:", processedData);
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -130,6 +129,11 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
     return [...baseColumns, ...subjectColumns, ...gradeColumns];
   }, [processedData.subjects]);
+  const processedData3 = useMemo(() => {
+    return processedData.students.filter(
+      (item) => item.status !== "คัดชื่อออก" && item.status !== "ลาออก"
+    );
+  }, [processedData.students]);
 
   const filteredData = useMemo(() => {
     if (
@@ -137,10 +141,10 @@ export function ClassroomGradeClient({ initialData }: Props) {
       !filters.selectedGradeFilter &&
       !filters.selectedSubjectFilter
     ) {
-      return processedData.students;
+      return processedData3;
     }
 
-    return processedData.students.filter((student) => {
+    return processedData3.filter((student) => {
       const matchSearch = debouncedSearchInput
         ? student.studentCode
             .toLowerCase()
@@ -153,7 +157,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
       return matchSearch;
     });
   }, [
-    processedData.students,
+    processedData3,
     debouncedSearchInput,
     filters.selectedGradeFilter,
     filters.selectedSubjectFilter,
