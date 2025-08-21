@@ -1,7 +1,15 @@
-import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import { CreateAcademicRequest, GetAcademicDetailUserResponse, GetAllAcademicUser, GetUserCountRespond, UpdateIsActiveUserRequest, UpdateUserDetailRequest, UpdateUserPasswordRequest } from "@/dto/userDto";
+import {
+  ClassCount,
+  CreateAcademicRequest,
+  GetAcademicDetailUserResponse,
+  GetAllAcademicUser,
+  GetGenderCount,
+  GetUserCountRespond,
+  UpdateIsActiveUserRequest,
+  UpdateUserDetailRequest,
+  UpdateUserPasswordRequest,
+} from "@/dto/userDto";
 import apiClient from "@/lib/apiClient";
-import { cookies } from "next/headers";
 
 export const GetAllAcademicUsers = async (): Promise<GetAllAcademicUser[]> => {
   try {
@@ -42,56 +50,51 @@ export const CreateAcademic = async (
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("User/CreateAcademic", payload);
-    return [200, 201, 204].includes(response.status) 
+    return [200, 201, 204].includes(response.status);
   } catch (err: any) {
     console.error("Error creating academic:", err);
     return false;
   }
 };
 
-
-export const UpdateIsActiveUser = async (
-  { userId, isActive }: UpdateIsActiveUserRequest
-): Promise<boolean> => {
+export const UpdateIsActiveUser = async ({
+  userId,
+  isActive,
+}: UpdateIsActiveUserRequest): Promise<boolean> => {
   try {
-  
-    const res = await apiClient.put(
-      "Admin/UpdateUserActive",
-      null,
-      { params: { userId, isActive } }
-    );
+    const res = await apiClient.put("Admin/UpdateUserActive", null, {
+      params: { userId, isActive },
+    });
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
     console.error("UpdateIsActiveUser error:", err?.response?.data || err);
-    throw err; 
+    throw err;
   }
 };
 
-export const UpdateUserDetails = async (payload: UpdateUserDetailRequest)=> {
+export const UpdateUserDetails = async (payload: UpdateUserDetailRequest) => {
   try {
-    const res = await apiClient.put(
-      "Admin/UpdateUserDetails",payload);
+    const res = await apiClient.put("Admin/UpdateUserDetails", payload);
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
     console.error("UpdateUserDetails error:", err?.response?.data || err);
-    throw err; 
+    throw err;
   }
 };
 
-
-export const UpdateUserPassword = async (
-  { userId, newPassword,confirmPassword }: UpdateUserPasswordRequest
-): Promise<boolean> => {
+export const UpdateUserPassword = async ({
+  userId,
+  newPassword,
+  confirmPassword,
+}: UpdateUserPasswordRequest): Promise<boolean> => {
   try {
-    const res = await apiClient.put(
-      "Admin/UpdateUserPassword",
-      null,
-      { params: { userId, newPassword,confirmPassword } }
-    );
+    const res = await apiClient.put("Admin/UpdateUserPassword", null, {
+      params: { userId, newPassword, confirmPassword },
+    });
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
     console.error("UpdateUserPassword error:", err?.response?.data || err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -127,3 +130,34 @@ export const GetUserCount = async (): Promise<GetUserCountRespond> => {
   }
 };
 
+export const GetGenderInfoCount = async (
+  role: "Student"
+): Promise<GetGenderCount[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GetGenderCount[];
+    }>(`Dashboard/GetGenderInfoCount/${role}`);
+
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log("Error in GetGenderInfoCount: ", err);
+    return [];
+  }
+};
+
+export const GetStudentClassCount = async (): Promise<ClassCount[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: ClassCount[];
+    }>(`Dashboard/GetStudentClassCount`);
+
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log("Error in GetGenderInfoCount: ", err);
+    return [];
+  }
+};

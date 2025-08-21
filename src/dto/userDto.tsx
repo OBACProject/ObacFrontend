@@ -16,16 +16,16 @@
 //   birthDate: string;
 // }
 export interface GetAllAcademicUser {
-  id : number;
+  id: number;
   academicId: number;
   userId: string;
-  prefix : string;
+  prefix: string;
   firstName: string;
   lastName: string;
   gender: string;
   phoneNumber: string;
   role: string;
-  isActive : boolean;
+  isActive: boolean;
 }
 export interface GetAcademicDetailUserResponse {
   username: string;
@@ -73,7 +73,7 @@ export interface UpdateIsActiveUserRequest {
   isActive: boolean;
 }
 
-export interface UpdateUserDetailRequest{
+export interface UpdateUserDetailRequest {
   id: string;
   prefix: string;
   firstName: string;
@@ -91,9 +91,19 @@ export interface UpdateUserPasswordRequest {
   confirmPassword: string;
 }
 
-export interface GetUserCountRespond{
-totalUserCount: number;
-totalStudentCount: number;
-totalTeacherCount: number;
-totalAcademicCount: number;
+export interface GetUserCountRespond {
+  totalUserCount: number;
+  totalStudentCount: number;
+  totalTeacherCount: number;
+  totalAcademicCount: number;
+}
+
+export interface GetGenderCount {
+  gender: string;
+  count: number;
+}
+
+export interface ClassCount {
+  class: string | null;
+  count: number;
 }

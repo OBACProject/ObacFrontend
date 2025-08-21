@@ -1,124 +1,105 @@
 "use client";
 
+import { GetGenderInfoCount, GetStudentClassCount } from "@/api/user/userAPI";
 import BarChart from "@/components/Academic/BarChart";
 import DonutChart from "@/components/Academic/DonutChart";
 import ProfileCard from "@/components/Academic/ProfileCard";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { useGetStudentClassCountDtosQuery } from "@/lib/api/hooks/queries/dashboard.queries";
-import { ChartPie, LoaderCircle } from "lucide-react";
-import React, { useMemo } from "react";
+import { ClassCount, GetGenderCount } from "@/dto/userDto";
+import { ChartPie } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+
+type GenderTH = "หญิง" | "ชาย";
 
 export default function AcademicDashboard() {
-  const {
-    data: studentClassData,
-    isLoading,
-    error,
-  } = useGetStudentClassCountDtosQuery();
-  const chartData = useMemo(() => {
-    if (!studentClassData) return null;
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [userGender, setUserGender] = useState<GetGenderCount[]>([]);
+  const [classCount, setClassCount] = useState<ClassCount[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-    const validData = studentClassData.filter(
-      (item) =>
-        item.class &&
-        item.genderCount?.gender &&
-        (item.genderCount.gender === "ชาย" ||
-          item.genderCount.gender === "หญิง") &&
-        !item.class.includes("/") &&
-        item.class.split(".").length <= 1 &&
-        (item.class.startsWith("ปวช") || item.class.startsWith("ปวส"))
-    );
-
-    const genderTotals = validData.reduce((acc, item) => {
-      const gender = item.genderCount.gender;
-      acc[gender] = (acc[gender] || 0) + item.genderCount.count;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const classTotals = validData.reduce((acc, item) => {
-      const classType = item.class.startsWith("ปวช") ? "ปวช" : "ปวส";
-      acc[classType] = (acc[classType] || 0) + item.genderCount.count;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const barChartData = validData.reduce((acc, item) => {
-      const key = `${item.class}.${item.level}`;
-      if (!acc[key]) {
-        acc[key] = { label: key, ชาย: 0, หญิง: 0 };
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const item = await GetGenderInfoCount("Student");
+        if (!alive) return;
+        if (item) setUserGender(item);
+      } catch (e) {
+        console.error(e);
+        if (alive) setError("โหลดข้อมูลไม่สำเร็จ");
+      } finally {
+        if (alive) setLoading(false);
       }
-      acc[key][item.genderCount.gender as "ชาย" | "หญิง"] =
-        item.genderCount.count;
-      return acc;
-    }, {} as Record<string, { label: string; ชาย: number; หญิง: number }>);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
-    const labels = Object.keys(barChartData).sort();
-    const maleData = labels.map((label) => barChartData[label].ชาย);
-    const femaleData = labels.map((label) => barChartData[label].หญิง);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const item = await GetStudentClassCount();
+        if (!alive) return;
+        if (item) setClassCount(item);
+      } catch (e) {
+        console.error(e);
+        if (alive) setError("โหลดข้อมูลไม่สำเร็จ");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const { labels, values, colors } = useMemo(() => {
+    const order: GenderTH[] = ["หญิง", "ชาย"];
+    const countMap: Record<GenderTH, number> = { หญิง: 0, ชาย: 0 };
+
+    for (const row of userGender ?? []) {
+      const g = (row.gender as GenderTH) ?? "";
+      if (g === "หญิง" || g === "ชาย") countMap[g] = Number(row.count) || 0;
+    }
 
     return {
-      gender: {
-        values: [genderTotals["ชาย"] || 0, genderTotals["หญิง"] || 0],
-        labels: ["ชาย", "หญิง"],
-      },
-      classType: {
-        values: [classTotals["ปวช"] || 0, classTotals["ปวส"] || 0],
-        labels: ["ปวช", "ปวส"],
-      },
-      barChart: {
-        labels,
-        maleData,
-        femaleData,
-      },
+      labels: order,
+      values: order.map((g) => countMap[g]),
+      colors: ["#FF8DC7", "#8AB6F9"],
     };
-  }, [studentClassData]);
+  }, [userGender]);
 
-  if (isLoading) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="w-full h-full bg-white border-[1px] border-blue-400 rounded-xl py-5 lg:py-10 flex gap-5 lg:gap-10 items-center justify-center h-fit">
-          <LoaderCircle className="w-12 h-12 text-blue-400 animate-spin" />
-          <h1 className="text-xl text-gray-600 font-prompt">กำลังโหลดข้อมูล... </h1>
-        </div>
-      </div>
+  const { vocLabels, vocValues, vocColors } = useMemo(() => {
+    const mapTop = new Map(
+      (classCount ?? []).map((r) => [
+        r.class?.trim() ?? null,
+        Number(r.count) || 0,
+      ])
     );
-  }
 
-  if (error) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg text-red-500">Error loading data</div>
-        </div>
-      </div>
-    );
-  }
+    const topVC = mapTop.get("ปวช");
+    const topVS = mapTop.get("ปวส");
 
-  if (!chartData) {
-    return (
-      <div className="lg:px-10 py-5 px-5 bg-gray-100">
-        <div className="w-full px-5">
-          <HeaderLabel
-            title="ภาพรวมโรงเรียน"
-            Icon={<ChartPie className="h-7 w-7 text-white" />}
-          />
-        </div>
-        <div className="flex justify-center items-center h-64">
-          <div className="text-lg">No data available</div>
-        </div>
-      </div>
-    );
-  }
+    const sumByPrefix = (prefix: string) =>
+      (classCount ?? []).reduce((sum, r) => {
+        const name = r.class?.trim();
+        if (!name || name === prefix) return sum;
+        return name.startsWith(prefix) ? sum + (Number(r.count) || 0) : sum;
+      }, 0);
+
+    const vc = topVC ?? sumByPrefix("ปวช");
+    const vs = topVS ?? sumByPrefix("ปวส");
+
+    return {
+      vocLabels: ["ปวช", "ปวส"],
+      vocValues: [vc, vs],
+      vocColors: ["#7EA1FF", "#B388EB"],
+    };
+  }, [classCount]);
 
   return (
     <div
@@ -151,37 +132,47 @@ export default function AcademicDashboard() {
           Icon={<ChartPie className="h-7 w-7 text-white" />}
         />
       </div>
+
       <div className="flex flex-col lg:flex-row lg:justify-between gap-6 px-4 py-6">
         {/* Chart Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-          <DonutChart
-            title="จำนวนนักเรียน ชาย-หญิง"
-            value={chartData.gender.values}
-            label={chartData.gender.labels}
-            backgroundColor={["#8AB6F9", "#FF8DC7"]}
-          />
+          <div className="relative">
+            {isLoading && (
+              <div className="absolute inset-0 grid place-items-center bg-white/60 rounded-md text-blue-600">
+                กำลังโหลด...
+              </div>
+            )}
+            <DonutChart
+              title="จำนวนนักเรียน ชาย-หญิง"
+              value={values}
+              label={labels}
+              backgroundColor={["#FF8DC7", "#8AB6F9"]}
+            />
+          </div>
+
           <DonutChart
             title="สัดส่วน ปวช-ปวส"
-            value={chartData.classType.values}
-            label={chartData.classType.labels}
-            backgroundColor={["#B388EB", "#7D7D7D"]}
+            value={vocValues}
+            label={vocLabels}
+            backgroundColor={["#FF8DC7", "#8AB6F9"]}
           />
         </div>
 
         <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
-
       </div>
 
       <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg">
         <h1 className="text-xl font-prompt text-blue-600">
           แผนภูมิแสดงจำนวนนักเรียน ชาย-หญิง ปวช - ปวส
         </h1>
-        <BarChart
-          labels={chartData.barChart.labels}
-          maleData={chartData.barChart.maleData}
-          femaleData={chartData.barChart.femaleData}
-        />
+        <BarChart labels={[]} maleData={[]} femaleData={[]} />
       </div>
+
+      {error && (
+        <div className="mx-5 my-3 px-4 py-2 bg-red-50 text-red-700 rounded">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
