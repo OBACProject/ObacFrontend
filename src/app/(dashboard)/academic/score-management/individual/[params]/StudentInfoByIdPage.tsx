@@ -21,6 +21,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
     if (apiData) {
       const transformedData: StudentTranscriptData = {
         studentId: apiData.student.id,
+        prefix: apiData.student.prefix,
         firstName: apiData.student.name,
         lastName: apiData.student.lastName,
         thaiName: apiData.student.name,
@@ -128,7 +129,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
         <StudentTermTable
           termData={termData}
           studentData={{
-            name: `${studentTranscriptDataById.thaiName} ${studentTranscriptDataById.thaiLastName}`,
+            name: `${studentTranscriptDataById.prefix} ${studentTranscriptDataById.thaiName} ${studentTranscriptDataById.thaiLastName}`,
             studentCode: studentTranscriptDataById.studentCode,
           }}
         />

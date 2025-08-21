@@ -249,6 +249,7 @@ export interface StudentTranscriptData {
   firstName: string;
   lastName: string;
   thaiName: string;
+  prefix:string;
   thaiLastName: string;
   class: string;
   currentYear: number;

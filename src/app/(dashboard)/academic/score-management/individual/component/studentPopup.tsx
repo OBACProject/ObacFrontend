@@ -3,9 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import Swal from "sweetalert2";
-import { useGetStudentDetailAndSummaryScoreByStudentCodeQuery, useUpdateStudentGradeByGradeIdMutation } from "@/lib/api/hooks/queries/grade.queries";
+import {
+  useGetStudentDetailAndSummaryScoreByStudentCodeQuery,
+  useUpdateStudentGradeByGradeIdMutation,
+} from "@/lib/api/hooks/queries/grade.queries";
 import { UpdateStudentGradeScoreRequest } from "@/lib/api/models/grade/grade.request";
 import { SubjectGradeScheduleSubject } from "@/lib/api/models/grade/grade.response";
+type ScoreKey =
+  | "assignmentScore"
+  | "collectScore"
+  | "affectiveScore"
+  | "midtermScore"
+  | "finaltermScore";
+
+type ScoreState = Record<ScoreKey, string>;
+
+const MAX_SCORES: Record<ScoreKey, number> = {
+  assignmentScore: 20,
+  collectScore: 10,
+  affectiveScore: 20,
+  midtermScore: 20,
+  finaltermScore: 30,
+};
 
 export interface SubjectData {
   subject_name: string;
@@ -44,19 +63,24 @@ export function StudentPopup({
   student,
   subjects,
 }: StudentPopupProps) {
-  const [score, setScore] = useState({
-    assignmentScore: 0,
-    collectScore: 0,
-    affectiveScore: 0,
-    midtermScore: 0,
-    finaltermScore: 0,
+  const [score, setScore] = useState<ScoreState>({
+    assignmentScore: "",
+    collectScore: "",
+    affectiveScore: "",
+    midtermScore: "",
+    finaltermScore: "",
   });
 
   const [remark, setRemark] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState<SubjectGradeScheduleSubject | null>(null);
+  const [selectedSubject, setSelectedSubject] =
+    useState<SubjectGradeScheduleSubject | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<string>("");
-  
-  const { data: studentDetailData, isLoading: isLoadingDetail, error: detailError } = useGetStudentDetailAndSummaryScoreByStudentCodeQuery(
+
+  const {
+    data: studentDetailData,
+    isLoading: isLoadingDetail,
+    error: detailError,
+  } = useGetStudentDetailAndSummaryScoreByStudentCodeQuery(
     student?.studentCode || "",
     {
       enabled: isOpen && !!student?.studentCode,
@@ -82,51 +106,60 @@ export function StudentPopup({
         icon: "error",
         confirmButtonColor: "#d33",
       });
-    }
+    },
   });
+  const s = (x: number | string | null | undefined) =>
+    x == null ? "" : String(x);
+  const toNum = (v: string) => (v === "" ? 0 : Number(v) || 0);
 
   useEffect(() => {
     if (subjects) {
-      
-      const hasDetailedScores = subjects.hasOwnProperty('assignmentScore') || 
-                               subjects.hasOwnProperty('midtermScore') || 
-                               subjects.hasOwnProperty('finaltermScore');
-      
+      const hasDetailedScores =
+        subjects.hasOwnProperty("assignmentScore") ||
+        subjects.hasOwnProperty("midtermScore") ||
+        subjects.hasOwnProperty("finaltermScore");
+
       if (hasDetailedScores) {
         setScore({
-          assignmentScore: (subjects as any).assignmentScore || 0,
-          collectScore: (subjects as any).collectScore || subjects.collectScore || 0,
-          affectiveScore: (subjects as any).affectiveScore || subjects.affectiveScore || 0,
-          midtermScore: (subjects as any).midtermScore || 0,
-          finaltermScore: (subjects as any).finaltermScore || subjects.testScore || 0,
+          assignmentScore: s((subjects as any).assignmentScore ?? 0),
+          collectScore: s(
+            (subjects as any).collectScore ?? subjects.collectScore ?? 0
+          ),
+          affectiveScore: s(
+            (subjects as any).affectiveScore ?? subjects.affectiveScore ?? 0
+          ),
+          midtermScore: s((subjects as any).midtermScore ?? 0),
+          finaltermScore: s(
+            (subjects as any).finaltermScore ?? subjects.testScore ?? 0
+          ),
         });
       } else {
         setScore({
-          assignmentScore: 0, 
-          collectScore: subjects.collectScore || 0,
-          affectiveScore: subjects.affectiveScore || 0,
-          midtermScore: 0, 
-          finaltermScore: subjects.testScore || 0, 
+          assignmentScore: s(0),
+          collectScore: s(subjects.collectScore ?? 0),
+          affectiveScore: s(subjects.affectiveScore ?? 0),
+          midtermScore: s(0),
+          finaltermScore: s(subjects.testScore ?? 0),
         });
       }
-      
+
       setRemark(subjects.remark || "");
-      
+
       if (studentDetailData && subjects.subject_name) {
         const matchingSubject = studentDetailData.termYearGradeGroups
-          .flatMap(group => group.grades)
-          .find(grade => grade.subjectName === subjects.subject_name);
-        
+          .flatMap((group) => group.grades)
+          .find((grade) => grade.subjectName === subjects.subject_name);
+
         if (matchingSubject) {
           setSelectedSubject(matchingSubject);
           setSelectedTerm(`${matchingSubject.term}/${matchingSubject.year}`);
-          
+
           setScore({
-            assignmentScore: matchingSubject.assignmentScore || 0,
-            collectScore: matchingSubject.collectScore || 0,
-            affectiveScore: matchingSubject.affectiveScore || 0,
-            midtermScore: matchingSubject.midtermScore || 0,
-            finaltermScore: matchingSubject.finaltermScore || 0,
+            assignmentScore: s(matchingSubject.assignmentScore ?? 0),
+            collectScore: s(matchingSubject.collectScore ?? 0),
+            affectiveScore: s(matchingSubject.affectiveScore ?? 0),
+            midtermScore: s(matchingSubject.midtermScore ?? 0),
+            finaltermScore: s(matchingSubject.finaltermScore ?? 0),
           });
         }
       }
@@ -136,37 +169,25 @@ export function StudentPopup({
   useEffect(() => {
     if (selectedSubject) {
       setScore({
-        assignmentScore: selectedSubject.assignmentScore || 0,
-        collectScore: selectedSubject.collectScore || 0,
-        affectiveScore: selectedSubject.affectiveScore || 0,
-        midtermScore: selectedSubject.midtermScore || 0,
-        finaltermScore: selectedSubject.finaltermScore || 0,
+        assignmentScore: s(selectedSubject.assignmentScore ?? 0),
+        collectScore: s(selectedSubject.collectScore ?? 0),
+        affectiveScore: s(selectedSubject.affectiveScore ?? 0),
+        midtermScore: s(selectedSubject.midtermScore ?? 0),
+        finaltermScore: s(selectedSubject.finaltermScore ?? 0),
       });
     }
   }, [selectedSubject]);
 
-
-  const handleInputChange = (field: string, value: string) => {
-    const numericValue = parseFloat(value) || 0;
-    
-    const maxScores = {
-      assignmentScore: 20,
-      collectScore: 10,
-      affectiveScore: 20,
-      midtermScore: 20,
-      finaltermScore: 30,
-    };
-    
-    const maxAllowed = maxScores[field as keyof typeof maxScores] || 100;
-    
-    const clampedValue = Math.min(Math.max(numericValue, 0), maxAllowed);
-    
-    setScore((prevScore) => ({
-      ...prevScore,
-      [field]: clampedValue,
-    }));
+  const handleInputChange = (field: ScoreKey, value: string) => {
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setScore((prev) => ({ ...prev, [field]: value }));
+    }
   };
-
+  const clampOnBlur = (field: ScoreKey) => {
+    const max = MAX_SCORES[field];
+    const n = Math.min(Math.max(toNum(score[field]), 0), max);
+    setScore((s) => ({ ...s, [field]: n === 0 ? "" : String(n) }));
+  };
   const gradingScorce = (totalScore: number) => {
     if (totalScore >= 80) return "4";
     if (totalScore >= 75) return "3.5";
@@ -177,7 +198,12 @@ export function StudentPopup({
     if (totalScore >= 50) return "1";
     return "0";
   };
-
+  const totalScore = () =>
+    toNum(score.assignmentScore) +
+    toNum(score.collectScore) +
+    toNum(score.affectiveScore) +
+    toNum(score.midtermScore) +
+    toNum(score.finaltermScore);
   const handleConfirm = async () => {
     try {
       const result = await Swal.fire({
@@ -192,8 +218,13 @@ export function StudentPopup({
       });
 
       if (result.isConfirmed && subjects?.gradeId !== undefined) {
-        const totalScore = score.assignmentScore + score.collectScore + score.affectiveScore + score.midtermScore + score.finaltermScore;
-        
+        const totalScore =
+          toNum(score.assignmentScore) +
+          toNum(score.collectScore) +
+          toNum(score.affectiveScore) +
+          toNum(score.midtermScore) +
+          toNum(score.finaltermScore);
+
         const payload: UpdateStudentGradeScoreRequest = {
           gradeId: subjects.gradeId,
           finalGrade: Number(gradingScorce(totalScore)),
@@ -202,14 +233,15 @@ export function StudentPopup({
           subjectName: subjects.subjectName || subjects.subject_name,
           subjectCode: subjects.subjectCode || subjects.subject_code,
           credit: Number(subjects.credit) || 0,
-          gradePoint: Number(gradingScorce(totalScore)) * Number(subjects.credit) || 0,
+          gradePoint:
+            Number(gradingScorce(totalScore)) * Number(subjects.credit) || 0,
           term: subjects.term || "1",
           year: subjects.year || new Date().getFullYear(),
-          collectScore: score.collectScore,
-          assignmentScore: score.assignmentScore,
-          affectiveScore: score.affectiveScore,
-          midtermScore: score.midtermScore,
-          finaltermScore: score.finaltermScore,
+          collectScore: toNum(score.collectScore),
+          assignmentScore: toNum(score.assignmentScore),
+          affectiveScore: toNum(score.affectiveScore),
+          midtermScore: toNum(score.midtermScore),
+          finaltermScore: toNum(score.finaltermScore),
           totalScore: totalScore,
         };
 
@@ -240,22 +272,26 @@ export function StudentPopup({
               <h1 className="text-xl font-bold mb-4 flex justify-between">
                 {student?.name}
                 {(() => {
-                  const totalScore = score.assignmentScore + score.collectScore + score.affectiveScore + score.midtermScore + score.finaltermScore;
-                  const hasFailingRemark = subjects?.remark && subjects.remark !== "ผ." && subjects.remark !== "";
-                  
-                  if (hasFailingRemark || totalScore < 50) {
-                    return <span className="text-red-500">ไม่ผ่าน</span>;
-                  } else {
-                    return <span className="text-green-500">ผ่าน</span>;
-                  }
+                  const sum = totalScore();
+                  const hasFailingRemark =
+                    subjects?.remark &&
+                    subjects.remark !== "ผ." &&
+                    subjects.remark !== "";
+                  return hasFailingRemark || sum < 50 ? (
+                    <span className="text-red-500">ไม่ผ่าน</span>
+                  ) : (
+                    <span className="text-green-500">ผ่าน</span>
+                  );
                 })()}
               </h1>
-              
+
               {/* Loading indicator */}
               {isLoadingDetail && (
                 <div className="flex items-center justify-center py-4">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                  <span className="ml-2 text-gray-600">กำลังโหลดข้อมูลรายละเอียด...</span>
+                  <span className="ml-2 text-gray-600">
+                    กำลังโหลดข้อมูลรายละเอียด...
+                  </span>
                 </div>
               )}
 
@@ -265,7 +301,8 @@ export function StudentPopup({
                   <div className="flex items-center">
                     <div className="text-red-600 mr-2">⚠️</div>
                     <span className="text-red-700 text-sm">
-                      ไม่สามารถโหลดข้อมูลรายละเอียดได้ แต่ยังสามารถแก้ไขคะแนนได้ตามปกติ
+                      ไม่สามารถโหลดข้อมูลรายละเอียดได้
+                      แต่ยังสามารถแก้ไขคะแนนได้ตามปกติ
                     </span>
                   </div>
                 </div>
@@ -287,7 +324,9 @@ export function StudentPopup({
                 {/* Enhanced Score Information */}
                 {selectedSubject && studentDetailData && (
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <h3 className="font-semibold text-blue-800 mb-3">ข้อมูลคะแนนรายละเอียด</h3>
+                    <h3 className="font-semibold text-blue-800 mb-3">
+                      ข้อมูลคะแนนรายละเอียด
+                    </h3>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <div className="flex justify-between py-1">
@@ -296,34 +335,52 @@ export function StudentPopup({
                         </div>
                         <div className="flex justify-between py-1">
                           <span className="text-gray-600">คะแนนงาน:</span>
-                          <span className="font-medium">{selectedSubject.assignmentScore || 0}</span>
+                          <span className="font-medium">
+                            {selectedSubject.assignmentScore || 0}
+                          </span>
                         </div>
                         <div className="flex justify-between py-1">
                           <span className="text-gray-600">คะแนนเก็บ:</span>
-                          <span className="font-medium">{selectedSubject.collectScore || 0}</span>
+                          <span className="font-medium">
+                            {selectedSubject.collectScore || 0}
+                          </span>
                         </div>
                         <div className="flex justify-between py-1">
                           <span className="text-gray-600">คะแนนจิตพิสัย:</span>
-                          <span className="font-medium">{selectedSubject.affectiveScore || 0}</span>
+                          <span className="font-medium">
+                            {selectedSubject.affectiveScore || 0}
+                          </span>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between py-1">
                           <span className="text-gray-600">คะแนนกลางภาค:</span>
-                          <span className="font-medium">{selectedSubject.midtermScore || 0}</span>
+                          <span className="font-medium">
+                            {selectedSubject.midtermScore || 0}
+                          </span>
                         </div>
                         <div className="flex justify-between py-1">
                           <span className="text-gray-600">คะแนนปลายภาค:</span>
-                          <span className="font-medium">{selectedSubject.finaltermScore || 0}</span>
+                          <span className="font-medium">
+                            {selectedSubject.finaltermScore || 0}
+                          </span>
                         </div>
                         <div className="flex justify-between py-1 border-t pt-2">
-                          <span className="text-gray-700 font-medium">คะแนนรวม:</span>
-                          <span className="font-bold text-blue-600">{selectedSubject.totalScore || 0}</span>
+                          <span className="text-gray-700 font-medium">
+                            คะแนนรวม:
+                          </span>
+                          <span className="font-bold text-blue-600">
+                            {selectedSubject.totalScore || 0}
+                          </span>
                         </div>
                         <div className="flex justify-between py-1">
-                          <span className="text-gray-700 font-medium">เกรดสุดท้าย:</span>
+                          <span className="text-gray-700 font-medium">
+                            เกรดสุดท้าย:
+                          </span>
                           <span className="font-bold text-green-600">
-                            {selectedSubject.finalGrade || selectedSubject.remark || 'N/A'}
+                            {selectedSubject.finalGrade ||
+                              selectedSubject.remark ||
+                              "N/A"}
                           </span>
                         </div>
                       </div>
@@ -334,13 +391,14 @@ export function StudentPopup({
                   <h1>คะแนนงาน (20 คะแนน)</h1>
                   <Input
                     type="number"
+                    inputMode="decimal"
+                    step="any"
                     placeholder="คะแนนงาน"
                     value={score.assignmentScore}
-                    min="0"
-                    max="20"
                     onChange={(e) =>
                       handleInputChange("assignmentScore", e.target.value)
                     }
+                    onBlur={() => clampOnBlur("assignmentScore")}
                   />
                 </div>
 
@@ -348,13 +406,14 @@ export function StudentPopup({
                   <h1>คะแนนเก็บ/ทดสอบ (10 คะแนน)</h1>
                   <Input
                     type="number"
+                    inputMode="decimal"
+                    step="any"
                     placeholder="คะแนนเก็บ"
                     value={score.collectScore}
-                    min="0"
-                    max="10"
                     onChange={(e) =>
                       handleInputChange("collectScore", e.target.value)
                     }
+                    onBlur={() => clampOnBlur("collectScore")}
                   />
                 </div>
 
@@ -362,13 +421,13 @@ export function StudentPopup({
                   <h1>คะแนนประพฤติ (20 คะแนน)</h1>
                   <Input
                     type="number"
-                    placeholder="คะแนนประพฤติ"
+                    inputMode="decimal"
+                    step="any"
                     value={score.affectiveScore}
-                    min="0"
-                    max="20"
                     onChange={(e) =>
                       handleInputChange("affectiveScore", e.target.value)
                     }
+                    onBlur={() => clampOnBlur("affectiveScore")}
                   />
                 </div>
 
@@ -376,13 +435,13 @@ export function StudentPopup({
                   <h1>คะแนนกลางภาค (20 คะแนน)</h1>
                   <Input
                     type="number"
-                    placeholder="คะแนนกลางภาค"
+                    inputMode="decimal"
+                    step="any"
                     value={score.midtermScore}
-                    min="0"
-                    max="20"
                     onChange={(e) =>
                       handleInputChange("midtermScore", e.target.value)
                     }
+                    onBlur={() => clampOnBlur("midtermScore")}
                   />
                 </div>
 
@@ -390,25 +449,38 @@ export function StudentPopup({
                   <h1>คะแนนปลายภาค (30 คะแนน)</h1>
                   <Input
                     type="number"
-                    placeholder="คะแนนปลายภาค"
+                    inputMode="decimal"
+                    step="any"
                     value={score.finaltermScore}
-                    min="0"
-                    max="30"
                     onChange={(e) =>
                       handleInputChange("finaltermScore", e.target.value)
                     }
+                    onBlur={() => clampOnBlur("finaltermScore")}
                   />
                 </div>
 
                 <div className="p-2 bg-gray-100 rounded-lg">
-                  <h1 className="font-semibold">คะแนนรวม: {score.assignmentScore + score.collectScore + score.affectiveScore + score.midtermScore + score.finaltermScore}/100</h1>
-                  <h1 className="font-semibold text-blue-600">เกรดที่จะได้: {gradingScorce(score.assignmentScore + score.collectScore + score.affectiveScore + score.midtermScore + score.finaltermScore)}</h1>
+                  <h1 className="font-semibold">
+                    คะแนนรวม:{" "}
+                    {score.assignmentScore +
+                      score.collectScore +
+                      score.affectiveScore +
+                      score.midtermScore +
+                      score.finaltermScore}
+                    /100
+                  </h1>
+                  <h1 className="font-semibold text-blue-600">
+                    เกรดที่จะได้:{" "}
+                    {gradingScorce(
+                      Number(score.assignmentScore) +
+                        Number(score.collectScore) +
+                        Number(score.affectiveScore) +
+                        Number(score.midtermScore) +
+                        Number(score.finaltermScore)
+                    )}
+                  </h1>
                 </div>
-
-                
               </div>
-              
-              
 
               <div className="p-2">
                 <h1>หมายเหตุ</h1>

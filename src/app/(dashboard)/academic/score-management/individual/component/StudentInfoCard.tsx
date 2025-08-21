@@ -51,7 +51,7 @@ export const StudentInfoCard = ({
                       ชื่อ-นามสกุล
                     </span>
                     <span className="text-lg font-semibold text-slate-800">
-                      {student.thaiName} {student.thaiLastName}
+                      {student.prefix} {student.thaiName} {student.thaiLastName}
                     </span>
                   </div>
                   <div className="flex flex-col">
