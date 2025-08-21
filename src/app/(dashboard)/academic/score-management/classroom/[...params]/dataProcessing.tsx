@@ -3,6 +3,7 @@ import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.respo
 export interface TransformedStudentData {
   studentId: number;
   studentCode: string;
+  status: string;
   name: string;
   gpa: number;
   gpax: number;
@@ -55,6 +56,7 @@ export const preProcessClassroomData = (
       gpa: Number(Number(student.gpa).toFixed(2)),
       gpax: Number(Number(student.gpax).toFixed(2)),
       totalCredit: student.totalCredit,
+      status: student.status,
       subjects: Object.fromEntries(
         (student.subject ?? []).map((sub) => [
           sub.subjectName,

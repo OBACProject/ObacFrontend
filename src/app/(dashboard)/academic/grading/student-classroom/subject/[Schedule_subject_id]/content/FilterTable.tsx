@@ -25,7 +25,6 @@ import { useUpdateScheduleSubject } from "@/lib/api/hooks/queries/scheduleSubjec
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { BulkUpdateStudentGradeByScheduleSubjectIdRequest } from "@/lib/api/models/grade/grade.request";
 
-
 type Field =
   | "assignmentscore"
   | "collectScore"
@@ -128,7 +127,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       subjectName: "ไม่มีข้อมูลวิชา",
       subjectCode: "N/A",
       subjectId: 0,
-      groupId:0,
+      groupId: 0,
       groupName: "N/A",
       groupCode: "N/A",
       class: "N/A",
@@ -141,7 +140,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     };
   }, [apiData]);
 
-
   const transformData = useMemo(() => {
     if (
       apiData &&
@@ -149,32 +147,35 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       apiData.subjectGrades.length > 0 &&
       subjectData
     ) {
-      return apiData.subjectGrades.map((item, index) => ({
-        gradeId: item.gradeId || index + 1,
-        subjectId: subjectData.subjectId,
-        scheduleSubjectId: Number(props.schuduleSubjectId),
-        studentGroup: subjectData.groupName,
-        studentId: item.studentId,
-        studentCode: item.studentCode,
-        prefix: item.prefix,
-        gender: "",
-        firstName: item.firstName,
-        lastName: item.lastName,
-        subjectName: subjectData.subjectName,
-        assignmentscore: item.assignmentScore || 0,
-        collectScore: item.collectScore || 0,
-        affectiveScore: item.affectiveScore || 0,
-        midtermScore: item.midtermScore || 0,
-        finaltermScore: item.finaltermScore || 0,
-        totalScore: item.totalScore || 0,
-        finalGrade: item.finalGrade, 
-        remarks: item.remark || "",
-        index: index + 1,
-      }));
+      return apiData.subjectGrades
+        .filter(
+          (item) => item.status !== "คัดชื่อออก" && item.status !== "ลาออก"
+        )
+        .map((item, index) => ({
+          gradeId: item.gradeId || index + 1,
+          subjectId: subjectData.subjectId,
+          scheduleSubjectId: Number(props.schuduleSubjectId),
+          studentGroup: subjectData.groupName,
+          studentId: item.studentId,
+          studentCode: item.studentCode,
+          prefix: item.prefix,
+          gender: "",
+          firstName: item.firstName,
+          lastName: item.lastName,
+          subjectName: subjectData.subjectName,
+          assignmentscore: item.assignmentScore || 0,
+          collectScore: item.collectScore || 0,
+          affectiveScore: item.affectiveScore || 0,
+          midtermScore: item.midtermScore || 0,
+          finaltermScore: item.finaltermScore || 0,
+          totalScore: item.totalScore || 0,
+          finalGrade: item.finalGrade,
+          remarks: item.remark || "",
+          index: index + 1,
+        }));
     }
     return [];
   }, [apiData, subjectData, props.schuduleSubjectId]);
-
 
   const calculateGrade = (totalScore: number): number => {
     if (totalScore >= 80) return 4;
@@ -206,7 +207,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       };
     });
   };
-
 
   useEffect(() => {
     const updatedData = updateTotalScoreAndGrade(transformData || []).sort(
@@ -242,7 +242,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   const clampNum = (n: number, min: number, max: number) =>
     Math.min(Math.max(n, min), max);
 
-
   const handleInputChangeDraft = (
     index: number,
     field: Field,
@@ -255,7 +254,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       }));
     }
   };
-
 
   const commitNumber = (idx: number, field: Field, n: number) => {
     const updated = [...tableData];
@@ -290,7 +288,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     const n = v === "" ? 0 : Number(v);
     const clamped = Number.isNaN(n) ? 0 : clampNum(n, min, max);
 
-
     setDraft((prev) => ({
       ...prev,
       [index]: { ...(prev[index] || {}), [field]: String(clamped) },
@@ -314,7 +311,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     })
     .sort((a, b) => a.studentCode.localeCompare(b.studentCode));
 
-
   const onChangeGrade = (grade: string, studentId: number) => {
     const updated = tableData
       .map((item) =>
@@ -325,7 +321,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       .sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
-
 
   const onChangeRemark = (remark: string, studentId: number) => {
     const updated = tableData
@@ -341,7 +336,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     setOnEdit(true);
   };
 
-
   const handleNotEdit = () => {
     setConfirmDialog({
       isOpen: true,
@@ -350,7 +344,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       text: "การเปลี่ยนแปลงทั้งหมดจะไม่ถูกบันทึก",
       onConfirm: () => {
         setTableData(originalData);
-        setDraft({}); 
+        setDraft({});
         setOnEdit(false);
       },
       showCancel: true,
@@ -420,7 +414,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           });
 
           setOriginalData(JSON.parse(JSON.stringify(tableData)));
-          setDraft({}); 
+          setDraft({});
           setOnEdit(false);
         } catch (error) {
           console.error("Save error:", error);
@@ -431,10 +425,9 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     });
   };
 
-
   const columnDefs = createColumns({
     onEdit,
-    handleInputChange: handleInputChangeDraft, 
+    handleInputChange: handleInputChangeDraft,
     handleBlur,
     draft,
     commitNumber,
@@ -554,7 +547,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             </div>
           </div>
         </div>
-
 
         <div className="px-4 pb-8">
           <StylesTable
