@@ -1,5 +1,6 @@
 import {
   BulkUpdateStudentGradeResponse,
+  GradBelowResponse,
   StudentGradesResponse,
   StudentGroupGrade,
   StudentGroupGradeResponse,
@@ -83,7 +84,7 @@ export const BulkUpdateStudentGradeByScheduleSubjectId = async (
   }
 };
 
-export const BulkGetStudentGradeByStudentGroupId = async (
+export const BulkGetTranscriptByGroupID = async (
   groupID: number
 ): Promise<StudentGroupGrades | null> => {
   try {
@@ -91,7 +92,7 @@ export const BulkGetStudentGradeByStudentGroupId = async (
       responseCode: string;
       responseMessage: string;
       data: StudentGroupGrades;
-    }>(`Grade/BulkGetStudentGradeByStudentGroupId?studentGroupId=${groupID}`);
+    }>(`Grade/BulkGetTranscriptByGroupID?studentGroupId=${groupID}`);
 
     const data = response.data.data;
 
@@ -108,7 +109,7 @@ export const BulkGetStudentGradeByStudentGroupId = async (
   }
 };
 
-export const BulkGetStudentGradeByStudentId = async (
+export const GetTranscriptByStudentID = async (
   studentID: number
 ): Promise<StudentGradesResponse | null> => {
   try {
@@ -116,11 +117,33 @@ export const BulkGetStudentGradeByStudentId = async (
       responseCode: string;
       responseMessage: string;
       data: StudentGradesResponse;
-    }>(`Grade/BulkGetStudentGradeByStudentId?studentId=${studentID}`);
+    }>(`Grade/GetTranscriptByStudentID?studentId=${studentID}`);
 
     return response.data.data;
   } catch (error) {
     console.error("Error fetching student group grades:", error);
     return null;
+  }
+};
+
+export const GetStudentIfGradeBelow = async (
+  className: string,
+  currentLavel: number,
+  grade: number,
+  term: string,
+  year: number
+): Promise<GradBelowResponse[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GradBelowResponse[];
+    }>(
+      `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&term=${term}&year=${year}`
+    );
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log(err);
+    return [];
   }
 };

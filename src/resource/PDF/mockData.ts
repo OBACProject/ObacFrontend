@@ -1115,7 +1115,7 @@ export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
   ],
 };
 
-export const mockGetGradBelowResponse: GetGradBelowResponse[] = [];
+// export const mockGetGradBelowResponse: GetGradBelowResponse[] = [];
 
 const prefixes = ["นาย", "นางสาว"];
 const firstNames = [
@@ -1144,22 +1144,22 @@ const lastNames = [
 ];
 const groupNames = ["1/1", "1/2", "1/3", "2/1", "2/4", "2/10", "3/1"];
 
-for (let i = 1; i <= 45; i++) {
-  const index = (i - 1) % 10;
-  const group = groupNames[i % groupNames.length];
+// for (let i = 1; i <= 45; i++) {
+//   const index = (i - 1) % 10;
+//   const group = groupNames[i % groupNames.length];
 
-  mockGetGradBelowResponse.push({
-    studentId: i,
-    prefix: prefixes[i % prefixes.length],
-    studentCode: `65110${i.toString().padStart(3, "0")}`,
-    firstName: firstNames[index],
-    lastName: lastNames[index],
-    facultyName: "บริหารธุรกิจ",
-    programName: "การบัญชี",
-    class: "ปวช.",
-    groupName: group,
-    term: "1",
-    year: 2568,
-    gpa: parseFloat((1.4 + Math.random() * 0.6).toFixed(2)), // 1.40 - 2.00
-  });
-}
+//   mockGetGradBelowResponse.push({
+//     studentId: i,
+//     prefix: prefixes[i % prefixes.length],
+//     studentCode: `65110${i.toString().padStart(3, "0")}`,
+//     firstName: firstNames[index],
+//     lastName: lastNames[index],
+//     facultyName: "บริหารธุรกิจ",
+//     programName: "การบัญชี",
+//     class: "ปวช.",
+//     groupName: group,
+//     term: "1",
+//     year: 2568,
+//     gpa: parseFloat((1.4 + Math.random() * 0.6).toFixed(2)), // 1.40 - 2.00
+//   });
+// }

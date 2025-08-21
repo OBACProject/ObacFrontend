@@ -2,6 +2,7 @@
 
 import {
   genBulkPDFStudentTranscriptPDF,
+  genPDFFailedStudentNamelist,
   genPDFStudentNamelistInGroup,
   genPDFStudentScoreInSubjectPDF,
   genPDFStudentTranscriptPDF,
@@ -115,6 +116,58 @@ export const BulkPDFStudentTranscriptPDF = ({
         <Download className="text-blue-500 w-5 h-5" />
       )}
       ดาวโหลดผลการเรียนทั้งห้องเรียน
+    </button>
+  );
+};
+
+export const PDFFailedStudentNamelistButton = ({
+  className,
+  currentYear,
+  grade,
+  term,
+  year,
+}: {
+  className: string;
+  currentYear: number;
+  grade: number;
+  term: string;
+  year: number;
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleClick = async () => {
+    try {
+      const ok = await genPDFFailedStudentNamelist(
+        className,
+        currentYear,
+        grade,
+        term,
+        year
+      );
+      if (ok) {
+        toast.success("ดาวน์โหลดสำเร็จ");
+      } else {
+        toast.error("ผิดพลาด");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("ผิดพลาด");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <button
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
+       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
+      onClick={handleClick}
+    >
+      {isLoading ? (
+        <LoaderCircle className="text-blue-500 w-5 h-5 animate-spin" />
+      ) : (
+        <Download className="text-blue-500 w-5 h-5" />
+      )}
+      รายชื่อนักเรียนไม่ผ่านเกณฑ์
     </button>
   );
 };

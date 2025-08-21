@@ -87,7 +87,7 @@ const StudentTranscript = (grads: StudentGradesResponse) => {
 
   doc.text("สถานะนักเรียน : กำลังศึกษา", 28.5, 45);
   doc.text("สาขางาน     : ", 110, 45);
-  doc.text(`${grads.programName}`, 130, 45);
+  doc.text(`${grads.subProgramName}`, 130, 45);
 
   doc.line(5, 50, 205, 50);
   doc.line(5, 50, 5, 257);

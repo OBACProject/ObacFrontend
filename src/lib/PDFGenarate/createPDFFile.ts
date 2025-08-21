@@ -3,13 +3,15 @@ import { GetStudentGroupByGroupId } from "@/api/student/route";
 import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
 import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
 import {
-  BulkGetStudentGradeByStudentGroupId,
-  BulkGetStudentGradeByStudentId,
+  BulkGetTranscriptByGroupID,
   GetStudentGroupGradeByScheduleSubjectId,
+  GetStudentIfGradeBelow,
+  GetTranscriptByStudentID,
 } from "@/api/grad/route";
 import { StudentItems } from "@/dto/studentDto";
 import BulkStudentTranscript from "../PDF/score/BulkStudentTranscript";
 import StudentTranscript from "../PDF/score/StudentTranscript";
+import StudentFailListPDF from "../PDF/name-list/StudentFailList";
 
 const parseStudentCode = (code?: string): number | null => {
   const digits =
@@ -86,7 +88,7 @@ export const genPDFStudentScoreInSubjectPDF = async (
 
 export const genPDFStudentTranscriptPDF = async (studentID: number) => {
   try {
-    const response = await BulkGetStudentGradeByStudentId(studentID);
+    const response = await GetTranscriptByStudentID(studentID);
     if (response) {
       StudentTranscript(response);
     }
@@ -99,14 +101,12 @@ export const genBulkPDFStudentTranscriptPDF = async (
   groupID: number
 ): Promise<boolean> => {
   try {
-    const response = await BulkGetStudentGradeByStudentGroupId(groupID);
+    const response = await BulkGetTranscriptByGroupID(groupID);
     if (response) {
       BulkStudentTranscript(
         response.studentGrades,
         response.class,
         response.groupName,
-        response.facultyName,
-        response.programName,
         response.term,
         response.year
       );
@@ -116,6 +116,37 @@ export const genBulkPDFStudentTranscriptPDF = async (
     }
   } catch (err) {
     console.log("Error in lib genStudentNamelistInGroup.", err);
+    return false;
+  }
+};
+
+export const genPDFFailedStudentNamelist = async (
+  className: string,
+  currentLevel: number,
+  grade: number,
+  term: string,
+  year: number
+): Promise<boolean> => {
+  try {
+    const response = await GetStudentIfGradeBelow(
+      className,
+      currentLevel,
+      grade,
+      term,
+      year
+    );
+    if (response) {
+      StudentFailListPDF({
+        student: response,
+        currentYear: currentLevel,
+        classGroup: className,
+      });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log("err PDF API ", err);
     return false;
   }
 };

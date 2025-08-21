@@ -130,9 +130,8 @@ export default function Main() {
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   // const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
-  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(
-    // mockGroup
-  );
+  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>();
+  // mockGroup
   const [nextGroupNameA, setNextGroupNameA] = useState<string>("");
   const [nextGroupNameB, setNextGroupNameB] = useState<string>("");
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);

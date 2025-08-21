@@ -2,17 +2,20 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../../Font/THSarabunFont";
-import THSarabunFontBold from "../../Font/THSarabunBold"; 
-import { GetGradBelowResponse } from "../../api/models/grade/grade.response";
+import THSarabunFontBold from "../../Font/THSarabunBold";
+import { GradBelowResponse } from "@/dto/gradDto";
 
 interface DataList {
-  student?: GetGradBelowResponse[];
+  student?: GradBelowResponse[];
   currentYear: number;
   classGroup: string;
 }
 
-const StudentFailListPDF = ({ //รายชื่อนักเรียนที่มีผลการเรียนต่ำกว่าเกณฑ์   StudentsNotPassedList (student-notpassed)
-    student , currentYear ,classGroup
+const StudentFailListPDF = ({
+  //รายชื่อนักเรียนที่มีผลการเรียนต่ำกว่าเกณฑ์   StudentsNotPassedList (student-notpassed)
+  student,
+  currentYear,
+  classGroup,
 }: DataList) => {
   const doc = new jsPDF({
     orientation: "portrait",
@@ -28,21 +31,30 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
 
   doc.setFont("THSarabunBold");
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียนไม่ผ่านเกณฑ์ ${classGroup} ปีการศึกษา ${currentYear}  เกรดเฉลี่ยไม่ถึง 1.75`, 56, 10, {
-    align: "center",
-  });
+  doc.text(
+    `รายชื่อนักเรียนไม่ผ่านเกณฑ์ ${classGroup} ปีการศึกษา ${currentYear}  เกรดเฉลี่ยไม่ถึง 1.75`,
+    56,
+    10,
+    {
+      align: "center",
+    }
+  );
   doc.setFontSize(12);
-
-  // doc.line(4, 4, 4, 291);
-  // doc.line(205, 4, 205, 291);
-  // doc.line(4, 4, 205, 4);
-  // doc.line(205, 291, 4, 291);
 
   doc.line(4, 12, 205, 12);
 
   autoTable(doc, {
     startY: 12,
-    body: [["ลำดับ", "รหัสนักศึกษา", `   ชื่อ - นามสกุล   `, "ห้อง", "เกรดเฉลี่ยสะสม","หมายเหตุ"]],
+    body: [
+      [
+        "ลำดับ",
+        "รหัสนักศึกษา",
+        `   ชื่อ - นามสกุล   `,
+        "ห้อง",
+        "เกรดเฉลี่ยสะสม",
+        "หมายเหตุ",
+      ],
+    ],
     alternateRowStyles: { fillColor: [255, 255, 255] },
     styles: {
       font: "THSarabunBold",
@@ -80,7 +92,8 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
             `${student[i].prefix} ${student[i].firstName}`,
             `${student[i].lastName}`,
             `${student[i].class}.${student[i].groupName}`,
-            `${student[i].gpa.toFixed(2)}`,""
+            `${student[i].gpax.toFixed(2)}`,
+            "",
           ],
         ],
         alternateRowStyles: { fillColor: [255, 255, 255] },
@@ -119,7 +132,7 @@ const StudentFailListPDF = ({ //รายชื่อนักเรียนท
       });
       y2 += 6;
       if (y2 >= 255) {
-         doc.addPage()
+        doc.addPage();
         y2 = 14;
       }
     }

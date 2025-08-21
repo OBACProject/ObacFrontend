@@ -9,8 +9,6 @@ const BulkStudentTranscript = (
   data: StudentGrade[],
   classGroup: string,
   groupName: string,
-  facultyName: string,
-  programName: string,
   term: string,
   year: number
 ) => {
@@ -92,15 +90,15 @@ const BulkStudentTranscript = (
     doc.setFont("THSarabun", "normal");
     doc.text("รอบ : เช้า", 42, 35);
     doc.text("ประเภทวิชา : ", 110.5, 35);
-    doc.text(`${facultyName}`, 130, 35);
+    doc.text(`${data[i].facultyName}`, 130, 35);
 
     doc.text(`ชั้นปี : ${classGroup}.${groupName}`, 42, 40);
     doc.text("สาขาวิชา     : ", 110, 40);
-    doc.text(`${programName}`, 130, 40);
+    doc.text(`${data[i].programName}`, 130, 40);
 
     doc.text("สถานะนักเรียน : กำลังศึกษา", 28.5, 45);
     doc.text("สาขางาน     : ", 110, 45);
-    doc.text(`-`, 130, 45);
+    doc.text(`${data[i].subProgramName}`, 130, 45);
 
     doc.line(5, 50, 205, 50);
     doc.line(5, 50, 5, 257);
@@ -276,7 +274,6 @@ const BulkStudentTranscript = (
     doc.text("( นายวิทวัต โยธินนรธรรม )", 133, 285);
 
     doc.text(`${thaiDate}`, 180, 295);
-
 
     if (i != data.length - 1) {
       doc.addPage();

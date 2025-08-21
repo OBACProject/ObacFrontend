@@ -1,13 +1,14 @@
 "use client";
 import StudentFailListPDF from "@/lib/PDF/name-list/StudentFailList";
-import { GetGropGradeBelowModel } from "@/dto/gradDto";
+import { GradBelowResponse } from "@/dto/gradDto";
 import { Download, Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-import { mockGetGradBelowResponse } from "@/resource/PDF/mockData";
+import { GetStudentIfGradeBelow } from "@/api/grad/route";
+import { PDFFailedStudentNamelistButton } from "@/components/PDF/PDFButton";
 
 interface IndividualStudentInfoData {
   studentId: number;
@@ -17,7 +18,7 @@ interface IndividualStudentInfoData {
 export default function Main() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
 
-  const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
+  const [students, setStudent] = useState<GradBelowResponse[]>([]);
   const studentCount = useMemo(() => students.length, [students]);
   const [grads, setGrad] = useState(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
@@ -39,31 +40,31 @@ export default function Main() {
   };
   const router = useRouter();
   const onFilterGroup = async () => {
-    // try {
-    //   setSearchTrigger(true);
-    //   await GetGropGradeBelow(
-    //     classSelect,
-    //     currentYearSelect,
-    //     grads,
-    //     term,
-    //     Number(year)
-    //   ).then((item: GetGropGradeBelowModel[]) => {
-    //     setStudent(item);
-    //   });
-    //   setIsSearch(true);
-    //   setSearchTrigger(false);
-    // } catch (err) {
-    //   console.error("Error in onFilterGroup:", err);
-    //   setSearchTrigger(false);
-    //   setIsSearch(true);
-    // }
     setSearchTrigger(true);
-    setStudent(
-      mockGetGradBelowResponse.map((item) => ({
-        ...item,
-        prefix: item.prefix ?? "",
-      }))
-    );
+    try {
+      await GetStudentIfGradeBelow(
+        classSelect,
+        currentYearSelect,
+        grads,
+        term,
+        year
+      ).then((item: GradBelowResponse[]) => {
+        setStudent(item);
+      });
+      setIsSearch(true);
+      setSearchTrigger(false);
+    } catch (err) {
+      console.log("API GetGradBelow ERROR ", Error);
+      setSearchTrigger(false);
+      setIsSearch(true);
+    }
+    // setSearchTrigger(true);
+    // setStudent(
+    //   mockGetGradBelowResponse.map((item) => ({
+    //     ...item,
+    //     prefix: item.prefix ?? "",
+    //   }))
+    // );
     setIsSearch(true);
     setSearchTrigger(false);
   };
@@ -161,20 +162,13 @@ export default function Main() {
                     จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{studentCount}</p>คน
                   </div>
                   <div>
-                    <button
-                      className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
-                      onClick={() => {
-                        if (students)
-                          StudentFailListPDF({
-                            student: mockGetGradBelowResponse,
-                            classGroup: `${classSelect}.${currentYearSelect}`,
-                            currentYear: year,
-                          });
-                      }}
-                    >
-                      <Download className="w-4 h-4" />
-                      รายชื่อนักเรียนตก PDF
-                    </button>
+                    <PDFFailedStudentNamelistButton
+                      className={classSelect}
+                      currentYear={currentYearSelect}
+                      grade={grads}
+                      term={term}
+                      year={year}
+                    />
                   </div>
                 </div>
 
@@ -223,7 +217,7 @@ export default function Main() {
                         {item.class}.{item.groupName}
                       </div>
                       <div className="text-center border-r border-gray-400 py-1">
-                        {item.gpa.toFixed(2)}
+                        {item.gpax.toFixed(2)}
                       </div>
                       <div className="text-center  py-1">-</div>
                     </div>

@@ -281,6 +281,9 @@ export interface StudentGrade {
   prefix: string;
   firstName: string;
   lastName: string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
   subjectGradesTermYear: SubjectGradesTermYear[];
 }
 
@@ -333,6 +336,23 @@ export interface StudentGradesResponse {
   groupName: string;
   facultyName: string;
   programName: string;
-
+  subProgramName: string;
   subjectGradesTermYear: SubjectGradesByTermYear[];
+}
+
+export interface GradBelowResponse {
+  prefix: string;
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  class: string;
+  currentLevel: number;
+  groupName: string;
+  term: string;
+  year: number;
+  gpax: number;
 }
