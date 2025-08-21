@@ -70,6 +70,7 @@ export interface GetStudentGroupGradeByScheduleSubjectIdResponse {
   subjectName : string;
   subjectCode : string;
   subjectId : number;
+  groupId:number;
   groupName : string;
   groupCode : string;
   class : string;

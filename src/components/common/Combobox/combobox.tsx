@@ -61,7 +61,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full shadow-sm bg-white hover:bg-sky-50 rounded-lg justify-between py-0.5 h-fit"
+          className="w-full shadow-sm bg-white hover:bg-sky-50 rounded-lg px-2 justify-between py-0.5 h-fit"
           disabled={disabled}
         >
           {value

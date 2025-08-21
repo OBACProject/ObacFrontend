@@ -4,6 +4,7 @@ export const mockStudentTranscriptList: StudentTranscriptData[] = [
   {
     studentId: 1,
     firstName: "อรทัย",
+    prefix:"นาย",
     lastName: "ตั้งใจ",
     thaiName: "อรทัย",
     thaiLastName: "ตั้งใจ",
@@ -82,6 +83,7 @@ export const mockStudentTranscriptList: StudentTranscriptData[] = [
   {
     studentId: 2,
     firstName: "วิชัย",
+    prefix:"นาย",
     lastName: "ใจดี",
     thaiName: "วิชัย",
     thaiLastName: "ใจดี",
@@ -160,6 +162,7 @@ export const mockStudentTranscriptList: StudentTranscriptData[] = [
   {
     studentId: 3,
     firstName: "วิชัยเอ",
+    prefix:"นาย",
     lastName: "ใจสิงค์",
     thaiName: "วิชัยเอ",
     thaiLastName: "ใจสิงค์",
@@ -238,6 +241,7 @@ export const mockStudentTranscriptList: StudentTranscriptData[] = [
   {
     studentId: 4,
     firstName: "นพมล",
+    prefix:"นาย",
     lastName: "แซ่ลิ้ม",
     thaiName: "นพมล",
     thaiLastName: "แซ่ลิ้ม",

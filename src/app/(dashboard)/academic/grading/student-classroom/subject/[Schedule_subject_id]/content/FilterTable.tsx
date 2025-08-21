@@ -1,11 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { createColumns } from "./columns";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
-import { CircleX, Pencil, ScrollText, CheckCircle } from "lucide-react";
+import {
+  CircleX,
+  Pencil,
+  ScrollText,
+  CheckCircle,
+  ChevronRight,
+  FileText,
+} from "lucide-react";
 import ConfirmDialog from "@/components/common/ConfirmDialog/ConfirmDialog";
 import { AnimatePresence, motion } from "framer-motion";
 import ExportFile from "./ExportFile";
@@ -18,6 +25,14 @@ import { useUpdateScheduleSubject } from "@/lib/api/hooks/queries/scheduleSubjec
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { BulkUpdateStudentGradeByScheduleSubjectIdRequest } from "@/lib/api/models/grade/grade.request";
 
+// ฟิลด์ที่แก้ไขแบบตัวเลขในตาราง
+type Field =
+  | "assignmentscore"
+  | "collectScore"
+  | "affectiveScore"
+  | "midtermScore"
+  | "finaltermScore";
+
 interface EditableGradePageProps {
   schuduleSubjectId: string;
 }
@@ -27,6 +42,14 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   const [onEdit, setOnEdit] = useState(false);
   const [filterTerm, setFilterTerm] = useState("");
   const [showExport, setShowExport] = useState(false);
+  const [tableData, setTableData] = useState<GetGradBySubjectId[]>([]);
+  const [originalData, setOriginalData] = useState<GetGradBySubjectId[]>([]);
+
+  // draft สำหรับค่าที่ผู้ใช้กำลังพิมพ์ (string) ต่อแถว/ฟิลด์
+  const [draft, setDraft] = useState<
+    Record<number, Partial<Record<Field, string>>>
+  >({});
+
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     type: "question" as "question" | "success" | "error",
@@ -45,7 +68,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
   } = useGetStudentGroupGradeByScheduleSubjectIdQuery(
     Number(props.schuduleSubjectId)
   );
-  console.log("API Data:", apiData);
 
   const bulkUpdateMutation = useBulkUpdateStudentGradeByScheduleSubjectId({
     onSuccess: () => {
@@ -107,6 +129,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       subjectName: "ไม่มีข้อมูลวิชา",
       subjectCode: "N/A",
       subjectId: 0,
+      groupId:0,
       groupName: "N/A",
       groupCode: "N/A",
       class: "N/A",
@@ -119,6 +142,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     };
   }, [apiData]);
 
+  // แปลงข้อมูลจาก API เป็นโครงที่ใช้กับตาราง
   const transformData = useMemo(() => {
     if (
       apiData &&
@@ -144,18 +168,15 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         midtermScore: item.midtermScore || 0,
         finaltermScore: item.finaltermScore || 0,
         totalScore: item.totalScore || 0,
-        finalGrade: item.finalGrade,
+        finalGrade: item.finalGrade, // สมมติ API อาจส่งมาเป็น number หรือ null
         remarks: item.remark || "",
         index: index + 1,
       }));
     }
-
     return [];
   }, [apiData, subjectData, props.schuduleSubjectId]);
-  console.log("Transformed Data:", transformData);
-  const [tableData, setTableData] = useState<GetGradBySubjectId[]>([]);
-  const [originalData, setOriginalData] = useState<GetGradBySubjectId[]>([]);
 
+  // คำนวณเกรดจากคะแนนรวม
   const calculateGrade = (totalScore: number): number => {
     if (totalScore >= 80) return 4;
     if (totalScore >= 75) return 3.5;
@@ -167,6 +188,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     return 0;
   };
 
+  // เติม totalScore/finalGrade ให้ข้อมูล (กันพลาด)
   const updateTotalScoreAndGrade = (updatedData: GetGradBySubjectId[]) => {
     return updatedData.map((item) => {
       const newTotalScore =
@@ -179,20 +201,23 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       return {
         ...item,
         totalScore: newTotalScore,
-        finalGrade: item.finalGrade
-          ? item.finalGrade
-          : calculateGrade(newTotalScore),
+        finalGrade:
+          item.finalGrade != null
+            ? item.finalGrade
+            : calculateGrade(newTotalScore),
       };
     });
   };
 
-  useMemo(() => {
+  // ❗ เปลี่ยนจาก useMemo ที่ setState เป็น useEffect
+  useEffect(() => {
     const updatedData = updateTotalScoreAndGrade(transformData || []).sort(
       (a, b) => a.studentCode.localeCompare(b.studentCode)
     );
     setTableData(updatedData);
   }, [transformData]);
 
+  // โหลด/เออเรอร์
   if (!apiData || isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -200,100 +225,86 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-lg text-red-600">
-          เกิดข้อผิดพลาดในการโหลดข้อมูล: {error.toString()}
+          เกิดข้อผิดพลาดในการโหลดข้อมูล: {String(error)}
         </div>
       </div>
     );
   }
 
-  const handleConfirm = async () => {
-    setConfirmDialog({
-      isOpen: true,
-      type: "question",
-      title: "ยืนยันการบันทึกข้อมูล?",
-      text: "คุณต้องการบันทึกคะแนนทั้งหมดใช่หรือไม่",
-      onConfirm: async () => {
-        try {
-          const updateParams: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] =
-            tableData.map((item) => ({
-              studentId: item.studentId,
-              assignmentScore: item.assignmentscore,
-              collectScore: item.collectScore,
-              affectiveScore: item.affectiveScore,
-              midtermScore: item.midtermScore,
-              finaltermScore: item.finaltermScore,
-              totalScore: item.totalScore,
-              finalGrade: item.finalGrade,
-              remarks: item.remarks || "",
-            }));
-
-          await bulkUpdateMutation.mutateAsync({
-            scheduleSubjectId: Number(props.schuduleSubjectId),
-            params: updateParams,
-          });
-
-          setConfirmDialog({
-            isOpen: true,
-            type: "success",
-            title: "บันทึกสำเร็จ",
-            text: "",
-            onConfirm: () => {},
-            showCancel: false,
-            autoClose: 1500,
-          });
-
-          setOriginalData(JSON.parse(JSON.stringify(tableData)));
-          setOnEdit(false);
-        } catch (error) {
-          console.error("Save error:", error);
-        }
-      },
-      showCancel: true,
-      autoClose: 0,
-    });
+  // max ต่อฟิลด์ (ใช้ clamp ตอน blur)
+  const MAX: Record<Field, number> = {
+    assignmentscore: 20,
+    collectScore: 10,
+    affectiveScore: 20,
+    midtermScore: 20,
+    finaltermScore: 30,
   };
+  const clampNum = (n: number, min: number, max: number) =>
+    Math.min(Math.max(n, min), max);
 
-  const handleInputChange = (
+  // onChange ระหว่างพิมพ์ → เก็บเป็น string ใน draft (ลบเลข 0 ได้)
+  const handleInputChangeDraft = (
     index: number,
-    field: keyof Pick<
-      GetGradBySubjectId,
-      | "assignmentscore"
-      | "collectScore"
-      | "affectiveScore"
-      | "midtermScore"
-      | "finaltermScore"
-    >,
+    field: Field,
     value: string
   ) => {
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setDraft((prev) => ({
+        ...prev,
+        [index]: { ...(prev[index] || {}), [field]: value },
+      }));
+    }
+  };
+
+  // commit ตัวเลขกลับเข้า tableData + คำนวณรวม/เกรด
+  const commitNumber = (idx: number, field: Field, n: number) => {
     const updated = [...tableData];
-    const numericValue = parseFloat(value) || 0;
-    updated[index][field] = numericValue;
+    const cur = updated[idx];
+    if (!cur) return;
 
-    const {
-      assignmentscore,
-      collectScore,
-      affectiveScore,
-      midtermScore,
-      finaltermScore,
-    } = updated[index];
-    const newTotalScore =
-      (field === "assignmentscore" ? numericValue : assignmentscore) +
-      (field === "collectScore" ? numericValue : collectScore) +
-      (field === "affectiveScore" ? numericValue : affectiveScore) +
-      (field === "midtermScore" ? numericValue : midtermScore) +
-      (field === "finaltermScore" ? numericValue : finaltermScore);
+    const clamped = clampNum(n, 0, MAX[field]);
+    (cur as any)[field] = clamped;
 
-    updated[index].totalScore = newTotalScore;
-    updated[index].finalGrade = calculateGrade(newTotalScore);
+    const newTotal =
+      (cur.assignmentscore || 0) +
+      (cur.collectScore || 0) +
+      (cur.affectiveScore || 0) +
+      (cur.midtermScore || 0) +
+      (cur.finaltermScore || 0);
+
+    cur.totalScore = newTotal;
+    cur.finalGrade = calculateGrade(newTotal);
+
     updated.sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
 
+  // onBlur → แปลง draft -> number, clamp, commit
+  const handleBlur = (
+    index: number,
+    field: Field,
+    min: number,
+    max: number,
+    commitNumberFn: (idx: number, field: Field, n: number) => void
+  ) => {
+    const v = draft[index]?.[field] ?? "";
+    const n = v === "" ? 0 : Number(v);
+    const clamped = Number.isNaN(n) ? 0 : clampNum(n, min, max);
+
+    // อัปเดต draft ให้สะอาด (ถ้าอยากให้ 0 กลายเป็น "" ก็เปลี่ยนตรงนี้ได้)
+    setDraft((prev) => ({
+      ...prev,
+      [index]: { ...(prev[index] || {}), [field]: String(clamped) },
+    }));
+
+    commitNumberFn(index, field, clamped);
+  };
+
+  // ค้นหา/กรอง
   const filteredData = tableData
     .filter((item) => {
       const fullName = `${item.firstName} ${item.lastName}`.toLowerCase();
@@ -309,22 +320,19 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     })
     .sort((a, b) => a.studentCode.localeCompare(b.studentCode));
 
+  // เปลี่ยนเกรด (จาก combobox) → เขียนลง finalGrade
   const onChangeGrade = (grade: string, studentId: number) => {
     const updated = tableData
-      .map((item) => {
-        if (
-          item.studentId === studentId &&
-          item.remarks &&
-          item.remarks.trim() !== ""
-        ) {
-          return { ...item, grade };
-        }
-        return item;
-      })
+      .map((item) =>
+        item.studentId === studentId
+          ? { ...item, finalGrade: Number(grade) }
+          : item
+      )
       .sort((a, b) => a.studentCode.localeCompare(b.studentCode));
     setTableData(updated);
   };
 
+  // เปลี่ยนหมายเหตุ
   const onChangeRemark = (remark: string, studentId: number) => {
     const updated = tableData
       .map((item) =>
@@ -334,11 +342,13 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     setTableData(updated);
   };
 
+  // เริ่มแก้ไข
   const handleEdit = () => {
     setOriginalData(JSON.parse(JSON.stringify(tableData)));
     setOnEdit(true);
   };
 
+  // ยกเลิกการแก้ไข
   const handleNotEdit = () => {
     setConfirmDialog({
       isOpen: true,
@@ -347,6 +357,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       text: "การเปลี่ยนแปลงทั้งหมดจะไม่ถูกบันทึก",
       onConfirm: () => {
         setTableData(originalData);
+        setDraft({}); // ล้าง draft ด้วย
         setOnEdit(false);
       },
       showCancel: true,
@@ -354,6 +365,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     });
   };
 
+  // ทำเครื่องหมายตรวจสอบเสร็จสิ้น
   const handleComplete = () => {
     setConfirmDialog({
       isOpen: true,
@@ -377,9 +389,62 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     });
   };
 
+  // บันทึกทั้งหมด
+  const handleConfirm = async () => {
+    setConfirmDialog({
+      isOpen: true,
+      type: "question",
+      title: "ยืนยันการบันทึกข้อมูล?",
+      text: "คุณต้องการบันทึกคะแนนทั้งหมดใช่หรือไม่",
+      onConfirm: async () => {
+        try {
+          const updateParams: BulkUpdateStudentGradeByScheduleSubjectIdRequest[] =
+            tableData.map((item) => ({
+              studentId: item.studentId,
+              assignmentScore: item.assignmentscore,
+              collectScore: item.collectScore,
+              affectiveScore: item.affectiveScore,
+              midtermScore: item.midtermScore,
+              finaltermScore: item.finaltermScore,
+              totalScore: item.totalScore,
+              finalGrade: Number(item.finalGrade ?? 0),
+              remarks: item.remarks || "",
+            }));
+
+          await bulkUpdateMutation.mutateAsync({
+            scheduleSubjectId: Number(props.schuduleSubjectId),
+            params: updateParams,
+          });
+
+          setConfirmDialog({
+            isOpen: true,
+            type: "success",
+            title: "บันทึกสำเร็จ",
+            text: "",
+            onConfirm: () => {},
+            showCancel: false,
+            autoClose: 1500,
+          });
+
+          setOriginalData(JSON.parse(JSON.stringify(tableData)));
+          setDraft({}); // ล้าง draft หลังบันทึก
+          setOnEdit(false);
+        } catch (error) {
+          console.error("Save error:", error);
+        }
+      },
+      showCancel: true,
+      autoClose: 0,
+    });
+  };
+
+  // สร้างคอลัมน์ (ส่ง draft + handlers ไปให้ columns)
   const columnDefs = createColumns({
     onEdit,
-    handleInputChange,
+    handleInputChange: handleInputChangeDraft, // ใช้ draft (string)
+    handleBlur, // clamp + commit
+    draft,
+    commitNumber,
     onChangeGrade,
     onChangeRemark,
   });
@@ -421,10 +486,10 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                   onClick={handleConfirm}
                   disabled={bulkUpdateMutation.isPending}
                 >
-                  {bulkUpdateMutation.isPending ? "กำลังบันทึก..." : "ยืนยัน"}
+                  {bulkUpdateMutation.isPending ? "กำลังบันทึก..." : "บันทึก"}
                 </button>
                 <button
-                  className="bg-red-500 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 hover:bg-red-600 transition-colors"
+                  className="bg-red-400 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 hover:bg-red-500 transition-colors"
                   onClick={handleNotEdit}
                 >
                   ยกเลิก <CircleX className="w-5 h-5" />
@@ -455,9 +520,15 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             <div className="relative inline-block">
               <button
                 onClick={() => setShowExport((prev) => !prev)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                className="bg-gray-500 text-white px-4 py-1.5 flex gap-2 items-center rounded-md hover:bg-gray-800 transition-colors"
               >
-                Export
+                <FileText className="text-white h-5 w-5" />
+                ดาวน์โหลดเอกสาร
+                <ChevronRight
+                  className={`text-white h-5 w-5 duration-300 ${
+                    showExport ? "rotate-90" : ""
+                  }`}
+                />
               </button>
 
               <AnimatePresence>
@@ -479,6 +550,8 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                         description: "",
                         isActive: true,
                       }}
+                      groupID={subjectData.groupId}
+                      scheduleSubjectID={Number(props.schuduleSubjectId)}
                       roomName={`${subjectData?.class}.${subjectData?.groupName}`}
                       term={subjectData?.term || "1"}
                       year={subjectData?.year?.toString() || "2568"}
@@ -493,10 +566,18 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         {/* Table */}
         <div className="px-4 pb-8">
           <StylesTable
-            icon={<ScrollText className="w-5 h-5 text-white" />}
+            icon={<ScrollText className="w-5 h-5 text-white hover:bg-white" />}
             title={`รายชื่อนักเรียนในห้อง ${subjectData.class}.${subjectData.groupName}`}
             data={filteredData}
-            columns={columnDefs}
+            columns={createColumns({
+              onEdit,
+              handleInputChange: handleInputChangeDraft,
+              handleBlur,
+              draft,
+              commitNumber,
+              onChangeGrade,
+              onChangeRemark,
+            })}
             pagination={filteredData.length}
           />
         </div>

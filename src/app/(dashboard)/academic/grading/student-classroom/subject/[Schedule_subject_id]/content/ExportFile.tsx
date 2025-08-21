@@ -1,20 +1,17 @@
 // === components/grad/ExportFile.tsx ===
 "use client";
 import React from "react";
-import StudentScoreInSubjectPDF from "@/lib/PDF/score/StudentScoreInSubject";
 import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
-import {
-  GetGradBySubjectId,
-  StudentGroupGradeResponse,
-  SubjectGradeItem,
-} from "@/dto/gradDto";
+import { GetGradBySubjectId, StudentGroupGradeResponse } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
 import { StudentNameListInSubject } from "@/dto/pdfDto";
+import { PDFStudentNamelistInGroupButton, PDFStudentScoreInSubjectPDF } from "@/components/PDF/PDFButton";
+import { getCurrentThaiTermYear } from "@/lib/utils";
 
 interface ExportFileProps {
   grads: GetGradBySubjectId[];
@@ -22,6 +19,8 @@ interface ExportFileProps {
   roomName: string;
   term: string;
   year: string;
+  scheduleSubjectID: number;
+  groupID : number;
 }
 
 export default function ExportFile({
@@ -30,6 +29,8 @@ export default function ExportFile({
   roomName,
   term,
   year,
+  scheduleSubjectID,
+  groupID
 }: ExportFileProps) {
   const convertGrad = grads.map((item) => {
     const prefix = item.gender === "Male" ? "นาย" : "นางสาว";
@@ -94,6 +95,7 @@ export default function ExportFile({
       })),
     };
   };
+  const {currentYear} = getCurrentThaiTermYear()
 
   // Convert grads data to StudentNameListInSubject format for PDF
   const convertToStudentNameList = (): StudentNameListInSubject => {
@@ -114,27 +116,9 @@ export default function ExportFile({
   };
 
   return (
-    <div className="flex flex-row flex-wrap gap-2">
-      <Button
-        className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
-        onClick={() =>
-          StudentScoreInSubjectPDF({
-            data: convertToStudentGroupGradeResponse(),
-          })
-        }
-      >
-        ดาวน์โหลดใบคะแนน PDF
-      </Button>
-      <Button
-        className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
-        onClick={() =>
-          StudentNameInSubject({
-            data: convertToStudentNameList(),
-          })
-        }
-      >
-        ดาวน์โหลดรายชื่อ PDF
-      </Button>
+    <div className="flex flex-row w-[250px] flex-wrap gap-2">
+      <PDFStudentScoreInSubjectPDF scheduleSubjectID={scheduleSubjectID} />
+      <PDFStudentNamelistInGroupButton groupID={groupID} year={currentYear} />
       <Button
         className="text-sm bg-[#e4f1f8] text-gray-600 hover:bg-gray-200 rounded-md px-4 py-2"
         onClick={() =>

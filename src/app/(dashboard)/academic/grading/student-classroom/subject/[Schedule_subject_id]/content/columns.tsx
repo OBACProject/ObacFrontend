@@ -1,51 +1,66 @@
+"use client";
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { GetGradBySubjectId } from "@/dto/gradDto";
 import { Column } from "@/components/common/MainTable/table_style_1";
 
+type Field =
+  | "assignmentscore"
+  | "collectScore"
+  | "affectiveScore"
+  | "midtermScore"
+  | "finaltermScore";
+
 export const createColumns = ({
   onEdit,
-  handleInputChange,
+  handleInputChange, // (index, field, value:string) => void  // อัปเดต draft (string)
+  handleBlur, // (index, field, min, max, commitNumber) => void // clamp + commit number
+  draft, // Record<number, Partial<Record<Field, string>>>
+  commitNumber, // (idx, field, n:number) => void
   onChangeGrade,
   onChangeRemark,
 }: {
   onEdit: boolean;
-  handleInputChange: (
+  handleInputChange: (index: number, field: Field, value: string) => void;
+  handleBlur: (
     index: number,
-    field: keyof Pick<
-      GetGradBySubjectId,
-      | "assignmentscore"
-      | "collectScore"
-      | "affectiveScore"
-      | "midtermScore"
-      | "finaltermScore"
-    >,
-    value: string
+    field: Field,
+    min: number,
+    max: number,
+    commitNumber: (idx: number, field: Field, n: number) => void
   ) => void;
+  draft: Record<number, Partial<Record<Field, string>>>;
+  commitNumber: (idx: number, field: Field, n: number) => void;
   onChangeGrade: (grade: string, studentId: number) => void;
   onChangeRemark: (remark: string, studentId: number) => void;
 }): Column<GetGradBySubjectId>[] => {
   const gradeOptions = ["0", "1", "1.5", "2", "2.5", "3", "3.5", "4"];
-  const remarkOptions = ["", "ผ.", "มผ.", "ขส.", "ขร.", "มส."]; // Added empty option
+  const remarkOptions = ["", "ผ.", "มผ.", "ขส.", "ขร.", "มส."];
 
-  const calculateGradeFromScore = (totalScore: number): string => {
-    if (totalScore >= 80) return "4";
-    if (totalScore >= 75) return "3.5";
-    if (totalScore >= 70) return "3";
-    if (totalScore >= 65) return "2.5";
-    if (totalScore >= 60) return "2";
-    if (totalScore >= 55) return "1.5";
-    if (totalScore >= 50) return "1";
-    return "0";
+  const valueOf = (
+    row: GetGradBySubjectId,
+    idx: number,
+    field: Field
+  ): string => {
+    // ใช้ draft ระหว่างพิมพ์; ถ้าไม่มี draft ให้ Fallback เป็นค่าจาก row (แปลงเป็น string)
+    const inDraft = draft[idx]?.[field];
+    if (inDraft !== undefined) return inDraft;
+    const raw = (row as any)[field];
+    return raw === null || raw === undefined ? "" : String(raw);
   };
 
   const getGradeColor = (grade: string): string => {
-    console.log("Grade:", grade);
     switch (grade) {
       case "0":
-        return "bg-red-400 text-white";
+        return "bg-red-100 text-red-700";
       default:
-        return "bg-blue-200 text-blue-900";
+        return "bg-green-100 text-green-800";
     }
+  };
+
+  const idxOf = (row: GetGradBySubjectId) => {
+    const n =
+      typeof row.index === "number" ? row.index : Number(row.index ?? 1);
+    return (Number.isFinite(n) ? n : 1) - 1;
   };
 
   return [
@@ -54,11 +69,7 @@ export const createColumns = ({
       className: "w-1/12 flex justify-center text-sm",
       render: (row) => `${row.index}`,
     },
-    {
-      label: "รหัสนักเรียน",
-      key: "studentCode",
-      className: "w-1/12 text-sm",
-    },
+    { label: "รหัสนักเรียน", key: "studentCode", className: "w-1/12 text-sm" },
     {
       label: "ชื่อ - นามสกุล",
       className: "w-3/12 text-sm",
@@ -68,136 +79,151 @@ export const createColumns = ({
         </span>
       ),
     },
+
+    // จิตพิสัย (20)
     {
       label: "คะแนนจิตพิสัย (20)",
-      className: "w-1/12 text-sm",
+      className: "w-1/12 bg-blue-50 text-sm",
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
             type="number"
+            inputMode="decimal"
+            step="any"
             min={0}
             max={20}
-            value={row.affectiveScore}
-            className="text-center w-full border px-2 py-1 "
+            value={valueOf(row, idxOf(row), "affectiveScore")}
+            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
             onChange={(e) =>
-              handleInputChange(
-                row.index !== undefined ? Number(row.index) - 1 : 0,
-                "affectiveScore",
-                e.target.value
-              )
+              handleInputChange(idxOf(row), "affectiveScore", e.target.value)
+            }
+            onBlur={() =>
+              handleBlur(idxOf(row), "affectiveScore", 0, 20, commitNumber)
             }
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1 ">
+          <div className="text-center w-full px-2 py-1 ">
             {row.affectiveScore}
           </div>
         ),
     },
+
+    // ทดสอบ (10)
     {
       label: "คะแนนทดสอบ (10)",
-      className: "w-1/12 text-sm",
+      className: "w-1/12 bg-blue-50 text-sm",
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
             type="number"
+            inputMode="decimal"
+            step="any"
             min={0}
             max={10}
-            value={row.collectScore}
-            className="text-center w-full border px-2 py-1 "
+            value={valueOf(row, idxOf(row), "collectScore")}
+            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
             onChange={(e) =>
-              handleInputChange(
-                row.index !== undefined ? Number(row.index) - 1 : 0,
-                "collectScore",
-                e.target.value
-              )
+              handleInputChange(idxOf(row), "collectScore", e.target.value)
+            }
+            onBlur={() =>
+              handleBlur(idxOf(row), "collectScore", 0, 10, commitNumber)
             }
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1">
-            {row.collectScore}
-          </div>
+          <div className="text-center w-full px-2 py-1">{row.collectScore}</div>
         ),
     },
+
+    // ภาระงาน (20)
     {
-      label: "ภารระงาน (20)",
-      className: "w-1/12 text-sm",
+      label: "ภาระงาน (20)",
+      className: "w-1/12 bg-blue-50 text-sm",
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
             type="number"
+            inputMode="decimal"
+            step="any"
             min={0}
             max={20}
-            value={row.assignmentscore}
-            className="text-center w-full border px-2 py-1 "
+            value={valueOf(row, idxOf(row), "assignmentscore")}
+            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
             onChange={(e) =>
-              handleInputChange(
-                row.index !== undefined ? Number(row.index) - 1 : 0,
-                "assignmentscore",
-                e.target.value
-              )
+              handleInputChange(idxOf(row), "assignmentscore", e.target.value)
+            }
+            onBlur={() =>
+              handleBlur(idxOf(row), "assignmentscore", 0, 20, commitNumber)
             }
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1">
+          <div className="text-center w-full px-2 py-1">
             {row.assignmentscore}
           </div>
         ),
     },
+
+    // กลางภาค (20)
     {
-      label: "ตะแนนกลางภาค (20)",
-      className: "w-1/12 text-sm",
+      label: "คะแนนกลางภาค (20)",
+      className: "w-1/12 bg-blue-50 text-sm",
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
             type="number"
+            inputMode="decimal"
+            step="any"
             min={0}
             max={20}
-            value={row.midtermScore}
-            className="text-center w-full border px-2 py-1 "
+            value={valueOf(row, idxOf(row), "midtermScore")}
+            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
             onChange={(e) =>
-              handleInputChange(
-                row.index !== undefined ? Number(row.index) - 1 : 0,
-                "midtermScore",
-                e.target.value
-              )
+              handleInputChange(idxOf(row), "midtermScore", e.target.value)
+            }
+            onBlur={() =>
+              handleBlur(idxOf(row), "midtermScore", 0, 20, commitNumber)
             }
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1 ">
+          <div className="text-center w-full px-2 py-1 ">
             {row.midtermScore}
           </div>
         ),
     },
+
+    // ปลายภาค (30)
     {
       label: "คะแนนปลายภาค (30)",
-      className: "w-1/12 text-sm",
+      className: "w-1/12 bg-blue-50 text-sm",
       render: (row) =>
         onEdit && !row.remarks ? (
           <input
             type="number"
+            inputMode="decimal"
+            step="any"
             min={0}
             max={30}
-            value={row.finaltermScore}
-            className="text-center w-full border px-2 py-1"
+            value={valueOf(row, idxOf(row), "finaltermScore")}
+            className="text-center bg-blue-50 rounded-sm w-full px-2 py-1"
             onChange={(e) =>
-              handleInputChange(
-                row.index !== undefined ? Number(row.index) - 1 : 0,
-                "finaltermScore",
-                e.target.value
-              )
+              handleInputChange(idxOf(row), "finaltermScore", e.target.value)
+            }
+            onBlur={() =>
+              handleBlur(idxOf(row), "finaltermScore", 0, 30, commitNumber)
             }
           />
         ) : (
-          <div className="text-center w-full border px-2 py-1">
+          <div className="text-center w-full px-2 py-1">
             {row.finaltermScore}
           </div>
         ),
     },
+
+    // รวม / เกรด / หมายเหตุ เหมือนเดิม…
     {
       label: "รวม (100)",
       className: "w-1/12 text-sm",
       render: (row) => (
-        <div className="text-center w-full border px-2 py-1 font-semibold bg-blue-50">
+        <div className="text-center text-blue-700 w-full rounded-sm px-2 py-1 font-semibold ">
           {row.totalScore}
         </div>
       ),
@@ -206,43 +232,61 @@ export const createColumns = ({
       label: "เกรด",
       className: "w-1/12 flex justify-center text-sm",
       render: (row) => {
-                const hasRemark = row.remarks && row.remarks.trim() !== "";
-                const calculatedGrade = calculateGradeFromScore(row.totalScore);
-                let gradeColor;
-                if (row.finalGrade !== null && row.finalGrade !== undefined) {
-                  gradeColor = getGradeColor(String(row.finalGrade));
-                } else {
-                  gradeColor = getGradeColor(calculatedGrade || String(row.finalGrade));
-                }
+        const calculateGradeFromScore = (total: number): string =>
+          total >= 80
+            ? "4"
+            : total >= 75
+            ? "3.5"
+            : total >= 70
+            ? "3"
+            : total >= 65
+            ? "2.5"
+            : total >= 60
+            ? "2"
+            : total >= 55
+            ? "1.5"
+            : total >= 50
+            ? "1"
+            : "0";
+
+        const hasRemark = row.remarks && row.remarks.trim() !== "";
+        const calculatedGrade = calculateGradeFromScore(row.totalScore);
+        const gradeColor =
+          row.finalGrade != null
+            ? getGradeColor(String(row.finalGrade))
+            : getGradeColor(calculatedGrade);
+
         if (hasRemark) {
           return (
-            <div className="text-center w-full border px-2 py-1 rounded font-semibold text-blue-800">
+            <div className="text-center w-full  px-2 py-1 rounded font-semibold text-blue-800">
               {row.remarks}
             </div>
           );
         }
-        // If there's a finalGrade and no remark, show finalGrade (editable if onEdit is true)
+
         if (row.finalGrade && !hasRemark) {
           return onEdit ? (
             <Combobox
               disabled={!onEdit}
               buttonLabel="เกรด"
-              options={gradeOptions.map((g) => ({ label: g, value: g }))}
+              options={["0", "1", "1.5", "2", "2.5", "3", "3.5", "4"].map(
+                (g) => ({ label: g, value: g })
+              )}
               onSelect={(val) => onChangeGrade(val, row.studentId)}
               defaultValue={String(row.finalGrade)}
             />
           ) : (
             <div
-              className={`text-center w-full border px-2 py-1 rounded ${gradeColor}`}
+              className={`text-center w-full  px-2 py-1 rounded ${gradeColor}`}
             >
               {row.finalGrade}
             </div>
           );
         }
-        // Fallback to calculated grade from totalScore
+
         return (
           <div
-            className={`text-center w-full border px-2 py-1 rounded font-semibold ${gradeColor}`}
+            className={`text-center w-full px-2 py-1 rounded font-semibold ${gradeColor}`}
             title={`คำนวณอัตโนมัติจากคะแนนรวม ${row.totalScore}`}
           >
             {calculatedGrade}
@@ -258,15 +302,12 @@ export const createColumns = ({
           <Combobox
             disabled={!onEdit}
             buttonLabel="หมายเหตุ"
-            options={remarkOptions.map((r) => ({ 
-              label: r || "-", 
-              value: r 
-            }))}
+            options={remarkOptions.map((r) => ({ label: r || "-", value: r }))}
             onSelect={(val) => onChangeRemark(val, row.studentId)}
             defaultValue={row.remarks || ""}
           />
         ) : (
-          <div className="text-center w-full border h-6 px-2">
+          <div className="text-center w-full  h-6 px-2">
             {row.remarks || ""}
           </div>
         ),
