@@ -3,7 +3,7 @@ import {
   convertGradBySubjectId,
 } from "@/dto/gradDto";
 import { StudentItems } from "@/dto/studentDto";
-import { GeneralData, StudentList } from "./generateExcelFile";
+import { GeneralData, StudentListExcel } from "./generateExcelFile";
 
 export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
   {
@@ -201,7 +201,7 @@ export const mockGeneralData: GeneralData = {
   year: 2567,
 };
 
-export const mockStudentList: StudentList[] = [
+export const mockStudentList: StudentListExcel[] = [
   {
     studentId: 1001,
     studentCode: "65010001",

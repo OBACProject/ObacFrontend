@@ -9,8 +9,13 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
-import { GetGroupSummaryGradeRequest } from "@/lib/api/models/grade/grade.request";
+import { GetGroupSummaryGradeRequest,  } from "@/lib/api/models/grade/grade.request";
 import { useGetGroupSummaryGradeQuery } from "@/lib/api/hooks/queries/grade.queries";
+import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response";
+import { GroupSummaryGradeResponse, SubjectNameList, StudentList, Grad } from "@/dto/gradingDto";
+import GroupSummaryGradPDF from "@/lib/PDF/score/GroupSummaryGrade";
+import { ConvertClassroomGradingToExcel, GeneralData, StudentListExcel } from "@/lib/Excel/generateExcelFile";
+
 
 interface ClassroomTable {
   class: string;
@@ -68,9 +73,10 @@ export function ClassroomGrading() {
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
-
   const [searchInput, setSearchInput] = useState<string>("");
-
+  
+  const [downloadingGroupId, setDownloadingGroupId] = useState<number | null>(null);
+  const [downloadingExcelGroupId, setDownloadingExcelGroupId] = useState<number | null>(null);
   const {
     data: apiData,
     isLoading,
@@ -80,6 +86,168 @@ export function ClassroomGrading() {
     term: selectedTerm,
     year: Number(selectedYear),
   });
+
+  const gradeSummaryParams: GetGroupSummaryGradeRequest | null =
+    (downloadingGroupId !== null
+      ? {
+          groupId: downloadingGroupId,
+          term: selectedTerm,
+          year: Number(selectedYear),
+        }
+      : downloadingExcelGroupId !== null
+      ? {
+          groupId: downloadingExcelGroupId,
+          term: selectedTerm,
+          year: Number(selectedYear),
+        }
+      : null);
+
+  const {
+    data: gradeSummaryData,
+    isLoading: isLoadingGradeSummary,
+  } = useGetGroupSummaryGradeQuery(
+    gradeSummaryParams || { groupId: 0, term: "", year: 0 },
+    {
+      enabled: !!gradeSummaryParams, 
+    }
+  );
+
+  const transformGradeData = (data: GetGroupSummaryGradeResponse): GroupSummaryGradeResponse => {
+    const subjectsMap = new Map<string, SubjectNameList>();
+    let subjectIdCounter = 1;
+
+    data.students.forEach(student => {
+      student.subject.forEach(subject => {
+        if (!subjectsMap.has(subject.subjectCode)) {
+          subjectsMap.set(subject.subjectCode, {
+            subjectID: subjectIdCounter++,
+            subjectCode: subject.subjectCode,
+            subjectName: subject.subjectName
+          });
+        }
+      });
+    });
+
+    const subjectsArray = Array.from(subjectsMap.values());
+
+    const transformedStudents: StudentList[] = data.students
+      .filter(student => student.isActive) 
+      .map(student => {
+        const grads: Grad[] = subjectsArray.map(subject => {
+          const studentSubject = student.subject.find(s => s.subjectCode === subject.subjectCode);
+          if (studentSubject) {
+            let gradeNumber = 0;
+            if (!isNaN(parseFloat(studentSubject.grade))) {
+              gradeNumber = parseFloat(studentSubject.grade);
+            }
+            
+            return {
+              grad: gradeNumber,
+              remark: studentSubject.remark || ""
+            };
+          }
+          return {
+            grad: 0,
+            remark: "-"
+          };
+        });
+
+        return {
+          studentId: student.studentId,
+          prefix: student.prefix || "",
+          studentCode: student.studentCode,
+          studentFirstName: student.firstName,
+          studentLastName: student.lastName,
+          gpa: student.gpa || 0,
+          gpax: student.gpax || 0,
+          totalCredit: student.totalCredit || 0,
+          grads: grads
+        };
+      });
+
+    return {
+      groupId: data.groupId,
+      groupName: data.groupName,
+      groupCode: data.groupCode,
+      class: data.class,
+      facultyName: data.facultyName,
+      programName: data.programName,
+      term: data.term,
+      year: data.year,
+      student: transformedStudents,
+      subjects: subjectsArray
+    };
+  };
+
+const transformedDataExcel = (
+  data: GetGroupSummaryGradeResponse
+): { general: GeneralData; studentListExcel: StudentListExcel[] } => {
+  const general: GeneralData = {
+    groupId: data.groupId,
+    groupName: data.groupName,
+    groupCode: data.groupCode,
+    class: data.class,
+    facultyName: data.facultyName,
+    programName: data.programName,
+    term: data.term,
+    year: data.year,
+  };
+
+  const subjectCodes = new Set<string>();
+  data.students.forEach((student) => {
+    student.subject.forEach((subj) => subjectCodes.add(subj.subjectName));
+  });
+
+  const studentListExcel: StudentListExcel[] = data.students
+    .filter((s) => s.isActive)
+    .map((student) => {
+      const subjectsRecord: Record<string, string> = {};
+      subjectCodes.forEach((code) => {
+        const subj = student.subject.find((s) => s.subjectCode === code);
+        subjectsRecord[code] = subj ? subj.grade : "-";
+      });
+
+      return {
+        studentId: student.studentId,
+        studentCode: student.studentCode,
+        name: `${student.prefix ?? ""}${student.firstName} ${student.lastName}`,
+        gpa: student.gpa ?? 0,
+        gpax: student.gpax ?? 0,
+        totalCredit: student.totalCredit ?? 0,
+        subjects: subjectsRecord,
+      };
+    });
+
+  return { general, studentListExcel };
+};
+
+  useEffect(() => {
+    if (downloadingGroupId && gradeSummaryData && !isLoadingGradeSummary) {
+      try {
+        console.log("Raw API data:", gradeSummaryData);
+        const transformedData = transformGradeData(gradeSummaryData);
+        console.log("Transformed data for PDF:", transformedData);
+        
+        GroupSummaryGradPDF({ data: transformedData });
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        console.error("Error details:", error);
+      } finally {
+        setDownloadingGroupId(null);
+        setTriggerDownLoadPDF(false);
+      }
+    } else if (downloadingExcelGroupId && gradeSummaryData && !isLoadingGradeSummary) {
+  try {
+    const { general, studentListExcel } = transformedDataExcel(gradeSummaryData);
+      console.log(general, studentListExcel);
+      ConvertClassroomGradingToExcel( general, studentListExcel );
+    } catch (error) {
+      console.error("Error generating Excel:", error);
+    } finally {
+      setDownloadingExcelGroupId(null);
+    }
+  }
+    }, [downloadingGroupId, downloadingExcelGroupId, gradeSummaryData, isLoadingGradeSummary]);
 
   useEffect(() => {
     refetch();
@@ -98,18 +266,16 @@ export function ClassroomGrading() {
       groupCode: item.groupCode,
     }));
   }, [apiData]);
-  // const handleDownloadPDF = (groupId: number) => {
-  //   const paramsSummary: GetGroupSummaryGradeRequest = { groupId , selectedTerm ,selectedYear};
 
-  //   const {data } = useGetGroupSummaryGradeQuery(paramsSummary)
-  //   // get data from groupId
+  const handleDownloadPDF = (groupId: number) => {
+    setTriggerDownLoadPDF(true);
+    setDownloadingGroupId(groupId);
+  };
 
-  //   // set to use a PDF export Library
-  // };
+  const handleDownloadExcel = (groupId: number) => {
+    setDownloadingExcelGroupId(groupId);
+  };
 
-  const clearFilters = useCallback(() => {
-    setSearchInput("");
-  }, []);
 
   const filteredData = useMemo(() => {
     if (
@@ -148,30 +314,30 @@ export function ClassroomGrading() {
   ]);
 
   const tableData = useMemo(() => {
-  const sorted = [...filteredData].sort((a, b) => {
-    const parseClass = (cls: string) => {
-      // Example: "ปวช 1/10" or "ปวส 2/5"
-      const levelOrder = cls.startsWith("ปวช") ? 1 : 2; 
-      const match = cls.match(/(\d+)\/(\d+)/);
-      if (!match) return [levelOrder, 0, 0];
-      const year = parseInt(match[1], 10);
-      const section = parseInt(match[2], 10);
-      return [levelOrder, year, section];
-    };
+    const sorted = [...filteredData].sort((a, b) => {
+      const parseClass = (cls: string) => {
+        // Example: "ปวช 1/10" or "ปวส 2/5"
+        const levelOrder = cls.startsWith("ปวช") ? 1 : 2; 
+        const match = cls.match(/(\d+)\/(\d+)/);
+        if (!match) return [levelOrder, 0, 0];
+        const year = parseInt(match[1], 10);
+        const section = parseInt(match[2], 10);
+        return [levelOrder, year, section];
+      };
 
-    const [levelA, yearA, sectionA] = parseClass(a.class);
-    const [levelB, yearB, sectionB] = parseClass(b.class);
+      const [levelA, yearA, sectionA] = parseClass(a.class);
+      const [levelB, yearB, sectionB] = parseClass(b.class);
 
-    if (levelA !== levelB) return levelA - levelB;
-    if (yearA !== yearB) return yearA - yearB;
-    return sectionA - sectionB;
-  });
+      if (levelA !== levelB) return levelA - levelB;
+      if (yearA !== yearB) return yearA - yearB;
+      return sectionA - sectionB;
+    });
 
-  return sorted.map((item, index) => ({
-    ...item,
-    index: index + 1,
-  }));
-}, [filteredData]);
+    return sorted.map((item, index) => ({
+      ...item,
+      index: index + 1,
+    }));
+  }, [filteredData]);
 
   const onRowClick = useCallback(
     (item: ClassroomTable) => {
@@ -181,8 +347,6 @@ export function ClassroomGrading() {
     },
     [router, selectedTerm, selectedYear]
   );
-
-  // const handleDownloadExcel = async () => {};
 
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
@@ -207,27 +371,36 @@ export function ClassroomGrading() {
           <button
             className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
-              // handleDownloadPDF(Number(row.groupId));
+              handleDownloadPDF(Number(row.groupId));
               e.stopPropagation();
             }}
+            disabled={downloadingGroupId === row.groupId}
           >
-            {!triggerDownLoadPDF ? (
-              <p>ใบออกเกรด PDF</p>
-            ) : (
+            {downloadingGroupId === row.groupId ? (
               <p className="flex gap-1 items-center">
                 <Loader2 className="h-5 w-5 animate-spin" />
                 กำลังดาวโหลด
               </p>
+            ) : (
+              <p>ใบออกเกรด PDF</p>
             )}
           </button>
           <button
             className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
-              // handleDownloadExcel(Number(row.groupId), row.class);
+              handleDownloadExcel(Number(row.groupId));
               e.stopPropagation();
             }}
+            disabled={downloadingExcelGroupId === row.groupId}
           >
-            <p>ใบออกเกรดExcel</p>
+            {downloadingExcelGroupId === row.groupId ? (
+              <p className="flex gap-1 items-center">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                กำลังดาวโหลด
+              </p>
+            ) : (
+              <p>ใบออกเกรดExcel</p>
+            )}
           </button>
         </div>
       ),

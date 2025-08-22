@@ -148,7 +148,7 @@ export function StudentPopup({
       }
 
       setRemark(subjects.remark || "");
-      setReceiptNo(subjects.receiptNo || ""); // Initialize receiptNo
+      setReceiptNo(subjects.receiptNo || ""); 
 
       if (studentDetailData && subjects.subject_name) {
         const matchingSubject = studentDetailData.termYearGradeGroups

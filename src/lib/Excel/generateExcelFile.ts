@@ -17,7 +17,7 @@ export interface GeneralData {
   year: number;
 }
 
-export interface StudentList {
+export interface StudentListExcel {
   studentId: number;
   studentCode: string;
   name: string;
@@ -296,7 +296,7 @@ export async function ConvertClassroomToExcelWithSubject(
 
 export async function ConvertClassroomGradingToExcel(
   generalData: GeneralData,
-  studentList: StudentList[]
+  StudentListExcel: StudentListExcel[]
 ) {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Grading Sheet");
@@ -314,7 +314,7 @@ export async function ConvertClassroomGradingToExcel(
   classCell.font = { size: 12, bold: true };
 
   const uniqueSubjects = Array.from(
-    new Set(studentList.flatMap((student) => Object.keys(student.subjects)))
+    new Set(StudentListExcel.flatMap((student) => Object.keys(student.subjects)))
   );
 
   // const headerRow = worksheet.addRow([
@@ -356,7 +356,7 @@ export async function ConvertClassroomGradingToExcel(
     { key: "gpax", width: 12 },
   ];
 
-  studentList.forEach((student, index) => {
+  StudentListExcel.forEach((student, index) => {
     const rowData = [
       index + 1,
       student.studentCode,
