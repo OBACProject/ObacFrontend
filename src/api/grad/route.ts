@@ -5,6 +5,7 @@ import {
   StudentGroupGrade,
   StudentGroupGradeResponse,
   StudentGroupGrades,
+  StudentInfo,
 } from "@/dto/gradDto";
 import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
@@ -140,6 +141,25 @@ export const GetStudentIfGradeBelow = async (
       data: GradBelowResponse[];
     }>(
       `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&term=${term}&year=${year}`
+    );
+    return response.data.data ?? [];
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
+export const GetStudentIfGradeAbove = async (
+  groupID: number,
+  grade: number
+): Promise<StudentInfo[]> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: StudentInfo[];
+    }>(
+      `Grade/GetStudentIfGradeAbove?studentGroupId=${groupID}&gradeThreshold=${grade}`
     );
     return response.data.data ?? [];
   } catch (err) {

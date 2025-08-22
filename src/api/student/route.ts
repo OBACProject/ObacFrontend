@@ -42,7 +42,9 @@ export const GetStudentByStudentId = async (
   }
 };
 
-export const GetAllStudentsUser = async (): Promise<GetAllStudentUser[] | []> => {
+export const GetAllStudentsUser = async (): Promise<
+  GetAllStudentUser[] | []
+> => {
   try {
     const response = await apiClient.get("Admin/GetAllStudentUsers");
     console.log("📦 Response from API:", response.data);
@@ -56,16 +58,14 @@ export const GetAllStudentsUser = async (): Promise<GetAllStudentUser[] | []> =>
   }
 };
 
-export const GetAllStudentsPaged = async (
-  {
-    pageNumber = 1,
-    pageSize = 10,
-    searchTerm = "",
-    searchCategory = "all",
-    sortBy = "studentCode",
-    ascending = true,
-  }: GetAllStudentsPagedParams = {}
-): Promise<GetAllStudentsPagedResponse> => {
+export const GetAllStudentsPaged = async ({
+  pageNumber = 1,
+  pageSize = 10,
+  searchTerm = "",
+  searchCategory = "all",
+  sortBy = "studentCode",
+  ascending = true,
+}: GetAllStudentsPagedParams = {}): Promise<GetAllStudentsPagedResponse> => {
   try {
     const res = await apiClient.get("/Student/GetAllStudents", {
       params: {
@@ -87,7 +87,7 @@ export const GetAllStudentsPaged = async (
       class: String(r.class ?? ""),
       groupName: String(r.groupName ?? ""),
       groupCode: String(r.groupCode ?? ""),
-      id: String(r.userId ?? r.id ?? ""),      
+      id: String(r.userId ?? r.id ?? ""),
       userName: String(r.userName ?? r.username ?? ""),
       prefix: String(r.prefix ?? ""),
       firstName: String(r.firstName ?? r.name ?? ""),
@@ -180,7 +180,7 @@ export const CreateStudent = async (
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("User/CreateStudent", payload);
-    return [200, 201, 204].includes(response.status) 
+    return [200, 201, 204].includes(response.status);
   } catch (err: any) {
     console.error("Error creating academic:", err);
     return false;
