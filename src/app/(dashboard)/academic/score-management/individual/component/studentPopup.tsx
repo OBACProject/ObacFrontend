@@ -254,16 +254,7 @@ export function StudentPopup({
           totalScore: totalScore,
           receiptNo: receiptNo,
         };
-        await Swal.fire({
-          title: "ตรวจสอบ Payload",
-          html: `<pre style="text-align:left;">${JSON.stringify(
-            payload,
-            null,
-            2
-          )}</pre>`,
-          icon: "info",
-          confirmButtonText: "ดำเนินการต่อ",
-        });
+
         updateGradeMutation.mutate(payload);
       }
     } catch (error) {
