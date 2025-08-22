@@ -136,7 +136,7 @@ export default function Main() {
 
                 <div>
                   <div
-                    className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_10%_15%_15%] bg-gray-200 rounded-t-md
+                    className="grid shadow-lg h-fit grid-cols-[10%_10%_30%_10%_15%_15%_10%] bg-gray-200 rounded-t-md
                    text-gray-700   text-lg"
                   >
                     <div className="py-1 text-lg text-center">ลำดับ</div>
@@ -151,37 +151,90 @@ export default function Main() {
                     <div className="py-1 text-lg text-center">
                       เลขที่ใบเสร็จ
                     </div>
+                    <div></div>
                   </div>
-                  {students.map((item, index) => (
-                    <div
-                      onClick={() => {
-                        handleStudentName(Number(item.studentCode));
-                      }}
-                      key={index}
-                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_10%_15%_15%] shadow-md"
-                    >
-                      <div className="text-center py-1 border-r border-gray-400">
-                        {index + 1}
+                  {students.map((item, index) => {
+                    const receipts = Array.isArray(item.receipts)
+                      ? item.receipts
+                      : item.receipts && typeof item.receipts === "object"
+                      ? Object.values(item.receipts as any)
+                      : [];
+                    const hasReceipts = receipts.length > 0;
+                    return (
+                      <div
+                        key={index}
+                        className="border border-t-0 border-gray-300 hover:bg-red-100
+                       bg-white text-black grid h-fit  grid-cols-[10%_10%_15%_15%_10%_15%_15%_10%] shadow-md"
+                      >
+                        <div className="text-center py-1 border-r border-gray-400">
+                          {index + 1}
+                        </div>
+                        <div className="text-center py-1 border-r border-gray-400">
+                          {item.studentCode}
+                        </div>
+                        <div className="text-start py-1 pl-8">
+                          {item.prefix}&nbsp;
+                          {item.firstName}
+                        </div>
+                        <div className="text-start py-1 border-r border-gray-400">
+                          {item.lastName}
+                        </div>
+                        <div className="text-center border-r border-gray-400 py-1">
+                          {item.class}.{item.groupName}
+                        </div>
+                        <div className="text-center border-r border-gray-400 py-1">
+                          {item.gpax.toFixed(2)}
+                        </div>
+                        <div className="flex justify-center items-center py-1">
+                          <select
+                            className={`border px-3 rounded-md py-1 min-w-32
+            ${
+              hasReceipts
+                ? "text-green-600 focus:ring-green-400"
+                : "text-blue-600 focus:ring-blue-400"
+            }
+            focus:outline-none focus:ring-2`}
+                            defaultValue={hasReceipts ? "__has__" : "__none__"}
+                          >
+                            {hasReceipts ? (
+                              <>
+                                <option value="__has__" disabled>
+                                  มีใบเสร็จ ({receipts.length})
+                                </option>
+                                {receipts.map((r: any, i: number) => (
+                                  <option
+                                    key={`${item.studentId ?? index}-${
+                                      r?.receiptNo ?? i
+                                    }`}
+                                    value={r?.receiptNo ?? ""}
+                                  >
+                                    {r?.receiptNo ?? "—"}
+                                    {r?.subjectName
+                                      ? ` - ${r.subjectName}`
+                                      : ""}
+                                  </option>
+                                ))}
+                              </>
+                            ) : (
+                              <option value="__none__" disabled>
+                                ไม่มีใบเสร็จ
+                              </option>
+                            )}
+                          </select>
+                        </div>
+                        <div
+                          className="flex items-center justify-center  border-l border-gray-400"
+                          onClick={() => {
+                            handleStudentName(Number(item.studentCode));
+                          }}
+                        >
+                          <button className="py-0.5 px-4 bg-gray-500 h-fit text-white hover:bg-gray-700  rounded-md">
+                            รายละเอียด
+                          </button>
+                        </div>
                       </div>
-                      <div className="text-center py-1 border-r border-gray-400">
-                        {item.studentCode}
-                      </div>
-                      <div className="text-start py-1 pl-8">
-                        {item.prefix}&nbsp;
-                        {item.firstName}
-                      </div>
-                      <div className="text-start py-1 border-r border-gray-400">
-                        {item.lastName}
-                      </div>
-                      <div className="text-center border-r border-gray-400 py-1">
-                        {item.class}.{item.groupName}
-                      </div>
-                      <div className="text-center border-r border-gray-400 py-1">
-                        {item.gpax.toFixed(2)}
-                      </div>
-                      <div className="text-center  py-1">-</div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ) : (

@@ -1,11 +1,11 @@
 import {
   BulkUpdateStudentGradeResponse,
   GradBelowResponse,
+  GroupStudentsResponse,
   StudentGradesResponse,
   StudentGroupGrade,
   StudentGroupGradeResponse,
   StudentGroupGrades,
-  StudentInfo,
 } from "@/dto/gradDto";
 import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
@@ -179,27 +179,56 @@ export const GetStudentIfGradeBelow = async (
 export const GetStudentIfGradeAbove = async (
   groupID: number,
   grade: number
-): Promise<StudentInfo[]> => {
+): Promise<GroupStudentsResponse> => {
   try {
     const response = await apiClient.get<{
       responseCode: string;
       responseMessage: string;
-      data: StudentInfo[];
+      data: GroupStudentsResponse;
     }>(
       `Grade/GetStudentIfGradeAbove?studentGroupId=${groupID}&gradeThreshold=${grade}`
     );
 
-    const list = response.data.data ?? [];
-    const sorted = [...list].sort((a, b) =>
+    const data = response.data.data;
+
+    if (!data) {
+      return {
+        groupName: "",
+        groupCode: "",
+        class: "",
+        level: 0,
+        programId: 0,
+        facultyName: "",
+        programName: "",
+        subProgramName: "",
+        term: "",
+        year: 0,
+        students: [],
+      };
+    }
+
+    const sortedStudents = [...(data.students ?? [])].sort((a, b) =>
       (a.studentCode ?? "").localeCompare(b.studentCode ?? "", "en", {
         numeric: true,
         sensitivity: "base",
       })
     );
 
-    return sorted;
+    return { ...data, students: sortedStudents };
   } catch (err) {
-    console.log(err);
-    return [];
+    console.log("GetStudentIfGradeAbove error:", err);
+    return {
+      groupName: "",
+      groupCode: "",
+      class: "",
+      level: 0,
+      programId: 0,
+      facultyName: "",
+      programName: "",
+      subProgramName: "",
+      term: "",
+      year: 0,
+      students: [],
+    };
   }
 };

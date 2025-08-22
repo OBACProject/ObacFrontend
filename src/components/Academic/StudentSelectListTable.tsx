@@ -1,9 +1,9 @@
 "use client";
-import { StudentInfo } from "@/dto/gradDto";
+import { StudentInGroup } from "@/dto/gradDto";
 import React, { useState, useEffect } from "react";
 
 interface StudentListTableProps {
-  students: StudentInfo[];
+  students: StudentInGroup[];
   onSelectedIdsChange?: (selectedIds: number[]) => void;
 }
 
