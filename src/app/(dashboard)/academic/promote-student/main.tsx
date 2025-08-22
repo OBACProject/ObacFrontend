@@ -8,118 +8,25 @@ import GroupSelector, {
 import GradeFilter from "@/components/Academic/GradeFilter";
 import ConfirmPromoteModal from "@/components/Academic/ConfirmPromoteModal";
 import { ArrowUpDown } from "lucide-react";
-import { StudentGroupItem } from "@/dto/studentGroupItem";
-import { GetGropGradeAboveModel } from "@/dto/gradDto";
+import {
+  StudentGroupItem,
+  UpdateStudentGroupBody,
+} from "@/dto/studentGroupItem";
+import { GetGropGradeAboveModel, StudentInfo } from "@/dto/gradDto";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import StudentSelectListTable from "@/components/Academic/StudentSelectListTable";
-import { getCurrentThaiTermYear, sortStudentGroupItems } from "@/lib/utils";
-import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
-// import { GetStudentGroupsByTermYearDto, GetGropGradeAboveModel } from "@/dto/gradDto";
-
-// const mockGroup: GetGropGradeAboveModel = {
-//   groupId: 1,
-//   groupName: "1/4",
-//   groupCode: "V10104",
-//   class: "ปวช",
-//   facultyName: "บริหารธุรกิจ",
-//   programName: "คอมพิวเตอร์ธุรกิจ",
-//   programId: 101,
-//   term: "1",
-//   year: 2567,
-//   level: 1,
-//   student: [
-//     {
-//       studentId: 1,
-//       studentCode: "6401123",
-//       prefix: "นาย",
-//       firstName: "สมชาย",
-//       lastName: "พาเพลิน",
-//       isActive: true,
-//       gpa: 3.25,
-//     },
-//     {
-//       studentId: 2,
-//       studentCode: "6401124",
-//       prefix: "นางสาว",
-//       firstName: "สมหญิง",
-//       lastName: "สดใส",
-//       isActive: true,
-//       gpa: 3.55,
-//     },
-//     {
-//       studentId: 3,
-//       studentCode: "6401125",
-//       prefix: "นาย",
-//       firstName: "อนันต์",
-//       lastName: "ใจดี",
-//       isActive: false,
-//       gpa: 2.75,
-//     },
-//     {
-//       studentId: 4,
-//       studentCode: "6401126",
-//       prefix: "นางสาว",
-//       firstName: "วิภา",
-//       lastName: "ว่องไว",
-//       isActive: true,
-//       gpa: 3.8,
-//     },
-//     {
-//       studentId: 5,
-//       studentCode: "6401127",
-//       prefix: "นาย",
-//       firstName: "เอกชัย",
-//       lastName: "เร็วแรง",
-//       isActive: true,
-//       gpa: 2.9,
-//     },
-//     {
-//       studentId: 6,
-//       studentCode: "6401128",
-//       prefix: "นางสาว",
-//       firstName: "พรพิมล",
-//       lastName: "ใจดี",
-//       isActive: false,
-//       gpa: 3.1,
-//     },
-//     {
-//       studentId: 7,
-//       studentCode: "6401129",
-//       prefix: "นาย",
-//       firstName: "ณัฐวุฒิ",
-//       lastName: "ขยันเรียน",
-//       isActive: true,
-//       gpa: 3.65,
-//     },
-//     {
-//       studentId: 8,
-//       studentCode: "6401130",
-//       prefix: "นางสาว",
-//       firstName: "เกษม",
-//       lastName: "ตั้งใจดี",
-//       isActive: true,
-//       gpa: 2.45,
-//     },
-//     {
-//       studentId: 9,
-//       studentCode: "6401131",
-//       prefix: "นางสาว",
-//       firstName: "วราภรณ์",
-//       lastName: "สายบุญ",
-//       isActive: false,
-//       gpa: 3.95,
-//     },
-//     {
-//       studentId: 10,
-//       studentCode: "6401132",
-//       prefix: "นาย",
-//       firstName: "กิตติ",
-//       lastName: "จริงจัง",
-//       isActive: true,
-//       gpa: 2.8,
-//     },
-//   ],
-// };
+import {
+  genRandomGroupCode,
+  getCurrentThaiTermYear,
+  sortStudentGroupItems,
+} from "@/lib/utils";
+import {
+  GetAllStudentGroupByTermYear,
+  UpdateStudentGroupByStudentGroupId,
+} from "@/api/studentGroup/route";
+import { GetStudentIfGradeAbove } from "@/api/grad/route";
+import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
+import { toast } from "react-toastify";
 
 export default function Main() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
@@ -129,15 +36,14 @@ export default function Main() {
   const [grads, setGrad] = useState(2);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
-  // const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>(null);
-  const [newGroup, setNewGroup] = useState<GetGropGradeAboveModel | null>();
-  // mockGroup
+  const [newGroup, setNewGroup] = useState<StudentInfo[]>([]);
   const [nextGroupNameA, setNextGroupNameA] = useState<string>("");
   const [nextGroupNameB, setNextGroupNameB] = useState<string>("");
   const [promoteTrigger, SetPromoteTrigger] = useState<boolean>(false);
   const [confirmPromoteTrigger, setConfirmPromoteTrigger] =
     useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -160,17 +66,66 @@ export default function Main() {
 
   const onFilterGroup = async () => {
     setIsSearch(true);
-    // try {
-    //   const result = await GetGropGradeAbove(grads, term, year, groupID);
-    //   setNewGroup(result);
-    //   setIsSearch(true);
-    // } catch (err) {
-    //   console.error("Failed to filter group", err);
-    //   setIsSearch(false);
-    // }
+    setNewGroup([]);
+    try {
+      const result = await GetStudentIfGradeAbove(groupID, grads);
+      setNewGroup(result ?? []);
+      setIsSearch(false);
+    } catch (err) {
+      console.error("Failed to filter group", err);
+      setNewGroup([]);
+      setIsSearch(false);
+    }
   };
 
-  const onPromoteStudentGroup = async () => {};
+  const onPromoteStudentGroup = async () => {
+    try {
+      if (!newGroup || newGroup.length === 0) {
+        toast.error?.("ไม่พบข้อมูลกลุ่มปัจจุบัน");
+        return;
+      }
+      if (!nextGroupNameA || !nextGroupNameB) {
+        toast.error?.("กรุณาเลือกชั้น/ห้องถัดไปให้ครบ");
+        return;
+      }
+      if (selectedIds.length === 0) {
+        toast.error?.("กรุณาเลือกนักเรียนอย่างน้อย 1 คน");
+        return;
+      }
+      setConfirmPromoteTrigger(true);
+      const level = 0;
+      const groupName = `${nextGroupNameA}/${nextGroupNameB}`;
+
+      const programID = 0;
+      const randomGroupCode = genRandomGroupCode();
+      const body: UpdateStudentGroupBody = {
+        studentId: Array.from(new Set(selectedIds)),
+        studentGroup: {
+          groupName,
+          class: "",
+          groupCode: randomGroupCode,
+          level,
+          programID,
+          isPublish: false,
+          isComplete: false,
+          isActive: true,
+          year,
+          term,
+        },
+      };
+      const ok = await UpdateStudentGroupByStudentGroupId(body);
+      if (ok) {
+        toast.success?.("เลื่อนชั้นสำเร็จ");
+        SetPromoteTrigger(false);
+        await onFilterGroup();
+      } else {
+        toast.error?.("อัปเดตไม่สำเร็จ");
+      }
+    } catch (err) {
+      console.error("onPromoteStudentGroup error:", err);
+      toast.error?.("เกิดข้อผิดพลาดในการเลื่อนชั้น");
+    }
+  };
 
   return (
     <div className="pl-16 py-5">
@@ -197,79 +152,91 @@ export default function Main() {
         />
         <button
           onClick={onFilterGroup}
-          // disabled={!term || !year || !groupID}
-          className="px-5 py-1.5 bg-blue-500 hover:bg-blue-700 text-white rounded-md"
+          disabled={!groupID}
+          className="bg-blue-400  px-5 py-1.5 enabled:bg-blue-500 enabled-hover:bg-blue-700 text-white rounded-md"
         >
           ค้นหา
         </button>
       </div>
 
       <div className="px-10">
-        {isSearch && newGroup ? (
-          <>
-            <p className="mb-3 text-gray-600 font-medium">
-              ชั้นเรียนปัจจุบัน:
-              <span className="text-blue-800 font-semibold">
-                {newGroup.class}.{newGroup.groupName}
-              </span>
-            </p>
-            <div className="flex gap-3 items-center mb-4">
-              <p className="text-[18px] text-gray-700">ระบุชั้นเรียนต่อไป:</p>
-              <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">
-                {newGroup.class}
-              </p>
-              <select
-                className="border px-3 py-1 rounded-md"
-                value={nextGroupNameA}
-                onChange={(e) => setNextGroupNameA(e.target.value)}
-              >
-                <option value="">เลือกปี</option>
-                {[2, 3].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-              <span className="text-xl">/</span>
-              <select
-                className="border px-3 py-1 rounded-md"
-                value={nextGroupNameB}
-                onChange={(e) => setNextGroupNameB(e.target.value)}
-              >
-                <option value="">เลือกห้อง</option>
-                {[...Array(15)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <StudentSelectListTable students={newGroup.student} />
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={() => SetPromoteTrigger(true)}
-                disabled={!nextGroupNameA || !nextGroupNameB}
-                className="px-6 py-1 rounded bg-green-500 text-white hover:bg-green-600"
-              >
-                เลื่อนชั้นนักเรียน
-              </button>
-            </div>
-          </>
+        {isSearch ? (
+          <LoadingDataTable />
         ) : (
-          <div className="text-center text-gray-500 py-10 text-2xl font-semibold border-2 border-dashed border-gray-300 rounded-md">
-            {isSearch ? "ไม่พบข้อมูล" : "ยังไม่ได้เลือก"}
+          <div>
+            {newGroup?.length > 0 && newGroup ? (
+              <>
+                <p className="mb-3 text-gray-600 font-medium">
+                  ชั้นเรียนปัจจุบัน:
+                  <span className="text-blue-800 font-semibold">
+                    {newGroup[0].class}.{newGroup[0].groupName}
+                  </span>
+                </p>
+                <div className="flex gap-3 items-center mb-4">
+                  <p className="text-[18px] text-gray-700">
+                    ระบุชั้นเรียนต่อไป:
+                  </p>
+                  <p className="px-2 py-1 text-green-500 font-semibold bg-slate-100 rounded-md">
+                    {newGroup[0].class}
+                  </p>
+                  <select
+                    className="border px-3 py-1 rounded-md"
+                    value={nextGroupNameA}
+                    onChange={(e) => setNextGroupNameA(e.target.value)}
+                  >
+                    <option value="">เลือกปี</option>
+                    {[2, 3].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-xl">/</span>
+                  <select
+                    className="border px-3 py-1 rounded-md"
+                    value={nextGroupNameB}
+                    onChange={(e) => setNextGroupNameB(e.target.value)}
+                  >
+                    <option value="">เลือกห้อง</option>
+                    {[...Array(15)].map((_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <StudentSelectListTable
+                  students={newGroup}
+                  onSelectedIdsChange={(ids) => setSelectedIds(ids)}
+                />
+                <div className="flex justify-end mt-4">
+                  <button
+                    onClick={() => SetPromoteTrigger(true)}
+                    disabled={!nextGroupNameA || !nextGroupNameB}
+                    className="px-6 py-1 rounded bg-green-500 text-white hover:bg-green-600"
+                  >
+                    เลื่อนชั้นนักเรียน
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="text-center text-gray-500 py-10 text-2xl font-semibold border-2 border-dashed border-gray-300 rounded-md">
+                {isSearch ? "ไม่พบข้อมูล" : "ยังไม่ได้เลือก"}
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      <ConfirmPromoteModal
-        open={promoteTrigger}
-        currentGroup={`${newGroup?.class}.${newGroup?.groupName}`}
-        nextGroup={`${newGroup?.class}.${nextGroupNameA}/${nextGroupNameB}`}
-        onCancel={() => SetPromoteTrigger(false)}
-        onConfirm={onPromoteStudentGroup}
-        isLoading={confirmPromoteTrigger}
-      />
+      {newGroup && (
+        <ConfirmPromoteModal
+          open={promoteTrigger}
+          currentGroup={`${newGroup[0]?.class}.${newGroup[0]?.groupName}`}
+          nextGroup={`${newGroup[0]?.class}.${nextGroupNameA}/${nextGroupNameB}`}
+          onCancel={() => SetPromoteTrigger(false)}
+          onConfirm={onPromoteStudentGroup}
+          isLoading={confirmPromoteTrigger}
+        />
+      )}
     </div>
   );
 }

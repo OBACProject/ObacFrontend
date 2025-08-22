@@ -5,6 +5,7 @@ import {
   StudentGroupResponse,
   StudentGroupScheduleStatus,
   UpdateStudentGroupActiveRequest,
+  UpdateStudentGroupBody,
 } from "@/dto/studentGroupItem";
 import apiClient from "@/lib/apiClient";
 
@@ -68,7 +69,9 @@ export const GetStudentListByClassLevelTermYear = async (
   }
 };
 
-export const GetAllStudentGroup = async (): Promise<GetAllStudentGroupRequest[]> => {
+export const GetAllStudentGroup = async (): Promise<
+  GetAllStudentGroupRequest[]
+> => {
   try {
     const response = await apiClient.get<{
       responseCode: string;
@@ -87,19 +90,22 @@ export const CreateStudentGroup = async (
   payload: CreateStudentGroupRequest
 ): Promise<boolean> => {
   try {
-    const response = await apiClient.post("StudentGroup/CreateStudentGroup", payload);
-    return [200, 201, 204].includes(response.status) 
+    const response = await apiClient.post(
+      "StudentGroup/CreateStudentGroup",
+      payload
+    );
+    return [200, 201, 204].includes(response.status);
   } catch (err: any) {
     console.error("Error creating academic:", err);
     return false;
   }
 };
 
-export const UpdateStudentGroupActive = async (
-  { studentGroupId, isActive }: UpdateStudentGroupActiveRequest
-): Promise<boolean> => {
+export const UpdateStudentGroupActive = async ({
+  studentGroupId,
+  isActive,
+}: UpdateStudentGroupActiveRequest): Promise<boolean> => {
   try {
-  
     const res = await apiClient.put(
       "StudentGroup/UpdateStudentGroupActive",
       null,
@@ -107,19 +113,43 @@ export const UpdateStudentGroupActive = async (
     );
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
-    console.error("UpdateStudentGroupActive error:", err?.response?.data || err);
-    throw err; 
+    console.error(
+      "UpdateStudentGroupActive error:",
+      err?.response?.data || err
+    );
+    throw err;
   }
 };
 
 export const DeleteStudentGroupById = async (id: number): Promise<boolean> => {
   try {
     const res = await apiClient.delete("StudentGroup/DeleteStudentGroup", {
-      params: { studentGroupId: id }, 
+      params: { studentGroupId: id },
     });
     return [200, 201, 204].includes(res.status);
   } catch (err: any) {
     console.error("DeleteStudentGroupById error:", err?.response?.data || err);
-    throw err; 
+    throw err;
+  }
+};
+
+export const UpdateStudentGroupByStudentGroupId = async (
+  body: UpdateStudentGroupBody
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put<{
+      responseCode: string;
+      responseMessage: string;
+      data: boolean | null;
+    }>("StudentGroup/UpdateStudentGroupByStudentGroupId", body);
+
+    if (typeof res.data?.data === "boolean") return res.data.data;
+    return [200, 201, 204].includes(res.status);
+  } catch (err: any) {
+    console.error(
+      "UpdateStudentGroupByStudentGroupId error:",
+      err?.response?.data || err
+    );
+    return false;
   }
 };

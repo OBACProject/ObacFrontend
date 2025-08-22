@@ -356,3 +356,26 @@ export interface GradBelowResponse {
   year: number;
   gpax: number;
 }
+
+export interface StudentReceipt {
+  receiptNo: string;
+  subjectName: string;
+}
+
+export interface StudentInfo {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  class: string;
+  currentLevel: number;
+  groupName: string;
+  term: string;
+  year: number;
+  gpa: number;
+  receipts: StudentReceipt[];
+}

@@ -42,3 +42,23 @@ export function sortStudentGroupItems(
     return aGroup.second - bGroup.second;
   });
 }
+
+export function genRandomGroupCode(letters = 2, digits = 3): string {
+  const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const rand = (max: number) => {
+    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+      const buf = new Uint32Array(1);
+      crypto.getRandomValues(buf);
+      return buf[0] % max;
+    }
+    return Math.floor(Math.random() * max);
+  };
+
+  let letterPart = "";
+  for (let i = 0; i < letters; i++) {
+    letterPart += alpha[rand(alpha.length)];
+  }
+
+  const numberPart = String(rand(10 ** digits)).padStart(digits, "0");
+  return `${letterPart}-${numberPart}`;
+}
