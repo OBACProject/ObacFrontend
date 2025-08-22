@@ -1,14 +1,16 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Combobox } from "@/components/common/Combobox/combobox";
-import Swal from "sweetalert2";
 import {
   useGetStudentDetailAndSummaryScoreByStudentCodeQuery,
   useUpdateStudentGradeByGradeIdMutation,
 } from "@/lib/api/hooks/queries/grade.queries";
 import { UpdateStudentGradeScoreRequest } from "@/lib/api/models/grade/grade.request";
 import { SubjectGradeScheduleSubject } from "@/lib/api/models/grade/grade.response";
+import ConfirmationPopup from "./subPopup/confirmationPopup";
+import SuccessPopup from "./subPopup/successPopup";
+import ErrorPopup from "./subPopup/errorPopup";
 
 type ScoreKey =
   | "assignmentScore"
@@ -57,6 +59,7 @@ interface StudentPopupProps {
   subjects: SubjectData | null;
 }
 
+
 const remarkOptions = ["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
 
 export function StudentPopup({
@@ -74,10 +77,15 @@ export function StudentPopup({
   });
 
   const [remark, setRemark] = useState("");
-  const [receiptNo, setReceiptNo] = useState(""); // Added receiptNo state
+  const [receiptNo, setReceiptNo] = useState("");
   const [selectedSubject, setSelectedSubject] =
     useState<SubjectGradeScheduleSubject | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<string>("");
+
+  // Popup states
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const {
     data: studentDetailData,
@@ -92,23 +100,13 @@ export function StudentPopup({
 
   const updateGradeMutation = useUpdateStudentGradeByGradeIdMutation({
     onSuccess: () => {
-      Swal.fire({
-        title: "อัพเดตสำเร็จ!",
-        text: "ข้อมูลของนักเรียนได้รับการอัพเดตแล้ว",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-      });
-      onClose(false);
-      window.location.reload();
+      setShowConfirmation(false);
+      setShowSuccess(true);
     },
     onError: (error) => {
       console.error(error);
-      Swal.fire({
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถอัพเดตข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
-        icon: "error",
-        confirmButtonColor: "#d33",
-      });
+      setShowConfirmation(false);
+      setShowError(true);
     },
   });
 
@@ -148,7 +146,7 @@ export function StudentPopup({
       }
 
       setRemark(subjects.remark || "");
-      setReceiptNo(subjects.receiptNo || ""); 
+      setReceiptNo(subjects.receiptNo || "");
 
       if (studentDetailData && subjects.subject_name) {
         const matchingSubject = studentDetailData.termYearGradeGroups
@@ -213,20 +211,13 @@ export function StudentPopup({
     toNum(score.midtermScore) +
     toNum(score.finaltermScore);
 
-  const handleConfirm = async () => {
-    try {
-      const result = await Swal.fire({
-        title: "ยืนยันข้อมูล?",
-        text: "คุณจะไม่สามารถแก้ไขข้อมูลได้หลังจากยืนยัน",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      });
+  const handleConfirm = () => {
+    setShowConfirmation(true);
+  };
 
-      if (result.isConfirmed && subjects?.gradeId !== undefined) {
+  const handleFinalConfirm = async () => {
+    try {
+      if (subjects?.gradeId !== undefined) {
         const totalScore =
           toNum(score.assignmentScore) +
           toNum(score.collectScore) +
@@ -259,13 +250,15 @@ export function StudentPopup({
       }
     } catch (error) {
       console.error(error);
-      await Swal.fire({
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถอัพเดตข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
-        icon: "error",
-        confirmButtonColor: "#d33",
-      });
+      setShowConfirmation(false);
+      setShowError(true);
     }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    onClose(false);
+    window.location.reload();
   };
 
   return (
@@ -531,13 +524,39 @@ export function StudentPopup({
                   disabled={updateGradeMutation.isPending}
                   className="w-1/4 bg-blue-500 hover:bg-blue-600 disabled:opacity-50"
                 >
-                  {updateGradeMutation.isPending ? "กำลังบันทึก..." : "ยืนยัน"}
+                  ยืนยัน
                 </Button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Confirmation Popup */}
+      <ConfirmationPopup
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleFinalConfirm}
+        title="ยืนยันข้อมูล?"
+        message="คุณจะไม่สามารถแก้ไขข้อมูลได้หลังจากยืนยัน"
+        isLoading={updateGradeMutation.isPending}
+      />
+
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={showSuccess}
+        onClose={handleSuccessClose}
+        title="อัพเดตสำเร็จ!"
+        message="ข้อมูลของนักเรียนได้รับการอัพเดตแล้ว"
+      />
+
+      {/* Error Popup */}
+      <ErrorPopup
+        isOpen={showError}
+        onClose={() => setShowError(false)}
+        title="เกิดข้อผิดพลาด"
+        message="ไม่สามารถอัพเดตข้อมูลได้ กรุณาลองใหม่อีกครั้ง"
+      />
     </>
   );
 }
