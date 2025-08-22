@@ -232,73 +232,74 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   };
 
   const handleSubmit = async () => {
-    if (!prefix) {
-      toast.error("กรุณาเลือกคำนำหน้า");
-      return;
-    }
-    if (
-      !username.trim() ||
-      !password ||
-      !firstName.trim() ||
-      !lastName.trim() ||
-      !birthDate ||
-      !studentCode.trim() ||
-      !studentGroupId
-    ) {
-      toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
-      return;
-    }
-    if (password !== confirmPassword) {
-      toast.error("รหัสผ่านไม่ตรงกัน");
-      return;
-    }
-    if (!/^\d{13}$/.test(citizenId)) {
-      toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
-      return;
-    }
-    if (!/^\d{10}$/.test(phone)) {
-      toast.error("เบอร์โทรต้องเป็นตัวเลข 10 หลัก");
-      return;
-    }
+  if (!prefix) {
+    toast.error("กรุณาเลือกคำนำหน้า");
+    return;
+  }
+  if (
+    !username.trim() ||
+    !password ||
+    !firstName.trim() ||
+    !lastName.trim() ||
+    !studentCode.trim() ||
+    !studentGroupId
+  ) {
+    toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
+    return;
+  }
+  if (password !== confirmPassword) {
+    toast.error("รหัสผ่านไม่ตรงกัน");
+    return;
+  }
+  if (!/^\d{13}$/.test(citizenId)) {
+    toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
+    return;
+  }
 
-    const payload: CreateStudentRequest = {
-      userName: username.trim(),
-      password,
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      studentCode: studentCode.trim(),
-      gender: gender || "",
-      citizenId: citizenId.trim(),
-      phoneNumber: phone.trim(),
-      nationality: nationality || "",
-      birthDate, // จาก input type="date" เป็นรูปแบบ YYYY-MM-DD อยู่แล้ว
-      prefix: prefix || "",
-      studentGroupId: Number(studentGroupId),
-    };
+  
+  const today = new Date();
+  const formattedToday = today.toISOString().split("T")[0];
+  const finalBirthDate = birthDate || formattedToday;
 
-    try {
-      await CreateStudent(payload);
-      toast.success("สร้างบัญชีนักเรียนสำเร็จ");
-      onClosePopUp(true);
-    } catch (err: any) {
-      console.error("CreateStudent error:", err?.response?.data || err);
-      const modelErrors = err?.response?.data?.errors;
-      if (modelErrors && typeof modelErrors === "object") {
-        const firstKey = Object.keys(modelErrors)[0];
-        const firstMsg = Array.isArray(modelErrors[firstKey])
-          ? modelErrors[firstKey][0]
-          : String(modelErrors[firstKey]);
-        toast.error(firstMsg);
-      } else {
-        const backendMsg =
-          err?.response?.data?.responseMessage ||
-          err?.response?.data?.title ||
-          err?.message ||
-          "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
-        toast.error(backendMsg);
-      }
-    }
+  const payload: CreateStudentRequest = {
+    userName: username.trim(),
+    password,
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
+    studentCode: studentCode.trim(),
+    gender: gender || "",
+    citizenId: citizenId.trim(),
+    phoneNumber: phone.trim(),
+    nationality: nationality || "",
+    birthDate: finalBirthDate, 
+    prefix: prefix || "",
+    studentGroupId: Number(studentGroupId),
   };
+
+  try {
+    await CreateStudent(payload);
+    toast.success("สร้างบัญชีนักเรียนสำเร็จ");
+    onClosePopUp(true);
+  } catch (err: any) {
+    console.error("CreateStudent error:", err?.response?.data || err);
+    const modelErrors = err?.response?.data?.errors;
+    if (modelErrors && typeof modelErrors === "object") {
+      const firstKey = Object.keys(modelErrors)[0];
+      const firstMsg = Array.isArray(modelErrors[firstKey])
+        ? modelErrors[firstKey][0]
+        : String(modelErrors[firstKey]);
+      toast.error(firstMsg);
+    } else {
+      const backendMsg =
+        err?.response?.data?.responseMessage ||
+        err?.response?.data?.title ||
+        err?.message ||
+        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+      toast.error(backendMsg);
+    }
+  }
+};
+
 
   const selectedRoom = useMemo(
     () => groups.find((g) => g.id === studentGroupId),
