@@ -1,7 +1,6 @@
 "use client";
-import StudentFailListPDF from "@/lib/PDF/name-list/StudentFailList";
 import { GradBelowResponse } from "@/dto/gradDto";
-import { Download, Loader2, Search, User } from "lucide-react";
+import { Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
@@ -9,18 +8,13 @@ import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { GetStudentIfGradeBelow } from "@/api/grad/route";
 import { PDFFailedStudentNamelistButton } from "@/components/PDF/PDFButton";
-
-interface IndividualStudentInfoData {
-  studentId: number;
-  studentName: string;
-}
+import GradeFilter from "@/components/Academic/GradeFilter";
 
 export default function Main() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
-
   const [students, setStudent] = useState<GradBelowResponse[]>([]);
   const studentCount = useMemo(() => students.length, [students]);
-  const [grads, setGrad] = useState(2.0);
+  const [grads, setGrad] = useState<number>(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   const [classSelect, setClassSelect] = useState<string>("");
@@ -28,17 +22,14 @@ export default function Main() {
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setGrad(!isNaN(value) ? value : 0.0);
-  };
-
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const [classType, year] = e.target.value.split("&");
     setClassSelect(classType);
     setCurrentYearSelect(Number(year));
   };
+
   const router = useRouter();
+
   const onFilterGroup = async () => {
     setSearchTrigger(true);
     try {
@@ -58,31 +49,13 @@ export default function Main() {
       setSearchTrigger(false);
       setIsSearch(true);
     }
-    // setSearchTrigger(true);
-    // setStudent(
-    //   mockGetGradBelowResponse.map((item) => ({
-    //     ...item,
-    //     prefix: item.prefix ?? "",
-    //   }))
-    // );
+
     setIsSearch(true);
     setSearchTrigger(false);
   };
 
-  const handleStudentName = (
-    id: number,
-    prefix: string,
-    fname: string,
-    lname: string
-  ) => {
-    const data: IndividualStudentInfoData = {
-      studentId: id,
-      studentName: prefix + fname + " " + lname,
-    };
-    localStorage.setItem("selectedStudentData", JSON.stringify(data));
-    localStorage.setItem("activeTabStudent", "individualStudentInfo");
-
-    router.push(`/academic/score-management/individual/${id}`);
+  const handleStudentName = (studentCode: number) => {
+    router.push(`/academic/score-management/individual/${studentCode}`);
   };
 
   return (
@@ -103,18 +76,7 @@ export default function Main() {
           onChangeTerm={setTerm}
           onChangeYear={setYear}
         />
-        <div className="flex items-center gap-2" style={{ userSelect: "none" }}>
-          <label className="text-black text-[16px]">เกรดขั้นต่ำ</label>
-          <input
-            type="number"
-            className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
-            value={grads}
-            onChange={handleChange}
-            step={0.25}
-            min={0.0}
-            max={4.0}
-          />
-        </div>
+        <GradeFilter grade={grads} onChange={setGrad} />
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
           onChange={handleClassChange}
@@ -165,7 +127,7 @@ export default function Main() {
                     <PDFFailedStudentNamelistButton
                       className={classSelect}
                       currentYear={currentYearSelect}
-                      grade={grads}
+                      grade={Number(grads)}
                       term={term}
                       year={year}
                     />
@@ -173,7 +135,10 @@ export default function Main() {
                 </div>
 
                 <div>
-                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_10%_15%_15%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
+                  <div
+                    className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_10%_15%_15%] bg-gray-200 rounded-t-md
+                   text-gray-700   text-lg"
+                  >
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
@@ -190,12 +155,7 @@ export default function Main() {
                   {students.map((item, index) => (
                     <div
                       onClick={() => {
-                        handleStudentName(
-                          item.studentId,
-                          item.prefix,
-                          item.firstName,
-                          item.lastName
-                        );
+                        handleStudentName(Number(item.studentCode));
                       }}
                       key={index}
                       className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_10%_15%_15%] shadow-md"

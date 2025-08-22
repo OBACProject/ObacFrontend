@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import GroupSelector, {
   GroupOption,
@@ -33,7 +33,7 @@ export default function Main() {
 
   const [groups, setGroups] = useState<StudentGroupItem[]>([]);
   const [groupID, setGroupID] = useState<number>(0);
-  const [grads, setGrad] = useState(2);
+  const [grads, setGrad] = useState<number>(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   const [newGroup, setNewGroup] = useState<StudentInfo[]>([]);
