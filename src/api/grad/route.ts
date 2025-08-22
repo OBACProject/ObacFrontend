@@ -142,7 +142,34 @@ export const GetStudentIfGradeBelow = async (
     }>(
       `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&term=${term}&year=${year}`
     );
-    return response.data.data ?? [];
+
+    const list = response.data.data ?? [];
+
+    const parseGroup = (s?: string) => {
+      const [maj, min] = (s ?? "").split("/").map((t) => t.trim());
+      const major = Number.parseInt(maj, 10);
+      const minor = Number.parseInt(min, 10);
+      return {
+        major: Number.isFinite(major) ? major : Number.MAX_SAFE_INTEGER,
+        minor: Number.isFinite(minor) ? minor : Number.MAX_SAFE_INTEGER,
+      };
+    };
+
+    const sorted = [...list].sort((a, b) => {
+      const ga = parseGroup((a as any).groupName);
+      const gb = parseGroup((b as any).groupName);
+
+      if (ga.major !== gb.major) return ga.major - gb.major;
+      if (ga.minor !== gb.minor) return ga.minor - gb.minor;
+
+      return ((a as any).studentCode ?? "").localeCompare(
+        (b as any).studentCode ?? "",
+        "en",
+        { numeric: true, sensitivity: "base" }
+      );
+    });
+
+    return sorted;
   } catch (err) {
     console.log(err);
     return [];
@@ -161,7 +188,16 @@ export const GetStudentIfGradeAbove = async (
     }>(
       `Grade/GetStudentIfGradeAbove?studentGroupId=${groupID}&gradeThreshold=${grade}`
     );
-    return response.data.data ?? [];
+
+    const list = response.data.data ?? [];
+    const sorted = [...list].sort((a, b) =>
+      (a.studentCode ?? "").localeCompare(b.studentCode ?? "", "en", {
+        numeric: true,
+        sensitivity: "base",
+      })
+    );
+
+    return sorted;
   } catch (err) {
     console.log(err);
     return [];
