@@ -39,17 +39,13 @@ export default function SelectTermAndYear({
           value={year === 0 ? "" : year}
           onChange={(e) => {
             const selected = e.target.value;
-            if (selected === "") {
-              onChangeYear(0);
-            } else {
-              onChangeYear(Number(selected));
-            }
+            onChangeYear(selected === "" ? 0 : Number(selected));
           }}
         >
           <option value="">ทั้งหมด</option>
-          {[0, 1, 2, 3, 4].map((offset) => (
-            <option key={offset} value={currentYear - offset}>
-              {currentYear - offset}
+          {Array.from({ length: 6 }, (_, i) => currentYear + 1 - i).map((y) => (
+            <option key={y} value={y}>
+              {y}
             </option>
           ))}
         </select>
