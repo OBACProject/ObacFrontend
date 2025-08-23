@@ -136,6 +136,7 @@ export default function Main() {
           year: newGroupYear,
           term: newGroupTerm,
         },
+        action:"promote"
       };
       console.log(body);
       const ok = await UpdateStudentGroupByStudentGroupId(body);

@@ -131,4 +131,5 @@ export interface UpdateStudentGroupBody {
     year: number;   
     term: string;  
   };
+  action:string;
 }
