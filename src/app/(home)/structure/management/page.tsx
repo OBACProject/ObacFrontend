@@ -3,10 +3,15 @@ import React from "react";
 export default function page() {
   return (
     <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
-      <div className="grid place-items-center py-10  text-2xl  bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500  text-white ">
+      {/* <div className="grid place-items-center py-10  text-2xl  bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500  text-white ">
         <p className="text-5xl ">โครงสร้างการบริหารวิทยาลัย</p>
-      </div>
-      <div className="grid place-items-center pb-20">
+      </div> */}
+      <div className="grid place-items-center py-10 text-white text-2xl bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500">
+          <p className="text-3xl sm:text-4xl md:text-5xl font-prompt text-center">
+            โครงสร้างการบริหารวิทยาลัย
+          </p>
+        </div>
+      <div className="grid place-items-center pb-20 pt-10">
         <div className="">
           <img alt="obac" src="/static/management-01.jpg" width={800} height={1000} />
         </div>

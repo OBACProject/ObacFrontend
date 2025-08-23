@@ -4,15 +4,14 @@ import React from "react";
 
 export default function Form() {
   return (
-    <div className="w-full py-10 px-5 bg-white">
-      <div className="relative ">
-      
-        <h1 className="mb-4 animate-fadeIn text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
-          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-blue-800 to-blue-500 font-prompt z-10">
+    <div className="mt-16 sm:mt-[8px] md:pt-[80px] lg:mt-16">
+      <div className="bg-white text-blue-950 font-prompt">
+        {/* Header */}
+        <div className="grid place-items-center py-10 text-white text-2xl bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500">
+          <p className="text-3xl sm:text-4xl md:text-5xl font-prompt text-center">
             ช่องทางการติดต่อ OBAC
-          </span>
-        </h1>
-        <div className="animate-fadeIn h-4  bg-gradient-to-r rounded-lg from-blue-800 to-sky-500 w-full"></div>
+          </p>
+        </div>
       </div>
       <div className="my-5 animate-fastFade lg:flex gap-2  grid place-items-center lg:*:place-items-start lg:mx-5">
         <div className=" lg:w-[600px] lg:h-[450px]  ">
@@ -23,7 +22,7 @@ export default function Form() {
             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B8%B2%E0%B8%A5%E0%B8%B1%E0%B8%A2%E0%B8%AD%E0%B8%B2%E0%B8%8A%E0%B8%B5%E0%B8%A7%E0%B8%A8%E0%B8%B6%E0%B8%81%E0%B8%A9%E0%B8%B2%E0%B9%80%E0%B8%AD%E0%B8%81%E0%B8%A7%E0%B8%B4%E0%B8%97%E0%B8%A2%E0%B9%8C%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%AB%E0%B8%B2%E0%B8%A3%E0%B8%98%E0%B8%B8%E0%B8%A3%E0%B8%81%E0%B8%B4%E0%B8%88%20(%E0%B9%82%E0%B8%AD%E0%B9%81%E0%B8%9A%E0%B8%84)&zoom=16&maptype=roadmap"
           ></iframe>
         </div>
-        <div className="lg:px-10 animate-fadeIn">
+        <div className="px-4 lg:px-10 animate-fadeIn">
           <div className="text-xl w-fit line-clamp-2 text-blue-800 font-bold">
             OBAC (Ekkawit Business Administration)
           </div>

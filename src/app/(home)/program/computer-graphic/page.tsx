@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import StickerFacebook from "@/components/Effect/StickerFacebook";
 import StickerYoutube from "@/components/Effect/StickerYoutube";
@@ -55,19 +55,14 @@ export default function Page() {
   return (
     <div className="bg-white text-blue-950 font-prompt mt-16 md:mt-36">
       <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <link rel="canonical" href="https://ekawit.ac.th" />
       </Head>
 
       <StickerFacebook />
       <StickerYoutube />
 
-      {/* Header Section */}
       <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
-        {/* Floating Icons */}
         {iconPositions.map((icon, index) => (
           <div
             key={index}
@@ -79,42 +74,52 @@ export default function Page() {
               animationDuration: `${6 + index * 0.5}s`,
             }}
           >
-            <Image
-              src={icon.src}
-              alt={icon.alt}
-              width={64}
-              height={64}
-              className={`${icon.size} drop-shadow-lg`}
-            />
+            <Image src={icon.src} alt={icon.alt} width={64} height={64} className={`${icon.size} drop-shadow-lg`} />
           </div>
         ))}
 
-        {/* Content */}
-        <div className="absolute inset-0 flex items-center justify-center px-4 md:px-10 z-20">
-          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-10 w-full max-w-6xl">
-            {/* Avatar */}
-            <div className="w-full sm:w-1/2 flex justify-center">
-              <Image
-                src="/cls/computer-graphic/avatar.png"
-                alt="Marketing Professional"
-                width={800}
-                height={800}
-                className="h-[160px] sm:h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
+        {/* Mobile layout */}
+        <div className="absolute inset-0 sm:hidden">
+          <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
+            <h1
+              className="text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl"
+              style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
+            >
+              สาขาวิชาคอมพิวเตอร์กราฟิก
+            </h1>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 flex justify-center z-10">
+            <Image
+              src="/cls/computer-graphic/avatar.png"
+              alt="Computer Graphics"
+              width={900}
+              height={900}
+              className="h-[170px] w-auto object-contain drop-shadow-2xl translate-x-4 sm:translate-x-0"
+              priority
+            />
+          </div>
+        </div>
 
-            {/* Text */}
-            <div className="text-white text-center sm:text-left w-full sm:w-1/2">
+        {/* Desktop layout */}
+        <div className="hidden sm:flex absolute inset-0 items-center justify-center px-4 md:px-10 z-20">
+          <div className="flex sm:flex-row-reverse items-center gap-6 md:gap-10 w-full max-w-6xl">
+            <div className="text-white text-left w-1/2">
               <h1
-                className="text-3xl sm:text-3xl md:text-4xl font-bold tracking-wide drop-shadow-2xl"
-                style={{
-                  transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)`,
-                }}
+                className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold tracking-tight drop-shadow-2xl"
+                style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
               >
                 สาขาวิชาคอมพิวเตอร์กราฟิก
               </h1>
-
+            </div>
+            <div className="w-1/2 flex justify-center">
+              <Image
+                src="/cls/computer-graphic/avatar.png"
+                alt="Computer Graphics"
+                width={900}
+                height={900}
+                className="h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -141,25 +146,18 @@ export default function Page() {
           ))}
         </div>
       </div>
+
       <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
           สาขาวิชาคอมพิวเตอร์กราฟิก (Computer Graphics)
         </h3>
-
         <p className="text-base sm:text-lg leading-relaxed indent-8">
-          สาขาวิชาคอมพิวเตอร์กราฟิกเปิดโอกาสให้นักเรียนได้เรียนรู้การออกแบบงานกราฟิก
-          ทั้งในรูปแบบสิ่งพิมพ์และสื่อดิจิทัล เช่น การออกแบบโลโก้ โปสเตอร์ สื่อประชาสัมพันธ์
-          และงานมัลติมีเดียเพื่อใช้ในองค์กรหรือธุรกิจ
+          สาขาวิชาคอมพิวเตอร์กราฟิกเปิดโอกาสให้นักเรียนได้เรียนรู้การออกแบบงานกราฟิก ทั้งในรูปแบบสิ่งพิมพ์และสื่อดิจิทัล เช่น การออกแบบโลโก้ โปสเตอร์ สื่อประชาสัมพันธ์ และงานมัลติมีเดียเพื่อใช้ในองค์กรหรือธุรกิจ
         </p>
-
         <p className="text-base sm:text-lg leading-relaxed indent-8">
-          นักเรียนจะได้ฝึกใช้โปรแกรมออกแบบยอดนิยม เช่น Photoshop, Illustrator และอื่น ๆ
-          รวมถึงการเรียนรู้แนวคิดด้านศิลปะและองค์ประกอบของการออกแบบ เพื่อพัฒนาผลงานให้โดดเด่น
-          มีความคิดสร้างสรรค์ พร้อมเข้าสู่อุตสาหกรรมการออกแบบอย่างมืออาชีพ
+          นักเรียนจะได้ฝึกใช้โปรแกรมออกแบบยอดนิยม เช่น Photoshop, Illustrator และอื่น ๆ รวมถึงการเรียนรู้แนวคิดด้านศิลปะและองค์ประกอบของการออกแบบ เพื่อพัฒนาผลงานให้โดดเด่น มีความคิดสร้างสรรค์ พร้อมเข้าสู่อุตสาหกรรมการออกแบบอย่างมืออาชีพ
         </p>
       </div>
-
-
     </div>
   );
 }

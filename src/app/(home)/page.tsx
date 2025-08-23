@@ -76,9 +76,9 @@ export default function Home() {
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-44 sm:pt-0">
           <Parallax speed={20}>
             <div className="text-white space-y-4 sm:space-y-6">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
-                Welcome to OBAC
-              </h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)] mt-16 sm:mt-0">
+  Welcome to OBAC
+</h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-prompt_lite">
                 Ekawit Business Administration Vocational College
               </p>
@@ -182,11 +182,11 @@ export default function Home() {
         <section className="container mx-auto px-4 py-10 sm:py-16">
           <h2 className="text-3xl md:text-4xl text-center font-bold mb-10">หลักสูตรที่เปิดสอน</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <CardCourse iconName="BookOpen" title="สาขาการบัญชี" />
-            <CardCourse iconName="Laptop2" title="สาขาเทคโนโลยีธุรกิจดิจิทัล" />
-            <CardCourse iconName="Users" title="สาขาธุรกิจค้าปลีก" />
-            <CardCourse iconName="Briefcase" title="สาขาการตลาด" />
-            <CardCourse iconName="Plane" title="สาขาการท่องเที่ยว" />
+            <CardCourse iconName="BookOpen" title="สาขาการบัญชี" href={"/program/accounting"} />
+            <CardCourse iconName="Laptop2" title="สาขาเทคโนโลยีธุรกิจดิจิทัล" href={"/program/computer-business"}  />
+            <CardCourse iconName="TvMinimalPlay" title="สาขาดิจิทัลกราฟฟิก" href={"/program/computer-graphic"} />
+            <CardCourse iconName="Briefcase" title="สาขาการตลาด" href={"/program/marketing"} />
+            <CardCourse iconName="Plane" title="สาขาการท่องเที่ยว" href={"/program/tourism-management"} />
           </div>
         </section>
       </OpeningScroll>
