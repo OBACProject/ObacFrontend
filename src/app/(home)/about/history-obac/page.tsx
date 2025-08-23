@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import OpeningScroll from "@/components/Effect/OpeningScroll";
 import FadeInOnScroll from "@/components/Effect/FadInScroll";
 import { Parallax } from "react-scroll-parallax";
+import Header from "@/components/common/Header/Header";
 
 export default function page() {
   const [isMobile, setIsMobile] = useState(false);
@@ -23,14 +24,10 @@ export default function page() {
   return (
     <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
       <div className="bg-white text-blue-950 font-prompt">
-        {/* Header */}
-        <div className="grid place-items-center py-10 text-white text-2xl bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500">
-          <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
-            ประวัติของ OBAC
-          </p>
-        </div>
+        <Header
+        title="ประวัติของ OBAC"
+      />
 
-        {/* Section 1 */}
         <OpeningScroll>
           <section className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <MaybeParallax speed={-5}>
@@ -43,7 +40,7 @@ export default function page() {
               </div>
             </MaybeParallax>
             <MaybeParallax speed={5}>
-               <div className="flex flex-col justify-start space-y-4 text-sm sm:text-base md:text-lg leading-relaxed pt-0">
+              <div className="flex flex-col justify-start space-y-4 text-sm sm:text-base md:text-lg leading-relaxed pt-0">
                 <h3 className="text-xl text-center sm:text-2xl md:text-3xl font-bold mb-2">
                   ความเป็นมา
                 </h3>
