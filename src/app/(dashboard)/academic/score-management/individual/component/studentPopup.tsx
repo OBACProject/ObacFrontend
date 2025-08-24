@@ -384,7 +384,7 @@ export function StudentPopup({
                           </span>
                           <span className="font-bold text-green-600">
                             {selectedSubject.finalGrade ||
-                              selectedSubject.remark ||
+                              selectedSubject.remarks ||
                               "N/A"}
                           </span>
                         </div>
