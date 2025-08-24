@@ -1,5 +1,6 @@
 "use client";
 
+import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 import StickerFacebook from "@/components/Effect/StickerFacebook";
 import StickerYoutube from "@/components/Effect/StickerYoutube";
 import Head from "next/head";
@@ -19,9 +20,9 @@ export default function Page() {
       streetAddress: "ถนนลาดกระบัง",
       addressLocality: "กรุงเทพ",
       postalCode: "10520",
-      addressCountry: "TH"
+      addressCountry: "TH",
     },
-    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"]
+    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
   };
 
   const [mounted, setMounted] = useState(false);
@@ -32,7 +33,7 @@ export default function Page() {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
+        y: (e.clientY / window.innerHeight) * 100,
       });
     };
     window.addEventListener("mousemove", handleMouseMove);
@@ -40,14 +41,62 @@ export default function Page() {
   }, []);
 
   const iconPositions = [
-    { src: "/cls/computer-business/business_light.png", alt: "Light Bulb", position: { top: "15%", left: "35%" }, parallaxStrength: 0.3, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/computer-business/business_chart.png", alt: "Chart", position: { top: "20%", right: "15%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-20 sm:h-20" },
-    { src: "/cls/computer-business/business_arrow.png", alt: "Target Arrow", position: { bottom: "25%", right: "10%" }, parallaxStrength: 0.5, size: "w-14 h-14 sm:w-24 sm:h-24" },
-    { src: "/cls/computer-business/business_coin.png", alt: "Coin", position: { bottom: "35%", left: "40%" }, parallaxStrength: 0.3, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/computer-business/business_cart.png", alt: "Shopping Cart", position: { bottom: "15%", left: "35%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-18 sm:h-18" },
-    { src: "/cls/computer-business/business_global.png", alt: "Global", position: { bottom: "10%", left: "50%" }, parallaxStrength: 0.2, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/computer-business/business_mail.png", alt: "Mail", position: { top: "25%", left: "10%" }, parallaxStrength: 0.3, size: "w-8 h-8 sm:w-14 sm:h-14" },
-    { src: "/cls/computer-business/business_graph.png", alt: "Graph", position: { top: "40%", left: "5%" }, parallaxStrength: 0.4, size: "w-10 h-10 sm:w-16 sm:h-16" }
+    {
+      src: "/cls/computer-business/business_light.png",
+      alt: "Light Bulb",
+      position: { top: "15%", left: "35%" },
+      parallaxStrength: 0.3,
+      size: "w-10 h-10 sm:w-16 sm:h-16",
+    },
+    {
+      src: "/cls/computer-business/business_chart.png",
+      alt: "Chart",
+      position: { top: "20%", right: "15%" },
+      parallaxStrength: 0.4,
+      size: "w-12 h-12 sm:w-20 sm:h-20",
+    },
+    {
+      src: "/cls/computer-business/business_arrow.png",
+      alt: "Target Arrow",
+      position: { bottom: "25%", right: "10%" },
+      parallaxStrength: 0.5,
+      size: "w-14 h-14 sm:w-24 sm:h-24",
+    },
+    {
+      src: "/cls/computer-business/business_coin.png",
+      alt: "Coin",
+      position: { bottom: "35%", left: "40%" },
+      parallaxStrength: 0.3,
+      size: "w-10 h-10 sm:w-16 sm:h-16",
+    },
+    {
+      src: "/cls/computer-business/business_cart.png",
+      alt: "Shopping Cart",
+      position: { bottom: "15%", left: "35%" },
+      parallaxStrength: 0.4,
+      size: "w-12 h-12 sm:w-18 sm:h-18",
+    },
+    {
+      src: "/cls/computer-business/business_global.png",
+      alt: "Global",
+      position: { bottom: "10%", left: "50%" },
+      parallaxStrength: 0.2,
+      size: "w-10 h-10 sm:w-16 sm:h-16",
+    },
+    {
+      src: "/cls/computer-business/business_mail.png",
+      alt: "Mail",
+      position: { top: "25%", left: "10%" },
+      parallaxStrength: 0.3,
+      size: "w-8 h-8 sm:w-14 sm:h-14",
+    },
+    {
+      src: "/cls/computer-business/business_graph.png",
+      alt: "Graph",
+      position: { top: "40%", left: "5%" },
+      parallaxStrength: 0.4,
+      size: "w-10 h-10 sm:w-16 sm:h-16",
+    },
   ];
 
   if (!mounted) return null;
@@ -55,7 +104,10 @@ export default function Page() {
   return (
     <div className="bg-white text-blue-950 font-prompt mt-16 md:mt-36">
       <Head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <link rel="canonical" href="https://ekawit.ac.th" />
       </Head>
 
@@ -69,12 +121,20 @@ export default function Page() {
             className="absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110"
             style={{
               ...icon.position,
-              transform: `translate(${(mousePosition.x - 50) * icon.parallaxStrength * 0.1}px, ${(mousePosition.y - 50) * icon.parallaxStrength * 0.1}px)`,
+              transform: `translate(${
+                (mousePosition.x - 50) * icon.parallaxStrength * 0.1
+              }px, ${(mousePosition.y - 50) * icon.parallaxStrength * 0.1}px)`,
               animationDelay: `${index * 0.5}s`,
-              animationDuration: `${6 + index * 0.5}s`
+              animationDuration: `${6 + index * 0.5}s`,
             }}
           >
-            <Image src={icon.src} alt={icon.alt} width={64} height={64} className={`${icon.size} drop-shadow-lg`} />
+            <Image
+              src={icon.src}
+              alt={icon.alt}
+              width={64}
+              height={64}
+              className={`${icon.size} drop-shadow-lg`}
+            />
           </div>
         ))}
 
@@ -82,7 +142,11 @@ export default function Page() {
           <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
             <h1
               className="text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl"
-              style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
+              style={{
+                transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
+                  (mousePosition.y - 50) * 0.02
+                }px)`,
+              }}
             >
               สาขาวิชาคอมพิวเตอร์ธุรกิจ
             </h1>
@@ -104,7 +168,11 @@ export default function Page() {
             <div className="text-white text-left w-1/2">
               <h1
                 className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold tracking-tight drop-shadow-2xl"
-                style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
+                style={{
+                  transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
+                    (mousePosition.y - 50) * 0.02
+                  }px)`,
+                }}
               >
                 สาขาวิชาคอมพิวเตอร์ธุรกิจ
               </h1>
@@ -123,9 +191,18 @@ export default function Page() {
         </div>
 
         <div className="absolute top-10 left-10 w-1 h-20 bg-gradient-to-b from-orange-400 to-transparent opacity-60 animate-pulse" />
-        <div className="absolute top-20 right-20 w-20 h-1 bg-gradient-to-r from-yellow-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute bottom-20 left-20 w-1 h-16 bg-gradient-to-t from-orange-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "2s" }} />
-        <div className="absolute bottom-10 right-10 w-16 h-1 bg-gradient-to-l from-yellow-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "1.5s" }} />
+        <div
+          className="absolute top-20 right-20 w-20 h-1 bg-gradient-to-r from-yellow-400 to-transparent opacity-60 animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute bottom-20 left-20 w-1 h-16 bg-gradient-to-t from-orange-400 to-transparent opacity-60 animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute bottom-10 right-10 w-16 h-1 bg-gradient-to-l from-yellow-400 to-transparent opacity-60 animate-pulse"
+          style={{ animationDelay: "1.5s" }}
+        />
 
         <div className="absolute inset-0 pointer-events-none">
           {Array.from({ length: 15 }).map((_, i) => (
@@ -136,26 +213,29 @@ export default function Page() {
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${6 + Math.random() * 4}s`
+                animationDuration: `${6 + Math.random() * 4}s`,
               }}
             />
           ))}
         </div>
       </div>
-
-      <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
-        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
-          สาขาวิชาคอมพิวเตอร์ธุรกิจ (Computer Business)
-        </h3>
-        <p className="text-base sm:text-lg leading-relaxed indent-8">
-          สาขาวิชาคอมพิวเตอร์ธุรกิจเน้นการประยุกต์ใช้เทคโนโลยีสารสนเทศในงานธุรกิจ ทั้งด้านการใช้โปรแกรมสำนักงาน การจัดการฐานข้อมูล การวิเคราะห์ข้อมูล
-          และการพัฒนาระบบเบื้องต้นที่สนับสนุนการทำงานขององค์กร
-        </p>
-        <p className="text-base sm:text-lg leading-relaxed indent-8">
-          หลักสูตรนี้ช่วยให้นักเรียนมีทักษะรอบด้านทั้งด้านไอทีและการจัดการธุรกิจ เหมาะสำหรับการทำงานในหลากหลายสายอาชีพ เช่น ธุรการ พนักงานไอที
-          หรือสามารถต่อยอดเพื่อประกอบธุรกิจส่วนตัวในอนาคตได้
-        </p>
-      </div>
+      <SciFiBackgroundNormal>
+        <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
+            สาขาวิชาคอมพิวเตอร์ธุรกิจ (Computer Business)
+          </h3>
+          <p className="text-base sm:text-lg leading-relaxed indent-8">
+            สาขาวิชาคอมพิวเตอร์ธุรกิจเน้นการประยุกต์ใช้เทคโนโลยีสารสนเทศในงานธุรกิจ
+            ทั้งด้านการใช้โปรแกรมสำนักงาน การจัดการฐานข้อมูล การวิเคราะห์ข้อมูล
+            และการพัฒนาระบบเบื้องต้นที่สนับสนุนการทำงานขององค์กร
+          </p>
+          <p className="text-base sm:text-lg leading-relaxed indent-8">
+            หลักสูตรนี้ช่วยให้นักเรียนมีทักษะรอบด้านทั้งด้านไอทีและการจัดการธุรกิจ
+            เหมาะสำหรับการทำงานในหลากหลายสายอาชีพ เช่น ธุรการ พนักงานไอที
+            หรือสามารถต่อยอดเพื่อประกอบธุรกิจส่วนตัวในอนาคตได้
+          </p>
+        </div>
+      </SciFiBackgroundNormal>
     </div>
   );
 }
