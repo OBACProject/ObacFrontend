@@ -46,7 +46,7 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
       await UpdateSubject(payload);
       toast.success("แก้ไขวิชาสำเร็จ");
       onClosePopUp(false);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
       toast.error("แก้ไขวิชาไม่สำเร็จ");

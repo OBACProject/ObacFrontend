@@ -42,28 +42,6 @@ export const TeacherSideBarData: TeacherSidebarProps = {
           className=""
         />
       ),
-    },
-    // {
-    //   title: "ตารางสอน",
-    //   tooltip: "schedule",
-    //   href: "/teacher/schedule",
-    //   icon: (
-    //     <CreditCard
-    //       style={{ width: "2.2rem", height: "2.5rem" }}
-    //       className=""
-    //     />
-    //   ),
-    // },
-     {
-      title: "Import Score",
-      tooltip: "นำเข้าคะแนน",
-      href: "/teacher/import-score",
-      icon: (
-        <ArchiveRestore
-          style={{ width: "2.0rem", height: "2.0rem" }}
-          className=""
-        />
-      ),
-    },
+    }
   ],
 };

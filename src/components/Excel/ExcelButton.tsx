@@ -1,25 +1,24 @@
-"use client"
+"use client";
 import { useGetStudentGroupByGroupIdQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { ConvertClassroomToExcel } from "@/lib/Excel/generateExcelFile";
 import { Download } from "lucide-react";
-
-
 
 export const ExcelStudentNamelistInGroupButton = ({
   groupID,
 }: {
   groupID: string;
 }) => {
-    const {data : studentData} = useGetStudentGroupByGroupIdQuery(groupID);
-    console.log("studentData", studentData);
+  const { data: studentData } = useGetStudentGroupByGroupIdQuery(groupID);
 
-    const downloadExcel = async () => {
-        // call excel generate
-        ConvertClassroomToExcel(
-          studentData?.students ?? [],
-          studentData?.groupName || "",
-        );
-    }
+  const sortedStudents = [...(studentData?.students ?? [])]
+    .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+    .sort((a, b) =>
+      a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+    );
+
+  const downloadExcel = async () => {
+    ConvertClassroomToExcel(sortedStudents ?? [], studentData?.groupName || "");
+  };
 
   return (
     <button
@@ -32,5 +31,3 @@ export const ExcelStudentNamelistInGroupButton = ({
     </button>
   );
 };
-
-

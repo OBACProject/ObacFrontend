@@ -42,7 +42,7 @@ const BulkStudentTranscript = (
   const img = new Image();
   img.src = "/asset/footprintOBAC.png";
 
-  for (let i = 0; i < data.length; i++) {
+  for (let k = 0; k < data.length; k++) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const imgWidth = 180;
@@ -79,10 +79,10 @@ const BulkStudentTranscript = (
     doc.text("รายงานผลการศึกษา", 90, 24);
 
     doc.setFontSize(14);
-    doc.text(`รหัสนักศึกษา : ${data[i]?.studentCode}`, 30, 30);
+    doc.text(`รหัสนักศึกษา : ${data[k]?.studentCode}`, 30, 30);
     doc.text("ชื่อ - สกุล   : ", 110.5, 30);
     doc.text(
-      `${data[i]?.prefix} ${data[i]?.firstName} ${data[i]?.lastName}`,
+      `${data[k]?.prefix} ${data[k]?.firstName} ${data[k]?.lastName}`,
       130,
       30
     );
@@ -90,15 +90,15 @@ const BulkStudentTranscript = (
     doc.setFont("THSarabun", "normal");
     doc.text("รอบ : เช้า", 42, 35);
     doc.text("ประเภทวิชา : ", 110.5, 35);
-    doc.text(`${data[i].facultyName}`, 130, 35);
+    doc.text(`${data[k].facultyName}`, 130, 35);
 
     doc.text(`ชั้นปี : ${classGroup}.${groupName}`, 42, 40);
     doc.text("สาขาวิชา     : ", 110, 40);
-    doc.text(`${data[i].programName}`, 130, 40);
+    doc.text(`${data[k].programName}`, 130, 40);
 
     doc.text("สถานะนักเรียน : กำลังศึกษา", 28.5, 45);
     doc.text("สาขางาน     : ", 110, 45);
-    doc.text(`${data[i].subProgramName}`, 130, 45);
+    doc.text(`${data[k].subProgramName}`, 130, 45);
 
     doc.line(5, 50, 205, 50);
     doc.line(5, 50, 5, 257);
@@ -275,7 +275,7 @@ const BulkStudentTranscript = (
 
     doc.text(`${thaiDate}`, 180, 295);
 
-    if (i != data.length - 1) {
+    if (k != data.length - 1) {
       doc.addPage();
     }
   }

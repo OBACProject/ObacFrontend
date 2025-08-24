@@ -170,7 +170,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           finaltermScore: item.finaltermScore || 0,
           totalScore: item.totalScore || 0,
           finalGrade: item.finalGrade,
-          remarks: item.remark || "",
+          remarks: item.remarks || "",
           index: index + 1,
         }));
     }

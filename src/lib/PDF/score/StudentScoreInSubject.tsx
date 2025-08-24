@@ -3,15 +3,77 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../../Font/THSarabunFont";
 import THSarabunFontBold from "../../Font/THSarabunBold";
-// import { StudentScorenSubject } from "@/dto/pdfDto";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
+type GradeBucket = 0 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4;
+type RemarkKey = "ผ." | "มผ." | "ร." | "ขร." | "ขส.";
+function normalizeRemark(raw: string): RemarkKey | null {
+  const s = (raw ?? "").trim();
+  if (!s) return null;
+  const t = s
+    .replace(/\s+/g, "")
+    .replace("ผ่าน", "ผ.")
+    .replace("ไม่ผ่าน", "มผ.")
+    .replace("รอ", "ร.")
+    .replace("ขาดเรียน", "ขร.")
+    .replace("ขาดสอบ", "ขส.");
+
+  if (["ผ.", "มผ.", "ร.", "ขร.", "ขส."].includes(t)) return t as RemarkKey;
+  if (t === "ผ") return "ผ.";
+  if (t === "มผ") return "มผ.";
+  if (t === "ร") return "ร.";
+  if (t === "ขร") return "ขร.";
+  if (t === "ขส") return "ขส.";
+  return null;
+}
+
+function summarizeGradesAndRemarks(data: StudentGroupGradeResponse) {
+  const gradeCounts: Record<GradeBucket, number> = {
+    4: 0,
+    3.5: 0,
+    3: 0,
+    2.5: 0,
+    2: 0,
+    1.5: 0,
+    1: 0,
+    0: 0,
+  };
+  const remarkCounts: Record<RemarkKey, number> = {
+    "ผ.": 0,
+    "มผ.": 0,
+    "ร.": 0,
+    "ขร.": 0,
+    "ขส.": 0,
+  };
+
+  for (const s of data.subjectGrades ?? []) {
+    const rk = normalizeRemark(s.remarks ?? "");
+    if (rk) {
+      remarkCounts[rk] += 1;
+      continue;
+    }
+    const g =
+      typeof s.finalGrade === "string"
+        ? Number((s.finalGrade as string).replace(",", "."))
+        : Number(s.finalGrade);
+
+    if ([4, 3.5, 3, 2.5, 2, 1.5, 1, 0].includes(g)) {
+      gradeCounts[g as GradeBucket] += 1;
+    }
+  }
+
+  const totalEligible = Object.values(gradeCounts).reduce((a, b) => a + b, 0);
+  return { gradeCounts, remarkCounts, totalEligible };
+}
 interface DataList {
   data: StudentGroupGradeResponse;
 }
 
 const StudentScoreInSubjectPDF = ({ data }: DataList) => {
+  const { gradeCounts, remarkCounts, totalEligible } =
+    summarizeGradesAndRemarks(data);
+
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
   const doc = new jsPDF({
     orientation: "portrait",
@@ -145,6 +207,22 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("ร.", 139, 140);
   doc.text("ข.ร.", 151, 140);
   doc.text("ข.ส.", 167, 140);
+
+  //// คำนวนคะแนน
+  doc.text(String(gradeCounts[4]), 37, 153.5);
+  doc.text(String(gradeCounts[3.5]), 46, 153.5);
+  doc.text(String(gradeCounts[3]), 55, 153.5);
+  doc.text(String(gradeCounts[2.5]), 64, 153.5);
+  doc.text(String(gradeCounts[2]), 72, 153.5);
+  doc.text(String(gradeCounts[1.5]), 82, 153.5);
+  doc.text(String(gradeCounts[1]), 91, 153.5);
+  doc.text(String(gradeCounts[0]), 100, 153.5);
+
+  doc.text(String(remarkCounts["ผ."]), 111, 153.5);
+  doc.text(String(remarkCounts["มผ."]), 125, 153.5);
+  doc.text(String(remarkCounts["ร."]), 139, 153.5);
+  doc.text(String(remarkCounts["ขร."]), 153, 153.5);
+  doc.text(String(remarkCounts["ขส."]), 167, 153.5);
 
   doc.setFontSize(20);
   doc.text("การอนุมัติการเรียน", pageWidth / 2, 177, {
