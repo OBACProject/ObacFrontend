@@ -123,7 +123,7 @@ export default function page() {
               <p className="mt-6 text-sm sm:text-base md:text-lg text-gray-700">
                 โดยได้รับใบอนุญาต เลขที่ กอ. 136/2541 ลงวันที่ 23 มิถุนายน 2541
                 <br />
-                โดยมีคุณศุภรัฐ โยธินธรรมมณี เป็นผู้รับใบอนุญาต
+                โดยมีอาจารย์มยุรี โยธินนธรรม เป็นผู้รับใบอนุญาต
               </p>
             </section>
           </OpeningScroll>
