@@ -129,7 +129,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   doc.text(`รายวิชา ${data.subjectName || "ยังไม่ทราบรายวิชา"}`, 15, 83);
   doc.text(`รหัสวิชา ${data.subjectCode || "00000-0000"}`, 105, 83);
-  doc.text(`หน่วยกิต ${data.credit || "-"}`, 150, 83);
+  doc.text(`หน่วยกิต ${data.credits || "-"}`, 150, 83);
 
   doc.text(`เวลาเรียน ${data.hour}`, 15, 89);
 

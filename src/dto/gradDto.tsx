@@ -212,7 +212,7 @@ export interface SubjectGradeItem {
 export interface StudentGroupGradeResponse {
   subjectName: string;
   subjectCode: string;
-  credit: number;
+  credits: number;
   hour: number;
   subjectTeacher: string;
   subjectId: number;
