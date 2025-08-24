@@ -1,60 +1,68 @@
-"use client"
+"use client";
 
 type HeaderProps = {
-  title: string
-  subtitle?: string
-  theme?: "blue" | "dark" | "light"
-  size?: "sm" | "md" | "lg"
-}
+  title: string;
+  subtitle?: string;
+  theme?: "blue" | "dark" | "light";
+  size?: "sm" | "md" | "lg";
+};
 
-export default function Header({ title, subtitle, theme = "blue", size = "md" }: HeaderProps) {
+export default function HeaderHomePageMenu({
+  title,
+  subtitle,
+  theme = "blue",
+  size = "md",
+}: HeaderProps) {
   const themeClasses = {
     blue: {
       background: "bg-gradient-to-br from-[#143d66] via-[#1e4a7a] to-[#0f2d4d]",
-      overlay: "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.1)_0%,transparent_70%)]",
+      overlay:
+        "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.1)_0%,transparent_70%)]",
       text: "text-white",
       subtitle: "text-white/90",
       accent: "bg-white/90",
     },
     dark: {
       background: "bg-gradient-to-br from-gray-900 via-gray-800 to-black",
-      overlay: "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)]",
+      overlay:
+        "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)]",
       text: "text-white",
       subtitle: "text-gray-300",
       accent: "bg-blue-400",
     },
     light: {
       background: "bg-gradient-to-br from-gray-50 via-white to-gray-100",
-      overlay: "bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.03)_0%,transparent_70%)]",
+      overlay:
+        "bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.03)_0%,transparent_70%)]",
       text: "text-gray-900",
       subtitle: "text-gray-600",
       accent: "bg-blue-600",
     },
-  }
+  };
 
   const sizeClasses = {
     sm: {
-      container: "py-6 sm:py-8",
-      title: "text-2xl sm:text-3xl md:text-4xl",
+      container: "py-4 sm:py-6",
+      title: "text-xl sm:text-3xl md:text-2xl",
       subtitle: "text-sm sm:text-base",
       accent: "h-[2px] w-16 sm:w-20",
     },
     md: {
-      container: "py-8 sm:py-12 md:py-16",
-      title: "text-3xl sm:text-4xl md:text-5xl lg:text-6xl",
+      container: "py-6 sm:py-6 md:py-4",
+      title: "text-2xl sm:text-4xl md:text-5xl lg:text-4xl",
       subtitle: "text-base sm:text-lg md:text-xl",
       accent: "h-[3px] w-20 sm:w-28 md:w-36",
     },
     lg: {
-      container: "py-12 sm:py-16 md:py-20",
-      title: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl",
+      container: "py-8 sm:py-16 md:py-20",
+      title: "text-2xl sm:text-5xl md:text-2xl lg:text-2xl",
       subtitle: "text-lg sm:text-xl md:text-2xl",
       accent: "h-[4px] w-24 sm:w-32 md:w-40",
     },
-  }
+  };
 
-  const currentTheme = themeClasses[theme]
-  const currentSize = sizeClasses[size]
+  const currentTheme = themeClasses[theme];
+  const currentSize = sizeClasses[size];
 
   return (
     <div
@@ -76,7 +84,10 @@ export default function Header({ title, subtitle, theme = "blue", size = "md" }:
         <h1
           className={`${currentSize.title} font-bold tracking-tight ${currentTheme.text} drop-shadow-2xl leading-tight`}
         >
-          <span className="bg-clip-text bg-gradient-to-r from-current to-current/80">{title}</span>
+          <span className="bg-clip-text bg-gradient-to-r from-current to-current/80">
+            {title}
+          </span>
+          <div className="border-b-2 pt-2 border-white"></div>
         </h1>
 
         {subtitle && (
@@ -86,13 +97,7 @@ export default function Header({ title, subtitle, theme = "blue", size = "md" }:
             {subtitle}
           </p>
         )}
-
-        <div className="mt-6 flex justify-center">
-          <span
-            className={`inline-block ${currentSize.accent} rounded-full ${currentTheme.accent} shadow-lg transform transition-all duration-300 hover:scale-110`}
-          />
-        </div>
       </div>
     </div>
-  )
+  );
 }

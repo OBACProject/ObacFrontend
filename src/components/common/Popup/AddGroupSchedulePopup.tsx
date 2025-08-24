@@ -11,7 +11,6 @@ import {
   SubjectItem,
 } from "@/dto/subjectDto";
 import { GetAllTeacherResponse } from "@/dto/teacherDto";
-import { usegetAllActiveSubjectsQuery } from "@/lib/api/hooks/queries/subject.queries";
 import { GetAllActiveSubjectsResponse } from "@/lib/api/models/subject/subject.response";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
@@ -34,7 +33,6 @@ export default function AddGroupSchedulePopUp({
   const [subjects, setSubject] = useState<SubjectItem[]>([]);
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
 
-  const { data: subjectActiveData = [] } = usegetAllActiveSubjectsQuery();
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
@@ -85,6 +83,7 @@ export default function AddGroupSchedulePopUp({
   const [teacherID, setTeacherID] = useState<number>(0);
   const [subjectID, setSubjectID] = useState<number>(0);
   const [studentGroupId, setStudentGroupId] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const subjectOptions = subjects.map((item: GetAllActiveSubjectsResponse) => ({
     value: item.id,
@@ -108,6 +107,8 @@ export default function AddGroupSchedulePopUp({
   );
 
   const onSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const studentGroupById = studentGroup.find(
       (item) => item.id === studentGroupId
     );
