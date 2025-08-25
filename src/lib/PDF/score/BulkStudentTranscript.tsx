@@ -144,8 +144,9 @@ const BulkStudentTranscript = (
 
     let AllOfGrad = 0;
     let AllOfCredit = 0;
-    
+
     for (let i = 0; i < student.subjectGradesTermYear.length; i++) {
+      const termBlock = student.subjectGradesTermYear[i];
       if (swift == false && startColumn >= 250) {
         startColumn = 64;
         Xaxis = 130;
@@ -157,7 +158,7 @@ const BulkStudentTranscript = (
       }
       doc.setFont("THSarabunBold", "bold");
       doc.text(
-        `ภาคเรียนที่ ${data[i].subjectGradesTermYear[i].term} ปีการศึกษา ${data[i].subjectGradesTermYear[i].year}`,
+        `ภาคเรียนที่ ${termBlock.term} ปีการศึกษา ${termBlock.year}`,
         Xaxis + 7,
         startColumn
       );
@@ -167,11 +168,7 @@ const BulkStudentTranscript = (
       let CreditCount = 0;
       let CountGrad = 0;
 
-      for (
-        let j = 0;
-        j < data[i].subjectGradesTermYear[i].subjectGrades.length;
-        j++
-      ) {
+      for (let j = 0; j < termBlock.subjectGrades.length; j++) {
         if (swift == false && inStartColoume >= 250) {
           inStartColoume = 63;
           inStartColoume = inStartColoume + 5;
@@ -183,18 +180,16 @@ const BulkStudentTranscript = (
           Xaxis = 30;
           swift = false;
         }
-        let GradResult =
-          Number(data[i].subjectGradesTermYear[i].subjectGrades[j].finalGrade) *
-          Number(data[i].subjectGradesTermYear[i].subjectGrades[j].credit);
-        CountGrad += GradResult;
-        CreditCount += Number(
-          data[i].subjectGradesTermYear[i].subjectGrades[j].credit
-        );
+        const row = termBlock.subjectGrades[j];
+        const grad = Number(row.finalGrade) || 0;
+        const credit = Number(row.credit) || 0;
+        const GradResult = grad * credit;
 
+        CountGrad += GradResult;
+        CreditCount += credit;
         AllOfGrad += GradResult;
-        AllOfCredit += Number(
-          data[i].subjectGradesTermYear[i].subjectGrades[j].credit
-        );
+        AllOfCredit += credit;
+
         doc.text(
           `${data[i].subjectGradesTermYear[i].subjectGrades[j].subjectCode}`,
           Xaxis - 23,
