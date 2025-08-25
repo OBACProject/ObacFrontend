@@ -1,6 +1,7 @@
 import {
   BulkUpdateStudentGradeResponse,
   GradBelowResponse,
+  GroupStudentsResponse,
   StudentGradesResponse,
   StudentGroupGrade,
   StudentGroupGradeResponse,
@@ -141,9 +142,93 @@ export const GetStudentIfGradeBelow = async (
     }>(
       `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&term=${term}&year=${year}`
     );
-    return response.data.data ?? [];
+
+    const list = response.data.data ?? [];
+
+    const parseGroup = (s?: string) => {
+      const [maj, min] = (s ?? "").split("/").map((t) => t.trim());
+      const major = Number.parseInt(maj, 10);
+      const minor = Number.parseInt(min, 10);
+      return {
+        major: Number.isFinite(major) ? major : Number.MAX_SAFE_INTEGER,
+        minor: Number.isFinite(minor) ? minor : Number.MAX_SAFE_INTEGER,
+      };
+    };
+
+    const sorted = [...list].sort((a, b) => {
+      const ga = parseGroup((a as any).groupName);
+      const gb = parseGroup((b as any).groupName);
+
+      if (ga.major !== gb.major) return ga.major - gb.major;
+      if (ga.minor !== gb.minor) return ga.minor - gb.minor;
+
+      return ((a as any).studentCode ?? "").localeCompare(
+        (b as any).studentCode ?? "",
+        "en",
+        { numeric: true, sensitivity: "base" }
+      );
+    });
+
+    return sorted;
   } catch (err) {
     console.log(err);
     return [];
+  }
+};
+
+export const GetStudentIfGradeAbove = async (
+  groupID: number,
+  grade: number
+): Promise<GroupStudentsResponse> => {
+  try {
+    const response = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: GroupStudentsResponse;
+    }>(
+      `Grade/GetStudentIfGradeAbove?studentGroupId=${groupID}&gradeThreshold=${grade}`
+    );
+
+    const data = response.data.data;
+
+    if (!data) {
+      return {
+        groupName: "",
+        groupCode: "",
+        class: "",
+        level: 0,
+        programId: 0,
+        facultyName: "",
+        programName: "",
+        subProgramName: "",
+        term: "",
+        year: 0,
+        students: [],
+      };
+    }
+
+    const sortedStudents = [...(data.students ?? [])].sort((a, b) =>
+      (a.studentCode ?? "").localeCompare(b.studentCode ?? "", "en", {
+        numeric: true,
+        sensitivity: "base",
+      })
+    );
+
+    return { ...data, students: sortedStudents };
+  } catch (err) {
+    console.log("GetStudentIfGradeAbove error:", err);
+    return {
+      groupName: "",
+      groupCode: "",
+      class: "",
+      level: 0,
+      programId: 0,
+      facultyName: "",
+      programName: "",
+      subProgramName: "",
+      term: "",
+      year: 0,
+      students: [],
+    };
   }
 };

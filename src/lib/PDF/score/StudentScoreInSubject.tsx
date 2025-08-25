@@ -3,15 +3,77 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import THSarabunFont from "../../Font/THSarabunFont";
 import THSarabunFontBold from "../../Font/THSarabunBold";
-// import { StudentScorenSubject } from "@/dto/pdfDto";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
+type GradeBucket = 0 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4;
+type RemarkKey = "ผ." | "ม.ผ." | "ร." | "ข.ร." | "ข.ส.";
+function normalizeRemark(raw: string): RemarkKey | null {
+  const s = (raw ?? "").trim();
+  if (!s) return null;
+  const t = s
+    .replace(/\s+/g, "")
+    .replace("ผ่าน", "ผ.")
+    .replace("ไม่ผ่าน", "ม.ผ.")
+    .replace("รอ", "ร.")
+    .replace("ขาดเรียน", "ข.ร.")
+    .replace("ขาดสอบ", "ข.ส.");
+
+  if (["ผ.", "ม.ผ.", "ร.", "ข.ร.", "ข.ส."].includes(t)) return t as RemarkKey;
+  if (t === "ผ") return "ผ.";
+  if (t === "ม.ผ") return "ม.ผ.";
+  if (t === "ร") return "ร.";
+  if (t === "ข.ร") return "ข.ร.";
+  if (t === "ข.ส") return "ข.ส.";
+  return null;
+}
+
+function summarizeGradesAndRemarks(data: StudentGroupGradeResponse) {
+  const gradeCounts: Record<GradeBucket, number> = {
+    4: 0,
+    3.5: 0,
+    3: 0,
+    2.5: 0,
+    2: 0,
+    1.5: 0,
+    1: 0,
+    0: 0,
+  };
+  const remarkCounts: Record<RemarkKey, number> = {
+    "ผ.": 0,
+    "ม.ผ.": 0,
+    "ร.": 0,
+    "ข.ร.": 0,
+    "ข.ส.": 0,
+  };
+
+  for (const s of data.subjectGrades ?? []) {
+    const rk = normalizeRemark(s.remarks ?? "");
+    if (rk) {
+      remarkCounts[rk] += 1;
+      continue;
+    }
+    const g =
+      typeof s.finalGrade === "string"
+        ? Number((s.finalGrade as string).replace(",", "."))
+        : Number(s.finalGrade);
+
+    if ([4, 3.5, 3, 2.5, 2, 1.5, 1, 0].includes(g)) {
+      gradeCounts[g as GradeBucket] += 1;
+    }
+  }
+
+  const totalEligible = Object.values(gradeCounts).reduce((a, b) => a + b, 0);
+  return { gradeCounts, remarkCounts, totalEligible };
+}
 interface DataList {
   data: StudentGroupGradeResponse;
 }
 
 const StudentScoreInSubjectPDF = ({ data }: DataList) => {
+  const { gradeCounts, remarkCounts, totalEligible } =
+    summarizeGradesAndRemarks(data);
+
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
   const doc = new jsPDF({
     orientation: "portrait",
@@ -67,7 +129,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   doc.text(`รายวิชา ${data.subjectName || "ยังไม่ทราบรายวิชา"}`, 15, 83);
   doc.text(`รหัสวิชา ${data.subjectCode || "00000-0000"}`, 105, 83);
-  doc.text(`หน่วยกิต ${data.credit || "-"}`, 150, 83);
+  doc.text(`หน่วยกิต ${data.credits || "-"}`, 150, 83);
 
   doc.text(`เวลาเรียน ${data.hour}`, 15, 89);
 
@@ -141,10 +203,26 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("0", 100, 140);
   //////////////////////
   doc.text("ผ.", 111, 140);
-  doc.text("มผ.", 124, 140);
+  doc.text("ม.ผ.", 124, 140);
   doc.text("ร.", 139, 140);
   doc.text("ข.ร.", 151, 140);
   doc.text("ข.ส.", 167, 140);
+
+  //// คำนวนคะแนน
+  doc.text(String(gradeCounts[4]), 37, 153.5);
+  doc.text(String(gradeCounts[3.5]), 46, 153.5);
+  doc.text(String(gradeCounts[3]), 55, 153.5);
+  doc.text(String(gradeCounts[2.5]), 64, 153.5);
+  doc.text(String(gradeCounts[2]), 72, 153.5);
+  doc.text(String(gradeCounts[1.5]), 82, 153.5);
+  doc.text(String(gradeCounts[1]), 91, 153.5);
+  doc.text(String(gradeCounts[0]), 100, 153.5);
+
+  doc.text(String(remarkCounts["ผ."]), 111, 153.5);
+  doc.text(String(remarkCounts["ม.ผ."]), 125, 153.5);
+  doc.text(String(remarkCounts["ร."]), 139, 153.5);
+  doc.text(String(remarkCounts["ข.ร."]), 153, 153.5);
+  doc.text(String(remarkCounts["ข.ส."]), 167, 153.5);
 
   doc.setFontSize(20);
   doc.text("การอนุมัติการเรียน", pageWidth / 2, 177, {
@@ -229,7 +307,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   // Next page.....
   doc.addPage();
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ${data.groupName}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน ${data.class}.${data.groupName}`, 36, 10, {
     align: "center",
   });
   doc.setFontSize(14);

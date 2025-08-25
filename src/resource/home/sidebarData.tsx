@@ -1,4 +1,4 @@
-import { BookText } from "lucide-react";
+import { BookText, TvMinimalPlay } from "lucide-react";
 
 interface DropMenuList {
   menuName: string;
@@ -52,4 +52,5 @@ export const iconMap: Record<string, React.ElementType> = {
   Users,
   Briefcase,
   Plane,
+  TvMinimalPlay
 };

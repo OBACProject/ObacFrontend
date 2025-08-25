@@ -1,33 +1,36 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DataTableStudentInfo } from "@/components/common/MainTable/table_style_studentInfo"
-import { StudentPopup, type SubjectData } from "../component/studentPopup"
-import type { TermQuery, YearData } from "@/dto/studentDto"
-import { BookOpen, TrendingUp, Award, AlertTriangle } from "lucide-react"
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTableStudentInfo } from "@/components/common/MainTable/table_style_studentInfo";
+import { StudentPopup, type SubjectData } from "../component/studentPopup";
+import type { TermQuery, YearData } from "@/dto/studentDto";
+import { BookOpen, TrendingUp, Award, AlertTriangle } from "lucide-react";
 
 interface Props {
-  termData: YearData[]
+  termData: YearData[];
   studentData: {
-    name: string
-    studentCode: string
-  }
+    name: string;
+    studentCode: string;
+  };
 }
 
 export const StudentTermTable = ({ termData, studentData }: Props) => {
-  const [isOpenPopUp, setIsOpenPopUp] = useState(false)
-  const [subjectDataByRowClick, setSubjectDataByRowClick] = useState<SubjectData | null>(null)
+  const [isOpenPopUp, setIsOpenPopUp] = useState(false);
+  const [subjectDataByRowClick, setSubjectDataByRowClick] =
+    useState<SubjectData | null>(null);
 
   const handleRowClick = (subjectName: string) => {
-    const subject = termData.flatMap((year) => year.termQuery.filter((term) => term.subject_name === subjectName))[0]
+    const subject = termData.flatMap((year) =>
+      year.termQuery.filter((term) => term.subject_name === subjectName)
+    )[0];
 
     if (subject) {
-      setSubjectDataByRowClick(subject)
-      setIsOpenPopUp(true)
+      setSubjectDataByRowClick(subject);
+      setIsOpenPopUp(true);
     }
-  }
+  };
 
   const columns = [
     {
@@ -48,15 +51,21 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
     {
       label: "เกรด",
       key: "finalGrade",
-      className: "w-3/12 px-4 py-1 text-center font-medium flex justify-center ",
+      className:
+        "w-3/12 px-4 py-1 text-center font-medium flex justify-center ",
       render: (row: any) => {
-        const showValue = row.remark && row.remark !== "" ? row.remark : row.finalGrade;
-        console.log("Row data:",row.finalGrade, row.remark);
+        console.log(row.remark || "none");
+        const showValue =
+          row.remark && row.remark !== "" ? row.remark : row.finalGrade;
         const shouldHighlight = row.isFailed && row.remark !== "ผ.";
         return (
           <span
             className={`px-2 py-1 rounded text-xs font-medium ${
-              shouldHighlight ? "text-red-800" : !row.isFailed ? "text-green-800" : ""
+              shouldHighlight
+                ? "text-red-800"
+                : !row.isFailed
+                ? "text-green-800"
+                : ""
             }`}
           >
             {showValue}
@@ -70,43 +79,41 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
       className: "w-2/12 px-4 py-1 text-center font-medium",
       render: (row: any) => {
         return (
-          <span className="text-sm text-gray-600">
-            {row.receiptNo || "-"}
-          </span>
+          <span className="text-sm text-gray-600">{row.receiptNo || "-"}</span>
         );
       },
     },
   ];
 
   const calculateGpa = (termQuery: TermQuery[], totalCredit: number) => {
-    let totalGradePoints = 0
+    let totalGradePoints = 0;
 
     termQuery.forEach((term) => {
-      const grade = Number.parseFloat(term.finalGrade)
-      const credit = Number.parseFloat(term.credit)
+      const grade = Number.parseFloat(term.finalGrade);
+      const credit = Number.parseFloat(term.credit);
 
       if (!isNaN(grade) && !isNaN(credit)) {
-        totalGradePoints += grade * credit
+        totalGradePoints += grade * credit;
       }
-    })
+    });
 
-    if (totalCredit <= 0) return "0.00"
+    if (totalCredit <= 0) return "0.00";
 
-    const gpa = totalGradePoints / totalCredit
-    return gpa.toFixed(2)
-  }
+    const gpa = totalGradePoints / totalCredit;
+    return gpa.toFixed(2);
+  };
 
   const getGpaColor = (gpa: string) => {
-
     if (gpa == "ผ.") {
-      return "text-blue-600 bg-blue-50 border-blue-200"
+      return "text-blue-600 bg-blue-50 border-blue-200";
     }
-    const gpaValue = Number.parseFloat(gpa)
-    if (gpaValue >= 3.5) return "text-green-600 bg-green-50 border-green-200"
-    if (gpaValue >= 3.0) return "text-blue-600 bg-blue-50 border-blue-200"
-    if (gpaValue >= 2.5) return "text-yellow-600 bg-yellow-50 border-yellow-200"
-    return "text-red-600 bg-red-50 border-red-200"
-  }
+    const gpaValue = Number.parseFloat(gpa);
+    if (gpaValue >= 3.5) return "text-green-600 bg-green-50 border-green-200";
+    if (gpaValue >= 3.0) return "text-blue-600 bg-blue-50 border-blue-200";
+    if (gpaValue >= 2.5)
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    return "text-red-600 bg-red-50 border-red-200";
+  };
 
   const getFailedSubjectsCount = (termQuery: TermQuery[]) => {
     return termQuery.filter((term) => {
@@ -116,8 +123,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
         return term.finalGrade === "0";
       }
     }).length;
-  }
-  console.log("Term data:", termData);
+  };
 
   return (
     <div className="space-y-6">
@@ -139,14 +145,14 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
             credit: term.credit,
             finalGrade: term.finalGrade,
             remark: term.remark,
-            receiptNo: term.receiptNo, 
+            receiptNo: term.receiptNo,
             isFailed,
           };
-        })
-        console.log("Transformed data:", transformedData)
+        });
+        console.log(transformedData);
 
-        const gpa = calculateGpa(year.termQuery, year.totalCredit)
-        const failedCount = getFailedSubjectsCount(year.termQuery)
+        const gpa = calculateGpa(year.termQuery, year.totalCredit);
+        const failedCount = getFailedSubjectsCount(year.termQuery);
 
         return (
           <Card key={index} className="shadow-lg border-0 overflow-hidden">
@@ -161,13 +167,17 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
                       ปีการศึกษา {year.year} เทอม {year.term.slice(0, 1)}
                     </CardTitle>
                     <p className="text-sm text-slate-600 mt-1">
-                      {year.termQuery.length} รายวิชา • {year.totalCredit} หน่วยกิต
+                      {year.termQuery.length} รายวิชา • {year.totalCredit}{" "}
+                      หน่วยกิต
                     </p>
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Badge variant="outline" className={`px-4 py-2 font-semibold ${getGpaColor(gpa)}`}>
+                  <Badge
+                    variant="outline"
+                    className={`px-4 py-2 font-semibold ${getGpaColor(gpa)}`}
+                  >
                     <TrendingUp className="w-4 h-4 mr-2" />
                     GPA: {gpa}
                   </Badge>
@@ -198,7 +208,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
               />
             </CardContent>
           </Card>
-        )
+        );
       })}
 
       <StudentPopup
@@ -208,5 +218,5 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
         subjects={subjectDataByRowClick}
       />
     </div>
-  )
-}
+  );
+};

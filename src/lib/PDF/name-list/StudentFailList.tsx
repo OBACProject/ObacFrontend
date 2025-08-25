@@ -92,7 +92,7 @@ const StudentFailListPDF = ({
             `${student[i].prefix} ${student[i].firstName}`,
             `${student[i].lastName}`,
             `${student[i].class}.${student[i].groupName}`,
-            `${student[i].gpax.toFixed(2)}`,
+            `${student[i].gpa.toFixed(2)}`,
             "",
           ],
         ],

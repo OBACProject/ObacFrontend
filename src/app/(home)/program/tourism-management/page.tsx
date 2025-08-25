@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import StickerFacebook from "@/components/Effect/StickerFacebook";
 import StickerYoutube from "@/components/Effect/StickerYoutube";
@@ -56,19 +56,14 @@ export default function Page() {
   return (
     <div className="bg-white text-blue-950 font-prompt mt-16 md:mt-36">
       <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <link rel="canonical" href="https://ekawit.ac.th" />
       </Head>
 
       <StickerFacebook />
       <StickerYoutube />
 
-      {/* Header Section */}
       <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
-        {/* Floating Icons */}
         {iconPositions.map((icon, index) => (
           <div
             key={index}
@@ -80,53 +75,59 @@ export default function Page() {
               animationDuration: `${6 + index * 0.5}s`,
             }}
           >
-            <Image
-              src={icon.src}
-              alt={icon.alt}
-              width={64}
-              height={64}
-              className={`${icon.size} drop-shadow-lg`}
-            />
+            <Image src={icon.src} alt={icon.alt} width={64} height={64} className={`${icon.size} drop-shadow-lg`} />
           </div>
         ))}
 
-        {/* Content */}
-        <div className="absolute inset-0 flex items-center justify-center px-4 md:px-10 z-20">
-          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-10 w-full max-w-6xl">
-            {/* Avatar */}
-            <div className="w-full sm:w-1/2 flex justify-center">
-              <Image
-                src="/cls/tourism-management/avatar.png"
-                alt="Marketing Professional"
-                width={800}
-                height={800}
-                className="h-[160px] sm:h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
+        <div className="absolute inset-0 sm:hidden">
+          <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
+            <h1
+              className="text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl"
+              style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
+            >
+              สาขาวิชาการท่องเที่ยว
+            </h1>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 flex justify-center z-10">
+            <Image
+              src="/cls/tourism-management/avatar.png"
+              alt="Tourism Management"
+              width={900}
+              height={900}
+              className="h-[180px] w-auto object-contain drop-shadow-2xl translate-x-4 sm:translate-x-0"
+              priority
+            />
+          </div>
+        </div>
 
-            {/* Text */}
-            <div className="text-white text-center sm:text-left w-full sm:w-1/2">
+        <div className="hidden sm:flex absolute inset-0 items-center justify-center px-4 md:px-10 z-20">
+          <div className="flex sm:flex-row-reverse items-center gap-6 md:gap-10 w-full max-w-6xl">
+            <div className="text-white text-left w-1/2">
               <h1
-                className="text-3xl sm:text-3xl md:text-5xl font-bold tracking-wide drop-shadow-2xl"
-                style={{
-                  transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)`,
-                }}
+                className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold tracking-tight drop-shadow-2xl"
+                style={{ transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)` }}
               >
                 สาขาวิชาการท่องเที่ยว
               </h1>
-
+            </div>
+            <div className="w-1/2 flex justify-center">
+              <Image
+                src="/cls/tourism-management/avatar.png"
+                alt="Tourism Management"
+                width={900}
+                height={900}
+                className="h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
+                priority
+              />
             </div>
           </div>
         </div>
 
-        {/* Decorations */}
         <div className="absolute top-10 left-10 w-1 h-20 bg-gradient-to-b from-orange-400 to-transparent opacity-60 animate-pulse" />
         <div className="absolute top-20 right-20 w-20 h-1 bg-gradient-to-r from-yellow-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "1s" }} />
         <div className="absolute bottom-20 left-20 w-1 h-16 bg-gradient-to-t from-orange-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "2s" }} />
         <div className="absolute bottom-10 right-10 w-16 h-1 bg-gradient-to-l from-yellow-400 to-transparent opacity-60 animate-pulse" style={{ animationDelay: "1.5s" }} />
 
-        {/* Particles */}
         <div className="absolute inset-0 pointer-events-none">
           {Array.from({ length: 15 }).map((_, i) => (
             <div
@@ -142,25 +143,18 @@ export default function Page() {
           ))}
         </div>
       </div>
+
       <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
           สาขาวิชาการท่องเที่ยว (Tourism Management)
         </h3>
-
         <p className="text-base sm:text-lg leading-relaxed indent-8">
-          สาขาวิชาการท่องเที่ยวมุ่งผลิตบุคลากรที่มีความรู้และทักษะในการให้บริการด้านการท่องเที่ยว
-          การเป็นมัคคุเทศก์ การบริหารจัดการทัวร์ ตลอดจนการดูแลลูกค้าอย่างมีประสิทธิภาพ
-          และมีจิตบริการที่ดี
+          สาขาวิชาการท่องเที่ยวมุ่งผลิตบุคลากรที่มีความรู้และทักษะในการให้บริการด้านการท่องเที่ยว การเป็นมัคคุเทศก์ การบริหารจัดการทัวร์ ตลอดจนการดูแลลูกค้าอย่างมีประสิทธิภาพ และมีจิตบริการที่ดี
         </p>
-
         <p className="text-base sm:text-lg leading-relaxed indent-8">
-          นักเรียนจะได้เรียนรู้การจัดกิจกรรมท่องเที่ยว การวางแผนเส้นทาง การประชาสัมพันธ์แหล่งท่องเที่ยว
-          รวมถึงภาษาต่างประเทศเพื่อการสื่อสาร พร้อมทั้งฝึกประสบการณ์จากสถานการณ์จริงในสถานประกอบการ
-          เพื่อเตรียมพร้อมสู่สายงานบริการและธุรกิจท่องเที่ยวระดับมืออาชีพ
+          นักเรียนจะได้เรียนรู้การจัดกิจกรรมท่องเที่ยว การวางแผนเส้นทาง การประชาสัมพันธ์แหล่งท่องเที่ยว รวมถึงภาษาต่างประเทศเพื่อการสื่อสาร พร้อมทั้งฝึกประสบการณ์จากสถานการณ์จริงในสถานประกอบการ เพื่อเตรียมพร้อมสู่สายงานบริการและธุรกิจท่องเที่ยวระดับมืออาชีพ
         </p>
       </div>
-
-
     </div>
   );
 }

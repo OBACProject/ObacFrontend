@@ -115,3 +115,21 @@ export interface StudentGroupResponse {
   level: number;
   students: Students[];
 }
+
+
+export interface UpdateStudentGroupBody {
+  studentId: number[]; 
+  studentGroup: {
+    groupName: string; 
+    class: string;      
+    groupCode: string;   
+    level: number;    
+    programId: number;  
+    isPublish: boolean;
+    isComplete: boolean;
+    isActive: boolean;
+    year: number;   
+    term: string;  
+  };
+  action:string;
+}

@@ -42,7 +42,9 @@ export const GetStudentByStudentId = async (
   }
 };
 
-export const GetAllStudentsUser = async (): Promise<GetAllStudentUser[] | []> => {
+export const GetAllStudentsUser = async (): Promise<
+  GetAllStudentUser[] | []
+> => {
   try {
     const response = await apiClient.get("Admin/GetAllStudentUsers");
     console.log("📦 Response from API:", response.data);
@@ -56,16 +58,14 @@ export const GetAllStudentsUser = async (): Promise<GetAllStudentUser[] | []> =>
   }
 };
 
-export const GetAllStudentsPaged = async (
-  {
-    pageNumber = 1,
-    pageSize = 10,
-    searchTerm = "",
-    searchCategory = "all",
-    sortBy = "studentCode",
-    ascending = true,
-  }: GetAllStudentsPagedParams = {}
-): Promise<GetAllStudentsPagedResponse> => {
+export const GetAllStudentsPaged = async ({
+  pageNumber = 1,
+  pageSize = 10,
+  searchTerm = "",
+  searchCategory = "all",
+  sortBy = "studentCode",
+  ascending = true,
+}: GetAllStudentsPagedParams = {}): Promise<GetAllStudentsPagedResponse> => {
   try {
     const res = await apiClient.get("/Student/GetAllStudents", {
       params: {
@@ -87,7 +87,7 @@ export const GetAllStudentsPaged = async (
       class: String(r.class ?? ""),
       groupName: String(r.groupName ?? ""),
       groupCode: String(r.groupCode ?? ""),
-      id: String(r.userId ?? r.id ?? ""),      
+      id: String(r.userId ?? r.id ?? ""),
       userName: String(r.userName ?? r.username ?? ""),
       prefix: String(r.prefix ?? ""),
       firstName: String(r.firstName ?? r.name ?? ""),
@@ -177,15 +177,33 @@ export const UpdateStudentStatus = async (
 
 export const CreateStudent = async (
   payload: CreateStudentRequest
-): Promise<boolean> => {
+): Promise<{ success: boolean; message?: string }> => {
   try {
     const response = await apiClient.post("User/CreateStudent", payload);
-    return [200, 201, 204].includes(response.status) 
+
+    const msg = String(response.data?.message ?? "");
+    if (/This UserName Already Exists/i.test(msg)) {
+      return { success: false, message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น" };
+    }
+
+    // ✅ เผื่อมีเคส StudentCode ซ้ำ
+    if (/This StudentCode Already Exists/i.test(msg)) {
+      return { success: false, message: "รหัสนักเรียนนี้ถูกใช้แล้ว โปรดใช้รหัสอื่น" };
+    }
+
+    if ([200, 201, 204].includes(response.status)) {
+      return { success: true, message: "สร้างบัญชีนักเรียนสำเร็จ" };
+    }
+    return { success: false, message: "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง" };
+
   } catch (err: any) {
-    console.error("Error creating academic:", err);
-    return false;
+    console.error("Error creating student:", err);
+
+    const backendMsg = err?.response?.data?.message || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
+    return { success: false, message: backendMsg };
   }
 };
+
 
 export const UpdateStudentUser = async (payload: UpdateStudentUserRequest) => {
   try {

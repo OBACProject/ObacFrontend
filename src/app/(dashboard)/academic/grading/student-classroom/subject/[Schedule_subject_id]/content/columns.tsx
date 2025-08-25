@@ -34,7 +34,7 @@ export const createColumns = ({
   onChangeRemark: (remark: string, studentId: number) => void;
 }): Column<GetGradBySubjectId>[] => {
   const gradeOptions = ["0", "1", "1.5", "2", "2.5", "3", "3.5", "4"];
-  const remarkOptions = ["", "ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+  const remarkOptions = ["", "ผ.", "ม.ผ.", "ข.ส.", "ข.ร."];
 
   const valueOf = (
     row: GetGradBySubjectId,

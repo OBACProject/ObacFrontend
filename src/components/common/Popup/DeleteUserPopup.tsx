@@ -11,6 +11,7 @@ type Props = {
 };
 
 const DeleteUserPopup: React.FC<Props> = ({ userId, onClose }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -22,6 +23,9 @@ const DeleteUserPopup: React.FC<Props> = ({ userId, onClose }) => {
   }, [onClose]);
 
   const handleConfirmDelete = async () => {
+     if (isSubmitting) return;
+  setIsSubmitting(true);
+    
     try {
       setLoading(true);
       const ok = await DeleteUser(userId);
@@ -42,7 +46,9 @@ const DeleteUserPopup: React.FC<Props> = ({ userId, onClose }) => {
       toast.error(msg);
     } finally {
       setLoading(false);
+      setIsSubmitting(false);
     }
+    
   };
 
   return (
@@ -71,7 +77,7 @@ const DeleteUserPopup: React.FC<Props> = ({ userId, onClose }) => {
           <button
             onClick={handleConfirmDelete}
             className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white disabled:opacity-60"
-            disabled={loading}
+            disabled={loading ||isSubmitting}
           >
             {loading ? "กำลังลบ..." : "ลบผู้ใช้"}
           </button>

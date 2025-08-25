@@ -354,7 +354,8 @@ export function generateMockStudents(count: number): GradBelowResponse[] {
       }`,
       term: `${Math.floor(Math.random() * 2) + 1}`,
       year: 2568,
-      gpax: parseFloat((Math.random() * 4).toFixed(2)),
+      gpa: parseFloat((Math.random() * 4).toFixed(2)),
+      receipts: [],
     });
   }
 
@@ -1045,7 +1046,7 @@ import { StudentGroupGradeResponse } from "@/dto/gradDto";
 export const mockStudentGroupGradeResponse: StudentGroupGradeResponse = {
   subjectName: "คณิตศาสตร์พื้นฐาน",
   subjectCode: "MATH101",
-  credit: 3,
+  credits: 3,
   hour: 45,
   subjectTeacher: "อาจารย์ณัฐวุฒิ ใจดี",
   subjectId: 101,

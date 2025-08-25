@@ -212,7 +212,7 @@ export interface SubjectGradeItem {
 export interface StudentGroupGradeResponse {
   subjectName: string;
   subjectCode: string;
-  credit: number;
+  credits: number;
   hour: number;
   subjectTeacher: string;
   subjectId: number;
@@ -354,5 +354,35 @@ export interface GradBelowResponse {
   groupName: string;
   term: string;
   year: number;
-  gpax: number;
+  gpa: number;
+  receipts:Receipt[]
+}
+
+export interface Receipt {
+  receiptNo: string;
+  subjectName: string;
+}
+
+export interface StudentInGroup {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gpa: number;
+  receipts: Receipt[];
+}
+
+export interface GroupStudentsResponse {
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  programId: number;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  term: string;
+  year: number;
+  students: StudentInGroup[];
 }

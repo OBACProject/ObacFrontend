@@ -1,5 +1,5 @@
 "use client";
-import { User, BookOpen, GraduationCap } from "lucide-react";
+import { User, BookOpen, GraduationCap, Building } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,18 +28,12 @@ export const StudentInfoCard = ({
           >
             <div className="space-y-4">
               <div className="flex items-center gap-4 mb-4">
-                <Badge
-                  variant="secondary"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 text-sm font-medium"
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  ข้อมูลนักเรียน
-                </Badge>
+              
                 <Badge
                   variant="outline"
-                  className="text-blue-700 border-blue-200"
+                  className="text-blue-700 text-lg border-blue-200"
                 >
-                  <GraduationCap className="w-4 h-4 mr-2" />
+                  <GraduationCap className="w-6 h-6 mr-2" />
                   {student.class}.{student.groupName}
                 </Badge>
               </div>
@@ -87,11 +81,11 @@ export const StudentInfoCard = ({
               {/* Faculty Information */}
               <div className="pt-3 border-t border-slate-200">
                 <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-slate-500" />
-                  <span className="text-sm font-medium text-slate-600">
-                    คณะ:
+                  <Building className="w-5  h-5 text-slate-500" />
+                  <span className="text-base text-slate-600">
+                    สายการเรียน :
                   </span>
-                  <span className="text-sm text-slate-700">
+                  <span className="text-base text-slate-700">
                     {student.facultyName}
                   </span>
                 </div>

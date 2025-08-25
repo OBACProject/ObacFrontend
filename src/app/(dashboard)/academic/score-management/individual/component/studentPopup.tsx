@@ -59,7 +59,6 @@ interface StudentPopupProps {
   subjects: SubjectData | null;
 }
 
-
 const remarkOptions = ["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
 
 export function StudentPopup({
@@ -385,7 +384,7 @@ export function StudentPopup({
                           <span className="font-bold text-green-600">
                             {selectedSubject.finalGrade ||
                               selectedSubject.remark ||
-                              "N/A"}
+                              "-"}
                           </span>
                         </div>
                       </div>
@@ -424,7 +423,7 @@ export function StudentPopup({
                 </div>
 
                 <div className="p-2">
-                  <h1>คะแนนประพฤติ (20 คะแนน)</h1>
+                  <h1>คะแนนจิตพิสัย (20 คะแนน)</h1>
                   <Input
                     type="number"
                     inputMode="decimal"

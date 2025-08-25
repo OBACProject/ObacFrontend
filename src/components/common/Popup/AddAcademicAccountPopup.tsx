@@ -1,17 +1,19 @@
 "use client";
 
-import { CreateAcademic } from "@/api/user/userAPI";
-import { CreateAcademicRequest } from "@/dto/userDto";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { CreateAcademic } from "@/api/user/userAPI";
+import { CreateAcademicRequest } from "@/dto/userDto";
+import { fi } from "@faker-js/faker";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
-  onCreated?: () => Promise<void> | void; 
+  onCreated?: () => Promise<void> | void;
 };
 
 export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Props) {
   const [academicCode, setAcademicCode] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,52 +29,65 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async () => {
-    if (
-      !academicCode ||
-      !firstName ||
-      !lastName ||
-      !phone ||
-      !username ||
-      !password ||
-      !confirmPassword ||
-      !citizenId ||
-      !birthDate
-    ) {
-      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
-      return;
-    }
+  if (isSubmitting) return; 
+  setIsSubmitting(true);
+  
+  if (
+    !academicCode ||
+    !firstName ||
+    !lastName ||
+    !username ||
+    !password ||
+    !confirmPassword
+  ) {
+    toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+    return;
+  }
 
-    if (password !== confirmPassword) {
-      toast.error("รหัสผ่านไม่ตรงกัน");
-      return;
-    }
+  if (password !== confirmPassword) {
+    toast.error("รหัสผ่านไม่ตรงกัน");
+    return;
+  }
+  const today = new Date().toISOString().split("T")[0];
+  const finalBirthDate = birthDate || today;
 
-    const payload: CreateAcademicRequest = {
-      prefix,
-      academicCode,
-      username,
-      password,
-      firstName,
-      lastName,
-      gender,
-      citizenId,
-      phoneNumber: phone,
-      nationality,
-      birthDate,
-    };
-
-    try {
-      await CreateAcademic(payload);
-      toast.success("เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
-      // ✅ แจ้งหน้าหลักให้รีเฟรชรายการ
-      await onCreated?.();
-      // ✅ ปิดป็อปอัป
-      onClosePopUp(false);
-    } catch (err) {
-      console.error("Error saving academic:", err);
-      toast.error("บันทึกข้อมูลไม่สำเร็จ");
-    }
+  const payload: CreateAcademicRequest = {
+    prefix,
+    academicCode,
+    username: username.trim(),
+    password,
+    firstName: firstName.trim(),
+    lastName: lastName.trim(),
+    gender,
+    citizenId: citizenId.trim(),
+    phoneNumber: phone.trim(),
+    nationality: nationality.trim(),
+    birthDate: finalBirthDate,
   };
+
+  try {
+    const result = await CreateAcademic(payload);
+
+    if (result.success) {
+      toast.success(result.message || "เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
+      await onCreated?.();
+      onClosePopUp(false);
+      return;
+    }
+
+    toast.error(
+      result.message ||
+        "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง"
+    );
+  } catch (err: any) {
+    console.error("Error saving academic:", err);
+    toast.error("ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง");
+
+  }finally {
+      setIsSubmitting(false);
+    }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
@@ -179,7 +194,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
         </div>
 
         <div>
-          <label className="text-sm">ชื่อผู้ใช้ </label>
+          <label className="text-sm">ชื่อผู้ใช้ของฝ่ายทะเบียน </label>
           <input
             type="text"
             value={username}
@@ -236,8 +251,9 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
+            disabled={isSubmitting}
           >
-            บันทึกข้อมูล
+            {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
           </button>
         </div>
       </div>

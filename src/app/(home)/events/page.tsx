@@ -3,6 +3,8 @@
 import { useState } from "react";
 import BigCarouselNews from "../../../components/common/Carousel/BigCarouselNews";
 import CardNews from "../../../components/common/Card/card-news";
+import HeaderHomePageMenu from "@/components/common/Header/Header";
+import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 
 const newsItems = [
   {
@@ -62,32 +64,24 @@ export default function NewsSection() {
   return (
     <div className="mt-16 sm:mt-[8px] md:pt-[80px] lg:mt-16">
       <div className="bg-white text-blue-950 font-prompt">
-        {/* Header */}
-        <div className="grid place-items-center py-10 text-white text-2xl bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500">
-          <p className="text-3xl sm:text-4xl md:text-5xl font-prompt text-center">
-            กิจกรรม OBAC
-          </p>
-        </div>
+        <HeaderHomePageMenu title="กิจกรรม OBAC" />
+        <SciFiBackgroundNormal>
+          <section className="container mx-auto px-4 py-4">
+            <BigCarouselNews />
+            <CardNews news={newsItems.slice(0, visibleCount)} />
 
-        <section className="container mx-auto px-4 py-4">
-          {/* ข่าวเด่น Carousel */}
-          <BigCarouselNews />
-
-          {/* ข่าวย่อย Grid – แสดงตามจำนวน visibleCount */}
-          <CardNews news={newsItems.slice(0, visibleCount)} />
-
-          {/* ปุ่มดูเพิ่มเติม */}
-          {visibleCount < newsItems.length && (
-            <div className="flex justify-center mt-10">
-              <button
-                onClick={handleShowMore}
-                className="inline-block bg-blue-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800 transition"
-              >
-                ดูข่าวเพิ่มเติม
-              </button>
-            </div>
-          )}
-        </section>
+            {visibleCount < newsItems.length && (
+              <div className="flex justify-center mt-10">
+                <button
+                  onClick={handleShowMore}
+                  className="inline-block bg-blue-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800 transition"
+                >
+                  ดูข่าวเพิ่มเติม
+                </button>
+              </div>
+            )}
+          </section>
+        </SciFiBackgroundNormal>
       </div>
     </div>
   );

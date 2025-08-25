@@ -19,14 +19,14 @@ import type { UpdateTeacherUserRequest } from "@/dto/teacherDto";
 
 
 function toISODateOnly(input?: string | null): string {
- 
+
   if (!input) return "";
-  
+
   if (/^\d{4}-\d{2}-\d{2}$/.test(String(input))) return String(input);
- 
+
   const t = String(input).match(/^(\d{4})-(\d{2})-(\d{2})T/);
   if (t) return `${t[1]}-${t[2]}-${t[3]}`;
-  
+
   const dmy = String(input).match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
   if (dmy) {
     const dd = dmy[1].padStart(2, "0");
@@ -56,6 +56,7 @@ function isoToDMY(iso?: string | null): string {
 type Props = { teacherId: number };
 
 export default function TeacherDetailForm({ teacherId }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<GetTeacherDetailUserResponse | null>(null);
   const [originalData, setOriginalData] = useState<GetTeacherDetailUserResponse | null>(null);
 
@@ -69,15 +70,15 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
- 
+
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
 
-  
+
   const [selectedProgramId, setSelectedProgramId] = useState<number | null>(null);
 
-  
+
   useEffect(() => {
     (async () => {
       const data = await GetTeacherDetailUser(teacherId);
@@ -139,7 +140,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     }
   }, [formData, programRows]);
 
-  
+
   const faculties = useMemo(() => {
     const s = new Set(programRows.map((p) => p.facultyName).filter(Boolean) as string[]);
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
@@ -203,6 +204,8 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   };
 
   const handleSave = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     if (!formData) return;
 
     if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
@@ -257,7 +260,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       const ok = await UpdateTeacherUser(payload);
       if (ok) {
         toast.success("บันทึกข้อมูลเรียบร้อย");
-       
+
         setFormData((prev) =>
           prev
             ? ({
@@ -299,12 +302,13 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       }
     } finally {
       setSaving(false);
+      setIsSubmitting(false); 
     }
   };
 
   const handleCancel = () => {
     setFormData(originalData);
-    
+
     const pid =
       (originalData as any)?.programId ??
       (originalData as any)?.ProgramId ??
@@ -360,7 +364,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
               <button
                 className="w-[120px] bg-green-500 rounded-md flex justify-center items-center gap-2 py-1 text-white disabled:opacity-60"
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || isSubmitting}
               >
                 <Save className="w-5 h-5" />
                 {saving ? "กำลังบันทึก..." : "บันทึก"}
@@ -408,7 +412,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
 
       <div className="grid grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6">
         {/* account */}
-        <Info label="ชื่อผู้ใช้" value={(formData as any).username} editable={false} />
+        <Info label="ชื่อผู้ใช้ของอาจารย์" value={(formData as any).username} editable={false} />
 
         <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
         <Info label="ชื่อจริง" value={(formData as any).firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
@@ -429,16 +433,15 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         <Info label="เบอร์โทร" value={(formData as any).phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={(formData as any).nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
 
-        {/* วันที่เข้าทำงาน */}
+
         <Info
-          label="วันที่เข้าทำงาน (hiredDate)"
+          label="วันที่เข้าทำงาน"
           value={(formData as any).hiredDate as any}
           editable={isEditing}
           onChange={(v) => handleChange("hiredDate", toISODateOnly(v))}
           type="date"
         />
 
-        {/* ---------- Program (View / Edit) ---------- */}
         <div className="col-span-2">
           {!isEditing ? (
             <div className="grid grid-cols-3 gap-4">

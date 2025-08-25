@@ -7,6 +7,7 @@ import {
   PDFStudentNamelistInGroupButton,
 } from "@/components/PDF/PDFButton";
 import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
+import EducateSuccessPopUp from "@/components/common/Popup/EducateSuccessPopUp";
 
 type PageParams = Promise<{ slug: number[] }>;
 
@@ -31,6 +32,7 @@ export default async function Page({ params }: { params: PageParams }) {
               groupID={String(studentGroupID)}
             />
             <BulkPDFStudentTranscriptPDF groupID={studentGroupID} />
+           
           </div>
         </div>
       </div>
