@@ -5,8 +5,9 @@ import NameListScheduleTable, {
   ColumnConfig,
 } from "@/components/Academic/table/NameListScheduleTable";
 import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
+import EducateSuccessPopUp from "@/components/common/Popup/EducateSuccessPopUp";
 import { StudentGroupDetail, StudentItems } from "@/dto/studentDto";
-import { Box } from "lucide-react";
+import { Box, GraduationCap } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -65,6 +66,8 @@ export default function Form({ GroupID }: Props) {
       setIsLoading(true);
     })();
   }, [GroupID]);
+
+  const [onEducatePopUp, setOnEducatePopUp] = useState<boolean>(false);
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
   const getStatusClass = (status?: string) => {
     switch (status) {
@@ -77,20 +80,29 @@ export default function Form({ GroupID }: Props) {
       case "คัดชื่อออก":
         return "text-red-600 bg-red-50 border-red-200 w-[80%]";
       case "สำเร็จการศึกษา":
-        return "bg-blue-600 text-white  px-8";
+        return "bg-gradient-to-r  from-blue-500 to-indigo-500 text-white  px-8";
       case "ทดลองเรียน":
         return "bg-yellow-500 text-white  px-4";
       case "ลาออก":
         return "bg-gray-500 text-white  w-[80%]";
       case "กำลังติดตาม":
-        return "animate-pulse duration-1000 anime bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 text-white  px-8";
+        return "animate-pulse duration-[2000ms]  anime bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 text-white  px-8";
       default:
         return "text-gray-700 bg-gray-50 border-gray-200 px-8";
     }
   };
 
   return (
-    <div className="bg-white rounded-xl py-4">
+    <div className="bg-white rounded-xl py-2">
+      <div className="px-10 justify-end flex items-center">
+        <button
+          onClick={() => setOnEducatePopUp(true)}
+          className="px-8 py-1.5 hover:bg-blue-700 bg-blue-500  flex gap-3 items-center justify-center text-white rounded-md "
+        >
+          <GraduationCap className="w-6 h-6 text-white"/>
+          ปรับสถานะจบการศึกษา
+        </button>
+      </div>
       {isLoading ? (
         <NameListScheduleTable
           data={students}
@@ -102,6 +114,13 @@ export default function Form({ GroupID }: Props) {
         />
       ) : (
         <LoadingDataTable />
+      )}
+      {onEducatePopUp && (
+        <EducateSuccessPopUp
+          onClickPopUp={setOnEducatePopUp}
+          groupID={GroupID}
+          GroupFullName={`${studentGroupDetail?.class}.${studentGroupDetail?.groupName}`}
+        />
       )}
     </div>
   );

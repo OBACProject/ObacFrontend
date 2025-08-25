@@ -8,7 +8,7 @@ import {
   UpdateStudentGroupBody,
 } from "@/dto/studentGroupItem";
 import apiClient from "@/lib/apiClient";
-import { sortStudentGroupItems} from "@/lib/utils";
+import { sortStudentGroupItems } from "@/lib/utils";
 
 export const GetAllStudentGroupByTermYear = async (
   term: string,
@@ -153,5 +153,37 @@ export const UpdateStudentGroupByStudentGroupId = async (
       err?.response?.data || err
     );
     return false;
+  }
+};
+
+type UpdateStatusApiResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: { studentAffect: number } | null;
+  error?: unknown;
+};
+
+export const UpdateStudentStatusByStudentGroupId = async (
+  studentGroupId: number,
+  newStatus: string
+): Promise<{ ok: boolean; affected: number }> => {
+  try {
+    const res = await apiClient.put<UpdateStatusApiResponse>(
+      "StudentGroup/UpdateStudentStatusByStudentGroupId",
+      null,
+      {
+        params: { studentGroupId, newStatus },
+      }
+    );
+
+    const affected = res.data?.data?.studentAffect ?? 0;
+    const ok = affected > 0;
+    return { ok, affected };
+  } catch (err: any) {
+    console.error(
+      "UpdateStudentStatusByStudentGroupId error:",
+      err?.response?.data || err
+    );
+    return { ok: false, affected: 0 };
   }
 };

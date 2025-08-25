@@ -7,6 +7,7 @@ import {
   PDFStudentNamelistInGroupButton,
 } from "@/components/PDF/PDFButton";
 import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
+import EducateSuccessPopUp from "@/components/common/Popup/EducateSuccessPopUp";
 
 type PageParams = Promise<{ slug: number[] }>;
 
@@ -31,11 +32,7 @@ export default async function Page({ params }: { params: PageParams }) {
               groupID={String(studentGroupID)}
             />
             <BulkPDFStudentTranscriptPDF groupID={studentGroupID} />
-            <div>
-              <button className="px-8 py-1.5 hover:bg-blue-700 bg-blue-500  text-white rounded-md ">
-                ปรับสถานะจบการศึกษา
-              </button>
-            </div>
+           
           </div>
         </div>
       </div>
