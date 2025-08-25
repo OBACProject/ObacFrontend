@@ -43,6 +43,7 @@ const BulkStudentTranscript = (
   img.src = "/asset/footprintOBAC.png";
 
   for (let k = 0; k < data.length; k++) {
+    const student = data[k];
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const imgWidth = 180;
@@ -143,7 +144,8 @@ const BulkStudentTranscript = (
 
     let AllOfGrad = 0;
     let AllOfCredit = 0;
-    for (let i = 0; i < data[i].subjectGradesTermYear.length; i++) {
+    
+    for (let i = 0; i < student.subjectGradesTermYear.length; i++) {
       if (swift == false && startColumn >= 250) {
         startColumn = 64;
         Xaxis = 130;
