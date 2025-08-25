@@ -31,7 +31,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white h-full text-blue-950 font-prompt">
+    <div className="bg-white h-full  text-blue-950 font-prompt">
       <Head>
         <script
           type="application/ld+json"
@@ -249,12 +249,12 @@ export default function Home() {
         {/* Call to Action */}
       </SciFiBackgroundNormal>{" "}
       <FadeInOnScroll>
-        <section className="bg-blue-900 text-white py-10 sm:py-16 text-center mt-5 mb-0 sm:mt-20">
+        <section className="bg-blue-900 text-white  sm:py-16 text-center  ">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             พร้อมจะเริ่มต้นอนาคตของคุณแล้วหรือยัง?
           </h2>
           <a
-            href="/register"
+            href=""
             className="inline-block mt-4 bg-white text-blue-900 font-semibold px-6 py-3 rounded-full hover:bg-gray-100"
           >
             สมัครเรียนกับ OBAC

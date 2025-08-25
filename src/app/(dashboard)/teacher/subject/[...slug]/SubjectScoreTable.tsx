@@ -136,13 +136,13 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
     "3.5",
     "4",
     "ผ.",
-    "มผ.",
-    "ขส.",
-    "ขร.",
-    "มส.",
+    "ม.ผ.",
+    "ข.ส.",
+    "ข.ร.",
+    "ม.ส.",
   ];
 
-  const remarkValue = ["ผ.", "มผ.", "ขส.", "ขร.", "มส."];
+  const remarkValue = ["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
   const onChangeRemark = (value: string, studentId: number) => {
     gradDatas.map((item) => {
       if (item.studentId === studentId) {

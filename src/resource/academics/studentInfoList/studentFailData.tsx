@@ -14,7 +14,7 @@ export interface SubjectOfStudentFailDataColumn {
   subjectCode: string;
   subjectName: string;
   score: number;
-  grade: "มผ" | "ร";
+  grade: "ม.ผ" | "ร";
 }
 
 export const SubjectOfFailStudentData: SubjectOfStudentFailDataColumn[] =
@@ -23,7 +23,7 @@ export const SubjectOfFailStudentData: SubjectOfStudentFailDataColumn[] =
     subjectCode: faker.string.alphanumeric(5), // ใช้ alphanumeric
     subjectName: faker.word.noun(),
     score: faker.number.int({ min: 0, max: 49 }),
-    grade: faker.helpers.arrayElement(["มผ", "ร"]), // มผ , ร
+    grade: faker.helpers.arrayElement(["ม.ผ", "ร"]), // มผ , ร
   }));
 
 const facultyNames = ["พาณิชยกรรม", "การท่องเที่ยว"];

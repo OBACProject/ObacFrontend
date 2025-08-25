@@ -7,24 +7,24 @@ import { getCurrentThaiTermYear } from "@/lib/utils";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
 type GradeBucket = 0 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4;
-type RemarkKey = "ผ." | "มผ." | "ร." | "ขร." | "ขส.";
+type RemarkKey = "ผ." | "ม.ผ." | "ร." | "ข.ร." | "ข.ส.";
 function normalizeRemark(raw: string): RemarkKey | null {
   const s = (raw ?? "").trim();
   if (!s) return null;
   const t = s
     .replace(/\s+/g, "")
     .replace("ผ่าน", "ผ.")
-    .replace("ไม่ผ่าน", "มผ.")
+    .replace("ไม่ผ่าน", "ม.ผ.")
     .replace("รอ", "ร.")
-    .replace("ขาดเรียน", "ขร.")
-    .replace("ขาดสอบ", "ขส.");
+    .replace("ขาดเรียน", "ข.ร.")
+    .replace("ขาดสอบ", "ข.ส.");
 
-  if (["ผ.", "มผ.", "ร.", "ขร.", "ขส."].includes(t)) return t as RemarkKey;
+  if (["ผ.", "ม.ผ.", "ร.", "ข.ร.", "ข.ส."].includes(t)) return t as RemarkKey;
   if (t === "ผ") return "ผ.";
-  if (t === "มผ") return "มผ.";
+  if (t === "ม.ผ") return "ม.ผ.";
   if (t === "ร") return "ร.";
-  if (t === "ขร") return "ขร.";
-  if (t === "ขส") return "ขส.";
+  if (t === "ข.ร") return "ข.ร.";
+  if (t === "ข.ส") return "ข.ส.";
   return null;
 }
 
@@ -41,10 +41,10 @@ function summarizeGradesAndRemarks(data: StudentGroupGradeResponse) {
   };
   const remarkCounts: Record<RemarkKey, number> = {
     "ผ.": 0,
-    "มผ.": 0,
+    "ม.ผ.": 0,
     "ร.": 0,
-    "ขร.": 0,
-    "ขส.": 0,
+    "ข.ร.": 0,
+    "ข.ส.": 0,
   };
 
   for (const s of data.subjectGrades ?? []) {
@@ -203,7 +203,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("0", 100, 140);
   //////////////////////
   doc.text("ผ.", 111, 140);
-  doc.text("มผ.", 124, 140);
+  doc.text("ม.ผ.", 124, 140);
   doc.text("ร.", 139, 140);
   doc.text("ข.ร.", 151, 140);
   doc.text("ข.ส.", 167, 140);
@@ -219,10 +219,10 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text(String(gradeCounts[0]), 100, 153.5);
 
   doc.text(String(remarkCounts["ผ."]), 111, 153.5);
-  doc.text(String(remarkCounts["มผ."]), 125, 153.5);
+  doc.text(String(remarkCounts["ม.ผ."]), 125, 153.5);
   doc.text(String(remarkCounts["ร."]), 139, 153.5);
-  doc.text(String(remarkCounts["ขร."]), 153, 153.5);
-  doc.text(String(remarkCounts["ขส."]), 167, 153.5);
+  doc.text(String(remarkCounts["ข.ร."]), 153, 153.5);
+  doc.text(String(remarkCounts["ข.ส."]), 167, 153.5);
 
   doc.setFontSize(20);
   doc.text("การอนุมัติการเรียน", pageWidth / 2, 177, {
