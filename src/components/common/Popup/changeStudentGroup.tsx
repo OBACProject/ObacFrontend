@@ -25,6 +25,7 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
   const [studentGroupCode, setStudentGroupCode] = useState<string>("");
   const [onSubmitCheck, setOnSubmitCheck] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
 
   useEffect(() => {
     if (term && year) {
@@ -70,6 +71,9 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
       const ok = await UpdateStudentGroupByStudentGroupId(body);
       if (ok) {
         toast.success?.("ย้ายห้องสำเร็จ");
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         toast.error?.("อัปเดตไม่สำเร็จ");
       }
@@ -145,7 +149,12 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
           </div>
 
           <div className="flex gap-4 justify-center items-center ">
-            <input type="checkbox" className="w-5 h-5  bg-green-500" />
+            <input
+              type="checkbox"
+              className="w-5 h-5 bg-green-500"
+              checked={isConfirm}
+              onChange={(e) => setIsConfirm(e.target.checked)}
+            />
             <p>ตรวจสอบความถูกต้องของข้อมูล</p>
           </div>
 
@@ -157,8 +166,13 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
               ยกเลิก
             </button>
             <button
-              className="px-5 duration-500 text-center w-fit py-1 h-fit  rounded-md text-white bg-blue-500 hover:bg-blue-600"
-              onClick={onChangeStudentGroup}
+              className={`px-5 duration-500 text-center w-fit py-1 h-fit rounded-md text-white ${
+                isConfirm
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+              onClick={isConfirm ? onChangeStudentGroup : undefined}
+              disabled={!isConfirm}
             >
               ตกลง
             </button>
