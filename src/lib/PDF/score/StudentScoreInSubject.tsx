@@ -307,7 +307,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   // Next page.....
   doc.addPage();
   doc.setFontSize(14);
-  doc.text(`รายชื่อนักเรียน ${data.groupName}`, 36, 10, {
+  doc.text(`รายชื่อนักเรียน ${data.class}.${data.groupName}`, 36, 10, {
     align: "center",
   });
   doc.setFontSize(14);

@@ -42,14 +42,14 @@ export default function Form({ GroupID }: Props) {
       width: "60%",
       render: (item) => (
         <span
-          className={`inline-flex items-center justify-center px-2 py-0.5 text-sm font-medium rounded-full border ${getStatusClass(
+          className={` inline-flex items-center justify-center px-2 py-0.5 text-sm font-medium rounded-full border ${getStatusClass(
             item.status || ""
           )}`}
         >
           {item.status || "-"}
         </span>
       ),
-      className: "flex justify-center",
+      className: " flex justify-center",
     },
   ];
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Form({ GroupID }: Props) {
       case "ลาออก":
         return "bg-gray-500 text-white  w-[80%]";
       case "กำลังติดตาม":
-        return "bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 text-white  px-8";
+        return "animate-pulse duration-1000 anime bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 text-white  px-8";
       default:
         return "text-gray-700 bg-gray-50 border-gray-200 px-8";
     }

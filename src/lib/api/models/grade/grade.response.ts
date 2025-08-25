@@ -146,7 +146,7 @@ export interface GetStudentDetailAndSummaryScoreByStudentCodeResponse {
     finaltermScore: number;
     totalScore: number;
     finalGrade: number;
-    remarks: string ;
+    remark: string ;
     subjectName: string;
     subjectCode: string;
     credit: number;

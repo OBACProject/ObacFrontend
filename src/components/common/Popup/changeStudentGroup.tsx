@@ -1,6 +1,13 @@
 "use client";
 
-import { StudentGroupItem } from "@/dto/studentGroupItem";
+import {
+  GetAllStudentGroupByTermYear,
+  UpdateStudentGroupByStudentGroupId,
+} from "@/api/studentGroup/route";
+import {
+  StudentGroupItem,
+  UpdateStudentGroupBody,
+} from "@/dto/studentGroupItem";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
@@ -10,25 +17,18 @@ interface Props {
   studentId: number;
 }
 
-const GetStudentGroupsByTermYear = async (term: string, year: number) => {
-  try {
-    // return await fetchGetStudentGroupsByTermYear(term, year);
-  } catch (err) {
-    return [];
-  }
-};
-
 export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
   const currentYear = new Date().getFullYear() + 543;
 
   const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<number>(currentYear);
-  const [studentGroupId, setStudentGroupId] = useState<number>(0);
+  const [studentGroupCode, setStudentGroupCode] = useState<string>("");
+  const [onSubmitCheck, setOnSubmitCheck] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
-  console.log(studentId);
+
   useEffect(() => {
     if (term && year) {
-      GetStudentGroupsByTermYear(term, year)
+      GetAllStudentGroupByTermYear(term, year)
         .then((data: StudentGroupItem[] | undefined) => {
           if (data) {
             setStudentGroup(data);
@@ -43,24 +43,40 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
     }
   }, [term, year]);
   const groupOptions = studentGroup.map((item) => ({
-    value: item.id,
+    value: item.groupCode,
     label: `${item.class}.${item.groupName}`,
   }));
 
   const onChangeStudentGroup = async () => {
+    if (onSubmitCheck) return;
+    setOnSubmitCheck(true);
     try {
-      // const response = await fetchUpdateGroup(studentId, studentGroupId);
-      // if (response) {
-      //   toast.success("ย้ายห้องสำเร็จ");
-      //   onClickPopUp(false);
-      //   setTimeout(() => {
-      //     window.location.reload();
-      //   }, 1500);
-      // } else {
-      //   toast.error("ไม่สามารถย้ายได้");
-      // }
+      const body: UpdateStudentGroupBody = {
+        studentId: [studentId],
+        studentGroup: {
+          groupName: "",
+          class: "",
+          groupCode: studentGroupCode,
+          level: 0,
+          programId: 0,
+          isPublish: false,
+          isComplete: false,
+          isActive: true,
+          year: year,
+          term: term,
+        },
+        action: "move",
+      };
+      const ok = await UpdateStudentGroupByStudentGroupId(body);
+      if (ok) {
+        toast.success?.("ย้ายห้องสำเร็จ");
+      } else {
+        toast.error?.("อัปเดตไม่สำเร็จ");
+      }
+      onClickPopUp(false);
     } catch (err) {
-      toast.error("ไม่สามารถย้ายได้");
+      console.error("onPromoteStudentGroup error:", err);
+      toast.error?.("เกิดข้อผิดพลาดในการเลื่อนชั้น");
     }
   };
   return (
@@ -101,24 +117,36 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
               </select>
             </div>
           </div>
-          <div className="w-fit flex justify-start ">
+          <div className="w-fit flex justify-start  gap-4 items-center">
+            <p>เลือกห้องเรียน</p>
             <Select
               options={groupOptions.map((item) => ({
                 value: item.value,
                 label: `${item.label} `,
               }))}
               value={
-                studentGroupId
+                studentGroupCode
                   ? groupOptions.find(
-                      (item) => item.value === studentGroupId
+                      (item) => item.value === studentGroupCode
                     ) || null
                   : null
               }
               onChange={(selectedOption) =>
-                setStudentGroupId(Number(selectedOption?.value || 0))
+                setStudentGroupCode(selectedOption?.value || "")
               }
               placeholder=" เลือกห้องเรียน "
             />
+          </div>
+          <div className="text-red-600 text-sm text-center">
+            <p>
+              โปรดตรวจสอบให้แน่ใจว่าข้อมูลย้ายห้องถูกต้อง
+              <br /> หากผิดพลาดไม่สามารถแก้ไขกลับได้
+            </p>
+          </div>
+
+          <div className="flex gap-4 justify-center items-center ">
+            <input type="checkbox" className="w-5 h-5  bg-green-500" />
+            <p>ตรวจสอบความถูกต้องของข้อมูล</p>
           </div>
 
           <div className="flex justify-center gap-5 items-center py-2">
