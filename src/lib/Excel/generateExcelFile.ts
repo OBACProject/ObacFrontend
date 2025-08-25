@@ -309,7 +309,7 @@ export async function ConvertClassroomGradingToExcel(
 
   worksheet.mergeCells("A2:G2");
   const classCell = worksheet.getCell("A2");
-  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ห้อง: ${generalData.class}.${generalData.groupName}`;
+  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ${generalData.year} ห้อง: ${generalData.class}.${generalData.groupName}`;
   classCell.alignment = { horizontal: "center", vertical: "middle" };
   classCell.font = { size: 12, bold: true };
 

@@ -91,6 +91,7 @@ export default function AddSchedulePopUp({ onClosePopUp }: AddSchedulePopUp) {
   const onSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
+
     const studentGroupById = studentGroup.find(
       (item) => item.id === studentGroupId
     );

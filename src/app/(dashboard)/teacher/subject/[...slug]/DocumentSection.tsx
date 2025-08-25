@@ -1,9 +1,9 @@
 "use client";
+import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
 import {
   PDFStudentNamelistInGroupButton,
   PDFStudentScoreInSubjectPDF,
 } from "@/components/PDF/PDFButton";
-// import { genStudentScoreInSubject } from "@/lib/PDFGenarate/generateFile";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 
@@ -32,9 +32,7 @@ export default function DocumentSection({
           </div>
 
           <PDFStudentScoreInSubjectPDF scheduleSubjectID={scheduleSubjectID} />
-          <button className="px-4 py-1.5 rounded-md bg-white text-blue-600 shadow-lg hover:bg-gray-50">
-            รายชื่อ Excel
-          </button>
+          <ExcelStudentNamelistInGroupButton groupID={String(groupID)} />
         </div>
       </div>
     </div>
