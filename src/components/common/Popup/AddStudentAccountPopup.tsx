@@ -5,7 +5,6 @@ import { GetAllStudentGroup } from "@/api/studentGroup/route";
 import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-
 import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
 
@@ -23,7 +22,7 @@ type CreateStudentRequest = {
   citizenId: string;
   phoneNumber: string;
   nationality: string;
-  birthDate: string; // "YYYY-MM-DD"
+  birthDate: string;
   prefix: string;
   studentGroupId: number;
 };
@@ -40,11 +39,39 @@ function formatRoomLabel(g: MergedGroup) {
   return `${cls}. ${name}`;
 }
 
+function toThaiErrorMessage(err: any) {
+  const data = err?.response?.data ?? {};
+  const status = err?.response?.status as number | undefined;
+  const rawMsg =
+    data?.responseMessage ??
+    data?.title ??
+    data?.message ??
+    err?.message ??
+    "";
+
+  if (typeof rawMsg === "string") {
+    if (rawMsg.includes("This UserName Already Exists")) {
+      return "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น";
+    }
+    if (rawMsg.includes("This StudentCode Already Exists")) {
+      return "รหัสนักเรียนนี้ถูกใช้แล้ว โปรดใช้รหัสอื่น";
+    }
+  }
+
+  if (status === 400) return "คำขอไม่ถูกต้อง กรุณาตรวจสอบข้อมูลอีกครั้ง";
+  if (status === 401) return "คุณไม่มีสิทธิ์เข้าถึง (401)";
+  if (status === 409) return "ข้อมูลซ้ำในระบบ (409)";
+  if (status && status >= 500) return "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง";
+
+  return typeof rawMsg === "string" && rawMsg
+    ? rawMsg
+    : "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+}
+
 export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
-  // form states
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [studentCode, setStudentCode] = useState("");
   const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
-
   const [prefix, setPrefix] = useState<string>("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -59,20 +86,15 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // data state
   const [rawGroups, setRawGroups] = useState<GetAllStudentGroupRequest[]>([]);
   const [programs, setPrograms] = useState<GetAllProgramsResponse[]>([]);
   const [groups, setGroups] = useState<MergedGroup[]>([]);
-
   const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
   const [groupsError, setGroupsError] = useState<string | null>(null);
 
-  // cascading selects (คณะ → สาขา → แขนง)
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
-
-  // ⬇️ ขั้นใหม่: เทอม → ปีการศึกษา → ห้อง
   const [selectedTerm, setSelectedTerm] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string>("");
 
@@ -84,8 +106,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
         const [prog, grp] = await Promise.all([GetAllPrograms(), GetAllStudentGroup()]);
         setPrograms(Array.isArray(prog) ? prog : []);
         setRawGroups(Array.isArray(grp) ? grp : []);
-      } catch (e) {
-        console.error(e);
+      } catch {
         setGroupsError("โหลดข้อมูลไม่สำเร็จ");
       } finally {
         setLoadingGroups(false);
@@ -94,7 +115,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     load();
   }, []);
 
-  // map group + program
   useEffect(() => {
     if (!rawGroups.length) {
       setGroups([]);
@@ -126,7 +146,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setGroups(activeMerged);
   }, [rawGroups, programs]);
 
-  // ขั้นคณะ/สาขา/แขนง
   const faculties = useMemo(() => {
     const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
@@ -156,7 +175,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
   }, [groups, selectedFaculty, selectedProgramName]);
 
-  // กลุ่มที่ถูกกรองตาม คณะ/สาขา/แขนง
   const filteredBySubProgram = useMemo(() => {
     return groups.filter((g) => {
       if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
@@ -166,7 +184,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     });
   }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName]);
 
-  // ⬇️ options ของ เทอม / ปี / ห้อง จาก filteredBySubProgram
   const termOptions = useMemo(() => {
     const s = new Set(
       filteredBySubProgram.map((g) => String(g.term ?? "")).filter((x) => x && x !== "-")
@@ -181,7 +198,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
         .map((g) => String(g.year ?? ""))
         .filter((x) => x && x !== "-")
     );
-    // ปีอยากให้เรียงจากมากไปน้อย (ล่าสุดก่อน)
     return Array.from(s).sort((a, b) => Number(b) - Number(a));
   }, [filteredBySubProgram, selectedTerm]);
 
@@ -197,7 +213,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       );
   }, [filteredBySubProgram, selectedTerm, selectedYear]);
 
-  // เปลี่ยนค่าส่วนบน ให้รีเซ็ตค่าถัดไป
   const onSelectFaculty = (val: string) => {
     setSelectedFaculty(val);
     setSelectedProgramName("");
@@ -206,6 +221,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setSelectedYear("");
     setStudentGroupId(null);
   };
+
   const onSelectProgramName = (val: string) => {
     setSelectedProgramName(val);
     setSelectedSubProgramName("");
@@ -213,6 +229,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setSelectedYear("");
     setStudentGroupId(null);
   };
+
   const onSelectSubProgramName = (val: string) => {
     setSelectedSubProgramName(val);
     setSelectedTerm("");
@@ -220,86 +237,84 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setStudentGroupId(null);
   };
 
-  // เปลี่ยนค่า เทอม/ปี → รีเซ็ตส่วนถัดไป
   const onSelectTerm = (val: string) => {
     setSelectedTerm(val);
     setSelectedYear("");
     setStudentGroupId(null);
   };
+
   const onSelectYear = (val: string) => {
     setSelectedYear(val);
     setStudentGroupId(null);
   };
 
   const handleSubmit = async () => {
-  if (!prefix) {
-    toast.error("กรุณาเลือกคำนำหน้า");
-    return;
-  }
-  if (
-    !username.trim() ||
-    !password ||
-    !firstName.trim() ||
-    !lastName.trim() ||
-    !studentCode.trim() ||
-    !studentGroupId
-  ) {
-    toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
-    return;
-  }
-  if (password !== confirmPassword) {
-    toast.error("รหัสผ่านไม่ตรงกัน");
-    return;
-  }
-  if (!/^\d{13}$/.test(citizenId)) {
-    toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
-    return;
-  }
-
-  
-  const today = new Date();
-  const formattedToday = today.toISOString().split("T")[0];
-  const finalBirthDate = birthDate || formattedToday;
-
-  const payload: CreateStudentRequest = {
-    userName: username.trim(),
-    password,
-    firstName: firstName.trim(),
-    lastName: lastName.trim(),
-    studentCode: studentCode.trim(),
-    gender: gender || "",
-    citizenId: citizenId.trim(),
-    phoneNumber: phone.trim(),
-    nationality: nationality || "",
-    birthDate: finalBirthDate, 
-    prefix: prefix || "",
-    studentGroupId: Number(studentGroupId),
-  };
-
-  try {
-    await CreateStudent(payload);
-    toast.success("สร้างบัญชีนักเรียนสำเร็จ");
-    onClosePopUp(true);
-  } catch (err: any) {
-    console.error("CreateStudent error:", err?.response?.data || err);
-    const modelErrors = err?.response?.data?.errors;
-    if (modelErrors && typeof modelErrors === "object") {
-      const firstKey = Object.keys(modelErrors)[0];
-      const firstMsg = Array.isArray(modelErrors[firstKey])
-        ? modelErrors[firstKey][0]
-        : String(modelErrors[firstKey]);
-      toast.error(firstMsg);
-    } else {
-      const backendMsg =
-        err?.response?.data?.responseMessage ||
-        err?.response?.data?.title ||
-        err?.message ||
-        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
-      toast.error(backendMsg);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    if (!prefix) {
+      toast.error("กรุณาเลือกคำนำหน้า");
+      return;
     }
-  }
-};
+    if (
+      !username.trim() ||
+      !password ||
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !studentCode.trim() ||
+      !studentGroupId
+    ) {
+      toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("รหัสผ่านไม่ตรงกัน");
+      return;
+    }
 
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+    const finalBirthDate = birthDate || formattedToday;
+
+    const payload: CreateStudentRequest = {
+      userName: username.trim(),
+      password,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      studentCode: studentCode.trim(),
+      gender: gender || "",
+      citizenId: citizenId.trim(),
+      phoneNumber: phone.trim(),
+      nationality: nationality || "",
+      birthDate: finalBirthDate,
+      prefix: prefix || "",
+      studentGroupId: Number(studentGroupId),
+    };
+
+    try {
+      const res = await CreateStudent(payload);
+      const msg = String(res?.message ?? "");
+      if (/This UserName Already Exists/i.test(msg)) {
+        toast.error("ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น");
+        return;
+      }
+      toast.success("สร้างบัญชีนักเรียนสำเร็จ");
+      onClosePopUp(true);
+    } catch (err: any) {
+      const modelErrors = err?.response?.data?.errors;
+      if (modelErrors && typeof modelErrors === "object") {
+        const firstKey = Object.keys(modelErrors)[0];
+        const firstMsg = Array.isArray(modelErrors[firstKey])
+          ? modelErrors[firstKey][0]
+          : String(modelErrors[firstKey]);
+        toast.error(firstMsg || "กรุณาตรวจสอบข้อมูลอีกครั้ง");
+        return;
+      }
+      const thaiMsg = toThaiErrorMessage(err);
+      toast.error(thaiMsg);
+    }finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const selectedRoom = useMemo(
     () => groups.find((g) => g.id === studentGroupId),
@@ -311,7 +326,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       <div className="bg-white rounded-2xl shadow-xl p-7 w-[780px] space-y-6 max-h-[92vh] overflow-y-auto">
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีนักเรียน</h2>
 
-        {/* เลือกคณะ → สาขา → แขนง → เทอม → ปี → ห้อง */}
         <div className="space-y-3">
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -331,7 +345,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </div>
 
             <div>
-              <label className="text-sm">คณะ </label>
+              <label className="text-sm">คณะ</label>
               <select
                 value={selectedFaculty}
                 onChange={(e) => onSelectFaculty(e.target.value)}
@@ -354,7 +368,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </div>
 
             <div>
-              <label className="text-sm">สาขา  </label>
+              <label className="text-sm">สาขา</label>
               <select
                 value={selectedProgramName}
                 onChange={(e) => onSelectProgramName(e.target.value)}
@@ -373,7 +387,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="text-sm">แขนง/สาขาย่อย  </label>
+              <label className="text-sm">แขนง/สาขาย่อย</label>
               <select
                 value={selectedSubProgramName}
                 onChange={(e) => onSelectSubProgramName(e.target.value)}
@@ -391,9 +405,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               </select>
             </div>
 
-            {/* ⬇️ เทอม */}
             <div>
-              <label className="text-sm">เทอม  </label>
+              <label className="text-sm">เทอม</label>
               <select
                 value={selectedTerm}
                 onChange={(e) => onSelectTerm(e.target.value)}
@@ -411,9 +424,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               </select>
             </div>
 
-            {/* ⬇️ ปีการศึกษา */}
             <div>
-              <label className="text-sm">ปีการศึกษา </label>
+              <label className="text-sm">ปีการศึกษา</label>
               <select
                 value={selectedYear}
                 onChange={(e) => onSelectYear(e.target.value)}
@@ -432,10 +444,9 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </div>
           </div>
 
-          {/* ⬇️ ห้องเรียน */}
           <div className="grid grid-cols-3 gap-4">
             <div className="col-span-3">
-              <label className="text-sm">ห้อง  </label>
+              <label className="text-sm">ห้อง</label>
               <select
                 value={studentGroupId ?? ""}
                 onChange={(e) => setStudentGroupId(e.target.value === "" ? null : Number(e.target.value))}
@@ -460,7 +471,6 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           </div>
         </div>
 
-        {/* ข้อมูลผู้ใช้ */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="text-sm">คำนำหน้า</label>
@@ -556,7 +566,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             />
           </div>
           <div>
-            <label className="text-sm">ชื่อผู้ใช้ </label>
+            <label className="text-sm">ชื่อผู้ใช้ของนักเรียน</label>
             <input
               type="text"
               value={username}
@@ -611,9 +621,9 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           <button
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
             onClick={handleSubmit}
-            disabled={loadingGroups}
+            disabled={loadingGroups || isSubmitting}
           >
-            บันทึกข้อมูล
+            {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
           </button>
         </div>
       </div>

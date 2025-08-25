@@ -131,18 +131,33 @@ export const GetTeacherDetailAndSchedule = async (
   }
 };
 
+const t = (msg?: string) => {
+  if (!msg) return msg;
+  if (/This UserName Already Exists/i.test(msg)) return "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น";
+  if (/This TeacherCode Already Exists/i.test(msg)) return "รหัสอาจารย์นี้ถูกใช้แล้ว โปรดใช้รหัสอื่น";
+  return msg;
+};
+
 export const CreateTeacher = async (
   payload: CreateTeacherRequest
-): Promise<boolean> => {
+): Promise<{ success: boolean; message?: string }> => {
   try {
-    const response = await apiClient.post("User/CreateTeacher", payload);
-    return [200, 201, 204].includes(response.status) 
-       || response.data?.isSuccess === true;
+    const res = await apiClient.post("User/CreateTeacher", payload);
+    const msg = t(String(res.data?.message ?? res.data?.responseMessage ?? ""));
+    if ([200, 201, 204].includes(res.status)) {
+      // ถ้า backend ใส่ข้อความ error มาใน 200 จะถูกแปลและส่งกลับเป็น error
+      if (/ชื่อผู้ใช้นี้ถูกใช้แล้ว|รหัสอาจารย์นี้ถูกใช้แล้ว/.test(msg ?? "")) {
+        return { success: false, message: msg };
+      }
+      return { success: true, message: "เพิ่มบัญชีอาจารย์สำเร็จ" };
+    }
+    return { success: false, message: msg || "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง" };
   } catch (err: any) {
-    console.error("Error creating teacher:", err);
-    throw err;
+    const raw = err?.response?.data?.message || err?.response?.data?.responseMessage || err?.message;
+    return { success: false, message: t(String(raw)) || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้" };
   }
 };
+
 
 
 export const UpdateTeacherUser = async (payload: UpdateTeacherUserRequest) => {

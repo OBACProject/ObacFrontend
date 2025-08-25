@@ -10,10 +10,11 @@ import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
-  onCreated?: () => Promise<void> | void; 
+  onCreated?: () => Promise<void> | void;
 };
 
 export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [teacherCode, setTeacherCode] = useState("");
   const [prefix, setPrefix] = useState("นาย");
   const [firstName, setFirstName] = useState("");
@@ -115,18 +116,18 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; 
+  setIsSubmitting(true);
     if (
       !teacherCode ||
       !username ||
       !password ||
       !firstName ||
       !lastName ||
-      !birthDate ||
-      !hiredDate ||
       !resolvedProgramId
     ) {
       toast.error(
-        "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล, วันเกิด, วันที่เริ่มงาน และเลือกคณะ/สาขา/แขนงให้ครบ"
+        "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล และเลือกคณะ/สาขา/แขนงให้ครบ"
       );
       return;
     }
@@ -139,19 +140,16 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
       toast.error("รหัสอาจารย์ต้องเป็นตัวเลขเท่านั้น");
       return;
     }
-    if (phone && !/^\d{10}$/.test(phone)) {
-      toast.error("เบอร์โทรต้องเป็นตัวเลข 10 หลัก");
-      return;
-    }
-    if (citizenId && !/^\d{13}$/.test(citizenId)) {
-      toast.error("รหัสประชาชนต้องเป็นตัวเลข 13 หลัก");
-      return;
-    }
+
+
+    const today = new Date().toISOString().split("T")[0];
+    const finalBirthDate = birthDate || today;
+    const finalHiredDate = hiredDate || today;
 
     const payload: CreateTeacherRequest = {
       prefix,
       teacherCode: teacherCode.trim(),
-      hiredDate, // YYYY-MM-DD จาก input type="date"
+      hiredDate: finalHiredDate,
       programId: Number(resolvedProgramId),
       userName: username.trim(),
       password,
@@ -161,35 +159,22 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
       citizenId: citizenId || "",
       phoneNumber: phone || "",
       nationality: nationality || "",
-      birthDate, // YYYY-MM-DD
+      birthDate: finalBirthDate,
     };
 
-    try {
-      await CreateTeacher(payload);
-      toast.success("เพิ่มบัญชีอาจารย์สำเร็จ");
-      // ✅ แจ้งหน้าแม่ให้รีเฟรช
+    const result = await CreateTeacher(payload);
+
+    if (result.success) {
+      toast.success(result.message || "เพิ่มบัญชีอาจารย์สำเร็จ");
       await onCreated?.();
-      // ✅ ปิดป็อปอัป
       onClosePopUp(false);
-    } catch (err: any) {
-      console.error("Error saving teacher:", err?.response?.data || err);
-      const modelErrors = err?.response?.data?.errors;
-      if (modelErrors && typeof modelErrors === "object") {
-        const firstKey = Object.keys(modelErrors)[0];
-        const firstMsg = Array.isArray(modelErrors[firstKey])
-          ? modelErrors[firstKey][0]
-          : String(modelErrors[firstKey]);
-        toast.error(firstMsg);
-      } else {
-        const backendMsg =
-          err?.response?.data?.responseMessage ||
-          err?.response?.data?.title ||
-          err?.message ||
-          "บันทึกข้อมูลไม่สำเร็จ";
-        toast.error(backendMsg);
-      }
+    } else {
+      toast.error(result.message || "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง");
     }
+    setIsSubmitting(false);
+    
   };
+
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
@@ -223,8 +208,8 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
                 {loadingPrograms
                   ? "กำลังโหลดข้อมูล..."
                   : programsError
-                  ? "โหลดข้อมูลไม่สำเร็จ"
-                  : "— เลือกคณะ —"}
+                    ? "โหลดข้อมูลไม่สำเร็จ"
+                    : "— เลือกคณะ —"}
               </option>
               {faculties.map((f) => (
                 <option key={f} value={f}>
@@ -375,7 +360,7 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
         </div>
 
         <div>
-          <label className="text-sm">ชื่อผู้ใช้ </label>
+          <label className="text-sm">ชื่อผู้ใช้ของอาจารย์ </label>
           <input
             type="text"
             value={username}
@@ -429,9 +414,9 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
-            disabled={loadingPrograms}
+            disabled={loadingPrograms ||isSubmitting}
           >
-            บันทึกข้อมูล
+            {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
           </button>
         </div>
       </div>
