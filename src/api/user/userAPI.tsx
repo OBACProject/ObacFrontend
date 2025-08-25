@@ -47,15 +47,60 @@ export const GetAcademicDetailUser = async (
 
 export const CreateAcademic = async (
   payload: CreateAcademicRequest
-): Promise<boolean> => {
+): Promise<{ success: boolean; message?: string; status?: number }> => {
   try {
     const response = await apiClient.post("User/CreateAcademic", payload);
-    return [200, 201, 204].includes(response.status);
+
+    const msg =
+      String(response.data?.message ?? response.data?.responseMessage ?? "").trim();
+
+    if (/This UserName Already Exists/i.test(msg)) {
+      return {
+        success: false,
+        status: 409,
+        message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น",
+      };
+    }
+    if ([200, 201, 204].includes(response.status)) {
+      return { success: true, status: response.status, message: "เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ" };
+    }
+
+    return {
+      success: false,
+      status: response.status,
+      message: msg || "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+    };
   } catch (err: any) {
-    console.error("Error creating academic:", err);
-    return false;
+    const status = err?.response?.status;
+    const data = err?.response?.data || {};
+    const rawMsg = String(
+      data?.message || data?.responseMessage || err?.message || ""
+    );
+
+    if (/This UserName Already Exists/i.test(rawMsg)) {
+      return {
+        success: false,
+        status: status ?? 409,
+        message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น",
+      };
+    }
+
+    // อื่น ๆ
+    return {
+      success: false,
+      status,
+      message:
+        status === 400
+          ? "คำขอไม่ถูกต้อง กรุณาตรวจสอบข้อมูลอีกครั้ง"
+          : status === 401
+          ? "คุณไม่มีสิทธิ์เข้าถึง (401)"
+          : status && status >= 500
+          ? "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง"
+          : rawMsg || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้",
+    };
   }
 };
+
 
 export const UpdateIsActiveUser = async ({
   userId,

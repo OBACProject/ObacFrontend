@@ -44,11 +44,12 @@ function isoToDMY(iso?: string | null): string {
 /* ------------------------------------------------------ */
 
 export default function AcademicDetailForm({ academicId }: Props) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<GetAcademicDetailUserResponse | null>(null);
   const [originalData, setOriginalData] = useState<GetAcademicDetailUserResponse | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
-  const [openDeletePopup, setOpenDeletePopup] = useState(false); // ⬅️ state popup ลบ
+  const [openDeletePopup, setOpenDeletePopup] = useState(false); 
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -65,6 +66,8 @@ export default function AcademicDetailForm({ academicId }: Props) {
   };
 
   const handleSave = async () => {
+    if (isSubmitting) return;
+  setIsSubmitting(true);
     if (!formData) return;
 
     if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
@@ -121,6 +124,7 @@ export default function AcademicDetailForm({ academicId }: Props) {
       }
     } finally {
       setSaving(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -160,7 +164,7 @@ export default function AcademicDetailForm({ academicId }: Props) {
               <button
                 className="w-[150px] bg-green-500 rounded-md px-4 py-1 text-white flex items-center justify-center gap-2 disabled:opacity-60"
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || isSubmitting}
               >
                 <Save className="w-5 h-5" />
                 {saving ? "กำลังบันทึก..." : "บันทึก"}

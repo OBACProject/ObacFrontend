@@ -177,15 +177,33 @@ export const UpdateStudentStatus = async (
 
 export const CreateStudent = async (
   payload: CreateStudentRequest
-): Promise<boolean> => {
+): Promise<{ success: boolean; message?: string }> => {
   try {
     const response = await apiClient.post("User/CreateStudent", payload);
-    return [200, 201, 204].includes(response.status);
+
+    const msg = String(response.data?.message ?? "");
+    if (/This UserName Already Exists/i.test(msg)) {
+      return { success: false, message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น" };
+    }
+
+    // ✅ เผื่อมีเคส StudentCode ซ้ำ
+    if (/This StudentCode Already Exists/i.test(msg)) {
+      return { success: false, message: "รหัสนักเรียนนี้ถูกใช้แล้ว โปรดใช้รหัสอื่น" };
+    }
+
+    if ([200, 201, 204].includes(response.status)) {
+      return { success: true, message: "สร้างบัญชีนักเรียนสำเร็จ" };
+    }
+    return { success: false, message: "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง" };
+
   } catch (err: any) {
-    console.error("Error creating academic:", err);
-    return false;
+    console.error("Error creating student:", err);
+
+    const backendMsg = err?.response?.data?.message || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
+    return { success: false, message: backendMsg };
   }
 };
+
 
 export const UpdateStudentUser = async (payload: UpdateStudentUserRequest) => {
   try {

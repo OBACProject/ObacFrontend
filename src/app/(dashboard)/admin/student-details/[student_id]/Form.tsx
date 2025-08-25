@@ -74,7 +74,7 @@ export default function StudentDetailForm({ studentId }: Props) {
   );
   const [originalData, setOriginalData] =
     useState<GetStudentDetailResponse | null>(null);
-
+const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -249,6 +249,8 @@ export default function StudentDetailForm({ studentId }: Props) {
   };
 
  const handleSave = async () => {
+  if (isSubmitting) return; 
+  setIsSubmitting(true);
   if (!formData) return;
 
   if (!formData.prefix) {
@@ -402,6 +404,7 @@ export default function StudentDetailForm({ studentId }: Props) {
     }
   } finally {
     setSaving(false);
+    setIsSubmitting(false); 
   }
 };
 
@@ -453,7 +456,8 @@ export default function StudentDetailForm({ studentId }: Props) {
               <button
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded flex items-center gap-2 disabled:opacity-60"
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving||isSubmitting}
+   
               >
                 <Save className="w-4 h-4" />
                 {saving ? "กำลังบันทึก..." : "บันทึก"}
@@ -501,7 +505,7 @@ export default function StudentDetailForm({ studentId }: Props) {
       <div className="grid grid-cols-2 gap-4 bg-white shadow-md rounded-lg p-6">
         {/* Row1: username / prefix */}
         <ReadWrite
-          label="ชื่อผู้ใช้"
+          label="ชื่อผู้ใช้ของนักเรียน"
           value={formData.username}
           editable={false}
         />
