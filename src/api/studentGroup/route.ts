@@ -8,6 +8,7 @@ import {
   UpdateStudentGroupBody,
 } from "@/dto/studentGroupItem";
 import apiClient from "@/lib/apiClient";
+import { sortStudentGroupItems} from "@/lib/utils";
 
 export const GetAllStudentGroupByTermYear = async (
   term: string,
@@ -21,7 +22,8 @@ export const GetAllStudentGroupByTermYear = async (
     }>("StudentGroup/GetAllStudentGroupByTermYear", {
       params: { term, year },
     });
-    return response.data.data ?? [];
+    const data = response.data.data ?? [];
+    return sortStudentGroupItems(data);
   } catch (err) {
     console.log("Error in GetAllStudentGroupByTermYear : ", err);
     return [];

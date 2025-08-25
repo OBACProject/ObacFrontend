@@ -1,5 +1,4 @@
 import {
-  ScheduleItemStudentGroups,
   StudentGroupItem,
 } from "@/dto/studentGroupItem";
 import { clsx, type ClassValue } from "clsx";

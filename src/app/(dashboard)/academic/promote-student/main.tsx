@@ -18,7 +18,6 @@ import StudentSelectListTable from "@/components/Academic/StudentSelectListTable
 import {
   genRandomGroupCode,
   getCurrentThaiTermYear,
-  sortStudentGroupItems,
 } from "@/lib/utils";
 import {
   GetAllStudentGroupByTermYear,
@@ -59,8 +58,7 @@ export default function Main() {
     const fetchGroups = async () => {
       try {
         const data = await GetAllStudentGroupByTermYear(term, year);
-        const sorted = sortStudentGroupItems(data);
-        setGroups(sorted || []);
+        setGroups(data || []);
       } catch (err) {
         console.error("Failed to fetch groups", err);
         setGroups([]);

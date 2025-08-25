@@ -354,7 +354,7 @@ export function generateMockStudents(count: number): GradBelowResponse[] {
       }`,
       term: `${Math.floor(Math.random() * 2) + 1}`,
       year: 2568,
-      gpax: parseFloat((Math.random() * 4).toFixed(2)),
+      gpa: parseFloat((Math.random() * 4).toFixed(2)),
       receipts: [],
     });
   }

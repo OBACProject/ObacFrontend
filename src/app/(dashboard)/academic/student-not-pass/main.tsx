@@ -183,7 +183,7 @@ export default function Main() {
                           {item.class}.{item.groupName}
                         </div>
                         <div className="text-center border-r border-gray-400 py-1">
-                          {item.gpax.toFixed(2)}
+                          {item.gpa.toFixed(2)}
                         </div>
                         <div className="flex justify-center items-center py-1">
                           <select
@@ -210,7 +210,7 @@ export default function Main() {
                                   >
                                     {r?.receiptNo ?? "—"}
                                     {r?.subjectName
-                                      ? ` - ${r.subjectName}`
+                                      ? ``
                                       : ""}
                                   </option>
                                 ))}

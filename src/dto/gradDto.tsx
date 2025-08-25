@@ -354,7 +354,7 @@ export interface GradBelowResponse {
   groupName: string;
   term: string;
   year: number;
-  gpax: number;
+  gpa: number;
   receipts:Receipt[]
 }
 
