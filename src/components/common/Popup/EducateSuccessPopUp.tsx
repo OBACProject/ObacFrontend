@@ -28,9 +28,9 @@ export default function EducateSuccessPopUp({
       );
       if (ok) {
         toast.success("ปรับสถานะสำเร็จ");
-        setTimeout(()=>{
-            window.location.reload()
-        },500)
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         toast.error("ไม่สามารถปรับสถานะได้");
       }
@@ -74,9 +74,12 @@ export default function EducateSuccessPopUp({
             >
               ยกเลิก
             </button>{" "}
-            <button onClick={()=>{
-                onChangeStatusGroup()
-            }} className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-700">
+            <button
+              onClick={() => {
+                onChangeStatusGroup();
+              }}
+              className="px-8 text-white py-1 bg-blue-500 rounded-sm hover:bg-blue-700"
+            >
               ตกลง
             </button>
           </div>
