@@ -2,17 +2,22 @@
 
 import { DataTable } from "@/components/common/MainTable/table_style_1";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, Search, Users } from "lucide-react";
+import { Download, FileText, Search, Users, Loader2 } from "lucide-react";
 import { useState, useMemo, useCallback } from "react";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response";
 import { useDebounce } from "@/hooks/useDebounce";
 import { FilterState, FilterBar } from "./component/filterBar";
-import { preProcessClassroomData, TransformedStudentData } from "./dataProcessing";
+import {
+  preProcessClassroomData,
+  TransformedStudentData,
+} from "./dataProcessing";
 // import { TransformedStudentData } from "./mockData";
 import { ClassroomInfoTable } from "@/components/Academic/table/classroomInfoTable";
 import { Input } from "@/components/ui/input";
 import { BulkPDFStudentTranscriptPDF } from "@/components/PDF/PDFButton";
+import { ConvertClassroomGradingToExcel } from "@/lib/Excel/generateExcelFile";
+import GroupSummaryGradPDF from "@/lib/PDF/score/GroupSummaryGrade";
 
 interface Props {
   initialData: GetGroupSummaryGradeResponse;
@@ -25,11 +30,170 @@ export function ClassroomGradeClient({ initialData }: Props) {
     selectedSubjectFilter: "",
   });
 
+  // Add new state for download buttons
+  const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
+  const [isDownloadingExcel, setIsDownloadingExcel] = useState(false);
+
   const debouncedSearchInput = useDebounce(filters.searchInput, 300);
   const processedData = useMemo(
     () => preProcessClassroomData(initialData),
     [initialData]
   );
+
+  // Helper function to transform data for PDF
+  const transformGradeDataForPDF = (data: GetGroupSummaryGradeResponse) => {
+    const subjectsMap = new Map();
+    let subjectIdCounter = 1;
+
+    data.students.forEach((student) => {
+      student.subject.forEach((subject) => {
+        if (!subjectsMap.has(subject.subjectCode)) {
+          subjectsMap.set(subject.subjectCode, {
+            subjectID: subjectIdCounter++,
+            subjectCode: subject.subjectCode,
+            subjectName: subject.subjectName,
+          });
+        }
+      });
+    });
+
+    const subjectsArray = Array.from(subjectsMap.values());
+
+    const transformedStudents = data.students
+      .filter((student) => student.isActive)
+      .map((student) => {
+        const grads = subjectsArray.map((subject) => {
+          const studentSubject = student.subject.find(
+            (s) => s.subjectCode === subject.subjectCode
+          );
+          if (studentSubject) {
+            let gradeNumber = 0;
+            if (!isNaN(parseFloat(studentSubject.grade))) {
+              gradeNumber = parseFloat(studentSubject.grade);
+            }
+
+            return {
+              grad: gradeNumber,
+              remark: studentSubject.remark || "",
+            };
+          }
+          return {
+            grad: 0,
+            remark: "-",
+          };
+        });
+
+        return {
+          studentId: student.studentId,
+          prefix: student.prefix || "",
+          studentCode: student.studentCode,
+          studentFirstName: student.firstName,
+          studentLastName: student.lastName,
+          gpa: student.gpa || 0,
+          gpax: student.gpax || 0,
+          totalCredit: student.totalCredit || 0,
+          grads: grads,
+        };
+      });
+
+    return {
+      groupId: data.groupId,
+      groupName: data.groupName,
+      groupCode: data.groupCode,
+      class: data.class,
+      facultyName: data.facultyName,
+      programName: data.programName,
+      term: data.term,
+      year: data.year,
+      student: transformedStudents,
+      subjects: subjectsArray,
+    };
+  };
+
+  // Helper function to transform data for Excel
+  const transformDataForExcel = (data: GetGroupSummaryGradeResponse) => {
+    const general = {
+      groupId: data.groupId,
+      groupName: data.groupName,
+      groupCode: data.groupCode,
+      class: data.class,
+      facultyName: data.facultyName,
+      programName: data.programName,
+      term: data.term,
+      year: data.year,
+    };
+
+    const subjectNames: string[] = [];
+    data.students.forEach((student) => {
+      student.subject.forEach((subj) => {
+        if (!subjectNames.includes(subj.subjectName)) {
+          subjectNames.push(subj.subjectName);
+        }
+      });
+    });
+
+    const studentListExcel = data.students
+      .filter((s) => s.isActive)
+      .map((student) => {
+        const subjectsRecord: Record<string, string> = {};
+        subjectNames.forEach((name) => {
+          const subj = student.subject.find((s) => s.subjectName === name);
+          subjectsRecord[name] = subj ? subj.grade : "-";
+        });
+
+        return {
+          studentId: student.studentId,
+          studentCode: student.studentCode,
+          name: `${student.prefix ?? ""}${student.firstName} ${
+            student.lastName
+          }`,
+          gpa: student.gpa ?? 0,
+          gpax: student.gpax ?? 0,
+          totalCredit: student.totalCredit ?? 0,
+          subjects: subjectsRecord,
+        };
+      });
+
+    return { general, studentListExcel };
+  };
+
+  // Add download handlers
+  const handleDownloadGradePdf = async () => {
+    setIsDownloadingPDF(true);
+    try {
+      const transformedData = transformGradeDataForPDF(initialData);
+      console.log("Transformed data for PDF:", transformedData);
+
+      GroupSummaryGradPDF({ data: transformedData });
+
+      console.log(
+        "Downloading PDF for group:",
+        processedData.generalData.groupId
+      );
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsDownloadingPDF(false);
+    }
+  };
+
+  const handleDownloadGradeExcel = async () => {
+    setIsDownloadingExcel(true);
+    try {
+      const { general, studentListExcel } = transformDataForExcel(initialData);
+
+      ConvertClassroomGradingToExcel(general, studentListExcel);
+
+      console.log(
+        "Downloading Excel for group:",
+        processedData.generalData.groupId
+      );
+    } catch (error) {
+      console.error("Error generating Excel:", error);
+    } finally {
+      setIsDownloadingExcel(false);
+    }
+  };
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -113,7 +277,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
         key: "gpax",
         className: "w-[5%] text-center flex justify-center text-sm",
         render: (row: any) => {
-          const gpax = row.gpax
+          const gpax = row.gpax;
           return (
             <span
               className={`px-2 py-1 rounded text-xs font-medium ${
@@ -129,6 +293,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
     return [...baseColumns, ...subjectColumns, ...gradeColumns];
   }, [processedData.subjects]);
+
   const processedData3 = useMemo(() => {
     return processedData.students.filter(
       (item) => item.status !== "คัดชื่อออก" && item.status !== "ลาออก"
@@ -193,7 +358,8 @@ export function ClassroomGradeClient({ initialData }: Props) {
         />
       </div>
       <div className="bg-white px-6 py-2 rounded-lg shadow-sm border">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          {/* Left side - Info */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
               {processedData.generalData.class} -{" "}
@@ -208,27 +374,66 @@ export function ClassroomGradeClient({ initialData }: Props) {
               {processedData.generalData.term}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => console.log("Downloading grades...")}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              <span>ดาวน์โหลดคะแนน</span>
-            </Button>
 
-            <BulkPDFStudentTranscriptPDF
-              groupID={processedData.generalData.groupId}
-            />
+          {/* Right side - Actions */}
+          <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
+            {/* Buttons row */}
+            <div className="flex flex-row gap-2">
+              {/* PDF Download Button */}
+              <button
+                className="flex h-9 px-4 py-2 border border-gray-300 text-blue-500 bg-white
+      hover:bg-blue-50 duration-200 text-xs rounded items-center justify-center gap-2 disabled:opacity-60 min-w-[100px]"
+                onClick={handleDownloadGradePdf}
+                disabled={isDownloadingPDF}
+                type="button"
+              >
+                {isDownloadingPDF ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    ใบคะแนน PDF
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-3 w-3" />
+                    ใบคะแนน PDF
+                  </>
+                )}
+              </button>
 
-            <div className="ml-auto relative w-64">
+              {/* Excel Download Button */}
+              <button
+                className="flex h-9 px-4 py-2 border border-gray-300 text-green-500 bg-white
+      hover:bg-green-50 duration-200 text-xs rounded items-center justify-center gap-2 disabled:opacity-60 min-w-[100px]"
+                onClick={handleDownloadGradeExcel}
+                disabled={isDownloadingExcel}
+                type="button"
+              >
+                {isDownloadingExcel ? (
+                  <>
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    ใบคะแนน Excel
+                  </>
+                ) : (
+                  <>
+                    <Download className="h-3 w-3" />
+                    ใบคะแนน Excel
+                  </>
+                )}
+              </button>
+
+              {/* Existing BulkPDF Button */}
+              <BulkPDFStudentTranscriptPDF
+                groupID={processedData.generalData.groupId}
+              />
+            </div>
+
+            {/* Search input (under buttons, right aligned) */}
+            <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 type="text"
                 placeholder="ค้นหารหัสนักเรียน"
-                className="pl-9 pr-3 w-full text-sm"
+                className="pl-9 pr-3 w-full text-sm h-9"
                 value={filters.searchInput}
                 onChange={(e) =>
                   onFilterChange({ searchInput: e.target.value })
