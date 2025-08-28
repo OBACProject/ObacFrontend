@@ -10,6 +10,7 @@ import {
   Dock,
   Download,
   FileChartColumn,
+  LoaderCircle,
   Pencil,
   Save,
   Settings2,
@@ -19,25 +20,26 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import InputBox from "@/components/Teacher/InputBox";
 import { StudentDetails } from "@/dto/studentDto";
-import { GetStudentDetailByStudentId } from "@/api/student/route";
-import { getCurrentThaiTermYear } from "@/lib/utils";
+import {
+  GetStudentDetailByStudentId,
+  UpdateStudentDetail,
+} from "@/api/student/route";
+import { getCurrentThaiTermYear, toUpdatePayload } from "@/lib/utils";
 import { PDFStudentTransScriptButton } from "@/components/PDF/PDFButton";
+import { toast } from "react-toastify";
 
 type Props = {
   studentID: string;
 };
 
 const emptyStudent: StudentDetails = {
+  userName: "",
   id: 0,
   prefix: "",
   name: "",
   lastName: "",
   gender: "",
-  nationality: "",
-  birthDate: "",
-  citizenId: "",
   studentCode: "",
-  phoneNumber: "",
   studentGroupId: 0,
   groupName: "",
   groupCode: "",
@@ -46,14 +48,22 @@ const emptyStudent: StudentDetails = {
   programName: "",
   subProgramName: "",
   facultyName: "",
-  gpax: 0,
+  gpax: null,
   status: "",
   programId: 0,
   isActive: true,
-  thaiID: "",
-  religion: "",
-  address: "",
-  email: "",
+  userId: "",
+  citizenId: null,
+  nationality: null,
+  religion: null,
+  phoneNumber: null,
+  email: null,
+  birthDate: null,
+  currentAddress: null,
+  fatherFirstName: null,
+  fatherLastName: null,
+  motherFirstName: null,
+  motherLastName: null,
 };
 
 export default function Form({ studentID }: Props) {
@@ -76,7 +86,7 @@ export default function Form({ studentID }: Props) {
   }, []);
 
   const [formData, setFormData] = useState<StudentDetails>(emptyStudent);
-
+  const [saving, setSaving] = useState(false);
   useEffect(() => {
     GetStudentDetailByStudentId(Number(studentID)).then((item) => {
       if (item) {
@@ -103,6 +113,31 @@ export default function Form({ studentID }: Props) {
     }));
   };
 
+  const onSaveUpdate = async () => {
+    if (!formData) return;
+    try {
+      setSaving(true);
+      if (!formData.name || !formData.lastName) {
+        toast.error("กรุณากรอกชื่อและนามสกุล");
+        return;
+      }
+
+      const payload = toUpdatePayload(formData);
+      const ok = await UpdateStudentDetail(payload);
+
+      if (ok) {
+        toast.success("บันทึกข้อมูลนักเรียนสำเร็จ");
+        setOnEdit(false);
+      } else {
+        toast.error("บันทึกไม่สำเร็จ โปรดลองอีกครั้ง");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("เกิดข้อผิดพลาดในการบันทึก");
+    } finally {
+      setSaving(false);
+    }
+  };
   return (
     <div className="px-5 ">
       <div className="flex justify-between py-5">
@@ -167,11 +202,15 @@ export default function Form({ studentID }: Props) {
               <div className="flex gap-2">
                 <button
                   className="w-[120px] h-fit bg-green-500 rounded-md items-center hover:opacity-75 pl-2 gap-2 flex justify-center py-1 text-white "
-                  // onClick={onSaveChangeStudentData}
+                  onClick={onSaveUpdate}
                 >
-                  <Save className="w-5 h-5" />
+                  {saving ? (
+                    <LoaderCircle className="w-5 h-5 animate-spin duration-1000" />
+                  ) : (
+                    <Save className="w-5 h-5" />
+                  )}
                   บันทึก
-                </button>{" "}
+                </button>
                 <button
                   className="w-[120px] h-fit bg-red-500 rounded-md hover:opacity-75 pl-2 gap-2 flex justify-center items-center py-1 text-white "
                   onClick={() => setOnEdit(!onEdit)}
@@ -230,7 +269,7 @@ export default function Form({ studentID }: Props) {
 
                 <InputBox
                   label="ชื่อ"
-                  name="firstName"
+                  name="name"
                   value={formData.name || "ไม่มีข้อมูล"}
                   onChange={handleChange}
                   placeholder="ชื่อจริง"
@@ -265,10 +304,10 @@ export default function Form({ studentID }: Props) {
                   value={students?.facultyName || "ไม่มีข้อมูล"}
                   onChange={handleChange}
                   placeholder="หลักสูตร"
-                  inputWidth="w-[180px]"
+                  inputWidth="w-[250px]"
                   inputSize="text-base"
                   labelSize="text-base"
-                  disable={!onEdit}
+                  disable={true}
                 />
                 <InputBox
                   label="สาขา"
@@ -276,10 +315,10 @@ export default function Form({ studentID }: Props) {
                   value={students?.programName || "ไม่มีข้อมูล"}
                   onChange={handleChange}
                   placeholder="สาขา"
-                  inputWidth="w-[180px]"
+                  inputWidth="w-[250px]"
                   inputSize="text-base"
                   labelSize="text-base"
-                  disable={!onEdit}
+                  disable={true}
                 />
               </div>
             </div>
@@ -304,8 +343,8 @@ export default function Form({ studentID }: Props) {
             <div className="flex gap-5 items-center">
               <InputBox
                 label="เลขบัตรประชาชน"
-                name="thaiId"
-                value={formData.thaiID || "ไม่มีข้อมูล"}
+                name="citizenId"
+                value={formData.citizenId || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="เลขบัตรประชาชน"
                 inputWidth="w-[200px]"
@@ -339,7 +378,7 @@ export default function Form({ studentID }: Props) {
                 <p className="text-gray-700">เพศ </p>
                 {onEdit ? (
                   <select
-                    name="prefix"
+                    name="gender"
                     className="border border-gray-300 rounded-md px-2 py-1.5"
                     onChange={handleChange}
                     value={formData.gender || "ไม่ทราบ"}
@@ -359,7 +398,7 @@ export default function Form({ studentID }: Props) {
             <div className="flex gap-5 items-center">
               <InputBox
                 label="เบอร์ติดต่อ"
-                name="studentCode"
+                name="phoneNumber"
                 value={formData.phoneNumber || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="เบอร์ติดต่อ"
@@ -370,7 +409,7 @@ export default function Form({ studentID }: Props) {
               />
               <InputBox
                 label="อีเมลล์"
-                name="studentCode"
+                name="email"
                 value={formData.email || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="อีเมลล์"
@@ -379,23 +418,23 @@ export default function Form({ studentID }: Props) {
                 labelSize="text-base"
                 disable={!onEdit}
               />
-              <InputBox
-                label="วันเกิด"
-                name="birthDate"
-                value={formData.birthDate || "ไม่มีข้อมูล"}
-                onChange={handleChange}
-                placeholder="วันเกิด"
-                inputWidth="w-[150px]"
-                inputSize="text-base"
-                labelSize="text-base"
-                disable={!onEdit}
-              />
+              <div className="flex gap-4 items-center">
+                <label className="text-base">วันเกิด</label>
+                <input
+                  type="date"
+                  name="birthDate"
+                  value={formData.birthDate ?? ""}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-md px-2 py-1.5 w-[180px]"
+                  disabled={!onEdit}
+                />
+              </div>
             </div>
             <div className="flex gap-5 items-center">
               <InputBox
                 label="ที่อยู่ปัจจุบัน"
-                name="address"
-                value={formData.address || "ไม่มีข้อมูล"}
+                name="currentAddress"
+                value={formData.currentAddress || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[150px]"
@@ -410,8 +449,8 @@ export default function Form({ studentID }: Props) {
               </p>
               <InputBox
                 label="ชื่อจริง"
-                name="name"
-                value={"ไม่มีข้อมูล"}
+                name="motherFirstName"
+                value={formData.motherFirstName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[180px]"
@@ -421,8 +460,8 @@ export default function Form({ studentID }: Props) {
               />
               <InputBox
                 label="นามสกุล"
-                name="name"
-                value={"ไม่มีข้อมูล"}
+                name="motherLastName"
+                value={formData.motherLastName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[180px]"
@@ -437,8 +476,8 @@ export default function Form({ studentID }: Props) {
               </p>
               <InputBox
                 label="ชื่อจริง"
-                name="name"
-                value={"ไม่มีข้อมูล"}
+                name="fatherFirstName"
+                value={formData.fatherFirstName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[200px]"
@@ -448,8 +487,8 @@ export default function Form({ studentID }: Props) {
               />
               <InputBox
                 label="นามสกุล"
-                name="name"
-                value={"ไม่มีข้อมูล"}
+                name="fatherLastName"
+                value={formData.fatherLastName || "ไม่มีข้อมูล"}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[200px]"
