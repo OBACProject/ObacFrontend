@@ -11,6 +11,7 @@ import OpeningScroll from "@/components/Effect/OpeningScroll";
 import ActivityCarousel from "@/components/common/Carousel/ActivityCarousel";
 import { Parallax } from "react-scroll-parallax";
 import SciFiBackgroundNormal from "../styles/bg-normal";
+import Image from "next/image";
 
 export default function Home() {
   const structuredData = {
@@ -76,7 +77,7 @@ export default function Home() {
 
           <OpeningScroll>
             <Parallax speed={5}>
-              <p className="max-w-4xl mx-auto text-base sm:text-lg leading-relaxed indent-8 text-left">
+              <p className="max-w-4xl mx-auto text-base sm:text-lg leading-relaxed indent-8 mb-10 text-left">
                 "At the heart of our university lies a powerful vision — to
                 shape the future by merging innovation with entrepreneurship. As
                 a leading institution in technology and business, we equip
@@ -92,7 +93,7 @@ export default function Home() {
           </OpeningScroll>
 
           <OpeningScroll>
-            <section className="container mx-auto px-4 py-6 sm:py-8 space-y-10 sm:space-y-20">
+            <section className=" py-6 lg:py-8 space-y-5 lg:space-y-10">
               {/* Section 1 */}
               <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-10 items-center">
                 <Parallax speed={5}>
@@ -115,29 +116,29 @@ export default function Home() {
                     <img
                       src="/images/sub_main_1.jpg"
                       alt="OBAC Innovation"
-                      className="w-full h-auto rounded-xl shadow-lg"
+                      className="w-full  rounded-md lg:rounded-xl shadow-lg"
                     />
                   </div>
                 </Parallax>
               </div>
 
               {/* Section 2 */}
-              <div className="grid grid-cols-1 py-6 sm:py-10 md:grid-cols-2 gap-5 items-center">
+              <div className="grid grid-cols-1 py-6 sm:py-5  md:grid-cols-2 gap-5 items-center">
                 <Parallax speed={5}>
                   <div>
                     <img
-                      src="/images/sub_main_2.jpg"
+                      src="/homepage/common/img01.jpg"
                       alt="OBAC Future Leader"
-                      className="w-full h-auto rounded-xl shadow-md"
+                      className="w-full  rounded-md lg:rounded-xl shadow-md"
                     />
                   </div>
                 </Parallax>
                 <Parallax speed={5}>
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-950">
-                      ที่ OBAC คุณจะไม่ได้แค่เรียนเพื่อรู้
+                      ที่ OBAC <br className="lg:hidden block"/>คุณจะไม่ได้แค่เรียนเพื่อรู้
                     </h3>
-                    <p className="indent-8 text-base text-left sm:text-lg leading-relaxed text-blue-950">
+                    <p className="indent-4 lg:indent-8 text-base text-left sm:text-lg leading-relaxed text-blue-950">
                       แต่เรียนเพื่อ <strong>ลงมือทำ</strong> และ{" "}
                       <strong>เติบโต</strong>
                       ไปสู่ความสำเร็จในสายอาชีพอย่างมั่นคงเพราะ OBAC
@@ -152,11 +153,13 @@ export default function Home() {
 
         {/* Secondary Banner */}
         <FadeInOnScroll>
-          <div className="relative w-full h-[180px] sm:h-[300px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden">
-            <img
-              src="/banner/banner.jpg"
+          <div className="relative w-full  sm:h-[300px] md:h-[400px] lg:h-[600px] lg:w-full  ">
+            <Image
+              width={800}
+              height={800}
+              src="/homepage/common/img03.jpg"
               alt="OBAC Secondary Banner"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t  pointer-events-none" />
           </div>
@@ -164,11 +167,15 @@ export default function Home() {
 
         {/* Courses Section */}
         <OpeningScroll>
-          <section className="container mx-auto px-4 py-10 sm:py-16">
-            <h2 className="text-3xl md:text-4xl text-center font-bold mb-10">
-              หลักสูตรที่เปิดสอน
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <section className="lg:w-full  lg:mt-10 py-5 lg:py-16">
+            <div className="lg:text-3xl text-2xl lg:justify-start flex justify-center items-center gap-2 md:text-4xl lg:text-start text-center font-bold mb-6">
+              หลักสูตร{" "}
+              <p className="px-4 py-1 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white lg:text-3xl">
+                ปวช.
+              </p>{" "}
+              ที่เปิดสอน
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-full  lg:grid-cols-5 gap-2">
               <CardCourse
                 iconName="BookOpen"
                 title="สาขาการบัญชี"
@@ -193,6 +200,52 @@ export default function Home() {
                 iconName="Plane"
                 title="สาขาการท่องเที่ยว"
                 href={"/program/tourism-management"}
+              />
+            </div>
+          </section>
+        </OpeningScroll>
+         <FadeInOnScroll>
+          <div className="relative w-full  sm:h-[300px] md:h-[400px] lg:h-[600px] lg:w-full  ">
+            <Image
+              width={800}
+              height={800}
+              src="/homepage/common/img02.jpg"
+              alt="OBAC Secondary Banner"
+              className="w-full h-full object-cover rounded-xl"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t  pointer-events-none" />
+          </div>
+        </FadeInOnScroll>
+        <OpeningScroll>
+          <section className="lg:w-full   py-5 sm:py-10">
+            <div className="lg:text-3xl lg:justify-start  justify-center text-2xl flex items-center gap-2 md:text-4xl lg:text-start text-center font-bold mb-6">
+              หลักสูตร{" "}
+              <p className="px-4 py-1 rounded-lg bg-gradient-to-r from-red-500 to-purple-500 text-white lg:text-3xl">
+                ปวส.
+              </p>{" "}
+              ที่เปิดสอน
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:w-full  lg:grid-cols-5 gap-2">
+              <CardCourse
+                iconName="BookOpen"
+                title="สาขาการบัญชี"
+                href={"/program/accounting"}
+              />
+              <CardCourse
+                iconName="Laptop2"
+                title="สาขาการตลาด"
+                href={"/program/computer-business"}
+              />
+              <CardCourse
+                iconName="TvMinimalPlay"
+                title="สาขาเทคโนโลยีธุรกิจดิจิทัล
+"
+                href={"/program/computer-graphic"}
+              />
+              <CardCourse
+                iconName="Briefcase"
+                title="สาขาการจัดการสำนักงาน"
+                href={"/program/marketing"}
               />
             </div>
           </section>
@@ -249,8 +302,8 @@ export default function Home() {
         {/* Call to Action */}
       </SciFiBackgroundNormal>{" "}
       <FadeInOnScroll>
-        <section className="bg-blue-900 text-white  sm:py-16 text-center  ">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+        <section className="bg-blue-900 text-white py-5  lg:py-16 text-center  ">
+          <h2 className="lg:text-3xl text-lg font-bold lg:mb-4">
             พร้อมจะเริ่มต้นอนาคตของคุณแล้วหรือยัง?
           </h2>
           <a

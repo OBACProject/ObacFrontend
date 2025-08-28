@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import OpeningScroll from "@/components/Effect/OpeningScroll";
-import FadeInOnScroll from "@/components/Effect/FadInScroll";
+import Image from "next/image";
 import { Parallax } from "react-scroll-parallax";
 import HeaderHomePageMenu from "@/components/common/Header/Header";
 import SciFiBackgroundNormal from "@/app/styles/bg-normal";
@@ -65,10 +65,12 @@ export default function page() {
 
               <MaybeParallax speed={-5}>
                 <div className="w-full h-full flex justify-center items-center">
-                  <img
-                    src="/static/symbol_1.jpg"
+                  <Image
+                    height={300}
+                    width={300}
+                    src="/homepage/common/costom.jpg"
                     alt="การแต่งกายของนักศึกษา OBAC"
-                    className="w-full max-w-xl rounded-lg shadow-xl"
+                    className="w-full rounded-lg shadow-lg"
                   />
                 </div>
               </MaybeParallax>

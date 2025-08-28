@@ -1,9 +1,8 @@
 export default function HomeFooter() {
   return (
-    <footer className="w-full bg-[#0C243C] px-4 sm:px-6 lg:px-10 py-10">
-      <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start gap-6 lg:gap-12 text-white">
-
-        <div className="flex items-start gap-4">
+    <footer className="w-full bg-[#0C243C] px-4 sm:px-6 lg:px-10 py-6">
+      <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start gap-4 lg:gap-12 text-white">
+        <div className="lg:flex lg:items-start grid place-items-center lg:justify-center gap-4">
           <div className="hidden sm:block bg-white rounded-full p-2 w-fit h-fit">
             <img
               src="/images/obac_navbar_logo.png"
@@ -12,9 +11,18 @@ export default function HomeFooter() {
             />
           </div>
 
+          <div className=" bg-white rounded-full p-1 w-fit h-fit">
+            <img
+              src="/images/obac_navbar_logo.png"
+              alt="obac-logo"
+              className="h-20 w-auto"
+            />
+          </div>
+
           <div className="flex flex-col justify-center font-inter font-bold">
-            <span className="text-base sm:text-lg">
-              Ekawit Business Administration Vocational College
+            <span className="text-base text-center sm:text-lg">
+              Ekawit Business Administration <br className="lg:hidden block" />{" "}
+              Vocational College
             </span>
             <span className="text-sm sm:text-base font-normal">
               วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ
@@ -24,7 +32,8 @@ export default function HomeFooter() {
 
         <div className="text-sm sm:text-base leading-relaxed text-center lg:text-left max-w-md mx-auto lg:mx-0">
           <p>
-            5 ซอย ลาดกระบัง 34/1 ถนนลาดกระบัง แขวงลาดกระบัง เขตลาดกระบัง<br />
+            5 ซอย ลาดกระบัง 34/1 ถนนลาดกระบัง แขวงลาดกระบัง เขตลาดกระบัง
+            <br />
             กรุงเทพมหานคร 10520
           </p>
           <p className="mt-2">ติดต่อ : 02 327 2992</p>
