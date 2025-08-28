@@ -11,7 +11,7 @@ export default function HomeFooter() {
             />
           </div>
 
-          <div className=" bg-white rounded-full p-1 w-fit h-fit">
+          <div className=" lg:hidden block bg-white rounded-full p-1 w-fit h-fit">
             <img
               src="/images/obac_navbar_logo.png"
               alt="obac-logo"
