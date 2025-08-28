@@ -103,12 +103,12 @@ export const ExcelGradStudentGroup= ({
 
   return (
     <button
-      className="flex h-fit px-8 border-[1px] border-gray-300 text-blue-500 font-prompt_Light bg-white py-1.5
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-green-600  font-prompt_Light bg-white py-1.5
        hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
       onClick={downloadExcel}
       disabled={!data}
     >
-      <Download className="text-blue-500 w-5 h-5" />
+      <Download className="text-green-600  w-5 h-5" />
       ดาวน์โหลดใบคะแนน Excel
     </button>
   );
