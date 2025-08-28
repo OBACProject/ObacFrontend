@@ -1,7 +1,6 @@
 // === components/grad/ExportFile.tsx ===
 "use client";
 import React from "react";
-import StudentNameInSubject from "@/lib/PDF/name-list/StudentNameInSubject";
 import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
@@ -9,7 +8,6 @@ import {
 import { GetGradBySubjectId, StudentGroupGradeResponse } from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
-import { StudentNameListInSubject } from "@/dto/pdfDto";
 import {
   PDFStudentNamelistInGroupButton,
   PDFStudentScoreInSubjectPDF,
@@ -54,6 +52,7 @@ export default function ExportFile({
         item.finaltermScore,
       finalGrade: item.finalGrade,
       remarks: item.remarks,
+      status: String(item.status),
     };
   });
 
@@ -77,7 +76,7 @@ export default function ExportFile({
        hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
         onClick={() =>
           ConvertScoreToExcel(
-            convertGrad,
+            convertGrad.filter(item => item.status !== "คัดชื่อออก" && item.status !== "ลาออก"),
             term,
             year,
             subject?.subjectCode ?? "",
