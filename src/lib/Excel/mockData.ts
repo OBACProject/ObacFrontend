@@ -14,6 +14,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 18,
     midtermScore: 14,
     finaltermScore: 16,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010002",
@@ -23,6 +25,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 19,
     midtermScore: 16,
     finaltermScore: 17,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010003",
@@ -32,6 +36,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 16,
     midtermScore: 12,
     finaltermScore: 14,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010004",
@@ -41,6 +47,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 17,
     midtermScore: 15,
     finaltermScore: 16,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010005",
@@ -50,6 +58,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 15,
     midtermScore: 11,
     finaltermScore: 12,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010006",
@@ -59,6 +69,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 20,
     midtermScore: 17,
     finaltermScore: 18,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010007",
@@ -68,6 +80,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 16,
     midtermScore: 13,
     finaltermScore: 15,
+    finalGrade: 0,
+    remarks: ""
   },
   {
     studentCode: "65010008",
@@ -77,6 +91,8 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 17,
     midtermScore: 12,
     finaltermScore: 13,
+    finalGrade: 0,
+    remarks: ""
   },
 ];
 
