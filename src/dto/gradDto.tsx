@@ -56,6 +56,7 @@ export interface convertGradBySubjectId {
   finaltermScore: number;
   finalGrade: number;
   remarks: string;
+  status : string;
 }
 export interface ConvertClassroomToExcelDto {
   studentCode: string;

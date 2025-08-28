@@ -14,8 +14,9 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     affectiveScore: 18,
     midtermScore: 14,
     finaltermScore: 16,
-    finalGrade:0,
-    remarks:"",
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010002",
@@ -24,8 +25,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 24,
     affectiveScore: 19,
     midtermScore: 16,
-    finaltermScore: 17,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 17,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010003",
@@ -34,8 +37,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 20,
     affectiveScore: 16,
     midtermScore: 12,
-    finaltermScore: 14,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 14,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010004",
@@ -44,8 +49,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 23,
     affectiveScore: 17,
     midtermScore: 15,
-    finaltermScore: 16,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 16,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010005",
@@ -54,8 +61,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 18,
     affectiveScore: 15,
     midtermScore: 11,
-    finaltermScore: 12,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 12,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010006",
@@ -64,8 +73,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 25,
     affectiveScore: 20,
     midtermScore: 17,
-    finaltermScore: 18,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 18,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010007",
@@ -74,8 +85,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 21,
     affectiveScore: 16,
     midtermScore: 13,
-    finaltermScore: 15,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 15,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
   {
     studentCode: "65010008",
@@ -84,8 +97,10 @@ export const mockConvertGradBySubjectId: convertGradBySubjectId[] = [
     collectScore: 19,
     affectiveScore: 17,
     midtermScore: 12,
-    finaltermScore: 13,    finalGrade:0,
-    remarks:"",
+    finaltermScore: 13,
+    finalGrade: 0,
+    remarks: "",
+    status: ""
   },
 ];
 
