@@ -169,6 +169,7 @@ const BulkStudentTranscript = (
       let CountGrad = 0;
 
       for (let j = 0; j < termBlock.subjectGrades.length; j++) {
+        
         if (swift == false && inStartColoume >= 250) {
           inStartColoume = 63;
           inStartColoume = inStartColoume + 5;
@@ -191,24 +192,24 @@ const BulkStudentTranscript = (
         AllOfCredit += credit;
 
         doc.text(
-          `${data[i].subjectGradesTermYear[i].subjectGrades[j].subjectCode}`,
+          `${row.subjectCode}`,
           Xaxis - 23,
           inStartColoume
         );
         doc.text(
-          `${data[i].subjectGradesTermYear[i].subjectGrades[j].subjectName}`,
+          `${row.subjectName}`,
           Xaxis - 4,
           inStartColoume
         );
         doc.text(
-          `${data[i].subjectGradesTermYear[i].subjectGrades[j].credit}`,
+          `${row.credit}`,
           Xaxis + 56,
           inStartColoume
         );
         doc.text(
           `${
-            data[i].subjectGradesTermYear[i].subjectGrades[j].remark ||
-            data[i].subjectGradesTermYear[i].subjectGrades[j].finalGrade ||
+            row.remark ||
+            row.finalGrade ||
             0
           }`,
           Xaxis + 62,
