@@ -52,6 +52,8 @@ export default function ExportFile({
         item.collectScore +
         item.midtermScore +
         item.finaltermScore,
+      finalGrade: item.finalGrade,
+      remarks: item.remarks,
     };
   });
 

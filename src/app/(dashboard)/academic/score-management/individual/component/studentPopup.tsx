@@ -383,44 +383,14 @@ export function StudentPopup({
                           </span>
                           <span className="font-bold text-green-600">
                             {selectedSubject.finalGrade ||
-                              selectedSubject.remark ||
-                              "-"}
+                              selectedSubject.remarks ||
+                              "N/A"}
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
-
-                <div className="p-2">
-                  <h1>คะแนนงาน (20 คะแนน)</h1>
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    step="any"
-                    placeholder="คะแนนงาน"
-                    value={score.assignmentScore}
-                    onChange={(e) =>
-                      handleInputChange("assignmentScore", e.target.value)
-                    }
-                    onBlur={() => clampOnBlur("assignmentScore")}
-                  />
-                </div>
-
-                <div className="p-2">
-                  <h1>คะแนนเก็บ/ทดสอบ (10 คะแนน)</h1>
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    step="any"
-                    placeholder="คะแนนเก็บ"
-                    value={score.collectScore}
-                    onChange={(e) =>
-                      handleInputChange("collectScore", e.target.value)
-                    }
-                    onBlur={() => clampOnBlur("collectScore")}
-                  />
-                </div>
 
                 <div className="p-2">
                   <h1>คะแนนจิตพิสัย (20 คะแนน)</h1>
@@ -433,6 +403,34 @@ export function StudentPopup({
                       handleInputChange("affectiveScore", e.target.value)
                     }
                     onBlur={() => clampOnBlur("affectiveScore")}
+                  />
+                </div>
+                    <div className="p-2">
+                  <h1>คะแนนทดสอบ (10 คะแนน)</h1>
+                  <Input
+                    type="number"
+                    inputMode="decimal"
+                    step="any"
+                    placeholder="คะแนนเก็บ"
+                    value={score.collectScore}
+                    onChange={(e) =>
+                      handleInputChange("collectScore", e.target.value)
+                    }
+                    onBlur={() => clampOnBlur("collectScore")}
+                  />
+                </div>
+                <div className="p-2">
+                  <h1>คะแนนภาระงาน (20 คะแนน)</h1>
+                  <Input
+                    type="number"
+                    inputMode="decimal"
+                    step="any"
+                    placeholder="คะแนนงาน"
+                    value={score.assignmentScore}
+                    onChange={(e) =>
+                      handleInputChange("assignmentScore", e.target.value)
+                    }
+                    onBlur={() => clampOnBlur("assignmentScore")}
                   />
                 </div>
 

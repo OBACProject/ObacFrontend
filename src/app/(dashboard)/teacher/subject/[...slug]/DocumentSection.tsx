@@ -1,5 +1,8 @@
 "use client";
-import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
+import {
+  ExcelGradStudentGroup,
+  ExcelStudentNamelistInGroupButton,
+} from "@/components/Excel/ExcelButton";
 import {
   PDFStudentNamelistInGroupButton,
   PDFStudentScoreInSubjectPDF,
@@ -26,13 +29,13 @@ export default function DocumentSection({
           <ChevronRight className="text-blue-600 h-6 w-6 group-hover:rotate-90 duration-300" />
         </button>
 
-        <div className="absolute top-fit mt-2 left-0 hidden group-hover:flex flex-col gap-1 z-10">
-          <div className="w-full">
+        <div className="absolute top-fit mt-2 left-0 hidden group-hover:flex flex-col gap-2 z-10">
             <PDFStudentNamelistInGroupButton groupID={groupID} year={year} />
-          </div>
-
-          <PDFStudentScoreInSubjectPDF scheduleSubjectID={scheduleSubjectID} />
-          <ExcelStudentNamelistInGroupButton groupID={String(groupID)} />
+            <PDFStudentScoreInSubjectPDF
+              scheduleSubjectID={scheduleSubjectID}
+            />
+            <ExcelStudentNamelistInGroupButton groupID={String(groupID)} />
+            <ExcelGradStudentGroup scheduleSubjectId={scheduleSubjectID} />
         </div>
       </div>
     </div>
