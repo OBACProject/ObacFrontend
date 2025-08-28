@@ -381,8 +381,12 @@ export default function Form({ studentID }: Props) {
                     name="gender"
                     className="border border-gray-300 rounded-md px-2 py-1.5"
                     onChange={handleChange}
-                    value={formData.gender || "ไม่ทราบ"}
+                    value={formData.gender ?? ""}
+                    disabled={!onEdit}
                   >
+                    <option value="" disabled>
+                      เลือกเพศ
+                    </option>
                     <option value="ชาย">ชาย</option>
                     <option value="หญิง">หญิง</option>
                   </select>

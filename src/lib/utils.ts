@@ -64,8 +64,9 @@ export function genRandomGroupCode(letters = 2, digits = 3): string {
   const numberPart = String(rand(10 ** digits)).padStart(digits, "0");
   return `${letterPart}-${numberPart}`;
 }
-
-const s = (v: string | null | undefined) => v ?? "";
+const s = (v: string | null | undefined) => {
+  return v ?? "-";
+};
 const d = (v: string | null | undefined) => v ?? "";
 
 export function toUpdatePayload(
