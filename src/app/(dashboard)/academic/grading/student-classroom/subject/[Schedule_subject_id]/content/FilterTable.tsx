@@ -170,7 +170,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
           finaltermScore: item.finaltermScore || 0,
           totalScore: item.totalScore || 0,
           finalGrade: item.finalGrade,
-          remarks: item.remark || "",
+          remarks: item.remarks || "",
           index: index + 1,
         }));
     }
@@ -424,16 +424,6 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       autoClose: 0,
     });
   };
-
-  const columnDefs = createColumns({
-    onEdit,
-    handleInputChange: handleInputChangeDraft,
-    handleBlur,
-    draft,
-    commitNumber,
-    onChangeGrade,
-    onChangeRemark,
-  });
 
   return (
     <div className="pb-20 mb-10">

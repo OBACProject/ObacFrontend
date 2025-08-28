@@ -54,6 +54,8 @@ export interface convertGradBySubjectId {
   affectiveScore: number;
   midtermScore: number;
   finaltermScore: number;
+  finalGrade: number;
+  remarks: string;
 }
 export interface ConvertClassroomToExcelDto {
   studentCode: string;

@@ -384,7 +384,7 @@ export function StudentPopup({
                           </span>
                           <span className="font-bold text-green-600">
                             {selectedSubject.finalGrade ||
-                              selectedSubject.remark ||
+                              selectedSubject.remarks ||
                               "N/A"}
                           </span>
                         </div>
@@ -394,22 +394,20 @@ export function StudentPopup({
                 )}
 
                 <div className="p-2">
-                  <h1>คะแนนงาน (20 คะแนน)</h1>
+                  <h1>คะแนนจิตพิสัย (20 คะแนน)</h1>
                   <Input
                     type="number"
                     inputMode="decimal"
                     step="any"
-                    placeholder="คะแนนงาน"
-                    value={score.assignmentScore}
+                    value={score.affectiveScore}
                     onChange={(e) =>
-                      handleInputChange("assignmentScore", e.target.value)
+                      handleInputChange("affectiveScore", e.target.value)
                     }
-                    onBlur={() => clampOnBlur("assignmentScore")}
+                    onBlur={() => clampOnBlur("affectiveScore")}
                   />
                 </div>
-
-                <div className="p-2">
-                  <h1>คะแนนเก็บ/ทดสอบ (10 คะแนน)</h1>
+                    <div className="p-2">
+                  <h1>คะแนนทดสอบ (10 คะแนน)</h1>
                   <Input
                     type="number"
                     inputMode="decimal"
@@ -422,18 +420,18 @@ export function StudentPopup({
                     onBlur={() => clampOnBlur("collectScore")}
                   />
                 </div>
-
                 <div className="p-2">
-                  <h1>คะแนนประพฤติ (20 คะแนน)</h1>
+                  <h1>คะแนนภาระงาน (20 คะแนน)</h1>
                   <Input
                     type="number"
                     inputMode="decimal"
                     step="any"
-                    value={score.affectiveScore}
+                    placeholder="คะแนนงาน"
+                    value={score.assignmentScore}
                     onChange={(e) =>
-                      handleInputChange("affectiveScore", e.target.value)
+                      handleInputChange("assignmentScore", e.target.value)
                     }
-                    onBlur={() => clampOnBlur("affectiveScore")}
+                    onBlur={() => clampOnBlur("assignmentScore")}
                   />
                 </div>
 
