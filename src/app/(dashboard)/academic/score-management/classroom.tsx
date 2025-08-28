@@ -131,7 +131,7 @@ export function ClassroomGrading() {
     const subjectsArray = Array.from(subjectsMap.values());
 
     const transformedStudents: StudentList[] = data.students
-      .filter(student => student.isActive) 
+      .filter(student => student.isActive && student.status !== "คัดชื่อออก" && student.status !== "ลาออก") 
       .map(student => {
         const grads: Grad[] = subjectsArray.map(subject => {
           const studentSubject = student.subject.find(s => s.subjectCode === subject.subjectCode);
@@ -199,7 +199,7 @@ const transformedDataExcel = (
   });
 
   const studentListExcel: StudentListExcel[] = data.students
-    .filter((s) => s.isActive)
+    .filter((s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
     .map((student) => {
       const subjectsRecord: Record<string, string> = {};
       subjectCodes.forEach((code) => {
@@ -224,9 +224,7 @@ const transformedDataExcel = (
   useEffect(() => {
     if (downloadingGroupId && gradeSummaryData && !isLoadingGradeSummary) {
       try {
-        console.log("Raw API data:", gradeSummaryData);
         const transformedData = transformGradeData(gradeSummaryData);
-        console.log("Transformed data for PDF:", transformedData);
         
         GroupSummaryGradPDF({ data: transformedData });
       } catch (error) {

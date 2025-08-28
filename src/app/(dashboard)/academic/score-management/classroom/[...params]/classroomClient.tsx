@@ -60,7 +60,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
     const subjectsArray = Array.from(subjectsMap.values());
 
     const transformedStudents = data.students
-      .filter((student) => student.isActive)
+      .filter((student) => student.isActive && student.status !== "คัดชื่อออก" && student.status !== "ลาออก")
       .map((student) => {
         const grads = subjectsArray.map((subject) => {
           const studentSubject = student.subject.find(
@@ -133,7 +133,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
     });
 
     const studentListExcel = data.students
-      .filter((s) => s.isActive)
+      .filter((s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
       .map((student) => {
         const subjectsRecord: Record<string, string> = {};
         subjectNames.forEach((name) => {

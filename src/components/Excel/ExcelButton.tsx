@@ -28,7 +28,14 @@ export const convertToExcelFormat = (
     finaltermScore: grade.finaltermScore,
     finalGrade: grade.finalGrade,
     remarks: grade.remarks || "",
+    status : grade.status,
   }));
+
+  const filteredData = [...(convertedData ?? [])]
+    .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+    .sort((a, b) =>
+      a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+    );
 
   const metadata = {
     term: data.term,
@@ -38,7 +45,7 @@ export const convertToExcelFormat = (
     classroom: data.class,
   };
 
-  return { convertedData, metadata };
+  return { convertedData: filteredData, metadata };
 };
 
 export const ExcelStudentNamelistInGroupButton = ({
@@ -56,7 +63,7 @@ export const ExcelStudentNamelistInGroupButton = ({
 
     const downloadExcel = async () => {
         ConvertClassroomToExcel(
-          studentData?.students ?? [],
+          sortedStudents ?? [],
           studentData?.groupName || "",
         );
     }
