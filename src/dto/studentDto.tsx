@@ -87,7 +87,7 @@ export interface GetStudentByGroupId {
   gpax: number;
   totalCredit: number;
   subject: GetSubjectByGroupId[];
-  status : string;
+  status: string;
 }
 
 export interface GetAllStudent {
@@ -125,7 +125,6 @@ export interface GetAllStudent {
   birthDate: string | null;
 }
 
-
 export interface GetAllStudentUser {
   studentId: number;
   studentCode: string;
@@ -140,16 +139,16 @@ export interface GetAllStudentUser {
   gender: string;
   role: string;
   isActive: boolean;
-  userId : string;
+  userId: string;
 }
 
 export type GetAllStudentsPagedParams = {
-  pageNumber?: number;    
-  pageSize?: number;       
-  searchTerm?: string;    
-  searchCategory?: string; 
-  sortBy?: string;         
-  ascending?: boolean;     
+  pageNumber?: number;
+  pageSize?: number;
+  searchTerm?: string;
+  searchCategory?: string;
+  sortBy?: string;
+  ascending?: boolean;
 };
 
 export type GetAllStudentsPagedResponse = {
@@ -194,9 +193,8 @@ export interface CreateStudentRequest {
   nationality: string;
   birthDate: string;
   prefix: string;
-  studentGroupId : number;
+  studentGroupId: number;
 }
-
 
 export interface GetAllStudentTableDto {
   studentId: number;
@@ -251,7 +249,7 @@ export interface StudentTranscriptData {
   firstName: string;
   lastName: string;
   thaiName: string;
-  prefix:string;
+  prefix: string;
   thaiLastName: string;
   class: string;
   currentYear: number;
@@ -419,16 +417,13 @@ export interface StudentDetail {
 }
 
 export interface StudentDetails {
+  userName: string;
   id: number;
   prefix: string;
   name: string;
   lastName: string;
   gender: string;
-  nationality: string;
-  birthDate: string;
-  citizenId: string;
   studentCode: string;
-  phoneNumber: string;
   studentGroupId: number;
   groupName: string;
   groupCode: string;
@@ -437,17 +432,53 @@ export interface StudentDetails {
   programName: string;
   subProgramName: string;
   facultyName: string;
-  gpax: number;
+  gpax: number | null;
   status: string;
   programId: number;
   isActive: boolean;
-  
-  thaiID:string;
-  religion:string;
-  address:string;
-  email:string;
+  userId: string;
+  citizenId: string | null;
+  nationality: string | null;
+  religion: string | null;
+  phoneNumber: string | null;
+  email: string | null;
+  birthDate: string | null;
+  currentAddress: string | null;
+  fatherFirstName: string | null;
+  fatherLastName: string | null;
+  motherFirstName: string | null;
+  motherLastName: string | null;
 }
 
+export interface UpdateStudentDetailsRequest {
+  studentId: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  studentGroupId: number;
+  studentCode: string;
+  programId: number;
+  isActive: boolean;
+  status: string;
+  birthDate: string;
+  citizenId: string;
+  nationality: string;
+  religion: string;
+  phoneNumber: string;
+  email: string;
+  currentAddress: string;
+  fatherFirstName: string;
+  fatherLastName: string;
+  motherFirstName: string;
+  motherLastName: string;
+  class: string;
+  level: number;
+  programName: string;
+  subProgramName: string;
+  facultyName: string;
+  gpax: number;
+}
 
 export interface UpdateStudentUserRequest {
   studentId: number;
@@ -456,7 +487,7 @@ export interface UpdateStudentUserRequest {
   lastName: string;
   gender: string;
   studentGroupId: number;
-  birthDate: string;         
+  birthDate: string;
   studentCode: string;
   enrollYear: number;
   currentLevel: number;

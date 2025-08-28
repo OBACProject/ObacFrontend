@@ -6,6 +6,7 @@ import {
   GetStudentDetailResponse,
   StudentDetails,
   StudentGroupDetail,
+  UpdateStudentDetailsRequest,
   UpdateStudentUserRequest,
 } from "@/dto/studentDto";
 import apiClient from "@/lib/apiClient";
@@ -183,27 +184,32 @@ export const CreateStudent = async (
 
     const msg = String(response.data?.message ?? "");
     if (/This UserName Already Exists/i.test(msg)) {
-      return { success: false, message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น" };
+      return {
+        success: false,
+        message: "ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น",
+      };
     }
 
     // ✅ เผื่อมีเคส StudentCode ซ้ำ
     if (/This StudentCode Already Exists/i.test(msg)) {
-      return { success: false, message: "รหัสนักเรียนนี้ถูกใช้แล้ว โปรดใช้รหัสอื่น" };
+      return {
+        success: false,
+        message: "รหัสนักเรียนนี้ถูกใช้แล้ว โปรดใช้รหัสอื่น",
+      };
     }
 
     if ([200, 201, 204].includes(response.status)) {
       return { success: true, message: "สร้างบัญชีนักเรียนสำเร็จ" };
     }
     return { success: false, message: "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง" };
-
   } catch (err: any) {
     console.error("Error creating student:", err);
 
-    const backendMsg = err?.response?.data?.message || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
+    const backendMsg =
+      err?.response?.data?.message || "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้";
     return { success: false, message: backendMsg };
   }
 };
-
 
 export const UpdateStudentUser = async (payload: UpdateStudentUserRequest) => {
   try {
@@ -212,5 +218,21 @@ export const UpdateStudentUser = async (payload: UpdateStudentUserRequest) => {
   } catch (error) {
     console.error("UpdateStudentUser Error:", error);
     return null;
+  }
+};
+
+export const UpdateStudentDetail = async (
+  payload: UpdateStudentDetailsRequest
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put<{
+      responseCode: string;
+      responseMessage: string;
+      data: boolean;
+    }>("Student/UpdateStudentDetail", payload);
+    return res.data.data ?? false;
+  } catch (error) {
+    console.error("UpdateStudentDetail Error:", error);
+    return false;
   }
 };

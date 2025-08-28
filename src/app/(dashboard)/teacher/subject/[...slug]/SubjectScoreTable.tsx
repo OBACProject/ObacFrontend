@@ -157,16 +157,16 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
         {onEdit ? (
           <div className="flex items-center gap-2 justify-center">
             <button
-              className="py-1.5 bg-red-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-red-400-400 "
-              onClick={() => setEdit(!onEdit)}
-            >
-              ยกเลิก
-            </button>
-            <button
               onClick={() => onSaveGrad()}
               className="py-1.5 bg-green-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-green-400 "
             >
               บันทึก
+            </button>
+            <button
+              className="py-1.5 bg-red-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-red-400-400 "
+              onClick={() => setEdit(!onEdit)}
+            >
+              ยกเลิก
             </button>
           </div>
         ) : (

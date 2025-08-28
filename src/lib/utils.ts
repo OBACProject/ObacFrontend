@@ -1,12 +1,15 @@
-import {
-  StudentGroupItem,
-} from "@/dto/studentGroupItem";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+import type {
+  StudentDetails,
+  UpdateStudentDetailsRequest,
+} from "@/dto/studentDto";
 
 export function getCurrentThaiTermYear() {
   const date = new Date();
@@ -60,4 +63,41 @@ export function genRandomGroupCode(letters = 2, digits = 3): string {
 
   const numberPart = String(rand(10 ** digits)).padStart(digits, "0");
   return `${letterPart}-${numberPart}`;
+}
+
+const s = (v: string | null | undefined) => v ?? "";
+const d = (v: string | null | undefined) => v ?? "";
+
+export function toUpdatePayload(
+  src: StudentDetails
+): UpdateStudentDetailsRequest {
+  return {
+    studentId: src.id,
+    prefix: s(src.prefix),
+    firstName: s(src.name),
+    lastName: s(src.lastName),
+    gender: s(src.gender),
+    studentGroupId: src.studentGroupId ?? 0,
+    studentCode: s(src.studentCode),
+    programId: src.programId ?? 0,
+    isActive: !!src.isActive,
+    status: s(src.status),
+    birthDate: d(src.birthDate),
+    citizenId: s(src.citizenId),
+    nationality: s(src.nationality),
+    religion: s(src.religion),
+    phoneNumber: s(src.phoneNumber),
+    email: s(src.email),
+    currentAddress: s(src.currentAddress),
+    fatherFirstName: s(src.fatherFirstName),
+    fatherLastName: s(src.fatherLastName),
+    motherFirstName: s(src.motherFirstName),
+    motherLastName: s(src.motherLastName),
+    class: s(src.class),
+    level: src.level ?? 0,
+    programName: s(src.programName),
+    subProgramName: s(src.subProgramName),
+    facultyName: s(src.facultyName),
+    gpax: typeof src.gpax === "number" ? src.gpax : 0,
+  };
 }
