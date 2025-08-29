@@ -124,13 +124,11 @@ export const PDFFailedStudentNamelistButton = ({
   className,
   currentYear,
   grade,
-  term,
   year,
 }: {
   className: string;
   currentYear: number;
   grade: number;
-  term: string;
   year: number;
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -140,7 +138,6 @@ export const PDFFailedStudentNamelistButton = ({
         className,
         currentYear,
         grade,
-        term,
         year
       );
       if (ok) {

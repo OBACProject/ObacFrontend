@@ -124,7 +124,6 @@ export const genPDFFailedStudentNamelist = async (
   className: string,
   currentLevel: number,
   grade: number,
-  term: string,
   year: number
 ): Promise<boolean> => {
   try {
@@ -132,7 +131,6 @@ export const genPDFFailedStudentNamelist = async (
       className,
       currentLevel,
       grade,
-      term,
       year
     );
     if (response) {

@@ -38,7 +38,7 @@ export default function Main() {
 
   const onFilterGroup = async () => {
     setSearchTrigger(true);
-    setStudent([])
+    setStudent([]);
     try {
       await GetStudentIfGradeBelow(
         classSelect,
@@ -142,7 +142,6 @@ export default function Main() {
                       className={classSelect}
                       currentYear={currentYearSelect}
                       grade={Number(grads)}
-                      term={term}
                       year={year}
                     />
                   </div>
@@ -174,6 +173,8 @@ export default function Main() {
                       ? Object.values(item.receipts as any)
                       : [];
                     const hasReceipts = receipts.length > 0;
+                    const formatGPA = (g: number | null | undefined) =>
+                      typeof g === "number" && isFinite(g) ? g.toFixed(2) : "—";
                     return (
                       <div
                         key={index}
@@ -197,7 +198,7 @@ export default function Main() {
                           {item.class}.{item.groupName}
                         </div>
                         <div className="text-center border-r border-gray-400 py-1">
-                          {item.gpa.toFixed(2)}
+                          {formatGPA(item.gpa)}
                         </div>
                         <div className="flex justify-center items-center py-1">
                           <select
