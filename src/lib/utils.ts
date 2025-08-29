@@ -69,6 +69,14 @@ const s = (v: string | null | undefined) => {
 };
 const d = (v: string | null | undefined) => v ?? "";
 
+const formatTodayYMD = (): string => {
+  const now = new Date(); // เวลาเครื่องผู้ใช้ (Local)
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
 export function toUpdatePayload(
   src: StudentDetails
 ): UpdateStudentDetailsRequest {
@@ -83,7 +91,10 @@ export function toUpdatePayload(
     programId: src.programId ?? 0,
     isActive: !!src.isActive,
     status: s(src.status),
-    birthDate: d(src.birthDate),
+    birthDate:
+      src.birthDate && src.birthDate.trim() !== ""
+        ? src.birthDate
+        : formatTodayYMD(),
     citizenId: s(src.citizenId),
     nationality: s(src.nationality),
     religion: s(src.religion),
