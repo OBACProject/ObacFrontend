@@ -21,6 +21,12 @@ export default function Main() {
   const [currentYearSelect, setCurrentYearSelect] = useState<number>(0);
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
+  const handleAcademicYearChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const v = e.target.value;
+    setYear(v ? Number(v) : currentYear);
+  };
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const [classType, year] = e.target.value.split("&");
@@ -32,12 +38,12 @@ export default function Main() {
 
   const onFilterGroup = async () => {
     setSearchTrigger(true);
+    setStudent([])
     try {
       await GetStudentIfGradeBelow(
         classSelect,
         currentYearSelect,
         grads,
-        term,
         year
       ).then((item: GradBelowResponse[]) => {
         setStudent(item);
@@ -57,7 +63,9 @@ export default function Main() {
   const handleStudentName = (studentCode: number) => {
     router.push(`/academic/score-management/individual/${studentCode}`);
   };
-
+  const yearOptions = useMemo(() => {
+    return Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
+  }, [currentYear]);
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
@@ -69,13 +77,19 @@ export default function Main() {
         />
       </div>
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
-        <SelectTermAndYear
-          term={term}
-          year={year}
-          currentYear={currentYear}
-          onChangeTerm={setTerm}
-          onChangeYear={setYear}
-        />
+        <p>ปีการศึกษา</p>
+        <select
+          className="border border-gray-200 rounded-sm py-1 px-4"
+          onChange={handleAcademicYearChange}
+          value={year}
+        >
+          <option value="">เลือก</option>
+          {yearOptions.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
         <GradeFilter grade={grads} onChange={setGrad} />
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
@@ -209,9 +223,7 @@ export default function Main() {
                                     value={r?.receiptNo ?? ""}
                                   >
                                     {r?.receiptNo ?? "—"}
-                                    {r?.subjectName
-                                      ? ``
-                                      : ""}
+                                    {r?.subjectName ? `` : ""}
                                   </option>
                                 ))}
                               </>
