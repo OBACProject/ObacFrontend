@@ -90,7 +90,7 @@ export async function ConvertScoreToExcel(
     { key: "testScore", width: 15 },
     { key: "totalScore", width: 15 },
     { key: "finalGrade", width: 15 },
-    { key: "remarks", width: 30 },
+    // { key: "remarks", width: 30 },
   ];
 
   data.forEach((item, index) => {
@@ -105,8 +105,8 @@ export async function ConvertScoreToExcel(
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
       item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore, // คะแนนรวม
-      item.finalGrade, // เกรด
-      item.remarks || "",
+      item.remarks ? item.remarks : item.finalGrade, // เกรด
+      // item.remarks || "",
     ]);
     row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };

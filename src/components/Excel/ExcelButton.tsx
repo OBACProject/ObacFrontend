@@ -42,7 +42,7 @@ export const convertToExcelFormat = (
     year: data.year.toString(),
     subjectCode: data.subjectCode,
     subjectName: data.subjectName,
-    classroom: data.class,
+    classroom: `${data.class}.${data.groupName}`,
   };
 
   return { convertedData: filteredData, metadata };
