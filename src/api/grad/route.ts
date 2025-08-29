@@ -131,7 +131,6 @@ export const GetStudentIfGradeBelow = async (
   className: string,
   currentLavel: number,
   grade: number,
-  term: string,
   year: number
 ): Promise<GradBelowResponse[]> => {
   try {
@@ -140,7 +139,7 @@ export const GetStudentIfGradeBelow = async (
       responseMessage: string;
       data: GradBelowResponse[];
     }>(
-      `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&term=${term}&year=${year}`
+      `Grade/GetStudentIfGradeBelow?className=${className}&currentLevel=${currentLavel}&grade=${grade}&year=${year}`
     );
 
     const list = response.data.data ?? [];
