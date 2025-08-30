@@ -136,7 +136,7 @@ export default function Home() {
                 <Parallax speed={5}>
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold mb-4 text-blue-950">
-                      ที่ OBAC <br className="lg:hidden block"/>คุณจะไม่ได้แค่เรียนเพื่อรู้
+                      ที่ OBAC <br className="lg:hidden block" />คุณจะไม่ได้แค่เรียนเพื่อรู้
                     </h3>
                     <p className="indent-4 lg:indent-8 text-base text-left sm:text-lg leading-relaxed text-blue-950">
                       แต่เรียนเพื่อ <strong>ลงมือทำ</strong> และ{" "}
@@ -182,7 +182,7 @@ export default function Home() {
                 href={"/program/accounting"}
               />
               <CardCourse
-                iconName="Laptop2"
+                iconName="Laptop"
                 title="สาขาเทคโนโลยีธุรกิจดิจิทัล"
                 href={"/program/computer-business"}
               />
@@ -204,7 +204,7 @@ export default function Home() {
             </div>
           </section>
         </OpeningScroll>
-         <FadeInOnScroll>
+        <FadeInOnScroll>
           <div className="relative w-full  sm:h-[300px] md:h-[400px] lg:h-[600px] lg:w-full  ">
             <Image
               width={800}
@@ -232,20 +232,19 @@ export default function Home() {
                 href={"/program/accounting"}
               />
               <CardCourse
-                iconName="Laptop2"
+                iconName="Briefcase"
                 title="สาขาการตลาด"
+                href={"/program/marketing"}
+              />
+              <CardCourse
+                iconName="Laptop"
+                title="สาขาเทคโนโลยีธุรกิจดิจิทัล"
                 href={"/program/computer-business"}
               />
               <CardCourse
-                iconName="TvMinimalPlay"
-                title="สาขาเทคโนโลยีธุรกิจดิจิทัล
-"
-                href={"/program/computer-graphic"}
-              />
-              <CardCourse
-                iconName="Briefcase"
+                iconName="ClipboardList"
                 title="สาขาการจัดการสำนักงาน"
-                href={"/program/marketing"}
+                href="/program/office-management"
               />
             </div>
           </section>
