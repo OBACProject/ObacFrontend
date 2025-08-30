@@ -73,30 +73,7 @@ export default function Page() {
 
       {/* HERO */}
       <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
-        {/* {iconPositions.map((icon, index) => {
-          const dx = (mousePosition.x - 50) * icon.parallaxStrength * 0.1;
-          const dy = (mousePosition.y - 50) * icon.parallaxStrength * 0.1;
-
-          return (
-            <div
-              key={index}
-              className={`absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110 ${
-                showAnimations ? "animate-in slide-in-from-bottom-8 fade-in duration-700" : "opacity-0 translate-y-8"
-              }`}
-              style={{
-                ...(icon.position as React.CSSProperties),
-                transform: `translate(${dx}px, ${dy}px) ${!showAnimations ? " translateY(32px)" : ""}`,
-                animationDelay: `${index * 0.15}s`,
-                animationDuration: `${6 + index * 0.5}s`,
-                transitionDelay: `${index * 150}ms`,
-                opacity: showAnimations ? 1 : 0,
-              }}
-            >
-              <Image src={icon.src} alt={icon.alt} width={64} height={64} className={`${icon.size} drop-shadow-lg`} />
-            </div>
-          );
-        })} */}
-
+       
         {/* Mobile */}
         <div className="absolute inset-0 sm:hidden">
           <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
@@ -112,19 +89,7 @@ export default function Page() {
               สาขาการจัดการสำนักงาน
             </h1>
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex justify-center z-10">
-            {/* <Image
-              src="/cls/office-management/avatar.png"
-              alt="Office Management"
-              width={900}
-              height={900}
-              className={`h-[170px] w-auto object-contain drop-shadow-2xl translate-x-4 sm:translate-x-0 transition-all duration-1000 ${
-                showAnimations ? "animate-in slide-in-from-bottom-8 fade-in" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: "400ms" }}
-              priority
-            /> */}
-          </div>
+        
         </div>
 
         {/* Desktop */}
