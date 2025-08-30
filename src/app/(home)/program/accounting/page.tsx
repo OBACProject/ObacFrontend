@@ -1,11 +1,12 @@
-"use client";
+"use client"
 
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import StickerFacebook from "@/components/Effect/StickerFacebook";
-import StickerYoutube from "@/components/Effect/StickerYoutube";
-import SciFiBackgroundNormal from "@/app/styles/bg-normal";
+import Head from "next/head"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import StickerFacebook from "@/components/Effect/StickerFacebook"
+import StickerYoutube from "@/components/Effect/StickerYoutube"
+import SciFiBackgroundNormal from "@/app/styles/bg-normal"
+import FadeInOnScroll from "@/components/Effect/FadInScroll"
 
 export default function Page() {
   const structuredData = {
@@ -23,22 +24,30 @@ export default function Page() {
       addressCountry: "TH",
     },
     sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
-  };
+  }
 
-  const [mounted, setMounted] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [showAnimations, setShowAnimations] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
+    setMounted(true)
+    const timer = setTimeout(() => {
+      setShowAnimations(true)
+    }, 100)
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+      })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      clearTimeout(timer)
+    }
+  }, [])
 
   const iconPositions = [
     {
@@ -83,17 +92,14 @@ export default function Page() {
       parallaxStrength: 0.2,
       size: "w-10 h-10 sm:w-16 sm:h-16",
     },
-  ];
+  ]
 
-  if (!mounted) return null;
+  if (!mounted) return null
 
   return (
     <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-36">
       <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <link rel="canonical" href="https://ekawit.ac.th" />
       </Head>
 
@@ -104,18 +110,24 @@ export default function Page() {
         {iconPositions.map((icon, index) => (
           <div
             key={index}
-            className="absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110"
+            className={`absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110 ${
+              showAnimations ? "animate-in slide-in-from-bottom-8 fade-in duration-700" : "opacity-0 translate-y-8"
+            }`}
             style={{
               ...icon.position,
               transform: `translate(${
                 (mousePosition.x - 50) * icon.parallaxStrength * 0.1
-              }px, ${(mousePosition.y - 50) * icon.parallaxStrength * 0.1}px)`,
-              animationDelay: `${index * 0.5}s`,
+              }px, ${(mousePosition.y - 50) * icon.parallaxStrength * 0.1}px) ${
+                !showAnimations ? "translateY(32px)" : ""
+              }`,
+              animationDelay: `${index * 0.15}s`,
               animationDuration: `${6 + index * 0.5}s`,
+              transitionDelay: `${index * 150}ms`,
+              opacity: showAnimations ? 1 : 0,
             }}
           >
             <Image
-              src={icon.src}
+              src={icon.src || "/placeholder.svg"}
               alt={icon.alt}
               width={64}
               height={64}
@@ -127,11 +139,12 @@ export default function Page() {
         <div className="absolute inset-0 sm:hidden">
           <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
             <h1
-              className="text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl"
+              className={`text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl transition-all duration-1000 ${
+                showAnimations ? "animate-in slide-in-from-top-4 fade-in" : "opacity-0 -translate-y-4"
+              }`}
               style={{
-                transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
-                  (mousePosition.y - 50) * 0.02
-                }px)`,
+                transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)`,
+                transitionDelay: "200ms",
               }}
             >
               สาขาวิชาการบัญชี
@@ -143,7 +156,12 @@ export default function Page() {
               alt="Accounting Student"
               width={900}
               height={900}
-              className="h-[240px] w-auto object-contain drop-shadow-2xl"
+              className={`h-[240px] w-auto object-contain drop-shadow-2xl transition-all duration-1000 ${
+                showAnimations ? "animate-in slide-in-from-bottom-8 fade-in" : "opacity-0 translate-y-8"
+              }`}
+              style={{
+                transitionDelay: "400ms",
+              }}
               priority
             />
           </div>
@@ -153,11 +171,12 @@ export default function Page() {
           <div className="flex sm:flex-row-reverse items-center gap-6 md:gap-10 w-full max-w-6xl">
             <div className="text-white text-left w-1/2">
               <h1
-                className="text-4xl md:text-5xl font-bold tracking-wide drop-shadow-2xl"
+                className={`text-4xl md:text-5xl font-bold tracking-wide drop-shadow-2xl transition-all duration-1000 ${
+                  showAnimations ? "animate-in slide-in-from-left-8 fade-in" : "opacity-0 -translate-x-8"
+                }`}
                 style={{
-                  transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
-                    (mousePosition.y - 50) * 0.02
-                  }px)`,
+                  transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.02}px)`,
+                  transitionDelay: "200ms",
                 }}
               >
                 สาขาวิชาการบัญชี
@@ -169,7 +188,12 @@ export default function Page() {
                 alt="Accounting Student"
                 width={900}
                 height={900}
-                className="h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
+                className={`h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl transition-all duration-1000 ${
+                  showAnimations ? "animate-in slide-in-from-right-8 fade-in" : "opacity-0 translate-x-8"
+                }`}
+                style={{
+                  transitionDelay: "400ms",
+                }}
                 priority
               />
             </div>
@@ -211,19 +235,30 @@ export default function Page() {
             สาขาวิชาการบัญชี (Accounting)
           </h3>
           <p className="text-base sm:text-lg leading-relaxed indent-8">
-            สาขาวิชาการบัญชีมุ่งเน้นการเรียนรู้เกี่ยวกับกระบวนการจัดทำบัญชีเบื้องต้น
-            ตั้งแต่การเขียนบันทึกรายการค้า การจัดทำงบการเงิน
-            การวิเคราะห์ข้อมูลทางบัญชี
-            ไปจนถึงการอ่านและแปลความหมายของงบการเงินอย่างถูกต้อง
+            สาขาวิชาการบัญชีมุ่งเน้นการเรียนรู้เกี่ยวกับกระบวนการจัดทำบัญชีเบื้องต้น ตั้งแต่การเขียนบันทึกรายการค้า การจัดทำงบการเงิน
+            การวิเคราะห์ข้อมูลทางบัญชี ไปจนถึงการอ่านและแปลความหมายของงบการเงินอย่างถูกต้อง
           </p>
           <p className="text-base sm:text-lg leading-relaxed indent-8">
-            นักเรียนจะได้ฝึกฝนทั้งภาคทฤษฎีและภาคปฏิบัติ
-            เพื่อเตรียมพร้อมในการทำงานจริง ทั้งในภาคธุรกิจและภาครัฐ
-            มีความรู้ความเข้าใจในมาตรฐานการบัญชีและจรรยาบรรณวิชาชีพ
-            เพื่อเป็นนักบัญชีที่มีคุณภาพในอนาคต
+            นักเรียนจะได้ฝึกฝนทั้งภาคทฤษฎีและภาคปฏิบัติ เพื่อเตรียมพร้อมในการทำงานจริง ทั้งในภาคธุรกิจและภาครัฐ
+            มีความรู้ความเข้าใจในมาตรฐานการบัญชีและจรรยาบรรณวิชาชีพ เพื่อเป็นนักบัญชีที่มีคุณภาพในอนาคต
           </p>
         </div>
+        <FadeInOnScroll>
+          <div className="relative w-full py-5 sm:py-12 md:py-16">
+            <div className="relative w-full overflow-hidden rounded-2xl">
+              <Image
+                src="/program/program_accounting.jpg"
+                alt="OBAC Secondary Banner"
+                width={1365}
+                height={768}
+                className="w-full h-auto block"
+                priority
+              />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            </div>
+          </div>
+        </FadeInOnScroll>
       </SciFiBackgroundNormal>
     </div>
-  );
+  )
 }
