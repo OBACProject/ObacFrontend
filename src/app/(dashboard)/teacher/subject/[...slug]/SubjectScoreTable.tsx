@@ -39,7 +39,14 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
 
   const clamp = (n: number, min: number, max: number) =>
     Math.max(min, Math.min(max, n));
-
+const remarkOptions = [
+  { label: "-", value: "" },    
+  { label: "ผ.", value: "ผ." },
+  { label: "ม.ผ.", value: "ม.ผ." },
+  { label: "ข.ส.", value: "ข.ส." },
+  { label: "ข.ร.", value: "ข.ร." },
+  { label: "ม.ส.", value: "ม.ส." },
+];
   const handleScoreChange = (
     index: number,
     field: keyof typeof LIMITS,
@@ -142,7 +149,7 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
     "ม.ส.",
   ];
 
-  const remarkValue = ["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
+  const remarkValue = ["", "ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
   const onChangeRemark = (value: string, studentId: number) => {
     gradDatas.map((item) => {
       if (item.studentId === studentId) {
@@ -365,9 +372,9 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 <Combobox
                   buttonLabel="หมายเหตุ"
                   disabled={!onEdit}
-                  options={remarkValue.map((item) => ({
-                    label: item,
-                    value: item,
+                  options={remarkOptions.map((item) => ({
+                    label: item.label,
+                    value: item.value,
                   }))}
                   onSelect={(selectedGrade) =>
                     onChangeRemark(selectedGrade, item.studentId)

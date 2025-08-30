@@ -1,9 +1,12 @@
-"use client"
+"use client";
 import { convertGradBySubjectId } from "@/dto/gradDto";
 import { useGetStudentGroupGradeByScheduleSubjectIdQuery } from "@/lib/api/hooks/queries/grade.queries";
 import { useGetStudentGroupByGroupIdQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetStudentGroupGradeByScheduleSubjectIdResponse } from "@/lib/api/models/grade/grade.response";
-import { ConvertClassroomToExcel, ConvertScoreToExcel } from "@/lib/Excel/generateExcelFile";
+import {
+  ConvertClassroomToExcel,
+  ConvertScoreToExcel,
+} from "@/lib/Excel/generateExcelFile";
 import { Download } from "lucide-react";
 
 export const convertToExcelFormat = (
@@ -18,18 +21,20 @@ export const convertToExcelFormat = (
     classroom: string;
   };
 } => {
-  const convertedData: convertGradBySubjectId[] = data.subjectGrades.map((grade) => ({
-    studentCode: grade.studentCode,
-    name: `${grade.prefix}${grade.firstName} ${grade.lastName}`,
-    assignmentscore: grade.assignmentScore,
-    collectScore: grade.collectScore,
-    affectiveScore: grade.affectiveScore,
-    midtermScore: grade.midtermScore,
-    finaltermScore: grade.finaltermScore,
-    finalGrade: grade.finalGrade,
-    remarks: grade.remarks || "",
-    status : grade.status,
-  }));
+  const convertedData: convertGradBySubjectId[] = data.subjectGrades.map(
+    (grade) => ({
+      studentCode: grade.studentCode,
+      name: `${grade.prefix}${grade.firstName} ${grade.lastName}`,
+      assignmentscore: grade.assignmentScore,
+      collectScore: grade.collectScore,
+      affectiveScore: grade.affectiveScore,
+      midtermScore: grade.midtermScore,
+      finaltermScore: grade.finaltermScore,
+      finalGrade: grade.finalGrade,
+      remarks: grade.remarks || "",
+      status: grade.status,
+    })
+  );
 
   const filteredData = [...(convertedData ?? [])]
     .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
@@ -61,12 +66,9 @@ export const ExcelStudentNamelistInGroupButton = ({
       a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
     );
 
-    const downloadExcel = async () => {
-        ConvertClassroomToExcel(
-          sortedStudents ?? [],
-          studentData?.groupName || "",
-        );
-    }
+  const downloadExcel = async () => {
+    ConvertClassroomToExcel(sortedStudents ?? [], studentData?.groupName || "");
+  };
 
   return (
     <button
@@ -80,13 +82,13 @@ export const ExcelStudentNamelistInGroupButton = ({
   );
 };
 
-
-export const ExcelGradStudentGroup= ({
+export const ExcelGradStudentGroup = ({
   scheduleSubjectId,
 }: {
   scheduleSubjectId: number;
 }) => {
-  const { data } = useGetStudentGroupGradeByScheduleSubjectIdQuery(scheduleSubjectId);
+  const { data } =
+    useGetStudentGroupGradeByScheduleSubjectIdQuery(scheduleSubjectId);
   const downloadExcel = async () => {
     if (!data) {
       console.error("No data available for export");
@@ -116,7 +118,7 @@ export const ExcelGradStudentGroup= ({
       disabled={!data}
     >
       <Download className="text-green-600  w-5 h-5" />
-      ดาวน์โหลดใบคะแนน Excel
+      ใบคะแนน Excel
     </button>
   );
 };
