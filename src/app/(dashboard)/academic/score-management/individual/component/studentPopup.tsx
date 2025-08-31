@@ -383,7 +383,7 @@ export function StudentPopup({
                           </span>
                           <span className="font-bold text-green-600">
                             {selectedSubject.finalGrade ||
-                              selectedSubject.remarks ||
+                              selectedSubject.remark ||
                               "N/A"}
                           </span>
                         </div>

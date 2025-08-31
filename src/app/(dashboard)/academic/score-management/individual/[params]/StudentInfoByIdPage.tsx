@@ -16,7 +16,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
   const [scoreFileData, setScoreFileData] = useState<GetStudentGradeDetailDto | null>(null)
 
   const { data: apiData, isLoading, error, refetch } = useGetStudentDetailAndSummaryScoreByStudentCodeQuery(studentCode);
-
+  console.log(apiData)
   useEffect(() => {
     if (apiData) {
       const transformedData: StudentTranscriptData = {
@@ -27,7 +27,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
         thaiName: apiData.student.name,
         thaiLastName: apiData.student.lastName,
         class: apiData.student.class,
-        currentYear: new Date().getFullYear(),
+        currentYear: apiData.termYearGradeGroups[0]?.year || 0,
         studentCode: apiData.student.studentCode,
         groupName: apiData.student.groupName,
         programName: apiData.student.programName,
@@ -42,7 +42,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
             subject_code: grade.subjectCode,
             credit: grade.credit.toString(),
             finalGrade: grade.finalGrade?.toString() || "0",
-            remark: grade.remarks || "",
+            remark: grade.remark || "",
             collectScore: grade.collectScore,
             affectiveScore: grade.affectiveScore,
             testScore: grade.midtermScore + grade.finaltermScore,
@@ -56,7 +56,7 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
       setTermData(transformedData.year);
     }
   }, [apiData]);
-
+  console.log(termData)
   if (isLoading) {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-6">
