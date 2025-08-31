@@ -158,9 +158,9 @@ export default function Main() {
                       ชื่อ - นามสกุล
                     </div>
                     <div className="py-1 text-lg text-center">ห้องเรียน</div>
-                    <div className="py-1 text-lg text-center">
-                      เกรดเทอมล่าสุด
-                    </div>
+                    <p className="py-1 text-lg text-center line-clamp-1">
+                      เกรดเฉลี่ย 2 เทอม
+                    </p>
                     <div className="py-1 text-lg text-center">
                       เลขที่ใบเสร็จ
                     </div>
@@ -203,12 +203,12 @@ export default function Main() {
                         <div className="flex justify-center items-center py-1">
                           <select
                             className={`border px-3 rounded-md py-1 min-w-32
-            ${
-              hasReceipts
-                ? "text-green-600 focus:ring-green-400"
-                : "text-blue-600 focus:ring-blue-400"
-            }
-            focus:outline-none focus:ring-2`}
+                          ${
+                            hasReceipts
+                              ? "text-green-600 focus:ring-green-400"
+                              : "text-blue-600 focus:ring-blue-400"
+                          }
+                          focus:outline-none focus:ring-2`}
                             defaultValue={hasReceipts ? "__has__" : "__none__"}
                           >
                             {hasReceipts ? (

@@ -367,7 +367,7 @@ const transformedDataExcel = (
       render: (row: ClassroomTable) => (
         <div className="flex gap-1">
           <button
-            className="px-3 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
+            className="px-4 bg-white border hover:bg-blue-600 rounded-full h-fit py-0.5 text-blue-400 hover:text-white flex text-sm justify-center items-center gap-2"
             onClick={(e) => {
               handleDownloadPDF(Number(row.groupId));
               e.stopPropagation();
@@ -380,11 +380,11 @@ const transformedDataExcel = (
                 กำลังดาวโหลด
               </p>
             ) : (
-              <p>ใบออกเกรด PDF</p>
+              <p>PDF</p>
             )}
           </button>
           <button
-            className="px-3 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
+            className="px-4 bg-white text-sm hover:bg-green-600 rounded-full h-fit py-0.5 text-green-500 border flex justify-center hover:text-white items-center gap-2"
             onClick={(e) => {
               handleDownloadExcel(Number(row.groupId));
               e.stopPropagation();
@@ -397,7 +397,7 @@ const transformedDataExcel = (
                 กำลังดาวโหลด
               </p>
             ) : (
-              <p>ใบออกเกรดExcel</p>
+              <p>Excel</p>
             )}
           </button>
         </div>

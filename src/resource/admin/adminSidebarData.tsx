@@ -91,23 +91,23 @@ export const AdminSidebarData: AdminSidebarProps = {
         />
       ),
     },
-    {
-      title: "กิจกรรม",
-      tooltip: "กิจกรรม",
-      href: "/admin/event-management",
-      headLink: "/admin/event-management",
-      icon: (
-        <CalendarClock
-          style={{ width: "2.0rem", height: "2.0rem" }}
-        />
-      ),
-    },
-    {
-      title: "ข่าวสาร",
-      tooltip: "ข่าวสาร",
-      href: "/admin/news-management",
-      headLink: "/admin/news-management",
-      icon: <Newspaper style={{ width: "2.0rem", height: "2.0rem" }} />,
-    },
+    // {
+    //   title: "กิจกรรม",
+    //   tooltip: "กิจกรรม",
+    //   href: "/admin/event-management",
+    //   headLink: "/admin/event-management",
+    //   icon: (
+    //     <CalendarClock
+    //       style={{ width: "2.0rem", height: "2.0rem" }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   title: "ข่าวสาร",
+    //   tooltip: "ข่าวสาร",
+    //   href: "/admin/news-management",
+    //   headLink: "/admin/news-management",
+    //   icon: <Newspaper style={{ width: "2.0rem", height: "2.0rem" }} />,
+    // },
   ],
 };
