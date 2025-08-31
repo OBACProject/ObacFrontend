@@ -149,7 +149,6 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
             isFailed,
           };
         });
-        console.log(transformedData);
 
         const gpa = calculateGpa(year.termQuery, year.totalCredit);
         const failedCount = getFailedSubjectsCount(year.termQuery);
