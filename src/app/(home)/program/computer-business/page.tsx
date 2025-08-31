@@ -1,6 +1,7 @@
 "use client";
 
 import SciFiBackgroundNormal from "@/app/styles/bg-normal";
+import FadeInOnScroll from "@/components/Effect/FadInScroll";
 import StickerFacebook from "@/components/Effect/StickerFacebook";
 import StickerYoutube from "@/components/Effect/StickerYoutube";
 import Head from "next/head";
@@ -27,9 +28,12 @@ export default function Page() {
 
   const [mounted, setMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showAnimations, setShowAnimations] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const timer = setTimeout(() => setShowAnimations(true), 100);
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
@@ -37,7 +41,11 @@ export default function Page() {
       });
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      clearTimeout(timer);
+    };
   }, []);
 
   const iconPositions = [
@@ -114,41 +122,57 @@ export default function Page() {
       <StickerFacebook />
       <StickerYoutube />
 
+      {/* HERO */}
       <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
-        {iconPositions.map((icon, index) => (
-          <div
-            key={index}
-            className="absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110"
-            style={{
-              ...icon.position,
-              transform: `translate(${
-                (mousePosition.x - 50) * icon.parallaxStrength * 0.1
-              }px, ${(mousePosition.y - 50) * icon.parallaxStrength * 0.1}px)`,
-              animationDelay: `${index * 0.5}s`,
-              animationDuration: `${6 + index * 0.5}s`,
-            }}
-          >
-            <Image
-              src={icon.src}
-              alt={icon.alt}
-              width={64}
-              height={64}
-              className={`${icon.size} drop-shadow-lg`}
-            />
-          </div>
-        ))}
+        {iconPositions.map((icon, index) => {
+          const dx = (mousePosition.x - 50) * icon.parallaxStrength * 0.1;
+          const dy = (mousePosition.y - 50) * icon.parallaxStrength * 0.1;
 
+          return (
+            <div
+              key={index}
+              className={`absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110 ${
+                showAnimations
+                  ? "animate-in slide-in-from-bottom-8 fade-in duration-700"
+                  : "opacity-0 translate-y-8"
+              }`}
+              style={{
+                ...(icon.position as React.CSSProperties),
+                transform: `translate(${dx}px, ${dy}px) ${
+                  !showAnimations ? " translateY(32px)" : ""
+                }`,
+                animationDelay: `${index * 0.15}s`,
+                animationDuration: `${6 + index * 0.5}s`,
+                transitionDelay: `${index * 150}ms`,
+                opacity: showAnimations ? 1 : 0,
+              }}
+            >
+              <Image
+                src={icon.src}
+                alt={icon.alt}
+                width={64}
+                height={64}
+                className={`${icon.size} drop-shadow-lg`}
+              />
+            </div>
+          );
+        })}
+
+        {/* Mobile title + avatar */}
         <div className="absolute inset-0 sm:hidden">
           <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
             <h1
-              className="text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl"
+              className={`text-white text-3xl font-bold tracking-wide text-center drop-shadow-2xl transition-all duration-1000 ${
+                showAnimations ? "animate-in slide-in-from-top-4 fade-in" : "opacity-0 -translate-y-4"
+              }`}
               style={{
                 transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
                   (mousePosition.y - 50) * 0.02
                 }px)`,
+                transitionDelay: "200ms",
               }}
             >
-              สาขาวิชาคอมพิวเตอร์ธุรกิจ
+              สาขาเทคโนโลยีธุรกิจดิจิทัล
             </h1>
           </div>
           <div className="absolute inset-x-0 bottom-0 flex justify-center z-10">
@@ -157,24 +181,31 @@ export default function Page() {
               alt="Computer Business"
               width={900}
               height={900}
-              className="h-[170px] w-auto object-contain drop-shadow-2xl translate-x-3 sm:translate-x-0"
+              className={`h-[170px] w-auto object-contain drop-shadow-2xl translate-x-3 sm:translate-x-0 transition-all duration-1000 ${
+                showAnimations ? "animate-in slide-in-from-bottom-8 fade-in" : "opacity-0 translate-y-8"
+              }`}
+              style={{ transitionDelay: "400ms" }}
               priority
             />
           </div>
         </div>
 
+        {/* Desktop title + avatar */}
         <div className="hidden sm:flex absolute inset-0 items-center justify-center px-4 md:px-10 z-20">
           <div className="flex sm:flex-row-reverse items-center gap-6 md:gap-10 w-full max-w-6xl">
             <div className="text-white text-left w-1/2">
               <h1
-                className="text-3xl md:text-4xl lg:text-5xl leading-tight font-bold tracking-tight drop-shadow-2xl"
+                className={`text-3xl md:text-4xl lg:text-5xl leading-tight font-bold tracking-tight drop-shadow-2xl transition-all duration-1000 ${
+                  showAnimations ? "animate-in slide-in-from-left-8 fade-in" : "opacity-0 -translate-x-8"
+                }`}
                 style={{
                   transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${
                     (mousePosition.y - 50) * 0.02
                   }px)`,
+                  transitionDelay: "200ms",
                 }}
               >
-                สาขาวิชาคอมพิวเตอร์ธุรกิจ
+                สาขาเทคโนโลยีธุรกิจดิจิทัล
               </h1>
             </div>
             <div className="w-1/2 flex justify-center">
@@ -183,13 +214,17 @@ export default function Page() {
                 alt="Computer Business"
                 width={900}
                 height={900}
-                className="h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl"
+                className={`h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl transition-all duration-1000 ${
+                  showAnimations ? "animate-in slide-in-from-right-8 fade-in" : "opacity-0 translate-x-8"
+                }`}
+                style={{ transitionDelay: "400ms" }}
                 priority
               />
             </div>
           </div>
         </div>
 
+        {/* accents */}
         <div className="absolute top-10 left-10 w-1 h-20 bg-gradient-to-b from-orange-400 to-transparent opacity-60 animate-pulse" />
         <div
           className="absolute top-20 right-20 w-20 h-1 bg-gradient-to-r from-yellow-400 to-transparent opacity-60 animate-pulse"
@@ -204,6 +239,7 @@ export default function Page() {
           style={{ animationDelay: "1.5s" }}
         />
 
+        {/* particles */}
         <div className="absolute inset-0 pointer-events-none">
           {Array.from({ length: 15 }).map((_, i) => (
             <div
@@ -219,13 +255,15 @@ export default function Page() {
           ))}
         </div>
       </div>
+
+      {/* CONTENT */}
       <SciFiBackgroundNormal>
         <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
-            สาขาวิชาคอมพิวเตอร์ธุรกิจ (Computer Business)
+            สาขาเทคโนโลยีธุรกิจดิจิทัล (Computer Business)
           </h3>
           <p className="text-base sm:text-lg leading-relaxed indent-8">
-            สาขาวิชาคอมพิวเตอร์ธุรกิจเน้นการประยุกต์ใช้เทคโนโลยีสารสนเทศในงานธุรกิจ
+            สาขาเทคโนโลยีธุรกิจดิจิทัลเน้นการประยุกต์ใช้เทคโนโลยีสารสนเทศในงานธุรกิจ
             ทั้งด้านการใช้โปรแกรมสำนักงาน การจัดการฐานข้อมูล การวิเคราะห์ข้อมูล
             และการพัฒนาระบบเบื้องต้นที่สนับสนุนการทำงานขององค์กร
           </p>
@@ -235,6 +273,21 @@ export default function Page() {
             หรือสามารถต่อยอดเพื่อประกอบธุรกิจส่วนตัวในอนาคตได้
           </p>
         </div>
+        <FadeInOnScroll>
+          <div className="relative w-full py-5 sm:py-12 md:py-16">
+            <div className="relative w-full overflow-hidden rounded-2xl">
+              <Image
+                src="/program/program_computer.jpg"
+                alt="OBAC Secondary Banner"
+                width={1365}
+                height={768}
+                className="w-full h-auto block"
+                priority
+              />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+            </div>
+          </div>
+        </FadeInOnScroll>
       </SciFiBackgroundNormal>
     </div>
   );

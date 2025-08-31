@@ -49,14 +49,14 @@ export default function Page() {
   }, []);
 
   const iconPositions = [
-    { src: "/cls/marketing/marketing_light.png", alt: "Light Bulb", position: { top: "15%", left: "25%" }, parallaxStrength: 0.3, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/marketing/marketing_chart.png", alt: "Chart", position: { top: "20%", right: "15%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-20 sm:h-20" },
-    { src: "/cls/marketing/marketing_arrow.png", alt: "Target Arrow", position: { bottom: "25%", right: "10%" }, parallaxStrength: 0.5, size: "w-14 h-14 sm:w-24 sm:h-24" },
-    { src: "/cls/marketing/marketing_coin.png", alt: "Coin", position: { bottom: "35%", left: "30%" }, parallaxStrength: 0.3, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/marketing/marketing_cart.png", alt: "Shopping Cart", position: { bottom: "15%", left: "35%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-18 sm:h-18" },
-    { src: "/cls/marketing/marketing_global.png", alt: "Global", position: { bottom: "20%", left: "50%" }, parallaxStrength: 0.2, size: "w-10 h-10 sm:w-16 sm:h-16" },
-    { src: "/cls/marketing/marketing_mail.png", alt: "Mail", position: { top: "25%", left: "10%" }, parallaxStrength: 0.3, size: "w-8 h-8 sm:w-14 sm:h-14" },
-    { src: "/cls/marketing/marketing_graph.png", alt: "Graph", position: { top: "40%", left: "5%" }, parallaxStrength: 0.4, size: "w-10 h-10 sm:w-16 sm:h-16" },
+    { src: "/cls/office-management/office_clipboard.png", alt: "Clipboard", position: { top: "16%", left: "24%" }, parallaxStrength: 0.35, size: "w-10 h-10 sm:w-16 sm:h-16" },
+    { src: "/cls/office-management/office_file.png", alt: "File", position: { top: "18%", right: "15%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-20 sm:h-20" },
+    { src: "/cls/office-management/office_calendar.png", alt: "Calendar", position: { bottom: "26%", right: "10%" }, parallaxStrength: 0.5, size: "w-14 h-14 sm:w-20 sm:h-20" },
+    { src: "/cls/office-management/office_printer.png", alt: "Printer", position: { bottom: "35%", left: "38%" }, parallaxStrength: 0.3, size: "w-12 h-12 sm:w-18 sm:h-18" },
+    { src: "/cls/office-management/office_folder.png", alt: "Folder", position: { bottom: "15%", left: "33%" }, parallaxStrength: 0.4, size: "w-12 h-12 sm:w-18 sm:h-18" },
+    { src: "/cls/office-management/office_paperclip.png", alt: "Paperclip", position: { bottom: "12%", left: "50%" }, parallaxStrength: 0.25, size: "w-10 h-10 sm:w-16 sm:h-16" },
+    { src: "/cls/office-management/office_phone.png", alt: "Telephone", position: { top: "26%", left: "10%" }, parallaxStrength: 0.32, size: "w-8 h-8 sm:w-14 sm:h-14" },
+    { src: "/cls/office-management/office_chat.png", alt: "Chat", position: { top: "42%", left: "6%" }, parallaxStrength: 0.4, size: "w-10 h-10 sm:w-16 sm:h-16" },
   ];
 
   if (!mounted) return null;
@@ -73,32 +73,7 @@ export default function Page() {
 
       {/* HERO */}
       <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
-        {iconPositions.map((icon, index) => {
-          const dx = (mousePosition.x - 50) * icon.parallaxStrength * 0.1;
-          const dy = (mousePosition.y - 50) * icon.parallaxStrength * 0.1;
-
-          return (
-            <div
-              key={index}
-              className={`absolute animate-float opacity-80 hover:opacity-100 transition-all duration-300 cursor-pointer hover:scale-110 ${
-                showAnimations
-                  ? "animate-in slide-in-from-bottom-8 fade-in duration-700"
-                  : "opacity-0 translate-y-8"
-              }`}
-              style={{
-                ...(icon.position as React.CSSProperties),
-                transform: `translate(${dx}px, ${dy}px) ${!showAnimations ? " translateY(32px)" : ""}`,
-                animationDelay: `${index * 0.15}s`,
-                animationDuration: `${6 + index * 0.5}s`,
-                transitionDelay: `${index * 150}ms`,
-                opacity: showAnimations ? 1 : 0,
-              }}
-            >
-              <Image src={icon.src} alt={icon.alt} width={64} height={64} className={`${icon.size} drop-shadow-lg`} />
-            </div>
-          );
-        })}
-
+       
         {/* Mobile */}
         <div className="absolute inset-0 sm:hidden">
           <div className="absolute left-0 right-0 top-14 flex justify-center z-20">
@@ -111,22 +86,10 @@ export default function Page() {
                 transitionDelay: "200ms",
               }}
             >
-              สาขาวิชาการตลาด
+              สาขาการจัดการสำนักงาน
             </h1>
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex justify-center z-10">
-            <Image
-              src="/cls/marketing/avatar.png"
-              alt="Marketing"
-              width={900}
-              height={900}
-              className={`h-[170px] w-auto object-contain drop-shadow-2xl translate-x-4 sm:translate-x-0 transition-all duration-1000 ${
-                showAnimations ? "animate-in slide-in-from-bottom-8 fade-in" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: "400ms" }}
-              priority
-            />
-          </div>
+        
         </div>
 
         {/* Desktop */}
@@ -142,13 +105,15 @@ export default function Page() {
                   transitionDelay: "200ms",
                 }}
               >
-                สาขาวิชาการตลาด
+                สาขาการจัดการสำนักงาน
               </h1>
+              {/* ถ้าต้องการ Subtitle อังกฤษ:
+              <p className="mt-2 text-white/90 text-sm md:text-base">Office Management</p> */}
             </div>
             <div className="w-1/2 flex justify-center">
-              <Image
-                src="/cls/marketing/avatar.png"
-                alt="Marketing"
+              {/* <Image
+                src="/cls/office-management/avatar.png"
+                alt="Office Management"
                 width={900}
                 height={900}
                 className={`h-[200px] md:h-[300px] w-auto object-contain drop-shadow-2xl transition-all duration-1000 ${
@@ -156,7 +121,7 @@ export default function Page() {
                 }`}
                 style={{ transitionDelay: "400ms" }}
                 priority
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -188,33 +153,26 @@ export default function Page() {
       <SciFiBackgroundNormal>
         <div className="space-y-6 pt-20 px-6 max-w-5xl mx-auto pb-20">
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-900">
-            สาขาวิชาการตลาด (Marketing)
+            สาขาการจัดการสำนักงาน (Office Management)
           </h3>
           <p className="text-base sm:text-lg leading-relaxed indent-8">
-            สาขาวิชาการตลาด มุ่งเน้นให้นักเรียนได้เรียนรู้กระบวนการทางธุรกิจ
-            การวางแผนกลยุทธ์ การส่งเสริมการขาย
-            และการใช้สื่อดิจิทัลเพื่อเข้าถึงกลุ่มเป้าหมายได้อย่างมีประสิทธิภาพ
-            นักเรียนจะได้ฝึกทักษะการนำเสนอ การเจรจาต่อรอง
-            และการวิเคราะห์พฤติกรรมผู้บริโภค ทั้งในรูปแบบภาคทฤษฎีและปฏิบัติจริง
+            สาขาการจัดการสำนักงานมุ่งเน้นทักษะการบริหารงานธุรการอย่างเป็นระบบ ตั้งแต่การจัดทำและจัดเก็บเอกสาร การประสานงาน การนัดหมาย การเขียนโต้ตอบทางราชการ ไปจนถึงการใช้ซอฟต์แวร์สำนักงานและเครื่องมือดิจิทัลเพื่อเพิ่มประสิทธิภาพการทำงาน
           </p>
           <p className="text-base sm:text-lg leading-relaxed indent-8">
-            หลักสูตรนี้ยังเสริมสร้างความรู้ด้านการใช้เทคโนโลยีและเครื่องมือดิจิทัลในงานการตลาด
-            เช่น การสร้างสื่อโฆษณาออนไลน์ การจัดการสื่อสังคม
-            การวิเคราะห์ข้อมูลทางการตลาด
-            เพื่อให้นักเรียนพร้อมเข้าสู่สายงานหรือประกอบธุรกิจของตนเองในอนาคต
+            ผู้เรียนจะได้ฝึกปฏิบัติจริงทั้งการสื่อสารในองค์กร มารยาททางธุรกิจ งานต้อนรับ การจัดประชุม การวางแผนงาน และงานบริการลูกค้า เพื่อเตรียมความพร้อมสู่บทบาทเลขานุการ ผู้ช่วยผู้บริหาร เจ้าหน้าที่ธุรการ และงานสำนักงานในภาครัฐและเอกชน
           </p>
         </div>
         <FadeInOnScroll>
           <div className="relative w-full py-5 sm:py-12 md:py-16">
             <div className="relative w-full overflow-hidden rounded-2xl">
-              <Image
-                src="/program/program_marketing.jpg"
+              {/* <Image
+                src="/program/program_office.jpg"
                 alt="OBAC Secondary Banner"
                 width={1365}
                 height={768}
                 className="w-full h-auto block"
                 priority
-              />
+              /> */}
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>

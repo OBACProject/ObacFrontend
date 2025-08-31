@@ -15,6 +15,7 @@ import {
   Building,
   TvMinimalPlay,
   Users,
+  ClipboardList,
 } from "lucide-react";
 interface DropMenuList {
   menuName: string;
@@ -121,6 +122,16 @@ export const NavbarData: DropMenuProps[] = [
         ),
         tab: "tourism",
         href: "/program/tourism-management",
+      },
+      {
+        menuName: "สาขาการจัดการสำนักงาน",
+        menuIcon: (
+          <ClipboardList
+            className="text-white w-6 h-6  transition-colors "
+          />
+        ),
+        tab: "office",
+        href: "/program/office-management",
       },
     ],
   },

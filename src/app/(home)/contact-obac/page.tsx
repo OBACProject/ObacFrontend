@@ -10,7 +10,7 @@ export const metadata = {
     "เอกวิทย์บริหารธุรกิจ",
     "ปวช",
     "ปวส",
-    "คอมพิวเตอร์ธุรกิจ",
+    "สาขาเทคโนโลยีธุรกิจดิจิทัล",
     "เทคโนโลยี",
   ],
   robots: {
@@ -46,7 +46,7 @@ export default function ContactPage() {
         <meta name="robots" content="index, follow" />
         <meta
           name="keywords"
-          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, คอมพิวเตอร์ธุรกิจ, เทคโนโลยี"
+          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, สาขาเทคโนโลยีธุรกิจดิจิทัล, เทคโนโลยี"
         />
         <meta name="author" content="Ekawit Business College | OBAC" />
         <link rel="canonical" href="https://ekawit.ac.th/contact" />

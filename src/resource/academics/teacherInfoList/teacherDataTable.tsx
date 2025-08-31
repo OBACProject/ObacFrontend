@@ -29,7 +29,7 @@ export const TeacherColumnsData: TeacherColumns[] = Array.from(
     programs: faker.helpers.arrayElement([
       "การบัญชี",
       "การตลาด",
-      "คอมพิวเตอร์ธุรกิจ",
+      "เทคโนโลยีธุรกิจดิจิทัล",
       "คอมพิวกราฟฟิค",
       "การจัดการสำนักงาน",
       "การท่องเที่ยว",
