@@ -430,11 +430,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       <div className="flex px-10 w-full justify-between items-center mb-4">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
-          title={`ตารางวิชาในห้องเรียน ${
-            subjectData?.class || `ปวส.${subjectData?.groupName}/2`
-          } (รหัสวิชา: ${subjectData?.subjectCode}) - ${
-            subjectData?.subjectName
-          }`}
+          title={`ตารางวิชาในห้องเรียน ${subjectData.class}.${subjectData.groupName} วิชา ${subjectData.subjectName} (${subjectData.subjectCode})`}
           className="text-blue"
         />
       </div>
