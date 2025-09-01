@@ -316,7 +316,7 @@ export default function StudentClassroomContent() {
         getRowLink={(row) =>
           `/academic/grading/student-classroom/${row.groupId}/${term}/${year}`
         }
-        pagination={10}
+        pagination={20}
       />
     </>
   );
