@@ -24,7 +24,7 @@ export default function SelectTermAndYear({
           value={term}
           onChange={(e) => onChangeTerm(e.target.value)}
         >
-          <option value="">ทั้งหมด</option>
+          <option value="">-</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="s1">ฤดูร้อน1</option>
@@ -42,7 +42,7 @@ export default function SelectTermAndYear({
             onChangeYear(selected === "" ? 0 : Number(selected));
           }}
         >
-          <option value="">ทั้งหมด</option>
+          <option value="">-</option>
           {Array.from({ length: 6 }, (_, i) => currentYear + 1 - i).map((y) => (
             <option key={y} value={y}>
               {y}

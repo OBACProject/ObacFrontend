@@ -9,9 +9,10 @@ import { Pencil } from "lucide-react";
 interface Props {
   grads?: SubjectGradeItem[];
   scheduleID: number;
+  isComplete : boolean;
 }
 
-export default function SubjectTableForm({ grads, scheduleID }: Props) {
+export default function SubjectTableForm({ grads, scheduleID,isComplete }: Props) {
   const [onEdit, setEdit] = useState<boolean>(false);
   const [gradDatas, setGradData] = useState<SubjectGradeItem[]>([]);
 
@@ -164,7 +165,11 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
         {onEdit ? (
           <div className="flex items-center gap-2 justify-center">
             <button
-              onClick={() => onSaveGrad()}
+              onClick={() => {
+                if (!isComplete) {
+                  onSaveGrad();
+                }
+              }}
               className="py-1.5 bg-green-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-green-400 "
             >
               บันทึก
@@ -179,7 +184,11 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
         ) : (
           <button
             className="py-1.5 bg-blue-500 text-white px-10 flex items-center gap-2 rounded-md shadow-md hover:bg-blue-400 "
-            onClick={() => setEdit(!onEdit)}
+            onClick={() => {
+              if (!isComplete) {
+                setEdit(!onEdit);
+              }
+            }}
           >
             <Pencil className="h-5 w-5" />
             แก้ไข
@@ -250,7 +259,10 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
                 {item.studentCode}
               </span>
               <span className="text-start pl-5 border-r-[1px] flex py-0 items-center justify-start">
-                {item.firstName} {item.lastName}
+                <p>
+                  {item.prefix} {item.firstName}&nbsp;&nbsp;&nbsp;
+                  {item.lastName}
+                </p>
               </span>
               <input
                 disabled={!onEdit}

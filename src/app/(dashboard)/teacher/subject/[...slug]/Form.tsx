@@ -88,6 +88,7 @@ export default function Form({
         <SubjectTableForm
           scheduleID={Number(scheduleID)}
           grads={grads.subjectGrades}
+          isComplete={grads.isComplete}
         />
       )}
     </div>
