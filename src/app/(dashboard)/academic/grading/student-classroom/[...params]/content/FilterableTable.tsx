@@ -66,14 +66,21 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
   const deferredSearch = useDeferredValue(searchTerm);
 
   const {
-    data: apiResponse,
-    isLoading,
-    isError,
-  } = useGetSubjectsByStudentGroupIdTermYearQuery({
+  data: apiResponse,
+  isLoading,
+  isError,
+} = useGetSubjectsByStudentGroupIdTermYearQuery(
+  {
     studentGroupId: classroomId,
     term,
     year,
-  });
+  },
+  {
+    staleTime: 0, 
+    refetchOnMount: true,
+    refetchOnWindowFocus: true, 
+  }
+);
 
   const sourceData = useMemo(() => {
     if (

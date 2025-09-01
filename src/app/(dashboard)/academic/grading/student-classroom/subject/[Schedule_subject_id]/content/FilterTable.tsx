@@ -94,7 +94,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
         title: "ตรวจสอบเสร็จสิ้น",
         text: "อัพเดทสถานะสำเร็จ กำลังกลับไปยังหน้ารายการวิชา",
         onConfirm: () => {
-          const classroomId = subjectData?.subjectId;
+          const classroomId = subjectData?.groupId;
           const term = subjectData?.term;
           const year = subjectData?.year;
           router.push(
