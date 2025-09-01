@@ -39,14 +39,14 @@ export default function SubjectTableForm({ grads, scheduleID }: Props) {
 
   const clamp = (n: number, min: number, max: number) =>
     Math.max(min, Math.min(max, n));
-const remarkOptions = [
-  { label: "-", value: "" },    
-  { label: "ผ.", value: "ผ." },
-  { label: "ม.ผ.", value: "ม.ผ." },
-  { label: "ข.ส.", value: "ข.ส." },
-  { label: "ข.ร.", value: "ข.ร." },
-  { label: "ม.ส.", value: "ม.ส." },
-];
+  const remarkOptions = [
+    { label: "-", value: "" },
+    { label: "ผ.", value: "ผ." },
+    { label: "ม.ผ.", value: "ม.ผ." },
+    { label: "ข.ส.", value: "ข.ส." },
+    { label: "ข.ร.", value: "ข.ร." },
+    { label: "ม.ส.", value: "ม.ส." },
+  ];
   const handleScoreChange = (
     index: number,
     field: keyof typeof LIMITS,
@@ -151,11 +151,11 @@ const remarkOptions = [
 
   const remarkValue = ["", "ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."];
   const onChangeRemark = (value: string, studentId: number) => {
-    gradDatas.map((item) => {
-      if (item.studentId === studentId) {
-        item.remarks = value;
-      }
-    });
+    setGradData((prev) =>
+      prev.map((it) =>
+        it.studentId === studentId ? { ...it, remarks: value } : it
+      )
+    );
   };
 
   return (
@@ -225,19 +225,19 @@ const remarkOptions = [
           </span>
         </div>
         {gradDatas?.map((item, index) => {
-          const calculatedGrade =
-            item.remarks && remarkValue.includes(item.remarks)
+          const REMARK_SET = new Set(["ผ.", "ม.ผ.", "ข.ส.", "ข.ร.", "ม.ส."]);
+          const total =
+            (item.assignmentScore ?? 0) +
+            (item.affectiveScore ?? 0) +
+            (item.collectScore ?? 0) +
+            (item.midtermScore ?? 0) +
+            (item.finaltermScore ?? 0);
+
+          const calculated = gradingScorce(total);
+          const finalGradeDisplay =
+            item.remarks && REMARK_SET.has(item.remarks)
               ? item.remarks
-              : gradingScorce(
-                  (item.assignmentScore ?? 0) +
-                    (item.affectiveScore ?? 0) +
-                    (item.collectScore ?? 0) +
-                    (item.midtermScore ?? 0) +
-                    (item.finaltermScore ?? 0)
-                );
-          const finalGradeDisplay = remarkValue.includes(item.remarks ?? "")
-            ? item.remarks
-            : calculatedGrade;
+              : calculated;
           return (
             <div
               className=" text-sm border-b-[1px] h-fit grid group hover:bg-[#e8f3ff] grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%]"
@@ -354,19 +354,8 @@ const remarkOptions = [
                   (item.midtermScore ?? 0) +
                   (item.finaltermScore ?? 0)}
               </span>
-              <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] font-semibold text-base border-r-[1px]">
-                <div className="flex justify-center px-1 py-0.5">
-                  <Combobox
-                    buttonLabel="เกรด"
-                    disabled={true}
-                    options={gradeValue.map((item) => ({
-                      label: item,
-                      value: item,
-                    }))}
-                    onSelect={(selectedGrade) => onChangeGrade(selectedGrade)}
-                    defaultValue={finalGradeDisplay}
-                  />
-                </div>
+              <span className="text-center bg-gray-100 group-hover:bg-[#cae2fa] text-sm border-r-[1px] flex items-center justify-center">
+                {finalGradeDisplay || "-"}
               </span>
               <div className="flex justify-center px-1 py-0.5 border-r-[1px]">
                 <Combobox
