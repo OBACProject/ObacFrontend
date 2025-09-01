@@ -7,7 +7,6 @@ import {
   PDFStudentNamelistInGroupButton,
 } from "@/components/PDF/PDFButton";
 import { ExcelStudentNamelistInGroupButton } from "@/components/Excel/ExcelButton";
-import EducateSuccessPopUp from "@/components/common/Popup/EducateSuccessPopUp";
 
 type PageParams = Promise<{ slug: number[] }>;
 

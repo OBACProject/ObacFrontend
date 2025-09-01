@@ -4,6 +4,7 @@ import { useGetStudentGroupGradeByScheduleSubjectIdQuery } from "@/lib/api/hooks
 import { useGetStudentGroupByGroupIdQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetStudentGroupGradeByScheduleSubjectIdResponse } from "@/lib/api/models/grade/grade.response";
 import {
+  ConvertClassroomToExcel,
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
@@ -51,6 +52,35 @@ export const convertToExcelFormat = (
   };
 
   return { convertedData: filteredData, metadata };
+};
+
+export const ExcelStudentNamelistInGroupButton = ({
+  groupID,
+}: {
+  groupID: string;
+}) => {
+  const { data: studentData } = useGetStudentGroupByGroupIdQuery(groupID);
+
+  const sortedStudents = [...(studentData?.students ?? [])]
+    .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+    .sort((a, b) =>
+      a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+    );
+
+  const downloadExcel = async () => {
+    ConvertClassroomToExcel(sortedStudents ?? [], studentData?.groupName || "");
+  };
+
+  return (
+    <button
+      className="flex h-fit px-8 border-[1px] border-gray-300 text-green-600 font-prompt_Light bg-white py-1.5
+       hover:bg-blue-50 duration-300 text-sm rounded-md items-center justify-center gap-3"
+      onClick={downloadExcel}
+    >
+      <Download className="text-green-600 w-5 h-5" />
+      รายชื่อนักเรียน Excel
+    </button>
+  );
 };
 
 export const ExcelSubjectStudentNamelistInGroupButton = ({
