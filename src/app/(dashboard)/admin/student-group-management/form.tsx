@@ -33,7 +33,7 @@ export default function Form() {
   const [filterYear, setFilterYear] = useState<string>(String(currentYear));
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
 
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 

@@ -204,107 +204,111 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   };
 
   const handleSave = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    if (!formData) return;
+  if (!formData) return;
 
-    if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
-      toast.error("กรุณากรอกชื่อและนามสกุล");
-      return;
-    }
-    if (!formData.birthDate) {
-      toast.error("กรุณาเลือกวันเกิด");
-      return;
-    }
-    if (!selectedProgramId) {
-      toast.error("กรุณาเลือก คณะ / สาขา / แขนง ให้ครบ");
-      return;
-    }
+  if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
+    toast.error("กรุณากรอกชื่อและนามสกุล");
+    return;
+  }
+  if (!formData.birthDate) {
+    toast.error("กรุณาเลือกวันเกิด");
+    return;
+  }
+  if (!formData.prefix || formData.prefix === "-") {
+  toast.error("กรุณาเลือกคำนำหน้า");
+  return;
+}
+  if (!selectedProgramId) {
+    toast.error("กรุณาเลือก คณะ / สาขา / แขนง ให้ครบ");
+    return;
+  }
 
-    const teacherIdNum =
-      Number((formData as any)?.teacherId) ||
-      Number(teacherId) || 0;
+  const teacherIdNum =
+    Number((formData as any)?.teacherId) ||
+    Number(teacherId) || 0;
 
-    if (!teacherIdNum) {
-      toast.error("ไม่พบรหัสอาจารย์ (teacherId)");
-      return;
-    }
+  if (!teacherIdNum) {
+    toast.error("ไม่พบรหัสอาจารย์ (teacherId)");
+    return;
+  }
 
-    const birthDateStr = toISODateOnly((formData as any).birthDate);
-    const hiredDateStr = toISODateOnly((formData as any).hiredDate);
-    if (!birthDateStr) { toast.error("รูปแบบวันเกิดไม่ถูกต้อง"); return; }
-    if (!hiredDateStr) { toast.error("กรุณาเลือกวันที่เข้าทำงาน"); return; }
+  const birthDateStr = toISODateOnly((formData as any).birthDate);
+  const hiredDateStr = toISODateOnly((formData as any).hiredDate);
+  if (!birthDateStr) { toast.error("รูปแบบวันเกิดไม่ถูกต้อง"); return; }
+  if (!hiredDateStr) { toast.error("กรุณาเลือกวันที่เข้าทำงาน"); return; }
 
-    const isActive =
-      typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
+  const isActive =
+    typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
 
-    const payload: UpdateTeacherUserRequest = {
-      teacherId: teacherIdNum,
-      prefix: formData.prefix ?? "",
-      firstName: formData.firstName ?? "",
-      lastName: formData.lastName ?? "",
-      gender: formData.gender ?? "",
-      teacherCode: (formData as any).teacherCode ?? "",
-      programId: Number(selectedProgramId),
-      isActive,
-      hiredDate: hiredDateStr,
-      birthDate: birthDateStr,
-      phoneNumber: formData.phoneNumber ?? "",
-      nationality: formData.nationality ?? "",
-      citizenId: formData.citizenId ?? "",
-    };
+  const payload: UpdateTeacherUserRequest = {
+    teacherId: teacherIdNum,
+    prefix: formData.prefix ?? "",
+    firstName: formData.firstName ?? "",
+    lastName: formData.lastName ?? "",
+    gender: formData.gender ?? "",
+    teacherCode: (formData as any).teacherCode ?? "",
+    programId: Number(selectedProgramId),
+    isActive,
+    hiredDate: hiredDateStr,
+    birthDate: birthDateStr,
+    phoneNumber: formData.phoneNumber ?? "",
+    nationality: formData.nationality ?? "",
+    citizenId: formData.citizenId ?? "",
+  };
 
+  if (isSubmitting) return;
+  setIsSubmitting(true);
+  setSaving(true);
 
-    try {
-      setSaving(true);
-      const ok = await UpdateTeacherUser(payload);
-      if (ok) {
-        toast.success("บันทึกข้อมูลเรียบร้อย");
-
-        setFormData((prev) =>
-          prev
-            ? ({
+  try {
+    const ok = await UpdateTeacherUser(payload);
+    if (ok) {
+      toast.success("บันทึกข้อมูลเรียบร้อย");
+      setFormData((prev) =>
+        prev
+          ? ({
               ...prev,
               programId: Number(selectedProgramId),
               birthDate: birthDateStr,
               hiredDate: hiredDateStr,
             } as any)
-            : prev
-        );
-        setOriginalData((prev) =>
-          prev
-            ? ({
+          : prev
+      );
+      setOriginalData((prev) =>
+        prev
+          ? ({
               ...prev,
               ...(formData as any),
               programId: Number(selectedProgramId),
               birthDate: birthDateStr,
               hiredDate: hiredDateStr,
             } as any)
-            : (formData as any)
-        );
-        setIsEditing(false);
-      } else {
-        toast.error("บันทึกข้อมูลไม่สำเร็จ");
-      }
-    } catch (err: any) {
-      const errors = err?.response?.data?.errors;
-      if (errors && typeof errors === "object") {
-        const firstKey = Object.keys(errors)[0];
-        const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
-        toast.error(firstMsg);
-      } else {
-        const msg =
-          err?.response?.data?.responseMessage ||
-          err?.response?.data?.title ||
-          err?.message ||
-          "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
-        toast.error(msg);
-      }
-    } finally {
-      setSaving(false);
-      setIsSubmitting(false); 
+          : (formData as any)
+      );
+      setIsEditing(false);
+    } else {
+      toast.error("บันทึกข้อมูลไม่สำเร็จ");
     }
-  };
+  } catch (err: any) {
+    const errors = err?.response?.data?.errors;
+    if (errors && typeof errors === "object") {
+      const firstKey = Object.keys(errors)[0];
+      const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
+      toast.error(firstMsg);
+    } else {
+      const msg =
+        err?.response?.data?.responseMessage ||
+        err?.response?.data?.title ||
+        err?.message ||
+        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+      toast.error(msg);
+    }
+  } finally {
+    setSaving(false);
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleCancel = () => {
     setFormData(originalData);
@@ -414,7 +418,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
         {/* account */}
         <Info label="ชื่อผู้ใช้ของอาจารย์" value={(formData as any).username} editable={false} />
 
-        <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["นาย", "นาง", "นางสาว"]} />
+        <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["-","นาย", "นาง", "นางสาว"]} />
         <Info label="ชื่อจริง" value={(formData as any).firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
         <Info label="นามสกุล" value={(formData as any).lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
         <Info label="เพศ" value={(formData as any).gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
@@ -566,19 +570,27 @@ function Info({
   }
 
   if (type === "select" && options) {
-    return (
-      <div>
-        <label className="text-sm text-gray-500">{label}</label>
-        <select value={value ?? ""} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded">
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
+  const safeValue =
+    options.includes(String(value ?? "")) ? String(value ?? "") : options[0];
+
+  return (
+    <div>
+      <label className="text-sm text-gray-500">{label}</label>
+      <select
+        value={safeValue}
+        onChange={(e) => onChange?.(e.target.value)}
+        className="w-full border px-3 py-2 rounded"
+      >
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 
   if (isDate) {
     return (

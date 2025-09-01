@@ -14,7 +14,7 @@ export default function Form() {
   const [searchTerm, setSearchTerm] = useState("");
   const [openCreatSubjectPopup, setOpenCreatePopUp] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const router = useRouter();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 

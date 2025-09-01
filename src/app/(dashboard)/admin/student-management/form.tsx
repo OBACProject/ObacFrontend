@@ -16,7 +16,7 @@ export default function Form() {
 
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(15);
+  const [pageSize] = useState(20);
 
   
   const [searchTerm, setSearchTerm] = useState("");

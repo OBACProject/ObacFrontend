@@ -5,8 +5,6 @@ import { GetAllStudentGroup } from "@/api/studentGroup/route";
 import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { GetAllPrograms } from "@/api/program/route";
-import type { GetAllProgramsResponse } from "@/dto/programDto";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
@@ -27,11 +25,7 @@ type CreateStudentRequest = {
   studentGroupId: number;
 };
 
-type MergedGroup = GetAllStudentGroupRequest & {
-  facultyName?: string;
-  programName?: string;
-  subProgramName?: string;
-};
+type MergedGroup = GetAllStudentGroupRequest;
 
 function formatRoomLabel(g: MergedGroup) {
   const cls = g.class ?? "-";
@@ -87,14 +81,10 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [rawGroups, setRawGroups] = useState<GetAllStudentGroupRequest[]>([]);
-  const [programs, setPrograms] = useState<GetAllProgramsResponse[]>([]);
   const [groups, setGroups] = useState<MergedGroup[]>([]);
   const [loadingGroups, setLoadingGroups] = useState<boolean>(false);
   const [groupsError, setGroupsError] = useState<string | null>(null);
 
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
-  const [selectedProgramName, setSelectedProgramName] = useState<string>("");
-  const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
   const [selectedTerm, setSelectedTerm] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string>("");
 
@@ -103,8 +93,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       try {
         setLoadingGroups(true);
         setGroupsError(null);
-        const [prog, grp] = await Promise.all([GetAllPrograms(), GetAllStudentGroup()]);
-        setPrograms(Array.isArray(prog) ? prog : []);
+        const grp = await GetAllStudentGroup();
         setRawGroups(Array.isArray(grp) ? grp : []);
       } catch {
         setGroupsError("โหลดข้อมูลไม่สำเร็จ");
@@ -120,90 +109,39 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       setGroups([]);
       return;
     }
-    const map = new Map<number, GetAllProgramsResponse>();
-    for (const p of programs) map.set(p.programId, p);
-
-    const activeMerged: MergedGroup[] = rawGroups
-      .filter((g) => g.isActive !== false)
-      .map((g) => {
-        const p = map.get(Number(g.programId));
-        return {
-          ...g,
-          facultyName: p?.facultyName,
-          programName: p?.programName,
-          subProgramName: p?.subProgramName,
-        };
-      });
-
+    const activeMerged: MergedGroup[] = rawGroups.filter((g) => g.isActive !== false);
     activeMerged.sort((a, b) =>
-      `${a.facultyName ?? ""}|${a.programName ?? ""}|${a.subProgramName ?? ""}|${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
-        `${b.facultyName ?? ""}|${b.programName ?? ""}|${b.subProgramName ?? ""}|${b.class ?? ""}|${b.groupName ?? ""}`,
+      `${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
+        `${b.class ?? ""}|${b.groupName ?? ""}`,
         "th",
         { numeric: true, sensitivity: "base" }
       )
     );
-
     setGroups(activeMerged);
-  }, [rawGroups, programs]);
-
-  const faculties = useMemo(() => {
-    const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups]);
-
-  const programNames = useMemo(() => {
-    const s = new Set(
-      groups
-        .filter((g) => !selectedFaculty || g.facultyName === selectedFaculty)
-        .map((g) => g.programName)
-        .filter(Boolean) as string[]
-    );
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups, selectedFaculty]);
-
-  const subProgramNames = useMemo(() => {
-    const s = new Set(
-      groups
-        .filter(
-          (g) =>
-            (!selectedFaculty || g.facultyName === selectedFaculty) &&
-            (!selectedProgramName || g.programName === selectedProgramName)
-        )
-        .map((g) => g.subProgramName)
-        .filter(Boolean) as string[]
-    );
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups, selectedFaculty, selectedProgramName]);
-
-  const filteredBySubProgram = useMemo(() => {
-    return groups.filter((g) => {
-      if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
-      if (selectedProgramName && g.programName !== selectedProgramName) return false;
-      if (selectedSubProgramName && g.subProgramName !== selectedSubProgramName) return false;
-      return true;
-    });
-  }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName]);
+  }, [rawGroups]);
 
   const termOptions = useMemo(() => {
-    const s = new Set(
-      filteredBySubProgram.map((g) => String(g.term ?? "")).filter((x) => x && x !== "-")
-    );
+    const s = new Set(groups.map((g) => String(g.term ?? "")).filter((x) => x && x !== "-"));
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { numeric: true, sensitivity: "base" }));
-  }, [filteredBySubProgram]);
+  }, [groups]);
 
   const yearOptions = useMemo(() => {
     const s = new Set(
-      filteredBySubProgram
+      groups
         .filter((g) => !selectedTerm || String(g.term ?? "") === selectedTerm)
         .map((g) => String(g.year ?? ""))
         .filter((x) => x && x !== "-")
     );
     return Array.from(s).sort((a, b) => Number(b) - Number(a));
-  }, [filteredBySubProgram, selectedTerm]);
+  }, [groups, selectedTerm]);
 
   const roomOptions = useMemo(() => {
-    return filteredBySubProgram
-      .filter((g) => (!selectedTerm || String(g.term ?? "") === selectedTerm) && (!selectedYear || String(g.year ?? "") === selectedYear))
+    return groups
+      .filter(
+        (g) =>
+          (!selectedTerm || String(g.term ?? "") === selectedTerm) &&
+          (!selectedYear || String(g.year ?? "") === selectedYear)
+      )
       .sort((a, b) =>
         `${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
           `${b.class ?? ""}|${b.groupName ?? ""}`,
@@ -211,31 +149,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           { numeric: true, sensitivity: "base" }
         )
       );
-  }, [filteredBySubProgram, selectedTerm, selectedYear]);
-
-  const onSelectFaculty = (val: string) => {
-    setSelectedFaculty(val);
-    setSelectedProgramName("");
-    setSelectedSubProgramName("");
-    setSelectedTerm("");
-    setSelectedYear("");
-    setStudentGroupId(null);
-  };
-
-  const onSelectProgramName = (val: string) => {
-    setSelectedProgramName(val);
-    setSelectedSubProgramName("");
-    setSelectedTerm("");
-    setSelectedYear("");
-    setStudentGroupId(null);
-  };
-
-  const onSelectSubProgramName = (val: string) => {
-    setSelectedSubProgramName(val);
-    setSelectedTerm("");
-    setSelectedYear("");
-    setStudentGroupId(null);
-  };
+  }, [groups, selectedTerm, selectedYear]);
 
   const onSelectTerm = (val: string) => {
     setSelectedTerm(val);
@@ -253,6 +167,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
     setIsSubmitting(true);
     if (!prefix) {
       toast.error("กรุณาเลือกคำนำหน้า");
+      setIsSubmitting(false);
       return;
     }
     if (
@@ -264,10 +179,12 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       !studentGroupId
     ) {
       toast.error("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
+      setIsSubmitting(false);
       return;
     }
     if (password !== confirmPassword) {
       toast.error("รหัสผ่านไม่ตรงกัน");
+      setIsSubmitting(false);
       return;
     }
 
@@ -295,6 +212,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       const msg = String(res?.message ?? "");
       if (/This UserName Already Exists/i.test(msg)) {
         toast.error("ชื่อผู้ใช้นี้ถูกใช้แล้ว โปรดใช้ชื่อผู้ใช้อื่น");
+        setIsSubmitting(false);
         return;
       }
       toast.success("สร้างบัญชีนักเรียนสำเร็จ");
@@ -307,11 +225,12 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
           ? modelErrors[firstKey][0]
           : String(modelErrors[firstKey]);
         toast.error(firstMsg || "กรุณาตรวจสอบข้อมูลอีกครั้ง");
+        setIsSubmitting(false);
         return;
       }
       const thaiMsg = toThaiErrorMessage(err);
       toast.error(thaiMsg);
-    }finally {
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -345,77 +264,14 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </div>
 
             <div>
-              <label className="text-sm">คณะ</label>
-              <select
-                value={selectedFaculty}
-                onChange={(e) => onSelectFaculty(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                disabled={loadingGroups || !!groupsError || faculties.length === 0}
-              >
-                <option value="">
-                  {loadingGroups
-                    ? "กำลังโหลดข้อมูล..."
-                    : groupsError
-                      ? "โหลดข้อมูลไม่สำเร็จ"
-                      : "— เลือกคณะ —"}
-                </option>
-                {faculties.map((f) => (
-                  <option key={f} value={f}>
-                    {f}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="text-sm">สาขา</label>
-              <select
-                value={selectedProgramName}
-                onChange={(e) => onSelectProgramName(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                disabled={!selectedFaculty || loadingGroups || !!groupsError}
-              >
-                <option value="">{!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}</option>
-                {programNames.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="text-sm">แขนง/สาขาย่อย</label>
-              <select
-                value={selectedSubProgramName}
-                onChange={(e) => onSelectSubProgramName(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                disabled={!selectedProgramName || loadingGroups || !!groupsError}
-              >
-                <option value="">
-                  {!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}
-                </option>
-                {subProgramNames.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
               <label className="text-sm">เทอม</label>
               <select
                 value={selectedTerm}
                 onChange={(e) => onSelectTerm(e.target.value)}
                 className="w-full border px-3 py-2 rounded"
-                disabled={!selectedSubProgramName || loadingGroups || !!groupsError || termOptions.length === 0}
+                disabled={loadingGroups || !!groupsError || termOptions.length === 0}
               >
-                <option value="">
-                  {!selectedSubProgramName ? "— เลือกแขนงก่อน —" : "— เลือกเทอม —"}
-                </option>
+                <option value="">{loadingGroups ? "กำลังโหลดข้อมูล..." : groupsError ? "โหลดข้อมูลไม่สำเร็จ" : "— เลือกเทอม —"}</option>
                 {termOptions.map((t) => (
                   <option key={t} value={t}>
                     {t}
@@ -432,9 +288,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
                 className="w-full border px-3 py-2 rounded"
                 disabled={!selectedTerm || loadingGroups || !!groupsError || yearOptions.length === 0}
               >
-                <option value="">
-                  {!selectedTerm ? "— เลือกเทอมก่อน —" : "— เลือกปีการศึกษา —"}
-                </option>
+                <option value="">{!selectedTerm ? "— เลือกเทอมก่อน —" : "— เลือกปีการศึกษา —"}</option>
                 {yearOptions.map((y) => (
                   <option key={y} value={y}>
                     {y}
@@ -453,9 +307,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
                 className="w-full border px-3 py-2 rounded"
                 disabled={!selectedYear || loadingGroups || !!groupsError}
               >
-                <option value="">
-                  {!selectedYear ? "— เลือกปีการศึกษาก่อน —" : "— เลือกห้อง —"}
-                </option>
+                <option value="">{!selectedYear ? "— เลือกปีการศึกษาก่อน —" : "— เลือกห้อง —"}</option>
                 {roomOptions.map((g) => (
                   <option key={g.id} value={g.id ?? ""}>
                     {formatRoomLabel(g)}

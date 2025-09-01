@@ -15,7 +15,7 @@ export default function Form() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [openCreatSubjectPopup, setOpenCreatePopUp] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const sortByTeacherId = (arr: GetAllTeacherResponse[]) =>
@@ -208,7 +208,6 @@ export default function Form() {
       {openCreatSubjectPopup && (
         <AddTeacherAccountPopup
           onClosePopUp={setOpenCreatePopUp}
-          // ✅ หลังสร้างเสร็จ: รีเฟรชตาราง + กลับหน้า 1
           onCreated={async () => {
             await fetchTeachers();
             setCurrentPage(1);
