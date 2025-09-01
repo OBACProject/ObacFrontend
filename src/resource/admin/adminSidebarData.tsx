@@ -6,6 +6,7 @@ import {
   Newspaper,
   House,
   DoorOpen as Room,
+  Grid2X2Plus,
 } from "lucide-react";
 
 export interface ProfileData {
@@ -86,7 +87,7 @@ export const AdminSidebarData: AdminSidebarProps = {
       href: "/admin/student-group-management",
       headLink:"/admin/student-group-management",
       icon: (
-        <Room
+        <Grid2X2Plus
           style={{ width: "2.0rem", height: "2.0rem" }}
         />
       ),

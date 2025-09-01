@@ -93,6 +93,7 @@ export interface CreateStudentGroupRequest{
   isActive: boolean;
   year: number;
   term: string;
+  section:string;
 }
 
 export interface UpdateStudentGroupActiveRequest {
