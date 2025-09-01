@@ -284,6 +284,7 @@ export interface StudentGrade {
   prefix: string;
   firstName: string;
   lastName: string;
+  section:string;
   facultyName: string;
   programName: string;
   subProgramName: string;
@@ -334,7 +335,7 @@ export interface StudentGradesResponse {
   prefix: string;
   firstName: string;
   lastName: string;
-
+  section:string;
   class: string;
   groupName: string;
   facultyName: string;

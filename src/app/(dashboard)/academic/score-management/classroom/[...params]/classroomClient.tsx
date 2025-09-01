@@ -60,7 +60,12 @@ export function ClassroomGradeClient({ initialData }: Props) {
     const subjectsArray = Array.from(subjectsMap.values());
 
     const transformedStudents = data.students
-      .filter((student) => student.isActive && student.status !== "คัดชื่อออก" && student.status !== "ลาออก")
+      .filter(
+        (student) =>
+          student.isActive &&
+          student.status !== "คัดชื่อออก" &&
+          student.status !== "ลาออก"
+      )
       .map((student) => {
         const grads = subjectsArray.map((subject) => {
           const studentSubject = student.subject.find(
@@ -133,7 +138,9 @@ export function ClassroomGradeClient({ initialData }: Props) {
     });
 
     const studentListExcel = data.students
-      .filter((s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+      .filter(
+        (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
+      )
       .map((student) => {
         const subjectsRecord: Record<string, string> = {};
         subjectNames.forEach((name) => {
@@ -381,20 +388,20 @@ export function ClassroomGradeClient({ initialData }: Props) {
             <div className="flex flex-row gap-2">
               {/* PDF Download Button */}
               <button
-                className="flex h-9 px-4 py-2 border border-gray-300 text-blue-500 bg-white
-      hover:bg-blue-50 duration-200 text-xs rounded items-center justify-center gap-2 disabled:opacity-60 min-w-[100px]"
+                className="flex h-fit px-4 py-1.5 border border-gray-300 text-blue-500 bg-white
+      hover:bg-blue-50 duration-200 text-sm font-prompt_Light rounded-md items-center justify-center gap-2 disabled:opacity-60 min-w-[100px]"
                 onClick={handleDownloadGradePdf}
                 disabled={isDownloadingPDF}
                 type="button"
               >
                 {isDownloadingPDF ? (
                   <>
-                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     ใบคะแนน PDF
                   </>
                 ) : (
                   <>
-                    <FileText className="h-3 w-3" />
+                    <FileText className="h-5 w-5" />
                     ใบคะแนน PDF
                   </>
                 )}
@@ -402,20 +409,20 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
               {/* Excel Download Button */}
               <button
-                className="flex h-9 px-4 py-2 border border-gray-300 text-green-500 bg-white
-      hover:bg-green-50 duration-200 text-xs rounded items-center justify-center gap-2 disabled:opacity-60 min-w-[100px]"
+                className="flex  px-4 py-1.5 h-fit border border-gray-300 text-green-500 bg-white
+      hover:bg-green-50 duration-200 text-sm rounded-md items-center font-prompt_Light justify-center gap-2 disabled:opacity-60 min-w-[100px]"
                 onClick={handleDownloadGradeExcel}
                 disabled={isDownloadingExcel}
                 type="button"
               >
                 {isDownloadingExcel ? (
                   <>
-                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     ใบคะแนน Excel
                   </>
                 ) : (
                   <>
-                    <Download className="h-3 w-3" />
+                    <Download className="h-5 w-5" />
                     ใบคะแนน Excel
                   </>
                 )}

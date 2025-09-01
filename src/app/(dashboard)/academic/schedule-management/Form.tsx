@@ -88,10 +88,12 @@ export default function Form() {
       width: "20%",
       render: (item) => `${item.lastName} `,
       className: "text-start lg:pl-6",
+
     },
-    { label: "หมวดวิชา", width: "20%", render: (item) => item.facultyName },
+    { label: "หมวดวิชา", width: "40%",className: "text-start lg:pl-6 line-clamp-1", render: (item) => item.facultyName },
     {
       label: "เบอร์ติดต่อ",
+      
       width: "15%",
       render: (item) => item.phoneNumber ?? "-",
     },
