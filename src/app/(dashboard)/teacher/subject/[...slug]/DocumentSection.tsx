@@ -1,7 +1,7 @@
 "use client";
 import {
   ExcelGradStudentGroup,
-  ExcelStudentNamelistInGroupButton,
+  ExcelSubjectStudentNamelistInGroupButton,
 } from "@/components/Excel/ExcelButton";
 import {
   PDFStudentNamelistInGroupButton,
@@ -34,7 +34,7 @@ export default function DocumentSection({
             <PDFStudentScoreInSubjectPDF
               scheduleSubjectID={scheduleSubjectID}
             />
-            <ExcelStudentNamelistInGroupButton groupID={String(groupID)} />
+            <ExcelSubjectStudentNamelistInGroupButton scheduleSubjectID={scheduleSubjectID} />
             <ExcelGradStudentGroup scheduleSubjectId={scheduleSubjectID} />
         </div>
       </div>
