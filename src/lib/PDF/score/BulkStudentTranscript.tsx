@@ -89,7 +89,7 @@ const BulkStudentTranscript = (
     );
 
     doc.setFont("THSarabun", "normal");
-    doc.text("รอบ : เช้า", 42, 35);
+    doc.text(`รอบ : ${data[k].section}`, 42, 35);
     doc.text("ประเภทวิชา : ", 110.5, 35);
     doc.text(`${data[k].facultyName}`, 130, 35);
 

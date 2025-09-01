@@ -75,9 +75,8 @@ const StudentTranscript = (grads: StudentGradesResponse) => {
   doc.text(`รหัสนักศึกษา : ${grads?.studentCode}`, 30, 30);
   doc.text("ชื่อ - สกุล   : ", 110.5, 30);
   doc.text(`${grads?.prefix} ${grads?.firstName} ${grads?.lastName}`, 130, 30);
-
   doc.setFont("THSarabun", "normal");
-  doc.text("รอบ : เช้า", 42, 35);
+  doc.text(`รอบ : ${grads?.section}`, 42, 35);
   doc.text("ประเภทวิชา : ", 110.5, 35);
   doc.text(`${grads.facultyName}`, 130, 35);
 
