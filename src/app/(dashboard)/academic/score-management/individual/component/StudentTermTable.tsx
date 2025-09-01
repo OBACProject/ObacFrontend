@@ -148,6 +148,8 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
             receiptNo: term.receiptNo,
             isFailed,
           };
+        }).sort((a, b) => {
+          return a.subject_code < b.subject_code ? -1 : 1;
         });
 
         const gpa = calculateGpa(year.termQuery, year.totalCredit);
