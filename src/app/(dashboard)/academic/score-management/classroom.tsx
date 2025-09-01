@@ -216,7 +216,7 @@ const transformedDataExcel = (
         totalCredit: student.totalCredit ?? 0,
         subjects: subjectsRecord,
       };
-    });
+    }).sort((a, b) => a.studentId - b.studentId);
 
   return { general, studentListExcel };
 };
@@ -237,7 +237,6 @@ const transformedDataExcel = (
     } else if (downloadingExcelGroupId && gradeSummaryData && !isLoadingGradeSummary) {
   try {
     const { general, studentListExcel } = transformedDataExcel(gradeSummaryData);
-      console.log(general, studentListExcel);
       ConvertClassroomGradingToExcel( general, studentListExcel );
     } catch (error) {
       console.error("Error generating Excel:", error);

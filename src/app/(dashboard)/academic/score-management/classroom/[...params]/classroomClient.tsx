@@ -152,7 +152,7 @@ export function ClassroomGradeClient({ initialData }: Props) {
           totalCredit: student.totalCredit ?? 0,
           subjects: subjectsRecord,
         };
-      });
+      }).sort((a, b) => a.studentId - b.studentId);
 
     return { general, studentListExcel };
   };

@@ -56,7 +56,6 @@ const StudentInfoByIdPage = ({ params }: { params: { params: string } }) => {
       setTermData(transformedData.year);
     }
   }, [apiData]);
-  console.log(termData)
   if (isLoading) {
     return (
       <div className="container max-w-6xl mx-auto px-4 py-6">
