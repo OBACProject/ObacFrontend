@@ -1,6 +1,6 @@
 export default function HomeFooter() {
   return (
-    <footer className="w-full bg-[#0C243C] px-4 sm:px-6 lg:px-10 py-6">
+    <footer className="w-full bg-[#0C243C] px-4 sm:px-6 lg:px-10 py-6 mt-auto">
       <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start gap-4 lg:gap-12 text-white">
         <div className="lg:flex lg:items-start grid place-items-center lg:justify-center gap-4">
           <div className="bg-white rounded-full p-2 w-fit h-fit">
