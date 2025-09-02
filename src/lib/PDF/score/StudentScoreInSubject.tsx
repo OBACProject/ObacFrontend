@@ -7,20 +7,7 @@ import { getCurrentThaiTermYear } from "@/lib/utils";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
 
-function computeGradeFromTotal(total: number | string | undefined | null): GradeBucket | null {
-  if (total === undefined || total === null) return null;
-  const n = typeof total === "string" ? Number(total.replace(",", ".")) : Number(total);
-  if (Number.isNaN(n)) return null;
 
-  if (n >= 80) return 4;
-  if (n >= 75) return 3.5;
-  if (n >= 70) return 3;
-  if (n >= 65) return 2.5;
-  if (n >= 60) return 2;
-  if (n >= 55) return 1.5;
-  if (n >= 50) return 1;
-  return 0;
-}
 type GradeBucket = 0 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4;
 type RemarkKey = "ผ." | "ม.ผ." | "ร." | "ข.ร." | "ข.ส.";
 function normalizeRemark(raw: string): RemarkKey | null {
@@ -388,14 +375,8 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.setFont("THSarabun");
   let y2 = doc.lastAutoTable.finalY;
   const students = data.subjectGrades;
-  
   if (students) {
     for (let i = 0; i < students.length; i++) {
-const rawRemark = (students[i].remarks ?? "").trim();
-const remarkDisplay = normalizeRemark(rawRemark) ?? rawRemark; 
-const gradeVal = computeGradeFromTotal(students[i].totalScore);
-const gradeOrRemark = remarkDisplay ? remarkDisplay : (gradeVal !== null ? String(gradeVal) : "-");
-
       autoTable(doc, {
         startY: y2,
         body: [
@@ -411,7 +392,9 @@ const gradeOrRemark = remarkDisplay ? remarkDisplay : (gradeVal !== null ? Strin
             `${students[i].finaltermScore}`,
             `${students[i].totalScore}`,
             `${
-              gradeOrRemark
+              students[i].remarks !== ""
+                ? students[i].remarks
+                : students[i].finalGrade
             }`,
             ``,
           ],
