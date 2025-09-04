@@ -117,52 +117,64 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
   // Helper function to transform data for Excel
   const transformDataForExcel = (data: GetGroupSummaryGradeResponse) => {
-    const general = {
-      groupId: data.groupId,
-      groupName: data.groupName,
-      groupCode: data.groupCode,
-      class: data.class,
-      facultyName: data.facultyName,
-      programName: data.programName,
-      term: data.term,
-      year: data.year,
-    };
-
-    const subjectNames: string[] = [];
-    data.students.forEach((student) => {
-      student.subject.forEach((subj) => {
-        if (!subjectNames.includes(subj.subjectName)) {
-          subjectNames.push(subj.subjectName);
-        }
-      });
-    });
-
-    const studentListExcel = data.students
-      .filter(
-        (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
-      )
-      .map((student) => {
-        const subjectsRecord: Record<string, string> = {};
-        subjectNames.forEach((name) => {
-          const subj = student.subject.find((s) => s.subjectName === name);
-          subjectsRecord[name] = subj ? subj.grade : "-";
-        });
-
-        return {
-          studentId: student.studentId,
-          studentCode: student.studentCode,
-          name: `${student.prefix ?? ""}${student.firstName} ${
-            student.lastName
-          }`,
-          gpa: student.gpa ?? 0,
-          gpax: student.gpax ?? 0,
-          totalCredit: student.totalCredit ?? 0,
-          subjects: subjectsRecord,
-        };
-      }).sort((a, b) => a.studentId - b.studentId);
-
-    return { general, studentListExcel };
+  const general = {
+    groupId: data.groupId,
+    groupName: data.groupName,
+    groupCode: data.groupCode,
+    class: data.class,
+    facultyName: data.facultyName,
+    programName: data.programName,
+    term: data.term,
+    year: data.year,
   };
+
+  // Collect subjectName + credit
+  const subjectInfo: { name: string; credit: number }[] = [];
+  data.students.forEach((student) => {
+    student.subject.forEach((subj) => {
+      if (!subjectInfo.find((s) => s.name === subj.subjectName)) {
+        subjectInfo.push({ name: subj.subjectName, credit: subj.credit ?? 0 });
+      }
+    });
+  });
+
+  // Sort subjects: non-zero credits first, 0 credits last
+  subjectInfo.sort((a, b) => {
+    if (a.credit === 0 && b.credit !== 0) return 1;
+    if (a.credit !== 0 && b.credit === 0) return -1;
+    return 0;
+  });
+
+  const studentListExcel = data.students
+    .filter(
+      (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
+    )
+    .map((student) => {
+      const subjectsRecord: Record<string, string> = {};
+      subjectInfo.forEach(({ name }) => {
+        const subj = student.subject.find((s) => s.subjectName === name);
+        subjectsRecord[name] = subj
+            ? subj.remark
+              ? subj.remark
+              : subj.grade
+            : "-";
+      });
+
+      return {
+        studentId: student.studentId,
+        studentCode: student.studentCode,
+        name: `${student.prefix ?? ""}${student.firstName} ${student.lastName}`,
+        gpa: student.gpa ?? 0,
+        gpax: student.gpax ?? 0,
+        totalCredit: student.totalCredit ?? 0,
+        subjects: subjectsRecord,
+      };
+    })
+    .sort((a, b) => a.studentId - b.studentId);
+
+  return { general, studentListExcel };
+};
+
 
   // Add download handlers
   const handleDownloadGradePdf = async () => {

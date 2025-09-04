@@ -193,18 +193,41 @@ const transformedDataExcel = (
     year: data.year,
   };
 
-  const subjectCodes = new Set<string>();
+  // collect all subject names and also map credits
+  const subjectInfoMap = new Map<string, number>();
   data.students.forEach((student) => {
-    student.subject.forEach((subj) => subjectCodes.add(subj.subjectName));
+    student.subject.forEach((subj) => {
+      subjectInfoMap.set(subj.subjectName, subj.credit ?? 0);
+    });
   });
 
   const studentListExcel: StudentListExcel[] = data.students
     .filter((s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
     .map((student) => {
+      // create array of [subjectName, grade/remark]
+      const subjectsArray = Array.from(subjectInfoMap.entries()).map(
+        ([subjectName, credit]) => {
+          const subj = student.subject.find((s) => s.subjectName === subjectName);
+          const value = subj
+            ? subj.remark
+              ? subj.remark
+              : subj.grade
+            : "-";
+          return { subjectName, value, credit };
+        }
+      );
+
+      // sort: subjects with credit=0 go last, keep original order otherwise
+      subjectsArray.sort((a, b) => {
+        if (a.credit === 0 && b.credit !== 0) return 1;
+        if (a.credit !== 0 && b.credit === 0) return -1;
+        return 0;
+      });
+
+      // back to ordered record (if you still want Record)
       const subjectsRecord: Record<string, string> = {};
-      subjectCodes.forEach((code) => {
-        const subj = student.subject.find((s) => s.subjectCode === code);
-        subjectsRecord[code] = subj ? subj.grade : "-";
+      subjectsArray.forEach(({ subjectName, value }) => {
+        subjectsRecord[subjectName] = value;
       });
 
       return {
@@ -216,7 +239,8 @@ const transformedDataExcel = (
         totalCredit: student.totalCredit ?? 0,
         subjects: subjectsRecord,
       };
-    }).sort((a, b) => a.studentId - b.studentId);
+    })
+    .sort((a, b) => a.studentId - b.studentId);
 
   return { general, studentListExcel };
 };
@@ -237,6 +261,8 @@ const transformedDataExcel = (
     } else if (downloadingExcelGroupId && gradeSummaryData && !isLoadingGradeSummary) {
   try {
     const { general, studentListExcel } = transformedDataExcel(gradeSummaryData);
+
+    console.log(studentListExcel)
       ConvertClassroomGradingToExcel( general, studentListExcel );
     } catch (error) {
       console.error("Error generating Excel:", error);
