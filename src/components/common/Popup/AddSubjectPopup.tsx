@@ -41,6 +41,7 @@ export const AddSubjectPopUp = ({ onClosePopUp }: AddPopUpProps) => {
       await CreateSubject(payload);
       toast.success("เพิ่มวิชาสำเร็จ");
       onClosePopUp(false);
+      window.location.reload();
     } catch (err) {
       console.error("Error saving subject:", err);
       toast.error("บันทึกวิชาไม่สำเร็จ");
