@@ -213,7 +213,7 @@ export default function Main() {
                   onChange={(e) => setNextGroupNameA(e.target.value)}
                 >
                   <option value="">เลือกปี</option>
-                  {[2, 3].map((n) => (
+                  {[1,2, 3].map((n) => (
                     <option key={n} value={String(n)}>
                       {n}
                     </option>
