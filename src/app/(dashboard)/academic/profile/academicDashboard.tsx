@@ -3,6 +3,7 @@
 import { GetGenderInfoCount, GetStudentClassCount } from "@/api/user/userAPI";
 import BarChart from "@/components/Academic/BarChart";
 import DonutChart from "@/components/Academic/DonutChart";
+import OverviewChart from "@/components/Academic/OverviewChart";
 import ProfileCard from "@/components/Academic/ProfileCard";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { ClassCount, GetGenderCount } from "@/dto/userDto";
@@ -161,12 +162,7 @@ export default function AcademicDashboard() {
         <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
       </div>
 
-      <div className="my-5 mx-5 px-5 bg-white shadow-xl grid place-items-center rounded-lg">
-        <h1 className="text-xl font-prompt text-blue-600">
-          แผนภูมิแสดงจำนวนนักเรียน ชาย-หญิง ปวช - ปวส
-        </h1>
-        <BarChart labels={[]} maleData={[]} femaleData={[]} />
-      </div>
+      <OverviewChart />
 
       {error && (
         <div className="mx-5 my-3 px-4 py-2 bg-red-50 text-red-700 rounded">

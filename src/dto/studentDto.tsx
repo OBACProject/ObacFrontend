@@ -496,3 +496,14 @@ export interface UpdateStudentUserRequest {
   isActive: boolean;
   status: string;
 }
+
+export interface GenderCount {
+  gender: string;
+  count: number;
+}
+
+export interface ClassGenderStat {
+  class: string;
+  level: number;
+  genderCount: GenderCount;
+}

@@ -1,4 +1,5 @@
 import {
+  ClassGenderStat,
   CreateStudentRequest,
   GetAllStudentsPagedParams,
   GetAllStudentsPagedResponse,
@@ -234,5 +235,21 @@ export const UpdateStudentDetail = async (
   } catch (error) {
     console.error("UpdateStudentDetail Error:", error);
     return false;
+  }
+};
+
+export const GetStudentClassLevelGenderCountDtos = async (): Promise<
+  ClassGenderStat[]
+> => {
+  try {
+    const res = await apiClient.get<{
+      responseCode: string;
+      responseMessage: string;
+      data: ClassGenderStat[];
+    }>("Dashboard/GetStudentClassLevelGenderCountDtos");
+    return res.data.data ?? [];
+  } catch (error) {
+    console.error("GetStudentClassLevelGenderCountDtos Error:", error);
+    return [];
   }
 };
