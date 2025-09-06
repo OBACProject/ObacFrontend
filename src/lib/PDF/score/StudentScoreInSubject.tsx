@@ -6,8 +6,6 @@ import THSarabunFontBold from "../../Font/THSarabunBold";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { StudentGroupGradeResponse } from "@/dto/gradDto";
 
-
-
 type GradeBucket = 0 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4;
 type RemarkKey = "ผ." | "ม.ผ." | "ร." | "ข.ร." | "ข.ส.";
 function normalizeRemark(raw: string): RemarkKey | null {
@@ -117,7 +115,14 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
     align: "center",
   });
 
-  doc.text("ระดับประกาศนียบัตรวิชาชีพขั้นสูง", pageWidth / 2, 67, {
+  let Classifier = "";
+  if (data.class.trim() === "ปวส") {
+    Classifier = "ระดับประกาศนียบัตรวิชาชีพขั้นสูง";
+  } else {
+    Classifier = "ระดับประกาศนียบัตรวิชาชีพ";
+  }
+
+  doc.text(`${Classifier}`, pageWidth / 2, 67, {
     align: "center",
   });
   doc.setFontSize(14);
@@ -316,7 +321,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text(`รหัสวิชา ${data.subjectCode} วิชา ${data.subjectName}`, 120, 10, {
     align: "center",
   });
-  
+
   doc.setFontSize(12);
 
   doc.line(4, 4, 4, 15); // เส้นเริ่มแนวตั้ง
