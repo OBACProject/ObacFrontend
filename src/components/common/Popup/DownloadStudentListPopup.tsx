@@ -2,6 +2,7 @@
 
 import { GetStudentListByClassLevelTermYear } from "@/api/studentGroup/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
+import { Students } from "@/dto/studentGroupItem";
 import BulkStudentNameListInLevelPDF from "@/lib/PDF/name-list/BulkStudentNameList";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { Download, LoaderCircle } from "lucide-react";
@@ -45,13 +46,30 @@ export default function DownloadStudentListPopup({
           room: m ? Number(m[2]) : Number.MAX_SAFE_INTEGER,
         };
       };
+
+      const compareStudentCode = (a: Students, b: Students) => {
+        const sa = a.studentCode ?? "";
+        const sb = b.studentCode ?? "";
+
+        return sa.localeCompare(sb, undefined, {
+          numeric: true,
+          sensitivity: "base",
+        });
+      };
+
       const studentNameList = await GetStudentListByClassLevelTermYear(
         classGroup,
         level,
         term,
         year
       );
-      const sortedByRoomAsc = [...studentNameList].sort((a, b) => {
+
+      const withStudentsSorted = studentNameList.map((g) => ({
+        ...g,
+        students: [...(g.students ?? [])].sort(compareStudentCode),
+      }));
+
+      const sortedByRoomAsc = [...withStudentsSorted].sort((a, b) => {
         const A = parseGroupName(a.groupName);
         const B = parseGroupName(b.groupName);
         return A.room - B.room;
