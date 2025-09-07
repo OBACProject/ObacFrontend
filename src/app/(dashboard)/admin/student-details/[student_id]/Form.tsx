@@ -5,7 +5,7 @@ import { GraduationCap, Pencil, Save, CircleX, KeyRound, Trash2 } from "lucide-r
 import { toast } from "react-toastify";
 import { GetStudentDetailResponse, UpdateStudentUserRequest } from "@/dto/studentDto";
 import { GetStudentDetailById, UpdateStudentUser } from "@/api/student/route";
-import { GetAllStudentGroup } from "@/api/studentGroup/route";
+import { GetAllStudentGroup, GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
 import type { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
@@ -15,7 +15,7 @@ import { educationOptions } from "@/resource/academics/options/studentOption";
 
 function toISODate(input?: string | null): string {
   if (!input) return "";
-  const isoT = input?.match?.(/^(\d{4})-(\d{2})-(\d{2})T/);
+  const isoT = String(input).match(/^(\d{4})-(\d{2})-(\d{2})T/);
   if (isoT) return `${isoT[1]}-${isoT[2]}-${isoT[3]}`;
   if (/^\d{4}-\d{2}-\d{2}$/.test(String(input))) return String(input);
   const dmy = String(input).match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
@@ -41,14 +41,13 @@ function isoToDMY(iso?: string | null): string {
   const [, y, mm, dd] = m;
   return `${dd}/${mm}/${y}`;
 }
-
 function cx(...s: Array<string | false | undefined>) {
   return s.filter(Boolean).join(" ");
 }
 
 type Props = { studentId: string };
 
-type MergedGroup = GetAllStudentGroupRequest & {
+type AnyGroup = GetAllStudentGroupRequest & {
   facultyName?: string;
   programName?: string;
   subProgramName?: string;
@@ -62,317 +61,266 @@ export default function StudentDetailForm({ studentId }: Props) {
   const [saving, setSaving] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
-  const [rawGroups, setRawGroups] = useState<GetAllStudentGroupRequest[]>([]);
+
   const [programs, setPrograms] = useState<GetAllProgramsResponse[]>([]);
-  const [groups, setGroups] = useState<MergedGroup[]>([]);
-  const [loadingSources, setLoadingSources] = useState(true);
-  const [sourcesError, setSourcesError] = useState<string | null>(null);
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
-  const [selectedProgramName, setSelectedProgramName] = useState<string>("");
-  const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
-  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const pMap = useMemo(() => {
+    const m = new Map<number, GetAllProgramsResponse>();
+    programs.forEach((p) => m.set(p.programId, p));
+    return m;
+  }, [programs]);
+
+  const [originalGroup, setOriginalGroup] = useState<AnyGroup | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number>(0);
+  const [tyGroups, setTyGroups] = useState<AnyGroup[]>([]);
+  const [loadingTY, setLoadingTY] = useState(false);
+  const [selectedNewGroupId, setSelectedNewGroupId] = useState<number | null>(null);
+
   const currentBEYear = new Date().getFullYear() + 543;
 
   useEffect(() => {
     const load = async () => {
-      try {
-        setLoadingSources(true);
-        setSourcesError(null);
-        const [detail, prog, grp] = await Promise.all([
-          GetStudentDetailById(Number(studentId)),
-          GetAllPrograms(),
-          GetAllStudentGroup(),
-        ]);
-        if (detail) {
-          const normalized = { ...detail, birthDate: toISODate(detail.birthDate) };
-          setFormData(normalized);
-          setOriginalData(normalized);
-          if ((detail as any)?.studentGroupId) {
-            setSelectedGroupId(Number((detail as any).studentGroupId));
-          }
+      const [detail, prog, allGroups] = await Promise.all([
+        GetStudentDetailById(Number(studentId)),
+        GetAllPrograms(),
+        GetAllStudentGroup(),
+      ]);
+      if (prog) setPrograms(Array.isArray(prog) ? prog : []);
+      if (detail) {
+        const normalized = { ...detail, birthDate: toISODate(detail.birthDate) };
+        setFormData(normalized);
+        setOriginalData(normalized);
+        const gid = Number((detail as any)?.studentGroupId ?? 0) || 0;
+        const og = (Array.isArray(allGroups) ? allGroups : []).find((g) => Number(g.id) === gid) || null;
+        if (og) {
+          const pr = pMap.get(Number(og.programId));
+          const ogx: AnyGroup = {
+            ...og,
+            facultyName: pr?.facultyName,
+            programName: pr?.programName,
+            subProgramName: pr?.subProgramName,
+          };
+          setOriginalGroup(ogx);
+          setSelectedTerm(String(ogx.term ?? ""));
+          setSelectedYear(Number(ogx.year ?? 0));
+          setSelectedNewGroupId(Number(ogx.id));
         }
-        setPrograms(Array.isArray(prog) ? prog : []);
-        setRawGroups(Array.isArray(grp) ? grp : []);
-      } catch {
-        setSourcesError("โหลดข้อมูลไม่สำเร็จ");
-      } finally {
-        setLoadingSources(false);
       }
     };
     load();
   }, [studentId]);
 
   useEffect(() => {
-    if (!rawGroups.length) {
-      setGroups([]);
-      return;
-    }
-    const pMap = new Map<number, GetAllProgramsResponse>();
-    for (const p of programs) pMap.set(p.programId, p);
-    const merged: MergedGroup[] = rawGroups
-      .filter((g) => g.isActive !== false)
-      .map((g) => {
-        const p = pMap.get(Number(g.programId));
+    const fetchTY = async () => {
+      if (!selectedTerm || !selectedYear) {
+        setTyGroups([]);
+        return;
+      }
+      setLoadingTY(true);
+      const list = await GetAllStudentGroupByTermYear(selectedTerm, selectedYear);
+      const out = (Array.isArray(list) ? list : []).map((g) => {
+        const pr = pMap.get(Number(g.programId));
         return {
           ...g,
-          facultyName: p?.facultyName,
-          programName: p?.programName,
-          subProgramName: p?.subProgramName,
-        };
+          facultyName: pr?.facultyName ?? (g as AnyGroup).facultyName,
+          programName: pr?.programName ?? (g as AnyGroup).programName,
+          subProgramName: pr?.subProgramName ?? (g as AnyGroup).subProgramName,
+        } as AnyGroup;
       });
-    merged.sort((a, b) =>
-      `${a.facultyName ?? ""}|${a.programName ?? ""}|${a.subProgramName ?? ""}|${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
-        `${b.facultyName ?? ""}|${b.programName ?? ""}|${b.subProgramName ?? ""}|${b.class ?? ""}|${b.groupName ?? ""}`,
-        "th",
-        { numeric: true, sensitivity: "base" }
-      )
-    );
-    setGroups(merged);
-  }, [rawGroups, programs]);
-
-  useEffect(() => {
-    if (!selectedGroupId || !groups.length) return;
-    const g = groups.find((x) => x.id === selectedGroupId);
-    if (!g) return;
-    setSelectedFaculty(g.facultyName || "");
-    setSelectedProgramName(g.programName || "");
-    setSelectedSubProgramName(g.subProgramName || "");
-    const termStr = String(g.term ?? "");
-    const yearNum = Number(g.year ?? 0);
-    setSelectedTerm(termStr);
-    setSelectedYear(Number.isFinite(yearNum) ? yearNum : 0);
-  }, [selectedGroupId, groups]);
-
-  const faculties = useMemo(() => {
-    const s = new Set(groups.map((g) => g.facultyName).filter(Boolean) as string[]);
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups]);
-
-  const programNames = useMemo(() => {
-    const s = new Set(
-      groups.filter((g) => !selectedFaculty || g.facultyName === selectedFaculty).map((g) => g.programName).filter(Boolean) as string[]
-    );
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups, selectedFaculty]);
-
-  const subProgramNames = useMemo(() => {
-    const s = new Set(
-      groups
-        .filter((g) => (!selectedFaculty || g.facultyName === selectedFaculty) && (!selectedProgramName || g.programName === selectedProgramName))
-        .map((g) => g.subProgramName)
-        .filter(Boolean) as string[]
-    );
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
-  }, [groups, selectedFaculty, selectedProgramName]);
-
-  const groupsByCascade = useMemo(() => {
-    return groups.filter((g) => {
-      if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
-      if (selectedProgramName && g.programName !== selectedProgramName) return false;
-      if (selectedSubProgramName && g.subProgramName !== selectedSubProgramName) return false;
-      return true;
-    });
-  }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName]);
+      setTyGroups(out);
+      setLoadingTY(false);
+    };
+    fetchTY();
+  }, [selectedTerm, selectedYear, pMap]);
 
   const roomOptions = useMemo(() => {
-    return groups
-      .filter((g) => {
-        if (selectedFaculty && g.facultyName !== selectedFaculty) return false;
-        if (selectedProgramName && g.programName !== selectedProgramName) return false;
-        if (selectedSubProgramName && g.subProgramName !== selectedSubProgramName) return false;
-        if (selectedTerm && String(g.term ?? "") !== selectedTerm) return false;
-        if (selectedYear && Number(g.year ?? 0) !== selectedYear) return false;
-        return true;
-      })
-      .sort((a, b) =>
-        `${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(`${b.class ?? ""}|${b.groupName ?? ""}`, "th", {
-          numeric: true,
-          sensitivity: "base",
-        })
-      )
-      .map((g) => ({
-        value: String(g.id),
-        label: `${g.class ?? ""} ${g.groupName ?? ""} (เทอม ${g.term ?? "-"} ปี ${g.year ?? "-"})`,
-      }));
-  }, [groups, selectedFaculty, selectedProgramName, selectedSubProgramName, selectedTerm, selectedYear]);
+    return tyGroups
+      .slice()
+      .sort((a, b) => `${a.class}|${a.groupName}`.localeCompare(`${b.class}|${b.groupName}`, "th", { numeric: true, sensitivity: "base" }))
+      .map((g) => ({ value: String(g.id), label: `${g.class} ${g.groupName} (เทอม ${g.term} ปี ${g.year})` }));
+  }, [tyGroups]);
 
-  const noRoomsForTermYear = useMemo(
-    () => !!selectedTerm && !!selectedYear && roomOptions.length === 0,
-    [selectedTerm, selectedYear, roomOptions]
-  );
+  const originalProgram = useMemo(() => {
+    const pid = Number((originalData as any)?.programId ?? 0) || Number(originalGroup?.programId ?? 0);
+    return pMap.get(pid) || null;
+  }, [originalData, originalGroup, pMap]);
+
+  const selectedGroupInfo = useMemo(() => {
+    if (!selectedNewGroupId) return null;
+    return tyGroups.find((g) => Number(g.id) === Number(selectedNewGroupId)) || null;
+  }, [selectedNewGroupId, tyGroups]);
+
+  const isOriginalTY =
+    String(selectedTerm || "") === String(originalGroup?.term || "") &&
+    Number(selectedYear || 0) === Number(originalGroup?.year || 0);
+
+  const displayFaculty = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
+    ? originalProgram?.facultyName || "—"
+    : selectedNewGroupId
+    ? selectedGroupInfo?.facultyName || "ไม่มีคณะ"
+    : "ไม่มีคณะ";
+
+  const displayProgram = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
+    ? originalProgram?.programName || "—"
+    : selectedNewGroupId
+    ? selectedGroupInfo?.programName || "ไม่มีสาขา"
+    : "ไม่มีสาขา";
+
+  const displaySubProgram = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
+    ? originalProgram?.subProgramName || "—"
+    : selectedNewGroupId
+    ? selectedGroupInfo?.subProgramName || "ไม่มีแขนง"
+    : "ไม่มีแขนง";
 
   const handleChange = (field: keyof GetStudentDetailResponse, value: string) => {
     if (!formData) return;
     setFormData({ ...formData, [field]: value });
   };
 
-  const onSelectFaculty = (val: string) => {
-    setSelectedFaculty(val);
-    setSelectedProgramName("");
-    setSelectedSubProgramName("");
-    setSelectedGroupId(null);
-  };
-  const onSelectProgramName = (val: string) => {
-    setSelectedProgramName(val);
-    setSelectedSubProgramName("");
-    setSelectedGroupId(null);
-  };
-  const onSelectSubProgramName = (val: string) => {
-    setSelectedSubProgramName(val);
-    setSelectedGroupId(null);
-  };
-
   const onSelectTerm = (val: string) => {
     setSelectedTerm(val);
     setSelectedYear(0);
-    setSelectedGroupId(null);
+    setSelectedNewGroupId(null);
+    setTyGroups([]);
   };
   const onSelectYear = (val: string) => {
     const y = Number(val) || 0;
     setSelectedYear(y);
-    setSelectedGroupId(null);
+    setSelectedNewGroupId(null);
   };
 
   const handleSave = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    if (!formData) return;
+    if (isSubmitting || !formData) return;
     if (!formData.prefix) {
       toast.error("กรุณาเลือกคำนำหน้า");
-      setIsSubmitting(false);
       return;
     }
     if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
       toast.error("กรุณากรอกชื่อและนามสกุล");
-      setIsSubmitting(false);
       return;
     }
     if (!formData.birthDate) {
       toast.error("กรุณาเลือกวันเกิด");
-      setIsSubmitting(false);
       return;
     }
     if (!/^\d+$/.test(String(formData.studentCode || ""))) {
       toast.error("รหัสนักเรียนต้องเป็นตัวเลขเท่านั้น");
-      setIsSubmitting(false);
       return;
     }
-    if (!selectedGroupId) {
+
+    const originalGroupId: number | null = Number(originalGroup?.id ?? 0) || null;
+    const finalGroupId: number | null = selectedNewGroupId ?? originalGroupId;
+    if (!finalGroupId) {
       toast.error("กรุณาเลือกห้อง");
-      setIsSubmitting(false);
       return;
     }
-    const chosenGroup = groups.find((g) => g.id === selectedGroupId);
-    if (!chosenGroup) {
-      toast.error("ไม่พบข้อมูลห้องที่เลือก");
-      setIsSubmitting(false);
-      return;
-    }
+
+    const chosenNewGroup = selectedNewGroupId ? tyGroups.find((g) => Number(g.id) === Number(selectedNewGroupId)) : null;
+
     const studentIdNum =
       Number((formData as any)?.studentId) ||
       Number((formData as any)?.id) ||
       Number((formData as any)?.userId);
     if (!studentIdNum) {
       toast.error("ไม่พบรหัสนักเรียน (studentId)");
-      setIsSubmitting(false);
       return;
     }
-    const enrollYearRaw = (formData as any)?.enrollYear ?? (formData as any)?.year ?? new Date().getFullYear();
-    const currentLevelRaw = (formData as any)?.currentLevel ?? (formData as any)?.level ?? chosenGroup?.level ?? 1;
+
+    const enrollYearRaw = (formData as any)?.enrollYear ?? new Date().getFullYear();
+    const currentLevelRaw = (formData as any)?.currentLevel ?? (chosenNewGroup?.level ?? originalGroup?.level ?? 1);
     const graduateYearRaw = (formData as any)?.graduateYear ?? 0;
     const enrollYear = Number(enrollYearRaw);
     const currentLevel = Number(currentLevelRaw);
     const graduateYear = Number(graduateYearRaw);
     if ([enrollYear, currentLevel, graduateYear].some((n) => Number.isNaN(n))) {
       toast.error("รูปแบบตัวเลขของปี/ชั้นปีไม่ถูกต้อง");
-      setIsSubmitting(false);
       return;
     }
-    const programId = Number((formData as any)?.programId) || Number(chosenGroup?.programId);
+
+    const programId =
+      (chosenNewGroup?.programId && Number(chosenNewGroup.programId)) ||
+      Number((formData as any)?.programId) ||
+      Number(originalGroup?.programId) ||
+      0;
     if (!programId) {
       toast.error("ไม่พบ Program ของห้องที่เลือก");
-      setIsSubmitting(false);
       return;
     }
+
     const isActive = typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
     const statusCandidate = String((formData as any)?.status ?? "");
-    const status = educationOptions.includes(statusCandidate)
-      ? statusCandidate
-      : "กำลังศึกษา";
+    const status = educationOptions.includes(statusCandidate) ? statusCandidate : "กำลังศึกษา";
+
     const birth = new Date(formData.birthDate as string);
     if (isNaN(birth.getTime())) {
       toast.error("รูปแบบวันเกิดไม่ถูกต้อง");
-      setIsSubmitting(false);
       return;
     }
+
     const payload: UpdateStudentUserRequest = {
       studentId: studentIdNum,
       prefix: formData.prefix ?? "",
       firstName: formData.firstName ?? "",
       lastName: formData.lastName ?? "",
       gender: formData.gender ?? "",
-      studentGroupId: Number(selectedGroupId),
+      studentGroupId: Number(finalGroupId),
       studentCode: formData.studentCode ?? "",
       birthDate: toISODate(formData.birthDate),
       enrollYear,
       currentLevel,
       graduateYear,
-      nationality:formData.nationality ?? "",
+      nationality: formData.nationality ?? "",
       citizenId: formData.citizenId ?? "",
       phoneNumber: formData.phoneNumber ?? "",
       programId,
       isActive,
       status,
     };
+
+    setIsSubmitting(true);
+    setSaving(true);
     try {
-      setSaving(true);
-      const res = await UpdateStudentUser(payload);
-      if (res) {
-        toast.success("บันทึกข้อมูลเรียบร้อย");
-        const found = groups.find((g) => g.id === selectedGroupId);
-        setFormData((prev) =>
-          prev
-            ? {
-              ...prev,
-              class: found?.class ?? prev.class,
-              groupName: found?.groupName ?? prev.groupName,
-              prefix: payload.prefix,
-              firstName: payload.firstName,
-              lastName: payload.lastName,
-              gender: payload.gender,
-              studentCode: payload.studentCode,
-              birthDate: toISODate(formData.birthDate),
-              enrollYear: payload.enrollYear,
-              currentLevel: payload.currentLevel,
-              graduateYear: payload.graduateYear,
-              programId: payload.programId,
-              isActive: payload.isActive,
-              status: payload.status,
-              studentGroupId: payload.studentGroupId,
-            }
-            : prev
-        );
-        setOriginalData((prev) =>
-          prev
-            ? {
-              ...prev,
-              class: found?.class ?? prev.class,
-              groupName: found?.groupName ?? prev.groupName,
-            }
-            : prev
-        );
-        setIsEditing(false);
-      } else {
+      const ok = await UpdateStudentUser(payload);
+      if (!ok) {
         toast.error("บันทึกข้อมูลไม่สำเร็จ");
+        return;
       }
+      toast.success("บันทึกข้อมูลเรียบร้อย");
+
+      const next = {
+        ...(formData as any),
+        studentGroupId: finalGroupId,
+        programId,
+        birthDate: toISODate(formData.birthDate),
+        enrollYear,
+        currentLevel,
+        graduateYear,
+        status,
+      } as GetStudentDetailResponse;
+
+      setFormData(next);
+      setOriginalData(next);
+      if (selectedNewGroupId) {
+        const pr = pMap.get(programId);
+        const g = tyGroups.find((x) => Number(x.id) === Number(selectedNewGroupId));
+        setOriginalGroup(
+          g
+            ? {
+                ...g,
+                facultyName: pr?.facultyName ?? g.facultyName,
+                programName: pr?.programName ?? g.programName,
+                subProgramName: pr?.subProgramName ?? g.subProgramName,
+              }
+            : originalGroup
+        );
+      }
+      setIsEditing(false);
     } catch (err: any) {
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
         const firstKey = Object.keys(errors)[0];
         const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
-        toast.error(firstMsg);
+        toast.error(firstMsg || "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
       } else {
         const msg =
           err?.response?.data?.responseMessage ||
@@ -389,26 +337,22 @@ export default function StudentDetailForm({ studentId }: Props) {
 
   const handleCancel = () => {
     setFormData(originalData);
-    if (originalData) {
-      const ogId = (originalData as any)?.studentGroupId ?? null;
-      setSelectedGroupId(ogId);
-    } else setSelectedGroupId(null);
+    if (originalGroup) {
+      setSelectedTerm(String(originalGroup.term ?? ""));
+      setSelectedYear(Number(originalGroup.year ?? 0));
+      setSelectedNewGroupId(Number(originalGroup.id));
+    } else {
+      setSelectedTerm("");
+      setSelectedYear(0);
+      setSelectedNewGroupId(null);
+    }
+    setTyGroups([]);
     setIsEditing(false);
   };
 
-  if (loadingSources) {
-    return (
-      <div className="p-10">
-        <div className="animate-pulse h-8 w-64 bg-gray-200 rounded mb-6" />
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="animate-pulse h-10 bg-gray-200 rounded mb-2" />
-        ))}
-      </div>
-    );
-  }
   if (!formData) return <div className="p-10">ไม่พบข้อมูล</div>;
-
   const userId = (formData as any)?.id ?? (formData as any)?.userId ?? "";
+  const noRoomsForTermYear = !!selectedTerm && !!selectedYear && !loadingTY && roomOptions.length === 0;
 
   return (
     <div className="w-full p-10">
@@ -422,53 +366,30 @@ export default function StudentDetailForm({ studentId }: Props) {
         <div className="flex items-center gap-2">
           {isEditing ? (
             <>
-              <button
-                className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded flex items-center gap-2 disabled:opacity-60"
-                onClick={() => setOpenChangePassword(true)}
-                disabled={!userId || saving}
-              >
+              <button className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded flex items-center gap-2 disabled:opacity-60" onClick={() => setOpenChangePassword(true)} disabled={!userId || saving}>
                 <KeyRound className="w-4 h-4" />
                 เปลี่ยนรหัสผ่าน
               </button>
-              <button
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded flex items-center gap-2 disabled:opacity-60"
-                onClick={handleSave}
-                disabled={saving || isSubmitting}
-              >
+              <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded flex items-center gap-2 disabled:opacity-60" onClick={handleSave} disabled={saving || isSubmitting}>
                 <Save className="w-4 h-4" />
                 {saving ? "กำลังบันทึก..." : "บันทึก"}
               </button>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded flex items-center gap-2"
-                onClick={handleCancel}
-                disabled={saving}
-              >
+              <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded flex items-center gap-2" onClick={handleCancel} disabled={saving}>
                 <CircleX className="w-4 h-4" />
                 ยกเลิก
               </button>
-              <button
-                className="w-[140px] bg-red-700 hover:bg-red-800 rounded-md px-4 py-1 text-white flex items-center justify-center gap-2 disabled:opacity-60"
-                onClick={() => setOpenDeletePopup(true)}
-                disabled={!userId || saving}
-              >
+              <button className="w-[140px] bg-red-700 hover:bg-red-800 rounded-md px-4 py-1 text-white flex items-center justify-center gap-2 disabled:opacity-60" onClick={() => setOpenDeletePopup(true)} disabled={!userId || saving}>
                 <Trash2 className="w-5 h-5" />
                 ลบผู้ใช้
               </button>
             </>
           ) : (
             <>
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded flex items-center gap-2"
-                onClick={() => setIsEditing(true)}
-              >
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded flex items-center gap-2" onClick={() => setIsEditing(true)}>
                 <Pencil className="w-4 h-4" />
                 แก้ไข
               </button>
-              <button
-                className="w-[140px] bg-red-700 hover:bg-red-800 rounded-md px-4 py-1 text-white flex items-center justify-center gap-2 disabled:opacity-60"
-                onClick={() => setOpenDeletePopup(true)}
-                disabled={!userId}
-              >
+              <button className="w-[140px] bg-red-700 hover:bg-red-800 rounded-md px-4 py-1 text-white flex items-center justify-center gap-2 disabled:opacity-60" onClick={() => setOpenDeletePopup(true)} disabled={!userId}>
                 <Trash2 className="w-5 h-5" />
                 ลบผู้ใช้
               </button>
@@ -478,68 +399,20 @@ export default function StudentDetailForm({ studentId }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-4 bg-white shadow-md rounded-lg p-6">
-        <ReadWrite label="ชื่อผู้ใช้ของนักเรียน" value={formData.username} editable={false} />
-        <SelectRW
-          label="คำนำหน้า"
-          value={formData.prefix ?? ""}
-          editable={isEditing}
-          options={["นาย", "นาง", "นางสาว"]}
-          onChange={(v) => handleChange("prefix", v)}
-        />
-        <ReadWrite label="ชื่อจริง" value={formData.firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
-        <ReadWrite label="นามสกุล" value={formData.lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
+        <ReadOnly label="ชื่อผู้ใช้ของนักเรียน" value={(formData as any).username} />
+        <SelectRW label="คำนำหน้า" value={formData.prefix ?? ""} editable={isEditing} options={["นาย", "นาง", "นางสาว"]} onChange={(v) => handleChange("prefix", v)} />
+        <InputRW label="ชื่อจริง" value={formData.firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
+        <InputRW label="นามสกุล" value={formData.lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
         <SelectRW label="เพศ" value={formData.gender ?? ""} editable={isEditing} options={["ชาย", "หญิง"]} onChange={(v) => handleChange("gender", v)} />
         <DateRW label="วันเกิด" value={formData.birthDate ?? ""} editable={isEditing} onChange={(v) => handleChange("birthDate", toISODate(v))} />
-        <ReadWrite
-          label="รหัสนักเรียน"
-          value={formData.studentCode}
-          editable={isEditing}
-          onChange={(v) => (/^\d*$/.test(v) ? handleChange("studentCode", v) : null)}
-          placeholder="ตัวเลขเท่านั้น"
-        />
-        <SelectRW
-          label="คณะ"
-          value={selectedFaculty}
-          editable={isEditing}
-          options={[
-            { value: "", label: "— เลือกคณะ —" },
-            ...faculties.map((f) => ({ value: f, label: f })),
-          ]}
-          optionMode="object"
-          onChange={onSelectFaculty}
-          disabled={!!sourcesError || faculties.length === 0}
-        />
+        <InputRW label="รหัสนักเรียน" value={formData.studentCode} editable={isEditing} onChange={(v) => (/^\d*$/.test(v) ? handleChange("studentCode", v) : null)} placeholder="ตัวเลขเท่านั้น" />
 
-        <SelectRW
-          label="สาขา"
-          value={selectedProgramName}
-          editable={isEditing}
-          options={[
-            { value: "", label: "— เลือกสาขา —" },
-            ...programNames.map((p) => ({ value: p, label: p })),
-          ]}
-          optionMode="object"
-          onChange={onSelectProgramName}
-          disabled={!selectedFaculty}
-        />
-
-        <SelectRW
-          label="แขนง/สาขาย่อย"
-          value={selectedSubProgramName}
-          editable={isEditing}
-          options={[
-            { value: "", label: "— เลือกแขนง —" },
-            ...subProgramNames.map((s) => ({ value: s, label: s })),
-          ]}
-          optionMode="object"
-          onChange={onSelectSubProgramName}
-          disabled={!selectedProgramName}
-        />
         <SelectRW
           label="เทอม"
           value={selectedTerm}
           editable={isEditing}
           options={[
+            { value: "", label: "— เลือกเทอม —" },
             { value: "1", label: "1" },
             { value: "2", label: "2" },
             { value: "s1", label: "ฤดูร้อน1" },
@@ -547,14 +420,13 @@ export default function StudentDetailForm({ studentId }: Props) {
           ]}
           optionMode="object"
           onChange={onSelectTerm}
-          disabled={!selectedSubProgramName}
         />
         <SelectRW
           label="ปีการศึกษา (พ.ศ.)"
           value={selectedYear ? String(selectedYear) : ""}
           editable={isEditing}
           options={[
-            { value: "", label: "— กรุณาเลือก —" },
+            { value: "", label: "— เลือกปีการศึกษา —" },
             ...Array.from({ length: 6 }, (_, i) => {
               const y = String(currentBEYear + 1 - i);
               return { value: y, label: y };
@@ -562,57 +434,36 @@ export default function StudentDetailForm({ studentId }: Props) {
           ]}
           optionMode="object"
           onChange={onSelectYear}
-          disabled={!selectedSubProgramName || !selectedTerm}
+          disabled={!selectedTerm}
         />
-        <div>
-          <SelectRW
-            label="ห้อง"
-            value={String(selectedGroupId ?? "")}
-            editable={isEditing}
-            onChange={(v) => setSelectedGroupId(v ? Number(v) : null)}
-            options={[
-              { value: "", label: "— เลือกห้อง —" },
-              ...roomOptions,
-            ]}
-            optionMode="object"
-            disabled={
-              !selectedSubProgramName ||
-              !selectedTerm ||
-              !selectedYear ||
-              noRoomsForTermYear
-            }
-          />
-          {noRoomsForTermYear && (
-            <p className="text-xs text-red-600 mt-1">
-              ไม่มีห้องในเทอม/ปีการศึกษาดังกล่าว
-            </p>
-          )}
-        </div>
+        <SelectRW
+          label={`ห้อง${loadingTY ? " (กำลังโหลด...)" : ""}`}
+          value={String(selectedNewGroupId ?? "")}
+          editable={isEditing}
+          onChange={(v) => setSelectedNewGroupId(v ? Number(v) : null)}
+          options={[{ value: "", label: "— เลือกห้อง —" }, ...roomOptions]}
+          optionMode="object"
+          disabled={!selectedTerm || !selectedYear || loadingTY || roomOptions.length === 0}
+        />
+
+        <ReadOnly label="คณะ" value={displayFaculty} />
+        <ReadOnly label="สาขา" value={displayProgram} />
+        <ReadOnly label="แขนง/สาขาย่อย" value={displaySubProgram} />
+
+        {noRoomsForTermYear && <div className="col-span-2 text-sm text-red-600">ไม่มีห้องในเทอม/ปีการศึกษาดังกล่าว</div>}
+
         <SelectRW
           label="สถานะนักเรียน"
           value={(formData as any)?.status ?? ""}
           editable={isEditing}
-          options={[
-            { value: "", label: "— เลือกสถานะนักเรียน —" },
-            ...educationOptions.map((s) => ({ value: s, label: s })),
-          ]}
+          options={[{ value: "", label: "— เลือกสถานะนักเรียน —" }, ...educationOptions.map((s) => ({ value: s, label: s }))]}
           optionMode="object"
           onChange={(v) => handleChange("status" as keyof GetStudentDetailResponse, v)}
         />
 
-        <ReadWrite
-          label="รหัสบัตรประชาชน"
-          value={formData.citizenId}
-          editable={isEditing}
-          onChange={(v) => (/^\d*$/.test(v) && v.length <= 13 ? handleChange("citizenId", v) : null)}
-        />
-        <ReadWrite
-          label="เบอร์โทร"
-          value={formData.phoneNumber}
-          editable={isEditing}
-          onChange={(v) => (/^\d*$/.test(v) && v.length <= 10 ? handleChange("phoneNumber", v) : null)}
-        />
-        <ReadWrite label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
+        <InputRW label="รหัสบัตรประชาชน" value={formData.citizenId} editable={isEditing} onChange={(v) => (/^\d*$/.test(v) && v.length <= 13 ? handleChange("citizenId", v) : null)} />
+        <InputRW label="เบอร์โทร" value={formData.phoneNumber} editable={isEditing} onChange={(v) => (/^\d*$/.test(v) && v.length <= 10 ? handleChange("phoneNumber", v) : null)} />
+        <InputRW label="สัญชาติ" value={formData.nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
       </div>
 
       {openChangePassword && !!userId && (
@@ -629,7 +480,16 @@ export default function StudentDetailForm({ studentId }: Props) {
   );
 }
 
-function ReadWrite({
+function ReadOnly({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div>
+      <label className="text-sm text-gray-500">{label}</label>
+      <p className="w-full border px-3 py-2 rounded">{value && String(value).trim() !== "" ? String(value) : "—"}</p>
+    </div>
+  );
+}
+
+function InputRW({
   label,
   value,
   editable,
@@ -642,14 +502,7 @@ function ReadWrite({
   onChange?: (v: string) => void;
   placeholder?: string;
 }) {
-  if (!editable) {
-    return (
-      <div>
-        <label className="text-sm text-gray-500">{label}</label>
-        <p className="w-full border px-3 py-2 rounded">{value && String(value).trim() !== "" ? String(value) : "—"}</p>
-      </div>
-    );
-  }
+  if (!editable) return <ReadOnly label={label} value={value} />;
   return (
     <div>
       <label className="text-sm text-gray-500">{label}</label>
@@ -728,15 +581,15 @@ function SelectRW({
       >
         {optionMode === "object"
           ? (options as { value: string; label: string }[]).map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))
           : (options as string[]).map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
       </select>
     </div>
   );
