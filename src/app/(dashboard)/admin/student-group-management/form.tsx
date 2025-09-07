@@ -240,12 +240,13 @@ export default function Form() {
           </div>
 
           <div className="shadow-lg w-full text-sm">
-            <div className="grid grid-cols-[8%_16%_22%_10%_12%_12%_10%_10%] text-black bg-gray-50 border-b text-lg">
+            <div className="grid grid-cols-[8%_10%_10%_18%_10%_12%_12%_10%_10%] text-black bg-gray-50 border-b text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
               <div className="flex items-center justify-center py-2">
                 รหัสห้อง
               </div>
               <div className="flex items-center justify-center py-2">ห้อง</div>
+              <div className="flex items-center justify-center py-2">รอบ</div>
               <div className="flex items-center justify-center py-2">
                 ภาคเรียน
               </div>
@@ -268,7 +269,7 @@ export default function Form() {
               return (
                 <div
                   key={item.id}
-                  className="cursor-default grid grid-cols-[8%_16%_22%_10%_12%_12%_10%_10%] bg-white hover:bg-blue-100 text-gray-800 text-base"
+                  className="cursor-default grid grid-cols-[8%_10%_10%_18%_10%_12%_12%_10%_10%] bg-white hover:bg-blue-100 text-gray-800 text-base"
                 >
                   <div className="flex items-center justify-center py-2">
                     {(currentPage - 1) * itemsPerPage + index + 1}.
@@ -282,6 +283,10 @@ export default function Form() {
                     {(item.class ?? "") +
                       (item.class ? " " : "") +
                       (item.groupName ?? "")}
+                  </div>
+                  
+                  <div className="flex items-center justify-center py-2">
+                    {item.section || "-"}
                   </div>
 
                   <div className="flex items-center justify-center py-2">

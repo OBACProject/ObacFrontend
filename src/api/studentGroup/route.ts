@@ -6,6 +6,7 @@ import {
   StudentGroupScheduleStatus,
   UpdateStudentGroupActiveRequest,
   UpdateStudentGroupBody,
+  UpdateStudentGroupRequest,
 } from "@/dto/studentGroupItem";
 import apiClient from "@/lib/apiClient";
 import { sortStudentGroupItems } from "@/lib/utils";
@@ -185,5 +186,29 @@ export const UpdateStudentStatusByStudentGroupId = async (
       err?.response?.data || err
     );
     return { ok: false, affected: 0 };
+  }
+};
+
+export const UpdateStudentGroupDetail = async (
+  payload: UpdateStudentGroupRequest
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put(
+      "StudentGroup/UpdateStudentGroupDetail",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "text/plain", 
+        },
+      }
+    );
+    return res.status >= 200 && res.status < 300;
+  } catch (err: any) {
+    console.error(
+      "UpdateStudentGroupDetail error:",
+      err?.response?.data || err
+    );
+    return false;
   }
 };
