@@ -24,6 +24,7 @@ interface dataTable {
   class: string;
   space: string;
   isComplete: boolean;
+  status: string;
   isPublish: boolean;
   groupId: number;
 }
@@ -46,15 +47,15 @@ export default function StudentClassroomContent() {
   });
 
   // Mutation for updating publish status
-  const updatePublishStatusMutation = useUpdatePublishStatusByStudentGroupIdMutation({
-    onSuccess: () => {
-      console.log("Publish status updated successfully");
-    },
-    onError: (error) => {
-      console.error("Failed to update publish status:", error);
-    }
-  });
-
+  const updatePublishStatusMutation =
+    useUpdatePublishStatusByStudentGroupIdMutation({
+      onSuccess: () => {
+        console.log("Publish status updated successfully");
+      },
+      onError: (error) => {
+        console.error("Failed to update publish status:", error);
+      },
+    });
 
   const transformedData: dataTable[] = useMemo(() => {
     if (!data || !Array.isArray(data)) return [];
@@ -65,9 +66,10 @@ export default function StudentClassroomContent() {
         index: idx + 1,
         class: `${item.class}.${item.groupName}`,
         space: "",
+        status: item.completeStatus,
         isComplete: item.isComplete,
         isPublish: item.isPublish,
-        groupId: item.id, 
+        groupId: item.id,
       }));
   }, [data]);
 
@@ -89,27 +91,35 @@ export default function StudentClassroomContent() {
       className: "w-[30%] flex justify-center items-center pl-32",
     },
     {
-      label : " ",
-      key : "space",
+      label: " ",
+      key: "space",
       className: "w-[20%] flex justify-center",
     },
     {
       label: "สถานะการตรวจสอบ",
       key: "isComplete",
       className: "w-[20%] flex justify-center",
-      render: (row: dataTable) => (
-        <div className="flex justify-center">
-          {row.isComplete ? (
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-              ตรวจสอบเสร็จสิ้น
-            </span>
-          ) : (
-            <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
-              ยังไม่ตรวจสอบ
-            </span>
-          )}
-        </div>
-      ),
+      render: (row: dataTable) => {
+          const status = (row.status || "").trim();
+          let bgClass = "bg-yellow-100";
+          let textClass = "text-yellow-800";
+
+          if (status === "ยังไม่ตรวจสอบ") {
+            bgClass = "bg-red-100";
+            textClass = "text-red-800";
+          } else if (status === "ตรวจสอบแล้ว" || status === "ตรวจสอบเสร็จสิ้น") {
+            bgClass = "bg-green-100";
+            textClass = "text-green-800";
+          }
+
+          return (
+            <div className="flex justify-center">
+              <span className={`${bgClass} ${textClass} px-3 py-1 rounded-full text-sm font-medium`}>
+                {row.status}
+              </span>
+            </div>
+          );
+        },
     },
     {
       label: "เผยแพร่เกรด",
@@ -130,23 +140,30 @@ export default function StudentClassroomContent() {
                   // Optimistic update - update UI immediately
                   setTableData((prev) =>
                     prev.map((item, i) =>
-                      i === row.index - 1 ? { ...item, isPublish: newValue } : item
+                      i === row.index - 1
+                        ? { ...item, isPublish: newValue }
+                        : item
                     )
                   );
-                  
+
                   // Call API to update publish status
-                  updatePublishStatusMutation.mutate({
-                    studentGroupId: row.groupId,
-                    isPublished: newValue 
-                  }, {
-                    onError: () => {
-                      setTableData((prev) =>
-                        prev.map((item, i) =>
-                          i === row.index - 1 ? { ...item, isPublish: !newValue } : item
-                        )
-                      );
+                  updatePublishStatusMutation.mutate(
+                    {
+                      studentGroupId: row.groupId,
+                      isPublished: newValue,
+                    },
+                    {
+                      onError: () => {
+                        setTableData((prev) =>
+                          prev.map((item, i) =>
+                            i === row.index - 1
+                              ? { ...item, isPublish: !newValue }
+                              : item
+                          )
+                        );
+                      },
                     }
-                  });
+                  );
                 }
               }}
             />
@@ -164,11 +181,8 @@ export default function StudentClassroomContent() {
     }
   }, [showAdvanced]);
 
-  const allStatuses = useMemo(
-    () => ["ตรวจสอบเสร็จสิ้น", "ยังไม่ตรวจสอบ"],
-    []
-  );
-  
+  const allStatuses = useMemo(() => ["ตรวจสอบเสร็จสิ้น", "ยังไม่ตรวจสอบ"], []);
+
   const allPublishedStatuses = useMemo(
     () => ["เผยแพร่แล้ว", "ยังไม่เผยแพร่"],
     []
@@ -180,22 +194,34 @@ export default function StudentClassroomContent() {
   );
 
   const filteredData = useMemo(() => {
-    return tableData.filter((item) => {
-      const matchStatus = filterStatus === "" || 
-        (filterStatus === "ตรวจสอบเสร็จสิ้น" && item.isComplete) ||
-        (filterStatus === "ยังไม่ตรวจสอบ" && !item.isComplete);
-      
-      const matchPublished = filterPublished === "" ||
-        (filterPublished === "เผยแพร่แล้ว" && item.isPublish) ||
-        (filterPublished === "ยังไม่เผยแพร่" && !item.isPublish);
-      
-      const matchClass = filterClass === "" || item.class === filterClass;
-      
-      const matchSearch = item.class.toLowerCase().includes(deferredSearchTerm.toLowerCase());
+    return tableData
+      .filter((item) => {
+        const matchStatus =
+          filterStatus === "" ||
+          (filterStatus === "ตรวจสอบเสร็จสิ้น" && item.isComplete) ||
+          (filterStatus === "ยังไม่ตรวจสอบ" && !item.isComplete);
 
-      return matchStatus && matchPublished && matchClass && matchSearch;
-    }).sort((a,b) => a.groupId - b.groupId);
-  }, [tableData, deferredSearchTerm, filterStatus, filterPublished, filterClass]);
+        const matchPublished =
+          filterPublished === "" ||
+          (filterPublished === "เผยแพร่แล้ว" && item.isPublish) ||
+          (filterPublished === "ยังไม่เผยแพร่" && !item.isPublish);
+
+        const matchClass = filterClass === "" || item.class === filterClass;
+
+        const matchSearch = item.class
+          .toLowerCase()
+          .includes(deferredSearchTerm.toLowerCase());
+
+        return matchStatus && matchPublished && matchClass && matchSearch;
+      })
+      .sort((a, b) => a.groupId - b.groupId);
+  }, [
+    tableData,
+    deferredSearchTerm,
+    filterStatus,
+    filterPublished,
+    filterClass,
+  ]);
 
   if (isLoading || isPending) {
     return (
@@ -280,7 +306,10 @@ export default function StudentClassroomContent() {
                 defaultValue={filterStatus}
               />
               <Combobox
-                options={allPublishedStatuses.map((v) => ({ value: v, label: v }))}
+                options={allPublishedStatuses.map((v) => ({
+                  value: v,
+                  label: v,
+                }))}
                 buttonLabel="สถานะการเผยแพร่"
                 onSelect={setFilterPublished}
                 defaultValue={filterPublished}
@@ -300,7 +329,7 @@ export default function StudentClassroomContent() {
 
       {/* Data Source Indicator */}
       <div className="flex justify-center mb-4">
-        {data?.length == 0 &&  (
+        {data?.length == 0 && (
           <div className="text-sm text-orange-600 bg-orange-100 px-4 py-2 rounded-md">
             ไม่พบข้อมูลห้องเรียน
           </div>

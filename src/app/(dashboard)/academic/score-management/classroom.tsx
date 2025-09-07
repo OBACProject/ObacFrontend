@@ -1,6 +1,7 @@
 "use client";
 
 import { Combobox } from "@/components/common/Combobox/combobox";
+import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Loader2, Search, Table } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -454,9 +455,6 @@ const transformedDataExcel = (
         <div className="flex flex-wrap gap-4">
           {/* Search Input */}
           <div className="flex-1 min-w-[250px] w-60">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              ค้นหา
-            </label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
@@ -469,33 +467,13 @@ const transformedDataExcel = (
             </div>
           </div>
 
-          {/* Term Filter */}
           <div className="min-w-[150px]">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              ภาคเรียน
-            </label>
-            <Combobox
-              options={term.map((item) => ({
-                value: item,
-                label: `ภาคเรียนที่ ${item}`,
-              }))}
-              buttonLabel={`ภาคเรียนที่ ${selectedTerm}`}
-              onSelect={setSelectedTerm}
-            />
-          </div>
-
-          {/* Year Filter */}
-          <div className="min-w-[150px]">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              ปีการศึกษา
-            </label>
-            <Combobox
-              options={yearsList.map((item) => ({
-                value: item,
-                label: item,
-              }))}
-              buttonLabel={selectedYear}
-              onSelect={setSelectedYear}
+            <SelectTermAndYear
+              term={selectedTerm}
+              year={selectedYear ? Number(selectedYear) : 0}
+              currentYear={currentYear}
+              onChangeTerm={(t) => setSelectedTerm(t)}
+              onChangeYear={(y) => setSelectedYear(y === 0 ? "" : String(y))}
             />
           </div>
 

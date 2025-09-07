@@ -6,5 +6,4 @@ export const STUDENT_GROUP_ENDPOINTS = {
     GET_STUDENT_GROUP_SCHEDULE_STATUS : '/StudentGroup/GetStudentGroupScheduleStatus',
     UPDATE_STUDENT_GROUP_BY_STUDENT_GROUP_ID: '/StudentGroup/UpdateStudentGroupByStudentGroupId',
     PUT_IS_PUBLISHED_BY_STUDENT_GROUP_ID: '/StudentGroup/UpdatePublishStatus',
-
 }

@@ -10,6 +10,7 @@ export interface GetAllStudentGroupByTermYearResponse {
     facultyName: string | null;
     isPublish: boolean;
     isComplete: boolean;
+    completeStatus: string;
     isActive: boolean;
     year: number;
     term: string;
