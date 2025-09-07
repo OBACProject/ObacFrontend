@@ -3,17 +3,13 @@ import React from "react";
 import "@app/styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { StudentSidebar } from "@/components/common/SideBar/StudentSidebar";
-import {
-  ProfileData,
-  StudentSidebarData,
-} from "@/resource/students/studentSidebarData";
+import { ProfileData } from "@/resource/students/studentSidebarData";
 import { AdminSideBar } from "../../../components/common/SideBar/AdminSideBar";
 import { AdminSidebarData } from "@/resource/admin/adminSidebarData";
 import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
-  title: "Obac.ac.th - Admin",
+  title: "ระบบผู้ดูแล",
   description: "Admin OBAC",
 };
 
@@ -35,7 +31,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className="pt-20 lg:pl-10">{children}</div>
-        <HomeFooter/>
+        <HomeFooter />
       </body>
     </html>
   );
