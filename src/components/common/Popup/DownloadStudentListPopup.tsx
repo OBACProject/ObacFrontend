@@ -64,12 +64,19 @@ export default function DownloadStudentListPopup({
         year
       );
 
-      const withStudentsSorted = studentNameList.map((g) => ({
+      const normalize = (s?: string) => (s ?? "").trim().toLowerCase();
+      const EXCLUDED_STATUSES = new Set(["ลาออก", "คัดชื่อออก"].map(normalize));
+      const keepActive = (s: Students) =>
+        !EXCLUDED_STATUSES.has(normalize(s.status));
+
+      const withStudentsFilteredSorted = studentNameList.map((g) => ({
         ...g,
-        students: [...(g.students ?? [])].sort(compareStudentCode),
+        students: [...(g.students ?? [])]
+          .filter(keepActive)
+          .sort(compareStudentCode),
       }));
 
-      const sortedByRoomAsc = [...withStudentsSorted].sort((a, b) => {
+      const sortedByRoomAsc = [...withStudentsFilteredSorted].sort((a, b) => {
         const A = parseGroupName(a.groupName);
         const B = parseGroupName(b.groupName);
         return A.room - B.room;

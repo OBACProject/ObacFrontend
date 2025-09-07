@@ -110,6 +110,7 @@ export interface Students {
   firstName: string;
   lastName: string;
   studentCode: string;
+  status:string
 }
 
 export interface StudentGroupResponse {
