@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { GraduationCap, LibraryBig, UserPen } from "lucide-react";
 import ProfileCard from "@/components/Academic/ProfileCard";
 import StatCard from "@/components/common/Card/card-stat";
 import { GetUserCount } from "@/api/user/userAPI";
 import { GetUserCountRespond } from "@/dto/userDto";
-
 
 export default function AdminDashboard() {
   const [counts, setCounts] = useState<GetUserCountRespond | null>(null);
@@ -26,9 +24,8 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 px-6 lg:px-10 py-10">
-        
+    <div className="bg-gray-100 h-full  ">
+      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 px-6 lg:px-10 lg:py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
           <StatCard
             title="จำนวนนักเรียนในระบบ"
@@ -56,9 +53,8 @@ export default function AdminDashboard() {
           />
         </div>
 
-   
         <div className="w-full lg:w-[360px] shrink-0">
-          <ProfileCard username="ภัทรจาริน นภากาญจน์" rolename="ฝ่ายทะเบียน" />
+          <ProfileCard username="" rolename="ฝ่ายทะเบียน" />
         </div>
       </div>
     </div>

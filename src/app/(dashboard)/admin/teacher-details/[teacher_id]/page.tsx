@@ -8,7 +8,7 @@ export default function Page({ params }: { params: { teacher_id?: string } }) {
   }
 
   return (
-    <div className="pl-20">
+    <div className="pl-20 h-full">
       <Form teacherId={Number(teacher_id)} />
     </div>
   );

@@ -5,13 +5,17 @@ export interface StudentGroupItem {
   groupCode: string;
   level: number;
   programId: number;
-  facultyName: string;
   programName: string;
+  facultyName: string;
+  subProgramName: string;
   isPublish: boolean;
   isComplete: boolean;
   isActive: boolean;
   year: number;
   term: string;
+  total: number;
+  completeStatus: string;
+  section:string;
 }
 
 export interface ScheduleItemStudentGroup {
@@ -79,10 +83,10 @@ export interface GetAllStudentGroupRequest {
   isPublish?: boolean;
   isComplete?: boolean;
   isActive?: boolean;
-  totalStudents ?: number;
+  totalStudents?: number;
 }
 
-export interface CreateStudentGroupRequest{
+export interface CreateStudentGroupRequest {
   groupName: string;
   class: string;
   groupCode: string;
@@ -93,7 +97,7 @@ export interface CreateStudentGroupRequest{
   isActive: boolean;
   year: number;
   term: string;
-  section:string;
+  section: string;
 }
 
 export interface UpdateStudentGroupActiveRequest {
@@ -117,20 +121,19 @@ export interface StudentGroupResponse {
   students: Students[];
 }
 
-
 export interface UpdateStudentGroupBody {
-  studentId: number[]; 
+  studentId: number[];
   studentGroup: {
-    groupName: string; 
-    class: string;      
-    groupCode: string;   
-    level: number;    
-    programId: number;  
+    groupName: string;
+    class: string;
+    groupCode: string;
+    level: number;
+    programId: number;
     isPublish: boolean;
     isComplete: boolean;
     isActive: boolean;
-    year: number;   
-    term: string;  
+    year: number;
+    term: string;
   };
-  action:string;
+  action: string;
 }

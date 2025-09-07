@@ -1,144 +1,98 @@
 "use client";
 
-import {
-  UserRoundCheck,
-  PlusCircle,
-  DoorOpen,
-  Trash2,
-  Search,
-  University,
-} from "lucide-react";
+import { UserRoundCheck, PlusCircle, Trash2, Settings } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
-  GetAllStudentGroup,
   UpdateStudentGroupActive,
   DeleteStudentGroupById,
+  GetAllStudentGroupByTermYear,
 } from "@/api/studentGroup/route";
 import IsActiveToggleProps from "@/components/common/Toggle/IsActiveToggle";
 import { toast } from "react-toastify";
-import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
 import AddStudentGroupPopup from "@/components/common/Popup/AddStudentGroupPopup";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
+import { EditGroupPopup } from "@/components/common/Popup/EditGroupPopup";
 
 export default function Form() {
-  const [groups, setGroups] = useState<GetAllStudentGroupRequest[]>([]);
+  const [groups, setGroups] = useState<StudentGroupItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
   const [openCreatePopup, setOpenCreatePopup] = useState(false);
+  const [openEditGroupPopup, setOpenEditGrupPopup] = useState(false);
   const [openDeleteId, setOpenDeleteId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const router = useRouter();
-
   const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const { defaultTerm, currentYear } = useMemo(
-    () => getCurrentThaiTermYear(),
-    []
-  );
-  const [termInput, setTermInput] = useState<string>(defaultTerm);
-  const [yearInput, setYearInput] = useState<number>(currentYear);
-  const [filterTerm, setFilterTerm] = useState<string>(defaultTerm);
-  const [filterYear, setFilterYear] = useState<number>(currentYear);
-
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
+  const [term, setTerm] = useState<string>(defaultTerm);
+  const [year, setYear] = useState<number>(currentYear);
+  const [groupEdit, setGroupEdit] = useState<StudentGroupItem | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
+  const filtered = useMemo(() => {
+    const kw = searchInput.trim().toLowerCase();
+    if (!kw) return groups;
+
+    const hit = (v: unknown) => (v ?? "").toString().toLowerCase().includes(kw);
+
+    return groups.filter((g) => {
+      const room = `${g.class ?? ""} ${g.groupName ?? ""}`.trim();
+      return hit(g.groupCode) || hit(room) || hit(g.term) || hit(g.year);
+    });
+  }, [groups, searchInput]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchInput, term, year]);
+  const totalCount = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
 
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-  const sortByGroupCode = (arr: GetAllStudentGroupRequest[]) =>
-    [...arr].sort((a, b) =>
-      (a.groupCode ?? "").localeCompare(b.groupCode ?? "", "th", {
-        numeric: true,
-        sensitivity: "base",
-      })
-    );
+  useEffect(() => {
+    GetAllStudentGroupByTermYear(term, year).then((d) => {
+      if (d) {
+        setGroups(d);
+      }
+    });
+  }, []);
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const endIdx = Math.min(startIdx + itemsPerPage, totalCount);
+  const currentFrom = totalCount === 0 ? 0 : startIdx + 1;
+  const currentTo = endIdx;
+
+  const paginated = useMemo(
+    () => filtered.slice(startIdx, endIdx),
+    [filtered, startIdx, endIdx]
+  );
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const d = await GetAllStudentGroupByTermYear(term, year);
+        if (d) setGroups(d);
+      } catch (e) {
+        toast.error("โหลดข้อมูลไม่สำเร็จ");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [term, year]);
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages]);
 
   const fetchGroups = async () => {
     try {
       setLoading(true);
-      const d = await GetAllStudentGroup();
-      if (Array.isArray(d)) setGroups(sortByGroupCode(d));
-      else setGroups([]);
+      const d = await GetAllStudentGroupByTermYear(term, year);
+      if (d) setGroups(d);
+    } catch (err) {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  const termOptions = useMemo(() => {
-    const s = new Set(
-      groups.map((g) => String(g.term ?? "")).filter((v) => v && v !== "-")
-    );
-    return Array.from(s).sort((a, b) =>
-      a.localeCompare(b, "th", { numeric: true, sensitivity: "base" })
-    );
-  }, [groups]);
-
-  const yearOptions = useMemo(() => {
-    const s = new Set(
-      groups.map((g) => String(g.year ?? "")).filter((v) => v && v !== "-")
-    );
-    return Array.from(s).sort((a, b) => Number(b) - Number(a));
-  }, [groups]);
-
-  const filteredGroups = useMemo(() => {
-    const q = searchTerm.trim().toLowerCase();
-
-    const bySearch = (arr: GetAllStudentGroupRequest[]) => {
-      if (!q) return arr;
-      return arr.filter((g) => {
-        const code = (g.groupCode ?? "").toLowerCase();
-        const name = (g.groupName ?? "").toLowerCase();
-        const cls = (g.class ?? "").toLowerCase();
-        const term = String(g.term ?? "").toLowerCase();
-        const year = String(g.year ?? "").toLowerCase();
-        return (
-          code.includes(q) ||
-          name.includes(q) ||
-          cls.includes(q) ||
-          term.includes(q) ||
-          year.includes(q)
-        );
-      });
-    };
-
-    const byTermYear = groups.filter((g) => {
-      const tOk = filterTerm ? String(g.term ?? "") === filterTerm : true;
-      const yOk = filterYear
-        ? String(g.year ?? "") === String(filterYear)
-        : true;
-      return tOk && yOk;
-    });
-
-    return sortByGroupCode(bySearch(byTermYear));
-  }, [groups, searchTerm, filterTerm, filterYear]);
-
-  const totalCount = filteredGroups.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
-  const currentFrom =
-    totalCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
-  const currentTo = Math.min(currentPage * itemsPerPage, totalCount);
-
-  useEffect(() => {
-    if (currentPage > totalPages) setCurrentPage(totalPages);
-  }, [totalPages, currentPage]);
-
-  const paginated = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredGroups.slice(start, start + itemsPerPage);
-  }, [filteredGroups, currentPage]);
-
-  const applySearch = () => {
-    setSearchTerm(searchInput);
-    setFilterTerm(termInput);
-    setFilterYear(yearInput);
-    setCurrentPage(1);
   };
 
   const handleToggleActive = async (
@@ -184,7 +138,7 @@ export default function Form() {
 
   const openDeleteConfirm = (id: number) => {
     const found = groups.find((g) => g.id === id);
-    const count = Number(found?.totalStudents ?? 0);
+    const count = Number(found?.total ?? 0);
     if (count > 0) {
       toast.warn(`ไม่สามารถลบห้องนี้ได้ เนื่องจากมีนักเรียนอยู่ ${count} คน`);
       return;
@@ -196,7 +150,7 @@ export default function Form() {
     if (openDeleteId == null) return;
 
     const found = groups.find((g) => g.id === openDeleteId);
-    const count = Number(found?.totalStudents ?? 0);
+    const count = Number(found?.total ?? 0);
     if (count > 0) {
       toast.warn(`ไม่สามารถลบห้องนี้ได้ เนื่องจากมีนักเรียนอยู่ ${count} คน`);
       setOpenDeleteId(null);
@@ -209,6 +163,7 @@ export default function Form() {
       if (ok) {
         toast.success("ลบกลุ่มเรียนเรียบร้อย");
         setOpenDeleteId(null);
+        setGroups([]);
         fetchGroups();
       } else {
         toast.error("ลบกลุ่มเรียนไม่สำเร็จ");
@@ -237,19 +192,12 @@ export default function Form() {
         />
 
         <SelectTermAndYear
-          term={termInput}
-          year={yearInput}
-          onChangeTerm={setTermInput}
-          onChangeYear={setYearInput}
+          term={term}
+          year={year}
+          onChangeTerm={setTerm}
+          onChangeYear={setYear}
           currentYear={currentYear}
         />
-        <button
-          onClick={applySearch}
-          className="px-4 py-1 bg-blue-500 hover:bg-blue-700 text-white rounded-md flex gap-2 items-center"
-        >
-          <Search className="w-4 h-4" />
-          ค้นหา
-        </button>
 
         <button
           className="ml-auto px-10 py-1 flex text-lg gap-2 h-fit items-center bg-blue-500 hover:bg-blue-700 text-white rounded-3xl"
@@ -260,7 +208,6 @@ export default function Form() {
         </button>
       </div>
 
-      {/* ภาพรวมเนื้อหา: แยก loading / empty / table */}
       {loading ? (
         <div className="w-full px-10 py-5">
           {[...Array(6)].map((_, i) => (
@@ -311,13 +258,11 @@ export default function Form() {
               <div className="flex items-center justify-center py-2">
                 สถานะการใช้งาน
               </div>
-              <div className="flex items-center justify-center py-2">
-                การจัดการ
-              </div>
+              <div className="flex items-center justify-center py-2">แก้ไข</div>
             </div>
 
             {paginated.map((item, index) => {
-              const count = Number(item.totalStudents ?? 0);
+              const count = Number(item.total ?? 0);
               const canDelete = count === 0;
 
               return (
@@ -362,13 +307,18 @@ export default function Form() {
                   </div>
 
                   <div className="flex items-center justify-center py-2 gap-3">
-                    <span
-                      title={
-                        canDelete
-                          ? "ลบกลุ่มเรียน"
-                          : "มีนักเรียนอยู่ ไม่สามารถลบได้"
-                      }
-                    >
+                    <span className="group">
+                      <Settings
+                        className={
+                          "w-5 h-5 cursor-pointer text-blue-400 group-hover:text-blue-500"
+                        }
+                        onClick={() => {
+                          setOpenEditGrupPopup(true);
+                          setGroupEdit(item);
+                        }}
+                      />
+                    </span>
+                    <span>
                       <Trash2
                         className={
                           "w-5 h-5 cursor-pointer " +
@@ -473,6 +423,13 @@ export default function Form() {
           )
         );
       })()}
+
+      {openEditGroupPopup && groupEdit && (
+        <EditGroupPopup
+          onClosePopUp={setOpenEditGrupPopup}
+          payload={groupEdit}
+        />
+      )}
     </div>
   );
 }

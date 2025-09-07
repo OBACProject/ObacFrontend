@@ -4,7 +4,7 @@ import Main from './main'
 export default function Page() {
 
   return (
-    <div>
+    <div className='h-full'>
         <Main/>
     </div>
   )

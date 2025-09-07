@@ -15,13 +15,15 @@ export const metadata: Metadata = {
   description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)",
   alternates: { canonical: "https://ekawit.ac.th/" },
   applicationName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/favicon.ico", apple: "/asset/obac-logo.png" },
   openGraph: {
     title: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
     description: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)",
     url: "https://ekawit.ac.th",
     siteName: "วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ",
-    images: [{ url: "/banner/banner.jpg", width: 1200, height: 630, alt: "OBAC" }],
+    images: [
+      { url: "/banner/banner.jpg", width: 1200, height: 630, alt: "OBAC" },
+    ],
     type: "website",
   },
   twitter: {
@@ -57,11 +59,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <head>
-        <Script id="ld-website" type="application/ld+json" strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
-        <Script id="ld-org" type="application/ld+json" strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
+      <head>
+        <Script
+          id="ld-website"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <Script
+          id="ld-org"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <ClientParallaxWrapper>

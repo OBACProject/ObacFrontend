@@ -1,7 +1,6 @@
 "use client";
 
 import { GetGenderInfoCount, GetStudentClassCount } from "@/api/user/userAPI";
-import BarChart from "@/components/Academic/BarChart";
 import DonutChart from "@/components/Academic/DonutChart";
 import OverviewChart from "@/components/Academic/OverviewChart";
 import ProfileCard from "@/components/Academic/ProfileCard";
