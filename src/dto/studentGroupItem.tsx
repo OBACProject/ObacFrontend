@@ -15,7 +15,7 @@ export interface StudentGroupItem {
   term: string;
   total: number;
   completeStatus: string;
-  section:string;
+  section: string;
 }
 
 export interface ScheduleItemStudentGroup {
@@ -136,4 +136,18 @@ export interface UpdateStudentGroupBody {
     term: string;
   };
   action: string;
+}
+export interface UpdateStudentGroupRequest {
+  id: number;
+  groupName: string;
+  class: string;
+  groupCode: string;
+  level: number;
+  programId: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  isActive: boolean;
+  year: number;
+  term: string;
+  section: string;
 }
