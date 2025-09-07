@@ -10,6 +10,7 @@ import {
 } from "@/resource/students/studentSidebarData";
 import { AdminSideBar } from "../../../components/common/SideBar/AdminSideBar";
 import { AdminSidebarData } from "@/resource/admin/adminSidebarData";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
   title: "Obac.ac.th - Admin",
@@ -24,8 +25,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <SidebarProvider> */}
-        {/* Pass StudentSidebarData to StudentSidebar */}
         <ToastContainer
           position="bottom-right"
           hideProgressBar
@@ -36,6 +35,7 @@ export default function RootLayout({
           profileData={ProfileData}
         />
         <div className="pt-20 lg:pl-10">{children}</div>
+        <HomeFooter/>
       </body>
     </html>
   );

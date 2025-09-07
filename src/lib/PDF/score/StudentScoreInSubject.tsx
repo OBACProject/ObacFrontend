@@ -117,7 +117,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
 
   let Classifier = "";
   if (data.class.trim() === "ปวส") {
-    Classifier = "ระดับประกาศนียบัตรวิชาชีพขั้นสูง";
+    Classifier = "ระดับประกาศนียบัตรวิชาชีพชั้นสูง";
   } else {
     Classifier = "ระดับประกาศนียบัตรวิชาชีพ";
   }

@@ -1,12 +1,10 @@
 import {
   GraduationCap,
   BookMarked,
-  CalendarClock,
   UserRoundPen,
-  Newspaper,
   House,
   DoorOpen as Room,
-  Grid2X2Plus,
+  University,
 } from "lucide-react";
 
 export interface ProfileData {
@@ -19,7 +17,7 @@ export interface AdminSidebarProps {
     title: string;
     tooltip: string;
     href: string;
-    headLink:string;
+    headLink: string;
     icon: React.ReactNode;
     subMenu?: {
       title: string;
@@ -40,57 +38,36 @@ export const AdminSidebarData: AdminSidebarProps = {
       title: "หน้าหลัก",
       tooltip: "หน้าหลักผู้ใช้",
       href: "/admin/profile",
-      headLink:"/admin/profile",
-      icon: (
-        <House
-          style={{ width: "2.0rem", height: "2.0rem" }}
-        />
-      ),
+      headLink: "/admin/profile",
+      icon: <House style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
     {
       title: "จัดการนักเรียน",
       tooltip: "จัดการนักเรียน",
       href: "/admin/student-management",
-      headLink:"/admin/student-management",
-      icon: (
-        <GraduationCap
-          style={{ width: "2.0rem", height: "2.0rem" }}
-        />
-      ),
+      headLink: "/admin/student-management",
+      icon: <GraduationCap style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
     {
       title: "จัดการอาจารย์",
       tooltip: "จัดการอาจารย์",
       href: "/admin/teacher-management",
-      headLink:"/admin/teacher-management",
-      icon: (
-        <UserRoundPen
-          style={{ width: "2.0rem", height: "2.0rem" }}
-
-        />
-      ),
+      headLink: "/admin/teacher-management",
+      icon: <UserRoundPen style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
     {
       title: "จัดการฝ่ายทะเบียน",
       tooltip: "จัดการฝ่ายทะเบียน",
       href: "/admin/academic-management",
-      headLink:"/admin/academic-management",
-      icon: (
-        <BookMarked
-          style={{ width: "2.0rem", height: "2.0rem" }}
-        />
-      ),
+      headLink: "/admin/academic-management",
+      icon: <BookMarked style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
     {
       title: "จัดการห้องเรียน",
       tooltip: "จัดการฝ่ายทะเบียน",
       href: "/admin/student-group-management",
-      headLink:"/admin/student-group-management",
-      icon: (
-        <Grid2X2Plus
-          style={{ width: "2.0rem", height: "2.0rem" }}
-        />
-      ),
+      headLink: "/admin/student-group-management",
+      icon: <University style={{ width: "2.0rem", height: "2.0rem" }} />,
     },
     // {
     //   title: "กิจกรรม",

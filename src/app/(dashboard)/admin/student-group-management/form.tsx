@@ -1,6 +1,13 @@
 "use client";
 
-import { UserRoundCheck, PlusCircle, DoorOpen, Trash2, Search } from "lucide-react";
+import {
+  UserRoundCheck,
+  PlusCircle,
+  DoorOpen,
+  Trash2,
+  Search,
+  University,
+} from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -13,6 +20,7 @@ import { toast } from "react-toastify";
 import { GetAllStudentGroupRequest } from "@/dto/studentGroupItem";
 import AddStudentGroupPopup from "@/components/common/Popup/AddStudentGroupPopup";
 import { getCurrentThaiTermYear } from "@/lib/utils";
+import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 
 export default function Form() {
   const [groups, setGroups] = useState<GetAllStudentGroupRequest[]>([]);
@@ -26,11 +34,14 @@ export default function Form() {
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { defaultTerm, currentYear } = useMemo(() => getCurrentThaiTermYear(), []);
+  const { defaultTerm, currentYear } = useMemo(
+    () => getCurrentThaiTermYear(),
+    []
+  );
   const [termInput, setTermInput] = useState<string>(defaultTerm);
-  const [yearInput, setYearInput] = useState<string>(String(currentYear));
+  const [yearInput, setYearInput] = useState<number>(currentYear);
   const [filterTerm, setFilterTerm] = useState<string>(defaultTerm);
-  const [filterYear, setFilterYear] = useState<string>(String(currentYear));
+  const [filterYear, setFilterYear] = useState<number>(currentYear);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -61,12 +72,18 @@ export default function Form() {
   }, []);
 
   const termOptions = useMemo(() => {
-    const s = new Set(groups.map((g) => String(g.term ?? "")).filter((v) => v && v !== "-"));
-    return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { numeric: true, sensitivity: "base" }));
+    const s = new Set(
+      groups.map((g) => String(g.term ?? "")).filter((v) => v && v !== "-")
+    );
+    return Array.from(s).sort((a, b) =>
+      a.localeCompare(b, "th", { numeric: true, sensitivity: "base" })
+    );
   }, [groups]);
 
   const yearOptions = useMemo(() => {
-    const s = new Set(groups.map((g) => String(g.year ?? "")).filter((v) => v && v !== "-"));
+    const s = new Set(
+      groups.map((g) => String(g.year ?? "")).filter((v) => v && v !== "-")
+    );
     return Array.from(s).sort((a, b) => Number(b) - Number(a));
   }, [groups]);
 
@@ -81,13 +98,21 @@ export default function Form() {
         const cls = (g.class ?? "").toLowerCase();
         const term = String(g.term ?? "").toLowerCase();
         const year = String(g.year ?? "").toLowerCase();
-        return code.includes(q) || name.includes(q) || cls.includes(q) || term.includes(q) || year.includes(q);
+        return (
+          code.includes(q) ||
+          name.includes(q) ||
+          cls.includes(q) ||
+          term.includes(q) ||
+          year.includes(q)
+        );
       });
     };
 
     const byTermYear = groups.filter((g) => {
       const tOk = filterTerm ? String(g.term ?? "") === filterTerm : true;
-      const yOk = filterYear ? String(g.year ?? "") === filterYear : true;
+      const yOk = filterYear
+        ? String(g.year ?? "") === String(filterYear)
+        : true;
       return tOk && yOk;
     });
 
@@ -96,7 +121,8 @@ export default function Form() {
 
   const totalCount = filteredGroups.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / itemsPerPage));
-  const currentFrom = totalCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const currentFrom =
+    totalCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const currentTo = Math.min(currentPage * itemsPerPage, totalCount);
 
   useEffect(() => {
@@ -115,10 +141,16 @@ export default function Form() {
     setCurrentPage(1);
   };
 
-  const handleToggleActive = async (id: number, nextState: boolean, e?: React.MouseEvent) => {
+  const handleToggleActive = async (
+    id: number,
+    nextState: boolean,
+    e?: React.MouseEvent
+  ) => {
     e?.stopPropagation();
     const snapshot = [...groups];
-    setGroups((prev) => prev.map((g) => (g.id === id ? { ...g, isActive: nextState } : g)));
+    setGroups((prev) =>
+      prev.map((g) => (g.id === id ? { ...g, isActive: nextState } : g))
+    );
     setUpdatingId(id);
 
     try {
@@ -133,10 +165,16 @@ export default function Form() {
       const errors = err?.response?.data?.errors;
       if (errors && typeof errors === "object") {
         const firstKey = Object.keys(errors)[0];
-        const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
+        const firstMsg = Array.isArray(errors[firstKey])
+          ? errors[firstKey][0]
+          : String(errors[firstKey]);
         toast.error(firstMsg);
       } else {
-        const msg = err?.response?.data?.detail || err?.response?.data?.title || err?.message || "อัปเดตไม่สำเร็จ";
+        const msg =
+          err?.response?.data?.detail ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "อัปเดตไม่สำเร็จ";
         toast.error(msg);
       }
     } finally {
@@ -177,7 +215,10 @@ export default function Form() {
       }
     } catch (err: any) {
       const msg =
-        err?.response?.data?.responseMessage || err?.response?.data?.title || err?.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+        err?.response?.data?.responseMessage ||
+        err?.response?.data?.title ||
+        err?.message ||
+        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
       toast.error(msg);
     } finally {
       setDeleting(false);
@@ -186,13 +227,6 @@ export default function Form() {
 
   return (
     <div className="w-full">
-      <div className="flex py-3 px-10 justify-start">
-        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
-          <DoorOpen className="h-8 w-8" />
-          ระบบจัดการห้องเรียน
-        </h1>
-      </div>
-
       <div className="px-10 pt-6 pb-4 flex flex-wrap items-center gap-3">
         <input
           type="text"
@@ -202,34 +236,13 @@ export default function Form() {
           className="border border-gray-400 px-4 py-1 rounded-md"
         />
 
-        <select
-          className="border border-gray-400 px-3 py-1 rounded-md"
-          value={termInput}
-          onChange={(e) => setTermInput(e.target.value)}
-          title="ภาคเรียน (Term)"
-        >
-          {termOptions.length === 0 && <option value={termInput}>{termInput}</option>}
-          {termOptions.map((t) => (
-            <option key={t} value={t}>
-              เทอม {t}
-            </option>
-          ))}
-        </select>
-
-        <select
-          className="border border-gray-400 px-3 py-1 rounded-md"
-          value={yearInput}
-          onChange={(e) => setYearInput(e.target.value)}
-          title="ปีการศึกษา (Year)"
-        >
-          {yearOptions.length === 0 && <option value={yearInput}>{yearInput}</option>}
-          {yearOptions.map((y) => (
-            <option key={y} value={y}>
-              ปีการศึกษา {y}
-            </option>
-          ))}
-        </select>
-
+        <SelectTermAndYear
+          term={termInput}
+          year={yearInput}
+          onChangeTerm={setTermInput}
+          onChangeYear={setYearInput}
+          currentYear={currentYear}
+        />
         <button
           onClick={applySearch}
           className="px-4 py-1 bg-blue-500 hover:bg-blue-700 text-white rounded-md flex gap-2 items-center"
@@ -251,7 +264,10 @@ export default function Form() {
       {loading ? (
         <div className="w-full px-10 py-5">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="animate-pulse bg-gray-200 h-10 mb-2 rounded" />
+            <div
+              key={i}
+              className="animate-pulse bg-gray-200 h-10 mb-2 rounded"
+            />
           ))}
         </div>
       ) : totalCount === 0 ? (
@@ -266,22 +282,38 @@ export default function Form() {
             <UserRoundCheck className="w-5 h-5 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt">
               รายการกลุ่มเรียนทั้งหมด
-              <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">{totalCount}</p>
+              <p className="bg-blue-400 rounded-md px-4 py-0.5 text-white">
+                {totalCount}
+              </p>
               รายการ
-              <span className="text-sm opacity-90">(แสดง {currentFrom}-{currentTo})</span>
+              <span className="text-sm opacity-90">
+                (แสดง {currentFrom}-{currentTo})
+              </span>
             </div>
           </div>
 
           <div className="shadow-lg w-full text-sm">
             <div className="grid grid-cols-[8%_16%_22%_10%_12%_12%_10%_10%] text-black bg-gray-50 border-b text-lg">
               <div className="flex items-center justify-center py-2">ลำดับ</div>
-              <div className="flex items-center justify-center py-2">รหัสห้อง</div>
+              <div className="flex items-center justify-center py-2">
+                รหัสห้อง
+              </div>
               <div className="flex items-center justify-center py-2">ห้อง</div>
-              <div className="flex items-center justify-center py-2">ภาคเรียน</div>
-              <div className="flex items-center justify-center py-2">ปีการศึกษา</div>
-              <div className="flex items-center justify-center py-2">จำนวนนักเรียน</div>
-              <div className="flex items-center justify-center py-2">สถานะการใช้งาน</div>
-              <div className="flex items-center justify-center py-2">การจัดการ</div>
+              <div className="flex items-center justify-center py-2">
+                ภาคเรียน
+              </div>
+              <div className="flex items-center justify-center py-2">
+                ปีการศึกษา
+              </div>
+              <div className="flex items-center justify-center py-2">
+                จำนวนนักเรียน
+              </div>
+              <div className="flex items-center justify-center py-2">
+                สถานะการใช้งาน
+              </div>
+              <div className="flex items-center justify-center py-2">
+                การจัดการ
+              </div>
             </div>
 
             {paginated.map((item, index) => {
@@ -302,7 +334,9 @@ export default function Form() {
                   </div>
 
                   <div className="flex items-center justify-center py-2">
-                    {(item.class ?? "") + (item.class ? " " : "") + (item.groupName ?? "")}
+                    {(item.class ?? "") +
+                      (item.class ? " " : "") +
+                      (item.groupName ?? "")}
                   </div>
 
                   <div className="flex items-center justify-center py-2">
@@ -313,24 +347,38 @@ export default function Form() {
                     {item.year ?? "-"}
                   </div>
 
-                  <div className="flex items-center justify-center py-2">{count}</div>
+                  <div className="flex items-center justify-center py-2">
+                    {count}
+                  </div>
 
                   <div className="flex items-center justify-center py-2">
                     <IsActiveToggleProps
                       isActive={!!item.isActive}
                       disabled={updatingId === item.id}
-                      onToggle={(value: boolean) => handleToggleActive(item.id as number, value)}
+                      onToggle={(value: boolean) =>
+                        handleToggleActive(item.id as number, value)
+                      }
                     />
                   </div>
 
                   <div className="flex items-center justify-center py-2 gap-3">
-                    <span title={canDelete ? "ลบกลุ่มเรียน" : "มีนักเรียนอยู่ ไม่สามารถลบได้"}>
+                    <span
+                      title={
+                        canDelete
+                          ? "ลบกลุ่มเรียน"
+                          : "มีนักเรียนอยู่ ไม่สามารถลบได้"
+                      }
+                    >
                       <Trash2
                         className={
                           "w-5 h-5 cursor-pointer " +
-                          (canDelete ? "text-red-500 hover:text-red-700" : "text-gray-300 cursor-not-allowed")
+                          (canDelete
+                            ? "text-red-500 hover:text-red-700"
+                            : "text-gray-300 cursor-not-allowed")
                         }
-                        onClick={() => canDelete && openDeleteConfirm(item.id as number)}
+                        onClick={() =>
+                          canDelete && openDeleteConfirm(item.id as number)
+                        }
                       />
                     </span>
                   </div>
@@ -386,15 +434,21 @@ export default function Form() {
                 if (!deleting) setOpenDeleteId(null);
               }}
             >
-              <div className="bg-white rounded-lg shadow-xl w-[420px] p-6" onClick={(e) => e.stopPropagation()}>
-                <h3 className="text-lg font-semibold text-red-600 mb-2">ยืนยันการลบ</h3>
+              <div
+                className="bg-white rounded-lg shadow-xl w-[420px] p-6"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h3 className="text-lg font-semibold text-red-600 mb-2">
+                  ยืนยันการลบ
+                </h3>
                 <p className="text-sm text-gray-700 mb-6">
                   ต้องการลบกลุ่มเรียนหมายเลข{" "}
                   <b>
                     {(selectedItem.class ?? "") +
                       (selectedItem.class ? " " : "") +
                       (selectedItem.groupName ?? "")}{" "}
-                    เทอม {selectedItem.term || "-"} ปี {selectedItem.year ?? "-"}
+                    เทอม {selectedItem.term || "-"} ปี{" "}
+                    {selectedItem.year ?? "-"}
                   </b>{" "}
                   ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
                 </p>
