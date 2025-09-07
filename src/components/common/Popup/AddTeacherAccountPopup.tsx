@@ -40,6 +40,36 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
   const [resolvedProgramId, setResolvedProgramId] = useState<number | null>(null);
 
+  // ---------- NEW: reset ทั้งฟอร์ม ----------
+  const resetForm = () => {
+    setIsSubmitting(false);
+    setTeacherCode("");
+    setPrefix("นาย");
+    setFirstName("");
+    setLastName("");
+    setGender("ชาย");
+    setPhone("");
+    setCitizenId("");
+    setNationality("ไทย");
+    setBirthDate("");
+    setHiredDate("");
+    setUsername("");
+    setPassword("");
+    setConfirmPassword("");
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+    setSelectedFaculty("");
+    setSelectedProgramName("");
+    setSelectedSubProgramName("");
+    setResolvedProgramId(null);
+  };
+
+  const closeAndReset = (result: boolean) => {
+    resetForm();
+    onClosePopUp(result);
+  };
+  // -----------------------------------------
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -116,8 +146,9 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
   };
 
   const handleSubmit = async () => {
-    if (isSubmitting) return; 
-  setIsSubmitting(true);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     if (
       !teacherCode ||
       !username ||
@@ -129,18 +160,19 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
       toast.error(
         "กรุณากรอกข้อมูลที่จำเป็นให้ครบ: รหัสอาจารย์, Username, Password, ชื่อ, นามสกุล และเลือกคณะ/สาขา/แขนงให้ครบ"
       );
+      setIsSubmitting(false); // NEW: อย่าค้างสถานะกำลังบันทึก
       return;
     }
     if (password !== confirmPassword) {
       toast.error("รหัสผ่านไม่ตรงกัน");
+      setIsSubmitting(false); // NEW
       return;
     }
-
     if (!/^\d+$/.test(teacherCode)) {
       toast.error("รหัสอาจารย์ต้องเป็นตัวเลขเท่านั้น");
+      setIsSubmitting(false); // NEW
       return;
     }
-
 
     const today = new Date().toISOString().split("T")[0];
     const finalBirthDate = birthDate || today;
@@ -162,23 +194,33 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
       birthDate: finalBirthDate,
     };
 
-    const result = await CreateTeacher(payload);
-
-    if (result.success) {
-      toast.success(result.message || "เพิ่มบัญชีอาจารย์สำเร็จ");
-      await onCreated?.();
-      onClosePopUp(false);
-    } else {
-      toast.error(result.message || "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง");
+    try {
+      const result = await CreateTeacher(payload);
+      if (result.success) {
+        toast.success(result.message || "เพิ่มบัญชีอาจารย์สำเร็จ");
+        await onCreated?.();
+        closeAndReset(false); // ปิดพร้อมรีเซ็ต
+      } else {
+        toast.error(result.message || "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง");
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง");
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
-    
   };
 
-
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[720px] space-y-4 max-h-[90vh] overflow-y-auto">
+    // NEW: คลิกพื้นหลังเพื่อปิด + รีเซ็ต
+    <div
+      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+      onClick={() => closeAndReset(false)}
+    >
+      <div
+        className="bg-white rounded-lg shadow-lg p-6 w-[720px] space-y-4 max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()} // กันคลิกทะลุ
+      >
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีอาจารย์</h2>
 
         <div className="grid grid-cols-2 gap-4">
@@ -408,13 +450,13 @@ export default function AddTeacherAccountPopup({ onClosePopUp, onCreated }: Prop
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
-          <button className="px-4 py-1 bg-gray-300 rounded" onClick={() => onClosePopUp(false)}>
+          <button className="px-4 py-1 bg-gray-300 rounded" onClick={() => closeAndReset(false)}>
             ยกเลิก
           </button>
           <button
             className="px-4 py-1 bg-blue-600 text-white rounded"
             onClick={handleSubmit}
-            disabled={loadingPrograms ||isSubmitting}
+            disabled={loadingPrograms || isSubmitting}
           >
             {isSubmitting ? "กำลังบันทึก..." : "บันทึกข้อมูล"}
           </button>

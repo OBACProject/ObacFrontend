@@ -194,6 +194,7 @@ export interface CreateStudentRequest {
   birthDate: string;
   prefix: string;
   studentGroupId: number;
+  status : string;
 }
 
 export interface GetAllStudentTableDto {
@@ -493,6 +494,9 @@ export interface UpdateStudentUserRequest {
   currentLevel: number;
   graduateYear: number;
   programId: number;
+  nationality: string;
+  citizenId: string;
+  phoneNumber: string;
   isActive: boolean;
   status: string;
 }

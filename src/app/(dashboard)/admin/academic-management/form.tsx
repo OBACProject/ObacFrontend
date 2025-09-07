@@ -92,7 +92,7 @@ export default function Form() {
   return (
     <div className="w-full">
       <div className="flex py-3 px-10 justify-start">
-        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
+        <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700 bg-white">
           <LibraryBig className="h-8 w-8" />
           ระบบจัดการฝ่ายทะเบียน
         </h1>
@@ -169,7 +169,7 @@ export default function Form() {
             ))}
           </div>
 
-          <div className="flex justify-center items-center gap-4 mt-4">
+          <div className="flex justify-center items-center gap-4 mt-4 pb-5">
             <button
               className="px-4 py-1 bg-gray-200 rounded disabled:opacity-50"
               onClick={() => setCurrentPage((p) => p - 1)}

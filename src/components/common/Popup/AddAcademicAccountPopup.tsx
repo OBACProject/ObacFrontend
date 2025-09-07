@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateAcademic } from "@/api/user/userAPI";
 import { CreateAcademicRequest } from "@/dto/userDto";
-import { fi } from "@faker-js/faker";
 
 type Props = {
   onClosePopUp: (val: boolean) => void;
@@ -28,70 +27,96 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async () => {
-  if (isSubmitting) return; 
-  setIsSubmitting(true);
-  
-  if (
-    !academicCode ||
-    !firstName ||
-    !lastName ||
-    !username ||
-    !password ||
-    !confirmPassword
-  ) {
-    toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    toast.error("รหัสผ่านไม่ตรงกัน");
-    return;
-  }
-  const today = new Date().toISOString().split("T")[0];
-  const finalBirthDate = birthDate || today;
-
-  const payload: CreateAcademicRequest = {
-    prefix,
-    academicCode,
-    username: username.trim(),
-    password,
-    firstName: firstName.trim(),
-    lastName: lastName.trim(),
-    gender,
-    citizenId: citizenId.trim(),
-    phoneNumber: phone.trim(),
-    nationality: nationality.trim(),
-    birthDate: finalBirthDate,
+  const resetForm = () => {
+    setAcademicCode("");
+    setIsSubmitting(false);
+    setPrefix("นาย");
+    setFirstName("");
+    setLastName("");
+    setGender("ชาย");
+    setPhone("");
+    setCitizenId("");
+    setNationality("ไทย");
+    setBirthDate("");
+    setUsername("");
+    setPassword("");
+    setConfirmPassword("");
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
-  try {
-    const result = await CreateAcademic(payload);
+  const closeAndReset = (result: boolean) => {
+    resetForm();
+    onClosePopUp(result);
+  };
 
-    if (result.success) {
-      toast.success(result.message || "เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
-      await onCreated?.();
-      onClosePopUp(false);
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAndReset(false);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, []);
+
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    if (!academicCode || !firstName || !lastName || !username || !password || !confirmPassword) {
+      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      setIsSubmitting(false);
       return;
     }
 
-    toast.error(
-      result.message ||
-        "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง"
-    );
-  } catch (err: any) {
-    console.error("Error saving academic:", err);
-    toast.error("ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง");
+    if (password !== confirmPassword) {
+      toast.error("รหัสผ่านไม่ตรงกัน");
+      setIsSubmitting(false);
+      return;
+    }
 
-  }finally {
+    const today = new Date().toISOString().split("T")[0];
+    const finalBirthDate = birthDate || today;
+
+    const payload: CreateAcademicRequest = {
+      prefix,
+      academicCode,
+      username: username.trim(),
+      password,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      gender,
+      citizenId: citizenId.trim(),
+      phoneNumber: phone.trim(),
+      nationality: nationality.trim(),
+      birthDate: finalBirthDate,
+    };
+
+    try {
+      const result = await CreateAcademic(payload);
+      if (result.success) {
+        toast.success(result.message || "เพิ่มบัญชีฝ่ายทะเบียนสำเร็จ");
+        await onCreated?.();
+        closeAndReset(true);
+        return;
+      }
+      toast.error(result.message || "บันทึกข้อมูลไม่สำเร็จ กรุณาตรวจสอบข้อมูลอีกครั้ง");
+    } catch (err) {
+      console.error("Error saving academic:", err);
+      toast.error("ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง");
+    } finally {
       setIsSubmitting(false);
     }
-};
-
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+      onClick={() => closeAndReset(false)}
+    >
+      <div
+        className="bg-white rounded-lg shadow-lg p-6 w-[600px] space-y-4 max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold text-blue-700">เพิ่มบัญชีฝ่ายทะเบียน</h2>
 
         <div className="grid grid-cols-2 gap-4">
@@ -156,7 +181,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
             <input
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
               className="w-full border px-3 py-2 rounded"
             />
           </div>
@@ -168,7 +193,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
             <input
               type="text"
               value={citizenId}
-              onChange={(e) => setCitizenId(e.target.value)}
+              onChange={(e) => setCitizenId(e.target.value.replace(/\D/g, "").slice(0, 13))}
               className="w-full border px-3 py-2 rounded"
             />
           </div>
@@ -242,10 +267,7 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
         </div>
 
         <div className="flex justify-end gap-3 pt-4">
-          <button
-            className="px-4 py-1 bg-gray-300 rounded"
-            onClick={() => onClosePopUp(false)}
-          >
+          <button className="px-4 py-1 bg-gray-300 rounded" onClick={() => closeAndReset(false)}>
             ยกเลิก
           </button>
           <button

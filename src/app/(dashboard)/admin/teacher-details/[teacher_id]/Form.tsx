@@ -1,12 +1,11 @@
-
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Pencil, Save, CircleX, KeyRound, Trash2, UserPen, LoaderCircle } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { GetTeacherDetailUser } from "@/api/teacher/route";
-import type { GetTeacherDetailUserResponse } from "@/dto/teacherDto";
+import { GetTeacherDetailUser, UpdateTeacherUser } from "@/api/teacher/route";
+import type { GetTeacherDetailUserResponse, UpdateTeacherUserRequest } from "@/dto/teacherDto";
 
 import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
@@ -14,19 +13,11 @@ import type { GetAllProgramsResponse } from "@/dto/programDto";
 import ChangePasswordPopup from "@/components/common/Popup/ChangePasswordPopup";
 import DeleteUserPopup from "@/components/common/Popup/DeleteUserPopup";
 
-import { UpdateTeacherUser } from "@/api/teacher/route";
-import type { UpdateTeacherUserRequest } from "@/dto/teacherDto";
-
-
 function toISODateOnly(input?: string | null): string {
-
   if (!input) return "";
-
   if (/^\d{4}-\d{2}-\d{2}$/.test(String(input))) return String(input);
-
   const t = String(input).match(/^(\d{4})-(\d{2})-(\d{2})T/);
   if (t) return `${t[1]}-${t[2]}-${t[3]}`;
-
   const dmy = String(input).match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
   if (dmy) {
     const dd = dmy[1].padStart(2, "0");
@@ -34,7 +25,6 @@ function toISODateOnly(input?: string | null): string {
     const yy = dmy[3];
     return `${yy}-${mm}-${dd}`;
   }
-
   const d = new Date(String(input));
   if (!isNaN(d.getTime())) {
     const yy = d.getFullYear();
@@ -59,25 +49,19 @@ export default function TeacherDetailForm({ teacherId }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<GetTeacherDetailUserResponse | null>(null);
   const [originalData, setOriginalData] = useState<GetTeacherDetailUserResponse | null>(null);
-
   const [isEditing, setIsEditing] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [saving, setSaving] = useState(false);
 
-
   const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
   const [loadingPrograms, setLoadingPrograms] = useState(false);
   const [programsError, setProgramsError] = useState<string | null>(null);
 
-
   const [selectedFaculty, setSelectedFaculty] = useState<string>("");
   const [selectedProgramName, setSelectedProgramName] = useState<string>("");
   const [selectedSubProgramName, setSelectedSubProgramName] = useState<string>("");
-
-
   const [selectedProgramId, setSelectedProgramId] = useState<number | null>(null);
-
 
   useEffect(() => {
     (async () => {
@@ -90,6 +74,14 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       } as GetTeacherDetailUserResponse & { hiredDate?: string | null };
       setFormData(normalized);
       setOriginalData(normalized);
+
+      const tc = (normalized as any)?.teacherCode ?? (normalized as any)?.TeacherCode;
+      const forceEdit =
+        typeof window !== "undefined" &&
+        new URLSearchParams(window.location.search).get("edit") === "1";
+      if (forceEdit && (tc == null || String(tc).trim() === "")) {
+        setIsEditing(true);
+      }
     })();
   }, [teacherId]);
 
@@ -108,8 +100,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
           )
         );
         setProgramRows(rows);
-      } catch (e) {
-        console.error(e);
+      } catch {
         setProgramsError("โหลดข้อมูลโปรแกรมไม่สำเร็จ");
       } finally {
         setLoadingPrograms(false);
@@ -125,7 +116,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       (formData as any)?.ProgramId ??
       (formData as any)?.program?.programId ??
       null;
-
     const found = programRows.find((r) => r.programId === Number(pid));
     if (found) {
       setSelectedFaculty(found.facultyName || "");
@@ -139,7 +129,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       setSelectedProgramId(null);
     }
   }, [formData, programRows]);
-
 
   const faculties = useMemo(() => {
     const s = new Set(programRows.map((p) => p.facultyName).filter(Boolean) as string[]);
@@ -169,7 +158,6 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     );
     return Array.from(s).sort((a, b) => a.localeCompare(b, "th", { sensitivity: "base" }));
   }, [programRows, selectedFaculty, selectedProgramName]);
-
 
   const onSelectFaculty = (val: string) => {
     setSelectedFaculty(val);
@@ -203,122 +191,131 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     setFormData({ ...(formData as any), [field]: value } as any);
   };
 
-  const handleSave = async () => {
-  if (!formData) return;
+  const resetToSaved = (next: GetTeacherDetailUserResponse) => {
+    setFormData(next);
+    setOriginalData(next);
 
-  if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
-    toast.error("กรุณากรอกชื่อและนามสกุล");
-    return;
-  }
-  if (!formData.birthDate) {
-    toast.error("กรุณาเลือกวันเกิด");
-    return;
-  }
-  if (!formData.prefix || formData.prefix === "-") {
-  toast.error("กรุณาเลือกคำนำหน้า");
-  return;
-}
-  if (!selectedProgramId) {
-    toast.error("กรุณาเลือก คณะ / สาขา / แขนง ให้ครบ");
-    return;
-  }
-
-  const teacherIdNum =
-    Number((formData as any)?.teacherId) ||
-    Number(teacherId) || 0;
-
-  if (!teacherIdNum) {
-    toast.error("ไม่พบรหัสอาจารย์ (teacherId)");
-    return;
-  }
-
-  const birthDateStr = toISODateOnly((formData as any).birthDate);
-  const hiredDateStr = toISODateOnly((formData as any).hiredDate);
-  if (!birthDateStr) { toast.error("รูปแบบวันเกิดไม่ถูกต้อง"); return; }
-  if (!hiredDateStr) { toast.error("กรุณาเลือกวันที่เข้าทำงาน"); return; }
-
-  const isActive =
-    typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
-
-  const payload: UpdateTeacherUserRequest = {
-    teacherId: teacherIdNum,
-    prefix: formData.prefix ?? "",
-    firstName: formData.firstName ?? "",
-    lastName: formData.lastName ?? "",
-    gender: formData.gender ?? "",
-    teacherCode: (formData as any).teacherCode ?? "",
-    programId: Number(selectedProgramId),
-    isActive,
-    hiredDate: hiredDateStr,
-    birthDate: birthDateStr,
-    phoneNumber: formData.phoneNumber ?? "",
-    nationality: formData.nationality ?? "",
-    citizenId: formData.citizenId ?? "",
+    const pid =
+      (next as any)?.programId ??
+      (next as any)?.ProgramId ??
+      (next as any)?.program?.programId ??
+      null;
+    const found = programRows.find((r) => r.programId === Number(pid));
+    if (found) {
+      setSelectedFaculty(found.facultyName || "");
+      setSelectedProgramName(found.programName || "");
+      setSelectedSubProgramName(found.subProgramName || "");
+      setSelectedProgramId(found.programId);
+    } else {
+      setSelectedFaculty("");
+      setSelectedProgramName("");
+      setSelectedSubProgramName("");
+      setSelectedProgramId(null);
+    }
+    setIsEditing(false);
+    setIsSubmitting(false);
+    setSaving(false);
+    setOpenChangePassword(false);
+    setOpenDeletePopup(false);
   };
 
-  if (isSubmitting) return;
-  setIsSubmitting(true);
-  setSaving(true);
+  const handleSave = async () => {
+    if (!formData) return;
 
-  try {
-    const ok = await UpdateTeacherUser(payload);
-    if (ok) {
-      toast.success("บันทึกข้อมูลเรียบร้อย");
-      setFormData((prev) =>
-        prev
-          ? ({
-              ...prev,
-              programId: Number(selectedProgramId),
-              birthDate: birthDateStr,
-              hiredDate: hiredDateStr,
-            } as any)
-          : prev
-      );
-      setOriginalData((prev) =>
-        prev
-          ? ({
-              ...prev,
-              ...(formData as any),
-              programId: Number(selectedProgramId),
-              birthDate: birthDateStr,
-              hiredDate: hiredDateStr,
-            } as any)
-          : (formData as any)
-      );
-      setIsEditing(false);
-    } else {
-      toast.error("บันทึกข้อมูลไม่สำเร็จ");
-    }
-  } catch (err: any) {
-    const errors = err?.response?.data?.errors;
-    if (errors && typeof errors === "object") {
-      const firstKey = Object.keys(errors)[0];
-      const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
-      toast.error(firstMsg);
-    } else {
-      const msg =
-        err?.response?.data?.responseMessage ||
-        err?.response?.data?.title ||
-        err?.message ||
-        "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
-      toast.error(msg);
-    }
-  } finally {
-    setSaving(false);
-    setIsSubmitting(false);
-  }
-};
+    const rawTeacherCode = (formData as any)?.teacherCode;
+    const teacherCodeStr = rawTeacherCode == null ? "" : String(rawTeacherCode).trim();
+    const teacherCodeToSend = teacherCodeStr === "" ? null : teacherCodeStr;
 
+    if (!formData.firstName?.trim() || !formData.lastName?.trim()) {
+      toast.error("กรุณากรอกชื่อและนามสกุล");
+      return;
+    }
+
+    const today = toISODateOnly(new Date().toISOString().slice(0, 10));
+    const birthDateStr = toISODateOnly((formData as any).birthDate) || today;
+    const hiredDateStr = toISODateOnly((formData as any).hiredDate) || today;
+    const isActive = typeof (formData as any)?.isActive === "boolean" ? (formData as any).isActive : true;
+    const teacherIdNum = Number((formData as any)?.teacherId) || Number(teacherId) || 0;
+    if (!teacherIdNum) {
+      toast.error("ไม่พบรหัสอาจารย์ (teacherId)");
+      return;
+    }
+
+    const fallbackProgramId =
+      (formData as any)?.programId ??
+      (formData as any)?.ProgramId ??
+      programInfo?.programId ??
+      null;
+
+    const programIdToSend: number | null =
+      selectedProgramId != null
+        ? selectedProgramId
+        : fallbackProgramId != null && Number.isFinite(Number(fallbackProgramId))
+        ? Number(fallbackProgramId)
+        : null;
+
+    const payload: UpdateTeacherUserRequest = {
+      teacherId: teacherIdNum,
+      prefix: (formData as any).prefix ?? "",
+      firstName: (formData as any).firstName ?? "",
+      lastName: (formData as any).lastName ?? "",
+      gender: (formData as any).gender ?? "",
+      teacherCode: teacherCodeToSend as any,
+      programId: programIdToSend as any,
+      isActive,
+      hiredDate: hiredDateStr,
+      birthDate: birthDateStr,
+      phoneNumber: (formData as any).phoneNumber ?? "",
+      nationality: (formData as any).nationality ?? "",
+      citizenId: (formData as any).citizenId ?? "",
+    };
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setSaving(true);
+    try {
+      const ok = await UpdateTeacherUser(payload);
+      if (ok) {
+        toast.success("บันทึกข้อมูลเรียบร้อย");
+        const next: GetTeacherDetailUserResponse = {
+          ...(formData as any),
+          teacherCode: teacherCodeToSend as any,
+          programId: programIdToSend as any,
+          birthDate: birthDateStr,
+          hiredDate: hiredDateStr,
+        };
+        resetToSaved(next);
+      } else {
+        toast.error("บันทึกข้อมูลไม่สำเร็จ");
+        setSaving(false);
+        setIsSubmitting(false);
+      }
+    } catch (err: any) {
+      const errors = err?.response?.data?.errors;
+      if (errors && typeof errors === "object") {
+        const firstKey = Object.keys(errors)[0];
+        const firstMsg = Array.isArray(errors[firstKey]) ? errors[firstKey][0] : String(errors[firstKey]);
+        toast.error(firstMsg);
+      } else {
+        const msg =
+          err?.response?.data?.responseMessage ||
+          err?.response?.data?.title ||
+          err?.message ||
+          "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+        toast.error(msg);
+      }
+      setSaving(false);
+      setIsSubmitting(false);
+    }
+  };
 
   const handleCancel = () => {
     setFormData(originalData);
-
     const pid =
       (originalData as any)?.programId ??
       (originalData as any)?.ProgramId ??
       (originalData as any)?.program?.programId ??
       null;
-
     const found = programRows.find((r) => r.programId === Number(pid));
     if (found) {
       setSelectedFaculty(found.facultyName || "");
@@ -348,7 +345,7 @@ export default function TeacherDetailForm({ teacherId }: Props) {
     <div className="w-full p-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex py-3 px-10 justify-start">
-          <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700">
+          <h1 className="px-8 py-2 rounded-3xl flex gap-2 items-center text-xl w-fit border border-gray-100 shadow-md text-blue-700 bg-white">
             <UserPen className="h-8 w-8" />
             รายละเอียดอาจารย์
           </h1>
@@ -415,112 +412,106 @@ export default function TeacherDetailForm({ teacherId }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6">
-        {/* account */}
         <Info label="ชื่อผู้ใช้ของอาจารย์" value={(formData as any).username} editable={false} />
-
-        <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["-","นาย", "นาง", "นางสาว"]} />
+        <Info label="คำนำหน้า" value={(formData as any).prefix} editable={isEditing} onChange={(v) => handleChange("prefix", v)} type="select" options={["-", "นาย", "นาง", "นางสาว"]} />
         <Info label="ชื่อจริง" value={(formData as any).firstName} editable={isEditing} onChange={(v) => handleChange("firstName", v)} />
         <Info label="นามสกุล" value={(formData as any).lastName} editable={isEditing} onChange={(v) => handleChange("lastName", v)} />
         <Info label="เพศ" value={(formData as any).gender} editable={isEditing} onChange={(v) => handleChange("gender", v)} type="select" options={["ชาย", "หญิง"]} />
-
-        {/* วันเกิด */}
-        <Info
-          label="วันเกิด"
-          value={(formData as any).birthDate}
-          editable={isEditing}
-          onChange={(v) => handleChange("birthDate", toISODateOnly(v))}
-          type="date"
-        />
-
-        <Info label="รหัสอาจารย์" value={(formData as any).teacherCode} editable={isEditing} onChange={(v) => handleChange("teacherCode", v)} />
+        <Info label="วันเกิด" value={(formData as any).birthDate} editable={isEditing} onChange={(v) => handleChange("birthDate", toISODateOnly(v))} type="date" />
+        <div>
+          <label className="text-sm text-gray-500">รหัสอาจารย์</label>
+          {isEditing ? (
+            <input
+              type="text"
+              value={String((formData as any).teacherCode ?? "")}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (/^\d*$/.test(v)) handleChange("teacherCode", v);
+              }}
+              className="w-full border px-3 py-2 rounded"
+              placeholder="กรุณากรอกรหัสอาจารย์"
+            />
+          ) : (
+            <p className="w-full border px-3 py-2 rounded">
+              {(formData as any).teacherCode && String((formData as any).teacherCode).trim() !== "" ? String((formData as any).teacherCode) : "—"}
+            </p>
+          )}
+        </div>
+        {!isEditing ? (
+          <ReadOnlyBox
+            label="คณะ "
+            value={programInfo?.facultyName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")}
+          />
+        ) : (
+          <div>
+            <label className="text-sm text-gray-700">คณะ </label>
+            <select
+              value={selectedFaculty}
+              onChange={(e) => onSelectFaculty(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              disabled={loadingPrograms || !!programsError || faculties.length === 0}
+            >
+              <option value="">
+                {loadingPrograms ? "กำลังโหลดข้อมูล..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "— เลือกคณะ —"}
+              </option>
+              {faculties.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {!isEditing ? (
+          <ReadOnlyBox
+            label="สาขา  "
+            value={programInfo?.programName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")}
+          />
+        ) : (
+          <div>
+            <label className="text-sm text-gray-700">สาขา  </label>
+            <select
+              value={selectedProgramName}
+              onChange={(e) => onSelectProgramName(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              disabled={!selectedFaculty || loadingPrograms || !!programsError}
+            >
+              <option value="">{!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}</option>
+              {programNames.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        {!isEditing ? (
+          <ReadOnlyBox
+            label="แขนง  "
+            value={programInfo?.subProgramName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")}
+          />
+        ) : (
+          <div>
+            <label className="text-sm text-gray-700">แขนง  </label>
+            <select
+              value={selectedSubProgramName}
+              onChange={(e) => onSelectSubProgramName(e.target.value)}
+              className="w-full border px-3 py-2 rounded"
+              disabled={!selectedProgramName || loadingPrograms || !!programsError}
+            >
+              <option value="">{!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}</option>
+              {subProgramNames.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <Info label="รหัสประชาชน" value={(formData as any).citizenId} editable={isEditing} onChange={(v) => handleChange("citizenId", v)} />
         <Info label="เบอร์โทร" value={(formData as any).phoneNumber} editable={isEditing} onChange={(v) => handleChange("phoneNumber", v)} />
         <Info label="สัญชาติ" value={(formData as any).nationality} editable={isEditing} onChange={(v) => handleChange("nationality", v)} />
-
-
-        <Info
-          label="วันที่เข้าทำงาน"
-          value={(formData as any).hiredDate as any}
-          editable={isEditing}
-          onChange={(v) => handleChange("hiredDate", toISODateOnly(v))}
-          type="date"
-        />
-
-        <div className="col-span-2">
-          {!isEditing ? (
-            <div className="grid grid-cols-3 gap-4">
-              <ReadOnlyBox label="คณะ " value={programInfo?.facultyName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-              <ReadOnlyBox label="สาขา  " value={programInfo?.programName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-              <ReadOnlyBox label="แขนง  " value={programInfo?.subProgramName || (loadingPrograms ? "กำลังโหลด..." : programsError ? "โหลดข้อมูลไม่สำเร็จ" : "—")} />
-            </div>
-          ) : (
-            <div className="grid grid-cols-3 gap-4">
-              {/* Faculty */}
-              <div>
-                <label className="text-sm text-gray-700">คณะ </label>
-                <select
-                  value={selectedFaculty}
-                  onChange={(e) => onSelectFaculty(e.target.value)}
-                  className="w-full border px-3 py-2 rounded"
-                  disabled={loadingPrograms || !!programsError || faculties.length === 0}
-                >
-                  <option value="">
-                    {loadingPrograms
-                      ? "กำลังโหลดข้อมูล..."
-                      : programsError
-                        ? "โหลดข้อมูลไม่สำเร็จ"
-                        : "— เลือกคณะ —"}
-                  </option>
-                  {faculties.map((f) => (
-                    <option key={f} value={f}>
-                      {f}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Program */}
-              <div>
-                <label className="text-sm text-gray-700">สาขา  </label>
-                <select
-                  value={selectedProgramName}
-                  onChange={(e) => onSelectProgramName(e.target.value)}
-                  className="w-full border px-3 py-2 rounded"
-                  disabled={!selectedFaculty || loadingPrograms || !!programsError}
-                >
-                  <option value="">
-                    {!selectedFaculty ? "— เลือกคณะก่อน —" : "— เลือกสาขา —"}
-                  </option>
-                  {programNames.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Sub Program */}
-              <div>
-                <label className="text-sm text-gray-700">แขนง  </label>
-                <select
-                  value={selectedSubProgramName}
-                  onChange={(e) => onSelectSubProgramName(e.target.value)}
-                  className="w-full border px-3 py-2 rounded"
-                  disabled={!selectedProgramName || loadingPrograms || !!programsError}
-                >
-                  <option value="">
-                    {!selectedProgramName ? "— เลือกสาขาก่อน —" : "— เลือกแขนง —"}
-                  </option>
-                  {subProgramNames.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
-        </div>
+        <Info label="วันที่เข้าทำงาน" value={(formData as any).hiredDate as any} editable={isEditing} onChange={(v) => handleChange("hiredDate", toISODateOnly(v))} type="date" />
       </div>
 
       {openChangePassword && !!userId && (
@@ -532,15 +523,11 @@ export default function TeacherDetailForm({ teacherId }: Props) {
           }}
         />
       )}
-
-      {openDeletePopup && !!userId && (
-        <DeleteUserPopup userId={String(userId)} onClose={() => setOpenDeletePopup(false)} />
-      )}
+      {openDeletePopup && !!userId && <DeleteUserPopup userId={String(userId)} onClose={() => setOpenDeletePopup(false)} />}
     </div>
   );
 }
 
-/* ---------------- Small helpers ---------------- */
 function Info({
   label,
   value,
@@ -557,10 +544,8 @@ function Info({
   options?: string[];
 }) {
   const isDate = type === "date";
-
   if (!editable) {
-    const display =
-      isDate ? (value ? isoToDMY(String(value)) : "—") : value && String(value).trim() !== "" ? String(value) : "—";
+    const display = isDate ? (value ? isoToDMY(String(value)) : "—") : value && String(value).trim() !== "" ? String(value) : "—";
     return (
       <div>
         <label className="text-sm text-gray-500">{label}</label>
@@ -568,45 +553,29 @@ function Info({
       </div>
     );
   }
-
   if (type === "select" && options) {
-  const safeValue =
-    options.includes(String(value ?? "")) ? String(value ?? "") : options[0];
-
-  return (
-    <div>
-      <label className="text-sm text-gray-500">{label}</label>
-      <select
-        value={safeValue}
-        onChange={(e) => onChange?.(e.target.value)}
-        className="w-full border px-3 py-2 rounded"
-      >
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-
+    const safeValue = options.includes(String(value ?? "")) ? String(value ?? "") : options[0];
+    return (
+      <div>
+        <label className="text-sm text-gray-500">{label}</label>
+        <select value={safeValue} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded">
+          {options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
   if (isDate) {
     return (
       <div>
         <label className="text-sm text-gray-500">{label}</label>
-        <input
-          type="date"
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
-          lang="th-TH"
-        />
+        <input type="date" value={value ?? ""} onChange={(e) => onChange?.(e.target.value)} className="w-full border px-3 py-2 rounded" lang="th-TH" />
       </div>
     );
   }
-
   return (
     <div>
       <label className="text-sm text-gray-500">{label}</label>

@@ -54,6 +54,25 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
     null
   );
 
+  const resetLocalState = () => {
+    setGroupClass("");
+    setLevel("");
+    setGroupName("");
+    setGroupCode("");
+    setYear("");
+    setTerm("1");
+    setSection("เช้า");
+    setSelectedFaculty("");
+    setSelectedProgramName("");
+    setSelectedSubProgramName("");
+    setResolvedProgramId(null);
+  };
+
+  const closeAndReset = (val: boolean) => {
+    resetLocalState();
+    onClosePopUp(val);
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -68,6 +87,14 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       }
     };
     load();
+  }, []);
+
+  useEffect(() => {
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAndReset(false);
+    };
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
   }, []);
 
   const faculties = useMemo(() => {
@@ -135,7 +162,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       const stripped = groupName.replace(/^\d\//, "");
       setGroupName(`${level}/${stripped}`);
     }
-  }, [level]);
+  }, [level]); 
 
   const onChangeGroupName = (val: string) => {
     if (level) {
@@ -160,7 +187,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       return false;
     }
     if (!groupCode.trim()) {
-      toast.error("กรุณารหัสกลุ่ม (Group Code)");
+      toast.error("กรุณาระบุรหัสกลุ่ม (Group Code)");
       return false;
     }
     if (year === "" || isNaN(Number(year))) {
@@ -196,13 +223,13 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       isActive: true,
       year: Number(year),
       term,
-      section:section,
+      section,
     };
     try {
       const ok = await CreateStudentGroup(payload);
       if (ok) {
         toast.success("สร้างกลุ่มเรียนสำเร็จ");
-        onClosePopUp(true);
+        closeAndReset(true);
       } else {
         toast.error("สร้างกลุ่มเรียนไม่สำเร็จ");
       }
@@ -226,8 +253,14 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-xl p-7 w-[820px] space-y-6 max-h-[92vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+      onClick={() => closeAndReset(false)}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl p-7 w-[820px] space-y-6 max-h-[92vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold text-blue-700">เพิ่มกลุ่มเรียน</h2>
 
         <div className="space-y-5">
@@ -284,7 +317,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-1.5">
+            <div>
               <label className="text-sm">รหัสกลุ่ม (Group Code)</label>
               <input
                 type="text"
@@ -417,7 +450,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
         <div className="flex justify-end gap-3 pt-1">
           <button
             className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            onClick={() => onClosePopUp(false)}
+            onClick={() => closeAndReset(false)}
           >
             ยกเลิก
           </button>
