@@ -57,7 +57,6 @@ function useDebounce<T>(value: T, delay: number): T {
 export function ClassroomGrading() {
   const router = useRouter();
 
-  const term = ["1", "2"];
   const dateTime = new Date();
   const currentMonth = dateTime.getMonth();
   const currentYear =
@@ -65,9 +64,7 @@ export function ClassroomGrading() {
       ? dateTime.getFullYear() + 543
       : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
-  const yearsList = Array.from({ length: 3 }, (_, i) =>
-    (currentYear - i).toString()
-  );
+
 
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
   const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
@@ -164,7 +161,8 @@ export function ClassroomGrading() {
           totalCredit: student.totalCredit || 0,
           grads: grads
         };
-      });
+      })
+      .sort((a, b) => a.studentId - b.studentId);
 
     return {
       groupId: data.groupId,

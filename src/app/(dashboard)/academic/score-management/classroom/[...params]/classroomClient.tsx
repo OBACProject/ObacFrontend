@@ -99,7 +99,8 @@ export function ClassroomGradeClient({ initialData }: Props) {
           totalCredit: student.totalCredit || 0,
           grads: grads,
         };
-      });
+      })
+      .sort((a, b) => a.studentId - b.studentId);
 
     return {
       groupId: data.groupId,
