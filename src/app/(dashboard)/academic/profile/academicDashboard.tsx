@@ -97,7 +97,7 @@ export default function AcademicDashboard() {
     return {
       vocLabels: ["ปวช", "ปวส"],
       vocValues: [1128, 665],
-      vocColors: ["#7EA1FF", "#B388EB"],
+      vocColors: ["#3B82F6", "#9CA3AF"],
     };
   }, [classCount]);
 
@@ -154,7 +154,7 @@ export default function AcademicDashboard() {
             title="สัดส่วน ปวช-ปวส"
             value={vocValues}
             label={vocLabels}
-            backgroundColor={["#FF8DC7", "#8AB6F9"]}
+            backgroundColor={["#3B82F6", "#9CA3AF"]}
           />
         </div>
 
