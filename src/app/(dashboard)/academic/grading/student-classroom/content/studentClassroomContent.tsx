@@ -137,7 +137,6 @@ export default function StudentClassroomContent() {
               disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
-                  // Optimistic update - update UI immediately
                   setTableData((prev) =>
                     prev.map((item, i) =>
                       i === row.index - 1
@@ -214,7 +213,32 @@ export default function StudentClassroomContent() {
 
         return matchStatus && matchPublished && matchClass && matchSearch;
       })
-      .sort((a, b) => a.groupId - b.groupId);
+      .sort((a, b) => {
+        const parseClass = (className: string) => {
+          const match = className.match(/(ปวช|ปวส)\.(\d+)/);
+          if (!match) return { level: "", year: 0 };
+          const [_, level, year] = match;
+          return { level, year: parseInt(year, 10) };
+        };
+
+        const aClass = parseClass(a.class);
+        const bClass = parseClass(b.class);
+
+        // Prioritize ปวช.1 explicitly
+        if (a.class === "ปวช.1" && b.class !== "ปวช.1") {
+          return -1;
+        }
+        if (b.class === "ปวช.1" && a.class !== "ปวช.1") {
+          return 1;
+        }
+
+        if (aClass.level !== bClass.level) {
+          return aClass.level === "ปวช" ? -1 : 1;
+        }
+
+        return aClass.year - bClass.year;
+      })
+      .map((item, idx) => ({ ...item, index: idx + 1 }));
   }, [
     tableData,
     deferredSearchTerm,
