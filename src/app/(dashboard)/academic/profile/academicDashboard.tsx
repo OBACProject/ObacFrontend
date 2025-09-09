@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  AcademicDetailsResponse,
+  GetAcademicDetails,
+} from "@/api/academic/route";
 import { GetGenderInfoCount, GetStudentClassCount } from "@/api/user/userAPI";
 import DonutChart from "@/components/Academic/DonutChart";
 import OverviewChart from "@/components/Academic/OverviewChart";
@@ -16,7 +20,15 @@ export default function AcademicDashboard() {
   const [userGender, setUserGender] = useState<GetGenderCount[]>([]);
   const [classCount, setClassCount] = useState<ClassCount[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [userInfo, setUserInfo] = useState<AcademicDetailsResponse>();
 
+  useEffect(() => {
+    GetAcademicDetails().then((d) => {
+      if (d) {
+        setUserInfo(d);
+      }
+    });
+  }, []);
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -158,7 +170,10 @@ export default function AcademicDashboard() {
           />
         </div>
 
-        <ProfileCard username="---- -----" rolename="ฝ่ายทะเบียน" />
+        <ProfileCard
+          username={`คุณ ${userInfo?.name} ${userInfo?.lastName}`}
+          rolename="ฝ่ายทะเบียน"
+        />
       </div>
 
       <OverviewChart />
