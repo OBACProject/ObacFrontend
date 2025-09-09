@@ -88,7 +88,7 @@ export default function DownloadStudentListPopup({
 
       BulkStudentNameListInLevelPDF({
         data: sortedByRoomAsc,
-        year: currentYear,
+        year: year,
         classGroup,
         level,
       });
