@@ -10,13 +10,21 @@ import { TableSkeleton } from "@/components/common/TableSkeleton/tableSkeleton";
 import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
-import { GetGroupSummaryGradeRequest,  } from "@/lib/api/models/grade/grade.request";
+import { GetGroupSummaryGradeRequest } from "@/lib/api/models/grade/grade.request";
 import { useGetGroupSummaryGradeQuery } from "@/lib/api/hooks/queries/grade.queries";
 import { GetGroupSummaryGradeResponse } from "@/lib/api/models/grade/grade.response";
-import { GroupSummaryGradeResponse, SubjectNameList, StudentList, Grad } from "@/dto/gradingDto";
+import {
+  GroupSummaryGradeResponse,
+  SubjectNameList,
+  StudentList,
+  Grad,
+} from "@/dto/gradingDto";
 import GroupSummaryGradPDF from "@/lib/PDF/score/GroupSummaryGrade";
-import { ConvertClassroomGradingToExcel, GeneralData, StudentListExcel } from "@/lib/Excel/generateExcelFile";
-
+import {
+  ConvertClassroomGradingToExcel,
+  GeneralData,
+  StudentListExcel,
+} from "@/lib/Excel/generateExcelFile";
 
 interface ClassroomTable {
   class: string;
@@ -65,16 +73,19 @@ export function ClassroomGrading() {
       : dateTime.getFullYear() + 543 - 1;
   const defaultTerm = currentMonth > 5 ? "1" : "2";
 
-
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
   const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
   const [searchInput, setSearchInput] = useState<string>("");
-  
-  const [downloadingGroupId, setDownloadingGroupId] = useState<number | null>(null);
-  const [downloadingExcelGroupId, setDownloadingExcelGroupId] = useState<number | null>(null);
+
+  const [downloadingGroupId, setDownloadingGroupId] = useState<number | null>(
+    null
+  );
+  const [downloadingExcelGroupId, setDownloadingExcelGroupId] = useState<
+    number | null
+  >(null);
   const {
     data: apiData,
     isLoading,
@@ -86,7 +97,7 @@ export function ClassroomGrading() {
   });
 
   const gradeSummaryParams: GetGroupSummaryGradeRequest | null =
-    (downloadingGroupId !== null
+    downloadingGroupId !== null
       ? {
           groupId: downloadingGroupId,
           term: selectedTerm,
@@ -98,31 +109,31 @@ export function ClassroomGrading() {
           term: selectedTerm,
           year: Number(selectedYear),
         }
-      : null);
+      : null;
 
-  const {
-    data: gradeSummaryData,
-    isLoading: isLoadingGradeSummary,
-  } = useGetGroupSummaryGradeQuery(
-    gradeSummaryParams || { groupId: 0, term: "", year: 0 },
-    {
-      enabled: !!gradeSummaryParams, 
-      staleTime : 0,
-      cacheTime: 0
-    } as any
-  );
+  const { data: gradeSummaryData, isLoading: isLoadingGradeSummary } =
+    useGetGroupSummaryGradeQuery(
+      gradeSummaryParams || { groupId: 0, term: "", year: 0 },
+      {
+        enabled: !!gradeSummaryParams,
+        staleTime: 0,
+        cacheTime: 0,
+      } as any
+    );
 
-  const transformGradeData = (data: GetGroupSummaryGradeResponse): GroupSummaryGradeResponse => {
+  const transformGradeData = (
+    data: GetGroupSummaryGradeResponse
+  ): GroupSummaryGradeResponse => {
     const subjectsMap = new Map<string, SubjectNameList>();
     let subjectIdCounter = 1;
 
-    data.students.forEach(student => {
-      student.subject.forEach(subject => {
+    data.students.forEach((student) => {
+      student.subject.forEach((subject) => {
         if (!subjectsMap.has(subject.subjectCode)) {
           subjectsMap.set(subject.subjectCode, {
             subjectID: subjectIdCounter++,
             subjectCode: subject.subjectCode,
-            subjectName: subject.subjectName
+            subjectName: subject.subjectName,
           });
         }
       });
@@ -131,24 +142,31 @@ export function ClassroomGrading() {
     const subjectsArray = Array.from(subjectsMap.values());
 
     const transformedStudents: StudentList[] = data.students
-      .filter(student => student.isActive && student.status !== "คัดชื่อออก" && student.status !== "ลาออก") 
-      .map(student => {
-        const grads: Grad[] = subjectsArray.map(subject => {
-          const studentSubject = student.subject.find(s => s.subjectCode === subject.subjectCode);
+      .filter(
+        (student) =>
+          student.isActive &&
+          student.status !== "คัดชื่อออก" &&
+          student.status !== "ลาออก"
+      )
+      .map((student) => {
+        const grads: Grad[] = subjectsArray.map((subject) => {
+          const studentSubject = student.subject.find(
+            (s) => s.subjectCode === subject.subjectCode
+          );
           if (studentSubject) {
             let gradeNumber = 0;
             if (!isNaN(parseFloat(studentSubject.grade))) {
               gradeNumber = parseFloat(studentSubject.grade);
             }
-            
+
             return {
               grad: gradeNumber,
-              remark: studentSubject.remark || ""
+              remark: studentSubject.remark || "",
             };
           }
           return {
             grad: 0,
-            remark: "-"
+            remark: "-",
           };
         });
 
@@ -161,7 +179,7 @@ export function ClassroomGrading() {
           gpa: student.gpa || 0,
           gpax: student.gpax || 0,
           totalCredit: student.totalCredit || 0,
-          grads: grads
+          grads: grads,
         };
       })
       .sort((a, b) => a.studentId - b.studentId);
@@ -176,81 +194,83 @@ export function ClassroomGrading() {
       term: data.term,
       year: data.year,
       student: transformedStudents,
-      subjects: subjectsArray
+      subjects: subjectsArray,
     };
   };
 
-const transformedDataExcel = (
-  data: GetGroupSummaryGradeResponse
-): { general: GeneralData; studentListExcel: StudentListExcel[] } => {
-  const general: GeneralData = {
-    groupId: data.groupId,
-    groupName: data.groupName,
-    groupCode: data.groupCode,
-    class: data.class,
-    facultyName: data.facultyName,
-    programName: data.programName,
-    term: data.term,
-    year: data.year,
-  };
+  const transformedDataExcel = (
+    data: GetGroupSummaryGradeResponse
+  ): { general: GeneralData; studentListExcel: StudentListExcel[] } => {
+    const general: GeneralData = {
+      groupId: data.groupId,
+      groupName: data.groupName,
+      groupCode: data.groupCode,
+      class: data.class,
+      facultyName: data.facultyName,
+      programName: data.programName,
+      term: data.term,
+      year: data.year,
+    };
 
-  // collect all subject names and also map credits
-  const subjectInfoMap = new Map<string, number>();
-  data.students.forEach((student) => {
-    student.subject.forEach((subj) => {
-      subjectInfoMap.set(subj.subjectName, subj.credit ?? 0);
+    // collect all subject names and also map credits
+    const subjectInfoMap = new Map<string, number>();
+    data.students.forEach((student) => {
+      student.subject.forEach((subj) => {
+        subjectInfoMap.set(subj.subjectName, subj.credit ?? 0);
+      });
     });
-  });
 
-  const studentListExcel: StudentListExcel[] = data.students
-    .filter((s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
-    .map((student) => {
-      // create array of [subjectName, grade/remark]
-      const subjectsArray = Array.from(subjectInfoMap.entries()).map(
-        ([subjectName, credit]) => {
-          const subj = student.subject.find((s) => s.subjectName === subjectName);
-          const value = subj
-            ? subj.remark
-              ? subj.remark
-              : subj.grade
-            : "-";
-          return { subjectName, value, credit };
-        }
-      );
+    const studentListExcel: StudentListExcel[] = data.students
+      .filter(
+        (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
+      )
+      .map((student) => {
+        // create array of [subjectName, grade/remark]
+        const subjectsArray = Array.from(subjectInfoMap.entries()).map(
+          ([subjectName, credit]) => {
+            const subj = student.subject.find(
+              (s) => s.subjectName === subjectName
+            );
+            const value = subj ? (subj.remark ? subj.remark : subj.grade) : "-";
+            return { subjectName, value, credit };
+          }
+        );
 
-      // sort: subjects with credit=0 go last, keep original order otherwise
-      subjectsArray.sort((a, b) => {
-        if (a.credit === 0 && b.credit !== 0) return 1;
-        if (a.credit !== 0 && b.credit === 0) return -1;
-        return 0;
-      });
+        // sort: subjects with credit=0 go last, keep original order otherwise
+        subjectsArray.sort((a, b) => {
+          if (a.credit === 0 && b.credit !== 0) return 1;
+          if (a.credit !== 0 && b.credit === 0) return -1;
+          return 0;
+        });
 
-      // back to ordered record (if you still want Record)
-      const subjectsRecord: Record<string, string> = {};
-      subjectsArray.forEach(({ subjectName, value }) => {
-        subjectsRecord[subjectName] = value;
-      });
+        // back to ordered record (if you still want Record)
+        const subjectsRecord: Record<string, string> = {};
+        subjectsArray.forEach(({ subjectName, value }) => {
+          subjectsRecord[subjectName] = value;
+        });
 
-      return {
-        studentId: student.studentId,
-        studentCode: student.studentCode,
-        name: `${student.prefix ?? ""}${student.firstName} ${student.lastName}`,
-        gpa: student.gpa ?? 0,
-        gpax: student.gpax ?? 0,
-        totalCredit: student.totalCredit ?? 0,
-        subjects: subjectsRecord,
-      };
-    })
-    .sort((a, b) => a.studentId - b.studentId);
+        return {
+          studentId: student.studentId,
+          studentCode: student.studentCode,
+          name: `${student.prefix ?? ""}${student.firstName} ${
+            student.lastName
+          }`,
+          gpa: student.gpa ?? 0,
+          gpax: student.gpax ?? 0,
+          totalCredit: student.totalCredit ?? 0,
+          subjects: subjectsRecord,
+        };
+      })
+      .sort((a, b) => a.studentId - b.studentId);
 
-  return { general, studentListExcel };
-};
+    return { general, studentListExcel };
+  };
 
   useEffect(() => {
     if (downloadingGroupId && gradeSummaryData && !isLoadingGradeSummary) {
       try {
         const transformedData = transformGradeData(gradeSummaryData);
-        
+
         GroupSummaryGradPDF({ data: transformedData });
       } catch (error) {
         console.error("Error generating PDF:", error);
@@ -259,19 +279,29 @@ const transformedDataExcel = (
         setDownloadingGroupId(null);
         setTriggerDownLoadPDF(false);
       }
-    } else if (downloadingExcelGroupId && gradeSummaryData && !isLoadingGradeSummary) {
-  try {
-    const { general, studentListExcel } = transformedDataExcel(gradeSummaryData);
+    } else if (
+      downloadingExcelGroupId &&
+      gradeSummaryData &&
+      !isLoadingGradeSummary
+    ) {
+      try {
+        const { general, studentListExcel } =
+          transformedDataExcel(gradeSummaryData);
 
-    console.log(studentListExcel)
-      ConvertClassroomGradingToExcel( general, studentListExcel );
-    } catch (error) {
-      console.error("Error generating Excel:", error);
-    } finally {
-      setDownloadingExcelGroupId(null);
+        console.log(studentListExcel);
+        ConvertClassroomGradingToExcel(general, studentListExcel);
+      } catch (error) {
+        console.error("Error generating Excel:", error);
+      } finally {
+        setDownloadingExcelGroupId(null);
+      }
     }
-  }
-    }, [downloadingGroupId, downloadingExcelGroupId, gradeSummaryData, isLoadingGradeSummary]);
+  }, [
+    downloadingGroupId,
+    downloadingExcelGroupId,
+    gradeSummaryData,
+    isLoadingGradeSummary,
+  ]);
 
   useEffect(() => {
     refetch();
@@ -300,16 +330,12 @@ const transformedDataExcel = (
     setDownloadingExcelGroupId(groupId);
   };
 
-
   const filteredData = useMemo(() => {
-    if (
-      !debouncedSearchInput
-    ) {
+    if (!debouncedSearchInput) {
       return transformedData.sort((a, b) => +a.groupId - +b.groupId);
     }
 
     const filtered = transformedData.filter((item) => {
-      
       const matchSearch = debouncedSearchInput
         ? item.groupCode
             .toLowerCase()
@@ -324,24 +350,17 @@ const transformedDataExcel = (
             .toLowerCase()
             .includes(debouncedSearchInput.toLowerCase())
         : true;
-      return (
-        matchSearch
-      );
+      return matchSearch;
     });
 
     return filtered.sort((a, b) => +a.groupId - +b.groupId);
-  }, [
-    transformedData,
-    selectedYear,
-    currentYear,
-    debouncedSearchInput,
-  ]);
+  }, [transformedData, selectedYear, currentYear, debouncedSearchInput]);
 
   const tableData = useMemo(() => {
     const sorted = [...filteredData].sort((a, b) => {
       const parseClass = (cls: string) => {
         // Example: "ปวช 1/10" or "ปวส 2/5"
-        const levelOrder = cls.startsWith("ปวช") ? 1 : 2; 
+        const levelOrder = cls.startsWith("ปวช") ? 1 : 2;
         const match = cls.match(/(\d+)\/(\d+)/);
         if (!match) return [levelOrder, 0, 0];
         const year = parseInt(match[1], 10);
@@ -375,7 +394,11 @@ const transformedDataExcel = (
   const columns = [
     { label: "ลำดับ", key: "index", className: "w-1/12 justify-center" },
     { label: "ระดับชั้น", key: "class", className: "w-1/12 justify-center" },
-    { label: "รหัสห้อง", key: "groupCode", className: "w-1/12 pl-6 justify-center" },
+    {
+      label: "รหัสห้อง",
+      key: "groupCode",
+      className: "w-1/12 pl-6 justify-center",
+    },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
@@ -403,7 +426,6 @@ const transformedDataExcel = (
             {downloadingGroupId === row.groupId ? (
               <p className="flex gap-1 items-center">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                กำลังดาวโหลด
               </p>
             ) : (
               <p>PDF</p>
@@ -420,7 +442,6 @@ const transformedDataExcel = (
             {downloadingExcelGroupId === row.groupId ? (
               <p className="flex gap-1 items-center">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                กำลังดาวโหลด
               </p>
             ) : (
               <p>Excel</p>
@@ -452,30 +473,30 @@ const transformedDataExcel = (
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border space-y-6">
       {/* Filter Section */}
-        <div className="flex flex-wrap gap-4">
-          {/* Search Input */}
-          <div className="flex-1 min-w-[250px] w-60">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                type="text"
-                placeholder="ค้นหาชั้นการเรียน..."
-                className="pl-10 bg-white"
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="min-w-[150px]">
-            <SelectTermAndYear
-              term={selectedTerm}
-              year={selectedYear ? Number(selectedYear) : 0}
-              currentYear={currentYear}
-              onChangeTerm={(t) => setSelectedTerm(t)}
-              onChangeYear={(y) => setSelectedYear(y === 0 ? "" : String(y))}
+      <div className="flex flex-wrap gap-4">
+        {/* Search Input */}
+        <div className="flex-1 min-w-[250px] w-60">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="ค้นหาชั้นการเรียน..."
+              className="pl-10 bg-white"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
             />
           </div>
+        </div>
+
+        <div className="min-w-[150px]">
+          <SelectTermAndYear
+            term={selectedTerm}
+            year={selectedYear ? Number(selectedYear) : 0}
+            currentYear={currentYear}
+            onChangeTerm={(t) => setSelectedTerm(t)}
+            onChangeYear={(y) => setSelectedYear(y === 0 ? "" : String(y))}
+          />
+        </div>
 
         {/* Active Filters */}
         {debouncedSearchInput && (

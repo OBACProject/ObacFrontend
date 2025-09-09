@@ -50,7 +50,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
     align: "center",
   });
   doc.text(
-    `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.term} ปีการศึกษา ${year} ห้อง ${data.class}.${data.groupName}`,
+    `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.term} ปีการศึกษา ${data.year} ห้อง ${data.class}.${data.groupName}`,
     10,
     25
   );
