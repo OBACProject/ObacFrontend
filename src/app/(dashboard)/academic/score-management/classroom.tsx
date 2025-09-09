@@ -107,7 +107,9 @@ export function ClassroomGrading() {
     gradeSummaryParams || { groupId: 0, term: "", year: 0 },
     {
       enabled: !!gradeSummaryParams, 
-    }
+      staleTime : 0,
+      cacheTime: 0
+    } as any
   );
 
   const transformGradeData = (data: GetGroupSummaryGradeResponse): GroupSummaryGradeResponse => {

@@ -50,7 +50,7 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
     align: "center",
   });
   doc.text(
-    `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.term} ปีการศึกษา ${year} ห้อง ${data.groupName}`,
+    `สรุปเกรดนักศึกษา ภาคเรียนที่ ${data.term} ปีการศึกษา ${year} ห้อง ${data.class}.${data.groupName}`,
     10,
     25
   );
@@ -239,5 +239,5 @@ export default function GroupSummaryGradPDF({ data }: DataList) {
   }
 
   doc.setFont("THSarabun");
-  doc.save(`ใบตรวจเกรด ${data.groupName} ${data.term}_${data.year}.pdf`);
+  doc.save(`ใบตรวจเกรด ${data.class} ${data.groupName} ${data.term}_${data.year}.pdf`);
 }
