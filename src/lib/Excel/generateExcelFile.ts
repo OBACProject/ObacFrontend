@@ -79,15 +79,22 @@ export async function ConvertScoreToExcel(
     };
   });
   worksheet.getRow(headerRow.number).height = 18;
-
+    //   "คะแนนจิตพิสัย (20)",
+    // "คะแนนทดสอบ (10)",
+    // "คะแนนภาระงาน (20)",
+    // "คะแนนสอบกลางภาค (20)",
+    // "คะแนนสอบปลายภาค (30)",
+    // "คะแนนรวม",
   worksheet.columns = [
     { key: "index", width: 8 },
     { key: "studentCode", width: 15 },
     { key: "name", width: 35 },
     { key: "classroom", width: 10 },
     { key: "affectiveScore", width: 15 },
-    { key: "collectScore", width: 15 },
     { key: "testScore", width: 15 },
+    { key: "collectScore", width: 15 },
+    { key: "midtermScore", width: 15 },
+    { key: "finaltermScore", width: 15 },
     { key: "totalScore", width: 15 },
     { key: "finalGrade", width: 15 },
     { key: "remarks", width: 30 },
@@ -102,12 +109,11 @@ export async function ConvertScoreToExcel(
       item.affectiveScore, // คะแนนจิตพิสัย (20)
       item.assignmentscore, // คะแนนภาระงาน (20) 
       item.collectScore, // คะแนนเก็บ (10)
-      item.assignmentscore, // คะแนนภาระงาน (20)
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
       item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore + item.assignmentscore, // คะแนนรวม
       item.remarks ? item.remarks : item.finalGrade, // เกรด
-      "",
+      "", // หมายเหตุ
     ]);
     row.eachCell((cell, colNumber) => {
       cell.font = { size: 10 };
