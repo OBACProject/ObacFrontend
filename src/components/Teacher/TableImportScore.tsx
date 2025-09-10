@@ -1,5 +1,5 @@
 "use client";
-import { GetSubjectsByTermAndClass } from "@/api/subject/route";
+import { GetAllActiveSubjectAsync } from "@/api/subject/route";
 import { SubjectGrade } from "@/dto/gradingDto";
 import { SubjectItem } from "@/dto/subjectDto";
 import { Trash2 } from "lucide-react";
@@ -27,7 +27,7 @@ export default function ScoreInputForm({
 }: ScoreInputFormProps) {
   const [subjects, setSubject] = useState<SubjectItem[]>();
   useEffect(() => {
-    GetSubjectsByTermAndClass(String(term), String(classLevel)).then((d) => {
+    GetAllActiveSubjectAsync().then((d) => {
       if (d) {
         setSubject(d);
       }

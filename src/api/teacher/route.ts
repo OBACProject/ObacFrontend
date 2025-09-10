@@ -1,4 +1,4 @@
-import { CreateSubjectRequest } from "@/dto/subjectDto";
+
 import {
   CardSubjectResponse,
   CreateTeacherRequest,

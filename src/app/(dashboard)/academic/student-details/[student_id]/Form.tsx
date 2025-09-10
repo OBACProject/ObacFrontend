@@ -237,7 +237,7 @@ export default function Form({ studentID }: Props) {
                 <InputBox
                   label="รหัสนักเรียน"
                   name="studentCode"
-                  value={formData.studentCode || "ไม่มีข้อมูล"}
+                  value={formData.studentCode || ""}
                   onChange={handleChange}
                   placeholder="รหัสนักเรียน"
                   inputWidth="w-[150px]"
@@ -270,7 +270,7 @@ export default function Form({ studentID }: Props) {
                 <InputBox
                   label="ชื่อ"
                   name="name"
-                  value={formData.name || "ไม่มีข้อมูล"}
+                  value={formData.name || ""}
                   onChange={handleChange}
                   placeholder="ชื่อจริง"
                   inputWidth="w-[200px]"
@@ -281,7 +281,7 @@ export default function Form({ studentID }: Props) {
                 <InputBox
                   label="นามสกุล"
                   name="lastName"
-                  value={formData.lastName || "ไม่มีข้อมูล"}
+                  value={formData.lastName || ""}
                   onChange={handleChange}
                   placeholder="นามสกุล"
                   inputWidth="w-[200px]"
@@ -301,7 +301,7 @@ export default function Form({ studentID }: Props) {
                 <InputBox
                   label="หลักสูตร"
                   name="facultyName"
-                  value={students?.facultyName || "ไม่มีข้อมูล"}
+                  value={students?.facultyName || ""}
                   onChange={handleChange}
                   placeholder="หลักสูตร"
                   inputWidth="w-[250px]"
@@ -312,7 +312,7 @@ export default function Form({ studentID }: Props) {
                 <InputBox
                   label="สาขา"
                   name="programName"
-                  value={students?.programName || "ไม่มีข้อมูล"}
+                  value={students?.programName || ""}
                   onChange={handleChange}
                   placeholder="สาขา"
                   inputWidth="w-[250px]"
@@ -344,7 +344,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="เลขบัตรประชาชน"
                 name="citizenId"
-                value={formData.citizenId || "ไม่มีข้อมูล"}
+                value={formData.citizenId || ""}
                 onChange={handleChange}
                 placeholder="เลขบัตรประชาชน"
                 inputWidth="w-[200px]"
@@ -355,7 +355,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="สัญชาติ"
                 name="nationality"
-                value={formData.nationality || "ไม่มีข้อมูล"}
+                value={formData.nationality || ""}
                 onChange={handleChange}
                 placeholder="เชื้อชาติ"
                 inputWidth="w-[120px]"
@@ -366,7 +366,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="ศาสนา"
                 name="religion"
-                value={formData.religion || "ไม่มีข้อมูล"}
+                value={formData.religion || ""}
                 onChange={handleChange}
                 placeholder="ศาสนา"
                 inputWidth="w-[150px]"
@@ -403,7 +403,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="เบอร์ติดต่อ"
                 name="phoneNumber"
-                value={formData.phoneNumber || "ไม่มีข้อมูล"}
+                value={formData.phoneNumber || ""}
                 onChange={handleChange}
                 placeholder="เบอร์ติดต่อ"
                 inputWidth="w-[150px]"
@@ -414,7 +414,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="อีเมลล์"
                 name="email"
-                value={formData.email || "ไม่มีข้อมูล"}
+                value={formData.email || ""}
                 onChange={handleChange}
                 placeholder="อีเมลล์"
                 inputWidth="w-[150px]"
@@ -438,7 +438,7 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="ที่อยู่ปัจจุบัน"
                 name="currentAddress"
-                value={formData.currentAddress || "ไม่มีข้อมูล"}
+                value={formData.currentAddress || ""}
                 onChange={handleChange}
                 placeholder="ที่อยู่ปัจจุบัน"
                 inputWidth="w-[150px]"
@@ -454,9 +454,9 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="ชื่อจริง"
                 name="motherFirstName"
-                value={formData.motherFirstName || "ไม่มีข้อมูล"}
+                value={formData.motherFirstName || ""}
                 onChange={handleChange}
-                placeholder="ที่อยู่ปัจจุบัน"
+                placeholder="ชื่อจริง"
                 inputWidth="w-[180px]"
                 inputSize="text-base"
                 labelSize="text-base"
@@ -465,9 +465,9 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="นามสกุล"
                 name="motherLastName"
-                value={formData.motherLastName || "ไม่มีข้อมูล"}
+                value={formData.motherLastName || ""}
                 onChange={handleChange}
-                placeholder="ที่อยู่ปัจจุบัน"
+                placeholder="นามสกุล"
                 inputWidth="w-[180px]"
                 inputSize="text-base"
                 labelSize="text-base"
@@ -481,9 +481,9 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="ชื่อจริง"
                 name="fatherFirstName"
-                value={formData.fatherFirstName || "ไม่มีข้อมูล"}
+                value={formData.fatherFirstName || ""}
                 onChange={handleChange}
-                placeholder="ที่อยู่ปัจจุบัน"
+                placeholder="ชื่อจริง"
                 inputWidth="w-[200px]"
                 inputSize="text-base"
                 labelSize="text-base"
@@ -492,9 +492,9 @@ export default function Form({ studentID }: Props) {
               <InputBox
                 label="นามสกุล"
                 name="fatherLastName"
-                value={formData.fatherLastName || "ไม่มีข้อมูล"}
+                value={formData.fatherLastName || ""}
                 onChange={handleChange}
-                placeholder="ที่อยู่ปัจจุบัน"
+                placeholder="นามสกุล"
                 inputWidth="w-[200px]"
                 inputSize="text-base"
                 labelSize="text-base"
