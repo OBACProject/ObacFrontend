@@ -39,9 +39,9 @@ export default function ExportFile({
     return {
       studentCode: item.studentCode,
       name: `${prefix} ${item.firstName} ${item.lastName}`,
-      assignmentscore: item.assignmentscore,
-      collectScore: item.collectScore,
       affectiveScore: item.affectiveScore,
+      collectScore: item.collectScore,
+      assignmentscore: item.assignmentscore,
       midtermScore: item.midtermScore,
       finaltermScore: item.finaltermScore,
       totalScore:
