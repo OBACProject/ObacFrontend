@@ -92,19 +92,19 @@ export async function ConvertScoreToExcel(
     { key: "finalGrade", width: 15 },
     { key: "remarks", width: 30 },
   ];
-
+  console.log(data);
   data.forEach((item, index) => {
     const row = worksheet.addRow([
       index + 1,
       item.studentCode, 
       item.name,
       `${classroom} `,
-      item.assignmentscore, // คะแนนภาระงาน (20)
       item.affectiveScore, // คะแนนจิตพิสัย (20)
       item.collectScore, // คะแนนเก็บ (10)
+      item.assignmentscore, // คะแนนภาระงาน (20)
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
-      item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore, // คะแนนรวม
+      item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore + item.assignmentscore, // คะแนนรวม
       item.remarks ? item.remarks : item.finalGrade, // เกรด
       "",
     ]);

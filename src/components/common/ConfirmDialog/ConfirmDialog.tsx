@@ -82,9 +82,9 @@ export default function ConfirmDialog({
             </button>
 
             <div className="flex flex-col items-center space-y-4">
-              <div className={`${colorMap[type]} flex-shrink-0`}>
+              {/* <div className={`${colorMap[type]} flex-shrink-0`}>
                 <Icon className="w-16 h-16" />
-              </div>
+              </div> */}
               <div className="text-center">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {title}
