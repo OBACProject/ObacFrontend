@@ -58,8 +58,8 @@ export async function ConvertScoreToExcel(
     "ชื่อ-นามสกุล",
     "ห้องเรียน",
     "คะแนนจิตพิสัย (20)",
-    "คะแนนเก็บ (10)",
-    "คะแนนภารระงาน (20)",
+    "คะแนนทดสอบ (10)",
+    "คะแนนภาระงาน (20)",
     "คะแนนสอบกลางภาค (20)",
     "คะแนนสอบปลายภาค (30)",
     "คะแนนรวม",
@@ -99,8 +99,8 @@ export async function ConvertScoreToExcel(
       item.studentCode, 
       item.name,
       `${classroom} `,
-      item.assignmentscore, // คะแนนภาระงาน (20)
       item.affectiveScore, // คะแนนจิตพิสัย (20)
+      item.assignmentscore, // คะแนนภาระงาน (20) 
       item.collectScore, // คะแนนเก็บ (10)
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
