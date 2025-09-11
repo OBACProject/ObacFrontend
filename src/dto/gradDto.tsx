@@ -222,6 +222,7 @@ export interface StudentGroupGradeResponse {
   groupId: number;
   groupName: string;
   groupCode: string;
+  section:string;
   class: string;
   level: number;
   isPublish: boolean;

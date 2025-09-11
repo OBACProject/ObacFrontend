@@ -127,7 +127,7 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   });
   doc.setFontSize(14);
   doc.text("ระดับชั้น", 15, 77);
-  doc.text(data.class + "." + data.groupName + "  รอบ บ่าย", 35, 77);
+  doc.text(data.class + "." + data.groupName + `  รอบ ${data.section}`, 35, 77);
   doc.text(
     `ภาคเรียนที่   ${defaultTerm}   ปีการศึกษา   ${currentYear}`,
     105,
