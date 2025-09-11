@@ -107,8 +107,8 @@ export async function ConvertScoreToExcel(
       item.name,
       `${classroom} `,
       item.affectiveScore, // คะแนนจิตพิสัย (20)
+      item.collectScore, // คะแนนทดสอบ (10)
       item.assignmentscore, // คะแนนภาระงาน (20) 
-      item.collectScore, // คะแนนเก็บ (10)
       item.midtermScore, // คะแนนสอบ (30)
       item.finaltermScore, // คะแนนรวม (20)
       item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore + item.assignmentscore, // คะแนนรวม
