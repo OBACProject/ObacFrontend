@@ -21,7 +21,7 @@ export default function Form() {
           </div>
           <div className="px-4 lg:px-10 animate-fadeIn">
             <div className="text-xl w-fit line-clamp-2 text-blue-800 font-bold">
-              OBAC (Ekkawit Business Administration)
+              OBAC (Ekawit Business Administration)
             </div>
             <div className="lg:w-[300px] mt-5 text-gray-600 ">
               <b>ที่อยู่</b>&nbsp;5 ซอย ลาดกระบัง 34/1 ถนน ลาดกระบัง Khwaeng Lat
@@ -31,7 +31,7 @@ export default function Form() {
               <b>Main Phone :</b> 02-327-2992-4
             </div>
             <div className="mt-5 text-gray-600 text-lg">
-              <b>Email :</b> obac@gmail.com
+              <b>Email :</b> pr.obac.th@gmail.com
             </div>
             <div className="mt-5 py-5 h-fit px-8 bg-gray-200 rounded-md line-clamp-5 text-gray-600 lg:w-[360px]">
               <b>การเดินทาง รถประจำทางสายที่ผ่าน </b>
@@ -76,7 +76,4 @@ export default function Form() {
       </SciFiBackgroundNormal>
     </div>
   );
-}
-
-{
 }
