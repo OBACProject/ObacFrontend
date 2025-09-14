@@ -36,7 +36,7 @@ export const NavbarData: DropMenuProps[] = [
     href: "/about",
     menuList: [
       {
-        menuName: "ประวัติมหาลัย",
+        menuName: "ประวัติ",
         menuIcon: (
           <NotebookTabs
             className="text-white transition-colors w-6 h-6 "
