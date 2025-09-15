@@ -1,9 +1,5 @@
-import Form from "./Form";
+import React from "react";
 
 export default function page() {
-  return (
-    <div className="lg:flex lg:justify-center w-full"> 
-        <Form />
-    </div>
-  );
+  return <div>page</div>;
 }
