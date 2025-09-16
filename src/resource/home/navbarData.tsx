@@ -140,7 +140,7 @@ export const NavbarData: DropMenuProps[] = [
     href: "/structure",
     menuList: [
       {
-        menuName: "โครงสร้างการบริหาร",
+        menuName: "คณะผู้บริหารวิทยาลัย",
         menuIcon: (
           <Users
             className="text-white  transition-colors w-6 h-6 "
@@ -150,8 +150,9 @@ export const NavbarData: DropMenuProps[] = [
         href: "/structure/executive",
       },
       {
-        menuName: "คณะผู้บริหารวิทยาลัย",
+        menuName: "โครงสร้างคณะผู้บริหาร",
         menuIcon: (
+          
           <Boxes
 
             className="text-white  transition-colors w-6 h-6 "
