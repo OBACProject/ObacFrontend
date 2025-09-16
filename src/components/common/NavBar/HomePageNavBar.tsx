@@ -11,7 +11,7 @@ export function HomePageNavBar() {
   const [isMobile, setIsMobile] = useState(false);
   const [openSubs, setOpenSubs] = useState<Record<number, boolean>>({});
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 1200);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -65,12 +65,12 @@ export function HomePageNavBar() {
 
       <div
         className={cn(
-          "w-full bg-[#7E8C9C] px-4 sm:px-6 md:px-10 lg:px-20 py-2 text-white",
+          "w-full bg-[#7E8C9C] px-4 sm:px-6 md:px-10 lg:px-20 lg:py-2 text-white",
           !isMobile ? "block" : isMenuOpen ? "block" : "hidden"
         )}
       >
         <div className="w-full">
-          <div className="hidden lg:block ">
+          <div className="hidden md:block lg:block ">
             <DropMenu menuData={NavbarData} />
           </div>
         </div>
