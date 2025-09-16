@@ -11,7 +11,7 @@ export function HomePageNavBar() {
   const [isMobile, setIsMobile] = useState(false);
   const [openSubs, setOpenSubs] = useState<Record<number, boolean>>({});
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1200);
+    const handleResize = () => setIsMobile(window.innerWidth < 850);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -26,7 +26,7 @@ export function HomePageNavBar() {
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full bg-[#143d66] shadow-xl">
-      <div className="flex justify-between items-center px-4 sm:px-6 md:px-10 lg:px-20 py-2">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-20 py-2">
         <a href="/" className="flex items-center">
           <img
             src="/images/obac-logo.png"
@@ -43,7 +43,7 @@ export function HomePageNavBar() {
           </div>
         </a>
 
-        <div className="hidden md:flex gap-3">
+        <div className="hidden lg:flex gap-3">
           <Link
             href="/login"
             className="flex items-center gap-2 px-8 py-1 border-2 border-white rounded-full text-white text-base hover:bg-white hover:text-black duration-500 font-prompt_Light"
@@ -53,7 +53,7 @@ export function HomePageNavBar() {
         </div>
 
         <button
-          className="md:hidden text-white"
+          className="text-white lg:hidden"
           onClick={() => setIsMenuOpen((v) => !v)}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-drawer"
@@ -65,21 +65,20 @@ export function HomePageNavBar() {
 
       <div
         className={cn(
-          "w-full bg-[#7E8C9C] px-4 sm:px-6 md:px-10 lg:px-20 lg:py-2 text-white",
+          "w-full bg-[#7E8C9C] px-4 sm:px-6  lg:px-20 lg:py-2 text-white",
           !isMobile ? "block" : isMenuOpen ? "block" : "hidden"
         )}
       >
         <div className="w-full">
-          <div className="hidden md:block lg:block ">
+          <div className="hidden lg:block ">
             <DropMenu menuData={NavbarData} />
           </div>
         </div>
       </div>
-
       <aside
         id="mobile-drawer"
         className={cn(
-          "fixed top-0 right-0 h-full w-full bg-white shadow-lg z-[60] transform-gpu transition-transform duration-300 md:hidden",
+          "fixed top-0 right-0 h-full w-full bg-white shadow-lg z-[60] transform-gpu transition-transform duration-300 ",
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
         aria-hidden={!isMenuOpen}
@@ -184,12 +183,10 @@ export function HomePageNavBar() {
           </Link>
         </div>
       </aside>
-
-      {/* backdrop (คงไว้เสมอ, สลับแค่ opacity/pointer-events) */}
       <div
         onClick={() => setIsMenuOpen(false)}
         className={cn(
-          "fixed inset-0 bg-black/40 z-[55] transition-opacity duration-300 md:hidden",
+          "fixed inset-0 bg-black/40 z-[55] transition-opacity duration-300 ",
           isMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
