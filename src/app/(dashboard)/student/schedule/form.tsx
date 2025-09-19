@@ -176,12 +176,12 @@ export default function Form() {
                       {items.map((it) => (
                         <li
                           key={`${it.day}-${it.period}-${it.subjectId}`}
-                          className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+                          className="flex flex-col border-b-[1px] border-gray-300 pb-1  gap-2 sm:flex-row sm:items-center sm:justify-between"
                         >
                           <div className="text-sm grid ">
                             <div className="flex gap-2 ">
-                              <p>คาบ {it.period}</p> <div>วิชา</div>
-                              <p className="font-prompt text-gray-800">
+                              <p className="text-gray-800">คาบ {it.period}</p> <div>วิชา</div>
+                              <p className="font-prompt text-blue-600">
                                 {it.subjectName}
                               </p>
                             </div>
