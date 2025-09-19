@@ -1,0 +1,257 @@
+"use client";
+import React, { useEffect, useMemo, useState } from "react";
+import { GetStudentTranscript } from "@/api/student-account/route";
+import { StudentTranscript } from "@/dto/student-account-dto";
+import { Card, Field } from "@/components/common/Card/card-student-profile";
+
+export default function Form() {
+  const [data, setData] = useState<StudentTranscript | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    GetStudentTranscript().then((d) => {
+      if (d) {
+        setData(d);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const num = (v: unknown): number | null => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const getQuality = (
+    s: StudentTranscript["subjectGradesTermYear"][number]["subjectGrades"][number]
+  ): number | null => {
+    const c = num(s.credit) ?? 0;
+    if (c <= 0) return null;
+
+    const q = num(s.gradePoint);
+    if (q !== null) return q;
+
+    const g = num(s.finalGrade);
+    if (g !== null) return c * g;
+
+    return null;
+  };
+
+  const countable = (
+    s: StudentTranscript["subjectGradesTermYear"][number]["subjectGrades"][number]
+  ) => getQuality(s) !== null;
+
+  const calcTerm = (
+    grades: StudentTranscript["subjectGradesTermYear"][number]["subjectGrades"]
+  ) => {
+    let credits = 0;
+    let quality = 0;
+    let subjects = 0;
+
+    for (const g of grades ?? []) {
+      const q = getQuality(g);
+      if (q === null) continue;
+      const c = num(g.credit)!;
+
+      credits += c;
+      quality += q;
+      subjects += 1;
+    }
+
+    const gpa = credits > 0 ? quality / credits : null;
+    return { credits, quality, subjects, gpa };
+  };
+
+  const overall = useMemo(() => {
+    if (!data?.subjectGradesTermYear?.length)
+      return {
+        credits: 0,
+        quality: 0,
+        subjects: 0,
+        gpa: null as number | null,
+      };
+
+    let credits = 0;
+    let quality = 0;
+    let subjects = 0;
+
+    for (const ty of data.subjectGradesTermYear) {
+      for (const s of ty.subjectGrades ?? []) {
+        const q = getQuality(s);
+        if (q === null) continue;
+        const c = num(s.credit)!;
+
+        credits += c;
+        quality += q;
+        subjects += 1;
+      }
+    }
+
+    return {
+      credits,
+      quality,
+      subjects,
+      gpa: credits > 0 ? quality / credits : null,
+    };
+  }, [data]);
+
+  const fmt = (v: number | null | undefined, digits = 2) =>
+    typeof v === "number" ? v.toFixed(digits) : "-";
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 grid gap-6">
+        <Card title="กำลังโหลดข้อมูลนักเรียน">
+          <div className="animate-pulse grid gap-3">
+            <div className="h-4 bg-gray-200 rounded w-3/4" />
+            <div className="h-4 bg-gray-200 rounded w-2/3" />
+            <div className="h-4 bg-gray-200 rounded w-1/2" />
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 grid gap-6">
+        <Card title="ไม่พบข้อมูล">
+          <p className="text-sm text-gray-600">
+            ไม่สามารถดึงข้อมูลผลการเรียนได้
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto px-1 lg:px-4  lg:py-6 grid gap-6">
+      <Card title="ข้อมูลนักเรียน">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Field label="รหัสนักศึกษา" value={data.studentCode} />
+          <Field
+            label="ชื่อ-สกุล"
+            value={
+              [data.prefix, data.firstName, data.lastName]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
+          />
+          <Field label="หลักสูตร" value={data.facultyName} />
+          <Field label="สาขา" value={data.programName} />
+          <Field label="สาขาย่อย" value={data.subProgramName} />
+          <Field label="ระดับชั้น" value={data.class + "." + data.groupName} />
+          <Field label="กลุ่ม" value={data.section} />
+        </div>
+      </Card>
+      <Card title="สรุปผลรวม">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Field
+            label="หน่วยกิตสะสม"
+            value={overall.credits ? `${overall.credits}` : "-"}
+          />
+          <Field
+            label="จำนวนรายวิชา"
+            value={overall.subjects ? `${overall.subjects}` : "-"}
+          />
+          <Field label="GPA รวม" value={data.gpax ?? "-"} />
+        </div>
+      </Card>
+      {data.subjectGradesTermYear?.map((ty, idx) => {
+        const stat = calcTerm(ty.subjectGrades || []);
+        return (
+          <Card
+            key={`${ty.term}-${ty.year}-${idx}`}
+            title={`ผลการเรียน - เทอม ${ty.term} / ปี ${ty.year}`}
+          >
+            <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Field
+                label="หน่วยกิต"
+                value={stat.credits ? `${stat.credits}` : "-"}
+              />
+              <Field
+                label="จำนวนรายวิชา"
+                value={stat.subjects ? `${stat.subjects}` : "-"}
+              />
+              <Field
+                label="GPA ต่อเทอม"
+                value={stat.gpa !== null ? fmt(stat.gpa, 2) : "-"}
+              />
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="lg:min-w-[800px]  min-w-[500px] lg:text-sm text-xs border border-gray-200 rounded-lg overflow-hidden">
+                <thead className="bg-gray-50">
+                  <tr className="text-left">
+                    <th className="px-3 py-2 border-b">รหัสวิชา</th>
+                    <th className="px-3 py-2 border-b">รายวิชา</th>
+                    <th className="px-3 py-2 border-b">หน่วยกิต</th>
+                    <th className="px-3 py-2 border-b">เกรด</th>
+                    <th className="px-3 py-2 border-b">ผลคูณ</th>
+                    <th className="px-3 py-2 border-b hidden sm:table-cell">
+                      คะแนนรวม
+                    </th>
+                    <th className="px-3 py-2 border-b hidden lg:table-cell">
+                      หมายเหตุ
+                    </th>
+                    <th className="px-3 py-2 border-b hidden lg:table-cell">
+                      เลขที่ใบเสร็จ
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ty.subjectGrades?.map((s) => (
+                    <tr
+                      key={`${ty.term}-${ty.year}-${s.gradeId}`}
+                      className="odd:bg-white even:bg-gray-50"
+                    >
+                      <td className="px-3 py-2 border-b">{s.subjectCode}</td>
+                      <td className="px-3 py-2 border-b">{s.subjectName}</td>
+                      <td className="px-3 py-2 border-b">{s.credit}</td>
+                      <td className="px-3 py-2 border-b">
+                        {fmt(s.finalGrade, 2)}
+                      </td>
+                      <td className="px-3 py-2 border-b">
+                        {fmt(s.gradePoint, 2)}
+                      </td>
+                      <td className="px-3 py-2 border-b hidden sm:table-cell">
+                        {fmt(s.totalScore, 2)}
+                      </td>
+                      <td className="px-3 py-2 border-b hidden lg:table-cell">
+                        {s.remark || "-"}
+                      </td>
+                      <td className="px-3 py-2 border-b hidden lg:table-cell">
+                        {s.receiptNo || "-"}
+                      </td>
+                    </tr>
+                  ))}
+                  {!ty.subjectGrades?.length && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="px-3 py-4 text-center text-gray-500"
+                      >
+                        ไม่มีข้อมูลรายวิชาในเทอมนี้
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        );
+      })}
+      <div className="p-4 rounded-lg bg-white shadow-sm">
+        <div className="mt-3 text-xs text-gray-600 ">
+          <p className="mb-1">*** คะแนนรวมคำนวนจากคำแนนทั้ง 5 ช่อง ***</p>
+          <ul className="list-disc ml-5 grid  gap-x-6 gap-y-1">
+            <li>คะแนนเก็บ </li>
+            <li>คะแนนภาระงาน </li>
+            <li>คะแนนจิตพิสัย </li>
+            <li>คะแนนกลางภาค</li>
+            <li>คะแนนปลายภาค </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}

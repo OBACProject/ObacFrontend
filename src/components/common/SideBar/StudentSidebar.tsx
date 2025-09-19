@@ -97,14 +97,19 @@ export function StudentSidebar({
         </button>
         {triggerDropdown && (
           <div className="px-4 py-4 z-50 rounded-sm bg-white shadow-md border border-gray-200 fixed grid gap-1 top-20 right-5">
-            <div className="py-1 justify-center cursor-not-allowed w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
+            <Link
+              href={"/student/setting"}
+             onClick={() => setTriggerDropdown(!triggerDropdown)}
+              className="py-1 justify-center  w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center "
+            >
               <Settings className="w-5 h-5" />
               ตั้งค่าผู้ใช้งาน
-            </div>
+            </Link>
             {loading ? (
               <button
                 className=" w-[150px] justify-center items-center duration-300 text-sm rounded-sm py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
                 style={{ userSelect: "none" }}
+                onClick={() => setTriggerDropdown(!triggerDropdown)}
               >
                 <Loader2 className="w-5 h-5 animate-spin" />
                 ออกจากระบบ
@@ -124,7 +129,7 @@ export function StudentSidebar({
         )}
       </header>
 
-      <div className="lg:hidden flex justify-between items-center h-14 px-4 shadow-md fixed top-0 left-0 right-0">
+      <div className="lg:hidden flex justify-between items-center h-14 px-4 shadow-md bg-white fixed top-0 left-0 right-0 z-10">
         <div className="flex font-prompt text-sm gap-4 items-center">
           <Image
             src="/images/obac_navbar_logo.png"
@@ -148,7 +153,7 @@ export function StudentSidebar({
           className={`fixed top-0 right-0 h-full w-full bg-white shadow-lg z-50 transform transition-transform duration-300 flex flex-col
     ${open ? "translate-x-0" : "translate-x-full"}`}
         >
-          <div className="flex justify-between items-center p-3 border-b border-gray-300 bg-blue-900">
+          <div className="flex justify-between items-center font-prompt p-3 border-b border-gray-300 bg-gradient-to-r from-[#143d66] to-sky-800">
             <p className="text-lg text-white font-prompt_Ligh px-2">
               เมนูทั้งหมด
             </p>
@@ -170,7 +175,7 @@ export function StudentSidebar({
                   className={`flex items-center gap-3 font-prompt_Light rounded-md w-full py-2.5 px-4 transition 
                   ${
                     isActive
-                      ? "bg-gray-400 text-white "
+                      ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white "
                       : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
                   }`}
                 >
