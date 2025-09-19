@@ -144,16 +144,25 @@ export default function Form() {
         </div>
       </Card>
       <Card title="สรุปผลรวม">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Field
-            label="หน่วยกิตสะสม"
-            value={overall.credits ? `${overall.credits}` : "-"}
-          />
-          <Field
-            label="จำนวนรายวิชา"
-            value={overall.subjects ? `${overall.subjects}` : "-"}
-          />
-          <Field label="GPA รวม" value={data.gpax ?? "-"} />
+        <div className="flex justify-between items-center gap-1">
+          <div className="flex gap-1 items-center">
+            <p className="font-prompt text-blue-600 ">หน่วยกิตรวม</p>
+            <p className="px-2 py-1 bg-gray-100 rounded-sm">
+              {overall.credits ? `${overall.credits}` : "-"}
+            </p>
+          </div>
+          <div className="flex gap-1 items-center">
+            <p className="font-prompt text-blue-600 ">จำนวนวิชา</p>
+            <p className="px-2 py-1 bg-gray-100 rounded-sm">
+              {overall.subjects ? `${overall.subjects}` : "-"}
+            </p>
+          </div>
+          <div className="flex gap-2 items-center">
+            <p className="font-prompt text-blue-600  ">GPAX </p>
+            <p className="px-2 py-1 font-prompt rounded-sm bg-gray-100 text-green-600">
+              {data.gpax ?? "-"}
+            </p>
+          </div>
         </div>
       </Card>
       {data.subjectGradesTermYear?.map((ty, idx) => {
@@ -163,19 +172,27 @@ export default function Form() {
             key={`${ty.term}-${ty.year}-${idx}`}
             title={`ผลการเรียน - เทอม ${ty.term}  ปี ${ty.year}`}
           >
-            <div className="mb-4 grid grid-cols-2  gap-4">
-              <Field
-                label="หน่วยกิต"
-                value={stat.credits ? `${stat.credits}` : "-"}
-              />
-              <Field
-                label="จำนวนรายวิชา"
-                value={stat.subjects ? `${stat.subjects}` : "-"}
-              />
-              <Field
-                label="GPA ต่อเทอม"
-                value={stat.gpa !== null ? fmt(stat.gpa, 2) : "-"}
-              />
+            <div className="my-1 grid grid-cols-3  gap-1">
+              <div className="flex gap-1 items-center">
+                <p className="font-prompt_Light ">หน่วยกิต</p>
+                <p className="px-2 py-1 bg-gray-100 rounded-sm">
+                  {stat.credits ? `${stat.credits}` : "-"}
+                </p>
+              </div>
+
+              <div className="flex gap-1 items-center">
+                <p className="font-prompt_Light ">จำนวนวิชา</p>
+                <p className="px-2 py-1 bg-gray-100 rounded-sm">
+                  {stat.subjects ? `${stat.subjects}` : "-"}
+                </p>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <p className="font-prompt">GPA</p>
+                <p className="px-2 py-1 rounded-sm font-prompt bg-gray-100 text-green-600">
+                  {stat.gpa !== null ? fmt(stat.gpa, 2) : "-"}
+                </p>
+              </div>
             </div>
 
             <div className="overflow-x-auto">
