@@ -163,7 +163,7 @@ export default function Form() {
             key={`${ty.term}-${ty.year}-${idx}`}
             title={`ผลการเรียน - เทอม ${ty.term}  ปี ${ty.year}`}
           >
-            <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="mb-4 grid grid-cols-2  gap-4">
               <Field
                 label="หน่วยกิต"
                 value={stat.credits ? `${stat.credits}` : "-"}
