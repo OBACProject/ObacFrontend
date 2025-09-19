@@ -13,13 +13,13 @@ export default function Form() {
   const [schedule, setSchedule] = useState<ScheduleSubject[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const dayOrder = [
+    "อาทิตย์",
     "จันทร์",
     "อังคาร",
     "พุธ",
     "พฤหัสบดี",
     "ศุกร์",
     "เสาร์",
-    "อาทิตย์",
   ];
   const dayAlias: Record<string, string> = {
     mon: "จันทร์",
@@ -40,10 +40,15 @@ export default function Form() {
     sun: "อาทิตย์",
     sunday: "อาทิตย์",
   };
+
   const normDay = (d?: string) => {
-    if (!d) return d ?? "";
-    const k = d.trim().toLowerCase();
-    return dayAlias[k] ?? d;
+    if (!d) return "";
+    const raw = d
+      .trim()
+      .replace(/^วัน\s*/i, "")
+      .replace(/\./g, "");
+    const key = raw.toLowerCase();
+    return dayAlias[key] ?? raw; 
   };
 
   useEffect(() => {
@@ -180,7 +185,8 @@ export default function Form() {
                         >
                           <div className="text-sm grid ">
                             <div className="flex gap-2 ">
-                              <p className="text-gray-800">คาบ {it.period}</p> <div>วิชา</div>
+                              <p className="text-gray-800">คาบ {it.period}</p>{" "}
+                              <div>วิชา</div>
                               <p className="font-prompt text-blue-600">
                                 {it.subjectName}
                               </p>
