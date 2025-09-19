@@ -69,6 +69,17 @@ export default function Form({ GroupID }: Props) {
 
   const [onEducatePopUp, setOnEducatePopUp] = useState<boolean>(false);
   const students: StudentItems[] = studentGroupDetail?.students ?? [];
+  const [educateAmout, setEducateAmount] = useState<number>(0);
+
+  useEffect(() => {
+    let n = 0;
+    for (let i = 0; i < students.length; i++) {
+      if (students[i].status === "กำลังศึกษา") {
+        n += 1;
+      }
+    }
+    setEducateAmount(n);
+  }, [students]);
   const getStatusClass = (status?: string) => {
     switch (status) {
       case "กำลังศึกษา":
@@ -94,12 +105,20 @@ export default function Form({ GroupID }: Props) {
 
   return (
     <div className="bg-white rounded-xl py-2">
-      <div className="px-10 justify-end flex items-center">
+      <div className="px-10 justify-between flex items-center">
+        <div className="flex items-center gap-3 font-prompt_Light">
+          <div>จำนวนนักเรียนที่กำลังศึกษา</div>
+          <p className="text-lg font-bold text-green-600 px-2 py-1 rounded-md bg-gray-100">
+            {educateAmout}
+          </p>
+          <div> คน</div>
+        </div>
+
         <button
           onClick={() => setOnEducatePopUp(true)}
           className="px-8 py-1.5 hover:bg-blue-700 bg-blue-500  flex gap-3 items-center justify-center text-white rounded-md "
         >
-          <GraduationCap className="w-6 h-6 text-white"/>
+          <GraduationCap className="w-6 h-6 text-white" />
           ปรับสถานะจบการศึกษา
         </button>
       </div>
