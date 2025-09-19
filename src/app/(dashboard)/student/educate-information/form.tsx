@@ -144,20 +144,20 @@ export default function Form() {
         </div>
       </Card>
       <Card title="สรุปผลรวม">
-        <div className="flex justify-between items-center gap-1">
+        <div className="flex lg:text-base text-sm justify-between items-center gap-1">
           <div className="flex gap-1 items-center">
             <p className="font-prompt text-blue-600 ">หน่วยกิตรวม</p>
             <p className="px-2 py-1 bg-gray-100 rounded-sm">
               {overall.credits ? `${overall.credits}` : "-"}
             </p>
           </div>
-          <div className="flex gap-1 items-center">
+          <div className="flex lg:text-base text-sm gap-1 items-center">
             <p className="font-prompt text-blue-600 ">จำนวนวิชา</p>
             <p className="px-2 py-1 bg-gray-100 rounded-sm">
               {overall.subjects ? `${overall.subjects}` : "-"}
             </p>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex lg:text-base text-sm gap-2 items-center">
             <p className="font-prompt text-blue-600  ">GPAX </p>
             <p className="px-2 py-1 font-prompt rounded-sm bg-gray-100 text-green-600">
               {data.gpax ?? "-"}
@@ -172,7 +172,7 @@ export default function Form() {
             key={`${ty.term}-${ty.year}-${idx}`}
             title={`ผลการเรียน - เทอม ${ty.term}  ปี ${ty.year}`}
           >
-            <div className="my-1 grid grid-cols-3  gap-1">
+            <div className="my-1 flex lg:text-base text-sm items-center justify-between  gap-1">
               <div className="flex gap-1 items-center">
                 <p className="font-prompt_Light ">หน่วยกิต</p>
                 <p className="px-2 py-1 bg-gray-100 rounded-sm">
@@ -180,15 +180,15 @@ export default function Form() {
                 </p>
               </div>
 
-              <div className="flex gap-1 items-center">
+              <div className="flex gap-1 lg:text-base text-sm items-center">
                 <p className="font-prompt_Light ">จำนวนวิชา</p>
                 <p className="px-2 py-1 bg-gray-100 rounded-sm">
                   {stat.subjects ? `${stat.subjects}` : "-"}
                 </p>
               </div>
 
-              <div className="flex gap-2 items-center">
-                <p className="font-prompt">GPA</p>
+              <div className="flex gap-2 lg:text-base text-sm items-center">
+                <p className="font-prompt ">GPA</p>
                 <p className="px-2 py-1 rounded-sm font-prompt bg-gray-100 text-green-600">
                   {stat.gpa !== null ? fmt(stat.gpa, 2) : "-"}
                 </p>
