@@ -161,7 +161,7 @@ export default function Form() {
         return (
           <Card
             key={`${ty.term}-${ty.year}-${idx}`}
-            title={`ผลการเรียน - เทอม ${ty.term} / ปี ${ty.year}`}
+            title={`ผลการเรียน - เทอม ${ty.term}  ปี ${ty.year}`}
           >
             <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Field
