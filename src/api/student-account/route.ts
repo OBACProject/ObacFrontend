@@ -45,7 +45,6 @@ export const GetStudentTranscript =
           Authorization: token ? `Bearer ${token}` : "",
         },
       });
-
       return response.data.data ?? null;
     } catch (err) {
       console.error("Error in api GetStudentTranscript", err);
@@ -56,7 +55,7 @@ export const GetStudentTranscript =
 export const GetStudentScheduleByStudentIdTermYear = async (
   term: string,
   year: number
-): Promise<ScheduleSubject[] | null> => {
+): Promise<ScheduleSubject[]> => {
   try {
     const cookieStore = cookies();
     const token = cookieStore.get("token")?.value;
@@ -66,14 +65,13 @@ export const GetStudentScheduleByStudentIdTermYear = async (
       responseMessage: string;
       data: ScheduleSubject[];
     }>(
-      `Student/GetStudentScheduleByStudentIdTermYear?term=${term}&year=${year}'`,
+      `Student/GetStudentScheduleByStudentIdTermYear?term=${term}&year=${year}`,
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },
       }
     );
-
     return response.data.data ?? [];
   } catch (err) {
     console.error("Error in api GetStudentScheduleByStudentIdTermYear", err);

@@ -91,19 +91,9 @@ export default function Form() {
     cellMap.get(`${day}|${period}`);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 grid gap-6">
-      <Card title="สรุป">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Field label="จำนวนวันเรียน" value={days.length || "-"} />
-          <Field
-            label="จำนวนคาบทั้งหมด (unique)"
-            value={periods.length || "-"}
-          />
-          <Field label="จำนวนวิชาที่พบ" value={schedule?.length || "-"} />
-        </div>
-      </Card>
+    <div className="max-w-6xl mx-auto px-1 lg:px-4 sm:px-6 py-6 grid gap-6">
       <div className="lg:block hidden">
-        <Card title="ตารางเรียน">
+        <Card title={`จำนวน ${schedule.length} วิชา`}>
           <div className="overflow-x-auto">
             <table className="min-w-[900px] w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
               <thead className="bg-gray-50">
@@ -129,7 +119,7 @@ export default function Form() {
                         >
                           {c ? (
                             <div className="space-y-0.5">
-                              <div className="font-medium">{c.subjectName}</div>
+                              <div className="font-prompt">{c.subjectName}</div>
                               <div className="text-xs text-gray-600">
                                 {c.subjectCode}
                               </div>
@@ -166,15 +156,17 @@ export default function Form() {
       </div>
 
       <div className="block lg:hidden">
-        <Card title="ตารางเรียน">
+        <Card title={`จำนวน ${schedule.length} วิชา`}>
           <div className="grid grid-cols-1 gap-4">
             {days.map((d) => {
               const items = (schedule ?? [])
                 .filter((s) => normDay(s.day) === d)
                 .sort((a, b) => a.period - b.period);
               return (
-                <div key={d} className="rounded-xl border p-3">
-                  <div className="font-semibold mb-2">{d}</div>
+                <div key={d} className="rounded-xl border py-3 px-3">
+                  <div className="font-semibold px-2 py-1 bg-gray-200 w-full rounded-sm text-gray-700 mb-2">
+                    {d}
+                  </div>
                   {!items.length ? (
                     <div className="text-xs text-gray-500">
                       — ไม่มีคาบเรียน —
@@ -184,20 +176,22 @@ export default function Form() {
                       {items.map((it) => (
                         <li
                           key={`${it.day}-${it.period}-${it.subjectId}`}
-                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+                          className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
                         >
-                          <div className="text-sm">
-                            <span className="font-medium">
-                              คาบ {it.period}:
-                            </span>{" "}
-                            {it.subjectName}{" "}
-                            <span className="text-xs text-gray-600">
-                              ({it.subjectCode})
-                            </span>
+                          <div className="text-sm grid ">
+                            <div className="flex gap-2 ">
+                              <p>คาบ {it.period}</p> <div>วิชา</div>
+                              <p className="font-prompt text-gray-800">
+                                {it.subjectName}
+                              </p>
+                            </div>
                           </div>
-                          <div className="text-xs text-gray-600">
-                            ห้อง {it.room || "-"} · กลุ่ม{" "}
-                            {it.studentGroupCode || it.studentGroupName || "-"}
+                          <div className="flex gap-2 items-center ">
+                            <p>รหัส</p>
+                            <p>{it.subjectCode}</p>
+                            <p className="text-xs text-gray-600">
+                              ห้อง {it.room || "-"}
+                            </p>
                           </div>
                         </li>
                       ))}

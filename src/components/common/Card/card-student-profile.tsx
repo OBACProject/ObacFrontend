@@ -28,7 +28,7 @@ export function Card({
   return (
     <section className="bg-white  rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
       <h2
-        className="text-lg sm:text-xl font-prompt bg-gradient-to-r from-indigo-600 to-blue-400
+        className="lg:text-base text-base font-prompt bg-gradient-to-r from-indigo-600 to-blue-400
         text-white w-fit px-4  rounded-3xl "
       >
         {title}
