@@ -259,7 +259,7 @@ export default function Form() {
       })}
       <div className="p-4 rounded-lg bg-white shadow-sm">
         <div className="mt-3 text-xs text-gray-600 ">
-          <p className="mb-1">*** คะแนนรวมคำนวนจากคำแนนทั้ง 5 ช่อง ***</p>
+          <p className="mb-1">*** คะแนนรวมจากคำแนนทั้ง 5 ช่อง ***</p>
           <ul className="list-disc ml-5 grid  gap-x-6 gap-y-1">
             <li>คะแนนเก็บ </li>
             <li>คะแนนภาระงาน </li>

@@ -119,7 +119,7 @@ export default function LoginForm({ session }: LoginFormProps) {
         <form
           onSubmit={handleLogin}
           method="post"
-          className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
+          className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-[70%] sm:w-[80%] w-[80%] rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
           <Image
             src="/images/obac_navbar_logo.png"
@@ -132,21 +132,21 @@ export default function LoginForm({ session }: LoginFormProps) {
             <Input
               type="text"
               name="userName"
-              placeholder="Username / ชื่อผู้ใช้"
+              placeholder="username"
               required
-              className="w-3/5"
+              className="w-[70%]"
             />
             <Input
               type="password"
               name="password"
-              placeholder="Password / รหัสผ่าน"
+              placeholder="password"
               required
-              className="w-3/5"
+              className="w-[70%]"
             />
           </div>
           <Button
             type="submit"
-            className="bg-[#143d66] font-prompt px-20 text-white rounded-md py-2 flex items-center justify-center gap-2"
+            className="bg-[#143d66] font-prompt w-[70%] px-20 text-white rounded-md py-2 flex items-center justify-center gap-2"
             disabled={login.isPending}
           >
             {login.isPending && <Loader2 className="w-5 h-5 animate-spin" />}
