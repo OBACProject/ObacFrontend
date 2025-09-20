@@ -99,7 +99,7 @@ export function StudentSidebar({
           <div className="px-4 py-4 z-50 rounded-sm bg-white shadow-md border border-gray-200 fixed grid gap-1 top-20 right-5">
             <Link
               href={"/student/setting"}
-             onClick={() => setTriggerDropdown(!triggerDropdown)}
+              onClick={() => setTriggerDropdown(!triggerDropdown)}
               className="py-1 justify-center  w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center "
             >
               <Settings className="w-5 h-5" />
@@ -164,36 +164,44 @@ export function StudentSidebar({
               <X className="w-7 h-7 text-white duration-300 group-active:text-orange-400" />
             </button>
           </div>
-          <div className="px-3 py-2 grid gap-2 place-items-start w-full">
-            {menuItems.map((item, index) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={index}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 font-prompt_Light rounded-md w-full py-2.5 px-4 transition 
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white "
-                      : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
-                  }`}
-                >
-                  {item.icon}
-                  <span className="font-prompt_Light text-base">
-                    {item.title}
-                  </span>
-                </Link>
-              );
-            })}
-            <Link
-              href={"/student/setting"}
-              onClick={() => setOpen(false)}
-              className={`flex px-4 mt-3 active:border w-full rounded-md py-1 gap-4 text-base font-prompt_Light text-gray-700`}
-            >
-              <Settings className="h-6 w-6 text-gray-700" />
-              ตั้งค่าผู้ใช้งาน
-            </Link>
+          <div className="flex flex-col h-screen px-3 py-2 gap-2 w-full">
+            <div className="flex flex-col gap-2 flex-1">
+              {menuItems.map((item, index) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 font-prompt_Light rounded-md w-full py-2.5 px-4 transition 
+            ${
+              isActive
+                ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white"
+                : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
+            }`}
+                  >
+                    {item.icon}
+                    <span className="font-prompt_Light text-base">
+                      {item.title}
+                    </span>
+                  </Link>
+                );
+              })}
+
+              <Link
+                href={"/student/setting"}
+                onClick={() => setOpen(false)}
+                className="flex px-4 mt-3 active:border w-full rounded-md py-1 gap-4 text-base font-prompt_Light text-gray-700"
+              >
+                <Settings className="h-6 w-6 text-gray-700" />
+                ตั้งค่าผู้ใช้งาน
+              </Link>
+            </div>
+
+            <div
+            onClick={handleLogout} className="w-full rounded-md text-center bg-red-400 py-2 text-white cursor-pointer">
+              ออกจากระบบ
+            </div>
           </div>
         </div>
       </div>
