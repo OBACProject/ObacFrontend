@@ -196,7 +196,7 @@ export default function Form() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="lg:min-w-[800px]  min-w-[500px] lg:text-sm text-xs border border-gray-200 rounded-lg overflow-hidden">
+              <table className="lg:w-full  min-w-[800px] lg:text-sm text-xs border border-gray-200 rounded-lg overflow-hidden">
                 <thead className="bg-gray-50">
                   <tr className="text-left">
                     <th className="px-3 py-2 border-b">รหัสวิชา</th>
@@ -204,13 +204,13 @@ export default function Form() {
                     <th className="px-3 py-2 border-b">หน่วยกิต</th>
                     <th className="px-3 py-2 border-b">เกรด</th>
                     <th className="px-3 py-2 border-b">ผลคูณ</th>
-                    <th className="px-3 py-2 border-b hidden sm:table-cell">
+                    {/* <th className="px-3 py-2 border-b hidden sm:table-cell">
                       คะแนนรวม
-                    </th>
-                    <th className="px-3 py-2 border-b hidden lg:table-cell">
+                    </th> */}
+                    <th className="px-3 py-2 border-b table-cell">
                       หมายเหตุ
                     </th>
-                    <th className="px-3 py-2 border-b hidden lg:table-cell">
+                    <th className="px-3 py-2 border-b table-cell">
                       เลขที่ใบเสร็จ
                     </th>
                   </tr>
@@ -225,18 +225,18 @@ export default function Form() {
                       <td className="px-3 py-2 border-b">{s.subjectName}</td>
                       <td className="px-3 py-2 border-b">{s.credit}</td>
                       <td className="px-3 py-2 border-b">
-                        {fmt(s.finalGrade, 2)}
+                        {fmt(s.finalGrade, 1)}
                       </td>
                       <td className="px-3 py-2 border-b">
-                        {fmt(s.gradePoint, 2)}
+                        {fmt(s.gradePoint, 1)}
                       </td>
-                      <td className="px-3 py-2 border-b hidden sm:table-cell">
+                      {/* <td className="px-3 py-2 border-b hidden sm:table-cell">
                         {fmt(s.totalScore, 2)}
-                      </td>
-                      <td className="px-3 py-2 border-b hidden lg:table-cell">
+                      </td> */}
+                      <td className="px-3 py-2 font-prompt text-blue-600 text-center border-b table-cell">
                         {s.remark || "-"}
                       </td>
-                      <td className="px-3 py-2 border-b hidden lg:table-cell">
+                      <td className="px-3 py-2 border-b  text-center  table-cell">
                         {s.receiptNo || "-"}
                       </td>
                     </tr>

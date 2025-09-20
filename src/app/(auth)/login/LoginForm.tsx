@@ -72,7 +72,7 @@ export default function LoginForm({ session }: LoginFormProps) {
     const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
-        router.push("/student/schedule");
+        router.push("/student/profile");
         break;
       case "Teacher":
         router.push("/teacher/profile");
