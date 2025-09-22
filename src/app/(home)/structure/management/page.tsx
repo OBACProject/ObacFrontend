@@ -1,26 +1,17 @@
-"use client"
-import SciFiBackgroundNormal from "@/app/styles/bg-normal";
+"use client";
+import OrganizationalChart, { type NodeData } from "./organizational-chart";
+import raw from "./organization-data.json";
 import HeaderHomePageMenu from "@/components/common/Header/Header";
-import React from "react";
-import Image from "next/image";
 
-export default function page() {
+export default function Page() {
+  const data = raw as unknown as NodeData[];
+
   return (
     <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
-      <HeaderHomePageMenu title="โครงสร้างการบริหารวิทยาลัย" />
-      <SciFiBackgroundNormal>
-        <div className="grid place-items-center pb-5 ">
-          <div className="">
-            <Image
-              alt="obac"
-              className="lg:w-[1000px] w-full h-full rounded-lg"
-              src="/homepage/common/structure.jpg"
-              width={800}
-              height={1000}
-            />
-          </div>
-        </div>
-      </SciFiBackgroundNormal>
+      <div className="bg-white text-blue-950 font-prompt">
+              <HeaderHomePageMenu title="โครงสร้างการบริหารงาน" />
+            </div>
+      <OrganizationalChart data={data} height="78vh" />
     </div>
   );
 }
