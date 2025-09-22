@@ -1,13 +1,11 @@
 "use server";
 import { GetAllStudent, StudentTranscriptData } from "@/dto/studentDto";
 import { cookies } from "next/headers";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
 export async function GetAllStudentDataApi(): Promise<GetAllStudent[]> {
 	const token = cookies().get("token")?.value;
 	try {
 		const response = await fetch(
-			`${publicRuntimeConfig.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudent`,
+			`${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetAllStudent`,
 			{
 				method: "GET",
 				headers: {
@@ -32,7 +30,7 @@ export async function GetStudentByIdDataApi(
 	const token = cookies().get("token")?.value;
 	try {
 		const response = await fetch(
-			`${publicRuntimeConfig.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGradeDetail?studentId=${id}`,
+			`${process.env.NEXT_PUBLIC_API_URL_V1}/Student/GetStudentGradeDetail?studentId=${id}`,
 			{
 				method: "GET",
 				headers: {

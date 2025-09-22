@@ -2,8 +2,6 @@
 import { ClassSubjectData } from "@/dto/gradingDto";
 import axios from "axios";
 import { cookies } from "next/headers";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
 export const getClassSubjectData = async (
 	subjectId: number,
 	term: number
@@ -12,7 +10,7 @@ export const getClassSubjectData = async (
 		const token = cookies().get("token")?.value;
 
 		const response = await fetch(
-			`${publicRuntimeConfig.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
+			`${process.env.NEXT_PUBLIC_API_URL_V1}/Schedule/GetScheduleSubjectBySubjectId?subjectId=${subjectId}&term=${term}`,
 			{
 				method: "GET",
 				headers: {
@@ -45,7 +43,7 @@ export const putPublishGrade = async (
 		}
 
 		await axios.put(
-			`${publicRuntimeConfig.NEXT_PUBLIC_API_URL_V1}/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
+			`${process.env.NEXT_PUBLIC_API_URL_V1}/Grade/PublishGrade?scheduleSubject_id=${schedule_subject_id}&isPublished=true`,
 			{},
 			{
 				headers: {
