@@ -216,20 +216,26 @@ const StudentScoreInSubjectPDF = ({ data }: DataList) => {
   doc.text("ข.ส.", 167, 140);
 
   //// คำนวนคะแนน
-  doc.text(String(gradeCounts[4]), 37, 153.5);
-  doc.text(String(gradeCounts[3.5]), 46, 153.5);
-  doc.text(String(gradeCounts[3]), 55, 153.5);
-  doc.text(String(gradeCounts[2.5]), 64, 153.5);
-  doc.text(String(gradeCounts[2]), 72, 153.5);
-  doc.text(String(gradeCounts[1.5]), 82, 153.5);
-  doc.text(String(gradeCounts[1]), 91, 153.5);
-  doc.text(String(gradeCounts[0]), 100, 153.5);
+  const drawCount = (val: number | string, x: number, y: number) => {
+    const s = String(val ?? 0);
+    const adjX = s.length === 2 ? x - 1 : x;
+    doc.text(s, adjX, y);
+  };
 
-  doc.text(String(remarkCounts["ผ."]), 111, 153.5);
-  doc.text(String(remarkCounts["ม.ผ."]), 125, 153.5);
-  doc.text(String(remarkCounts["ร."]), 139, 153.5);
-  doc.text(String(remarkCounts["ข.ร."]), 153, 153.5);
-  doc.text(String(remarkCounts["ข.ส."]), 167, 153.5);
+  drawCount(gradeCounts[4], 37, 153.5);
+  drawCount(gradeCounts[3.5], 46, 153.5);
+  drawCount(gradeCounts[3], 55, 153.5);
+  drawCount(gradeCounts[2.5], 64, 153.5);
+  drawCount(gradeCounts[2], 72, 153.5);
+  drawCount(gradeCounts[1.5], 82, 153.5);
+  drawCount(gradeCounts[1], 91, 153.5);
+  drawCount(gradeCounts[0], 100, 153.5);
+
+  drawCount(remarkCounts["ผ."], 111, 153.5);
+  drawCount(remarkCounts["ม.ผ."], 125, 153.5);
+  drawCount(remarkCounts["ร."], 139, 153.5);
+  drawCount(remarkCounts["ข.ร."], 153, 153.5);
+  drawCount(remarkCounts["ข.ส."], 167, 153.5);
 
   doc.setFontSize(20);
   doc.text("การอนุมัติการเรียน", pageWidth / 2, 177, {
