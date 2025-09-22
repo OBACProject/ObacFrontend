@@ -24,7 +24,9 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
-          context: . # Use the root of the repository as build context
-          file: ./dockerfile # Dockerfile at the top level
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/obac_fe:test
+          build-args: |
+            NEXT_PUBLIC_API_URL_V2=${{ secrets.NEXT_PUBLIC_API_URL_V2_UAT }}
