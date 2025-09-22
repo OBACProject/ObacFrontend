@@ -1,6 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
 export interface ApiConfig {
 	baseURL: string;
 	timeout: number;
@@ -9,7 +7,7 @@ export interface ApiConfig {
 
 export const defaultApiConfig: ApiConfig = {
 	baseURL:
-		publicRuntimeConfig.NEXT_PUBLIC_API_URL_V2 ||
+		process.env.NEXT_PUBLIC_API_URL_V2 ||
 		"https://obac-api-dev.ekawit.ac.th/api/",
 	timeout: 30000,
 	// withCredentials: true,
