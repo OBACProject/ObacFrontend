@@ -1,4 +1,6 @@
 import {
+  BookA,
+  BookOpen,
   Boxes,
   CalendarRange,
   Component,
@@ -10,8 +12,10 @@ import {
   NotebookTabs,
   Phone,
   Plane,
+  Building,
   TvMinimalPlay,
   Users,
+  ClipboardList,
 } from "lucide-react";
 interface DropMenuList {
   menuName: string;
@@ -32,11 +36,10 @@ export const NavbarData: DropMenuProps[] = [
     href: "/about",
     menuList: [
       {
-        menuName: "ประวัติมหาลัย",
+        menuName: "ประวัติ",
         menuIcon: (
           <NotebookTabs
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white transition-colors"
+            className="text-white transition-colors w-6 h-6 "
           />
         ),
         tab: "history",
@@ -46,8 +49,7 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "วิสัยทัศน์ / ปรัชญา",
         menuIcon: (
           <Lightbulb
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "vision",
@@ -57,8 +59,7 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "อัตลักษณ์ / เอกลักษณ์",
         menuIcon: (
           <Component
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 " 
           />
         ),
         tab: "symbol",
@@ -74,56 +75,63 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "การบัญชี",
         menuIcon: (
           <HandCoins
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+          
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "accounting",
-        href: "/",
+        href: "/program/accounting",
       },
       {
         menuName: "การตลาด",
         menuIcon: (
           <Landmark
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "marketing",
-        href: "/",
+        href: "/program/marketing",
       },
       {
         menuName: "เทคโนโลยีธุรกิจดิจิทัล",
         menuIcon: (
           <Cpu
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
-        tab: "digital",
-        href: "/",
+        tab: "computer-business",
+        href: "/program/computer-business",
       },
       {
         menuName: "ดิจิทัลกราฟฟิก",
         menuIcon: (
           <TvMinimalPlay
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
-        tab: "graphic",
-        href: "/",
+        tab: "computer-graphic",
+        href: "/program/computer-graphic",
       },
       {
         menuName: "การท่องเที่ยว",
         menuIcon: (
           <Plane
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors "
+            className="text-white w-6 h-6  transition-colors "
           />
         ),
         tab: "tourism",
-        href: "/",
+        href: "/program/tourism-management",
+      },
+      {
+        menuName: "สาขาการจัดการสำนักงาน",
+        menuIcon: (
+          <ClipboardList
+            className="text-white w-6 h-6  transition-colors "
+          />
+        ),
+        tab: "office",
+        href: "/program/office-management",
       },
     ],
   },
@@ -132,22 +140,22 @@ export const NavbarData: DropMenuProps[] = [
     href: "/structure",
     menuList: [
       {
-        menuName: "โครงสร้างการบริหาร",
+        menuName: "คณะผู้บริหารวิทยาลัย",
         menuIcon: (
           <Users
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "management",
         href: "/structure/executive",
       },
       {
-        menuName: "คณะผู้บริหารวิทยาลัย",
+        menuName: "โครงสร้างคณะผู้บริหาร",
         menuIcon: (
+          
           <Boxes
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "executive",
@@ -163,8 +171,7 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "กิจกรรม",
         menuIcon: (
           <CalendarRange
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "activity",
@@ -174,8 +181,7 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "ข่าวสาร",
         menuIcon: (
           <Newspaper
-            style={{ width: "2.0rem", height: "2.5rem" }}
-            className="text-white  transition-colors"
+            className="text-white  transition-colors w-6 h-6 "
           />
         ),
         tab: "news",
@@ -191,7 +197,6 @@ export const NavbarData: DropMenuProps[] = [
         menuName: "ติดต่อวิทยาลัย",
         menuIcon: (
           <Phone
-            style={{ width: "2.0rem", height: "2.5rem" }}
             className="text-white  transition-colors"
           />
         ),
@@ -200,4 +205,190 @@ export const NavbarData: DropMenuProps[] = [
       },
     ],
   },
+];
+
+export const NavbarMobile: DropMenuProps[] = [
+  {
+    menuTopic: "เกี่ยวกับ OBAC",
+    href: "/about",
+    menuList: [
+      {
+        menuName: "ประวัติ",
+        menuIcon: (
+          <NotebookTabs
+            className="text-gray-600 transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "history",
+        href: "/about/history-obac",
+      },
+      {
+        menuName: "วิสัยทัศน์ / ปรัชญา",
+        menuIcon: (
+          <Lightbulb
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "vision",
+        href: "/about/symbol-obac",
+      },
+      {
+        menuName: "อัตลักษณ์ / เอกลักษณ์",
+        menuIcon: (
+          <Component
+            className="text-gray-600  transition-colors w-6 h-6 " 
+          />
+        ),
+        tab: "symbol",
+        href: "/about/vision-obac",
+      },
+    ],
+  },
+  {
+    menuTopic: "หลักสูตรเปิดสอน",
+    href: "/program",
+    menuList: [
+      {
+        menuName: "การบัญชี",
+        menuIcon: (
+          <HandCoins
+          
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "accounting",
+        href: "/program/accounting",
+      },
+      {
+        menuName: "การตลาด",
+        menuIcon: (
+          <Landmark
+
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "marketing",
+        href: "/program/marketing",
+      },
+      {
+        menuName: "เทคโนโลยีธุรกิจดิจิทัล",
+        menuIcon: (
+          <Cpu
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "computer-business",
+        href: "/program/computer-business",
+      },
+      {
+        menuName: "ดิจิทัลกราฟฟิก",
+        menuIcon: (
+          <TvMinimalPlay
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "computer-graphic",
+        href: "/program/computer-graphic",
+      },
+      {
+        menuName: "การท่องเที่ยว",
+        menuIcon: (
+          <Plane
+            className="text-gray-600 w-6 h-6  transition-colors "
+          />
+        ),
+        tab: "tourism",
+        href: "/program/tourism-management",
+      },
+      {
+        menuName: "สาขาการจัดการสำนักงาน",
+        menuIcon: (
+          <ClipboardList
+            className="text-gray-600 w-6 h-6  transition-colors "
+          />
+        ),
+        tab: "office",
+        href: "/program/office-management",
+      },
+    ],
+  },
+  {
+    menuTopic: "โครงสร้างการบริหารวิทยาลัย",
+    href: "/structure",
+    menuList: [
+      {
+        menuName: "คณะผู้บริหารวิทยาลัย",
+        menuIcon: (
+          <Users
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "management",
+        href: "/structure/executive",
+      },
+      {
+        menuName: "โครงสร้างคณะผู้บริหาร",
+        menuIcon: (
+          
+          <Boxes
+
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "executive",
+        href: "/structure/management",
+      },
+    ],
+  },
+  {
+    menuTopic: "ข่าวสารและกิจกรรม",
+    href: "/",
+    menuList: [
+      {
+        menuName: "กิจกรรม",
+        menuIcon: (
+          <CalendarRange
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "activity",
+        href:"/events"
+      },
+      {
+        menuName: "ข่าวสาร",
+        menuIcon: (
+          <Newspaper
+            className="text-gray-600  transition-colors w-6 h-6 "
+          />
+        ),
+        tab: "news",
+        href: "/news",
+      },
+    ],
+  },
+  {
+    menuTopic: "ติดต่อ",
+    href: "/contact-obac",
+    menuList: [
+      {
+        menuName: "ติดต่อวิทยาลัย",
+        menuIcon: (
+          <Phone
+            className="text-gray-600  transition-colors"
+          />
+        ),
+        tab: "contact",
+        href: "/contact-obac",
+      },
+    ],
+  },
+];
+
+
+export const DropDownIconPhone: React.ReactNode[] = [
+  <BookA className="w-5 h-5" key="info" />,         
+  <BookOpen className="w-5 h-5" key="book" />,      
+  <Building className="w-5 h-5" key="sitemap" />,   
+  <Newspaper className="w-5 h-5" key="news" />,     
+  <Phone className="w-5 h-5" key="phone" />,      
 ];

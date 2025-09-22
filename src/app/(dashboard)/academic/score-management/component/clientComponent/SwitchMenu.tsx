@@ -1,9 +1,9 @@
 "use client";
 import { useState, Suspense } from "react";
 import { ClassroomGrading } from "./../../classroom";
-import { StudentListPage } from "./../../studentList";
 import { Boxes, Users } from "lucide-react";
 import { ContentSkeleton } from "./../skeletons/ContentSkeleton";
+import StudentListPage from "../../studentList";
 
 function StaticHeader({ isToggle, setIsToggle }: { 
   isToggle: boolean; 

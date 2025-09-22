@@ -3,17 +3,18 @@ import React from "react";
 import "@app/styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { StudentSidebar } from "@/components/common/SideBar/StudentSidebar";
-import {
-  ProfileData,
-  StudentSidebarData,
-} from "@/resource/students/studentSidebarData";
+import { ProfileData } from "@/resource/students/studentSidebarData";
 import { AdminSideBar } from "../../../components/common/SideBar/AdminSideBar";
 import { AdminSidebarData } from "@/resource/admin/adminSidebarData";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
-  title: "Obac.ac.th - Admin",
+  title: "ระบบผู้ดูแล",
   description: "Admin OBAC",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/asset/obac-logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {/* <SidebarProvider> */}
-        {/* Pass StudentSidebarData to StudentSidebar */}
+      <body className="min-h-screen bg-gray-100 flex flex-col">
         <ToastContainer
           position="bottom-right"
           hideProgressBar
@@ -35,7 +34,8 @@ export default function RootLayout({
           menuItems={AdminSidebarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20 lg:pl-10">{children}</div>
+        <div className=" flex-1  pt-20 pl-10 ">{children}</div>
+        <HomeFooter />
       </body>
     </html>
   );

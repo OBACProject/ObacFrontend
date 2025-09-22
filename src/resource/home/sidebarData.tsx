@@ -1,4 +1,4 @@
-import { BookText } from "lucide-react";
+import { BookText, ClipboardList, Laptop, TvMinimalPlay } from "lucide-react";
 
 interface DropMenuList {
   menuName: string;
@@ -43,3 +43,16 @@ export const SidebarData: DropMenuList[] = [
     ),
   },
 ];
+
+import { BookOpen, Laptop2, Users, Briefcase, Plane } from "lucide-react";
+
+export const iconMap: Record<string, React.ElementType> = {
+  BookOpen,
+  Laptop2,
+  Laptop,
+  Users,
+  Briefcase,
+  Plane,
+  TvMinimalPlay,
+  ClipboardList
+};

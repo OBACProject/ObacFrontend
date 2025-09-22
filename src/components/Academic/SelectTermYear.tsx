@@ -16,7 +16,7 @@ export default function SelectTermAndYear({
   onChangeYear,
 }: SelectTermAndYearProps) {
   return (
-    <>
+    <div className="flex items-center justify-center gap-4">
       <div className="flex items-center gap-2 text-gray-600">
         <div>ภาคเรียน</div>
         <select
@@ -24,9 +24,13 @@ export default function SelectTermAndYear({
           value={term}
           onChange={(e) => onChangeTerm(e.target.value)}
         >
-          <option value="">ทั้งหมด</option>
+          <option value="">-</option>
           <option value="1">1</option>
           <option value="2">2</option>
+          <option value="s1">ฤดูร้อน1</option>
+          <option value="s2">ถดูร้อน2</option>
+          <option value="เทียบโอน1">เทียบโอน 1</option>
+          <option value="เทียบโอน2">เทียบโอน 2</option>
         </select>
       </div>
 
@@ -34,25 +38,20 @@ export default function SelectTermAndYear({
         <div>ปีการศึกษา</div>
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
-          value={year === 0 ? '' : year}
+          value={year === 0 ? "" : year}
           onChange={(e) => {
             const selected = e.target.value;
-            if (selected === '') {
-              onChangeYear(0);
-            } else {
-              onChangeYear(Number(selected));
-            }
+            onChangeYear(selected === "" ? 0 : Number(selected));
           }}
         >
-          <option value="">ทั้งหมด</option>
-          {[0, 1, 2, 3, 4].map((offset) => (
-            <option key={offset} value={currentYear - offset}>
-              {currentYear - offset}
+          <option value="">-</option>
+          {Array.from({ length: 6 }, (_, i) => currentYear + 1 - i).map((y) => (
+            <option key={y} value={y}>
+              {y}
             </option>
           ))}
         </select>
-
       </div>
-    </>
+    </div>
   );
 }

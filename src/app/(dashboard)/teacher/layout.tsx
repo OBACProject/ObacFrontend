@@ -18,19 +18,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className="h-full">
+      <body className="min-h-dvh flex flex-col">
         <ToastContainer
           position="bottom-right"
           hideProgressBar
           className="z-50"
         />
+
         <NewTeacherSidebar
           menuItems={TeacherSideBarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20 lg:pl-10">{children}</div>
-        <HomeFooter/>
+
+        <main className="flex-1 pt-16 lg:pl-16 flex">
+          <div className="m-auto w-full">{children}</div>
+        </main>
+
+        <HomeFooter />
       </body>
     </html>
   );

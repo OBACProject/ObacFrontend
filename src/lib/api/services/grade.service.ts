@@ -1,82 +1,114 @@
-import { BaseService } from './base/base.service';
-import { GRADE_ENDPOINTS } from '../endpoints/grade.endpoints';
+import { BaseService } from "./base/base.service";
+import { GRADE_ENDPOINTS } from "../endpoints/grade.endpoints";
 import {
-    GetStudentGradesByTermYearRequest,
-    GetStudentIfGradeBelowRequest,
-    GetStudentGradeAboveRequest,
-    GetStudentTranscriptRequest,
-    GetGroupSummaryGradeRequest,
-    GetGroupSummaryGradeAvailableStatusRequest,
-    GetStudentGroupGradeByGroupIdTermYearRequest,
-    UpdateStudentGradeRequest,
-    PublishGradeRequest,
-} from '../models/grade/grade.request';
+  BulkUpdateStudentGradeByScheduleSubjectIdRequest,
+  GetGroupSummaryGradeRequest,
+  GetStudentGradesByTermYearRequest,
+  GetStudentIfGradeBelowRequest,
+  UpdateStudentGradeScoreRequest,
+  UpsertStudentGradesRequest,
+
+} from "../models/grade/grade.request";
 
 import {
-    GetGradBelowResponse,
-    GetGradPerTermYearByStudentIdResponse,
-    GetGroupSummaryGradeResponse,
-    GetStudentGroupGradeAboveResponse,
-    StudentTranscriptResponse,
-} from '../models/grade/grade.response';
-
+  GetGroupSummaryGradeResponse,
+  GetStudentDetailAndSummaryScoreByStudentCodeResponse,
+  GetStudentGradesByTermYearResponse,
+  GetStudentGroupGradeByScheduleSubjectIdResponse,
+  GetStudentIfGradeBelowResponse,
+} from "../models/grade/grade.response";
 
 export class GradeService extends BaseService {
-  async getStudentGrades(params: GetStudentGradesByTermYearRequest): Promise<GetGradPerTermYearByStudentIdResponse> {
-    return this.get<GetGradPerTermYearByStudentIdResponse>(GRADE_ENDPOINTS.GET_STUDENT_GRADE_BY_TERM_YEAR, params);
-  }
 
-  async getStudentsBelowGrade(params: GetStudentIfGradeBelowRequest): Promise<GetGradBelowResponse[]> {
-    return this.get<GetGradBelowResponse[]>(GRADE_ENDPOINTS.GET_STUDENT_IF_GRADE_BELOW, params);
+  async getSummaryGrade(
+    params: GetGroupSummaryGradeRequest
+  ): Promise<GetGroupSummaryGradeResponse> {
+    return this.get<GetGroupSummaryGradeResponse>(
+      GRADE_ENDPOINTS.GET_GRADE_GROUP_SUMMARY_GRADE,
+      params
+    );
   }
-
-  async getGroupGradesAbove(params: GetStudentGradeAboveRequest): Promise<GetStudentGroupGradeAboveResponse[]> {
-    return this.get<GetStudentGroupGradeAboveResponse[]>(GRADE_ENDPOINTS.GET_GROUP_GRADE_ABOVE, params);
-  }
-
-  async getStudentTranscript(params : GetStudentTranscriptRequest): Promise<StudentTranscriptResponse> {
-    return this.get<StudentTranscriptResponse>(
-      `${GRADE_ENDPOINTS.GET_STUDENT_TRANSCRIPT , params}/`
+  
+  async getStudentGradesByTermYear(
+    params : GetStudentGradesByTermYearRequest
+  ) : Promise<GetStudentGradesByTermYearResponse> {
+    return this.get<GetStudentGradesByTermYearResponse>(
+      GRADE_ENDPOINTS.GET_GRADE_STUDENT_GRADES_BY_TERM_YEAR,
+      params
     );
   }
 
-  async getGradeSummary(params: GetGroupSummaryGradeRequest): Promise<GetGroupSummaryGradeResponse> {
-    return this.get<GetGroupSummaryGradeResponse>(GRADE_ENDPOINTS.GET_GROUP_SUMMARY_GRADE, params);
+  async BulkUpdateStudentGradeByScheduleSubjectId(
+    scheduleSubjectId : number,
+    params: BulkUpdateStudentGradeByScheduleSubjectIdRequest[]
+  ) : Promise<void> {
+    return this.put<void>(
+      `${GRADE_ENDPOINTS.UPDATE_BULKUPDATE_STUDENTS_GRADE_BY_SCHEDULE_SUBJECT_ID}?scheduleSubjectId=${scheduleSubjectId}`,
+      params
+    );
   }
 
-//   async getGradeStatistics(
-//     subjectId: number,
-//     classId: number,
-//     term: number,
-//     year: number
-//   ): Promise<GradeStatisticsResponse> {
-//     return this.get<GradeStatisticsResponse>(GRADE_ENDPOINTS.GET_STATISTICS, {
-//       subjectId,
-//       classId,
-//       term,
-//       year,
-//     });
-//   }
+  async GetStudentDetailAndSummaryScoreByStudentCode(
+    studentCode: string
+  ): Promise<GetStudentDetailAndSummaryScoreByStudentCodeResponse> {
+    return this.get<GetStudentDetailAndSummaryScoreByStudentCodeResponse>(
+      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_DETAIL_AND_SUMMARY_SCORE_BY_STUDENT_CODE}?studentCode=${studentCode}`
+    );
+  }
+  async getStudentGroupGradeByScheduleSubjectId(
+    scheduleSubjectId: number
+  ): Promise<GetStudentGroupGradeByScheduleSubjectIdResponse> {
+    return this.get<GetStudentGroupGradeByScheduleSubjectIdResponse>(
+      `${GRADE_ENDPOINTS.GET_GRADE_STUDENT_GROUP_GRADE_BY_SCHEDULE_SUBJECT_ID}?scheduleSubjectId=${scheduleSubjectId}`
+    );
+  }
 
-//   // Create new grade
-//   async createGrade(data: CreateGradeRequest): Promise<StudentGradeResponse> {
-//     return this.post<StudentGradeResponse>(GRADE_ENDPOINTS.CREATE, data);
-//   }
+  async getStudentIfGradeBelow(
+    params : GetStudentIfGradeBelowRequest
+  ) : Promise<GetStudentIfGradeBelowResponse> {
+    return this.get<GetStudentIfGradeBelowResponse>(
+      GRADE_ENDPOINTS.GET_GRADE_STUDENT_IF_GRADE_BELOW,
+      params
+    );
+  }
+  async updateStudentGradeByGradeId(
+    params : UpdateStudentGradeScoreRequest
+  ) : Promise<string> {
+    try {
+      const response = await this.client.put(
+        GRADE_ENDPOINTS.UPDATE_STUDENT_GRADE_BY_GRADE_ID,
+        params
+      );
+      
+      if (response.status === 200) {
+        return response.data?.message || "Grade updated successfully";
+      }
+      
+      throw new Error("Failed to update student grade");
+    } catch (error: any) {
+      if (error.response?.status === 200 && error.response?.data?.message) {
+        return error.response.data.message;
+      }
+      throw error;
+    }
+  }
 
-//   // Update grade
-//   async updateGrade(gradeId: number, data: UpdateGradeRequest): Promise<StudentGradeResponse> {
-//     return this.put<StudentGradeResponse>(`${GRADE_ENDPOINTS.UPDATE}/${gradeId}`, data);
-//   }
+    async upsertStudentGrades(
+    params: UpsertStudentGradesRequest
+  ): Promise<void> {
+    return this.put<void>(
+      GRADE_ENDPOINTS.POST_GRADE_UPSERTSTUDENT_GRADES,
+      params
+    );
+  }
 
-//   // Delete grade
-//   async deleteGrade(gradeId: number): Promise<void> {
-//     return this.delete<void>(`${GRADE_ENDPOINTS.DELETE}/${gradeId}`);
-//   }
-
-//   // Bulk update grades
-//   async bulkUpdateGrades(data: BulkGradeUpdateRequest): Promise<StudentGradeResponse[]> {
-//     return this.post<StudentGradeResponse[]>(GRADE_ENDPOINTS.BULK_UPDATE, data);
-//   }
+  async deleteGrade(
+    gradeId: number
+  ): Promise<void> {
+    return this.delete<void>(
+      `${GRADE_ENDPOINTS.DELETE_GRADE_DELETE_GRADE}/${gradeId}`
+    );
+  }
 
 }
 

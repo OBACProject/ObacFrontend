@@ -1,137 +1,161 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ClassroomGrading } from "./classroomGrading";
-import { fetchGetAllStudent } from "@/api/oldApi/student/studentApi";
-import { GetAllStudent } from "@/dto/studentDto";
-import { useRouter } from "next/navigation";
-import Select from "react-select";
-import { BookUser, Loader2, Search } from "lucide-react";
-export interface ClassroomByGroupIdProps {
-  groupId: number;
-  term: string;
-  year: string;
-  classroom: string;
-}
-
-const getStudentList = async () => {
-  try {
-    const response = await fetchGetAllStudent();
-    return response;
-  } catch (err) {}
-};
+import { BookUser, Box, Boxes } from "lucide-react";
+import HeaderLabel from "@/components/common/labelText/HeaderLabel";
+import SearchInput from "@/components/Teacher/SearchInput";
+import { StudentGroupItem } from "@/dto/studentGroupItem";
+import { getCurrentThaiTermYear } from "@/lib/utils";
+import { GetAllStudentGroupByTermYear } from "@/api/studentGroup/route";
+import NameListScheduleTable, {
+  ColumnConfig,
+} from "@/components/Academic/table/NameListScheduleTable";
+import SelectTermAndYear from "@/components/Academic/SelectTermYear";
+import DownloadStudentListPopup from "@/components/common/Popup/DownloadStudentListPopup";
+import LoadingDataTable from "@/components/common/loading/LoadingDataTable";
 
 export default function Form() {
-  const [studentListName, setStudentListName] = useState<GetAllStudent[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("classroom");
-  const [selectedClassroomData, setSelectedClassroomData] =
-    useState<ClassroomByGroupIdProps>();
-  const router = useRouter();
-  const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
+  const onSearch = () => {};
+
+  const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>();
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
+  const [year, setYear] = useState<number>(currentYear);
+  const [term, setTerm] = useState<string>(defaultTerm);
+
+  const [pdfListPopup, setPDFListPopup] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    getStudentList().then((item: any) => {
-      setStudentListName(item);
-    });
+    GetAllStudentGroupByTermYear(term, year).then(
+      (items: StudentGroupItem[]) => {
+        const sorted = items.sort((a, b) => {
+          if (a.class === "ปวช" && b.class === "ปวส") return -1;
+          if (a.class === "ปวส" && b.class === "ปวช") return 1;
+          const parseNums = (str: string) =>
+            str.match(/\d+/g)?.map(Number) ?? [];
+
+          const numsA = parseNums(a.groupName);
+          const numsB = parseNums(b.groupName);
+          const majorA = numsA[0] ?? 0;
+          const majorB = numsB[0] ?? 0;
+          if (majorA !== majorB) {
+            return majorA - majorB;
+          }
+          const minorA = numsA[1] ?? 0;
+          const minorB = numsB[1] ?? 0;
+          if (minorA !== minorB) {
+            return minorA - minorB;
+          }
+
+          return a.groupName.localeCompare(b.groupName, "th");
+        });
+        setStudentGroup(sorted);
+        setIsLoading(true);
+      }
+    );
   }, []);
 
-  const [selectedStudent, setSelectedStudent] = useState<{
-    value: number;
-    label: string;
-  } | null>(null);
+  useEffect(() => {
+    GetAllStudentGroupByTermYear(term, year).then(
+      (items: StudentGroupItem[]) => {
+        const sorted = items.sort((a, b) => {
+          if (a.class === "ปวช" && b.class === "ปวส") return -1;
+          if (a.class === "ปวส" && b.class === "ปวช") return 1;
 
-  const handleTab = (tab: string) => {
-    if (activeTab === tab) return;
-    setActiveTab(tab);
-    if (activeTab === "classroomByGroupId") {
-      setSelectedClassroomData(undefined);
-    }
-  };
+          const parseNums = (str: string) =>
+            str.match(/\d+/g)?.map(Number) ?? [];
 
-  const handleSelectedClassRoomDataByGroupId = (
-    data: ClassroomByGroupIdProps
-  ) => {
-    setSelectedClassroomData(data);
-    setActiveTab("classroomByGroupId");
-  };
-  const handleSubjectChange = (
-    option: { value: number; label: string } | null
-  ) => {
-    setSelectedStudent(option);
-  };
+          const numsA = parseNums(a.groupName);
+          const numsB = parseNums(b.groupName);
 
-  const onSearch = () => {
-    setSearchTrigger(true);
-    router.push(`/academic/student-details/${selectedStudent?.value}`);
-  };
+          const majorA = numsA[0] ?? 0;
+          const majorB = numsB[0] ?? 0;
+          if (majorA !== majorB) {
+            return majorA - majorB;
+          }
+          const minorA = numsA[1] ?? 0;
+          const minorB = numsB[1] ?? 0;
+          if (minorA !== minorB) {
+            return minorA - minorB;
+          }
+          return a.groupName.localeCompare(b.groupName, "th");
+        });
+        setStudentGroup(sorted);
+      }
+    );
+  }, [term, year]);
 
-  const studentNameOptions = studentListName.map((item) => ({
-    value: item.studentId,
-    label: `${item.studentCode} ${item.thaiName} ${item.thaiLastName}`,
-  }));
-
+  const studentColumns: ColumnConfig<StudentGroupItem>[] = [
+    { label: "No.", width: "5%", render: (_, i) => i + 1 },
+    {
+      label: "ระดับชั้น",
+      width: "10%",
+      render: (item) => `${item.class}.${item.groupName}`,
+    },
+    {
+      label: "หลักสูตร",
+      width: "30%",
+      render: (item) => item.facultyName,
+      className: "text-start lg:pl-6 line-clamp-1",
+    },
+    {
+      label: "สาขา",
+      width: "30%",
+      render: (item) => item.programName,
+      className: "text-start lg:pl-6 line-clamp-1",
+    },
+    { label: "รหัสห้อง", width: "15%", render: (item) => item.groupCode },
+    { label: "จำนวนนักเรียน", width: "10%", render: (item) =>  item.total  },
+  ];
   return (
     <div className="py-5 w-full">
-      <div className="flex justify-start py-2 items-center">
-        <div className="px-10 py-2 rounded-3xl  text-xl w-fit border border-gray-100 shadow-md   text-blue-700 flex gap-2 items-center">
-          <BookUser className="w-8 h-8"/>
-          รายชื่อและข้อมูลนักเรียน
-        </div>
+      <div className="w-full justify-start lg:px-10 flex">
+        <HeaderLabel
+          Icon={<BookUser className="h-7 w-7 text-white" />}
+          bg_icon="bg-blue-500"
+          title="รายชื่อและข้อมูลนักเรียน"
+          className="text-blue-600"
+        />
       </div>
-      <div className="pt-2 grid place-items-start">
-        <div className=" flex justify-between w-full items-center gap-4 ">
-          <div className="flex w-[400px] gap-1 items-center px-5">
-            {searchTrigger ? (
-              <button className=" py-1.5 bg-blue-400 flex gap-2  items-center text-white rounded-md px-4">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                ค้นหา
-              </button>
-            ) : (
-              <button
-                className="bg-blue-300  py-1.5 enabled:bg-blue-500 enabled:hover:bg-blue-600 flex gap-2 items-center text-white rounded-md px-4"
-                onClick={() => {
-                  onSearch();
-                }}
-                disabled={!selectedStudent}
-              >
-                <Search className="w-5 h-5" />
-                ค้นหา
-              </button>
-            )}
-
-            <Select
-              options={studentNameOptions}
-              value={selectedStudent}
-              onChange={handleSubjectChange}
-              isSearchable
-              placeholder="   -- รหัสนักเรียน --"
-              styles={{
-                container: (provided) => ({
-                  ...provided,
-                  width: "100%",
-                }),
-              }}
-            />
-          </div>
-          <div className="px-5">
-            <button
-              className="text-sm px-10 py-2 bg-blue-500 rounded-sm text-white hover:bg-blue-600"
-              onClick={() => {
-                router.push("/academic/student-info-list/studentList");
-              }}
-            >
-              รายชื่อนักเรียนทั้งหมด
-            </button>
-          </div>
-        </div>
-      </div>
-      <div>
-        {activeTab === "classroom" && (
-          <ClassroomGrading
-            handleTab={handleTab}
-            handleSelectedData={handleSelectedClassRoomDataByGroupId}
+      <div className="flex pt-5 lg:px-10 items-center justify-between">
+        <div className="flex justify-start   w-fit items-center lg:gap-8 ">
+          {/* <SearchInput onSearchKeyword={onSearch} edit={false} /> */}
+          <SelectTermAndYear
+            term={term}
+            year={year}
+            currentYear={currentYear}
+            onChangeTerm={setTerm}
+            onChangeYear={setYear}
           />
+        </div>
+
+        <button
+          onClick={() => setPDFListPopup(true)}
+          className="px-8  bg-white text-blue-600 font-prompt_Light hover:scale-[101%] duration-300 border-gray-300 shadow border-[1px] rounded-md py-1 flex items-center gap-3"
+        >
+          <Boxes className="w-5 h-5 text-blue-600 " />
+          โหลดใบรายชื่อแบบสายชั้น
+        </button>
+      </div>
+
+      <div className="py-2">
+        {isLoading ? (
+          <NameListScheduleTable
+            data={studentGroup || []}
+            icon={<Box className="h-6 w-6 text-white" />}
+            title={`รายชื่อห้องเรียนของ เทอม ${term} ปีการศึกษา ${year}`}
+            columns={studentColumns}
+            rowHref={(item) =>
+              `/academic/student-name-list/student-group/${item.id}/${year}`
+            }
+            emptyText="ไม่มีข้อมูลชั้นเรียน"
+          />
+        ) : (
+          <LoadingDataTable />
         )}
       </div>
+      {pdfListPopup && (
+        <DownloadStudentListPopup onClosePopUp={setPDFListPopup} />
+      )}
     </div>
   );
 }

@@ -1,65 +1,57 @@
 import {
+  BookOpen,
   BookText,
+  Calendar,
   CalendarDays,
   CreditCard,
   GraduationCap,
+  UserRound,
 } from "lucide-react";
 
 export interface StudentSidebarProps {
   menuItems: {
     title: string;
-    tooltip: string;
     href: string;
+    headLink: string;
     icon: React.ReactNode;
+    subMenu?: {
+      title: string;
+      href: string;
+      icon: React.ReactNode;
+    }[];
   }[];
 }
-
 export interface ProfileData {
-  name: string;
   id: string;
+  name: string;
   href: string;
 }
-
 export const ProfileData: ProfileData = {
-  name: "ถิรวัฒน์ พงศ์ปฏิสนธิพงศ์ปฏิสนธิ",
-  id: "6410450958",
-  href: "/student/profile",
+  name: "username",
+  id: "0000",
+  href: "/student",
 };
 
 export const StudentSidebarData: StudentSidebarProps = {
   menuItems: [
     {
+      title: "ข้อมูลผู้ใช้",
+      href: "/student/profile",
+      headLink: "/student/profile",
+      icon: <UserRound className="w-8 h-8" />,
+    },
+    {
+      title: "ผลการเรียน",
+      href: "/student/educate-information",
+      headLink: "/student/educate-information",
+      icon: <BookOpen className="w-8 h-8" />,
+    },
+    {
       title: "ตารางเรียน",
-      tooltip: "schedule",
       href: "/student/schedule",
-      icon: (
-        <CalendarDays
-          style={{ width: "2.5rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "ตรวจสอบผลการเรียน",
-      tooltip: "grade",
-      href: "/student/grade",
-      icon: (
-        <GraduationCap
-          style={{ width: "2.5rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
-    },
-    {
-      title: "สถานะการชำระเงิน",
-      tooltip: "payment",
-      href: "/student/payment",
-      icon: (
-        <CreditCard
-          style={{ width: "2.5rem", height: "2.5rem" }}
-          className="text-[#0C2943]"
-        />
-      ),
+      headLink: "/student/schedule",
+      icon: <Calendar className="w-8 h-8" />,
     },
   ],
 };
+

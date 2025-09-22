@@ -1,36 +1,31 @@
 "use client";
-import { GetGropGradeBelow } from "@/api/oldApi/grad/gradAPI";
-import StudentFailList from "@/lib/PDF/name-list/StudentFailList";
-import { GetGropGradeBelowModel } from "@/dto/gradDto";
-import { Download, Loader2, Search, User } from "lucide-react";
+import { GradBelowResponse } from "@/dto/gradDto";
+import { Loader2, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import HeaderLabel from "@/components/common/labelText/HeaderLabel";
 import { getCurrentThaiTermYear } from "@/lib/utils";
-
-interface IndividualStudentInfoData {
-  studentId: number;
-  studentName: string;
-}
+import { GetStudentIfGradeBelow } from "@/api/grad/route";
+import { PDFFailedStudentNamelistButton } from "@/components/PDF/PDFButton";
+import GradeFilter from "@/components/Academic/GradeFilter";
 
 export default function Main() {
   const { defaultTerm, currentYear } = getCurrentThaiTermYear();
-
-  const [students, setStudent] = useState<GetGropGradeBelowModel[]>([]);
+  const [students, setStudent] = useState<GradBelowResponse[]>([]);
   const studentCount = useMemo(() => students.length, [students]);
-  // const [groupID, setGroupID] = useState<number>(0);
-  const [grads, setGrad] = useState(2.0);
+  const [grads, setGrad] = useState<number>(2.0);
   const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState<number>(currentYear);
   const [classSelect, setClassSelect] = useState<string>("");
   const [currentYearSelect, setCurrentYearSelect] = useState<number>(0);
   const [searchTrigger, setSearchTrigger] = useState<boolean>(false);
   const [isSearch, setIsSearch] = useState<boolean>(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setGrad(!isNaN(value) ? value : 0.0);
+  const handleAcademicYearChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const v = e.target.value;
+    setYear(v ? Number(v) : currentYear);
   };
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -38,64 +33,64 @@ export default function Main() {
     setClassSelect(classType);
     setCurrentYearSelect(Number(year));
   };
+
   const router = useRouter();
+
   const onFilterGroup = async () => {
-    // try {
-    //   setSearchTrigger(true);
-    //   await GetGropGradeBelow(
-    //     classSelect,
-    //     currentYearSelect,
-    //     grads,
-    //     term,
-    //     Number(year)
-    //   ).then((item: GetGropGradeBelowModel[]) => {
-    //     setStudent(item);
-    //   });
-    //   setIsSearch(true);
-    //   setSearchTrigger(false);
-    // } catch (err) {
-    //   console.error("Error in onFilterGroup:", err);
-    //   setSearchTrigger(false);
-    //   setIsSearch(true);
-    // }
+    setSearchTrigger(true);
+    setStudent([]);
+    try {
+      await GetStudentIfGradeBelow(
+        classSelect,
+        currentYearSelect,
+        grads,
+        year
+      ).then((item: GradBelowResponse[]) => {
+        setStudent(item);
+      });
+      setIsSearch(true);
+      setSearchTrigger(false);
+    } catch (err) {
+      console.log("API GetGradBelow ERROR ", Error);
+      setSearchTrigger(false);
+      setIsSearch(true);
+    }
+
+    setIsSearch(true);
+    setSearchTrigger(false);
   };
 
-  const handleStudentName = (id: number, fname: string, lname: string) => {
-    const data: IndividualStudentInfoData = {
-      studentId: id,
-      studentName: fname + " " + lname,
-    };
-    localStorage.setItem("selectedStudentData", JSON.stringify(data));
-    localStorage.setItem("activeTabStudent", "individualStudentInfo");
-
-    router.push(`/academic/score-management/individual/${id}`);
+  const handleStudentName = (studentCode: number) => {
+    router.push(`/academic/score-management/individual/${studentCode}`);
   };
-
+  const yearOptions = useMemo(() => {
+    return Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
+  }, [currentYear]);
   return (
     <div className="py-5">
       <div className="w-full justify-start px-10 flex">
-        <HeaderLabel Icon={<User className="h-8 w-8"/>} title="นักเรียนไม่ผ่านเกณฑ์" className="text-red-600"/>
+        <HeaderLabel
+          Icon={<User className="h-7 w-7 text-white" />}
+          bg_icon="bg-red-500"
+          title="นักเรียนไม่ผ่านเกณฑ์"
+          className="text-red-600"
+        />
       </div>
       <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
-        <SelectTermAndYear
-          term={term}
-          year={year}
-          currentYear={currentYear}
-          onChangeTerm={setTerm}
-          onChangeYear={setYear}
-        />
-        <div className="flex items-center gap-2" style={{ userSelect: "none" }}>
-          <label className="text-black text-[16px]">เกรดขั้นต่ำ</label>
-          <input
-            type="number"
-            className="border py-1 border-gray-200 rounded-sm w-[80px] text-center"
-            value={grads}
-            onChange={handleChange}
-            step={0.25}
-            min={0.0}
-            max={4.0}
-          />
-        </div>
+        <p>ปีการศึกษา</p>
+        <select
+          className="border border-gray-200 rounded-sm py-1 px-4"
+          onChange={handleAcademicYearChange}
+          value={year}
+        >
+          <option value="">เลือก</option>
+          {yearOptions.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+        <GradeFilter grade={grads} onChange={setGrad} />
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
           onChange={handleClassChange}
@@ -143,66 +138,116 @@ export default function Main() {
                     จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{studentCount}</p>คน
                   </div>
                   <div>
-                    <button
-                      className="text-sm items-center flex justify-center gap-2  bg-[#e4f1f8] text-gray-700 hover:bg-gray-200 shadow-slate-300 shadow-sm rounded-full px-5 py-1 h-fit "
-                      onClick={() => {
-                        if (students)
-                          StudentFailList({
-                            student: students,
-                            classGroup: `${classSelect}.${currentYearSelect}`,
-                            currentYear: year,
-                          });
-                      }}
-                    >
-                      <Download className="w-4 h-4" />
-                      รายชื่อนักเรียนตก PDF
-                    </button>
+                    <PDFFailedStudentNamelistButton
+                      className={classSelect}
+                      currentYear={currentYearSelect}
+                      grade={Number(grads)}
+                      year={year}
+                    />
                   </div>
                 </div>
 
                 <div>
-                  <div className="grid shadow-lg h-fit grid-cols-[10%_20%_30%_20%_20%] bg-white border-t-2 border-b-2 border-gray-400  text-gray-800   text-lg">
+                  <div
+                    className="grid shadow-lg h-fit grid-cols-[10%_10%_30%_10%_15%_15%_10%] bg-gray-200 rounded-t-md
+                   text-gray-700   text-lg"
+                  >
                     <div className="py-1 text-lg text-center">ลำดับ</div>
                     <div className="py-1 text-lg text-center">รหัสนักศึกษา</div>
                     <div className="py-1 text-lg text-center">
                       ชื่อ - นามสกุล
                     </div>
+                    <div className="py-1 text-lg text-center">ห้องเรียน</div>
+                    <p className="py-1 text-lg text-center line-clamp-1">
+                      เกรดเฉลี่ย 2 เทอม
+                    </p>
                     <div className="py-1 text-lg text-center">
-                      เกรดเทอมล่าสุด
+                      เลขที่ใบเสร็จ
                     </div>
+                    <div></div>
                   </div>
-                  {students.map((item, index) => (
-                    <div
-                      onClick={() => {
-                        handleStudentName(
-                          item.studentId,
-                          item.firstName,
-                          item.lastName
-                        );
-                      }}
-                      key={index}
-                      className="border border-t-0 border-gray-300 hover:bg-red-100 bg-white text-black grid h-fit  grid-cols-[10%_20%_15%_15%_20%_20%] shadow-md"
-                    >
-                      <div className="text-center py-1 border-r border-gray-400">
-                        {index + 1}
+                  {students.map((item, index) => {
+                    const receipts = Array.isArray(item.receipts)
+                      ? item.receipts
+                      : item.receipts && typeof item.receipts === "object"
+                      ? Object.values(item.receipts as any)
+                      : [];
+                    const hasReceipts = receipts.length > 0;
+                    const formatGPA = (g: number | null | undefined) =>
+                      typeof g === "number" && isFinite(g) ? g.toFixed(2) : "—";
+                    return (
+                      <div
+                        key={index}
+                        className="border border-t-0 border-gray-300 hover:bg-red-100
+                       bg-white text-black grid h-fit  grid-cols-[10%_10%_15%_15%_10%_15%_15%_10%] shadow-md"
+                      >
+                        <div className="text-center py-1 border-r border-gray-400">
+                          {index + 1}
+                        </div>
+                        <div className="text-center py-1 border-r border-gray-400">
+                          {item.studentCode}
+                        </div>
+                        <div className="text-start py-1 pl-8">
+                          {item.prefix}&nbsp;
+                          {item.firstName}
+                        </div>
+                        <div className="text-start py-1 border-r border-gray-400">
+                          {item.lastName}
+                        </div>
+                        <div className="text-center border-r border-gray-400 py-1">
+                          {item.class}.{item.groupName}
+                        </div>
+                        <div className="text-center border-r border-gray-400 py-1">
+                          {formatGPA(item.gpa)}
+                        </div>
+                        <div className="flex justify-center items-center py-1">
+                          <select
+                            className={`border px-3 rounded-md py-1 min-w-32
+                          ${
+                            hasReceipts
+                              ? "text-green-600 focus:ring-green-400"
+                              : "text-blue-600 focus:ring-blue-400"
+                          }
+                          focus:outline-none focus:ring-2`}
+                            defaultValue={hasReceipts ? "__has__" : "__none__"}
+                          >
+                            {hasReceipts ? (
+                              <>
+                                <option value="__has__" disabled>
+                                  มีใบเสร็จ ({receipts.length})
+                                </option>
+                                {receipts.map((r: any, i: number) => (
+                                  <option
+                                    key={`${item.studentId ?? index}-${
+                                      r?.receiptNo ?? i
+                                    }`}
+                                    value={r?.receiptNo ?? ""}
+                                  >
+                                    {r?.receiptNo ?? "—"}
+                                    {r?.subjectName ? `` : ""}
+                                  </option>
+                                ))}
+                              </>
+                            ) : (
+                              <option value="__none__" disabled>
+                                ไม่มีใบเสร็จ
+                              </option>
+                            )}
+                          </select>
+                        </div>
+                        <div
+                          className="flex items-center justify-center  border-l border-gray-400"
+                          onClick={() => {
+                            handleStudentName(Number(item.studentCode));
+                          }}
+                        >
+                          <button className="py-0.5 px-4 bg-gray-500 h-fit text-white hover:bg-gray-700  rounded-md">
+                            รายละเอียด
+                          </button>
+                        </div>
                       </div>
-                      <div className="text-center py-1 border-r border-gray-400">
-                        {item.studentCode}
-                      </div>
-                      <div className="text-start py-1 pl-8">
-                        {item.firstName}
-                      </div>
-                      <div className="text-start py-1 border-r border-gray-400">
-                        {item.lastName}
-                      </div>
-                      <div className="text-center py-1">
-                        {item.class}.{item.groupName}
-                      </div>
-                      <div className="text-center py-1">
-                        {item.gpa.toFixed(2)}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ) : (

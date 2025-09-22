@@ -1,4 +1,4 @@
-export interface GetGradBySubjectId {
+export interface GradStudentInSubject {
   [key: string]: number | string;
   gradeId: number;
   subjectId: number;
@@ -10,24 +10,54 @@ export interface GetGradBySubjectId {
   firstName: string;
   lastName: string;
   subjectName: string;
+  assignmentscore: number;
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
+  midtermscore: number;
+  finaltermscore: number;
   totalScore: number;
   grade: string;
   remark: string;
 }
-
-export interface convertGradBySubjectId {
-  // gender : string;
+export interface GetGradBySubjectId {
+  [key: string]: number | string;
+  gradeId: number;
+  subjectId: number;
+  scheduleSubjectId: number;
+  studentGroup: string;
+  studentId: number;
   studentCode: string;
-  name: string; // firstName + lastName
+  prefix: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  subjectName: string;
+  assignmentscore: number;
   collectScore: number;
-  testScore: number;
   affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
   totalScore: number;
+  finalGrade: number;
+  remarks: string;
 }
-
+// assignmentscore คะแนนภารระงาน : 20
+// collectscore คะแนนเก็บ (ทดสอบ) : 10
+// affectivescore คะแนนประพฤติ : 20
+// midtermscore กลางภาค : 20
+// finaltermscore ปลายภาค : 30
+export interface convertGradBySubjectId {
+  studentCode: string;
+  name: string;
+  assignmentscore: number;
+  collectScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  finalGrade: number;
+  remarks: string;
+  status : string;
+}
 export interface ConvertClassroomToExcelDto {
   studentCode: string;
   name: string; // firstName + lastName
@@ -70,6 +100,7 @@ export interface ConvertGradBySubjectId {
 export type Student = {
   studentId: number;
   studentCode: string;
+  prefix: string;
   firstName: string;
   lastName: string;
   isActive: boolean;
@@ -92,6 +123,7 @@ export interface GetGropGradeAboveModel {
 export interface GetGropGradeBelowModel {
   studentId: number;
   studentCode: string;
+  prefix: string;
   firstName: string;
   lastName: string;
   facultyName: string;
@@ -162,3 +194,200 @@ export type GetStudentGroupGradeByGroupIdTermYearDto = {
   grade: number;
   remark: string | null;
 };
+
+export interface SubjectGradeItem {
+  studentId: number;
+  studentCode: string;
+  status: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  assignmentScore: number;
+  collectScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+}
+
+export interface StudentGroupGradeResponse {
+  subjectName: string;
+  subjectCode: string;
+  credits: number;
+  hour: number;
+  subjectTeacher: string;
+  subjectId: number;
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  section:string;
+  class: string;
+  level: number;
+  isPublish: boolean;
+  isComplete: boolean;
+  term: string;
+  year: number;
+  subjectGrades: SubjectGradeItem[];
+}
+
+export type StudentGroupGrade = {
+  studentId: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+  finalGrade: number;
+  remarks: string;
+};
+
+export type BulkUpdateStudentGradeResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: boolean;
+  error: null | {
+    code: string;
+    message: string;
+  };
+};
+
+export interface SubjectGrade {
+  gradeId: number;
+  finalGrade: number;
+  remark: string;
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  credit: number;
+  gradePoint: number;
+  term: string;
+  year: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+}
+
+export interface SubjectGradesTermYear {
+  term: string;
+  year: number;
+  subjectGrades: SubjectGrade[];
+}
+
+export interface StudentGrade {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  section:string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  subjectGradesTermYear: SubjectGradesTermYear[];
+}
+
+export interface StudentGroupGrades {
+  studentGroupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  term: string;
+  year: number;
+  facultyName: string;
+  programName: string;
+  studentGrades: StudentGrade[];
+}
+
+export interface StudentGradeItem {
+  gradeId: number;
+  finalGrade: number;
+  remark: string;
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  credit: number;
+  gradePoint: number;
+  term: string;
+  year: number;
+  collectScore: number;
+  assignmentScore: number;
+  affectiveScore: number;
+  midtermScore: number;
+  finaltermScore: number;
+  totalScore: number;
+}
+
+export interface SubjectGradesByTermYear {
+  term: string;
+  year: number;
+  subjectGrades: StudentGradeItem[];
+}
+
+export interface StudentGradesResponse {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  section:string;
+  class: string;
+  groupName: string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  subjectGradesTermYear: SubjectGradesByTermYear[];
+}
+
+export interface GradBelowResponse {
+  prefix: string;
+  studentId: number;
+  studentCode: string;
+  firstName: string;
+  lastName: string;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  class: string;
+  currentLevel: number;
+  groupName: string;
+  term: string;
+  year: number;
+  gpa: number;
+  receipts:Receipt[]
+}
+
+export interface Receipt {
+  receiptNo: string;
+  subjectName: string;
+}
+
+export interface StudentInGroup {
+  studentId: number;
+  studentCode: string;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gpa: number;
+  receipts: Receipt[];
+}
+
+export interface GroupStudentsResponse {
+  groupName: string;
+  groupCode: string;
+  class: string;
+  level: number;
+  programId: number;
+  facultyName: string;
+  programName: string;
+  subProgramName: string;
+  term: string;
+  year: number;
+  students: StudentInGroup[];
+}

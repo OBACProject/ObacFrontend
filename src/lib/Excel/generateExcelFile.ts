@@ -1,0 +1,406 @@
+"use client"
+import {
+  convertGradBySubjectId,
+  ConvertClassroomToExcelDto,
+} from "@/dto/gradDto";
+import { StudentItems } from "@/dto/studentDto";
+import ExcelJS from "exceljs";
+
+export interface GeneralData {
+  groupId: number;
+  groupName: string;
+  groupCode: string;
+  class: string;
+  facultyName: string;
+  programName: string;
+  term: string;
+  year: number;
+}
+
+export interface StudentListExcel {
+  studentId: number;
+  studentCode: string;
+  name: string;
+  gpa: number;
+  gpax: number;
+  totalCredit: number;
+  subjects: Record<string, string>;
+}
+
+export async function ConvertScoreToExcel(
+  data: convertGradBySubjectId[],
+  term: string,
+  year: string,
+  subjectCode: string,
+  subjectName: string,
+  classroom: string
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Grades");
+
+  worksheet.mergeCells("A1:H1");
+  const header1 = worksheet.getCell("A1");
+  header1.value = `ภาคเรียนที่ ${term} ปีการศึกษา ${year}`;
+  header1.alignment = { horizontal: "center", vertical: "middle" };
+  header1.font = { size: 14, bold: true };
+  worksheet.getRow(1).height = 20;
+
+  worksheet.mergeCells("A2:H2");
+  const header2 = worksheet.getCell("A2");
+  header2.value = `รหัสวิชา ${subjectCode} : ${subjectName}`;
+  header2.alignment = { horizontal: "center", vertical: "middle" };
+  header2.font = { size: 12, bold: true };
+  worksheet.getRow(2).height = 18;
+
+  const headerRow = worksheet.addRow([
+    "ลำดับ",
+    "รหัสนักเรียน",
+    "ชื่อ-นามสกุล",
+    "ห้องเรียน",
+    "คะแนนจิตพิสัย (20)",
+    "คะแนนทดสอบ (10)",
+    "คะแนนภาระงาน (20)",
+    "คะแนนสอบกลางภาค (20)",
+    "คะแนนสอบปลายภาค (30)",
+    "คะแนนรวม",
+    "เกรด",
+    "หมายเหตุ",
+  ]);
+
+  // Style the header row
+  headerRow.eachCell((cell) => {
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.font = { bold: true, size: 10 };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+  worksheet.getRow(headerRow.number).height = 18;
+    //   "คะแนนจิตพิสัย (20)",
+    // "คะแนนทดสอบ (10)",
+    // "คะแนนภาระงาน (20)",
+    // "คะแนนสอบกลางภาค (20)",
+    // "คะแนนสอบปลายภาค (30)",
+    // "คะแนนรวม",
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentCode", width: 15 },
+    { key: "name", width: 35 },
+    { key: "classroom", width: 10 },
+    { key: "affectiveScore", width: 15 },
+    { key: "testScore", width: 15 },
+    { key: "collectScore", width: 15 },
+    { key: "midtermScore", width: 15 },
+    { key: "finaltermScore", width: 15 },
+    { key: "totalScore", width: 15 },
+    { key: "finalGrade", width: 15 },
+    { key: "remarks", width: 30 },
+  ];
+  console.log(data);
+  data.forEach((item, index) => {
+    const row = worksheet.addRow([
+      index + 1,
+      item.studentCode, 
+      item.name,
+      `${classroom} `,
+      item.affectiveScore, // คะแนนจิตพิสัย (20)
+      item.collectScore, // คะแนนทดสอบ (10)
+      item.assignmentscore, // คะแนนภาระงาน (20) 
+      item.midtermScore, // คะแนนสอบ (30)
+      item.finaltermScore, // คะแนนรวม (20)
+      item.affectiveScore + item.collectScore + item.midtermScore + item.finaltermScore + item.assignmentscore, // คะแนนรวม
+      item.remarks ? item.remarks : item.finalGrade, // เกรด
+      "", // หมายเหตุ
+    ]);
+    row.eachCell((cell, colNumber) => {
+      cell.font = { size: 10 };
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
+      };
+      cell.border = {
+    top: { style: "thin" },
+    left: { style: "thin" },
+    bottom: { style: "thin" },
+    right: { style: "thin" },
+  };
+    });
+    row.height = 18;
+  });
+
+  // Save the Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = `ใบคะแนนห้องเรียน ${classroom} .xlsx`;
+  link.click();
+}
+
+export async function ConvertClassroomToExcel(
+  data: StudentItems[],
+  classroom: string
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Student List");
+  worksheet.mergeCells("A1:E1");
+  const header1 = worksheet.getCell("A1");
+  header1.value = `รายชื่อนักเรียน ห้องเรียน ${classroom}`;
+  header1.alignment = { horizontal: "center", vertical: "middle" };
+  header1.font = { size: 14, bold: true };
+  worksheet.getRow(1).height = 20;
+
+  const headerRow = worksheet.addRow([
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    "ชื่อ - นามสกุล",
+    "",
+    "หมายเหตุ",
+  ]);
+
+  headerRow.eachCell((cell) => {
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.font = { bold: true, size: 12 };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+  worksheet.getRow(headerRow.number).height = 20;
+
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentId", width: 15 },
+    { key: "name", width: 35 },
+    { key: "space", width: 60 },
+    { key: "note", width: 20 },
+  ];
+
+  data.forEach((student, index) => {
+    let gender = student.gender === "Female" ? "นางสาว" : "นาย";
+    const row = worksheet.addRow([
+      index + 1,
+      student.studentCode,
+      `${gender} ${student.firstName} ${student.lastName}`,
+      "",
+      "",
+    ]);
+
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = {
+        horizontal: colNumber === 3 ? "left" : "center",
+        vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
+      };
+      cell.font = { size: 10 };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+    row.height = 18;
+  });
+
+  // Save the Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+
+  const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom}.xlsx`;
+  const encodedFilename = encodeURIComponent(filename);
+
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = decodeURIComponent(encodedFilename);
+  link.click();
+}
+
+export async function ConvertClassroomToExcelWithSubject(
+  data: ConvertClassroomToExcelDto[],
+  subjectCode: string,
+  subjectName: string,
+  classroom: string
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Student List");
+
+  worksheet.mergeCells("A1:E1");
+  const header1 = worksheet.getCell("A1");
+  header1.value = `รายชื่อนักเรียน กลุ่มเรียน ${classroom} รหัสวิชา ${subjectCode} วิชา ${subjectName}`;
+  header1.alignment = { horizontal: "center", vertical: "middle" };
+  header1.font = { size: 14, bold: true };
+  worksheet.getRow(1).height = 20;
+
+  const headerRow = worksheet.addRow([
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    "ชื่อ - นามสกุล",
+    "",
+    "หมายเหตุ",
+  ]);
+
+  headerRow.eachCell((cell) => {
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.font = { bold: true, size: 12 };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+  worksheet.getRow(headerRow.number).height = 20;
+
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentId", width: 15 },
+    { key: "name", width: 35 },
+    { key: "space", width: 60 },
+    { key: "note", width: 20 },
+  ];
+
+  // Populate data
+  data.forEach((student, index) => {
+    const row = worksheet.addRow([
+      index + 1,
+      student.studentCode,
+      `${student.name}`,
+      "",
+      "",
+    ]);
+
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = { 
+        horizontal: colNumber === 3 ? "left" : "center", 
+        vertical: "middle",
+        indent: colNumber === 3 ? 1 : 0
+      };
+      cell.font = { size: 10 };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+    row.height = 18;
+  });
+
+  // Save the Excel file
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+
+  const filename = `รายชื่อนักเรียน ห้องเรียน ${classroom} วิชา ${subjectName}.xlsx`;
+  const encodedFilename = encodeURIComponent(filename);
+
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = decodeURIComponent(encodedFilename);
+  link.click();
+}
+
+export async function ConvertClassroomGradingToExcel(
+  generalData: GeneralData,
+  StudentListExcel: StudentListExcel[]
+) {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Grading Sheet");
+
+  worksheet.mergeCells("A1:G1");
+  const titleCell = worksheet.getCell("A1");
+  titleCell.value = `วันที่พิมพ์: ${new Date().toLocaleDateString()} วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ`;
+  titleCell.alignment = { horizontal: "center", vertical: "middle" };
+  titleCell.font = { size: 14, bold: true };
+
+  worksheet.mergeCells("A2:G2");
+  const classCell = worksheet.getCell("A2");
+  classCell.value = `สรุปเกรดนักศึกษา ภาคเรียนที่ ${generalData.term} ปีการศึกษา ${generalData.year} ห้อง: ${generalData.class}.${generalData.groupName}`;
+  classCell.alignment = { horizontal: "center", vertical: "middle" };
+  classCell.font = { size: 12, bold: true };
+
+  const uniqueSubjects = Array.from(
+    new Set(StudentListExcel.flatMap((student) => Object.keys(student.subjects)))
+  );
+
+  // const headerRow = worksheet.addRow([
+  //   "ลำดับ",
+  //   "รหัสนักศึกษา",
+  //   "ชื่อ - นามสกุล",
+  //   "ชื่อวิชา", // have like a subjects.length
+  //   "เฉลี่ย",
+  //   "เฉลี่ยสะสม",
+  // ]);
+
+  const headerRowValues = [
+    "ลำดับ",
+    "รหัสนักศึกษา",
+    "ชื่อ - นามสกุล",
+    ...uniqueSubjects,
+    "เฉลี่ย",
+    "เฉลี่ยสะสม",
+  ];
+  const headerRow = worksheet.addRow(headerRowValues);
+
+  headerRow.eachCell((cell) => {
+    cell.font = { bold: true };
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+  });
+
+  worksheet.columns = [
+    { key: "index", width: 8 },
+    { key: "studentCode", width: 15 },
+    { key: "name", width: 35 },
+    ...uniqueSubjects.map(() => ({ width: 20 })),
+    { key: "gpa", width: 12 },
+    { key: "gpax", width: 12 },
+  ];
+
+  StudentListExcel.forEach((student, index) => {
+    const rowData = [
+      index + 1,
+      student.studentCode,
+      student.name,
+      ...uniqueSubjects.map((subject) => student.subjects[subject] || "-"),
+      student.gpa.toFixed(2),
+      student.gpax.toFixed(2),
+    ];
+
+    const row = worksheet.addRow(rowData);
+
+    row.eachCell((cell, colNumber) => {
+      cell.alignment = {
+        vertical: "middle",
+        horizontal: colNumber === 3 ? "left" : "center",
+        indent: colNumber === 3 ? 1 : 0
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+    row.height = 18;
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `ออกคะแนนห้อง ${generalData.class}${generalData.groupName}.xlsx`;
+  link.click();
+}

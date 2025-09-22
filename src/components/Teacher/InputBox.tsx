@@ -43,9 +43,9 @@ export default function InputBox({
         onChange={onChange}
         placeholder={placeholder}
         disabled={disable}
-        className={`border border-gray-300 rounded px-3 py-1 focus:outline-none focus:ring-[1px] focus:ring-blue-300 ${inputSize} ${
+        className={`border  rounded px-3 py-1 focus:outline-none focus:ring-[1px] focus:ring-blue-500 focus:border-[1px] focus:border-blue-500  ${inputSize} ${
           isTailwindWidth ? inputWidth : ""
-        } ${disable ? "bg-gray-50 text-gray-700 cursor-not-allowed" : ""}`}
+        } ${disable ? "bg-gray-50 text-gray-700 cursor-not-allowed " : "border-blue-500"}`}
         style={!isTailwindWidth ? { width: inputWidth } : undefined}
       />
     </div>

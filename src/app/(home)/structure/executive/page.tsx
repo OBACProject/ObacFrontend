@@ -1,18 +1,25 @@
+"use client";
 import React from "react";
 import "@app/styles/globals.css";
+import HeaderHomePageMenu from "@/components/common/Header/Header";
+import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 
 export default function page() {
   return (
-
-    <div className="w-full py-5">
-      <div className="grid place-items-center py-10  text-2xl  bg-gradient-to-r from-blue-950 via-sky-500 to-slate-500  text-white ">
-        <p className="text-5xl ">คณะผู้บริหารวิทยาลัย</p>
-      </div>
-      <div className="grid place-items-center pb-20">
-        <div className="">
-          <img alt="obac-structure" src="/static/static-01.jpg" width={800} height="full" />
+    <div className="pt-[70px] lg:pt-[140px] sm:pt-[70px] md:pt-[140px]">
+      <HeaderHomePageMenu title="คณะผู้บริหารวิทยาลัย" />
+      <SciFiBackgroundNormal>
+        <div className="grid place-items-center">
+          <div className="">
+            <img
+              alt="obac-structure"
+              src="/homepage/common/management.jpg"
+              width={800}
+              height="full"
+            />
+          </div>
         </div>
-      </div>
+      </SciFiBackgroundNormal>
     </div>
   );
 }

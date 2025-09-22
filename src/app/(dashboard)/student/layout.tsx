@@ -8,6 +8,7 @@ import {
   ProfileData,
   StudentSidebarData,
 } from "@/resource/students/studentSidebarData";
+import HomeFooter from "@/components/common/Footer/HomeFooter";
 
 export const metadata: Metadata = {
   title: "OBAC-student.ac.th",
@@ -31,7 +32,8 @@ export default function RootLayout({
           menuItems={StudentSidebarData.menuItems}
           profileData={ProfileData}
         />
-        <div className="pt-20 lg:pl-10">{children}</div>
+        <div className="lg:pt-20 pt-14 lg:pl-16">{children}</div>
+        <HomeFooter/>
       </body>
     </html>
   );

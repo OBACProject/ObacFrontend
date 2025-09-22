@@ -1,15 +1,14 @@
 "use client";
-
-import { loginMutation } from "@/lib/hooks/queries/auth.queries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type React from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { Loader2, UserRound } from "lucide-react";
+import { Loader2, LoaderCircle, UserRound } from "lucide-react";
 import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLoginMutation } from "@/lib/api/hooks/queries/auth.queries";
 
 interface LoginFormProps {
   session?: { role?: string; name?: string };
@@ -17,16 +16,24 @@ interface LoginFormProps {
 
 export default function LoginForm({ session }: LoginFormProps) {
   const router = useRouter();
-  const login = loginMutation.useMutation();
-
+  const login = useLoginMutation();
   const [role, setRole] = useState<string | null>(session?.role || null);
   const [name, setName] = useState<string | null>(session?.name || null);
+
+  useEffect(() => {
+    const cookieRole = Cookies.get("role");
+    const cookieName = Cookies.get("name");
+
+    if (cookieRole && cookieName) {
+      setRole(cookieRole);
+      setName(cookieName);
+    }
+  }, []);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const formData = new FormData(event.currentTarget);
-
       const userName = formData.get("userName")?.toString().trim();
       const password = formData.get("password")?.toString().trim();
 
@@ -43,25 +50,8 @@ export default function LoginForm({ session }: LoginFormProps) {
 
       setRole(newRole);
       setName(newName);
-
       toast.success("เข้าสู่ระบบสำเร็จ");
-
-      switch (newRole) {
-        case "Student":
-          router.push("/student/schedule");
-          break;
-        case "Teacher":
-          router.push("/teacher/profile");
-          break;
-        case "Academic":
-          router.push("/academic/profile");
-          break;
-        case "Admin":
-          router.push("/admin/profile");
-          break;
-        default:
-          toast.error("Unknown role");
-      }
+      handleLoginButton();
     } catch (error) {
       console.error(error);
       toast.error("เข้าสู่ระบบไม่สำเร็จ โปรดลองอีกครั้ง");
@@ -82,7 +72,7 @@ export default function LoginForm({ session }: LoginFormProps) {
     const newRole = Cookies.get("role");
     switch (newRole) {
       case "Student":
-        router.push("/student/schedule");
+        router.push("/student/profile");
         break;
       case "Teacher":
         router.push("/teacher/profile");
@@ -91,7 +81,7 @@ export default function LoginForm({ session }: LoginFormProps) {
         router.push("/academic/profile");
         break;
       case "Admin":
-        router.push("/admin/academic-management");
+        router.push("/admin/profile");
         break;
       default:
         toast.error("สิทธิการเข้าถึงผิดพลาด");
@@ -111,31 +101,25 @@ export default function LoginForm({ session }: LoginFormProps) {
       </div>
       <div className="relative bg-gradient-to-t from-gray-900/60 to-gray-900/45 w-full h-screen" />
       {role && name ? (
-        <div className="absolute my-10 bg-white rounded-lg px-10 py-12">
-          <div className="space-y-4 text-center">
-            <UserRound className="mx-auto h-12 w-12" />
-            <div className="text-2xl">{name}</div>
-            <div className="mt-5 grid place-items-center gap-4">
-              <Button
-                onClick={handleLoginButton}
-                className="bg-blue-500 hover:bg-blue-700 transform hover:scale-105 transition duration-500"
-              >
-                กลับเข้าสู่ระบบ
-              </Button>
-              <Button
-                onClick={handleLogout}
-                variant="destructive"
-                className="bg-gradient-to-tr from-red-500/70 to-pink-400 hover:from-red-600 hover:to-pink-500 transform hover:scale-105 transition duration-500"
-              >
-                ออกจากระบบ
-              </Button>
+        <div className="absolute my-10 bg-white lg:w-[500px] w-fit rounded-lg px-10 py-12">
+          <div className="space-y-4 text-center grid place-items-center">
+            <p className="p-2 rounded-full bg-blue-500 w-fit">
+              <UserRound className="text-white h-12 w-12" />
+            </p>
+            <div className="text-lg animate-pulse text-blue-800 py-1">ตรวจสอบความปลอดภัย</div>
+            <div className="grid w-full place-items-center py-4 gap-3">
+              <LoaderCircle className="text-blue-500 w-20 h-20 animate-spin " />
+              <h1 className="text-blue-500 text-xl font-prompt ">
+                กำลังเข้าสู่ระบบ...
+              </h1>
             </div>
           </div>
         </div>
       ) : (
         <form
           onSubmit={handleLogin}
-          className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-6/12 sm:w-6/12 rounded-lg shadow-sm gap-8 pt-8 pb-10"
+          method="post"
+          className="z-10 absolute grid place-items-center bg-white border lg:w-3/12 md:w-[70%] sm:w-[80%] w-[80%] rounded-lg shadow-sm gap-8 pt-8 pb-10"
         >
           <Image
             src="/images/obac_navbar_logo.png"
@@ -148,21 +132,21 @@ export default function LoginForm({ session }: LoginFormProps) {
             <Input
               type="text"
               name="userName"
-              placeholder="Username / ชื่อผู้ใช้"
+              placeholder="username"
               required
-              className="w-3/5"
+              className="w-[70%]"
             />
             <Input
               type="password"
               name="password"
-              placeholder="Password / รหัสผ่าน"
+              placeholder="password"
               required
-              className="w-3/5"
+              className="w-[70%]"
             />
           </div>
           <Button
             type="submit"
-            className="bg-[#143d66] font-prompt px-20 text-white rounded-md py-2 flex items-center justify-center gap-2"
+            className="bg-[#143d66] font-prompt w-[70%] px-20 text-white rounded-md py-2 flex items-center justify-center gap-2"
             disabled={login.isPending}
           >
             {login.isPending && <Loader2 className="w-5 h-5 animate-spin" />}

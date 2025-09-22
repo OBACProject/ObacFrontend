@@ -23,38 +23,57 @@
 //   birthDate: Date;
 // }
 
-export interface GetAllTeacher {
+export interface GetAllTeacherResponse {
+  id : number;
   teacherId: number;
+  prefix:string;
   firstName: string;
   lastName: string;
-  thaiName: string;
-  thaiLastName: string;
-  email: string;
   teacherCode: string;
+  gender :string;
   facultyId: number;
   facultyName: string;
+  programName: string;
+  phoneNumber: string | null;
+  isActive : boolean;
 }
-
-export type GetTeacherByTeacherId = {
+export interface GetTeacherDetailUserResponse {
+  id: string;
+  username: string;
+  password: string;
+  role: string;
+  citizenId: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  nationality: string;
+  createdAt: string; 
+  updatedAt: string; 
+  birthDate: string; 
+  prefix: string;
+  isActive: boolean;
   teacherId: number;
   teacherCode: string;
-  teacherEngFirstName: string;
-  teacherEngLastName: string;
-  teacherRank: string;
-  thaiName: string;
-  thaiLastName: string;
-  teacherEmail: string;
-  teacherPhone: string;
-  teacherGender: string;
-  teacherNationality: string;
-  teacherReligion: string;
-  teacherQualification: string;
-  teacherFaculty: string;
-  teacherProgram: string;
-  teacherDateOfJoining: string;
-  teacherProfilePicture: string | null;
-  nameTitle: string;
-};
+  hiredDate: string; 
+  programId: number;
+}
+
+
+
+export interface TeacherDetails {
+  teacherId: number;
+  teacherCode: string;
+  name: string;
+  lastName: string;
+  phoneNumber: string;
+  gender: string;
+  nationality: string;
+  faculty: string;
+  program: string;
+  hiredDate: string; 
+}
+
 export interface TeacherEnrollment {
     id: number;
     teacherId: number;
@@ -94,4 +113,96 @@ export interface TeacherColumns {
   programs: string;
   email: string;
   phoneNumber: string;
+}
+
+export interface CardSubjectResponse {
+  scheduleSubjectId: number;
+  day: string;                  // eg. "วันจันทร์"
+  period: number;              // คาบเรียนที่
+  room: string;                // ห้องเรียน
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  term: string;
+  year: number;
+  studentGroupId: number;
+  studentGroupName: string;    // eg. "ห้อง 1"
+  studentGroupCode: string;    // eg. "A1"
+  class: string;               // eg. "ปวช"
+  level: number;               // ชั้นปี
+  studentAmount: number;      
+  isComplete: boolean;       
+  isPublish: boolean;
+  timing : number;
+}
+
+export interface TeacherDetail {
+  teacherId: number;
+  firstName: string;
+  lastName: string;
+  prefix: string;
+  gender: string;
+  teacherCode: string;
+  facultyId: number;
+  facultyName: string;
+  program: string;
+  phoneNumber: string;
+}
+
+
+export interface TeacherScheduleItem {
+  scheduleSubjectId: number;
+  day: string;
+  period: number;
+  room: string;
+  subjectId: number;
+  subjectName: string;
+  subjectCode: string;
+  term: string;
+  year: number;
+  studentGroupId: number;
+  studentGroupName: string;
+  studentGroupCode: string;
+  studentCount: number;
+  class: string;
+  level: number;
+  isComplete: boolean;
+  isPublish: boolean;
+  curriculumYear: number;
+}
+
+export interface TeacherDetailAndScheduleResponse {
+  teacher: TeacherDetail;
+  schedule: TeacherScheduleItem[];
+}
+export interface CreateTeacherRequest {
+    prefix: string;
+    teacherCode: string;
+    hiredDate: string;
+    programId?: number;
+    userName: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    citizenId: string;
+    phoneNumber: string;
+    nationality: string;
+    birthDate: string;
+  };
+
+export interface UpdateTeacherUserRequest {
+  teacherId: number;
+  prefix: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  teacherCode: string;
+  programId: number;
+  isActive: boolean;      
+  hiredDate: string;      
+  birthDate: string;     
+  phoneNumber: string;
+  nationality: string;
+  citizenId: string;
 }

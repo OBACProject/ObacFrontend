@@ -1,5 +1,15 @@
-
 interface subject {
+  id: number;
+  name: string;
+  code: string;
+  credits: number;
+  term: string;
+  level: number;
+  class?: string;
+  description?: string | null;
+  isActive: boolean;
+}
+export interface GetAllSubjectAsyncResponse {
     id: number;
     name: string;
     code: string;
@@ -10,30 +20,95 @@ interface subject {
     description?: string | null;
     isActive: boolean;
 }
-export interface GetAllSubjectAsyncResponse {
-    data : subject[];
-}
 
 export interface GetAllActiveSubjectsResponse {
-     data : subject[];
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
-
 export interface GetSubjectByIdResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 export interface CreateSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
-
 export interface UpdateSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
 }
 
 export interface DeleteSubjectResponse {
-    data : subject;
+    id: number;
+    name: string;
+    code: string;
+    credits: number;
+    term: string;
+    level: number;
+    class?: string;
+    description?: string | null;
+    isActive: boolean;
+}
+export interface GetSubjectByTermResponse {
+  data: subject[];
 }
 
 
+export interface GetSubjectsByStudentGroupIdTermYearResponse {
+    class : string;
+    groupName : string;
+    subjects : {
+        scheduleSubjectId: number;
+        subjectId: number;
+        subjectName: string;
+        subjectCode: string;
+        teacherName: string;
+        term: string;
+        year: number;
+        isPublish: boolean;
+        isComplete: boolean;
+    }
+}
+
+export interface GetSubjectByStudentId {
+  scheduleSubjectId: number;
+      SubjectId: number;
+      SubjectName: string;
+      SubjectCode: string;
+      TeacherName: string;
+      Term: string;
+      Year: number;
+      IsPublish: boolean;
+      IsComplete: boolean;
+}

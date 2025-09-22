@@ -1,45 +1,184 @@
 "use client";
-import { DataTable } from "@/components/common/MainTable/table_style_1";
+
+import type React from "react";
+
 import { Combobox } from "@/components/common/Combobox/combobox";
 import { Input } from "@/components/ui/input";
-import { GetAllStudentTableDto } from "@/dto/studentDto";
-import { getAllStudentViewData } from "@/resource/academics/grading/viewData/individualGradeViewData";
-import { Loader2 } from "lucide-react";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TableSkeleton } from "./component/skeletons/TableSkeleton";
+import { useGetAllStudentsQuery } from "@/lib/api/hooks/queries/student.queries";
+import { StyledServerPaginatedDataTable } from "@/components/Academic/table/PaginationTable";
 
-export function StudentListPage() {
-  const [individualStudentData, setIndividualStudentData] = useState<
-    GetAllStudentTableDto[]
-  >([]);
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
-  const classLevels = Array.from(
-    new Set(individualStudentData.map((student) => student.class))
-  );
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
 
-  const uniqueFaculties = Array.from(
-    new Set(individualStudentData.map((student) => student.facultyName))
-  );
-
+export default function StudentListPage() {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [selectedClassLevel, setSelectedClassLevel] = useState<string>("");
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("");
+  const debouncedSearchInput = useDebounce(searchInput, 500);
+
+  const {
+    data: allStudentsData,
+    isLoading: isLoadingFilterOptions,
+    isError,
+  } = useGetAllStudentsQuery({
+    pageNumber: 1,
+    pageSize: 10000,
+    searchText: undefined,
+    sortBy: undefined,
+    Ascending: true,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllStudentViewData();
-      setIndividualStudentData(data);
-      setIsLoadingPage(true);
-    };
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [debouncedSearchInput]);
 
-    fetchData();
-  }, []);
+  const filteredAndSortedData = useMemo(() => {
+    if (!allStudentsData?.items) return { items: [], totalCount: 0 };
+
+    let filteredItems = [...allStudentsData.items];
+
+    // Apply search filters
+    if (debouncedSearchInput) {
+      filteredItems = filteredItems.filter(
+        (student) =>
+          student.studentCode
+            ?.toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase()) ||
+          `${student.prefix}${student.name} ${student.lastName}`
+            .toLowerCase()
+            .includes(debouncedSearchInput.toLowerCase())
+      );
+    }
+
+    // Sort the filtered items
+    filteredItems.sort((a, b) => {
+      const getClassInfo = (classStr: string | null | undefined) => {
+        if (!classStr) return { type: "other", level: 999 };
+
+        if (classStr.includes("ปวช")) {
+          const levelMatch = classStr.match(/ปวช\.?(\d+)/);
+          return {
+            type: "ปวช",
+            level: levelMatch ? parseInt(levelMatch[1]) : 0,
+          };
+        } else if (classStr.includes("ปวส")) {
+          const levelMatch = classStr.match(/ปวส\.?(\d+)/);
+          return {
+            type: "ปวส",
+            level: levelMatch ? parseInt(levelMatch[1]) : 0,
+          };
+        }
+        return { type: "other", level: 0 };
+      };
+
+      const infoA = getClassInfo(a.class);
+      const infoB = getClassInfo(b.class);
+
+      // Sort by education type first (ปวช before ปวส)
+      if (infoA.type !== infoB.type) {
+        if (infoA.type === "ปวช" && infoB.type === "ปวส") return -1;
+        if (infoA.type === "ปวส" && infoB.type === "ปวช") return 1;
+        if (infoA.type === "other") return 1;
+        if (infoB.type === "other") return -1;
+        return infoA.type.localeCompare(infoB.type);
+      }
+
+      // If same education type, sort by level
+      if (infoA.level !== infoB.level) {
+        return infoA.level - infoB.level;
+      }
+
+      // Handle group names with slashes
+      const parseGroupName = (groupStr: string | null | undefined) => {
+        if (!groupStr) {
+          return { main: 999, sub: 999, original: "" };
+        }
+
+        if (groupStr.includes("/")) {
+          const [main, sub] = groupStr.split("/");
+          return {
+            main: parseInt(main) || 0,
+            sub: parseInt(sub) || 0,
+            original: groupStr,
+          };
+        }
+        const num = parseInt(groupStr);
+        return {
+          main: isNaN(num) ? 999 : num,
+          sub: 0,
+          original: groupStr,
+        };
+      };
+
+      const groupInfoA = parseGroupName(a.groupName);
+      const groupInfoB = parseGroupName(b.groupName);
+
+      if (groupInfoA.main !== groupInfoB.main) {
+        return groupInfoA.main - groupInfoB.main;
+      }
+
+      if (groupInfoA.sub !== groupInfoB.sub) {
+        return groupInfoA.sub - groupInfoB.sub;
+      }
+
+      return (a.studentCode || "").localeCompare(b.studentCode || "");
+    });
+
+    return {
+      items: filteredItems,
+      totalCount: filteredItems.length,
+    };
+  }, [allStudentsData?.items, debouncedSearchInput]);
+
+  // Pagination logic
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedItems = filteredAndSortedData.items.slice(
+      startIndex,
+      endIndex
+    );
+
+    return {
+      items: paginatedItems,
+      totalCount: filteredAndSortedData.totalCount,
+      totalPages: Math.ceil(filteredAndSortedData.totalCount / pageSize),
+      pageNumber: currentPage,
+      hasNextPage: endIndex < filteredAndSortedData.totalCount,
+      hasPreviousPage: currentPage > 1,
+    };
+  }, [filteredAndSortedData, currentPage, pageSize]);
 
   const columns = [
-    { label: "ลำดับ", key: "index", className: "w-2/16" },
-    { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16" },
-    { label: "ชื่อ - นามสกุล", key: "thaiName", className: "w-6/16" },
-    { label: "ระดับชั้น", key: "class", className: "w-2/16" },
+    { label: "ลำดับ", key: "index", className: "w-2/16 flex justify-center" },
+    { label: "รหัสนักเรียน", key: "studentCode", className: "w-2/16 flex justify-center" },
+    {
+      label: "ชื่อ - นามสกุล",
+      key: "fullName",
+      className: "w-5/16 pl-12 text-start flex justify-start",
+      render: (item: any) => `${item.prefix}${item.name} ${item.lastName}`,
+    },
+    {
+      label: "ระดับชั้น",
+      key: "class",
+      className: "w-3/16  flex justify-center",
+      render: (item: any) => `${item.class}.${item.groupName}`,
+    },
     {
       label: "หลักสูตรการศึกษา",
       key: "facultyName",
@@ -47,76 +186,95 @@ export function StudentListPage() {
     },
   ];
 
-  const filteredData = useMemo(() => {
-    return individualStudentData.filter((student) => {
-      const matchClassLevel = selectedClassLevel
-        ? student.class === selectedClassLevel
-        : true;
-      const matchFaculty = selectedFaculty
-        ? student.facultyName === selectedFaculty
-        : true;
-      const matchSearch = searchInput.toLocaleLowerCase()
-        ? student.studentCode.toLocaleLowerCase().includes(searchInput) ||
-          student.thaiName.toLocaleLowerCase().includes(searchInput)
-        : true;
+  const tableData = useMemo(() => {
 
-      return matchClassLevel && matchFaculty && matchSearch;
-    });
-  }, [individualStudentData, selectedClassLevel, selectedFaculty, searchInput]);
+    
+
+    return paginatedData.items
+      .map((item: any, index: number) => ({
+        ...item,
+        index: (currentPage - 1) * pageSize + index + 1,
+        fullName: `${item.prefix || ""}${item.name || ""} ${
+          item.lastName || ""
+        }`,
+      }))
+  }, [paginatedData.items, currentPage, pageSize]);
+
+  const getRowLink = useCallback((item: any) => {
+    return `/academic/score-management/individual/${item.studentCode}`;
+  }, []);
+
+  const clearFilters = () => {
+    setSearchInput("");
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchInput(event.target.value);
+  };
+  if (isLoadingFilterOptions) {
+    return <TableSkeleton rows={8} columns={5} />;
+  }
+
+  if (isError) {
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-sm border">
+        <div className="text-center text-red-600 py-8">
+          เกิดข้อผิดพลาดในการโหลดข้อมูล กรุณาลองใหม่อีกครั้ง
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border space-y-6">
-      {/* Filter Section */}
-      <div className="flex gap-4">
-        <div className="w-1/4">
-          <Suspense fallback={<div className="h-10 bg-gray-100 rounded animate-pulse"></div>}>
-            <Combobox
-              options={classLevels.map((classData) => ({
-                value: classData,
-                label: classData,
-              }))}
-              buttonLabel="ระดับการศึกษา"
-              onSelect={setSelectedClassLevel}
-            />
-
-            <Combobox
-              options={uniqueFaculties.map((data) => ({
-                value: data,
-                label: data,
-              }))}
-              buttonLabel="ระดับการศึกษา"
-              onSelect={setSelectedClassLevel}
-            />
-
-          </Suspense>
-        </div>
-        <div className="flex-1">
-          <Input
-            type="text"
-            placeholder="ค้นหารหัสนักเรียนหรือชื่อ..."
-            className="w-full"
-            onChange={(event) => setSearchInput(event.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Data Table */}
-      <Suspense fallback={<TableSkeleton />}>
-        <DataTable
-          columns={columns}
-          data={filteredData.map((item, index) => ({
-            ...item,
-            index: index + 1,
-          }))}
-          getRowLink={(item) => {
-            const student = individualStudentData.find(
-              (student) => student.studentCode === item.studentCode
-            );
-            return `/academic/score-management/individual/${student?.studentId}`;
-          }}
-          pagination={10}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <Input
+          type="text"
+          placeholder="ค้นหารหัสนักเรียน"
+          className="pl-10 w-1/3"
+          value={searchInput}
+          onChange={handleSearchInputChange}
         />
-      </Suspense>
+      </div>
+      {debouncedSearchInput && (
+        <div className="flex flex-wrap gap-2 pt-2 border-t">
+          <span className="text-sm text-gray-600">ตัวกรองที่ใช้:</span>
+
+          {debouncedSearchInput && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+              ค้นหา: "{debouncedSearchInput}"
+              <button
+                onClick={() => setSearchInput("")}
+                className="ml-1 text-purple-600 hover:text-purple-800"
+              >
+                ×
+              </button>
+            </span>
+          )}
+        </div>
+      )}
+
+      <StyledServerPaginatedDataTable
+        title="รายชื่อนักเรียน"
+        icon={<Search className="h-5 w-5 text-gray-500" />}
+        columns={columns}
+        data={tableData}
+        getRowLink={getRowLink}
+        currentPage={currentPage}
+        totalPages={paginatedData.totalPages}
+        totalCount={paginatedData.totalCount}
+        pageSize={pageSize}
+        onPageChange={handlePageChange}
+        hasNextPage={paginatedData.hasNextPage}
+        hasPreviousPage={paginatedData.hasPreviousPage}
+      />
     </div>
   );
 }

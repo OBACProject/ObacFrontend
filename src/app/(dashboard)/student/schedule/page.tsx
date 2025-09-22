@@ -1,40 +1,21 @@
-"use client";
-import { useEffect, useState } from "react";
+import SciFiBackgroundNormal from "@/app/styles/bg-normal";
+import { HeadTitle } from "@/components/common/Card/card-student-profile";
+import { Calendar } from "lucide-react";
+import React from "react";
+import Form from "./form";
 
-const getStudentUser = async () => {
-  try {
-    const response = await fetchStudentUser();
-    return response;
-  } catch (err) {
-    console.error("Failed to fetch student by ID:", err);
-  }
-};
-
-import Form from "./Form";
-import { fetchStudentUser } from "@/api/oldApi/student/studentApi";
-
-export default function Page() {
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [studentId, setStudentID] = useState<string>("");
-  useEffect(() => {
-    getStudentUser().then((item: any) => {
-      setStudentID(item?.studentId);
-    });
-  }, []);
-  useEffect(() => {
-      setLoading(true);
-    }, [studentId]);
+export default function page() {
   return (
-    <div>
-      {isLoading && studentId ? (
-        <Form  student_id={Number(studentId)}/>
-      ) : (
-        <div className="px-10  grid place-items-center py-4">
-          <div className="px-10 animate-pulse py-10 grid place-items-center text-4xl font-extrabold text-gray-600   w-full border-2 border-dashed border-gray-400 rounded-md">
-            Loading...
-          </div>
+    <SciFiBackgroundNormal>
+      <div className="min-h-screen h-full">
+        <HeadTitle
+          icon={<Calendar className="w-6 h-6 text-white" />}
+          title={"ตารางเรียน"}
+        />
+        <div className="py-2">
+          <Form />
         </div>
-      )}
-    </div>
+      </div>
+    </SciFiBackgroundNormal>
   );
 }
