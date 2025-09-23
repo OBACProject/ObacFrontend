@@ -6,6 +6,7 @@ import {
   StudentGroupGrade,
   StudentGroupGradeResponse,
   StudentGroupGrades,
+  SubjectGradesTermYear,
 } from "@/dto/gradDto";
 import {
   GetStudentDetailAndSummaryScoreByStudentCodeResponse,
@@ -85,6 +86,40 @@ export const BulkUpdateStudentGradeByScheduleSubjectId = async (
   }
 };
 
+const TRANSFER_TH = "เทียบโอน" as const;
+
+function isTransfer(term: string): boolean {
+  return (term ?? "").trim().startsWith(TRANSFER_TH);
+}
+
+function transferIndex(term: string): number {
+  const t = (term ?? "").trim();
+  const m = t.match(/^เทียบโอน\s*(\d+)/);
+  return m ? parseInt(m[1], 10) : 1;
+}
+
+function normalTermRank(term: string): number {
+  const t = (term ?? "").trim().toLowerCase();
+  if (["1", "01", "ภาคต้น", "เทอม1", "semester 1"].includes(t)) return 1;
+  if (["2", "02", "ภาคปลาย", "เทอม2", "semester 2"].includes(t)) return 2;
+  if (["3", "03", "summer", "ฤดูร้อน"].includes(t)) return 3;
+  return 99;
+}
+
+export function compareSubjectGradesTermYear(
+  a: SubjectGradesTermYear,
+  b: SubjectGradesTermYear
+): number {
+  const aIsTr = isTransfer(a.term);
+  const bIsTr = isTransfer(b.term);
+  if (aIsTr !== bIsTr) return aIsTr ? -1 : 1;
+  if (aIsTr && bIsTr) {
+    return transferIndex(a.term) - transferIndex(b.term);
+  }
+  if (a.year !== b.year) return a.year - b.year;
+  return normalTermRank(a.term) - normalTermRank(b.term);
+}
+
 export const BulkGetTranscriptByGroupID = async (
   groupID: number
 ): Promise<StudentGroupGrades | null> => {
@@ -97,10 +132,19 @@ export const BulkGetTranscriptByGroupID = async (
 
     const data = response.data.data;
 
-    if (data && data.studentGrades) {
+    if (data?.studentGrades) {
       data.studentGrades.sort((a, b) =>
-        a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+        String(a.studentCode ?? "").localeCompare(
+          String(b.studentCode ?? ""),
+          "en",
+          { numeric: true }
+        )
       );
+      for (const stu of data.studentGrades) {
+        if (Array.isArray(stu.subjectGradesTermYear)) {
+          stu.subjectGradesTermYear.sort(compareSubjectGradesTermYear);
+        }
+      }
     }
 
     return data;
