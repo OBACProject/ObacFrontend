@@ -97,7 +97,7 @@ export default function Page() {
   if (!mounted) return null
 
   return (
-    <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-36">
+    <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-18 lg:mt-36">
       <Head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <link rel="canonical" href="https://ekawit.ac.th" />
@@ -106,7 +106,7 @@ export default function Page() {
       <StickerFacebook />
       <StickerYoutube />
 
-      <div className="h-auto min-h-[260px] sm:h-[300px] bg-blue-900 relative overflow-hidden">
+      <div className="h-auto min-h-[260px] sm:h-[270px] md:h-[300px] bg-blue-900 relative overflow-hidden">
         {iconPositions.map((icon, index) => (
           <div
             key={index}

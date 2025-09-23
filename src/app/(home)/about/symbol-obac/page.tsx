@@ -29,9 +29,10 @@ export default function page() {
     isMobile ? <>{children}</> : <Parallax speed={speed}>{children}</Parallax>;
 
   return (
-    <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]"><SciFiBackgroundNormal>
+    <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
       <div className="bg-white text-blue-950 font-prompt">
         <HeaderHomePageMenu title="วิสัยทัศน์และพันธกิจของ OBAC" />
+        <SciFiBackgroundNormal>
         
           <OpeningScroll>
             <section className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-10 text-sm sm:text-base md:text-lg leading-relaxed">
@@ -132,8 +133,8 @@ export default function page() {
               </div>
             </section>
           </OpeningScroll>
-        
-      </div></SciFiBackgroundNormal>
+        </SciFiBackgroundNormal>
+      </div>
     </div>
   );
 }

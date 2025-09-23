@@ -80,7 +80,7 @@ export default function Form() {
     {
       label: "ชื่อ",
       width: "20%",
-      render: (item) => `${item.prefix || "อาจารย์"} ${item.firstName} `,
+      render: (item) => `${item.prefix || ""} ${item.firstName} `,
       className: "text-start lg:pl-6",
     },
     {

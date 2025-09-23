@@ -42,7 +42,7 @@ export default function Home() {
       </Head>
       <StickerFacebook />
       <StickerYoutube />
-      <div className="relative w-full h-[250px] sm:h-[500px] md:h-[700px] sm:pt-16 lg:h-full overflow-hidden">
+      <div className="relative hidden xl:block w-full h-[760px] xl:h-[860px] overflow-hidden">
         <Parallax speed={-10}>
           <div className="inset-0">
             <img
@@ -53,20 +53,51 @@ export default function Home() {
           </div>
         </Parallax>
 
-        {/* Text content */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 pt-44 sm:pt-0">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
           <Parallax speed={20}>
-            <div className="text-white space-y-4 sm:space-y-6">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)] mt-16 sm:mt-0">
+            <div className="text-white space-y-6">
+              <h1 className="text-6xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
                 Welcome to OBAC
               </h1>
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-prompt_lite">
+              <p className="text-2xl max-w-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-prompt_lite">
                 Ekawit Business Administration Vocational College
               </p>
             </div>
           </Parallax>
         </div>
       </div>
+
+      <div className="relative block xl:hidden w-full overflow-hidden">
+        {/* ความสูงที่ตั้งใจให้เหมาะกับแต่ละขนาด: 
+     - phone: h-[260px]
+     - sm (>=640): h-[420px]
+     - md (iPad portrait 768): h-[580px]
+     - lg (iPad landscape 1024): h-[680px]
+  */}
+        <div className="relative w-full h-[260px] sm:h-[420px] md:h-[580px] lg:h-[680px]">
+          <Image
+            src="/images/obac_view.jpg"
+            alt="OBAC Campus Banner"
+            fill
+            className="object-cover object-center blur-sm brightness-50"
+            priority
+            sizes="100vw"
+          />
+        </div>
+
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+          <div className="text-white space-y-4 sm:space-y-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold drop-shadow-[0_3px_6px_rgba(0,0,0,0.7)]">
+              Welcome to OBAC
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl max-w-2xl font-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] text-prompt_lite">
+              Ekawit Business Administration Vocational College
+            </p>
+          </div>
+        </div>
+      </div>
+
+
       <SciFiBackgroundNormal>
         <div className="container mx-auto px-4 text-center py-8 sm:py-14">
           <OpeningScroll>

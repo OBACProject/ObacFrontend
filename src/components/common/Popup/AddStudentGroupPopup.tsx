@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateStudentGroup } from "@/api/studentGroup/route";
+import { getCurrentThaiTermYear } from "@/lib/utils";
 import type { CreateStudentGroupRequest } from "@/dto/studentGroupItem";
 import { GetAllPrograms } from "@/api/program/route";
 import type { GetAllProgramsResponse } from "@/dto/programDto";
@@ -38,8 +39,8 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
   const [level, setLevel] = useState<1 | 2 | 3 | "">("");
   const [groupName, setGroupName] = useState("");
   const [groupCode, setGroupCode] = useState("");
-  const [year, setYear] = useState<number | "">("");
-  const [term, setTerm] = useState<"1" | "2">("1");
+  const [year, setYear] = useState<number | null>(null); 
+  const [term, setTerm] = useState<string>("1"); 
   const [section, setSection] = useState<string>("เช้า");
 
   const [programRows, setProgramRows] = useState<GetAllProgramsResponse[]>([]);
@@ -59,7 +60,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
     setLevel("");
     setGroupName("");
     setGroupCode("");
-    setYear("");
+    setYear(null); 
     setTerm("1");
     setSection("เช้า");
     setSelectedFaculty("");
@@ -71,6 +72,10 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
   const closeAndReset = (val: boolean) => {
     resetLocalState();
     onClosePopUp(val);
+  };
+
+  const onSelectYear = (val: number | null) => {
+    setYear(val);
   };
 
   useEffect(() => {
@@ -139,6 +144,8 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
     setResolvedProgramId(null);
   };
 
+  const { currentYear } = getCurrentThaiTermYear();
+
   const onSelectProgramName = (val: string) => {
     setSelectedProgramName(val);
     setSelectedSubProgramName("");
@@ -162,7 +169,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       const stripped = groupName.replace(/^\d\//, "");
       setGroupName(`${level}/${stripped}`);
     }
-  }, [level]); 
+  }, [level]);
 
   const onChangeGroupName = (val: string) => {
     if (level) {
@@ -190,12 +197,12 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       toast.error("กรุณาระบุรหัสกลุ่ม (Group Code)");
       return false;
     }
-    if (year === "" || isNaN(Number(year))) {
-      toast.error("กรุณาระบุปีการศึกษา (ตัวเลข)");
-      return false;
-    }
     if (!term) {
       toast.error("กรุณาเลือกเทอม");
+      return false;
+    }
+    if (year === null) {
+      toast.error("กรุณาเลือกปีการศึกษา");
       return false;
     }
     if (
@@ -221,7 +228,7 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
       isPublish: false,
       isComplete: false,
       isActive: true,
-      year: Number(year),
+      year: year as number, 
       term,
       section,
     };
@@ -332,25 +339,34 @@ export default function AddStudentGroupPopup({ onClosePopUp }: Props) {
               <label className="text-sm">เทอม </label>
               <select
                 value={term}
-                onChange={(e) => setTerm(e.target.value as "1" | "2")}
+                onChange={(e) => setTerm(e.target.value)}
                 className="w-full border px-3 py-2 rounded"
               >
                 <option value="1">1</option>
                 <option value="2">2</option>
+                <option value="s1">ฤดูร้อน1</option>
+                <option value="s2">ฤดูร้อน2</option>
               </select>
             </div>
 
             <div>
-              <label className="text-sm">ปีการศึกษา </label>
-              <input
-                type="number"
-                value={year}
+              <label className="text-sm">ปีการศึกษา</label>
+              <select
+                value={year ?? ""}
                 onChange={(e) =>
-                  setYear(e.target.value === "" ? "" : Number(e.target.value))
+                  onSelectYear(e.target.value === "" ? null : Number(e.target.value))
                 }
                 className="w-full border px-3 py-2 rounded"
-                placeholder="เช่น 2567"
-              />
+              >
+                <option value="">— เลือกปีการศึกษา —</option>
+                {Array.from({ length: 6 }, (_, i) => currentYear + 1 - i).map(
+                  (y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  )
+                )}
+              </select>
             </div>
           </div>
 

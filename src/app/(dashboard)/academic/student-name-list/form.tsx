@@ -104,7 +104,7 @@ export default function Form() {
       className: "text-start lg:pl-6 line-clamp-1",
     },
     { label: "รหัสห้อง", width: "15%", render: (item) => item.groupCode },
-    { label: "จำนวนนักเรียน", width: "10%", render: (_) => "-" },
+    { label: "จำนวนนักเรียน", width: "10%", render: (item) =>  item.total  },
   ];
   return (
     <div className="py-5 w-full">

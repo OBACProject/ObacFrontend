@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
   if (role && (urlPath === "/" || urlPath === "/login")) {
     switch (role) {
       case "Student":
-        return NextResponse.redirect(new URL("/student/schedule", req.url));
+        return NextResponse.redirect(new URL("/student/profile", req.url));
       case "Teacher":
         return NextResponse.redirect(new URL("/teacher/profile", req.url));
       case "Academic":
