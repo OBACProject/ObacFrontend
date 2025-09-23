@@ -120,7 +120,14 @@ export const GetTranscriptByStudentID = async (
       data: StudentGradesResponse;
     }>(`Grade/GetTranscriptByStudentID?studentId=${studentID}`);
 
-    return response.data.data;
+    const data = response.data.data;
+    const transferSet = new Set<string>(["เทียบโอน1", "เทียบโอน2"]);
+    const items = data.subjectGradesTermYear ?? [];
+    const head = items.filter((x) => transferSet.has(x.term));
+    const tail = items.filter((x) => !transferSet.has(x.term));
+    data.subjectGradesTermYear = [...head, ...tail];
+
+    return data;
   } catch (error) {
     console.error("Error fetching student group grades:", error);
     return null;
