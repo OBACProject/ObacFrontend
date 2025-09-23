@@ -43,13 +43,7 @@ export class StudentService extends BaseService {
             params
         );
     }
-    async getStudentListInStudentGroup(
-        params: GetStudentListInStudentGroupRequest
-    ): Promise<void> {
-        return this.get<void>(
-            `${STUDENT_ENDPOINTS.GET_STUDENT_LIST_IN_STUDENT_GROUP}/${params.className}/${params.level}/${params.groupName}`
-        );
-    }
+
     async getStudentListByClass(
         params: GetStudentListByClassRequest
     ): Promise<void> {

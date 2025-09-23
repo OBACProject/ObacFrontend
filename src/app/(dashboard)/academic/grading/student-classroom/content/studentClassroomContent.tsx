@@ -305,7 +305,6 @@ export default function StudentClassroomContent() {
         searchTerm={searchTerm}
         onSearchChange={(v) => startTransition(() => setSearchTerm(v))}
       />
-
       {/* Advanced Filters */}
       <div className="flex justify-end mb-3 px-10 items-center gap-2 relative">
         <AnimatePresence>

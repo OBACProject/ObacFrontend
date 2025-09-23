@@ -42,13 +42,7 @@ export const useUpdateStudentMutation = (options?: Partial<UseMutationOptions<vo
     );
 };
 
-export const useGetStudentListInStudentGroupQuery = createBaseQuery<
-    void,
-    GetStudentListInStudentGroupRequest
->(
-    (params) => ['studentListInStudentGroup', params],
-    (params) => studentService.getStudentListInStudentGroup(params),
-);
+
 
 export const useGetStudentListByClassQuery = createBaseQuery<
     void,
