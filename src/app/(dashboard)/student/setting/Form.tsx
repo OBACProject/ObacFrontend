@@ -25,8 +25,8 @@ export default function Form() {
     if (newPwd.length < MIN_LEN) return false;
     const hasUpper = /[A-Z]/.test(newPwd);
     const hasNum = /\d/.test(newPwd);
-    const hasSym = /[^A-Za-z0-9]/.test(newPwd);
-    return hasUpper && hasNum && hasSym;
+    // const hasSym = /[^A-Za-z0-9]/.test(newPwd);
+    return hasUpper && hasNum
   }, [oldPwd, newPwd]);
 
   const strength = useMemo(() => {
@@ -35,7 +35,7 @@ export default function Form() {
     if (/[A-Z]/.test(newPwd)) score++;
     if (/[a-z]/.test(newPwd)) score++;
     if (/\d/.test(newPwd)) score++;
-    if (/[^A-Za-z0-9]/.test(newPwd)) score++;
+    // if (/[^A-Za-z0-9]/.test(newPwd)) score++;
     return score; 
   }, [newPwd]);
 
@@ -77,7 +77,7 @@ export default function Form() {
             <div className="p-2 rounded-xl bg-indigo-600 text-white">
               <LockKeyhole className="w-5 h-5" />
             </div>
-            <h1 className="text-xl font-semibold tracking-tight">
+            <h1 className="text-xl font-prompt tracking-tight">
               เปลี่ยนรหัสผ่าน
             </h1>
           </div>
@@ -195,13 +195,13 @@ export default function Form() {
                 >
                   • มีตัวเลข (0–9)
                 </li>
-                <li
+                {/* <li
                   className={`${
                     /[^A-Za-z0-9]/.test(newPwd) ? "text-emerald-600" : ""
                   }`}
                 >
                   • มีสัญลักษณ์ (!@#$%^&* เป็นต้น)
-                </li>
+                </li> */}
                 <li
                   className={`${
                     newPwd && newPwd !== oldPwd ? "text-emerald-600" : ""
