@@ -156,9 +156,12 @@ const BulkStudentTranscript = (
         Xaxis = 30;
         swift = false;
       }
+      const displayTerm = termBlock.term
+        .replace("เทียบโอน1", "เทียบโอน")
+        .replace("เทียบโอน2", "เทียบโอน");
       doc.setFont("THSarabunBold", "bold");
       doc.text(
-        `ภาคเรียนที่ ${termBlock.term} ปีการศึกษา ${termBlock.year}`,
+        `ภาคเรียนที่ ${displayTerm} ปีการศึกษา ${termBlock.year}`,
         Xaxis + 7,
         startColumn
       );
@@ -169,7 +172,6 @@ const BulkStudentTranscript = (
       let CountGrad = 0;
 
       for (let j = 0; j < termBlock.subjectGrades.length; j++) {
-        
         if (swift == false && inStartColoume >= 250) {
           inStartColoume = 63;
           inStartColoume = inStartColoume + 5;
@@ -191,27 +193,11 @@ const BulkStudentTranscript = (
         AllOfGrad += GradResult;
         AllOfCredit += credit;
 
+        doc.text(`${row.subjectCode}`, Xaxis - 23, inStartColoume);
+        doc.text(`${row.subjectName}`, Xaxis - 4, inStartColoume);
+        doc.text(`${row.credit}`, Xaxis + 56, inStartColoume);
         doc.text(
-          `${row.subjectCode}`,
-          Xaxis - 23,
-          inStartColoume
-        );
-        doc.text(
-          `${row.subjectName}`,
-          Xaxis - 4,
-          inStartColoume
-        );
-        doc.text(
-          `${row.credit}`,
-          Xaxis + 56,
-          inStartColoume
-        );
-        doc.text(
-          `${
-            row.remark ||
-            row.finalGrade ||
-            0
-          }`,
+          `${row.remark || row.finalGrade || 0}`,
           Xaxis + 62,
           inStartColoume
         );

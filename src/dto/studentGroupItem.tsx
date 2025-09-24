@@ -67,7 +67,7 @@ export interface ScheduleItemStudentGroups {
   day: string;
   period: number;
   teacherName: string;
-  teacherLastName: string;
+  teacherLastname: string;
   room: string;
 }
 

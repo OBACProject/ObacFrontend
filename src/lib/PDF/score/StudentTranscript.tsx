@@ -142,8 +142,11 @@ const StudentTranscript = (grads: StudentGradesResponse) => {
       swift = false;
     }
     doc.setFont("THSarabunBold", "bold");
+    const displayTerm = grads.subjectGradesTermYear[i].term
+      .replace("เทียบโอน1", "เทียบโอน")
+      .replace("เทียบโอน2", "เทียบโอน");
     doc.text(
-      `ภาคเรียนที่ ${grads.subjectGradesTermYear[i].term} ปีการศึกษา ${grads.subjectGradesTermYear[i].year}`,
+      `ภาคเรียนที่ ${displayTerm} ปีการศึกษา ${grads.subjectGradesTermYear[i].year}`,
       Xaxis + 7,
       startColumn
     );
