@@ -116,7 +116,7 @@ export default function Form({ term, year, groupId }: Props) {
                         {d.curriculumYear}
                       </div>
                       <div className="border-l-[1px] text-start pl-2 lg:pl-6">
-                        {d.teacherName} {d.teacherLastName}
+                        {d.teacherName} {d.teacherLastname}
                       </div>
                       <div className="border-l-[1px] text-center">
                         {d.period}
