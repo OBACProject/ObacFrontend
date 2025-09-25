@@ -13,7 +13,7 @@ export default function Form() {
     GetStudentTranscript().then((d) => {
       if (d) {
         setData(d);
-        console.log(d)
+        console.log(d);
       }
       setLoading(false);
     });
@@ -175,7 +175,7 @@ export default function Form() {
           </p>
         </div>
       )}
-      {data.isPublish ?? (
+      {data.isPublish && (
         <>
           {" "}
           {data.subjectGradesTermYear?.map((ty, idx) => {
