@@ -100,7 +100,9 @@ export default function TeacherSidebar({
         </button>
         {triggerDropdown && (
           <div className="px-4 py-4 z-50 rounded-sm bg-white shadow-md border border-gray-200 fixed grid gap-1 top-20 right-5">
-            <div className="py-1 justify-center cursor-not-allowed w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
+            <div onClick={()=>{
+              router.push("/teacher/setting")
+            }} className="py-1 justify-center cursor-pointer w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
               <Settings className="w-5 h-5" />
               ตั้งค่าผู้ใช้งาน
             </div>

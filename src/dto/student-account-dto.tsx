@@ -68,6 +68,7 @@ export interface StudentTranscript {
   programName: string;
   subProgramName: string;
   class: string;
+  isPublish:boolean;
   groupName: string;
   section: string;
   gpax:string;

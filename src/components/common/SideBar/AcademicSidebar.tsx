@@ -95,7 +95,7 @@ export function AcademicSidebar({
           <div className="px-4 py-4 z-50 rounded-sm bg-white shadow-md border border-gray-200 fixed grid gap-1 top-20 right-5">
             <div onClick={()=>{
               router.push("/academic/setting")
-            }} className="py-1 justify-center w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
+            }} className="py-1 justify-center cursor-pointer  w-[150px] duration-300 rounded-sm hover:bg-gray-200 text-gray-700 flex gap-2 items-center ">
               <Settings className="w-5 h-5" />
               ตั้งค่าผู้ใช้งาน
             </div>
@@ -111,7 +111,7 @@ export function AcademicSidebar({
               <button
                 onClick={handleLogout}
                 disabled={loading}
-                className=" w-[150px] justify-center items-center duration-300 text-sm rounded-sm py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
+                className=" w-[150px] cursor-pointer justify-center items-center duration-300 text-sm rounded-sm py-1 bg-red-400 hover:bg-red-600 text-white flex gap-2"
                 style={{ userSelect: "none" }}
               >
                 <DoorOpen className="w-5 h-5" />

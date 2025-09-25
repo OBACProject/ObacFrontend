@@ -59,9 +59,10 @@ export function ClassroomInfoTable<T extends Record<string, any>>({
       return (
         <Link key={`row-${rowIndex}`} href={getRowLink(item)}>
           <div
-            className={`w-full shadow-md flex border border-r-0 border-gray-100 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
-            }`}
+            className={`w-full shadow-md flex border border-r-0 border-gray-100 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer 
+              flex-nowrap min-w-[1800px] ${
+                rowIndex % 2 === 0 ? "bg-white" : "bg-white"
+              }`}
           >
             {rowContent}
           </div>
@@ -70,10 +71,10 @@ export function ClassroomInfoTable<T extends Record<string, any>>({
     } else {
       return (
         <div
-          key={`row-${rowIndex}`}
-          className={`w-full shadow-md flex border border-r-0 border-gray-200 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer ${
-            rowIndex % 2 === 0 ? "bg-white" : "bg-white"
-          }`}
+          className={`w-full shadow-md flex border border-r-0 border-gray-200 border-t-0 hover:bg-blue-100 text-gray-700 cursor-pointer 
+              flex-nowrap min-w-[1800px] ${
+                rowIndex % 2 === 0 ? "bg-white" : "bg-white"
+              }`}
           onClick={() => onRowClick && onRowClick(item)}
         >
           {rowContent}
@@ -86,7 +87,7 @@ export function ClassroomInfoTable<T extends Record<string, any>>({
     <div className="overflow-x-auto">
       {/* Table Header */}
 
-      <div className="w-full flex border border-gray-300 shadow-lg ">
+      <div className="w-full flex border border-gray-300 shadow-lg flex-nowrap min-w-[1800px]">
         {columns.map((col, index) => (
           <div
             key={col.key || `header-${index}`}

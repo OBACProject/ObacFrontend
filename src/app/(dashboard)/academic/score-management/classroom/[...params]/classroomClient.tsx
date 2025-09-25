@@ -118,64 +118,68 @@ export function ClassroomGradeClient({ initialData }: Props) {
 
   // Helper function to transform data for Excel
   const transformDataForExcel = (data: GetGroupSummaryGradeResponse) => {
-  const general = {
-    groupId: data.groupId,
-    groupName: data.groupName,
-    groupCode: data.groupCode,
-    class: data.class,
-    facultyName: data.facultyName,
-    programName: data.programName,
-    term: data.term,
-    year: data.year,
-  };
+    const general = {
+      groupId: data.groupId,
+      groupName: data.groupName,
+      groupCode: data.groupCode,
+      class: data.class,
+      facultyName: data.facultyName,
+      programName: data.programName,
+      term: data.term,
+      year: data.year,
+    };
 
-  // Collect subjectName + credit
-  const subjectInfo: { name: string; credit: number }[] = [];
-  data.students.forEach((student) => {
-    student.subject.forEach((subj) => {
-      if (!subjectInfo.find((s) => s.name === subj.subjectName)) {
-        subjectInfo.push({ name: subj.subjectName, credit: subj.credit ?? 0 });
-      }
+    // Collect subjectName + credit
+    const subjectInfo: { name: string; credit: number }[] = [];
+    data.students.forEach((student) => {
+      student.subject.forEach((subj) => {
+        if (!subjectInfo.find((s) => s.name === subj.subjectName)) {
+          subjectInfo.push({
+            name: subj.subjectName,
+            credit: subj.credit ?? 0,
+          });
+        }
+      });
     });
-  });
 
-  // Sort subjects: non-zero credits first, 0 credits last
-  subjectInfo.sort((a, b) => {
-    if (a.credit === 0 && b.credit !== 0) return 1;
-    if (a.credit !== 0 && b.credit === 0) return -1;
-    return 0;
-  });
+    // Sort subjects: non-zero credits first, 0 credits last
+    subjectInfo.sort((a, b) => {
+      if (a.credit === 0 && b.credit !== 0) return 1;
+      if (a.credit !== 0 && b.credit === 0) return -1;
+      return 0;
+    });
 
-  const studentListExcel = data.students
-    .filter(
-      (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
-    )
-    .map((student) => {
-      const subjectsRecord: Record<string, string> = {};
-      subjectInfo.forEach(({ name }) => {
-        const subj = student.subject.find((s) => s.subjectName === name);
-        subjectsRecord[name] = subj
+    const studentListExcel = data.students
+      .filter(
+        (s) => s.isActive && s.status !== "คัดชื่อออก" && s.status !== "ลาออก"
+      )
+      .map((student) => {
+        const subjectsRecord: Record<string, string> = {};
+        subjectInfo.forEach(({ name }) => {
+          const subj = student.subject.find((s) => s.subjectName === name);
+          subjectsRecord[name] = subj
             ? subj.remark
               ? subj.remark
               : subj.grade
             : "-";
-      });
+        });
 
-      return {
-        studentId: student.studentId,
-        studentCode: student.studentCode,
-        name: `${student.prefix ?? ""}${student.firstName} ${student.lastName}`,
-        gpa: student.gpa ?? 0,
-        gpax: student.gpax ?? 0,
-        totalCredit: student.totalCredit ?? 0,
-        subjects: subjectsRecord,
-      };
-    })
-    .sort((a, b) => a.studentId - b.studentId);
+        return {
+          studentId: student.studentId,
+          studentCode: student.studentCode,
+          name: `${student.prefix ?? ""}${student.firstName} ${
+            student.lastName
+          }`,
+          gpa: student.gpa ?? 0,
+          gpax: student.gpax ?? 0,
+          totalCredit: student.totalCredit ?? 0,
+          subjects: subjectsRecord,
+        };
+      })
+      .sort((a, b) => a.studentId - b.studentId);
 
-  return { general, studentListExcel };
-};
-
+    return { general, studentListExcel };
+  };
 
   // Add download handlers
   const handleDownloadGradePdf = async () => {
@@ -220,53 +224,41 @@ export function ClassroomGradeClient({ initialData }: Props) {
       {
         label: "ลำดับ",
         key: "index",
-        className: "w-[5%] text-sm sticky flex justify-center bg-white z-10",
+        className: "w-[60px] text-sm sticky flex justify-center bg-white z-10",
       },
       {
         label: "รหัสนักเรียน",
         key: "studentCode",
-        className: "w-[10%] text-sm sticky  left-[5%] bg-white z-10",
+        className: "w-[120px] text-sm sticky left-[60px] bg-white z-10",
       },
       {
         label: "ชื่อ - นามสกุล",
         key: "name",
         className:
-          "w-[15%] text-sm text-center flex justify-start sticky left-[15%] bg-white z-10",
+          "w-[240px] text-sm text-left flex items-center sticky left-[180px] bg-white z-10",
       },
     ];
 
-    // Ensure we always have 10 columns
-    const filledSubjects = [
-      ...processedData.subjects,
-      ...Array(Math.max(0, 10 - processedData.subjects.length)).fill(""),
-    ];
+    const filledSubjects = processedData.subjects;
 
-    const subjectColumns = filledSubjects.map((subject, idx) => ({
+    const subjectColumns = processedData.subjects.map((subject) => ({
       label: subject || "",
-      key: subject ? `subjects.${subject}` : `subjects.blank${idx}`,
-      className: "w-[6%] text-center flex justify-center text-sm",
+      key: `subjects.${subject}`,
+      className: "w-[100px] text-center flex justify-center text-sm",
       render: (row: any) => {
-        if (!subject) {
-          return <span className="text-gray-400">-</span>;
-        }
         const grade = row.subjects[subject] || "-";
         const gradeValue = parseFloat(grade);
         const isFailedGrade = gradeValue === 0;
         const isPassedGrade = gradeValue > 0;
         return (
           <span
-            className={`px-2 py-1 rounded text-xs font-medium line-clamp-4 break-words whitespace-pre-line ${
+            className={`px-2 py-1 rounded text-xs font-medium ${
               isFailedGrade
                 ? "text-red-800"
                 : isPassedGrade
                 ? "text-green-800"
                 : "text-gray-800"
             }`}
-            style={{
-              display: "block",
-              maxHeight: "4.5em",
-              overflow: "hidden",
-            }}
           >
             {grade}
           </span>

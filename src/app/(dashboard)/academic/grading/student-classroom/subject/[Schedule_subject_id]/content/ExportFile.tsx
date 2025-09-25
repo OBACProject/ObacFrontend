@@ -5,7 +5,7 @@ import {
   ConvertClassroomToExcelWithSubject,
   ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
-import { GetGradBySubjectId, StudentGroupGradeResponse } from "@/dto/gradDto";
+import { GetGradBySubjectId} from "@/dto/gradDto";
 import { GetSubjectBySubjectId } from "@/dto/subjectDto";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,10 +35,9 @@ export default function ExportFile({
   groupID,
 }: ExportFileProps) {
   const convertGrad = grads.map((item) => {
-    const prefix = item.gender === "Male" ? "นาย" : "นางสาว";
     return {
       studentCode: item.studentCode,
-      name: `${prefix} ${item.firstName} ${item.lastName}`,
+      name: `${item.prefix} ${item.firstName} ${item.lastName}`,
       affectiveScore: item.affectiveScore,
       assignmentscore: item.assignmentscore,
       collectScore: item.collectScore,
@@ -57,10 +56,9 @@ export default function ExportFile({
   });
 
   const convertStudentExcel = grads.map((item) => {
-    const prefix = item.gender === "Male" ? "นาย" : "นางสาว";
     return {
       studentCode: item.studentCode,
-      name: `${prefix} ${item.firstName} ${item.lastName}`,
+      name: `${item.prefix} ${item.firstName} ${item.lastName}`,
     };
   });
 

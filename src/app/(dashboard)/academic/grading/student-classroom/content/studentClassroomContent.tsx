@@ -126,7 +126,8 @@ export default function StudentClassroomContent() {
       key: "isPublish",
       className: "w-[20%] flex justify-center",
       render: (row: dataTable) => {
-        const isDisabled = !row.isComplete;
+        const status = (row.status || "").trim();
+        const isDisabled = status !== "ตรวจสอบแล้ว" && status !== "ตรวจสอบเสร็จสิ้น";
         return (
           <div
             className="flex justify-center"
@@ -138,14 +139,13 @@ export default function StudentClassroomContent() {
               onToggle={(newValue) => {
                 if (!isDisabled) {
                   setTableData((prev) =>
-                    prev.map((item, i) =>
-                      i === row.index - 1
+                    prev.map((item) =>
+                      item.groupId === row.groupId
                         ? { ...item, isPublish: newValue }
                         : item
                     )
                   );
 
-                  // Call API to update publish status
                   updatePublishStatusMutation.mutate(
                     {
                       studentGroupId: row.groupId,
@@ -154,8 +154,8 @@ export default function StudentClassroomContent() {
                     {
                       onError: () => {
                         setTableData((prev) =>
-                          prev.map((item, i) =>
-                            i === row.index - 1
+                          prev.map((item) =>
+                            item.groupId === row.groupId
                               ? { ...item, isPublish: !newValue }
                               : item
                           )
@@ -305,7 +305,6 @@ export default function StudentClassroomContent() {
         searchTerm={searchTerm}
         onSearchChange={(v) => startTransition(() => setSearchTerm(v))}
       />
-
       {/* Advanced Filters */}
       <div className="flex justify-end mb-3 px-10 items-center gap-2 relative">
         <AnimatePresence>
