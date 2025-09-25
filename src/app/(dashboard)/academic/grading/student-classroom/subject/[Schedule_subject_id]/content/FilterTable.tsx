@@ -471,7 +471,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                 <button
                   className="bg-green-500 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleComplete}
-                  disabled={updateScheduleSubjectMutation.isPending}
+                  disabled={updateScheduleSubjectMutation.isPending || !subjectData.iscomplete}
                 >
                   {updateScheduleSubjectMutation.isPending
                     ? "กำลังประมวลผล..."
