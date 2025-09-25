@@ -92,7 +92,6 @@ export const ExcelSubjectStudentNamelistInGroupButton = ({
     data: apiData,
     isLoading,
     error,
-    refetch,
   } = useGetStudentGroupGradeByScheduleSubjectIdQuery(
     Number(scheduleSubjectID)
   );
