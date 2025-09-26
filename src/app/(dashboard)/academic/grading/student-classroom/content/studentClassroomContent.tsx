@@ -44,6 +44,10 @@ export default function StudentClassroomContent() {
   const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
     term: term,
     year: year,
+  },{
+    staleTime: 0, 
+    refetchOnMount: true,
+    refetchOnWindowFocus: true, 
   });
 
   // Mutation for updating publish status
