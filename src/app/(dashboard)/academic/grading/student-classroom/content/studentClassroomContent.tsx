@@ -135,7 +135,7 @@ export default function StudentClassroomContent() {
           >
             <GradeToggleButton
               isOn={row.isPublish}
-              disabled={isDisabled}
+              // disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
                   setTableData((prev) =>
