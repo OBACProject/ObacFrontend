@@ -133,7 +133,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
       class: "N/A",
       level: 0,
       isPublish: false,
-      iscomplete: false,
+      isComplete: false,
       term: "1",
       year: 2568,
       subjectGrades: [],
@@ -425,6 +425,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
     });
   };
 
+  console.log("data", subjectData);
   return (
     <div className="pb-20 mb-10">
       <div className="flex px-10 w-full justify-between items-center mb-4">
@@ -471,7 +472,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
                 <button
                   className="bg-green-500 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleComplete}
-                  disabled={updateScheduleSubjectMutation.isPending}
+                  disabled={updateScheduleSubjectMutation.isPending || subjectData.isComplete}
                 >
                   {updateScheduleSubjectMutation.isPending
                     ? "กำลังประมวลผล..."

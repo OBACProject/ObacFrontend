@@ -44,6 +44,10 @@ export default function StudentClassroomContent() {
   const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
     term: term,
     year: year,
+  },{
+    staleTime: 0, 
+    refetchOnMount: true,
+    refetchOnWindowFocus: true, 
   });
 
   // Mutation for updating publish status
@@ -135,7 +139,7 @@ export default function StudentClassroomContent() {
           >
             <GradeToggleButton
               isOn={row.isPublish}
-              disabled={isDisabled}
+              // disabled={isDisabled}
               onToggle={(newValue) => {
                 if (!isDisabled) {
                   setTableData((prev) =>

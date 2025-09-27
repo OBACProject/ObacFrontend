@@ -76,7 +76,7 @@ export interface GetStudentGroupGradeByScheduleSubjectIdResponse {
   class : string;
   level : number;
   isPublish : boolean;
-  iscomplete : boolean;
+  isComplete : boolean;
   term : string;
   year : number;
   subjectGrades : SubjectGradeScheduleSubjectForGradingPage[];
