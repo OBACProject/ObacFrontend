@@ -223,6 +223,9 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
           <input
             type="text"
             value={username}
+            autoCapitalize="none"
+            autoCorrect="off"
+            name="new-username"
             onChange={(e) => setUsername(e.target.value)}
             className="w-full border px-3 py-2 rounded"
           />
@@ -234,6 +237,8 @@ export default function AddAcademicAccountPopup({ onClosePopUp, onCreated }: Pro
             <input
               type={showPassword ? "text" : "password"}
               value={password}
+              autoComplete="new-password"
+              name="new-password"
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border px-3 py-2 rounded pr-10"
             />
