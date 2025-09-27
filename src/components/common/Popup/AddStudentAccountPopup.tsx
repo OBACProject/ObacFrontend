@@ -40,11 +40,7 @@ function toThaiErrorMessage(err: any) {
   const data = err?.response?.data ?? {};
   const status = err?.response?.status as number | undefined;
   const rawMsg =
-    data?.responseMessage ??
-    data?.title ??
-    data?.message ??
-    err?.message ??
-    "";
+    data?.responseMessage ?? data?.title ?? data?.message ?? err?.message ?? "";
 
   if (typeof rawMsg === "string") {
     if (rawMsg.includes("This UserName Already Exists")) {
@@ -57,8 +53,11 @@ function toThaiErrorMessage(err: any) {
   if (status === 400) return "คำขอไม่ถูกต้อง กรุณาตรวจสอบข้อมูลอีกครั้ง";
   if (status === 401) return "คุณไม่มีสิทธิ์เข้าถึง (401)";
   if (status === 409) return "ข้อมูลซ้ำในระบบ (409)";
-  if (status && status >= 500) return "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง";
-  return typeof rawMsg === "string" && rawMsg ? rawMsg : "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
+  if (status && status >= 500)
+    return "ระบบขัดข้องชั่วคราว กรุณาลองใหม่อีกครั้ง";
+  return typeof rawMsg === "string" && rawMsg
+    ? rawMsg
+    : "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์";
 }
 
 export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
@@ -88,7 +87,7 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
   const [selectedTerm, setSelectedTerm] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string>("");
 
-  const {currentYear} = getCurrentThaiTermYear();
+  const { currentYear } = getCurrentThaiTermYear();
 
   const resetForm = () => {
     setIsSubmitting(false);
@@ -146,7 +145,9 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
       setGroups([]);
       return;
     }
-    const activeMerged: MergedGroup[] = rawGroups.filter((g) => g.isActive !== false);
+    const activeMerged: MergedGroup[] = rawGroups.filter(
+      (g) => g.isActive !== false
+    );
     activeMerged.sort((a, b) =>
       `${a.class ?? ""}|${a.groupName ?? ""}`.localeCompare(
         `${b.class ?? ""}|${b.groupName ?? ""}`,
@@ -296,7 +297,11 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               disabled={loadingGroups || !!groupsError}
             >
               <option value="">
-                {loadingGroups ? "กำลังโหลดข้อมูล..." : groupsError ? "โหลดข้อมูลไม่สำเร็จ" : "— เลือกเทอม —"}
+                {loadingGroups
+                  ? "กำลังโหลดข้อมูล..."
+                  : groupsError
+                  ? "โหลดข้อมูลไม่สำเร็จ"
+                  : "— เลือกเทอม —"}
               </option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -313,8 +318,12 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               className="w-full border px-3 py-2 rounded"
               disabled={!selectedTerm || loadingGroups || !!groupsError}
             >
-              <option value="">{!selectedTerm ? "— เลือกเทอมก่อน —" : "— เลือกปีการศึกษา —"}</option>
-              {Array.from({ length: 6 }, (_, i) => String(currentYear + 1 - i)).map((y) => (
+              <option value="">
+                {!selectedTerm ? "— เลือกเทอมก่อน —" : "— เลือกปีการศึกษา —"}
+              </option>
+              {Array.from({ length: 6 }, (_, i) =>
+                String(currentYear + 1 - i)
+              ).map((y) => (
                 <option key={y} value={y}>
                   {y}
                 </option>
@@ -328,11 +337,17 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             <label className="text-sm">ห้อง</label>
             <select
               value={studentGroupId ?? ""}
-              onChange={(e) => setStudentGroupId(e.target.value === "" ? null : Number(e.target.value))}
+              onChange={(e) =>
+                setStudentGroupId(
+                  e.target.value === "" ? null : Number(e.target.value)
+                )
+              }
               className="w-full border px-3 py-2 rounded"
               disabled={!selectedYear || loadingGroups || !!groupsError}
             >
-              <option value="">{!selectedYear ? "— เลือกปีการศึกษาก่อน —" : "— เลือกห้อง —"}</option>
+              <option value="">
+                {!selectedYear ? "— เลือกปีการศึกษาก่อน —" : "— เลือกห้อง —"}
+              </option>
               {roomOptions.map((g) => (
                 <option key={g.id} value={g.id ?? ""}>
                   {formatRoomLabel(g)}
@@ -341,7 +356,11 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             </select>
             <p className="text-xs text-gray-500 mt-1">
               {studentGroupId && selectedRoom
-                ? `* กลุ่มเรียน: ${selectedRoom.class ?? ""} ${selectedRoom.groupName ?? ""} (เทอม ${selectedRoom.term ?? "-"} ปี ${selectedRoom.year ?? "-"})`
+                ? `* กลุ่มเรียน: ${selectedRoom.class ?? ""} ${
+                    selectedRoom.groupName ?? ""
+                  } (เทอม ${selectedRoom.term ?? "-"} ปี ${
+                    selectedRoom.year ?? "-"
+                  })`
                 : "* ยังไม่ได้เลือกกลุ่มเรียน"}
             </p>
           </div>
@@ -459,6 +478,9 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
             <input
               type="text"
               value={username}
+              autoCapitalize="none"
+              autoCorrect="off"
+              name="new-username"
               onChange={(e) => setUsername(e.target.value)}
               className="w-full border px-3 py-2 rounded"
             />
@@ -472,6 +494,8 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
+                autoComplete="new-password"
+                name="new-password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border px-3 py-2 rounded pr-10"
               />
@@ -506,7 +530,10 @@ export default function AddStudentAccountPopup({ onClosePopUp }: Props) {
         </div>
 
         <div className="flex justify-end gap-3 pt-2">
-          <button className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded" onClick={() => closeAndReset(false)}>
+          <button
+            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+            onClick={() => closeAndReset(false)}
+          >
             ยกเลิก
           </button>
           <button
