@@ -11,14 +11,24 @@ import type {
   UpdateStudentDetailsRequest,
 } from "@/dto/studentDto";
 
-export function getCurrentThaiTermYear() {
-  const date = new Date();
-  const currentMonth = date.getMonth();
+export function getCurrentThaiTermYear(now: Date = new Date()) {
+  const y = now.getFullYear();
+  const may1 = new Date(y, 4, 1);  
+  const nov1 = new Date(y, 10, 1); 
 
-  const currentYear =
-    currentMonth > 4 ? date.getFullYear() + 543 : date.getFullYear() + 543 - 1;
+  let defaultTerm: "1" | "2";
+  let currentYear: number; 
 
-  const defaultTerm = currentMonth > 4 ? "1" : "2";
+  if (now >= may1 && now < nov1) {
+    defaultTerm = "1";
+    currentYear = y + 543;
+  } else if (now >= nov1) {
+    defaultTerm = "2";
+    currentYear = y + 543;
+  } else {
+    defaultTerm = "2";
+    currentYear = (y - 1) + 543;
+  }
 
   return { defaultTerm, currentYear };
 }
