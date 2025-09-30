@@ -47,7 +47,7 @@ export default function Form({ term, year, groupId }: Props) {
     );
   }, [groupId, term, year]);
   return (
-    <div className="w-full px-10">
+    <div className="w-full h-full px-10">
       <div className="w-full py-2 flex justify-between items-center">
         <div></div>
         <button

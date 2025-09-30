@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: PageParams }) {
   const [term, year, groupID] = paramArray;
 
   return (
-    <div className="px-10">
+    <div className="px-10 h-full pb-14">
       <div className="py-5 px-10 flex justify-start">
         <HeaderLabel
           Icon={<Table className="h-5 w-5 text-white" />}

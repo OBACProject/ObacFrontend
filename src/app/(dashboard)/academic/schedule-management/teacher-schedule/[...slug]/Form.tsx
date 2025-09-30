@@ -48,7 +48,7 @@ export default function Form({ term, year, teacherID }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
-    <div className="w-full  px-10 ">
+    <div className="w-full  px-10 h-full pb-14 ">
       <div className="w-full py-5 flex justify-between items-start ">
         <div className=" rounded-md flex border group shadow-md shadow-gray-200 border-gray-200 w-fit px-5">
           <div className="overflow-hidden w-[100px] h-auto">

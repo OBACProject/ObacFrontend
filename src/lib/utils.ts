@@ -29,7 +29,6 @@ export function getCurrentThaiTermYear(now: Date = new Date()) {
     defaultTerm = "2";
     currentYear = (y - 1) + 543;
   }
-
   return { defaultTerm, currentYear };
 }
 

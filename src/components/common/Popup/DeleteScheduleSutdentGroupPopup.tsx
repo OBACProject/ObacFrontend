@@ -15,10 +15,16 @@ export default function DeleteScheduleSutdentGroupPopup({
 }: PropsDelete) {
   const onDeleteSchedule = async () => {
     try {
+      const response = await 
       DeleteEnrollmentGradeAndScheduleByScheduleSubjectId(
         scheduleData.scheduleSubjectsId
       );
-      toast.success("ลบสำเร็จ");
+      if (response){
+        toast.success("ลบสำเร็จ");
+      }else{
+        toast.error("ลบไม่สำเร็จ")
+      }
+      
       onClosePopup(false);
       setTimeout(() => {
         window.location.reload();
