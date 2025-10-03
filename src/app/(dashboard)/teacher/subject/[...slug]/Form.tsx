@@ -35,6 +35,11 @@ export default function Form({
         console.log("การดึงข้อมูลคะแนนเรียนมีปัญหา โปรดเช็ค api ");
         return;
       }
+      if (d.isComplete) {
+        console.log("วิชานี้ถูกปิดการแก้ไขแล้ว");
+        setGrads(undefined);
+        return;
+      }
       const filtered = (d.subjectGrades ?? []).filter((s) => {
         const status = (s.status ?? "").trim();
         return !EXCLUDED_STATUSES.has(status);
@@ -84,12 +89,18 @@ export default function Form({
           />
         )}
       </div>
-      {grads && (
+      {grads ? (
         <SubjectTableForm
           scheduleID={Number(scheduleID)}
           grads={grads.subjectGrades}
           isComplete={grads.isComplete}
         />
+      ) : (
+        <div className="flex py-10 items-center justify-center h-full">
+          <p className="text-xl font-semibold text-red-600">
+            ไม่สามารถทำรายการได้ เนื่องจากวิชานี้ถูกปิดการแก้ไขแล้ว
+          </p>
+        </div>
       )}
     </div>
   );
