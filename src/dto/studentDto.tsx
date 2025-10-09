@@ -488,6 +488,7 @@ export interface UpdateStudentUserRequest {
   lastName: string;
   gender: string;
   studentGroupId: number;
+  oldStudentGroupId: number; 
   birthDate: string;
   studentCode: string;
   enrollYear: number;
