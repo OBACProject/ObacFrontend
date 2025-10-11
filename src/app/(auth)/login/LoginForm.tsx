@@ -138,8 +138,8 @@ export default function LoginForm({ session }: LoginFormProps) {
             />
             <Input
               type="password"
-              name="รหัสผ่าน"
-              placeholder="password"
+              name="password"
+              placeholder="รหัสผ่าน"
               required
               className="w-[70%]"
             />
