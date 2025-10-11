@@ -4,18 +4,19 @@ import { useState } from "react";
 import BigCarouselNews from "../../../components/common/Carousel/BigCarouselNews";
 import CardNews from "../../../components/common/Card/card-news";
 import HeaderHomePageMenu from "@/components/common/Header/Header";
+import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 
 const newsItems = [
-  {
-    id: 1,
-    title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
-    image: "/cls/news/news_1.jpg",
-  },
-  {
-    id: 2,
-    title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
-    image: "/cls/news/news_2.jpg",
-  },
+  // {
+  //   id: 1,
+  //   title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
+  //   image: "/cls/news/news_1.jpg",
+  // },
+  // {
+  //   id: 2,
+  //   title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
+  //   image: "/cls/news/news_2.jpg",
+  // },
   {
     id: 3,
     title: "กิจกรรมสัมมนาเชิงปฏิบัติการ (ปวส.)ภาคเรียนที่ 1/2566",
@@ -62,18 +63,20 @@ export default function NewsSection() {
 
   return (
     <div className="mt-16 sm:mt-[8px] md:pt-[80px] lg:mt-16">
-      <div className="bg-white text-blue-950 font-prompt">
-        <HeaderHomePageMenu title="ข่าวสาร OBAC" />
+      {" "}<HeaderHomePageMenu title="ข่าวสาร OBAC" />
+      <SciFiBackgroundNormal>
+        <div className=" text-blue-950 font-prompt">
+          
 
-        <section className="container mx-auto px-4 py-4">
-          {/* ข่าวเด่น Carousel */}
-          <BigCarouselNews />
+          <section className="container mx-auto px-4 py-4">
+            {/* ข่าวเด่น Carousel */}
+            <BigCarouselNews />
 
-          {/* ข่าวย่อย Grid – แสดงตามจำนวน visibleCount */}
-          <CardNews news={newsItems.slice(0, visibleCount)} />
+            {/* ข่าวย่อย Grid – แสดงตามจำนวน visibleCount */}
+            <CardNews news={newsItems.slice(0, visibleCount)} />
 
-          {/* ปุ่มดูเพิ่มเติม */}
-          {visibleCount < newsItems.length && (
+            {/* ปุ่มดูเพิ่มเติม */}
+            {/* {visibleCount < newsItems.length && (
             <div className="flex justify-center mt-10">
               <button
                 onClick={handleShowMore}
@@ -82,9 +85,16 @@ export default function NewsSection() {
                 ดูข่าวเพิ่มเติม
               </button>
             </div>
-          )}
-        </section>
-      </div>
+          )} */}
+            <div className="py-10 grid place-items-center text-center">
+              <h1 className="text-red-600 text-2xl">
+                ขออภัย เนื้อหาส่วนนี้ยังไม่พร้อมใช้งาน
+              </h1>
+              <h1 className="text-red-600 text-2xl">ขณะนี้กำลังรอการพัฒนา</h1>
+            </div>
+          </section>
+        </div>{" "}
+      </SciFiBackgroundNormal>
     </div>
   );
 }

@@ -132,13 +132,13 @@ export default function LoginForm({ session }: LoginFormProps) {
             <Input
               type="text"
               name="userName"
-              placeholder="username"
+              placeholder="ชื่อผู้ใช้"
               required
               className="w-[70%]"
             />
             <Input
               type="password"
-              name="password"
+              name="รหัสผ่าน"
               placeholder="password"
               required
               className="w-[70%]"
