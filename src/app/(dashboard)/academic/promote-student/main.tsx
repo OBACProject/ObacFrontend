@@ -125,6 +125,7 @@ export default function Main() {
         studentGroup: {
           groupName,
           class: newGroup.class,
+          id: groupID,
           groupCode: randomGroupCode,
           level: Number(nextGroupNameA),
           programId: newGroup.programId,
