@@ -18,6 +18,7 @@ import { StylesTable } from "@/components/Academic/table/StylesTable";
 import { useGetAllStudentGroupByTermYearQuery } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { useUpdatePublishStatusByStudentGroupIdMutation } from "@/lib/api/hooks/queries/studentGroup.queries";
 import { GetAllStudentGroupByTermYearResponse } from "@/lib/api/models/studentGroup/studentGroup.response";
+import { getCurrentThaiTermYear } from "@/lib/utils";
 
 interface dataTable {
   index: number;
@@ -30,8 +31,8 @@ interface dataTable {
 }
 
 export default function StudentClassroomContent() {
-  const currentYear = new Date().getFullYear() + 543;
-  const [term, setTerm] = useState("1");
+  const { defaultTerm, currentYear } = getCurrentThaiTermYear();
+  const [term, setTerm] = useState<string>(defaultTerm);
   const [year, setYear] = useState(currentYear);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -41,14 +42,17 @@ export default function StudentClassroomContent() {
   const [isPending, startTransition] = useTransition();
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery({
-    term: term,
-    year: year,
-  },{
-    staleTime: 0, 
-    refetchOnMount: true,
-    refetchOnWindowFocus: true, 
-  });
+  const { data, isLoading, error } = useGetAllStudentGroupByTermYearQuery(
+    {
+      term: term,
+      year: year,
+    },
+    {
+      staleTime: 0,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+    }
+  );
 
   // Mutation for updating publish status
   const updatePublishStatusMutation =
@@ -104,26 +108,28 @@ export default function StudentClassroomContent() {
       key: "isComplete",
       className: "w-[20%] flex justify-center",
       render: (row: dataTable) => {
-          const status = (row.status || "").trim();
-          let bgClass = "bg-yellow-100";
-          let textClass = "text-yellow-800";
+        const status = (row.status || "").trim();
+        let bgClass = "bg-yellow-100";
+        let textClass = "text-yellow-800";
 
-          if (status === "ยังไม่ตรวจสอบ") {
-            bgClass = "bg-red-100";
-            textClass = "text-red-800";
-          } else if (status === "ตรวจสอบแล้ว" || status === "ตรวจสอบเสร็จสิ้น") {
-            bgClass = "bg-green-100";
-            textClass = "text-green-800";
-          }
+        if (status === "ยังไม่ตรวจสอบ") {
+          bgClass = "bg-red-100";
+          textClass = "text-red-800";
+        } else if (status === "ตรวจสอบแล้ว" || status === "ตรวจสอบเสร็จสิ้น") {
+          bgClass = "bg-green-100";
+          textClass = "text-green-800";
+        }
 
-          return (
-            <div className="flex justify-center">
-              <span className={`${bgClass} ${textClass} px-3 py-1 rounded-full text-sm font-medium`}>
-                {row.status}
-              </span>
-            </div>
-          );
-        },
+        return (
+          <div className="flex justify-center">
+            <span
+              className={`${bgClass} ${textClass} px-3 py-1 rounded-full text-sm font-medium`}
+            >
+              {row.status}
+            </span>
+          </div>
+        );
+      },
     },
     {
       label: "เผยแพร่เกรด",
@@ -131,7 +137,8 @@ export default function StudentClassroomContent() {
       className: "w-[20%] flex justify-center",
       render: (row: dataTable) => {
         const status = (row.status || "").trim();
-        const isDisabled = status !== "ตรวจสอบแล้ว" && status !== "ตรวจสอบเสร็จสิ้น";
+        const isDisabled =
+          status !== "ตรวจสอบแล้ว" && status !== "ตรวจสอบเสร็จสิ้น";
         return (
           <div
             className="flex justify-center"

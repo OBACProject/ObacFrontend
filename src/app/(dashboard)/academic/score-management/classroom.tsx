@@ -25,6 +25,7 @@ import {
   GeneralData,
   StudentListExcel,
 } from "@/lib/Excel/generateExcelFile";
+import { getCurrentThaiTermYear } from "@/lib/utils";
 
 interface ClassroomTable {
   class: string;
@@ -65,19 +66,13 @@ function useDebounce<T>(value: T, delay: number): T {
 export function ClassroomGrading() {
   const router = useRouter();
 
-  const dateTime = new Date();
-  const currentMonth = dateTime.getMonth();
-  const currentYear =
-    currentMonth > 5
-      ? dateTime.getFullYear() + 543
-      : dateTime.getFullYear() + 543 - 1;
-  const defaultTerm = currentMonth > 5 ? "1" : "2";
+  const {defaultTerm , currentYear} = getCurrentThaiTermYear()
 
   const [triggerDownLoadPDF, setTriggerDownLoadPDF] = useState<boolean>(false);
-  const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [selectedYear, setSelectedYear] = useState<string>(
     currentYear.toString()
   );
+  const [selectedTerm, setSelectedTerm] = useState<string>(defaultTerm);
   const [searchInput, setSearchInput] = useState<string>("");
 
   const [downloadingGroupId, setDownloadingGroupId] = useState<number | null>(
@@ -491,10 +486,10 @@ export function ClassroomGrading() {
         <div className="min-w-[150px]">
           <SelectTermAndYear
             term={selectedTerm}
-            year={selectedYear ? Number(selectedYear) : 0}
+            year={Number(selectedYear)}
             currentYear={currentYear}
-            onChangeTerm={(t) => setSelectedTerm(t)}
-            onChangeYear={(y) => setSelectedYear(y === 0 ? "" : String(y))}
+            onChangeTerm={setSelectedTerm}
+            onChangeYear={(y) => setSelectedYear(String(y))}
           />
         </div>
 
