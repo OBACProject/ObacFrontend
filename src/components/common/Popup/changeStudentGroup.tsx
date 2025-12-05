@@ -22,7 +22,8 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
 
   const [term, setTerm] = useState<string>("1");
   const [year, setYear] = useState<number>(currentYear);
-  const [studentGroupCode, setStudentGroupCode] = useState<string>("");
+  // const [studentGroupCode, setStudentGroupCode] = useState<string>("");
+  const [studentGroupID, setStudentGroupID] = useState<number>(0);
   const [onSubmitCheck, setOnSubmitCheck] = useState<boolean>(false);
   const [studentGroup, setStudentGroup] = useState<StudentGroupItem[]>([]);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
@@ -44,7 +45,7 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
     }
   }, [term, year]);
   const groupOptions = studentGroup.map((item) => ({
-    value: item.groupCode,
+    value: item.id,
     label: `${item.class}.${item.groupName}`,
   }));
 
@@ -55,9 +56,10 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
       const body: UpdateStudentGroupBody = {
         studentId: [studentId],
         studentGroup: {
+          id:Number(studentGroupID),
           groupName: "",
           class: "",
-          groupCode: studentGroupCode,
+          groupCode: String(studentGroupID),
           level: 0,
           programId: 0,
           isPublish: false,
@@ -129,14 +131,14 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
                 label: `${item.label} `,
               }))}
               value={
-                studentGroupCode
+                studentGroupID
                   ? groupOptions.find(
-                      (item) => item.value === studentGroupCode
+                      (item) => item.value === studentGroupID
                     ) || null
                   : null
               }
               onChange={(selectedOption) =>
-                setStudentGroupCode(selectedOption?.value || "")
+                setStudentGroupID(selectedOption?.value || 0)
               }
               placeholder=" เลือกห้องเรียน "
             />

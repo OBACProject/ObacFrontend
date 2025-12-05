@@ -47,8 +47,8 @@ export default function Form() {
           </div>
 
         </div>
-            <div className=" rounded-xl p-6 pb-4 lg:pb-6 border border-border/20">
-              <h4 className="text-xl w-fit line-clamp-2 text-blue-800 pb-5 font-bold">ติดตามเราได้ที่</h4>
+            <div className="font-prompt rounded-xl p-6 pb-4 lg:pb-6 border border-border/20">
+              <h4 className="text-xl text-center w-fit line-clamp-2 text-blue-800 pb-5 font-bold">ติดตามเราได้ที่</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <a
                   href="https://web.facebook.com/OBAC41/?locale=th_TH&_rdc=1&_rdr#"

@@ -128,6 +128,7 @@ export interface UpdateStudentGroupBody {
     groupName: string;
     class: string;
     groupCode: string;
+    id:number;
     level: number;
     programId: number;
     isPublish: boolean;

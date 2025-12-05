@@ -7,16 +7,16 @@ import HeaderHomePageMenu from "@/components/common/Header/Header";
 import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 
 const newsItems = [
-  {
-    id: 1,
-    title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
-    image: "/cls/news/news_1.jpg",
-  },
-  {
-    id: 2,
-    title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
-    image: "/cls/news/news_2.jpg",
-  },
+  // {
+  //   id: 1,
+  //   title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
+  //   image: "/cls/news/news_1.jpg",
+  // },
+  // {
+  //   id: 2,
+  //   title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
+  //   image: "/cls/news/news_2.jpg",
+  // },
   {
     id: 3,
     title: "กิจกรรมสัมมนาเชิงปฏิบัติการ (ปวส.)ภาคเรียนที่ 1/2566",
@@ -70,7 +70,7 @@ export default function NewsSection() {
             <BigCarouselNews />
             <CardNews news={newsItems.slice(0, visibleCount)} />
 
-            {visibleCount < newsItems.length && (
+            {/* {visibleCount < newsItems.length && (
               <div className="flex justify-center mt-10">
                 <button
                   onClick={handleShowMore}
@@ -79,8 +79,13 @@ export default function NewsSection() {
                   ดูข่าวเพิ่มเติม
                 </button>
               </div>
-            )}
+            )} */}
           </section>
+
+          <div className="py-10 grid place-items-center text-center">
+            <h1 className="text-red-600 text-2xl">ขออภัย เนื้อหาส่วนนี้ยังไม่พร้อมใช้งาน</h1>
+            <h1 className="text-red-600 text-2xl">ขณะนี้กำลังรอการพัฒนา</h1>
+          </div>
         </SciFiBackgroundNormal>
       </div>
     </div>

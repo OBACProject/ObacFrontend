@@ -157,20 +157,20 @@ export default function StudentDetailForm({ studentId }: Props) {
   const displayFaculty = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
     ? originalProgram?.facultyName || "—"
     : selectedNewGroupId
-    ? selectedGroupInfo?.facultyName || "ไม่มีคณะ"
-    : "ไม่มีคณะ";
+      ? selectedGroupInfo?.facultyName || "ไม่มีคณะ"
+      : "ไม่มีคณะ";
 
   const displayProgram = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
     ? originalProgram?.programName || "—"
     : selectedNewGroupId
-    ? selectedGroupInfo?.programName || "ไม่มีสาขา"
-    : "ไม่มีสาขา";
+      ? selectedGroupInfo?.programName || "ไม่มีสาขา"
+      : "ไม่มีสาขา";
 
   const displaySubProgram = isOriginalTY && (!selectedNewGroupId || Number(selectedNewGroupId) === Number(originalGroup?.id))
     ? originalProgram?.subProgramName || "—"
     : selectedNewGroupId
-    ? selectedGroupInfo?.subProgramName || "ไม่มีแขนง"
-    : "ไม่มีแขนง";
+      ? selectedGroupInfo?.subProgramName || "ไม่มีแขนง"
+      : "ไม่มีแขนง";
 
   const handleChange = (field: keyof GetStudentDetailResponse, value: string) => {
     if (!formData) return;
@@ -188,6 +188,14 @@ export default function StudentDetailForm({ studentId }: Props) {
     setSelectedYear(y);
     setSelectedNewGroupId(null);
   };
+  const roomReadonlyLabel = useMemo(() => {
+    const id = selectedNewGroupId ?? (originalGroup ? Number(originalGroup.id) : null);
+    if (!id) return "—";
+    const g = tyGroups.find(x => Number(x.id) === Number(id)) || originalGroup;
+    if (!g) return String(id);
+    return `${g.class} ${g.groupName} (เทอม ${g.term} ปี ${g.year})`;
+  }, [selectedNewGroupId, tyGroups, originalGroup]);
+
 
   const handleSave = async () => {
     if (isSubmitting || !formData) return;
@@ -208,13 +216,19 @@ export default function StudentDetailForm({ studentId }: Props) {
       return;
     }
 
-    const originalGroupId: number | null = Number(originalGroup?.id ?? 0) || null;
-    const finalGroupId: number | null = selectedNewGroupId ?? originalGroupId;
+    // const originalGroupId: number | null = Number(originalGroup?.id ?? 0) || null;
+    // const finalGroupId: number | null = selectedNewGroupId ?? originalGroupId;
+
+   const originalGroupIdNum = Number(originalGroup?.id ?? 0) || 0;
+   const finalGroupId: number | null = selectedNewGroupId ?? (originalGroupIdNum || null);
+
     if (!finalGroupId) {
       toast.error("กรุณาเลือกห้อง");
       return;
     }
 
+    const isGroupChanged = Number(finalGroupId) !== Number(originalGroupIdNum);
+    const oldStudentGroupId = isGroupChanged ? originalGroupIdNum : 0;
     const chosenNewGroup = selectedNewGroupId ? tyGroups.find((g) => Number(g.id) === Number(selectedNewGroupId)) : null;
 
     const studentIdNum =
@@ -264,6 +278,7 @@ export default function StudentDetailForm({ studentId }: Props) {
       lastName: formData.lastName ?? "",
       gender: formData.gender ?? "",
       studentGroupId: Number(finalGroupId),
+      oldStudentGroupId,
       studentCode: formData.studentCode ?? "",
       birthDate: toISODate(formData.birthDate),
       enrollYear,
@@ -306,11 +321,11 @@ export default function StudentDetailForm({ studentId }: Props) {
         setOriginalGroup(
           g
             ? {
-                ...g,
-                facultyName: pr?.facultyName ?? g.facultyName,
-                programName: pr?.programName ?? g.programName,
-                subProgramName: pr?.subProgramName ?? g.subProgramName,
-              }
+              ...g,
+              facultyName: pr?.facultyName ?? g.facultyName,
+              programName: pr?.programName ?? g.programName,
+              subProgramName: pr?.subProgramName ?? g.subProgramName,
+            }
             : originalGroup
         );
       }
@@ -346,9 +361,10 @@ export default function StudentDetailForm({ studentId }: Props) {
       setSelectedYear(0);
       setSelectedNewGroupId(null);
     }
-    setTyGroups([]);
+    // setTyGroups([]);
     setIsEditing(false);
   };
+
 
   if (!formData) return <div className="p-10">ไม่พบข้อมูล</div>;
   const userId = (formData as any)?.id ?? (formData as any)?.userId ?? "";
@@ -581,15 +597,15 @@ function SelectRW({
       >
         {optionMode === "object"
           ? (options as { value: string; label: string }[]).map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))
           : (options as string[]).map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
       </select>
     </div>
   );
