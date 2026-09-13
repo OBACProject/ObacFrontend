@@ -27,15 +27,24 @@ function parseJwt(token: string) {
 export function setAuthCookie(token: string) {
 
   const decodedPayload = parseJwt(token);
-  console.log("Decoded JWT Payload:", decodedPayload);
   if (!decodedPayload) {
       throw new Error("Invalid token format.");
     }
-  const { Role: role, Name: name, UserID: userId } = decodedPayload;
-  const expires = new Date(new Date().getTime() + 2* 60 * 60 * 1000);
+  const { Role: role, Name: name, UserID: userId, exp } = decodedPayload;
 
-  Cookies.set("role", role, { expires });
-  Cookies.set("name", name, { expires });
-  Cookies.set("userId", userId, { expires });
-  Cookies.set("token", token, { expires });
+  const expires =
+    typeof exp === "number"
+      ? new Date(exp * 1000)
+      : new Date(new Date().getTime() + 2 * 60 * 60 * 1000);
+
+  const cookieOptions = {
+    expires,
+    sameSite: "lax" as const,
+    secure: typeof window !== "undefined" && window.location.protocol === "https:",
+  };
+
+  Cookies.set("role", role, cookieOptions);
+  Cookies.set("name", name, cookieOptions);
+  Cookies.set("userId", userId, cookieOptions);
+  Cookies.set("token", token, cookieOptions);
 }
