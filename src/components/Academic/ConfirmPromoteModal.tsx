@@ -44,7 +44,7 @@ export default function ConfirmPromoteModal({
       onClick={onCancel}
     >
       <div
-        className="bg-white shadow-lg rounded-lg w-fit z-100 px-5"
+        className="bg-white shadow-lg rounded-lg w-fit max-w-[92vw] z-100 px-5"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="py-5 text-center font-prompt text-xl select-none">
@@ -56,7 +56,7 @@ export default function ConfirmPromoteModal({
         </p>
 
         <div className="px-5 grid place-items-center gap-3 py-2 bg-blue-50 rounded-md my-5">
-          <div className="flex gap-5 items-center">
+          <div className="flex flex-wrap gap-5 items-center">
             <p className="text-center py-1 px-5 rounded-md bg-gray-700 text-white w-fit">
               {currentGroup}
             </p>
@@ -82,7 +82,7 @@ export default function ConfirmPromoteModal({
 
           <ArrowDown className="w-12 h-12 text-gray-600" />
 
-          <div className="flex gap-5 items-center">
+          <div className="flex flex-wrap gap-5 items-center">
             <p className="text-center py-1 px-5 rounded-md bg-green-500 text-white w-fit">
               {nextGroup}
             </p>

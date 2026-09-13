@@ -86,7 +86,7 @@ export const EditSubjectPopUp = ({ onClosePopUp, data }: EditPopUpProps) => {
         <div className="w-full flex justify-center items-center gap-4 rounded-t-md text-center text-xl  ">
           <p className="py-4  text-gray-800">แก้ไขวิชาเรียน</p>
         </div>
-        <div className="w-full px-16  py-5 grid place-items-center gap-4">
+        <div className="w-full px-4 lg:px-16  py-5 grid place-items-center gap-4">
           <div className="flex w-full items-center gap-2">
             <label>รหัสวิชา : </label>
             <input

@@ -160,7 +160,7 @@ export default function AddTeacherSchedulePopup({
       onClick={() => onClosePopUp(false)}
     >
       <div
-        className=" bg-white shadow-lg shadow-gray-400   rounded-lg w-4/12 z-100 duration-500"
+        className=" bg-white shadow-lg shadow-gray-400   rounded-lg w-11/12 sm:w-4/12 z-100 duration-500"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-4 py-5">
@@ -176,7 +176,7 @@ export default function AddTeacherSchedulePopup({
               onChangeYear={setYear}
             />
           </div>
-          <div className="flex px-4 py-2">
+          <div className="flex flex-col sm:flex-row px-4 py-2 gap-2 sm:gap-0">
             <div className="w-full px-2">
               <h1>ห้องเรียน</h1>
               <Input
@@ -226,7 +226,7 @@ export default function AddTeacherSchedulePopup({
             </div>
           </div>
 
-          <div className="flex  px-4 py-2">
+          <div className="flex flex-col sm:flex-row  px-4 py-2 gap-2 sm:gap-0">
             <div className="w-full flex flex-col  px-2 relative">
               <h1>วันที่สอน</h1>
               <Select

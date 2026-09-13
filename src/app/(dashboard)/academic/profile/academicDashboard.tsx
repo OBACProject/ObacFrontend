@@ -108,7 +108,7 @@ export default function AcademicDashboard() {
 
     return {
       vocLabels: ["ปวช", "ปวส"],
-      vocValues: [1128, 665],
+      vocValues: [vc, vs],
       vocColors: ["#3B82F6", "#9CA3AF"],
     };
   }, [classCount]);

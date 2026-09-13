@@ -9,6 +9,7 @@ import {
   ConvertScoreToExcel,
 } from "@/lib/Excel/generateExcelFile";
 import { Download } from "lucide-react";
+import { useMemo } from "react";
 
 export const convertToExcelFormat = (
   data: GetStudentGroupGradeByScheduleSubjectIdResponse
@@ -61,11 +62,15 @@ export const ExcelStudentNamelistInGroupButton = ({
 }) => {
   const { data: studentData } = useGetStudentGroupByGroupIdQuery(groupID);
 
-  const sortedStudents = [...(studentData?.students ?? [])]
-    .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
-    .sort((a, b) =>
-      a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
-    );
+  const sortedStudents = useMemo(
+    () =>
+      [...(studentData?.students ?? [])]
+        .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+        .sort((a, b) =>
+          a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+        ),
+    [studentData?.students]
+  );
 
   const downloadExcel = async () => {
     ConvertClassroomToExcel(sortedStudents ?? [], studentData?.groupName || "");
@@ -97,11 +102,15 @@ export const ExcelSubjectStudentNamelistInGroupButton = ({
   );
 
   // Sort students by student code
-  const sortedStudents = [...(apiData?.subjectGrades ?? [])]
-    .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
-    .sort((a, b) =>
-      a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
-    );
+  const sortedStudents = useMemo(
+    () =>
+      [...(apiData?.subjectGrades ?? [])]
+        .filter((s) => s.status !== "คัดชื่อออก" && s.status !== "ลาออก")
+        .sort((a, b) =>
+          a.studentCode.localeCompare(b.studentCode, "en", { numeric: true })
+        ),
+    [apiData?.subjectGrades]
+  );
 
   const downloadExcel = async () => {
     if (!apiData) return;

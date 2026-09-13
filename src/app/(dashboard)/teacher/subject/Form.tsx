@@ -32,7 +32,7 @@ export default function Form() {
       {isLoading ? (
         <div className="w-full grid place-items-center">
           {subjects.length > 0 ? (
-            <div className="px-10 w-[70%] grid gap-4 ">
+            <div className="px-4 sm:px-10 w-full sm:w-[70%] grid gap-4 ">
               {subjects.map((items) => (
                 <Link
                   key={items.subjectId}
@@ -58,7 +58,7 @@ export default function Form() {
               ))}
             </div>
           ) : (
-            <div className="border-2 grid lg:w-[600px] px-10 place-items-center border-dashed border-gray-400 py-8 rounded-lg">
+            <div className="border-2 grid lg:w-[600px] px-4 sm:px-10 place-items-center border-dashed border-gray-400 py-8 rounded-lg">
               <h1 className="text-3xl font-prompt text-gray-500">
                 ไม่มีวิชาที่สอน
               </h1>

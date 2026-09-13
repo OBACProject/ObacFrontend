@@ -159,14 +159,14 @@ export default function Main() {
     }
   };
 
-  return (
-    <div className="pl-16 py-5">
-      <div className="flex justify-start px-10">
-        <HeaderLabel
-          title="เลื่อนชั้นนักเรียน"
-          Icon={<ArrowUpDown className="h-7 w-7 text-white" />}
-        />
-      </div>
+	return (
+		<div className="pl-4 lg:pl-16 py-5">
+			<div className="flex justify-start px-10">
+				<HeaderLabel
+					title="เลื่อนชั้นนักเรียน"
+					Icon={<ArrowUpDown className="h-7 w-7 text-white" />}
+				/>
+			</div>
 
       <div className="flex flex-wrap items-center gap-4 px-10 py-5">
         <SelectTermAndYear
@@ -207,11 +207,11 @@ export default function Main() {
                 </span>
               </p>
 
-              <div className="flex gap-3 items-center mb-2">
-                <p className="text-[16px] text-gray-700">ระบุชั้นเรียนต่อไป:</p>
-                <p className="px-2 py-1 text-green-600 font-semibold bg-slate-100 rounded-md">
-                  {newGroup.class}
-                </p>
+							<div className="flex flex-wrap gap-3 items-center mb-2">
+								<p className="text-[16px] text-gray-700">ระบุชั้นเรียนต่อไป:</p>
+								<p className="px-2 py-1 text-green-600 font-semibold bg-slate-100 rounded-md">
+									{newGroup.class}
+								</p>
 
                 <select
                   className="border px-3 py-1 rounded-md"
@@ -228,36 +228,36 @@ export default function Main() {
 
                 <span className="text-xl">/</span>
 
-                <select
-                  className="border px-3 py-1 rounded-md"
-                  value={nextGroupNameB}
-                  onChange={(e) => setNextGroupNameB(e.target.value)}
-                >
-                  <option value="">เลือกห้อง</option>
-                  {[...Array(15)].map((_, i) => (
-                    <option key={i + 1} value={String(i + 1)}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-5 items-center justify-start ">
-                <p className="text-[16px] text-gray-700">
-                  ระบุเทอม/ปีการศึกษาต่อไป
-                </p>
-                <SelectTermAndYear
-                  term={newGroupTerm}
-                  year={newGroupYear}
-                  currentYear={currentYear + 4}
-                  onChangeTerm={setNewGroupTerm}
-                  onChangeYear={setNewGroupYear}
-                />
-              </div>
-            </div>
-            <StudentSelectListTable
-              students={newGroup.students}
-              onSelectedIdsChange={setSelectedIds}
-            />
+								<select
+									className="border px-3 py-1 rounded-md"
+									value={nextGroupNameB}
+									onChange={(e) => setNextGroupNameB(e.target.value)}
+								>
+									<option value="">เลือกห้อง</option>
+									{[...Array(15)].map((_, i) => (
+										<option key={i + 1} value={String(i + 1)}>
+											{i + 1}
+										</option>
+									))}
+								</select>
+							</div>
+							<div className="flex flex-wrap gap-5 items-center justify-start ">
+								<p className="text-[16px] text-gray-700">
+									ระบุเทอม/ปีการศึกษาต่อไป
+								</p>
+								<SelectTermAndYear
+									term={newGroupTerm}
+									year={newGroupYear}
+									currentYear={currentYear + 4}
+									onChangeTerm={setNewGroupTerm}
+									onChangeYear={setNewGroupYear}
+								/>
+							</div>
+						</div>
+						<StudentSelectListTable
+							students={newGroup.students}
+							onSelectedIdsChange={setSelectedIds}
+						/>
 
             <div className="flex justify-center mt-4">
               <button

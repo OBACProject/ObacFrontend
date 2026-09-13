@@ -34,7 +34,7 @@ export default function RootLayout({
           menuItems={AdminSidebarData.menuItems}
           profileData={ProfileData}
         />
-        <div className=" flex-1  pt-20 pl-10 ">{children}</div>
+        <div className=" flex-1 min-w-0  pt-20 pl-10 ">{children}</div>
         <HomeFooter />
       </body>
     </html>

@@ -74,7 +74,7 @@ export default function page() {
           <ProfileForm />
         </div>
 
-        <div className="py-5 px-10 shadow-md  backdrop-blur-sm bg-white/60 grid place-items-start  rounded-md absolute bottom-5 right-10">
+        {/* <div className="py-5 px-10 shadow-md  backdrop-blur-sm bg-white/60 grid place-items-start  rounded-md absolute bottom-5 right-10">
           <h1 className="font-semibold ">หากระบบมีปัญหาสามารถติดต่อมาได้ที่</h1>
           <p className="text-gray-600">patara1919@gmail.com</p>
           <p className="text-gray-600">tel. 091-864-9154</p>
@@ -82,7 +82,7 @@ export default function page() {
           <p className="text-sm text-center text-gray-500">
             22/8/2025 - 22/9/2025
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

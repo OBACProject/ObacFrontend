@@ -95,7 +95,7 @@ export default function Form({ term, year, teacherID }: Props) {
       </div>
       {isLoading ? (
         <div className="w-full ">
-          <div className="py-2 px-5 flex items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
+          <div className="py-2 px-5 flex flex-wrap items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
             <CalendarClock className="text-white h-6 w-6" />
             <div className="text-white ">ตารางสอนของอาจารย์</div>
             <div className="flex items-center text-white  gap-4">
@@ -109,6 +109,8 @@ export default function Form({ term, year, teacherID }: Props) {
               </p>
             </div>
           </div>
+          <div className="overflow-x-auto">
+          <div className="min-w-[900px]">
           <div className="w-full grid grid-cols-[5%_10%_25%_10%_10%_10%_10%_10%_10%] shadow-lg bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1  text-center text-lg">
             <div className="text-center ">ลำดับ</div>
             <div className="text-center ">รหัสวิชา</div>
@@ -169,6 +171,8 @@ export default function Form({ term, year, teacherID }: Props) {
               </p>
             </div>
           )}
+          </div>
+          </div>
         </div>
       ) : (
         <LoadingDataTable />

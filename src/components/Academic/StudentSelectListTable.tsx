@@ -42,7 +42,7 @@ export default function StudentSelectListTable({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div className="text-base text-white bg-blue-500 py-1 px-5 border rounded-md">
           เลือกแล้ว:&nbsp;
           <span className="font-semibold ">{selectedIds.length}</span>{" "}
@@ -61,6 +61,8 @@ export default function StudentSelectListTable({
         </button>
       </div>
 
+      <div className="overflow-x-auto">
+      <div className="min-w-[560px]">
       <div className="grid shadow-lg rounded-t-md grid-cols-[5%_10%_20%_30%_35%] bg-gray-200 text-gray-700 font-prompt text-lg">
         <div className="py-1 text-center">
           <input
@@ -113,6 +115,8 @@ export default function StudentSelectListTable({
           </div>
         );
       })}
+      </div>
+      </div>
     </div>
   );
 }

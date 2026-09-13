@@ -140,7 +140,7 @@ export default function Form({ studentID }: Props) {
   };
   return (
     <div className="px-5 ">
-      <div className="flex justify-between py-5">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 py-5">
         <div className="rounded-3xl bg-white  flex gap-2 items-center  border border-gray-100 shadow-md  py-2 text-blue-700 text-xl w-fit px-5  font-prompt_Light">
           <UserRoundPen className="w-8 h-8" />
           รายละเอียดนักเรียน
@@ -151,8 +151,8 @@ export default function Form({ studentID }: Props) {
       </div>
 
       <div className="bg-white  px-5 py-4 rounded-lg">
-        <div className="w-full flex justify-between  py-2 items-center ">
-          <div className="flex gap-5 items-center justify-start">
+        <div className="w-full flex flex-wrap justify-between  py-2 items-center gap-y-2">
+          <div className="flex flex-wrap gap-5 items-center justify-start">
             <div className="gap-8 flex justify-start items-center  w-fit">
               <div className="w-fit items-center flex gap-2">
                 <div className="w-[100px]">สถานะนักเรียน</div>
@@ -230,10 +230,10 @@ export default function Form({ studentID }: Props) {
             )}
           </div>
         </div>
-        <div className="pt-4 w-full flex gap-5">
+        <div className="pt-4 w-full flex flex-col lg:flex-row gap-5">
           <div className="relative rounded-md border-t shadow-gray-300 w-fit shadow-md  bg-white ">
             <div className="grid gap-4 px-10 py-5">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <InputBox
                   label="รหัสนักเรียน"
                   name="studentCode"
@@ -290,7 +290,7 @@ export default function Form({ studentID }: Props) {
                   disable={!onEdit}
                 />
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 {" "}
                 <div className="flex items-center gap-2">
                   <p className="">ชั้นปี</p>
@@ -340,7 +340,7 @@ export default function Form({ studentID }: Props) {
         </div>
         <div className="py-5 ">
           <div className="grid gap-8 shadow-lg w-full rounded-md border px-8 py-6">
-            <div className="flex gap-5 items-center">
+            <div className="flex flex-wrap gap-5 items-center">
               <InputBox
                 label="เลขบัตรประชาชน"
                 name="citizenId"
@@ -399,7 +399,7 @@ export default function Form({ studentID }: Props) {
                 )}
               </div>
             </div>
-            <div className="flex gap-5 items-center">
+            <div className="flex flex-wrap gap-5 items-center">
               <InputBox
                 label="เบอร์ติดต่อ"
                 name="phoneNumber"
@@ -434,7 +434,7 @@ export default function Form({ studentID }: Props) {
                 />
               </div>
             </div>
-            <div className="flex gap-5 items-center">
+            <div className="flex flex-wrap gap-5 items-center">
               <InputBox
                 label="ที่อยู่ปัจจุบัน"
                 name="currentAddress"
@@ -447,7 +447,7 @@ export default function Form({ studentID }: Props) {
                 disable={!onEdit}
               />
             </div>
-            <div className="flex gap-5 items-center">
+            <div className="flex flex-wrap gap-5 items-center">
               <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">
                 มารดา
               </p>
@@ -474,7 +474,7 @@ export default function Form({ studentID }: Props) {
                 disable={!onEdit}
               />
             </div>
-            <div className="flex gap-5 items-center">
+            <div className="flex flex-wrap gap-5 items-center">
               <p className="text-base border border-gray-300 px-3 py-0.5 rounded-md ">
                 บิดา
               </p>

@@ -66,8 +66,8 @@ export default function StudentInformationCard({
   }, [studentCode, studentFirstName, studentLastName, className, faculty,prefix]);
 
   return (
-    <div className="w-fit py-5 px-14 border-gray-200 border rounded-lg shadow-sm">
-      <div className="flex items-center gap-5 mb-4">
+    <div className="w-fit max-w-full py-5 px-14 border-gray-200 border rounded-lg shadow-sm overflow-x-auto">
+      <div className="flex flex-wrap items-center gap-5 mb-4">
         <InputBox
           label="รหัสนักเรียน"
           name="studentCode"
@@ -112,7 +112,7 @@ export default function StudentInformationCard({
           disable={!edit}
         />
       </div>
-      <div className="flex items-center gap-8">
+      <div className="flex flex-wrap items-center gap-8">
         <InputBox
           label="ชั้นเรียน"
           name="studentLastName"

@@ -25,7 +25,7 @@ export default function OverviewChart() {
       const k = key(row.class, row.level);
       const cur = acc.get(k) ?? { male: 0, female: 0 };
       if (row.genderCount.gender === "ชาย") cur.male += row.genderCount.count;
-      else cur.female += row.genderCount.count;
+      else if (row.genderCount.gender === "หญิง") cur.female += row.genderCount.count;
       acc.set(k, cur);
     }
 

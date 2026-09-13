@@ -1,7 +1,5 @@
 "use client";
 import { GetStudentGroupByGroupId } from "@/api/student/route";
-import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
-import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
 import {
   BulkGetTranscriptByGroupID,
   GetStudentGroupGradeByScheduleSubjectId,
@@ -9,9 +7,6 @@ import {
   GetTranscriptByStudentID,
 } from "@/api/grad/route";
 import { StudentItems } from "@/dto/studentDto";
-import BulkStudentTranscript from "../PDF/score/BulkStudentTranscript";
-import StudentTranscript from "../PDF/score/StudentTranscript";
-import StudentFailListPDF from "../PDF/name-list/StudentFailList";
 
 const parseStudentCode = (code?: string): number | null => {
   const digits =
@@ -30,6 +25,13 @@ const byStudentCodeDesc = (a: StudentItems, b: StudentItems) => {
   return a.studentCode.localeCompare(b.studentCode, "th");
 };
 
+// The jsPDF/jspdf-autotable + embedded Thai font modules pulled in by
+// src/lib/PDF/** are heavy and were previously imported statically here,
+// shipping them in the bundle of every page with a download button even if
+// it was never clicked. Loading them with `import()` inside each handler
+// only pulls them in the moment a user actually generates that PDF - the
+// PDF templates/content themselves are untouched.
+
 export const genPDFStudentNamelistInGroup = async (
   groupID: number,
   year: number
@@ -45,6 +47,9 @@ export const genPDFStudentNamelistInGroup = async (
     });
 
     const studentsSorted = [...(activeStudents ?? [])].sort(byStudentCodeDesc);
+    const { default: StudentNameListInGroupPDF } = await import(
+      "../PDF/name-list/StudentNameListInGroup"
+    );
     StudentNameListInGroupPDF({
       student: studentsSorted,
       studentGroup: `${data?.class}.${data?.groupName}`,
@@ -77,6 +82,9 @@ export const genPDFStudentScoreInSubjectPDF = async (
 
       responseData.subjectGrades = filteredSorted;
 
+      const { default: StudentScoreInSubjectPDF } = await import(
+        "../PDF/score/StudentScoreInSubject"
+      );
       StudentScoreInSubjectPDF({ data: responseData });
     } else {
       console.error("ไม่พบข้อมูลคะแนนนักเรียน (responseData เป็น null)");
@@ -90,6 +98,9 @@ export const genPDFStudentTranscriptPDF = async (studentID: number) => {
   try {
     const response = await GetTranscriptByStudentID(studentID);
     if (response) {
+      const { default: StudentTranscript } = await import(
+        "../PDF/score/StudentTranscript"
+      );
       StudentTranscript(response);
     }
   } catch (err) {
@@ -103,6 +114,9 @@ export const genBulkPDFStudentTranscriptPDF = async (
   try {
     const response = await BulkGetTranscriptByGroupID(groupID);
     if (response) {
+      const { default: BulkStudentTranscript } = await import(
+        "../PDF/score/BulkStudentTranscript"
+      );
       BulkStudentTranscript(
         response.studentGrades,
         response.class,
@@ -134,6 +148,9 @@ export const genPDFFailedStudentNamelist = async (
       year
     );
     if (response) {
+      const { default: StudentFailListPDF } = await import(
+        "../PDF/name-list/StudentFailList"
+      );
       StudentFailListPDF({
         student: response,
         currentYear: currentLevel,

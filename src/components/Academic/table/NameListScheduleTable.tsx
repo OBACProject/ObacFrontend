@@ -28,12 +28,14 @@ export default function NameListScheduleTable<T>({
   title,
 }: NameListScheduleTableProps<T>) {
   return (
-    <div className="w-full rounded-sm py-2 px-10">
+    <div className="w-full rounded-sm py-2 px-4 lg:px-10">
       {/* Header */}
       <div className="py-2 px-5 flex items-center rounded-t-lg gap-3 bg-gradient-to-r from-blue-500 to-indigo-600">
         {icon}
         <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>
+      <div className="overflow-x-auto">
+      <div className="min-w-[640px]">
       <div
         className={`grid bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1 px-4 text-center text-lg`}
         style={{
@@ -87,6 +89,8 @@ export default function NameListScheduleTable<T>({
           {emptyText}
         </div>
       )}
+      </div>
+      </div>
     </div>
   );
 }

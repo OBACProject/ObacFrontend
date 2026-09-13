@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "http://localhost:5111/api";
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL_V1 || "https://obac-api-dev.ekawit.ac.th/api";
+import Cookies from "js-cookie";
+
 const API_BASE_URL =
 	process.env.NEXT_PUBLIC_API_URL_V2 || "https://obac-api-dev.ekawit.ac.th/api";
 const apiClient: AxiosInstance = axios.create({
@@ -8,31 +8,16 @@ const apiClient: AxiosInstance = axios.create({
 	timeout: 10000,
 });
 
-// Add request interceptor (e.g., for adding headers)
-// api.interceptors.request.use(
-//   (config: AxiosRequestConfig) => {
-//     const token = localStorage.getItem("accessToken"); // or retrieve token from cookies
-//     if (token) {
-//       config.headers = {
-//         ...config.headers,
-//         Authorization: `Bearer ${token}`,
-//       };
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
-// // Add response interceptor (e.g., for handling errors globally)
-// api.interceptors.response.use(
-//   (response: AxiosResponse) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       // Handle unauthorized error (optional)
-//       console.log("Unauthorized! Redirecting to login...");
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+// This interceptor used to be commented out, so every "use server"-less
+// route file under src/api/**/route.ts that relies on this client (instead
+// of manually attaching a token) sent requests with no Authorization header
+// at all and silently failed auth on the backend.
+apiClient.interceptors.request.use((config) => {
+	const token = Cookies.get("token");
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
+});
 
 export default apiClient;

@@ -12,7 +12,7 @@ export default function SearchInput({ onSearchKeyword,edit }: SearchProps) {
 
   return (
     <div>
-      <div className="flex gap-5  items-center justify-center">
+      <div className="flex flex-wrap gap-3 sm:gap-5 items-center justify-center">
         <input
           type="text"
           disabled={edit}

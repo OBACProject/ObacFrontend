@@ -28,6 +28,10 @@ interface ServerPaginatedTableProps<T> {
   hasPreviousPage?: boolean;
   title?: string;
   icon?: React.ReactNode;
+  // Opt-in: pass e.g. "min-w-[900px]" so this table becomes horizontally
+  // scrollable on narrow screens instead of squeezing its columns unreadably.
+  // Left unset, nothing changes for existing callers at any screen size.
+  minWidthClassName?: string;
 }
 
 export function StyledServerPaginatedDataTable<T extends Record<string, any>>({
@@ -44,6 +48,7 @@ export function StyledServerPaginatedDataTable<T extends Record<string, any>>({
   hasPreviousPage = false,
   title,
   icon,
+  minWidthClassName = "",
 }: ServerPaginatedTableProps<T>) {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
@@ -119,28 +124,32 @@ export function StyledServerPaginatedDataTable<T extends Record<string, any>>({
         <h1 className="text-lg text-white font-prompt">{title}</h1>
       </div>
 
-      <div className="w-full flex shadow-lg">
-        {columns.map((col, index) => (
-          <div
-            key={col.key || `header-${index}`}
-            className={`bg-gray-100 text-gray-800 border-t border-b border-gray-400 py-1 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
-          >
-            {col.label || "-"}
+      <div className="overflow-x-auto">
+        <div className={minWidthClassName}>
+          <div className="w-full flex shadow-lg">
+            {columns.map((col, index) => (
+              <div
+                key={col.key || `header-${index}`}
+                className={`bg-gray-100 text-gray-800 border-t border-b border-gray-400 py-1 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
+              >
+                {col.label || "-"}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {data.length > 0 ? (
-        data.map((item, rowIndex) => renderRow(item, rowIndex))
-      ) : (
-        <div className="text-center text-gray-600 py-8 border border-t-0 border-gray-200">
-          ไม่มีข้อมูลที่จะแสดง
+          {data.length > 0 ? (
+            data.map((item, rowIndex) => renderRow(item, rowIndex))
+          ) : (
+            <div className="text-center text-gray-600 py-8 border border-t-0 border-gray-200">
+              ไม่มีข้อมูลที่จะแสดง
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center space-y-4 sm:space-y-0 py-6">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center gap-2 space-y-4 sm:space-y-0 py-6">
           <div className="text-sm text-gray-600">
             แสดง {Math.min((currentPage - 1) * pageSize + 1, totalCount)} ถึง {" "}
             {Math.min(currentPage * pageSize, totalCount)} จาก {totalCount.toLocaleString()} รายการ

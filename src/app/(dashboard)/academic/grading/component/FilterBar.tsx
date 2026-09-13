@@ -24,7 +24,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
   onSearchChange,
 }) => {
   return (
-    <div className="flex flex-row justify-end items-center gap-4 mb-4 px-10">
+    <div className="flex flex-col sm:flex-row flex-wrap sm:flex-nowrap justify-end items-center gap-4 mb-4 px-4 sm:px-10">
       <SelectTermYear
         term={term}
         year={year}
@@ -33,13 +33,13 @@ const FilterBar: React.FC<FilterBarProps> = ({
         onChangeYear={onChangeYear}
       />
 
-      <div className="flex items-center gap-2 ">
+      <div className="flex items-center gap-2 w-full sm:w-auto">
         <label className="text-sm font-medium">ค้นหาข้อมูล</label>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-1 text-sm w-64"
+          className="border border-gray-300 rounded-md px-3 py-1 text-sm w-full sm:w-64"
           placeholder="ค้นหาห้อง / สาขา / สถานะ..."
         />
       </div>
