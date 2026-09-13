@@ -142,67 +142,74 @@ export function AcademicSidebar({
         <button onClick={() => setOpen(true)} aria-label="เปิดเมนู">
           <Menu className="text-gray-400 w-7 h-7" />
         </button>
-        {open && (
+        {/* Clips the slide-in drawer to exactly the viewport: `translate-x-full`
+            only moves the drawer visually, its untransformed box still occupies
+            a full extra screen-width to the right - without this wrapper's
+            overflow-hidden, that phantom width leaks into the page's own
+            scrollable area even while the drawer is closed. */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-40">
+          {open && (
+            <div
+              className="absolute inset-0 bg-black/50 pointer-events-auto"
+              onClick={() => setOpen(false)}
+            />
+          )}
           <div
-            className="fixed inset-0 bg-black/50 z-40"
-            onClick={() => setOpen(false)}
-          />
-        )}
-        <div
-          className={`fixed top-0 right-0 h-full w-full bg-white shadow-lg z-50 transform transition-transform duration-300 flex flex-col
-    ${open ? "translate-x-0" : "translate-x-full"}`}
-        >
-          <div className="flex justify-between items-center font-prompt p-3 border-b border-gray-300 bg-gradient-to-r from-[#143d66] to-sky-800">
-            <p className="text-lg text-white font-prompt_Ligh px-2">
-              เมนูทั้งหมด
-            </p>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="ปิดเมนู"
-              className="cursor-pointer px-2 active:bg-white duration-300 group h-full py-0.5 rounded-md"
-            >
-              <X className="w-7 h-7 text-white duration-300 group-active:text-orange-400" />
-            </button>
-          </div>
-          <div className="px-3 py-2 grid gap-2 place-items-start w-full overflow-y-auto">
-            {menuItems.map((item, index) => {
-              const isActive = pathname.startsWith(item.headLink);
-              return (
-                <Link
-                  key={index}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 font-prompt_Light rounded-3xl w-full py-2.5 px-4 transition
-            ${
-              isActive
-                ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white"
-                : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
-            }`}
-                >
-                  {item.icon}
-                  <span className="font-prompt_Light text-base">
-                    {item.title}
-                  </span>
-                </Link>
-              );
-            })}
+            className={`pointer-events-auto absolute top-0 right-0 h-full w-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col
+      ${open ? "translate-x-0" : "translate-x-full"}`}
+          >
+            <div className="flex justify-between items-center font-prompt p-3 border-b border-gray-300 bg-gradient-to-r from-[#143d66] to-sky-800">
+              <p className="text-lg text-white font-prompt_Ligh px-2">
+                เมนูทั้งหมด
+              </p>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="ปิดเมนู"
+                className="cursor-pointer px-2 active:bg-white duration-300 group h-full py-0.5 rounded-md"
+              >
+                <X className="w-7 h-7 text-white duration-300 group-active:text-orange-400" />
+              </button>
+            </div>
+            <div className="px-3 py-2 grid gap-2 place-items-start w-full overflow-y-auto">
+              {menuItems.map((item, index) => {
+                const isActive = pathname.startsWith(item.headLink);
+                return (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 font-prompt_Light rounded-3xl w-full py-2.5 px-4 transition
+              ${
+                isActive
+                  ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white"
+                  : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
+              }`}
+                  >
+                    {item.icon}
+                    <span className="font-prompt_Light text-base">
+                      {item.title}
+                    </span>
+                  </Link>
+                );
+              })}
 
-            <Link
-              href={"/academic/setting"}
-              onClick={() => setOpen(false)}
-              className="flex px-4 mt-3 active:border w-full rounded-md py-1 gap-4 text-base font-prompt_Light text-gray-700"
-            >
-              <Settings className="h-6 w-6 text-gray-700" />
-              ตั้งค่าผู้ใช้งาน
-            </Link>
-            <button
-              onClick={handleLogout}
-              disabled={loading}
-              className="w-full mt-3 rounded-md text-center bg-red-400 py-2 text-white cursor-pointer flex items-center justify-center gap-2"
-            >
-              {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-              ออกจากระบบ
-            </button>
+              <Link
+                href={"/academic/setting"}
+                onClick={() => setOpen(false)}
+                className="flex px-4 mt-3 active:border w-full rounded-md py-1 gap-4 text-base font-prompt_Light text-gray-700"
+              >
+                <Settings className="h-6 w-6 text-gray-700" />
+                ตั้งค่าผู้ใช้งาน
+              </Link>
+              <button
+                onClick={handleLogout}
+                disabled={loading}
+                className="w-full mt-3 rounded-md text-center bg-red-400 py-2 text-white cursor-pointer flex items-center justify-center gap-2"
+              >
+                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                ออกจากระบบ
+              </button>
+            </div>
           </div>
         </div>
       </div>
