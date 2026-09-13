@@ -13,6 +13,10 @@ interface TableProps<T> {
   pagination: number;
   onRowClick?: (item: T) => void;
   isEdit?: boolean;
+  // Opt-in: pass e.g. "min-w-[640px]" so this table becomes horizontally
+  // scrollable on narrow screens instead of squeezing its columns unreadably.
+  // Left unset, nothing changes for existing callers at any screen size.
+  minWidthClassName?: string;
 }
 
 export function DataTableStudentInfo<T extends Record<string, any>>({
@@ -20,6 +24,7 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
   data,
   pagination,
   onRowClick,
+  minWidthClassName = "",
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -37,49 +42,53 @@ export function DataTableStudentInfo<T extends Record<string, any>>({
   };
 
   return (
-    <div className="w-full rounded-sm py-5 px-10">
-      {/* Table Header */}
-      <div className="w-full flex rounded-t-lg overflow-hidden">
-        {columns.map((col, index) => (
-          <div
-            key={col.key || `header-${index}`}
-            className={`bg-[#cfe4ff] text-gray-800  py-0 text-center font-poppins flex items-center text-lg justify-center ${col.className}`}
-          >
-            {col.label || "-"}
+    <div className="w-full rounded-sm py-5 px-4 lg:px-10">
+      <div className="overflow-x-auto">
+        <div className={minWidthClassName}>
+          {/* Table Header */}
+          <div className="w-full flex rounded-t-lg overflow-hidden">
+            {columns.map((col, index) => (
+              <div
+                key={col.key || `header-${index}`}
+                className={`bg-[#cfe4ff] text-gray-800  py-0 text-center font-poppins flex items-center text-lg justify-center ${col.className}`}
+              >
+                {col.label || "-"}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Table Body */}
-      {paginatedData.length > 0 ? (
-        paginatedData.map((item, rowIndex) => (
-          <div
-            key={`row-${rowIndex}`}
-            className={`w-full flex border-[1px]  border-gray-400 h-fit  border-t-0 border-r-0 shadow-md hover:bg-blue-50 text-gray-600 cursor-pointer ${
-              rowIndex % 2 === 0 ? "bg-white" : "bg-white"
-            }`}
-            onClick={() => onRowClick && onRowClick(item)}
-          >
-            {columns.map((col, colIndex) => {
-              const cellValue = col.key ? item[col.key] : null;
-              const renderContent = col.render ? col.render(item) : cellValue;
-              return (
-                <div
-                  key={`cell-${rowIndex}-${colIndex}`}
-                  className={`text-center flex items-center px-4 py-0   border-r font-light  border-gray-400 ${col.className} ${
-                    item.isFailed ? "bg-red-100" : ""
-                  }
-                `}
-                >
-                  {renderContent != null ? renderContent : "-"}
-                </div>
-              );
-            })}
-          </div>
-        ))
-      ) : (
-        <div className="text-center text-gray-600 py-4">No data available</div>
-      )}
+          {/* Table Body */}
+          {paginatedData.length > 0 ? (
+            paginatedData.map((item, rowIndex) => (
+              <div
+                key={`row-${rowIndex}`}
+                className={`w-full flex border-[1px]  border-gray-400 h-fit  border-t-0 border-r-0 shadow-md hover:bg-blue-50 text-gray-600 cursor-pointer ${
+                  rowIndex % 2 === 0 ? "bg-white" : "bg-white"
+                }`}
+                onClick={() => onRowClick && onRowClick(item)}
+              >
+                {columns.map((col, colIndex) => {
+                  const cellValue = col.key ? item[col.key] : null;
+                  const renderContent = col.render ? col.render(item) : cellValue;
+                  return (
+                    <div
+                      key={`cell-${rowIndex}-${colIndex}`}
+                      className={`text-center flex items-center px-4 py-0   border-r font-light  border-gray-400 ${col.className} ${
+                        item.isFailed ? "bg-red-100" : ""
+                      }
+                    `}
+                    >
+                      {renderContent != null ? renderContent : "-"}
+                    </div>
+                  );
+                })}
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-600 py-4">No data available</div>
+          )}
+        </div>
+      </div>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (

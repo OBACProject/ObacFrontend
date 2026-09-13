@@ -15,7 +15,7 @@ function StaticHeader({
   setIsToggle: (value: boolean) => void;
 }) {
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <div className="px-10 rounded-3xl flex gap-2 items-center border border-gray-100 shadow-md bg-white py-2 text-blue-700 text-xl w-fit">
         {isToggle ? (
           <Users className="h-8 w-8" />
@@ -25,7 +25,7 @@ function StaticHeader({
         {isToggle ? "จัดการคะแนน (รายบุคคล)" : "จัดการคะแนน (ห้องเรียน)"}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <Link href={"/academic/import-score"}
           className="text-gray-600 py-1 rounded-md bg-white border-gray-300 border
         shadow px-6 flex items-center justify-center gap-3 hover:bg-gray-400 group  hover:text-white duration-200 cursor-pointer"

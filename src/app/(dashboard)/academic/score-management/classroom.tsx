@@ -520,6 +520,7 @@ export function ClassroomGrading() {
       <StylesTable
         title="ห้องเรียนทั้งหมด"
         icon={<Table className=" h-5 text-white w-5" />}
+        minWidthClassName="min-w-[900px]"
         columns={columns}
         data={tableData}
         onRowClick={onRowClick}

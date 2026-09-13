@@ -135,10 +135,10 @@ export default function Form() {
           ระบบจัดการตารางเรียน - ตารางสอน
         </h1>
       </div>
-      <div className="w-full items-center justify-between px-10 flex gap-2">
-        <div className="flex gap-2 items-center">
+      <div className="w-full items-center justify-between px-4 sm:px-10 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           <button
-            className={`px-10 py-1 ${
+            className={`px-6 sm:px-10 py-1 ${
               toggleMode
                 ? "bg-blue-600  text-white"
                 : "bg-white border-blue-500  border  text-blue-800 hover:bg-blue-500 hover:text-white"
@@ -150,7 +150,7 @@ export default function Form() {
             นักเรียน
           </button>
           <button
-            className={`px-10 py-1 duration-300 ${
+            className={`px-6 sm:px-10 py-1 duration-300 ${
               toggleMode
                 ? "bg-white border-blue-500  border   text-blue-800 hover:bg-blue-500 hover:text-white"
                 : "bg-blue-600  text-white"
@@ -159,9 +159,9 @@ export default function Form() {
           >
             อาจารย์
           </button>
-          <div className="px-5 flex items-center">
+          <div className="px-5 flex items-center w-full sm:w-auto">
             {toggleMode ? (
-              <div>
+              <div className="w-full">
                 <input
                   type="text"
                   placeholder="ค้นหาอาจารย์..."
@@ -171,7 +171,7 @@ export default function Form() {
                 />
               </div>
             ) : (
-              <div>
+              <div className="w-full">
                 <input
                   type="text"
                   placeholder="ค้นหาห้องเรียน..."

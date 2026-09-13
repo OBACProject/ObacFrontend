@@ -438,9 +438,9 @@ export default function EditableGradePage(props: EditableGradePageProps) {
 
       <div className="bg-white h-fit py-4 my-2 rounded-lg border border-gray-200 mx-4">
         {/* Toolbar */}
-        <div className="flex items-center justify-between px-6 mb-4 gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-6 mb-4 gap-4">
           {/* Search on left */}
-          <div className="flex items-center w-1/3">
+          <div className="flex items-center w-full sm:w-1/3">
             <Input
               type="text"
               placeholder="ค้นหาชื่อนักเรียน / รหัส / หมายเหตุ"
@@ -450,7 +450,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {onEdit ? (
               <>
                 <button
@@ -540,6 +540,7 @@ export default function EditableGradePage(props: EditableGradePageProps) {
             icon={<ScrollText className="w-5 h-5 text-white " />}
             title={`รายชื่อนักเรียนในห้อง ${subjectData.class}.${subjectData.groupName}`}
             data={filteredData}
+            minWidthClassName="min-w-[1100px]"
             columns={createColumns({
               onEdit,
               handleInputChange: handleInputChangeDraft,

@@ -15,13 +15,13 @@ const GradeSubjectSearchBar: React.FC<Props> = ({ onChange }) => {
   }, [deferredSearch, onChange]);
 
   return (
-    <div className="flex justify-end mt-4 px-4">
+    <div className="flex justify-end mt-4 px-4 w-full">
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="ค้นหาวิชา / อาจารย์ / สถานะ..."
-        className="border border-gray-300 rounded-md px-4 py-2 text-sm w-80"
+        className="border border-gray-300 rounded-md px-4 py-2 text-sm w-full sm:w-80"
       />
     </div>
   );

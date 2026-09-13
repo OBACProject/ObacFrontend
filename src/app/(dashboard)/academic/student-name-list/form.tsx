@@ -116,7 +116,7 @@ export default function Form() {
           className="text-blue-600"
         />
       </div>
-      <div className="flex pt-5 lg:px-10 items-center justify-between">
+      <div className="flex flex-col sm:flex-row pt-5 lg:px-10 items-center justify-between gap-3">
         <div className="flex justify-start   w-fit items-center lg:gap-8 ">
           {/* <SearchInput onSearchKeyword={onSearch} edit={false} /> */}
           <SelectTermAndYear

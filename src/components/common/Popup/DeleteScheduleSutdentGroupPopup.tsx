@@ -41,7 +41,7 @@ export default function DeleteScheduleSutdentGroupPopup({
       onClick={() => onClosePopup(false)}
     >
       <div
-        className="bg-white shadow-lg shadow-gray-400 rounded-lg w-[400px] z-100 duration-500"
+        className="bg-white shadow-lg shadow-gray-400 rounded-lg w-[calc(100vw-2rem)] sm:w-[400px] z-100 duration-500"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="py-4 w-full font-prompt text-center text-2xl font-semibold">

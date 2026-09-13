@@ -15,14 +15,14 @@ export default async function Page({ params }: { params: PageParams }) {
   const [studentGroupID, year] = ParamsArray;
 
   return (
-    <div className="pl-12 bg-gray-100">
-      <div className="py-4 w-full px-5 flex justify-between items-center">
+    <div className="pl-4 lg:pl-12 bg-gray-100">
+      <div className="py-4 w-full px-5 flex flex-col sm:flex-row justify-between items-center gap-3">
         <HeaderLabel
           Icon={<Users className="h-6 w-6" />}
           title="รายชื่อนักเรียนในห้อง"
         />
         <div>
-          <div className="flex items-center gap-2 justify-end">
+          <div className="flex flex-wrap items-center gap-2 justify-end">
             <PDFStudentNamelistInGroupButton
               groupID={studentGroupID}
               year={year}

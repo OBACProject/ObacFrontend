@@ -52,15 +52,15 @@ export default function Form({
   }, []);
   return (
     <div className=" w-full min-h-[calc(80dvh-2rem)]  ">
-      <div className="w-full flex justify-between mt-4 rounded-lg bg-blue-500">
+      <div className="w-full flex flex-col sm:flex-row sm:justify-between mt-4 rounded-lg bg-blue-500">
         <div className="grid gap-2 px-5 py-4">
           <div className="flex gap-2 items-center">
             <GraduationCap className="text-white h-6 w-6" />
-            <h1 className="text-2xl text-white font-prompt">
+            <h1 className="text-xl sm:text-2xl text-white font-prompt">
               ระบบจัดการคะแนนสำหรับอาจารย์
             </h1>
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-wrap gap-2 sm:gap-4 items-center">
             <div className="flex gap-1 items-center text-white">
               <p>รหัสวิชา </p>
               <p className="text-sm px-4 bg-blue-400 py-0.5 rounded-full">

@@ -317,7 +317,7 @@ export default function StudentClassroomContent() {
 				onSearchChange={(v) => startTransition(() => setSearchTerm(v))}
 			/>
 			{/* Advanced Filters */}
-			<div className="flex justify-end mb-3 px-10 items-center gap-2 relative">
+			<div className="flex flex-col sm:flex-row flex-wrap justify-end mb-3 px-4 sm:px-10 items-stretch sm:items-center gap-2 relative">
 				<AnimatePresence>
 					{showAdvanced && (
 						<motion.div
@@ -325,7 +325,7 @@ export default function StudentClassroomContent() {
 							animate={{ opacity: 1, x: 0 }}
 							exit={{ opacity: 0, x: -40 }}
 							transition={{ duration: 0.3 }}
-							className="flex flex-row gap-2 items-center"
+							className="flex flex-row flex-wrap gap-2 items-center"
 						>
 							<Combobox
 								options={allClasses.map((v) => ({ value: v, label: v }))}
@@ -374,6 +374,7 @@ export default function StudentClassroomContent() {
 			<StylesTable
 				icon={<School className="w-5 h-5 text-white" />}
 				title="ห้องเรียนทั้งหมด"
+				minWidthClassName="min-w-[900px]"
 				columns={columns}
 				data={filteredData}
 				getRowLink={(row) =>

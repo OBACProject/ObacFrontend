@@ -10,6 +10,7 @@ import {
   LogOut,
   Menu,
   Settings,
+  X,
 } from "lucide-react";
 import {
   ProfileData,
@@ -18,6 +19,8 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { logout } from "@/lib/authentication";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function TeacherSidebar({
   menuItems,
@@ -35,6 +38,8 @@ export default function TeacherSidebar({
     }
   }, []);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     setLoading(true);
@@ -49,7 +54,7 @@ export default function TeacherSidebar({
   };
   return (
     <div className="fixed top-0 left-0 right-0 flex flex-col z-20  w-full">
-      <header className="flex w-full items-center gap-2 bg-background border-b px-4  ">
+      <header className="hidden lg:flex w-full items-center gap-2 bg-background border-b px-4  ">
         <div className="flex h-[80px]  items-center">
           <button
             onClick={() => setIsVisible(!isVisible)}
@@ -129,11 +134,93 @@ export default function TeacherSidebar({
         )}
       </header>
 
-      <SidebarMenu
-        menuItems={menuItems}
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-      />
+      {/* Mobile-only header + slide-in drawer (desktop header/menu above are untouched) */}
+      <div className="lg:hidden flex justify-between items-center h-14 px-4 shadow-md bg-white fixed top-0 left-0 right-0 z-10">
+        <div className="flex font-prompt text-sm gap-3 items-center min-w-0">
+          <Image
+            src="/images/obac_navbar_logo.png"
+            alt="obac-logo"
+            width={100}
+            height={100}
+            className="h-10 w-10 object-cover shrink-0"
+          />
+          <span className="truncate">ระบบสำหรับครูผู้สอน</span>
+        </div>
+        <button onClick={() => setOpen(true)} aria-label="เปิดเมนู">
+          <Menu className="text-gray-400 w-7 h-7" />
+        </button>
+        {open && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setOpen(false)}
+          />
+        )}
+        <div
+          className={`fixed top-0 right-0 h-full w-full bg-white shadow-lg z-50 transform transition-transform duration-300 flex flex-col
+    ${open ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <div className="flex justify-between items-center font-prompt p-3 border-b border-gray-300 bg-gradient-to-r from-[#143d66] to-sky-800">
+            <p className="text-lg text-white font-prompt_Ligh px-2">
+              เมนูทั้งหมด
+            </p>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="ปิดเมนู"
+              className="cursor-pointer px-2 active:bg-white duration-300 group h-full py-0.5 rounded-md"
+            >
+              <X className="w-7 h-7 text-white duration-300 group-active:text-orange-400" />
+            </button>
+          </div>
+          <div className="px-3 py-2 grid gap-2 place-items-start w-full">
+            {menuItems.map((item, index) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center gap-3 font-prompt_Light rounded-3xl w-full py-2.5 px-4 transition
+            ${
+              isActive
+                ? "bg-gradient-to-r from-gray-400 to-indigo-100 text-white"
+                : "text-gray-600 active:bg-gray-200 active:text-gray-900 active:scale-95"
+            }`}
+                >
+                  {item.icon}
+                  <span className="font-prompt_Light text-base">
+                    {item.title}
+                  </span>
+                </Link>
+              );
+            })}
+
+            <Link
+              href={"/teacher/setting"}
+              onClick={() => setOpen(false)}
+              className="flex px-4 mt-3 active:border w-full rounded-md py-1 gap-4 text-base font-prompt_Light text-gray-700"
+            >
+              <Settings className="h-6 w-6 text-gray-700" />
+              ตั้งค่าผู้ใช้งาน
+            </Link>
+            <button
+              onClick={handleLogout}
+              disabled={loading}
+              className="w-full translate-y-20 rounded-md text-center bg-red-400 py-2 text-white cursor-pointer flex items-center justify-center gap-2"
+            >
+              {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+              ออกจากระบบ
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="lg:block hidden">
+        <SidebarMenu
+          menuItems={menuItems}
+          isVisible={isVisible}
+          setIsVisible={setIsVisible}
+        />
+      </div>
     </div>
   );
 }

@@ -19,6 +19,10 @@ interface TableProps<T> {
   title?: string;
   icon?: React.ReactNode;
   rowHover?: string;
+  // Opt-in: pass e.g. "min-w-[900px]" so this table becomes horizontally
+  // scrollable on narrow screens instead of squeezing its columns unreadably.
+  // Left unset, nothing changes for existing callers at any screen size.
+  minWidthClassName?: string;
 }
 
 export function StylesTable<T extends Record<string, any>>({
@@ -30,6 +34,7 @@ export function StylesTable<T extends Record<string, any>>({
   title,
   icon,
   rowHover,
+  minWidthClassName = "",
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -97,26 +102,30 @@ export function StylesTable<T extends Record<string, any>>({
         {icon}
         <h1 className="text-lg text-white font-prompt ">{title}</h1>
       </div>
-      <div className="w-full flex shadow-lg ">
-        {columns.map((col, index) => (
-          <div
-            key={col.key || `header-${index}`}
-            className={`bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
-          >
-            {col.label || "-"}
+      <div className="overflow-x-auto">
+        <div className={minWidthClassName}>
+          <div className="w-full flex shadow-lg ">
+            {columns.map((col, index) => (
+              <div
+                key={col.key || `header-${index}`}
+                className={`bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1 px-4 text-center text-lg flex items-center justify-center ${col.className}`}
+              >
+                {col.label || "-"}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {paginatedData.length > 0 ? (
-        <div className="pb-8">
-          {paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))}
+          {paginatedData.length > 0 ? (
+            <div className="pb-8">
+              {paginatedData.map((item, rowIndex) => renderRow(item, rowIndex))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-600 py-4 pb-12">
+              No data available
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="text-center text-gray-600 py-4 pb-12">
-          No data available
-        </div>
-      )}
+      </div>
 
       {totalPages > 1 && (
         <div className="flex justify-end items-center space-x-2 py-4 pb-12">

@@ -51,7 +51,7 @@ export default function Form() {
           Icon={<LibraryBig className="text-white h-7 w-7" />}
         />
       </div>
-      <div className="px-10 py-2 flex justify-between gap-5">
+      <div className="px-10 py-2 flex flex-col sm:flex-row sm:justify-between gap-5">
         <input
           type="text"
           placeholder="ค้นหาวิชา..."
@@ -82,6 +82,8 @@ export default function Form() {
                   รายการ
                 </div>
               </div>
+              <div className="overflow-x-auto">
+              <div className="min-w-[760px]">
               <div className="w-full shadow-lg grid grid-cols-[5%_15%_40%_10%_10%_10%_10%] bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1 px-4 text-center text-lg  items-center justify-center ">
                 <div className="text-center py-1 text-black">ลำดับ</div>
                 <div className="text-center py-1">รหัสวิชา</div>
@@ -136,10 +138,12 @@ export default function Form() {
                   </div>
                 </div>
               ))}
+              </div>
+              </div>
             </div>
           ) : (
             <div className="w-full grid place-items-center py-10">
-              <div className="py-10 border-gray-400 border-2 border-dashed  text-5xl text-gray-500 font-extrabold  rounded-lg grid place-items-center w-[700px]">
+              <div className="py-10 border-gray-400 border-2 border-dashed  text-5xl text-gray-500 font-extrabold  rounded-lg grid place-items-center w-full max-w-[700px]">
                 ไม่มีข้อมูล{" "}
               </div>
             </div>

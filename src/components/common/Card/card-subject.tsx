@@ -11,12 +11,12 @@ interface CardSubjectProps {
 
 export default function CardSubject({ data, year, term }: CardSubjectProps) {
   return (
-    <div className=" bg-white border border-gray-100 shadow-lg flex justify-between rounded-lg duration-300 overflow-hidden hover:bg-gray-100 hover:shadow-gray-300">
+    <div className=" bg-white border border-gray-100 shadow-lg flex flex-col sm:flex-row justify-between rounded-lg duration-300 overflow-hidden hover:bg-gray-100 hover:shadow-gray-300">
       <div className="grid gap-2 px-5 py-5">
         <h1 className="text-gl font-semibold font-prompt">
           {data.subjectName}
         </h1>
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <div className="flex gap-2 items-center">
             <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
             <p>รหัสวิชา : {data.subjectCode}</p>
@@ -28,7 +28,7 @@ export default function CardSubject({ data, year, term }: CardSubjectProps) {
             <p className="text-base  text-gray-700">{data.studentAmount} คน</p>
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <div className="px-2 py-1 rounded-lg bg-gray-200 text-gray-800 flex items-center gap-2 justify-center">
             <MapPin className="w-4 h-4" />
             {data.class}.{data.studentGroupName}
@@ -39,7 +39,7 @@ export default function CardSubject({ data, year, term }: CardSubjectProps) {
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 px-10 grid place-items-center">
+      <div className="bg-gray-50 px-5 sm:px-10 py-4 sm:py-0 grid place-items-center">
         <h1>สถานะคะแนน</h1>
         <div
           className={`flex gap-2 items-center justify-center ${

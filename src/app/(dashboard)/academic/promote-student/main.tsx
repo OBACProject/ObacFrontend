@@ -153,7 +153,7 @@ export default function Main() {
 	};
 
 	return (
-		<div className="pl-16 py-5">
+		<div className="pl-4 lg:pl-16 py-5">
 			<div className="flex justify-start px-10">
 				<HeaderLabel
 					title="เลื่อนชั้นนักเรียน"
@@ -200,7 +200,7 @@ export default function Main() {
 								</span>
 							</p>
 
-							<div className="flex gap-3 items-center mb-2">
+							<div className="flex flex-wrap gap-3 items-center mb-2">
 								<p className="text-[16px] text-gray-700">ระบุชั้นเรียนต่อไป:</p>
 								<p className="px-2 py-1 text-green-600 font-semibold bg-slate-100 rounded-md">
 									{newGroup.class}
@@ -234,7 +234,7 @@ export default function Main() {
 									))}
 								</select>
 							</div>
-							<div className="flex gap-5 items-center justify-start ">
+							<div className="flex flex-wrap gap-5 items-center justify-start ">
 								<p className="text-[16px] text-gray-700">
 									ระบุเทอม/ปีการศึกษาต่อไป
 								</p>

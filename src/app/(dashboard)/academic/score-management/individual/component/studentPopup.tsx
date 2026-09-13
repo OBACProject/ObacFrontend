@@ -268,7 +268,7 @@ export function StudentPopup({
           onClick={() => onClose(false)}
         >
           <div
-            className="bg-white rounded-lg shadow-lg p-6 w-2/3 max-w-4xl max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-lg shadow-lg p-6 w-[92vw] sm:w-2/3 max-w-4xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div>

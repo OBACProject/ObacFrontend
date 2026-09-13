@@ -204,6 +204,7 @@ export const StudentTermTable = ({ termData, studentData }: Props) => {
               <DataTableStudentInfo
                 columns={columns}
                 data={transformedData}
+                minWidthClassName="min-w-[640px]"
                 pagination={year.termQuery.length}
                 onRowClick={(item: any) => handleRowClick(item.subject_name)}
               />

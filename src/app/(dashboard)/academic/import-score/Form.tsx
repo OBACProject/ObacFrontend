@@ -87,7 +87,7 @@ export default function Form() {
   return (
     <div>
       <div className="py-6"></div>
-      <div className="flex justify-center items-center mt-5 gap-5 py-5">
+      <div className="flex flex-col sm:flex-row justify-center items-center mt-5 gap-5 py-5 text-center sm:text-left">
         <i className="text-gray-600">กรอกรหัสนักเรียนเพื่อทำการค้นหา</i>
         <SearchInput onSearchKeyword={onSearch} edit={edit} />
         <div className="relative h-6 px-4 text-base">
@@ -103,7 +103,7 @@ export default function Form() {
       <LineCenter color="text-back" />
       {student != null ? (
         <div key={student.student.studentCode}>
-          <div className="py-4 flex justify-between ">
+          <div className="py-4 flex flex-col lg:flex-row justify-between gap-4">
             <StudentInformationCard
               key={student?.student.id}
               Prefix={student?.student.prefix}
@@ -137,7 +137,7 @@ export default function Form() {
               </button>
             </div>
           </div>
-          <div className="w-full flex gap-10 items-center pt-4">
+          <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-10 items-start sm:items-center pt-4">
             <button
               className="enabled:bg-blue-500 bg-blue-400 px-10 py-1.5 rounded-md flex items-center gap-2 text-center text-white disabled:cursor-not-allowed enabled:hover:bg-blue-700"
               disabled={!edit}
@@ -146,7 +146,7 @@ export default function Form() {
               <PlusCircle className="w-6 h-6" />
               สร้างตารางคะแนน
             </button>
-            <p className="pl-20 text-red-500">
+            <p className="pl-0 sm:pl-20 text-red-500">
               *** โปรดตรวจสอบข้อมูลให้ถูกต้องทุกครั้งเมื่อทำการเพิ่มหรือแก้ไข
               ***
             </p>
@@ -243,7 +243,7 @@ export default function Form() {
         </div>
       ) : (
         <div className="py-10 grid place-items-center">
-          <div className="text-center border-[2px] rounded-md py-10 w-fit px-20">
+          <div className="text-center border-[2px] rounded-md py-10 w-fit max-w-full px-6 sm:px-20">
             <div className="text-lg mb-3">
               ใส่ผลลัพธ์เพื่อค้นหารายชื่อนักเรียนที่ต้องการแก้ไขคะแนน
             </div>
