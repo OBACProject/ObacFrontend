@@ -17,7 +17,7 @@ export default function ProfileCard({ username, rolename }: ProfileCardProps) {
   }, []);
   return (
     <div className="grid gap-4">
-      <div className="rounded-lg bg-white px-10 h-full w-[400px] grid  py-5  shadow-lg">
+      <div className="rounded-lg bg-white px-10 h-fit w-[400px] grid  py-5  shadow-lg">
         <div className="grid gap-2 h-fit">
           <h1 className="text-lg font-prompt_Light font-semibold py-1 w-full text-center px-5 shadow-md text-white bg-blue-500 rounded-3xl">
             {rolename}
@@ -27,7 +27,7 @@ export default function ProfileCard({ username, rolename }: ProfileCardProps) {
           <div>IP : {IP}</div>
         </div>
       </div>
-      <div
+      {/* <div
         className="py-5 z-10 px-10  backdrop-blur-sm bg-white/20 grid place-items-start  
         rounded-md "
       >
@@ -38,7 +38,7 @@ export default function ProfileCard({ username, rolename }: ProfileCardProps) {
         <p className="text-sm text-center text-gray-500">
           22/8/2025 - 22/9/2025
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }
