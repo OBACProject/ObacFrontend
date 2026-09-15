@@ -31,8 +31,8 @@ export default function RootLayout({
           profileData={ProfileData}
         />
 
-        <main className="flex-1 pt-16 lg:pl-16 flex">
-          <div className="m-auto w-full">{children}</div>
+        <main className="flex-1 min-w-0 pt-16 lg:pl-16 flex">
+          <div className="m-auto w-full min-w-0">{children}</div>
         </main>
 
         <HomeFooter />

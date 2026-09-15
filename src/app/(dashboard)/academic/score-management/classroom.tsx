@@ -19,7 +19,6 @@ import {
   StudentList,
   Grad,
 } from "@/dto/gradingDto";
-import GroupSummaryGradPDF from "@/lib/PDF/score/GroupSummaryGrade";
 import {
   ConvertClassroomGradingToExcel,
   GeneralData,
@@ -263,17 +262,22 @@ export function ClassroomGrading() {
 
   useEffect(() => {
     if (downloadingGroupId && gradeSummaryData && !isLoadingGradeSummary) {
-      try {
-        const transformedData = transformGradeData(gradeSummaryData);
+      const transformedData = transformGradeData(gradeSummaryData);
 
-        GroupSummaryGradPDF({ data: transformedData });
-      } catch (error) {
-        console.error("Error generating PDF:", error);
-        console.error("Error details:", error);
-      } finally {
-        setDownloadingGroupId(null);
-        setTriggerDownLoadPDF(false);
-      }
+      // Loaded on demand instead of statically - jsPDF/fonts don't need to
+      // ship in this page's initial bundle, only when a PDF is requested.
+      import("@/lib/PDF/score/GroupSummaryGrade")
+        .then(({ default: GroupSummaryGradPDF }) => {
+          GroupSummaryGradPDF({ data: transformedData });
+        })
+        .catch((error) => {
+          console.error("Error generating PDF:", error);
+          console.error("Error details:", error);
+        })
+        .finally(() => {
+          setDownloadingGroupId(null);
+          setTriggerDownLoadPDF(false);
+        });
     } else if (
       downloadingExcelGroupId &&
       gradeSummaryData &&
@@ -516,6 +520,7 @@ export function ClassroomGrading() {
       <StylesTable
         title="ห้องเรียนทั้งหมด"
         icon={<Table className=" h-5 text-white w-5" />}
+        minWidthClassName="min-w-[900px]"
         columns={columns}
         data={tableData}
         onRowClick={onRowClick}

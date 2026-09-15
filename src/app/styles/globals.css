@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Off-canvas mobile drawers (e.g. the sidebars) hide themselves with
+   `translate-x-full`, which moves them out of view visually but still
+   leaves their untransformed box counted toward the page's scrollable
+   width - without this, a closed drawer alone makes the whole page
+   horizontally scrollable, which is what let mobile browsers shift
+   fixed-position headers off-screen. */
+html,
+body {
+  overflow-x: hidden;
+}
+
 /* src/app/styles/global.css */
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");

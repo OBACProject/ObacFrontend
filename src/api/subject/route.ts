@@ -64,7 +64,7 @@ export const CreateSubject = async (
 ): Promise<boolean> => {
   try {
     const response = await apiClient.post("Subject/CreateSubject", payload);
-    return response.status === 201;
+    return [200, 201, 204].includes(response.status);
   } catch (err) {
     console.error("Error creating subject:", err);
     return false;

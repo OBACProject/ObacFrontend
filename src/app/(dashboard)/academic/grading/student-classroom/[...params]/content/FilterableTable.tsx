@@ -226,18 +226,18 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="flex px-10 w-full justify-between items-center">
+      <div className="flex flex-col sm:flex-row px-4 sm:px-10 w-full justify-between items-start sm:items-center gap-3">
         <HeaderLabel
           Icon={<ScrollText className="h-7 w-7 text-white" />}
           title={`ตารางวิชาในห้องเรียน ${classroomInfo.class}.${classroomInfo.groupName}`}
           className="text-blue"
         />
-        <div className="w-1/3">
+        <div className="w-full sm:w-1/3">
           <GradeSubjectSearchBar onChange={handleSearchChange} />
         </div>
       </div>
 
-      <div className="flex justify-end mb-3 px-12 mt-4 items-center gap-2 relative">
+      <div className="flex flex-col sm:flex-row flex-wrap justify-end mb-3 px-4 sm:px-12 mt-4 items-stretch sm:items-center gap-2 relative">
         <AnimatePresence mode="wait">
           {showAdvanced && (
             <motion.div
@@ -245,7 +245,7 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.2 }}
-              className="flex flex-row gap-2 items-center"
+              className="flex flex-row flex-wrap gap-2 items-center"
             >
               <Combobox
                 options={allLevels.map((v: string) => ({ value: v, label: v }))}
@@ -293,10 +293,11 @@ export default function FilterableTable({ classroomId, term, year }: Props) {
         )}
 
         {sourceData.length > 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-x-auto">
             <StylesTable
               icon={<Calendar className="w-5 h-5 text-white" />}
               title={`รายชื่อวิชาทั้งหมด ${classroomInfo.class} - ภาคเรียนที่ ${term} ปีการศึกษา ${year}`}
+              minWidthClassName="min-w-[700px]"
               columns={columns}
               data={tableData}
               getRowLink={getRowLink}

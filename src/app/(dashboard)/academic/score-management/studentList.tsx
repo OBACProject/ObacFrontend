@@ -264,6 +264,7 @@ export default function StudentListPage() {
       <StyledServerPaginatedDataTable
         title="รายชื่อนักเรียน"
         icon={<Search className="h-5 w-5 text-gray-500" />}
+        minWidthClassName="min-w-[760px]"
         columns={columns}
         data={tableData}
         getRowLink={getRowLink}

@@ -195,7 +195,8 @@ export default function SubjectTableForm({ grads, scheduleID,isComplete }: Props
           </button>
         )}
       </div>
-      <div className="w-full mb-10 ">
+      <div className="w-full mb-10 overflow-x-auto">
+        <div className="min-w-[900px]">
         <div className="  bg-gray-100 grid grid-cols-[3%_8%_15%_10%_10%_10%_10%_10%_8%_8%_8%] border border-gray-300">
           <span className="grid place-items-center text-base py-1">No.</span>
           <span className="grid place-items-center text-base  py-1">
@@ -396,6 +397,7 @@ export default function SubjectTableForm({ grads, scheduleID,isComplete }: Props
         </button>
       </div> */}
         <hr />
+        </div>
       </div>{" "}
     </div>
   );

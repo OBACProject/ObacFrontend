@@ -63,7 +63,7 @@ export default function page() {
   };
 
   return (
-    <div className="pl-10 py-5 h-full">
+    <div className="pl-4 lg:pl-10 py-5 h-full">
       <div className="w-full px-5">
         <div className="py-5 w-full">
           <HeaderLabel
@@ -71,7 +71,7 @@ export default function page() {
             Icon={<FileText className="text-white h-7 w-7 " />}
           />
         </div>
-        <div className=" rounded-md w-full py-5 grid grid-cols-4 gap-5 px-5">
+        <div className=" rounded-md w-full py-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 px-5">
           <PDFButtonTemplate
             title={"ใบสรุปผลการเรียน"}
             description="สรุปผลการเรียนทุกเทอมของนักเรียน (ต่อคน)"

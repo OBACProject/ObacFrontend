@@ -3,10 +3,19 @@ import SciFiBackgroundNormal from "@/app/styles/bg-normal";
 import HeaderHomePageMenu from "@/components/common/Header/Header";
 import React from "react";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function page() {
   return (
     <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
+      <Head>
+        <title>โครงสร้างการบริหารวิทยาลัย | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)</title>
+        <meta
+          name="description"
+          content="ผังโครงสร้างการบริหารวิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)"
+        />
+        <link rel="canonical" href="https://ekawit.ac.th/structure/management" />
+      </Head>
       <HeaderHomePageMenu title="โครงสร้างการบริหารวิทยาลัย" />
       <SciFiBackgroundNormal>
         <div className="grid place-items-center pb-5 ">

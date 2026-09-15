@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Head from "next/head";
 import OpeningScroll from "@/components/Effect/OpeningScroll";
 import FadeInOnScroll from "@/components/Effect/FadInScroll";
 import { Parallax } from "react-scroll-parallax";
@@ -30,6 +31,14 @@ export default function page() {
 
   return (
     <div className="pt-[70px] sm:pt-[70px] md:pt-[140px]">
+      <Head>
+        <title>วิสัยทัศน์และพันธกิจของ OBAC | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ</title>
+        <meta
+          name="description"
+          content="วิสัยทัศน์และพันธกิจของวิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC) มุ่งสร้างคนดี มีความรู้ สู่มาตรฐานสากล"
+        />
+        <link rel="canonical" href="https://ekawit.ac.th/about/symbol-obac" />
+      </Head>
       <div className="bg-white text-blue-950 font-prompt">
         <HeaderHomePageMenu title="วิสัยทัศน์และพันธกิจของ OBAC" />
         <SciFiBackgroundNormal>

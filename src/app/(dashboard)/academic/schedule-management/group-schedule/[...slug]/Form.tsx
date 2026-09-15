@@ -60,7 +60,7 @@ export default function Form({ term, year, groupId }: Props) {
       </div>
       {isLoading ? (
         <div className="w-full">
-          <div className="py-2 px-5 flex items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
+          <div className="py-2 px-5 flex flex-wrap items-center rounded-t-lg gap-6 bg-gradient-to-r from-blue-500 to-indigo-600">
             <CalendarClock className="w-6 h-6 text-white" />
             <div className="text-lg flex items-center justify-start gap-4 text-white font-prompt ">
               ตารางสอนของห้อง {scheduleGroup?.class}.{scheduleGroup?.groupName}
@@ -82,6 +82,8 @@ export default function Form({ term, year, groupId }: Props) {
               </p>
             </div>
           </div>
+          <div className="overflow-x-auto">
+          <div className="min-w-[900px]">
           <div className="w-full  grid grid-cols-[5%_10%_25%_10%_15%_10%_10%_10%_5%] shadow-lg bg-gray-100 text-gray-800 border-t-1 border-b-1 border-gray-400 py-1  text-center text-lg">
             <div className="text-center">ลำดับ</div>
             <div className="text-center ">รหัสวิชา</div>
@@ -147,6 +149,8 @@ export default function Form({ term, year, groupId }: Props) {
               </p>
             </div>
           )}
+          </div>
+          </div>
         </div>
       ) : (
         <LoadingDataTable />

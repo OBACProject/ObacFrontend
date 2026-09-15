@@ -4,6 +4,11 @@ import { ApiErrorResponse } from '../models/common/base.types';
 import Cookies from 'js-cookie';
 
 export function setupInterceptors(client: AxiosInstance): void {
+
+  const flagged = client as AxiosInstance & { __authInterceptorsAttached?: boolean };
+  if (flagged.__authInterceptorsAttached) return;
+  flagged.__authInterceptorsAttached = true;
+
   client.interceptors.request.use(
     (config) => {
       const token = Cookies.get('token');
@@ -37,8 +42,11 @@ export function setupInterceptors(client: AxiosInstance): void {
         case 401:
           errorResponse.message = 'Unauthorized access';
           if (typeof window !== 'undefined') {
-            localStorage.removeItem('authToken');
-            sessionStorage.removeItem('authToken');
+
+            Cookies.remove('token');
+            Cookies.remove('role');
+            Cookies.remove('name');
+            Cookies.remove('userId');
             window.location.href = '/login';
           }
           break;

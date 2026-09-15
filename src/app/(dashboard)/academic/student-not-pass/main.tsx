@@ -76,7 +76,7 @@ export default function Main() {
           className="text-red-600"
         />
       </div>
-      <div className="w-full py-4 px-10 flex items-center justify-start gap-4">
+      <div className="w-full py-4 px-10 flex flex-wrap items-center justify-start gap-4">
         <p>ปีการศึกษา</p>
         <select
           className="border border-gray-200 rounded-sm py-1 px-4"
@@ -133,7 +133,7 @@ export default function Main() {
           <div>
             {studentCount > 0 ? (
               <div className="grid gap-4">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center gap-2">
                   <div className="py-1 px-5 text-white bg-red-400 font-semibold w-fit border-2 border-red-400  rounded-md flex  gap-3">
                     จำนวนนักเรียนที่ไม่ผ่านเกณฑ์ <p>{studentCount}</p>คน
                   </div>
@@ -147,7 +147,8 @@ export default function Main() {
                   </div>
                 </div>
 
-                <div>
+                <div className="overflow-x-auto">
+                <div className="min-w-[900px]">
                   <div
                     className="grid shadow-lg h-fit grid-cols-[10%_10%_30%_10%_15%_15%_10%] bg-gray-200 rounded-t-md
                    text-gray-700   text-lg"
@@ -248,6 +249,7 @@ export default function Main() {
                       </div>
                     );
                   })}
+                </div>
                 </div>
               </div>
             ) : (

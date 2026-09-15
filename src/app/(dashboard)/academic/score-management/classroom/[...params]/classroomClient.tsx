@@ -17,7 +17,6 @@ import { ClassroomInfoTable } from "@/components/Academic/table/classroomInfoTab
 import { Input } from "@/components/ui/input";
 import { BulkPDFStudentTranscriptPDF } from "@/components/PDF/PDFButton";
 import { ConvertClassroomGradingToExcel } from "@/lib/Excel/generateExcelFile";
-import GroupSummaryGradPDF from "@/lib/PDF/score/GroupSummaryGrade";
 
 interface Props {
   initialData: GetGroupSummaryGradeResponse;
@@ -188,6 +187,11 @@ export function ClassroomGradeClient({ initialData }: Props) {
       const transformedData = transformGradeDataForPDF(initialData);
       console.log("Transformed data for PDF:", transformedData);
 
+      // Loaded on demand instead of statically - jsPDF/fonts don't need to
+      // ship in this page's initial bundle, only when a PDF is requested.
+      const { default: GroupSummaryGradPDF } = await import(
+        "@/lib/PDF/score/GroupSummaryGrade"
+      );
       GroupSummaryGradPDF({ data: transformedData });
 
       console.log(

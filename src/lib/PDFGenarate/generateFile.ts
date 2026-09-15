@@ -1,10 +1,4 @@
 "use client";
-import StudentFailListPDF from "../PDF/name-list/StudentFailList";
-import StudentNameInSubject from "../PDF/name-list/StudentNameInSubject";
-import StudentNameListInGroupPDF from "../PDF/name-list/StudentNameListInGroup";
-import ExampleTranscript from "../PDF/score/MockTranscript";
-import GroupSummaryGradPDF from "../PDF/score/GroupSummaryGrade";
-import StudentScoreInSubjectPDF from "../PDF/score/StudentScoreInSubject";
 import {
   GradSummaryGroupData,
   mockGroupSummaryGradeResponse,
@@ -14,8 +8,15 @@ import {
   mockStudents,
 } from "@/resource/PDF/mockData";
 
+// See createPDFFile.ts for why these PDF template imports are deferred with
+// `import()` instead of static imports - keeps jsPDF/fonts out of the page
+// bundle until one of these sample documents is actually generated.
+
 export const genGradSummaryForStudent = async () => {
   try {
+    const { default: ExampleTranscript } = await import(
+      "../PDF/score/MockTranscript"
+    );
     ExampleTranscript(GradSummaryGroupData);
   } catch (err) {
     console.log("Error in lib SummaryGradeForStudent.", err);
@@ -24,6 +25,9 @@ export const genGradSummaryForStudent = async () => {
 
 export const genGroupSummaryGrad = async () => {
   try {
+    const { default: GroupSummaryGradPDF } = await import(
+      "../PDF/score/GroupSummaryGrade"
+    );
     GroupSummaryGradPDF({ data: mockGroupSummaryGradeResponse });
   } catch (err) {
     console.log("Error in lib genGroupSummaryGrad.", err);
@@ -32,6 +36,9 @@ export const genGroupSummaryGrad = async () => {
 
 export const genStudentNamelistInGroup = async () => {
   try {
+    const { default: StudentNameListInGroupPDF } = await import(
+      "../PDF/name-list/StudentNameListInGroup"
+    );
     StudentNameListInGroupPDF({
       student: mockStudentListByGroupID,
       studentGroup: "ปวช.1/2",
@@ -44,6 +51,9 @@ export const genStudentNamelistInGroup = async () => {
 
 export const genStudentNameInSubject = async () => {
   try {
+    const { default: StudentNameInSubject } = await import(
+      "../PDF/name-list/StudentNameInSubject"
+    );
     StudentNameInSubject({ data: mockStudentNameListInSubject });
   } catch (err) {
     console.log("Error in lib genStudentNamelistInGroup.", err);
@@ -52,6 +62,9 @@ export const genStudentNameInSubject = async () => {
 
 export const genStudentScoreInSubject = async () => {
   try {
+    const { default: StudentScoreInSubjectPDF } = await import(
+      "../PDF/score/StudentScoreInSubject"
+    );
     StudentScoreInSubjectPDF({ data: mockStudentGroupGradeResponse });
   } catch (err) {
     console.log("Error in lib genStudentScoreInSubject.", err);
@@ -60,6 +73,9 @@ export const genStudentScoreInSubject = async () => {
 
 export const genStudentNotPassList = async () => {
   try {
+    const { default: StudentFailListPDF } = await import(
+      "../PDF/name-list/StudentFailList"
+    );
     StudentFailListPDF({
       student: mockStudents,
       currentYear: 2568,

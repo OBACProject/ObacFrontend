@@ -26,7 +26,7 @@ export default function CreateScoreTablePopup({
       onClick={() => onClickPopUp(false)}
     >
       <div
-        className="bg-white grid place-items-center  rounded-lg shadow-lg py-6 px-14 "
+        className="bg-white grid place-items-center  rounded-lg shadow-lg py-6 px-6 sm:px-14 "
         onClick={(e) => e.stopPropagation()}
       >
         <h1 className="text-xl text-center mb-5">เลือกปีการศึกษาและภาคเรียน</h1>

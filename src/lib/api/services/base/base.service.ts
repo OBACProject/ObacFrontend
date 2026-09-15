@@ -69,7 +69,11 @@ export abstract class BaseService {
   }
 
   private handleResponse<T>(response: AxiosResponse<ApiResponse<T>>): T {
-    const { data } = response;
+    const { status, data } = response;
+
+    if (status === 204 || data === undefined || data === null || (data as unknown) === '') {
+      return undefined as T;
+    }
 
     if (data.responseCode !== '200') {
       throw new Error(data.responseMessage || 'API request failed');

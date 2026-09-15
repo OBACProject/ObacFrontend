@@ -2,9 +2,11 @@
 
 import {
   GetAllStudentGroupByTermYear,
+  MoveStudentGroupByStudentGroupId,
   UpdateStudentGroupByStudentGroupId,
 } from "@/api/studentGroup/route";
 import {
+  MoveStudentGroupBody,
   StudentGroupItem,
   UpdateStudentGroupBody,
 } from "@/dto/studentGroupItem";
@@ -53,24 +55,12 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
     if (onSubmitCheck) return;
     setOnSubmitCheck(true);
     try {
-      const body: UpdateStudentGroupBody = {
-        studentId: [studentId],
-        studentGroup: {
-          id:Number(studentGroupID),
-          groupName: "",
-          class: "",
-          groupCode: String(studentGroupID),
-          level: 0,
-          programId: 0,
-          isPublish: false,
-          isComplete: false,
-          isActive: true,
-          year: year,
-          term: term,
-        },
-        action: "move",
+      const body: MoveStudentGroupBody = {
+        studentIds: [studentId],
+        newStudentGroupId: Number(studentGroupID),
       };
-      const ok = await UpdateStudentGroupByStudentGroupId(body);
+      const ok = await MoveStudentGroupByStudentGroupId(body);
+      console.log("body JSON:", JSON.stringify(body, null, 2));
       if (ok) {
         toast.success?.("ย้ายห้องสำเร็จ");
         setTimeout(() => {
@@ -133,7 +123,7 @@ export default function ChangeStudentGroup({ onClickPopUp, studentId }: Props) {
               value={
                 studentGroupID
                   ? groupOptions.find(
-                      (item) => item.value === studentGroupID
+                      (item) => item.value === studentGroupID,
                     ) || null
                   : null
               }

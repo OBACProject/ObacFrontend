@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CardHorizontalProp {
   img: string;
@@ -8,6 +9,7 @@ interface CardHorizontalProp {
   description: string;
   category: string;
   date: string;
+  href?: string;
 }
 
 interface CardHorizontalProps {
@@ -18,10 +20,14 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
   return (
     <>
       {Array.isArray(cardData) &&
-        cardData.slice(0, 3).map((data, index) => (
-          <div
+        cardData.slice(0, 3).map((data, index) => {
+          const CardWrapper = data.href ? Link : "div";
+          const wrapperProps = data.href ? { href: data.href } : {};
+          return (
+          <CardWrapper
             key={index}
-            className="rounded-lg border border-gray-300 bg-white shadow-md group overflow-hidden hover:shadow-lg transition-shadow duration-300 w-full max-w-sm mx-auto my-4"
+            {...(wrapperProps as any)}
+            className="rounded-lg border border-gray-300 bg-white shadow-md group overflow-hidden hover:shadow-lg transition-shadow duration-300 w-full max-w-sm mx-auto my-4 block"
           >
       
             <div className="relative w-full h-48 md:h-56 overflow-hidden">
@@ -47,8 +53,9 @@ export default function CardVertical({ cardData }: CardHorizontalProps) {
                 {data.description}
               </p>
             </div>
-          </div>
-        ))}
+          </CardWrapper>
+          );
+        })}
     </>
   );
 }

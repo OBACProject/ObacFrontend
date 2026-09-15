@@ -3,7 +3,6 @@
 import { GetStudentListByClassLevelTermYear } from "@/api/studentGroup/route";
 import SelectTermAndYear from "@/components/Academic/SelectTermYear";
 import { Students } from "@/dto/studentGroupItem";
-import BulkStudentNameListInLevelPDF from "@/lib/PDF/name-list/BulkStudentNameList";
 import { getCurrentThaiTermYear } from "@/lib/utils";
 import { Download, LoaderCircle } from "lucide-react";
 import { useState } from "react";
@@ -86,6 +85,11 @@ export default function DownloadStudentListPopup({
         throw new Error("ไม่พบรายชื่อนักเรียนสำหรับชั้นเรียนนี้");
       }
 
+      // Loaded on demand instead of statically - jsPDF/fonts don't need to
+      // ship in this popup's bundle until a download is actually requested.
+      const { default: BulkStudentNameListInLevelPDF } = await import(
+        "@/lib/PDF/name-list/BulkStudentNameList"
+      );
       BulkStudentNameListInLevelPDF({
         data: sortedByRoomAsc,
         year: year,

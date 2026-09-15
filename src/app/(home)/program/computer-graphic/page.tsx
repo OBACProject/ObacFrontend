@@ -11,19 +11,27 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    name: "OBAC",
-    alternateName: "Ekawit Business Administration Vocational College",
-    url: "https://ekawit.ac.th",
-    logo: "https://ekawit.ac.th/favicon.ico",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "ถนนลาดกระบัง",
-      addressLocality: "กรุงเทพ",
-      postalCode: "10520",
-      addressCountry: "TH",
+    "@type": "EducationalOccupationalProgram",
+    name: "สาขาวิชาคอมพิวเตอร์กราฟิก",
+    alternateName: "Computer Graphics",
+    description:
+      "สาขาวิชาคอมพิวเตอร์กราฟิกเปิดโอกาสให้นักเรียนได้เรียนรู้การออกแบบงานกราฟิก ทั้งสิ่งพิมพ์และสื่อดิจิทัล เช่น โลโก้ โปสเตอร์ และงานมัลติมีเดีย",
+    url: "https://ekawit.ac.th/program/computer-graphic",
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "OBAC",
+      alternateName: "Ekawit Business Administration Vocational College",
+      url: "https://ekawit.ac.th",
+      logo: "https://ekawit.ac.th/favicon.ico",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "ถนนลาดกระบัง",
+        addressLocality: "กรุงเทพ",
+        postalCode: "10520",
+        addressCountry: "TH",
+      },
+      sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
     },
-    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
   };
 
   const [mounted, setMounted] = useState(false);
@@ -64,8 +72,13 @@ export default function Page() {
   return (
     <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-18 lg:mt-36">
       <Head>
+        <title>สาขาวิชาคอมพิวเตอร์กราฟิก | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)</title>
+        <meta
+          name="description"
+          content="เรียนคอมพิวเตอร์กราฟิก ปวช.-ปวส. ที่ OBAC ออกแบบสิ่งพิมพ์ สื่อดิจิทัล โลโก้ โปสเตอร์ และงานมัลติมีเดียเพื่อองค์กรและธุรกิจ"
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <link rel="canonical" href="https://ekawit.ac.th" />
+        <link rel="canonical" href="https://ekawit.ac.th/program/computer-graphic" />
       </Head>
 
       <StickerFacebook />

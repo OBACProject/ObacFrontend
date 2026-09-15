@@ -11,19 +11,27 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    name: "OBAC",
-    alternateName: "Ekawit Business Administration Vocational College",
-    url: "https://ekawit.ac.th",
-    logo: "https://ekawit.ac.th/favicon.ico",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "ถนนลาดกระบัง",
-      addressLocality: "กรุงเทพ",
-      postalCode: "10520",
-      addressCountry: "TH",
+    "@type": "EducationalOccupationalProgram",
+    name: "สาขาวิชาการท่องเที่ยว",
+    alternateName: "Tourism Management",
+    description:
+      "สาขาวิชาการท่องเที่ยวมุ่งผลิตบุคลากรที่มีความรู้และทักษะในการให้บริการด้านการท่องเที่ยว การเป็นมัคคุเทศก์ และการบริหารจัดการทัวร์",
+    url: "https://ekawit.ac.th/program/tourism-management",
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "OBAC",
+      alternateName: "Ekawit Business Administration Vocational College",
+      url: "https://ekawit.ac.th",
+      logo: "https://ekawit.ac.th/favicon.ico",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "ถนนลาดกระบัง",
+        addressLocality: "กรุงเทพ",
+        postalCode: "10520",
+        addressCountry: "TH",
+      },
+      sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
     },
-    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
   };
 
   const [mounted, setMounted] = useState(false);
@@ -65,8 +73,13 @@ export default function Page() {
   return (
     <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-18 lg:mt-36">
       <Head>
+        <title>สาขาวิชาการท่องเที่ยว | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)</title>
+        <meta
+          name="description"
+          content="เรียนการท่องเที่ยว ปวช.-ปวส. ที่ OBAC ฝึกทักษะการให้บริการท่องเที่ยว งานมัคคุเทศก์ และการบริหารจัดการทัวร์อย่างมืออาชีพ"
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <link rel="canonical" href="https://ekawit.ac.th" />
+        <link rel="canonical" href="https://ekawit.ac.th/program/tourism-management" />
       </Head>
 
       <StickerFacebook />

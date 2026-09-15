@@ -80,8 +80,8 @@ export default function ScoreInputForm({
   };
   const updated = [...scores];
   return (
-    <div className="p-4 border border-gray-300 rounded-md mb-4">
-      <table className="w-full border border-gray-300 text-sm">
+    <div className="p-4 border border-gray-300 rounded-md mb-4 overflow-x-auto">
+      <table className="w-full min-w-[700px] border border-gray-300 text-sm">
         <thead className="bg-gray-200 text-lg font-prompt_Light text-center text-gray-800 font-semibold">
           <tr>
             <th className="border px-2 py-1 w-[100px]">เทอม</th>

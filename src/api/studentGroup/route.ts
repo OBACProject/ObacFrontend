@@ -1,6 +1,7 @@
 import {
   CreateStudentGroupRequest,
   GetAllStudentGroupRequest,
+  MoveStudentGroupBody,
   StudentGroupItem,
   StudentGroupResponse,
   StudentGroupScheduleStatus,
@@ -157,6 +158,26 @@ export const UpdateStudentGroupByStudentGroupId = async (
   }
 };
 
+export const MoveStudentGroupByStudentGroupId = async (
+  body: MoveStudentGroupBody
+): Promise<boolean> => {
+  try {
+    const res = await apiClient.put<{
+      responseCode: string;
+      responseMessage: string;
+      data: boolean | null;
+    }>("StudentGroup/MoveStudentsToNewGroup", body);
+
+    if (typeof res.data?.data === "boolean") return res.data.data;
+    return [200, 201, 204].includes(res.status);
+  } catch (err: any) {
+    console.error(
+      "MoveStudentsToNewGroup error:",
+      err?.response?.data || err
+    );
+    return false;
+  }
+};
 type UpdateStatusApiResponse = {
   responseCode: string;
   responseMessage: string;

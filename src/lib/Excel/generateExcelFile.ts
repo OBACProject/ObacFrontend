@@ -4,7 +4,7 @@ import {
   ConvertClassroomToExcelDto,
 } from "@/dto/gradDto";
 import { StudentItems } from "@/dto/studentDto";
-import ExcelJS from "exceljs";
+
 
 export interface GeneralData {
   groupId: number;
@@ -35,6 +35,7 @@ export async function ConvertScoreToExcel(
   subjectName: string,
   classroom: string
 ) {
+  const { default: ExcelJS } = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Grades");
 
@@ -146,6 +147,7 @@ export async function ConvertClassroomToExcel(
   data: StudentItems[],
   classroom: string
 ) {
+  const { default: ExcelJS } = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Student List");
   worksheet.mergeCells("A1:E1");
@@ -228,6 +230,7 @@ export async function ConvertClassroomToExcelWithSubject(
   subjectName: string,
   classroom: string
 ) {
+  const { default: ExcelJS } = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Student List");
 
@@ -310,6 +313,7 @@ export async function ConvertClassroomGradingToExcel(
   generalData: GeneralData,
   StudentListExcel: StudentListExcel[]
 ) {
+  const { default: ExcelJS } = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Grading Sheet");
 

@@ -105,7 +105,7 @@ export default function Form({ GroupID }: Props) {
 
   return (
     <div className="bg-white rounded-xl py-2">
-      <div className="px-10 justify-between flex items-center">
+      <div className="px-10 justify-between flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-3 font-prompt_Light">
           <div>จำนวนนักเรียนที่กำลังศึกษา</div>
           <p className="text-lg font-bold text-green-600 px-2 py-1 rounded-md bg-gray-100">

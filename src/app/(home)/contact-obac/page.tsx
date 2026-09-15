@@ -2,7 +2,7 @@ import Form from "./Form";
 import Head from "next/head";
 export const metadata = {
   title: "ข้อมูลการติดต่อ | OBAC",
-  description: "โทร. 091-864-9154",
+  description: "ช่องทางติดต่อวิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC) โทร. 091-864-9154 แผนที่และที่อยู่วิทยาลัย เขตลาดกระบัง กรุงเทพฯ",
   keywords: [
     "OBAC",
     "วิทยาลัยอาชีวศึกษา",
@@ -12,7 +12,9 @@ export const metadata = {
     "ปวส",
     "สาขาเทคโนโลยีธุรกิจดิจิทัล",
     "เทคโนโลยี",
+    "ติดต่อ",
   ],
+  alternates: { canonical: "https://ekawit.ac.th/contact-obac" },
   robots: {
     index: true,
     follow: true,
@@ -25,7 +27,7 @@ export default function ContactPage() {
     "@type": "EducationalOrganization",
     name: "Ekawit Business Administration Vocational College",
     alternateName: "OBAC",
-    url: "https://ekawit.ac.th/contact",
+    url: "https://ekawit.ac.th/contact-obac",
     logo: "https://ekawit.ac.th/favicon.ico",
     address: {
       "@type": "PostalAddress",
@@ -43,13 +45,6 @@ export default function ContactPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <meta name="robots" content="index, follow" />
-        <meta
-          name="keywords"
-          content="OBAC, วิทยาลัยอาชีวศึกษา, Ekawit, โรงเรียนธุรกิจ, ปวช, ปวส, สาขาเทคโนโลยีธุรกิจดิจิทัล, เทคโนโลยี"
-        />
-        <meta name="author" content="Ekawit Business College | OBAC" />
-        <link rel="canonical" href="https://ekawit.ac.th/contact" />
       </Head>
       <Form />
     </div>

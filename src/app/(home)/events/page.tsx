@@ -1,60 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Head from "next/head";
 import BigCarouselNews from "../../../components/common/Carousel/BigCarouselNews";
 import CardNews from "../../../components/common/Card/card-news";
 import HeaderHomePageMenu from "@/components/common/Header/Header";
 import SciFiBackgroundNormal from "@/app/styles/bg-normal";
+import { newsItems } from "@/resource/fetchData/newsItems";
 
-const newsItems = [
-  // {
-  //   id: 1,
-  //   title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
-  //   image: "/cls/news/news_1.jpg",
-  // },
-  // {
-  //   id: 2,
-  //   title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
-  //   image: "/cls/news/news_2.jpg",
-  // },
-  {
-    id: 3,
-    title: "กิจกรรมสัมมนาเชิงปฏิบัติการ (ปวส.)ภาคเรียนที่ 1/2566",
-    image: "/cls/news/news_3.jpg",
-  },
-  {
-    id: 4,
-    title: "พิธีไหว้ครู ปวช. ปีการศึกษา 2565",
-    image: "/cls/news/news_4.jpg",
-  },
-  {
-    id: 5,
-    title: "ตักบาตรข้าวสารอาหารแห้ง และถวายเทียนจำนำพรรษา ปีการศึกษา 2565",
-    image: "/cls/news/news_5.jpg",
-  },
-  {
-    id: 6,
-    title: "กิจกรรมทำบุญวิทยาลัยประจำปีการศึกษา 2565",
-    image: "/cls/news/news_6.jpg",
-  },
-  {
-    id: 7,
-    title: "สัมมนาเชิงวิชาการ ปวส. ภาคเรียนที่ 1/2565",
-    image: "/cls/news/news_7.jpg",
-  },
-  {
-    id: 8,
-    title: "พิธีถวายพระพรชัยมงคล สมเด็จพระนางเจ้าฯ พระบรมราชินี 2565 ( ปวช.1)",
-    image: "/cls/news/news_8.jpg",
-  },
-  {
-    id: 9,
-    title: "กิจกรรมวันภาษาไทย ประจำปีการศึกษา ๒๕๖๕",
-    image: "/cls/news/news_9.jpg",
-  },
-];
-
-export default function NewsSection() {
+export default function EventsSection() {
   const [visibleCount, setVisibleCount] = useState(6);
 
   const handleShowMore = () => {
@@ -63,29 +17,35 @@ export default function NewsSection() {
 
   return (
     <div className="mt-16 sm:mt-[8px] md:pt-[80px] lg:mt-16">
+      <Head>
+        <title>กิจกรรม OBAC | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ</title>
+        <meta
+          name="description"
+          content="ภาพกิจกรรมของวิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)"
+        />
+        <link rel="canonical" href="https://ekawit.ac.th/events" />
+      </Head>
       <div className="bg-white text-blue-950 font-prompt">
         <HeaderHomePageMenu title="กิจกรรม OBAC" />
         <SciFiBackgroundNormal>
           <section className="container mx-auto px-4 py-4">
             <BigCarouselNews />
-            <CardNews news={newsItems.slice(0, visibleCount)} />
+            {/* Events and news currently share the same activity-photo pool,
+                so both link into the same /news/[id] detail pages instead of
+                duplicating a second, identical detail-page system. */}
+            <CardNews news={newsItems.slice(0, visibleCount)} basePath="/news" />
 
-            {/* {visibleCount < newsItems.length && (
+            {visibleCount < newsItems.length && (
               <div className="flex justify-center mt-10">
                 <button
                   onClick={handleShowMore}
                   className="inline-block bg-blue-900 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800 transition"
                 >
-                  ดูข่าวเพิ่มเติม
+                  ดูกิจกรรมเพิ่มเติม
                 </button>
               </div>
-            )} */}
+            )}
           </section>
-
-          <div className="py-10 grid place-items-center text-center">
-            <h1 className="text-red-600 text-2xl">ขออภัย เนื้อหาส่วนนี้ยังไม่พร้อมใช้งาน</h1>
-            <h1 className="text-red-600 text-2xl">ขณะนี้กำลังรอการพัฒนา</h1>
-          </div>
         </SciFiBackgroundNormal>
       </div>
     </div>

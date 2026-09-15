@@ -3,40 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { newsItems } from "@/resource/fetchData/newsItems";
 
-interface NewsItem {
-  id: number;
-  title: string;
-  image: string;
-}
-
-const mockNews: NewsItem[] = [
-  // {
-  //   id: 1,
-  //   title: "ประกาศรับสมัคร/เสนอชื่อบุคคลเพื่อดำรงตำแหน่งผู้อำนวยการ...",
-  //   image: "/cls/news/news_1.jpg",
-  // },
-  // {
-  //   id: 2,
-  //   title: "กิจกรรมอบรมการตลาดดิจิทัลให้นักเรียน...",
-  //   image: "/cls/news/news_2.jpg",
-  // },
-  {
-    id: 3,
-    title: "กิจกรรมสัมมนาเชิงปฏิบัติการ (ปวส.)ภาคเรียนที่ 1/2566",
-    image: "/cls/news/news_3.jpg",
-  },
-  {
-    id: 4,
-    title: "พิธีไหว้ครู ปวช. ปีการศึกษา 2565",
-    image: "/cls/news/news_4.jpg",
-  },
-  {
-    id: 5,
-    title: "ตักบาตรข้าวสารอาหารแห้ง และถวายเทียนจำนำพรรษา ปีการศึกษา 2565",
-    image: "/cls/news/news_5.jpg",
-  },
-];
+const mockNews = newsItems;
 
 export default function BigCarouselNews() {
   const [currentIndex, setCurrentIndex] = useState(0);
