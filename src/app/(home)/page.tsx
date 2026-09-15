@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Head from "next/head";
-import { cardData } from "@/resource/fetchData/cardContent";
+import { newsItems } from "@/resource/fetchData/newsItems";
 import CardVertical from "@/components/common/Card/card-vertical";
 import CardCourse from "@/components/common/Card/card-course";
 import StickerFacebook from "@/components/Effect/StickerFacebook";
@@ -316,12 +316,23 @@ export default function Home() {
 
             <div className="overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar">
               <div className="inline-flex gap-4">
-                {cardData.slice(0, 10).map((data, index) => (
+                {newsItems.map((item) => (
                   <div
-                    key={index}
+                    key={item.id}
                     className="min-w-[280px] max-w-[280px] snap-center"
                   >
-                    <CardVertical cardData={[data]} />
+                    <CardVertical
+                      cardData={[
+                        {
+                          img: item.image,
+                          topic: item.title,
+                          description: `ภาพบรรยากาศ${item.title}`,
+                          category: "กิจกรรมวิทยาลัย",
+                          date: item.period || "",
+                          href: `/news/${item.id}`,
+                        },
+                      ]}
+                    />
                   </div>
                 ))}
               </div>
@@ -337,7 +348,7 @@ export default function Home() {
             พร้อมจะเริ่มต้นอนาคตของคุณแล้วหรือยัง?
           </h2>
           <a
-            href=""
+            href="/contact-obac"
             className="inline-block mt-4 bg-white text-blue-900 font-semibold px-6 py-3 rounded-full hover:bg-gray-100"
           >
             สมัครเรียนกับ OBAC

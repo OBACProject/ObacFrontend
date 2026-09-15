@@ -1,16 +1,25 @@
+import Link from "next/link";
+
 interface NewsItem {
   id: number;
   title: string;
   image: string;
 }
 
-export default function CardNews({ news }: { news: NewsItem[] }) {
+export default function CardNews({
+  news,
+  basePath = "/news",
+}: {
+  news: NewsItem[];
+  basePath?: string;
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 font-prompt_Ligte">
       {news.map((item) => (
-        <div
+        <Link
           key={item.id}
-          className="relative rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group h-64"
+          href={`${basePath}/${item.id}`}
+          className="relative rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl cursor-pointer group h-64 block"
         >
           <img
             src={item.image}
@@ -21,7 +30,7 @@ export default function CardNews({ news }: { news: NewsItem[] }) {
           <div className="absolute bottom-3 left-3 right-3 text-white text-sm font-medium drop-shadow-md">
             {item.title}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

@@ -1,12 +1,14 @@
 # *
 User-agent: *
+Allow: /
 Disallow: /academic/
 Disallow: /teacher/
 Disallow: /admin/
-Allow: /
+Disallow: /student/
+Disallow: /login
 
 # Host
-Host: https://ekkawit.ac.th
+Host: https://ekawit.ac.th
 
 # Sitemaps
-Sitemap: https://ekkawit.ac.th/sitemap.xml
+Sitemap: https://ekawit.ac.th/sitemap.xml

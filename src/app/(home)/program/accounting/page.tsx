@@ -11,19 +11,27 @@ import FadeInOnScroll from "@/components/Effect/FadInScroll"
 export default function Page() {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    name: "OBAC",
-    alternateName: "Ekawit Business Administration Vocational College",
-    url: "https://ekawit.ac.th",
-    logo: "https://ekawit.ac.th/favicon.ico",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "ถนนลาดกระบัง",
-      addressLocality: "กรุงเทพ",
-      postalCode: "10520",
-      addressCountry: "TH",
+    "@type": "EducationalOccupationalProgram",
+    name: "สาขาวิชาการบัญชี",
+    alternateName: "Accounting",
+    description:
+      "สาขาวิชาการบัญชีมุ่งเน้นการเรียนรู้เกี่ยวกับกระบวนการจัดทำบัญชีเบื้องต้น การจัดทำงบการเงิน การวิเคราะห์ข้อมูลทางบัญชี เพื่อเตรียมความพร้อมสู่วิชาชีพนักบัญชี",
+    url: "https://ekawit.ac.th/program/accounting",
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "OBAC",
+      alternateName: "Ekawit Business Administration Vocational College",
+      url: "https://ekawit.ac.th",
+      logo: "https://ekawit.ac.th/favicon.ico",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "ถนนลาดกระบัง",
+        addressLocality: "กรุงเทพ",
+        postalCode: "10520",
+        addressCountry: "TH",
+      },
+      sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
     },
-    sameAs: ["https://www.facebook.com/obacfanpage/?locale=th_TH"],
   }
 
   const [mounted, setMounted] = useState(false)
@@ -99,8 +107,13 @@ export default function Page() {
   return (
     <div className="bg-white h-full min-h-screen text-blue-950 font-prompt mt-16 md:mt-18 lg:mt-36">
       <Head>
+        <title>สาขาวิชาการบัญชี | วิทยาลัยอาชีวศึกษาเอกวิทย์บริหารธุรกิจ (OBAC)</title>
+        <meta
+          name="description"
+          content="เรียนบัญชี ปวช.-ปวส. ที่ OBAC ฝึกจัดทำบัญชี บันทึกรายการค้า วิเคราะห์งบการเงิน เตรียมความพร้อมสู่วิชาชีพนักบัญชีมืออาชีพ"
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <link rel="canonical" href="https://ekawit.ac.th" />
+        <link rel="canonical" href="https://ekawit.ac.th/program/accounting" />
       </Head>
 
       <StickerFacebook />
